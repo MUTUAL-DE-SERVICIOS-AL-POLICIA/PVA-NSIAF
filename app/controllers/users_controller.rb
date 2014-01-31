@@ -61,6 +61,21 @@ class UsersController < ApplicationController
     end
   end
 
+  ##
+  # GET /users/dbf
+  # Muestra el formulario para poder seleccionar un archivo *.dbf y luego proceder
+  # a la importación de los datos de Usuarios desde el archivo *.dbf
+  def dbf
+  end
+
+  ##
+  # POST /users/import
+  # Importa los datos del archivo DBF dentro de la tabla usuarios.
+  def import
+    # TODO importar el archivo a la base de datos
+    redirect_to :back, notice: 'No hay lio'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
