@@ -1,3 +1,5 @@
+= link_to "Importar", dbf_users_path
+
 %h1 Listing users
 
 %table
@@ -18,12 +20,12 @@
     %tr
       %td= user.code
       %td= user.name
-      %td= user.post
+      %td= user.title
       %td= user.ci
       %td= user.email
       %td= user.password
       %td= user.phone
-      %td= user.cellular
+      %td= user.mobile
       %td= link_to 'Show', user
       %td= link_to 'Edit', edit_user_path(user)
       %td= link_to 'Destroy', user, :method => :delete, :data => { :confirm => 'Are you sure?' }

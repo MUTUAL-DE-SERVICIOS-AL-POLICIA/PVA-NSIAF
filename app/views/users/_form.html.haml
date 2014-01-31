@@ -8,16 +8,16 @@
 
   .field
     = f.label :code
-    = f.number_field :code
+    = f.text_field :code
   .field
     = f.label :name
     = f.text_field :name
   .field
-    = f.label :post
-    = f.text_field :post
+    = f.label :title
+    = f.text_field :title
   .field
     = f.label :ci
-    = f.number_field :ci
+    = f.text_field :ci
   .field
     = f.label :email
     = f.text_field :email
@@ -26,9 +26,9 @@
     = f.text_field :password
   .field
     = f.label :phone
-    = f.number_field :phone
+    = f.text_field :phone
   .field
-    = f.label :cellular
-    = f.number_field :cellular
+    = f.label :mobile
+    = f.text_field :mobile
   .actions
     = f.submit 'Save'

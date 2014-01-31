@@ -8,3 +8,6 @@
   .form-group
     .col-sm-offset-2.col-sm-10
       = button_tag 'Importar', class: 'btn btn-default'
+      = link_to users_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        Cancelar
