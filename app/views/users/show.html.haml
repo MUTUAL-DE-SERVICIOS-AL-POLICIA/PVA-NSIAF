@@ -8,7 +8,7 @@
   = @user.name
 %p
   %b Post:
-  = @user.post
+  = @user.title
 %p
   %b Ci:
   = @user.ci
@@ -23,7 +23,7 @@
   = @user.phone
 %p
   %b Cellular:
-  = @user.cellular
+  = @user.mobile
 
 = link_to 'Edit', edit_user_path(@user)
 \|
