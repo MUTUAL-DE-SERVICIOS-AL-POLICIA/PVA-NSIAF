@@ -1,9 +1,8 @@
 .col-md-8.column.col-md-offset-1
   = simple_form_for @user, html: { class: 'form-horizontal' } do |f|
-
     .form-group= f.input :code
     .form-group= f.input :name
-    .form-group= f.input :post
+    .form-group= f.input :title
     .form-group= f.input :ci
     .form-group= f.input :email
     .form-group= f.input :username

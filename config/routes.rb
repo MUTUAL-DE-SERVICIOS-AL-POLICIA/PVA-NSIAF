@@ -1,5 +1,11 @@
 Nsiaf::Application.routes.draw do
-  resources :users
+  resources :users do
+    collection do
+      get 'dbf'
+      post 'import'
+    end
+  end
+
   devise_for :users, controllers: { sessions: "sessions" }, skip: [ :sessions ]
   as :user do
     get '/login' => 'sessions#new', as: :new_user_session

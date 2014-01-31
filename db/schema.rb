@@ -14,28 +14,30 @@
 ActiveRecord::Schema.define(version: 20140130190858) do
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                              default: "", null: false
+    t.string   "encrypted_password",                 default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",                      default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "username"
-    t.integer  "code"
-    t.string   "name"
-    t.string   "post"
+    t.string   "username",               limit: 230, default: "", null: false
+    t.string   "code",                   limit: 230
+    t.string   "name",                   limit: 230
+    t.string   "title",                  limit: 230
     t.integer  "ci"
-    t.integer  "phone"
-    t.integer  "cellular"
+    t.string   "phone",                  limit: 230
+    t.string   "mobile",                 limit: 230
+    t.string   "status",                 limit: 1
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end

@@ -42,9 +42,12 @@ end
 # gem 'capistrano', group: :development
 
 # Use debugger
-# gem 'debugger', group: [:development, :test]
+gem 'debugger', group: [:development, :test]
 
 gem 'devise'
 gem 'simple_form'
 gem 'bootstrap-sass', '~> 3.0.3.0'
 gem 'haml-rails'
+
+# Gem for read DBF files
+gem 'dbf'
