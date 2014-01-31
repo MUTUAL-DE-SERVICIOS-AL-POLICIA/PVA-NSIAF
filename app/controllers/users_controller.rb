@@ -72,7 +72,7 @@ class UsersController < ApplicationController
   # POST /users/import
   # Importa los datos del archivo DBF dentro de la tabla usuarios.
   def import
-    # TODO importar el archivo a la base de datos
+    User.import_dbf(params[:dbf])
     redirect_to :back, notice: 'No hay lio'
   end
 
