@@ -1,35 +1,29 @@
-= link_to "Importar", dbf_users_path
+= render '/layouts/menu_left', type_model: 'users'
+.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main.margin-content
+  %h2.sub-header= t("users.title.title")
 
-%h1 Listing users
-
-%table
-  %tr
-    %th Code
-    %th Name
-    %th Post
-    %th Ci
-    %th Email
-    %th Password
-    %th Phone
-    %th Cellular
-    %th
-    %th
-    %th
-
-  - @users.each do |user|
-    %tr
-      %td= user.code
-      %td= user.name
-      %td= user.title
-      %td= user.ci
-      %td= user.email
-      %td= user.password
-      %td= user.phone
-      %td= user.mobile
-      %td= link_to 'Show', user
-      %td= link_to 'Edit', edit_user_path(user)
-      %td= link_to 'Destroy', user, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= link_to 'New User', new_user_path
+  %table.table.table-striped.table-hover
+    %thead
+      %tr
+        %th= t('activerecord.attributes.user.code')
+        %th= t('activerecord.attributes.user.name')
+        %th= t('activerecord.attributes.user.title')
+        %th= t('general.status')
+        %th= t('general.actions')
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= user.code
+          %td= user.name
+          %td= user.title
+          %td
+          %td{style: 'width: 22%;'}
+            = link_to user, class: 'btn btn-primary' do
+              %span.glyphicon.glyphicon-eye-open
+              = t("general.btn.show")
+            = link_to edit_user_path(user), class: 'btn btn-primary' do
+              %span.glyphicon.glyphicon-edit
+              = t("general.btn.edit")
+            = link_to '#', class: 'btn btn-warning' do
+              %span.glyphicon.glyphicon-remove
+              = t("general.btn.active")

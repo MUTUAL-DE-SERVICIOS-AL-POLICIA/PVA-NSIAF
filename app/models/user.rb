@@ -1,11 +1,4 @@
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-
-  validates :username, presence: true, uniqueness: true
-
   CORRELATIONS = {
     'CODRESP' => 'code',
     'NOMRESP' => 'name',
@@ -13,6 +6,14 @@ class User < ActiveRecord::Base
     #'CODOFIC' => 'department_id',
     'API_ESTADO' => 'status'
   }
+
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  validates :username, presence: true, uniqueness: true
+  validates :code, :name, :post, :ci, :email, :password, presence: true
 
   ##
   # Importar el archivo DBF a la tabla de usuarios

@@ -5,17 +5,29 @@
     %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}/
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}/
 
-    %title Bootstrap 101 Template
-    / Bootstrap
-
-    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    %title NVSIAF
+    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
     = csrf_meta_tags
-    / HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
-    / WARNING: Respond.js doesn't work if you view the page via file://
-    /[if lt IE 9]
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   %body
+    .navbar.navbar-inverse.navbar-fixed-top{role: "navigation"}
+      .container-fluid
+        .navbar-header
+          %button.navbar-toggle.collapsed{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", type: "button"}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand{href: "#"} Sistema de Activos Fijos
+        .navbar-collapse.collapse
+          %ul.nav.navbar-nav.navbar-right
+            %li.active
+              %a{href: "#"} Dashboard
+            %li
+              %a{href: "#"} Settings
+            %li
+              %a{href: "#"} Profile
+            %li
+              %a{href: "#"} Help
     = notice if notice.present?
     = yield
     = javascript_include_tag "application", "data-turbolinks-track" => true

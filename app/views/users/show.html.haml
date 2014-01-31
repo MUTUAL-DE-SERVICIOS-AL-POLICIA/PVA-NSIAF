@@ -1,30 +1,30 @@
-%p#notice= notice
+= render '/layouts/menu_left', type_model: 'users'
+.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main.margin-content
+  .page-header
+    .pull-right
+      = link_to edit_user_path(@user), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+    %h2 Usuario: #{@user.name}
 
-%p
-  %b Code:
-  = @user.code
-%p
-  %b Name:
-  = @user.name
-%p
-  %b Post:
-  = @user.title
-%p
-  %b Ci:
-  = @user.ci
-%p
-  %b Email:
-  = @user.email
-%p
-  %b Password:
-  = @user.password
-%p
-  %b Phone:
-  = @user.phone
-%p
-  %b Cellular:
-  = @user.mobile
-
-= link_to 'Edit', edit_user_path(@user)
-\|
-= link_to 'Back', users_path
+  %p
+    %b #{t('activerecord.attributes.user.code')}:
+    = @user.code
+  %p
+    %b #{t('activerecord.attributes.user.title')}:
+    = @user.title
+  %p
+    %b #{t('activerecord.attributes.user.ci')}:
+    = @user.ci
+  %p
+    %b #{t('activerecord.attributes.user.email')}:
+    = @user.email
+  %p
+    %b #{t('activerecord.attributes.user.username')}:
+    = @user.password
+  %p
+    %b #{t('activerecord.attributes.user.phone')}:
+    = @user.phone
+  %p
+    %b #{t('activerecord.attributes.user.cellular')}:
+    = @user.mobile
