@@ -19,7 +19,7 @@
             %span.icon-bar
           %a.navbar-brand{href: "#"} Sistema de Activos Fijos
         .navbar-collapse.collapse
-          %ul.nav.navbar-nav.navbar-right
+          %ul.nav.navbar-nav.navbar-right.right_menu
             %li.active
               %a{href: "#"} Dashboard
             %li
@@ -28,5 +28,7 @@
               %a{href: "#"} Profile
             %li
               %a{href: "#"} Help
-    = yield
+    = render '/layouts/menu_left', type_model: controller_name
+    .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main.margin-content
+      = yield
     = javascript_include_tag "application", "data-turbolinks-track" => true

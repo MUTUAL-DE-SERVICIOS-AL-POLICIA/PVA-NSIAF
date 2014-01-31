@@ -1,31 +1,28 @@
-= render '/layouts/menu_left', type_model: 'users'
-.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main.margin-content
-  .page-header
-    .pull-right
-      = link_to edit_user_path(@user), class: 'btn btn-primary' do
-        %span.glyphicon.glyphicon-edit
-        = t("general.btn.edit")
-    %h2 Usuario: #{@user.name}
+.page-header
+  .pull-right
+    = link_to edit_user_path(@user), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+  %h2 Usuario: #{@user.name}
 
-  %p
-    %b #{t('activerecord.attributes.user.code')}:
-    = @user.code
-  %p
-    %b #{t('activerecord.attributes.user.title')}:
-    = @user.post
-  %p
-    %b #{t('activerecord.attributes.user.ci')}:
-    = @user.ci
-  %p
-    %b #{t('activerecord.attributes.user.email')}:
-    = @user.email
-  %p
-    %b #{t('activerecord.attributes.user.username')}:
-    = @user.password
-  %p
-    %b #{t('activerecord.attributes.user.phone')}:
-    = @user.phone
-  %p
-    %b #{t('activerecord.attributes.user.cellular')}:
-    = @user.cellular
-
+%p
+  %b #{User.human_attribute_name('code')}:
+  = @user.code
+%p
+  %b #{User.human_attribute_name('title')}:
+  = @user.post
+%p
+  %b #{User.human_attribute_name('ci')}:
+  = @user.ci
+%p
+  %b #{User.human_attribute_name('email')}:
+  = @user.email
+%p
+  %b #{User.human_attribute_name('username')}:
+  = @user.password
+%p
+  %b #{User.human_attribute_name('phone')}:
+  = @user.phone
+%p
+  %b #{User.human_attribute_name('mobile')}:
+  = @user.mobile

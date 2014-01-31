@@ -1,30 +1,28 @@
-= render '/layouts/menu_left', type_model: 'users'
-.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main.margin-content
-  %h2.sub-header= t("users.title.title")
+%h2.sub-header= t("users.title.title")
 
-  %table.table.table-striped.table-hover
-    %thead
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th= User.human_attribute_name('code')
+      %th= User.human_attribute_name('name')
+      %th= User.human_attribute_name('title')
+      %th= t('general.status')
+      %th= t('general.actions')
+
+  %tbody
+    - @users.each do |user|
       %tr
-        %th= t('activerecord.attributes.user.code')
-        %th= t('activerecord.attributes.user.name')
-        %th= t('activerecord.attributes.user.title')
-        %th= t('general.status')
-        %th= t('general.actions')
-
-    %tbody
-      - @users.each do |user|
-        %tr
-          %td= user.code
-          %td= user.name
-          %td= user.post
-          %td
-          %td{style: 'width: 22%;'}
-            = link_to user, class: 'btn btn-primary' do
-              %span.glyphicon.glyphicon-eye-open
-              = t("general.btn.show")
-            = link_to edit_user_path(user), class: 'btn btn-primary' do
-              %span.glyphicon.glyphicon-edit
-              = t("general.btn.edit")
-            = link_to '#', class: 'btn btn-warning' do
-              %span.glyphicon.glyphicon-remove
-              = t("general.btn.active")
+        %td= user.code
+        %td= user.name
+        %td= user.post
+        %td
+        %td{style: 'width: 22%;'}
+          = link_to user, class: 'btn btn-primary' do
+            %span.glyphicon.glyphicon-eye-open
+            = t("general.btn.show")
+          = link_to edit_user_path(user), class: 'btn btn-primary' do
+            %span.glyphicon.glyphicon-edit
+            = t("general.btn.edit")
+          = link_to '#', class: 'btn btn-warning' do
+            %span.glyphicon.glyphicon-remove
+            = t("general.btn.active")
