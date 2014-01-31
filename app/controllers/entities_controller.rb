@@ -23,7 +23,7 @@ class EntitiesController < ApplicationController
 
     respond_to do |format|
       if @entity.save
-        format.html { redirect_to entities_url, notice: 'Entity was successfully created.' }
+        format.html { redirect_to entities_url, notice: t('general.created', model: Entity.model_name.human) }
         format.json { render action: 'show', status: :created, location: @entity }
       else
         format.html { render action: 'new' }
@@ -37,7 +37,7 @@ class EntitiesController < ApplicationController
   def update
     respond_to do |format|
       if @entity.update(entity_params)
-        format.html { redirect_to entities_url, notice: 'Entity was successfully updated.' }
+        format.html { redirect_to entities_url, notice: t('general.updated', model: Entity.model_name.human) }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -51,7 +51,7 @@ class EntitiesController < ApplicationController
   def destroy
     @entity.destroy
     respond_to do |format|
-      format.html { redirect_to entities_url }
+      format.html { redirect_to entities_url, notice: t('general.destroy', name: @entity.name) }
       format.json { head :no_content }
     end
   end

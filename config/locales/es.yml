@@ -22,6 +22,9 @@
 es:
   general:
     are_you_sure: '¿Estás seguro?'
+    destroy: "<strong>%{name}</strong> ha sido eliminado."
+    created: "%{model} ha sido creado correctamente."
+    updated: "%{model} ha sido actualizado correctamente."
     status: 'Estado'
     actions: 'Acciones'
     btn:
@@ -81,6 +84,8 @@ es:
             password_confirmation:
               confirmation: "deben ser iguales"
     models:
+      building: "Edificio"
+      entity: "Entidad"
       user: "Usuario"
     attributes:
       building:

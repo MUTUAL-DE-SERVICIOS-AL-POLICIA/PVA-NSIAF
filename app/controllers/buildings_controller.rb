@@ -23,7 +23,7 @@ class BuildingsController < ApplicationController
 
     respond_to do |format|
       if @building.save
-        format.html { redirect_to buildings_url, notice: 'Building was successfully created.' }
+        format.html { redirect_to buildings_url, notice: t('general.created', model: Building.model_name.human) }
         format.json { render action: 'show', status: :created, location: @building }
       else
         format.html { render action: 'new' }
@@ -37,7 +37,7 @@ class BuildingsController < ApplicationController
   def update
     respond_to do |format|
       if @building.update(building_params)
-        format.html { redirect_to buildings_url, notice: 'Building was successfully updated.' }
+        format.html { redirect_to buildings_url, notice: t('general.updated', model: Building.model_name.human) }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -51,7 +51,7 @@ class BuildingsController < ApplicationController
   def destroy
     @building.destroy
     respond_to do |format|
-      format.html { redirect_to buildings_url }
+      format.html { redirect_to buildings_url, notice: t('general.destroy', name: @building.name) }
       format.json { head :no_content }
     end
   end
