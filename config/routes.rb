@@ -1,4 +1,6 @@
 Nsiaf::Application.routes.draw do
+  resources :entities, except: [:show]
+
   resources :users do
     collection do
       get 'dbf'
