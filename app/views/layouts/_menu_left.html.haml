@@ -1,0 +1,15 @@
+- case type_model
+- when 'users'
+  - url_list = users_path
+  - url_new = new_user_path
+
+.container-fluid
+  .row
+    .col-sm-3.col-md-2.sidebar.menu_left
+      %ul.nav.nav-sidebar
+        %li.active
+          = link_to t("#{type_model}.title.list"), url_list
+        %li
+          = link_to t("#{type_model}.title.new"), url_new
+        %li
+          = link_to 'Migración de Usuarios', ''
