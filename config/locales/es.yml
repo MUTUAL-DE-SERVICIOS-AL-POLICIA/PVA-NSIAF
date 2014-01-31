@@ -32,7 +32,12 @@ es:
       destroy: "Eliminar"
       active: 'Activar'
       deactive: 'Desactivar'
-
+  buildings:
+    title:
+      title: "Edificios"
+      list: "Listado de Edificios"
+      new: "Nuevo Edificio"
+      edit: "Editar Edificio"
   entities:
     title:
       title: "Entidades"
@@ -49,6 +54,10 @@ es:
   activerecord:
     errors:
       models:
+        building:
+          attributes:
+            code:
+              taken: "ya existe"
         user:
           attributes:
             name:
@@ -74,6 +83,10 @@ es:
     models:
       user: "Usuario"
     attributes:
+      building:
+        acronym: "Sigla"
+        code: "Código"
+        entity: "Entidad"
       entity:
         acronym: "Sigla"
         code: "Código"

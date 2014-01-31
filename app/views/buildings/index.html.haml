@@ -1,0 +1,22 @@
+%h2.sub-header= t("buildings.title.title")
+
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th= Building.human_attribute_name('code')
+      %th= Building.human_attribute_name('name')
+      %th= Building.human_attribute_name('acronym')
+      %th= t('general.actions')
+  %tbody
+    - @buildings.each do |building|
+      %tr
+        %td= building.code
+        %td= building.name
+        %td= link_to_if building.entity, building.entity_name, building.entity
+        %td{style: 'width: 22%;'}
+          = link_to [:edit, building], class: 'btn btn-primary' do
+            %span.glyphicon.glyphicon-edit
+            = t("general.btn.edit")
+          = link_to building, class: 'btn btn-danger', method: :delete, data: { confirm: t('general.are_you_sure') } do
+            %span.glyphicon.glyphicon-remove
+            = t("general.btn.destroy")

@@ -21,6 +21,8 @@
         .navbar-collapse.collapse
           %ul.nav.navbar-nav.navbar-right.right_menu
             %li.active
+              = link_to t('buildings.title.title'), buildings_path
+            %li
               = link_to t('entities.title.title'), entities_path
             %li
               = link_to t('users.title.title'), users_path
