@@ -2,6 +2,10 @@
 - when 'users'
   - url_list = users_path
   - url_new = new_user_path
+  - url_migration = dbf_users_path
+- when 'entities'
+  - url_list = entities_path
+  - url_new = new_entity_path
 
 .container-fluid
   .row
@@ -11,5 +15,6 @@
           = link_to t("#{type_model}.title.list"), url_list
         %li
           = link_to t("#{type_model}.title.new"), url_new
-        %li
-          = link_to 'Migración de Usuarios', ''
+        - if %w(users).include?(type_model)
+          %li
+            = link_to 'Migración de Usuarios', url_migration
