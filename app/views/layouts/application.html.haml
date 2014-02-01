@@ -18,22 +18,8 @@
             %span.icon-bar
             %span.icon-bar
           = link_to "Sistema de Activos Fijos", root_path, class: 'navbar-brand'
-        .navbar-collapse.collapse
-          %ul.nav.navbar-nav.navbar-right.right_menu
-            %li.active
-              = link_to t('entities.title.title'), entities_path
-            %li
-              = link_to t('buildings.title.title'), buildings_path
-            %li
-              = link_to t('users.title.title'), users_path
-            %li
-              %a{href: "#"} Dashboard
-            %li
-              %a{href: "#"} Settings
-            %li
-              %a{href: "#"} Profile
-            %li
-              %a{href: "#"} Help
+        = yield :main_navigation
+
     = render '/layouts/menu_left', type_model: controller_name
     .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main.margin-content
       - if notice.present?
