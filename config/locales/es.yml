@@ -53,6 +53,7 @@ es:
       list: "Listado de Usuarios"
       new: "Nuevo Usuario"
       edit: "Editar Usuario"
+      migration: "Migración de Usuarios"
 
   activerecord:
     errors:
