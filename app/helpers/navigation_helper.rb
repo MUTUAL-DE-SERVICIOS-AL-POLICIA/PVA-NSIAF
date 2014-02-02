@@ -8,4 +8,8 @@ module NavigationHelper
     options[:class] = [title, true].include?(current_tab) ? 'active' : nil
     content_tag(:li, link_to(title, url), options)
   end
+
+  def import_models
+    %w(buildings departments users accounts auxiliars actives)
+  end
 end

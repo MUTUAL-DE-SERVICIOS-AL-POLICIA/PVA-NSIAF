@@ -10,6 +10,8 @@ Nsiaf::Application.routes.draw do
     end
   end
 
+  match '/dbf/:model', to: 'dbf#index', constraints: { model: /(buildings|departments|users|accounts|auxiliars|actives)/ }, as: 'dbf', via: [:get, :post]
+
   devise_for :users, controllers: { sessions: "sessions" }, skip: [ :sessions ]
   as :user do
     get '/login' => 'sessions#new', as: :new_user_session

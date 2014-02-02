@@ -93,6 +93,7 @@ es:
         acronym: "Sigla"
         code: "Código"
         entity: "Entidad"
+        name: "Nombre"
       entity:
         acronym: "Sigla"
         code: "Código"
