@@ -46,7 +46,7 @@ gem 'debugger', group: [:development, :test]
 
 gem 'devise'
 gem 'simple_form'
-gem 'bootstrap-sass', '~> 3.0.3.0'
+gem 'bootstrap-sass', '~> 3.1.0'
 gem 'haml-rails'
 
 # Gem for read DBF files

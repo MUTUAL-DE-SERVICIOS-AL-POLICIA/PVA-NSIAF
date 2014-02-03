@@ -1,5 +1,7 @@
 %h2.sub-header= t("users.title.title")
 
+= currently_at t('users.title.title')
+
 %table.table.table-striped.table-hover
   %thead
     %tr
@@ -11,5 +13,24 @@
 
   %tbody
     - @users.each do |user|
+<<<<<<< HEAD
       %tr{ id: dom_id(user) }
         = render 'user', user: user
+=======
+      %tr
+        %td= user.code
+        %td= user.name
+        %td= user.title
+        %td
+        %td{style: 'width: 22%;'}
+          = link_to user, class: 'btn btn-primary' do
+            %span.glyphicon.glyphicon-eye-open
+            = t("general.btn.show")
+          = link_to edit_user_path(user), class: 'btn btn-primary' do
+            %span.glyphicon.glyphicon-edit
+            = t("general.btn.edit")
+          = link_to '#', class: 'btn btn-warning' do
+            %span.glyphicon.glyphicon-remove
+            = t("general.btn.active")
+
+>>>>>>> 1c200832eecbeab36d9b31cf4ed6eadea3f8d1e0

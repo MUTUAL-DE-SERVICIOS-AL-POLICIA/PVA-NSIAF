@@ -28,7 +28,11 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
+<<<<<<< HEAD
         format.html { redirect_to @user, notice: 'El usuario fue creado con éxito.' }
+=======
+        format.html { redirect_to @user, notice: t('general.created', model: User.model_name.human) }
+>>>>>>> 1c200832eecbeab36d9b31cf4ed6eadea3f8d1e0
         format.json { render action: 'show', status: :created, location: @user }
       else
         format.html { render action: 'new' }
@@ -47,7 +51,11 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
+<<<<<<< HEAD
         format.html { redirect_to @user, notice: 'El usuario fue actualizado con éxito.' }
+=======
+        format.html { redirect_to @user, notice: t('general.updated', model: User.model_name.human) }
+>>>>>>> 1c200832eecbeab36d9b31cf4ed6eadea3f8d1e0
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -61,7 +69,7 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url }
+      format.html { redirect_to users_url, notice: t('general.destroy', name: @user.name) }
       format.json { head :no_content }
     end
   end

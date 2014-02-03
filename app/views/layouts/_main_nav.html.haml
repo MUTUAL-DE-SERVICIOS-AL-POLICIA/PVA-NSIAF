@@ -1,0 +1,10 @@
+= content_for :main_navigation do
+  .navbar-collapse.collapse
+    %ul.nav.navbar-nav.navbar-right.right_menu
+      = nav_tab t('entities.title.title'), entities_path, current: current_tab
+      = nav_tab t('buildings.title.title'), buildings_path, current: current_tab
+      = nav_tab t('users.title.title'), users_path, current: current_tab
+      = nav_tab 'Dashboard', '#', current: current_tab
+      = nav_tab 'Settings', '#', current: current_tab
+      = nav_tab 'Profile', '#', current: current_tab
+      = nav_tab 'Help', '#', current: current_tab

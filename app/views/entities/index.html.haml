@@ -1,0 +1,24 @@
+%h2.sub-header= t("entities.title.title")
+
+= currently_at t('entities.title.title')
+
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th= Entity.human_attribute_name('code')
+      %th= Entity.human_attribute_name('name')
+      %th= Entity.human_attribute_name('acronym')
+      %th= t('general.actions')
+  %tbody
+    - @entities.each do |entity|
+      %tr
+        %td= entity.code
+        %td= entity.name
+        %td= entity.acronym
+        %td{style: 'width: 22%;'}
+          = link_to [:edit, entity], class: 'btn btn-primary' do
+            %span.glyphicon.glyphicon-edit
+            = t("general.btn.edit")
+          = link_to entity, class: 'btn btn-danger', method: :delete, data: { confirm: t('general.are_you_sure') } do
+            %span.glyphicon.glyphicon-remove
+            = t("general.btn.destroy")
