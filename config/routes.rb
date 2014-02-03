@@ -4,6 +4,7 @@ Nsiaf::Application.routes.draw do
       get 'dbf'
       post 'import'
     end
+    get :change_status, on: :member
   end
 
   devise_for :users, controllers: { sessions: "sessions" }, skip: [ :sessions ]
