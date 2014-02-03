@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include ImportDbf
+
   CORRELATIONS = {
     'CODRESP' => 'code',
     'NOMRESP' => 'name',
@@ -15,44 +17,22 @@ class User < ActiveRecord::Base
   validates :username, presence: true, uniqueness: true
   validates :code, :name, :title, :ci, :email, :password, presence: true
 
-  ##
-  # Importar el archivo DBF a la tabla de usuarios
-  def self.import_dbf(dbf)
-    # TODO falta asignar a un departamento
-    users = DBF::Table.new(dbf.tempfile)
-    i = 0; j = 0
-    transaction do
-      users.each_with_index do |record, index|
-        print "#{index}.-\t"
-        if record.present?
-          CORRELATIONS.each { |k, v| print "#{record[k].inspect}, " }
-          token = get_unique_tokensss
-          save_correlations(record, token)
-          i += 1
-        else
-          j += 1
-          print record.inspect
-        end
-        puts ''
-      end
-    end
-    [i, j]
-  end
-
   private
 
   ##
   # Guarda en la base de datos de acuerdo a la correspondencia de campos.
-  def self.save_correlations(record, token)
+  def self.save_correlations(record)
+    # TODO falta asignar a un departamento
+    CORRELATIONS.each { |k, v| print "#{record[k].inspect}, " }
     user = Hash.new
     CORRELATIONS.each do |origin, destination|
       user.merge!({ destination => record[origin] })
     end
-    user.merge!({ 'password' => token })
-    new(user).save(validate: false)
+    user.merge!({ 'password' => get_unique_tokens })
+    new(user).save(validate: false) if user.present?
   end
 
-  def self.get_unique_tokensss
+  def self.get_unique_tokens
     loop do
       token = SecureRandom.urlsafe_base64(7)
       break token unless User.exists?(username: token)
