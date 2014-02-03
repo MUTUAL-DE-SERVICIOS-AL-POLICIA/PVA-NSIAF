@@ -104,7 +104,6 @@ es:
       user: "Usuario"
     attributes:
       building:
-        acronym: "Sigla"
         code: "Código"
         entity: "Entidad"
         name: "Nombre"

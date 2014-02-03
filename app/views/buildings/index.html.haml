@@ -5,13 +5,15 @@
 %table.table.table-striped.table-hover
   %thead
     %tr
+      %th= Building.human_attribute_name('id')
       %th= Building.human_attribute_name('code')
       %th= Building.human_attribute_name('name')
-      %th= Building.human_attribute_name('acronym')
+      %th= Building.human_attribute_name('entity')
       %th= t('general.actions')
   %tbody
     - @buildings.each do |building|
       %tr
+        %td= building.id
         %td= building.code
         %td= building.name
         %td= link_to_if building.entity, building.entity_name, building.entity
