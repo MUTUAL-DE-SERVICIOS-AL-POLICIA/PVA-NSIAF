@@ -5,6 +5,7 @@
 %table.table.table-striped.table-hover
   %thead
     %tr
+      %th= User.human_attribute_name('id')
       %th= User.human_attribute_name('code')
       %th= User.human_attribute_name('name')
       %th= User.human_attribute_name('title')
@@ -14,6 +15,7 @@
   %tbody
     - @users.each do |user|
       %tr
+        %td= user.id
         %td= user.code
         %td= user.name
         %td= user.title

@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :username, presence: true, uniqueness: true
-  validates :code, :name, :post, :ci, :email, :password, presence: true
+  validates :code, :name, :title, :ci, :email, :password, presence: true
 
   ##
   # Importar el archivo DBF a la tabla de usuarios
@@ -48,10 +48,8 @@ class User < ActiveRecord::Base
     CORRELATIONS.each do |origin, destination|
       user.merge!({ destination => record[origin] })
     end
-    user.merge!({ 'username' => token })
-    user.merge!({ 'email' => "#{token}@test.com" })
     user.merge!({ 'password' => token })
-    create!(user)
+    new(user).save(validate: false)
   end
 
   def self.get_unique_tokensss

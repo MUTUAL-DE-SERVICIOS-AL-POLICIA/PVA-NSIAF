@@ -5,7 +5,8 @@ Nsiaf::Application.routes.draw do
 
   resources :users
 
-  match '/dbf/:model', to: 'dbf#index', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'dbf', via: [:get, :post]
+  post '/dbf/:model/import', to: 'dbf#import', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'import_dbf'
+  get '/dbf/:model', to: 'dbf#index', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'dbf'
   get '/dbf', to: redirect('/dbf/buildings'), as: 'migration'
 
   devise_for :users, controllers: { sessions: "sessions" }, skip: [ :sessions ]
