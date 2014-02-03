@@ -1,20 +1,18 @@
-- case type_model
-- when 'users'
-  - url_list = users_path
-  - url_new = new_user_path
-  - url_migration = dbf_users_path
-- when 'entities'
-  - url_list = entities_path
-  - url_new = new_entity_path
+- if %w(buildings entities users).include?(controller_name)
+  - url_list = url_for(controller: type_model, action: 'index')
+  - url_new = url_for(controller: type_model, action: 'new')
+  - if %w(users).include?(type_model)
+    - url_migration = url_for(controller: type_model, action: 'dbf')
 
 .container-fluid
   .row
     .col-sm-3.col-md-2.sidebar.menu_left
       %ul.nav.nav-sidebar
-        %li.active
-          = link_to t("#{type_model}.title.list"), url_list
-        %li
-          = link_to t("#{type_model}.title.new"), url_new
-        - if %w(users).include?(type_model)
-          %li
-            = link_to 'Migración de Usuarios', url_migration
+        - if %(dbf).include?(controller_name)
+          - import_models.each do |model|
+            = nav_tab(model, dbf_path(model), current: (params[:model] == model))
+        - else
+          = nav_tab t("#{type_model}.title.list"), url_list, current: (action_name == 'index')
+          = nav_tab t("#{type_model}.title.new"), url_new, current: (action_name == 'new')
+          - if %w(users).include?(type_model)
+            = nav_tab t("#{type_model}.title.migration"), url_migration, current: (action_name == 'dbf')

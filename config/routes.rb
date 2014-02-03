@@ -1,4 +1,6 @@
 Nsiaf::Application.routes.draw do
+  resources :buildings, except: [:show]
+
   resources :entities, except: [:show]
 
   resources :users do
@@ -7,6 +9,8 @@ Nsiaf::Application.routes.draw do
       post 'import'
     end
   end
+
+  match '/dbf/:model', to: 'dbf#index', constraints: { model: /(buildings|departments|users|accounts|auxiliars|actives)/ }, as: 'dbf', via: [:get, :post]
 
   devise_for :users, controllers: { sessions: "sessions" }, skip: [ :sessions ]
   as :user do

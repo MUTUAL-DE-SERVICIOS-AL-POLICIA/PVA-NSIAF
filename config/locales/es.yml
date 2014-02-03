@@ -22,6 +22,9 @@
 es:
   general:
     are_you_sure: '¿Estás seguro?'
+    destroy: "<strong>%{name}</strong> ha sido eliminado."
+    created: "%{model} ha sido creado correctamente."
+    updated: "%{model} ha sido actualizado correctamente."
     status: 'Estado'
     actions: 'Acciones'
     btn:
@@ -32,7 +35,12 @@ es:
       destroy: "Eliminar"
       active: 'Activar'
       deactive: 'Desactivar'
-
+  buildings:
+    title:
+      title: "Edificios"
+      list: "Listado de Edificios"
+      new: "Nuevo Edificio"
+      edit: "Editar Edificio"
   entities:
     title:
       title: "Entidades"
@@ -45,10 +53,15 @@ es:
       list: "Listado de Usuarios"
       new: "Nuevo Usuario"
       edit: "Editar Usuario"
+      migration: "Migración de Usuarios"
 
   activerecord:
     errors:
       models:
+        building:
+          attributes:
+            code:
+              taken: "ya existe"
         user:
           attributes:
             name:
@@ -72,8 +85,15 @@ es:
             password_confirmation:
               confirmation: "deben ser iguales"
     models:
+      building: "Edificio"
+      entity: "Entidad"
       user: "Usuario"
     attributes:
+      building:
+        acronym: "Sigla"
+        code: "Código"
+        entity: "Entidad"
+        name: "Nombre"
       entity:
         acronym: "Sigla"
         code: "Código"
