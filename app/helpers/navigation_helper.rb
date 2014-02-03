@@ -10,6 +10,6 @@ module NavigationHelper
   end
 
   def import_models
-    %w(buildings departments users accounts auxiliars actives)
+    %w(buildings departments users accounts auxiliaries assets)
   end
 end
