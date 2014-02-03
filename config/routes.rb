@@ -1,4 +1,6 @@
 Nsiaf::Application.routes.draw do
+  resources :departments
+
   resources :buildings, except: [:show]
 
   resources :entities, except: [:show]

@@ -53,6 +53,9 @@ es:
   departments:
     title:
       title: "Departamentos"
+      list: "Listado de Departamentos"
+      new: "Nuevo Departamento"
+      edit: "Editar Departamento"
   entities:
     title:
       title: "Entidades"
@@ -76,6 +79,12 @@ es:
           attributes:
             code:
               taken: "ya existe"
+        department:
+          attributes:
+            code:
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
         user:
           attributes:
             name:
@@ -100,6 +109,7 @@ es:
               confirmation: "deben ser iguales"
     models:
       building: "Edificio"
+      department: "Departamento"
       entity: "Entidad"
       user: "Usuario"
     attributes:
@@ -107,6 +117,11 @@ es:
         code: "Código"
         entity: "Entidad"
         name: "Nombre"
+      department:
+        code: "Código"
+        name: "Nombre"
+        building: "Edificio"
+        status: "Estado"
       entity:
         acronym: "Sigla"
         code: "Código"

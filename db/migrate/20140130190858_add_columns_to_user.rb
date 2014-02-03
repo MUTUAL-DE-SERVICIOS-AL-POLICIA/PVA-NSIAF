@@ -7,7 +7,7 @@ class AddColumnsToUser < ActiveRecord::Migration
     add_column :users, :ci,       :integer
     add_column :users, :phone,    :string, limit: 230
     add_column :users, :mobile,   :string, limit: 230
-    add_column :users, :status,   :string, limit: 1
+    add_column :users, :status,   :string, limit: 2
 
     add_index :users, :username
   end
