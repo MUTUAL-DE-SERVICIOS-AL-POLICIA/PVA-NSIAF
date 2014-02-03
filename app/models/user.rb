@@ -14,8 +14,23 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  validates :username, presence: true, uniqueness: true
-  validates :code, :name, :title, :ci, :email, :password, presence: true
+  validates :code, presence: true, uniqueness: true
+  validates :name, :title, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
+  validates :ci, presence: true, uniqueness: true, numericality: { only_integer: true }
+  validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z]+\z/ }
+  validates :phone, :mobile, numericality: { only_integer: true }
+
+  before_create :user_inactive
+
+  def type_status
+    state = self.status == '0' ? 'inactive' : 'active'
+    I18n.t("general.#{state}")
+  end
+
+  def change_status
+    state = self.status == '0' ? '1' : '0'
+    self.update_attribute(:status, state)
+  end
 
   private
 
@@ -37,5 +52,9 @@ class User < ActiveRecord::Base
       token = SecureRandom.urlsafe_base64(7)
       break token unless User.exists?(username: token)
     end
+  end
+
+  def user_inactive
+    self.status = '0'
   end
 end

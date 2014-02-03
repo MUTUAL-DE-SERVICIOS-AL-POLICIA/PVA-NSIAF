@@ -4,4 +4,9 @@ module ApplicationHelper
   def dbf_mime_types
     %w(application/dbase application/x-dbase application/dbf application/x-dbf zz-application/zz-winassoc-dbf)
   end
+
+  def title_status(type)
+    state = type == '0' ? 'active' : 'deactive'
+    t("general.btn.#{state}")
+  end
 end

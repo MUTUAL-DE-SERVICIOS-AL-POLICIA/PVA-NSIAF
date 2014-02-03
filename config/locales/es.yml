@@ -27,6 +27,8 @@ es:
     updated: "%{model} ha sido actualizado correctamente."
     status: 'Estado'
     actions: 'Acciones'
+    active: 'ACTIVO'
+    inactive: 'INACTIVO'
     btn:
       cancel: "Cancelar"
       save: "Aceptar"
@@ -87,31 +89,44 @@ es:
               blank: "es obligatorio"
         user:
           attributes:
-            name:
-              blank: "es obligatorio"
             code:
               blank: "es obligatorio"
+              taken: "ya existe"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
             title:
               blank: "es obligatorio"
+              invalid: "inválido"
             ci:
               blank: "es obligatorio"
+              not_a_number: "no es un número"
+              taken: "ya existe"
             email:
               blank: "es obligatorio"
-              invalid: "invalido"
+              invalid: "inválido"
               taken: "ya existe"
             username:
               blank: "es obligatorio"
+              invalid: "inválido"
               taken: "ya existe"
             password:
               blank: "es obligatorio"
-              too_short: "es muy corto"
+              too_short: "mínimo 8 caractéres"
             password_confirmation:
               confirmation: "deben ser iguales"
+            phone:
+              not_a_number: "no es un número"
+            mobile:
+              not_a_number: "no es un número"
+
+
     models:
       building: "Edificio"
       department: "Departamento"
       entity: "Entidad"
       user: "Usuario"
+
     attributes:
       building:
         code: "Código"
@@ -136,4 +151,4 @@ es:
         password: "Contraseña"
         password_confirmation: "Confirmar Contraseña"
         phone: "Teléfono"
-        cellular: "Celular"
+        mobile: "Celular"

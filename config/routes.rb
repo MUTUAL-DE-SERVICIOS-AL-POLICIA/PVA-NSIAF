@@ -5,7 +5,9 @@ Nsiaf::Application.routes.draw do
 
   resources :entities, except: [:show]
 
-  resources :users
+  resources :users do
+    get :change_status, on: :member
+  end
 
   post '/dbf/:model/import', to: 'dbf#import', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'import_dbf'
   get '/dbf/:model', to: 'dbf#index', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'dbf'

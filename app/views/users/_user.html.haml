@@ -1,0 +1,15 @@
+%td= user.id
+%td= user.code
+%td= user.name
+%td= user.title
+%td= user.type_status
+%td{style: 'width: 24%;'}
+  = link_to user, class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-eye-open
+    = t("general.btn.show")
+  = link_to edit_user_path(user), class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-edit
+    = t("general.btn.edit")
+  = link_to change_status_user_path(user), class: 'btn btn-warning', remote: true do
+    %span.glyphicon.glyphicon-remove
+    = title_status(user.status)

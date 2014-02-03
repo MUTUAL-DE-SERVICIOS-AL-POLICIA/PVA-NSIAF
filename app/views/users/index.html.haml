@@ -14,20 +14,5 @@
 
   %tbody
     - @users.each do |user|
-      %tr
-        %td= user.id
-        %td= user.code
-        %td= user.name
-        %td= user.title
-        %td
-        %td{style: 'width: 22%;'}
-          = link_to user, class: 'btn btn-primary' do
-            %span.glyphicon.glyphicon-eye-open
-            = t("general.btn.show")
-          = link_to edit_user_path(user), class: 'btn btn-primary' do
-            %span.glyphicon.glyphicon-edit
-            = t("general.btn.edit")
-          = link_to '#', class: 'btn btn-warning' do
-            %span.glyphicon.glyphicon-remove
-            = t("general.btn.active")
-
+      %tr{ id: dom_id(user) }
+        = render 'user', user: user
