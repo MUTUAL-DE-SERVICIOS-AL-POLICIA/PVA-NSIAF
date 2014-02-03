@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20140131221812) do
     t.datetime "updated_at"
   end
 
+  add_index "buildings", ["code"], name: "index_buildings_on_code", unique: true, using: :btree
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
 
   create_table "entities", force: true do |t|
