@@ -35,25 +35,42 @@ es:
       destroy: "Eliminar"
       active: 'Activar'
       deactive: 'Desactivar'
+  accounts:
+    title:
+      title: "Cuentas"
+  assets:
+    title:
+      title: "Activos"
+  auxiliaries:
+    title:
+      title: "Auxiliares"
   buildings:
     title:
       title: "Edificios"
       list: "Listado de Edificios"
       new: "Nuevo Edificio"
       edit: "Editar Edificio"
+  departments:
+    title:
+      title: "Departamentos"
+      list: "Listado de Departamentos"
+      new: "Nuevo Departamento"
+      edit: "Editar Departamento"
   entities:
     title:
       title: "Entidades"
       list: "Listado de Entidades"
       new: "Nueva Entidad"
       edit: "Editar Entidad"
+  migration:
+    title:
+      title: "Migración"
   users:
     title:
       title: "Usuarios"
       list: "Listado de Usuarios"
       new: "Nuevo Usuario"
       edit: "Editar Usuario"
-      migration: "Migración de Usuarios"
 
   activerecord:
     errors:
@@ -62,6 +79,12 @@ es:
           attributes:
             code:
               taken: "ya existe"
+        department:
+          attributes:
+            code:
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
         user:
           attributes:
             name:
@@ -86,14 +109,19 @@ es:
               confirmation: "deben ser iguales"
     models:
       building: "Edificio"
+      department: "Departamento"
       entity: "Entidad"
       user: "Usuario"
     attributes:
       building:
-        acronym: "Sigla"
         code: "Código"
         entity: "Entidad"
         name: "Nombre"
+      department:
+        code: "Código"
+        name: "Nombre"
+        building: "Edificio"
+        status: "Estado"
       entity:
         acronym: "Sigla"
         code: "Código"

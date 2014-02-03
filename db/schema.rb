@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140131221812) do
+ActiveRecord::Schema.define(version: 20140203150058) do
 
   create_table "buildings", force: true do |t|
     t.string   "code",       limit: 50
@@ -21,7 +21,19 @@ ActiveRecord::Schema.define(version: 20140131221812) do
     t.datetime "updated_at"
   end
 
+  add_index "buildings", ["code"], name: "index_buildings_on_code", unique: true, using: :btree
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
+
+  create_table "departments", force: true do |t|
+    t.string   "code",        limit: 50
+    t.string   "name",        limit: 230
+    t.string   "status",      limit: 2
+    t.integer  "building_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "departments", ["building_id"], name: "index_departments_on_building_id", using: :btree
 
   create_table "entities", force: true do |t|
     t.string   "code",       limit: 50
@@ -54,8 +66,8 @@ ActiveRecord::Schema.define(version: 20140131221812) do
     t.string   "status",                 limit: 1
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", using: :btree
 
 end

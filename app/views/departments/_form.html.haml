@@ -1,0 +1,14 @@
+.col-md-8.column.col-md-offset-1
+  = simple_form_for @department, html: { class: 'form-horizontal' } do |f|
+    .form_group= f.input :code
+    .form_group= f.input :name
+    .form_group= f.input :status
+    .form_group= f.association :building, include_blank: false
+    .form-group
+      .col-lg-offset-5.col-lg-9
+        = button_tag class: 'btn btn-primary' do
+          %span.glyphicon.glyphicon-ok
+          Aceptar
+        = link_to departments_path, class: 'btn btn-danger' do
+          %span.glyphicon.glyphicon-remove
+          Cancelar
