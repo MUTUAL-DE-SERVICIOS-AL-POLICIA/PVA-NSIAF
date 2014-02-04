@@ -40,6 +40,9 @@ es:
   accounts:
     title:
       title: "Cuentas"
+      list: "Listado de Cuentas"
+      new: "Nueva Cuenta"
+      edit: "Editar Cuenta"
   assets:
     title:
       title: "Activos"
@@ -77,6 +80,13 @@ es:
   activerecord:
     errors:
       models:
+        account:
+          attributes:
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
         building:
           attributes:
             code:
@@ -120,14 +130,17 @@ es:
             mobile:
               not_a_number: "no es un número"
 
-
     models:
+      account: "Cuenta"
       building: "Edificio"
       department: "Departamento"
       entity: "Entidad"
       user: "Usuario"
 
     attributes:
+      account:
+        code: "Código"
+        name: "Nombre"
       building:
         code: "Código"
         entity: "Entidad"

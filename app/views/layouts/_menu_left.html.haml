@@ -1,4 +1,4 @@
-- if %w(buildings departments entities users).include?(controller_name)
+- unless %w(dbf).include?(controller_name)
   - url_list = url_for(controller: type_model, action: 'index')
   - url_new = url_for(controller: type_model, action: 'new')
 
