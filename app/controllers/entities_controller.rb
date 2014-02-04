@@ -1,10 +1,13 @@
 class EntitiesController < ApplicationController
-  before_action :set_entity, only: [:edit, :update, :destroy]
+  before_action :set_entity, only: [:edit, :update, :destroy, :show]
 
   # GET /entities
   # GET /entities.json
   def index
     @entities = Entity.all
+  end
+
+  def show
   end
 
   # GET /entities/new

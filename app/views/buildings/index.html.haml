@@ -17,8 +17,11 @@
         %td= building.code
         %td= building.name
         %td= link_to_if building.entity, building.entity_name, building.entity
-        %td{style: 'width: 22%;'}
-          = link_to [:edit, building], class: 'btn btn-primary' do
+        %td.td_actions
+          = link_to building, class: 'btn btn-primary' do
+            %span.glyphicon.glyphicon-eye-open
+            = t("general.btn.show")
+          = link_to edit_building_path(building), class: 'btn btn-primary' do
             %span.glyphicon.glyphicon-edit
             = t("general.btn.edit")
           = link_to building, class: 'btn btn-danger', method: :delete, data: { confirm: t('general.are_you_sure') } do

@@ -21,13 +21,9 @@ class User < ActiveRecord::Base
   validates :ci, presence: true, uniqueness: true, numericality: { only_integer: true }
   validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z]+\z/ }
   validates :phone, :mobile, numericality: { only_integer: true }
+  validates :department_id, presence: true
 
   before_create :user_inactive
-
-  def type_status
-    state = self.status == '0' ? 'inactive' : 'active'
-    I18n.t("general.#{state}")
-  end
 
   def change_status
     state = self.status == '0' ? '1' : '0'

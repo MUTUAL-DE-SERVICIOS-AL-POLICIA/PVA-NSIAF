@@ -1,11 +1,13 @@
 Nsiaf::Application.routes.draw do
   resources :accounts
 
-  resources :departments
+  resources :departments do
+    get :change_status, on: :member
+  end
 
-  resources :buildings, except: [:show]
+  resources :buildings
 
-  resources :entities, except: [:show]
+  resources :entities
 
   resources :users do
     get :change_status, on: :member

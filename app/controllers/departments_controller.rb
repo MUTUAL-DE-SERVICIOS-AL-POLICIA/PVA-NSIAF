@@ -1,5 +1,5 @@
 class DepartmentsController < ApplicationController
-  before_action :set_department, only: [:show, :edit, :update, :destroy]
+  before_action :set_department, only: [:show, :edit, :update, :destroy, :change_status]
 
   # GET /departments
   # GET /departments.json
@@ -59,6 +59,10 @@ class DepartmentsController < ApplicationController
       format.html { redirect_to departments_url, notice: t('general.destroy', name: @department.name) }
       format.json { head :no_content }
     end
+  end
+
+  def change_status
+    @department.change_status
   end
 
   private

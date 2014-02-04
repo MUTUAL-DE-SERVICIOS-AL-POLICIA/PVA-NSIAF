@@ -2,8 +2,9 @@
 %td= user.code
 %td= user.name
 %td= user.title
-%td= user.type_status
-%td{style: 'width: 24%;'}
+%td= link_to user.department.name, department_path(user.department.id)
+%td= type_status(user.status)
+%td.td_actions
   = link_to user, class: 'btn btn-primary' do
     %span.glyphicon.glyphicon-eye-open
     = t("general.btn.show")

@@ -8,21 +8,10 @@
       %th= Department.human_attribute_name('id')
       %th= Department.human_attribute_name('code')
       %th= Department.human_attribute_name('name')
-      %th= Department.human_attribute_name('status')
       %th= Department.human_attribute_name('building')
+      %th= t('general.status')
       %th= t('general.actions')
   %tbody
     - @departments.each do |department|
-      %tr
-        %td= department.id
-        %td= department.code
-        %td= department.name
-        %td= department.status
-        %td= link_to_if department.building, department.building_name, department.building
-        %td{style: 'width: 22%;'}
-          = link_to [:edit, department], class: 'btn btn-primary' do
-            %span.glyphicon.glyphicon-edit
-            = t("general.btn.edit")
-          = link_to department, class: 'btn btn-danger', method: :delete, data: { confirm: t('general.are_you_sure') } do
-            %span.glyphicon.glyphicon-remove
-            = t("general.btn.destroy")
+      %tr{ id: dom_id(department) }
+        = render 'department', department: department

@@ -1,3 +1,5 @@
+= currently_at t('users.title.title')
+
 .page-header
   .pull-right
     = link_to edit_user_path(@user), class: 'btn btn-primary' do
@@ -26,3 +28,9 @@
 %p
   %b #{User.human_attribute_name('mobile')}:
   = @user.mobile
+%p
+  %b #{User.human_attribute_name('department')}:
+  = @user.department.name
+%p
+  %b #{t('general.status')}:
+  = type_status(@user.status)

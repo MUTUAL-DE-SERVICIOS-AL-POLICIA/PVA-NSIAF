@@ -1,18 +1,24 @@
-%p#notice= notice
+= currently_at t('departments.title.title')
+
+.page-header
+  .pull-right
+    = link_to edit_department_path(@department), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+  %h2 Departamento
 
 %p
-  %b Code:
+  %b #{Department.human_attribute_name('code')}:
   = @department.code
 %p
-  %b Name:
+  %b #{Department.human_attribute_name('name')}:
   = @department.name
 %p
-  %b Status:
+  %b #{Department.human_attribute_name('code')}:
   = @department.status
 %p
-  %b Building:
-  = @department.building
-
-= link_to 'Edit', edit_department_path(@department)
-\|
-= link_to 'Back', departments_path
+  %b #{Department.human_attribute_name('building')}:
+  = @department.building.name
+%p
+  %b #{t('general.status')}:
+  = type_status(@department.status)

@@ -9,8 +9,9 @@ class Building < ActiveRecord::Base
 
   belongs_to :entity
 
-  validates :name, :entity_id, presence: true
   validates :code, presence: true, uniqueness: true
+  validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
+  validates :entity_id, presence: true
 
   def entity_name
     entity.present? ? entity.name : ''

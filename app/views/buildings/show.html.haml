@@ -1,0 +1,18 @@
+= currently_at t('buildings.title.title')
+
+.page-header
+  .pull-right
+    = link_to edit_building_path(@building), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+  %h2 Edificio
+
+%p
+  %b #{Building.human_attribute_name('code')}:
+  = @building.code
+%p
+  %b #{Building.human_attribute_name('name')}:
+  = @building.name
+%p
+  %b #{Building.human_attribute_name('entity')}:
+  = @building.entity.name

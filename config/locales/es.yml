@@ -95,12 +95,28 @@ es:
         building:
           attributes:
             code:
+              blank: "es obligatorio"
               taken: "ya existe"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
         department:
           attributes:
             code:
               blank: "es obligatorio"
+              taken: "ya existe"
             name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+        entity:
+          attributes:
+            code:
+              blank: "es obligatorio"
+              taken: "ya existe"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+            acronym:
               blank: "es obligatorio"
         user:
           attributes:
