@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  belongs_to :department
+
   validates :code, presence: true, uniqueness: true
   validates :name, :title, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
   validates :ci, presence: true, uniqueness: true, numericality: { only_integer: true }

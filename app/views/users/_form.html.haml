@@ -10,6 +10,7 @@
     = f.input :password_confirmation
     = f.input :phone
     = f.input :mobile
+    = f.association :department, include_blank: false
 
     .form-group
       .col-lg-offset-5.col-lg-9
