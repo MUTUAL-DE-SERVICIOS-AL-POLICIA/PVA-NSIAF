@@ -7,4 +7,5 @@
       = nav_tab 'Dashboard', '#', current: current_tab
       = nav_tab 'Settings', '#', current: current_tab
       = nav_tab 'Profile', '#', current: current_tab
-      = nav_tab 'Help', '#', current: current_tab
+      %li
+        = link_to 'Cerrar Sesión', destroy_user_session_path, method: :delete

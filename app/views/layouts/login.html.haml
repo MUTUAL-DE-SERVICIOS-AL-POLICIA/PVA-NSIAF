@@ -1,0 +1,13 @@
+!!!
+%html
+  %head
+    %title NVSIAF - Login
+    = stylesheet_link_tag "login", media: "all"
+    = csrf_meta_tags
+  %body
+    .row-fluid.login-wrapper
+      - if notice
+        .notice= notice
+      - if alert
+        .alert= alert
+      = yield

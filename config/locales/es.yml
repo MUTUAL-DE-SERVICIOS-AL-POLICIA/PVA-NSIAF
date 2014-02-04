@@ -20,6 +20,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 es:
+  sessions:
+    log_in: 'Iniciar Sesión'
+    new_password: '¿Olvidaste tu contraseña?'
   general:
     are_you_sure: '¿Estás seguro?'
     destroy: "<strong>%{name}</strong> ha sido eliminado."
@@ -37,6 +40,8 @@ es:
       destroy: "Eliminar"
       active: 'Activar'
       deactive: 'Desactivar'
+      sign_in: 'INGRESAR'
+      send: 'ENVIAR'
   buildings:
     title:
       title: "Edificios"
