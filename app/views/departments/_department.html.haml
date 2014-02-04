@@ -2,7 +2,7 @@
 %td= department.code
 %td= department.name
 %td= type_status(department.status)
-%td= link_to department.building.name, building_path(department.building.id)
+%td= link_to_if department.building, department.building_name, department.building
 %td.td_actions
   = link_to department, class: 'btn btn-primary' do
     %span.glyphicon.glyphicon-eye-open
