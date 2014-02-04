@@ -20,8 +20,8 @@
           = link_to "Sistema de Activos Fijos", root_path, class: 'navbar-brand'
         = yield :main_navigation
 
-    = render '/layouts/menu_left', type_model: controller_name
-    .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main.margin-content
+    =# render '/layouts/menu_left', type_model: controller_name
+    .col-sm-12.col-md-12
       - if notice.present?
         .alert.alert-success
           %button(type="button" class="close" data-dismiss="alert" aria-hidden="true") &times;
