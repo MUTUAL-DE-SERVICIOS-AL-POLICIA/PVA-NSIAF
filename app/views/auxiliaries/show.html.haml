@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Code:
+  = @auxiliary.code
+%p
+  %b Name:
+  = @auxiliary.name
+%p
+  %b Account:
+  = @auxiliary.account
+
+= link_to 'Edit', edit_auxiliary_path(@auxiliary)
+\|
+= link_to 'Back', auxiliaries_path
