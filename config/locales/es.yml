@@ -51,6 +51,9 @@ es:
   assets:
     title:
       title: "Activos"
+      list: "Listado de Activos"
+      new: "Nuevo Activo"
+      edit: "Editar Activo"
   auxiliaries:
     title:
       title: "Auxiliares"
@@ -94,6 +97,17 @@ es:
               taken: "ya existe"
               blank: "es obligatorio"
             name:
+              blank: "es obligatorio"
+        asset:
+          attributes:
+            auxiliary_id:
+              blank: "es obligatorio"
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
+            user_id:
               blank: "es obligatorio"
         auxiliary:
           attributes:
@@ -165,6 +179,7 @@ es:
 
     models:
       account: "Cuenta"
+      asset: "Activo"
       auxiliary: "Auxiliar"
       building: "Edificio"
       department: "Departamento"
@@ -175,6 +190,11 @@ es:
       account:
         code: "Código"
         name: "Nombre"
+      asset:
+        code: "Código"
+        description: "Descripción"
+        auxiliary: "Auxiliar"
+        user: "Usuario"
       auxiliary:
         code: "Código"
         name: "Nombre"
