@@ -42,33 +42,66 @@ es:
       deactive: 'Desactivar'
       sign_in: 'INGRESAR'
       send: 'ENVIAR'
+  accounts:
+    title:
+      title: "Cuentas"
+      list: "Listado de Cuentas"
+      new: "Nueva Cuenta"
+      edit: "Editar Cuenta"
+  assets:
+    title:
+      title: "Activos"
+  auxiliaries:
+    title:
+      title: "Auxiliares"
   buildings:
     title:
       title: "Edificios"
       list: "Listado de Edificios"
       new: "Nuevo Edificio"
       edit: "Editar Edificio"
+  departments:
+    title:
+      title: "Departamentos"
+      list: "Listado de Departamentos"
+      new: "Nuevo Departamento"
+      edit: "Editar Departamento"
   entities:
     title:
       title: "Entidades"
       list: "Listado de Entidades"
       new: "Nueva Entidad"
       edit: "Editar Entidad"
+  migration:
+    title:
+      title: "Migración"
   users:
     title:
       title: "Usuarios"
       list: "Listado de Usuarios"
       new: "Nuevo Usuario"
       edit: "Editar Usuario"
-      migration: "Migración de Usuarios"
 
   activerecord:
     errors:
       models:
+        account:
+          attributes:
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
         building:
           attributes:
             code:
               taken: "ya existe"
+        department:
+          attributes:
+            code:
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
         user:
           attributes:
             code:
@@ -102,18 +135,26 @@ es:
             mobile:
               not_a_number: "no es un número"
 
-
     models:
+      account: "Cuenta"
       building: "Edificio"
+      department: "Departamento"
       entity: "Entidad"
       user: "Usuario"
 
     attributes:
+      account:
+        code: "Código"
+        name: "Nombre"
       building:
-        acronym: "Sigla"
         code: "Código"
         entity: "Entidad"
         name: "Nombre"
+      department:
+        code: "Código"
+        name: "Nombre"
+        building: "Edificio"
+        status: "Estado"
       entity:
         acronym: "Sigla"
         code: "Código"

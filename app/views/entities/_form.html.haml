@@ -1,8 +1,8 @@
 .col-md-8.column.col-md-offset-1
   = simple_form_for @entity, html: { class: 'form-horizontal' } do |f|
-    .form_group= f.input :code
-    .form_group= f.input :name
-    .form_group= f.input :acronym
+    = f.input :code
+    = f.input :name
+    = f.input :acronym
     .form-group
       .col-lg-offset-5.col-lg-9
         = button_tag class: 'btn btn-primary' do

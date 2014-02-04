@@ -1,18 +1,14 @@
-- if %w(buildings entities users).include?(controller_name)
+- unless %w(dbf).include?(controller_name)
   - url_list = url_for(controller: type_model, action: 'index')
   - url_new = url_for(controller: type_model, action: 'new')
-  - if %w(users).include?(type_model)
-    - url_migration = url_for(controller: type_model, action: 'dbf')
 
 .container-fluid
   .row
     .col-sm-3.col-md-2.sidebar.menu_left
       %ul.nav.nav-sidebar
-        - if %(dbf).include?(controller_name)
+        - if %w(dbf).include?(controller_name)
           - import_models.each do |model|
-            = nav_tab(model, dbf_path(model), current: (params[:model] == model))
+            = nav_tab(t("#{model}.title.title"), dbf_path(model), current: (params[:model] == model))
         - else
           = nav_tab t("#{type_model}.title.list"), url_list, current: (action_name == 'index')
           = nav_tab t("#{type_model}.title.new"), url_new, current: (action_name == 'new')
-          - if %w(users).include?(type_model)
-            = nav_tab t("#{type_model}.title.migration"), url_migration, current: (action_name == 'dbf')

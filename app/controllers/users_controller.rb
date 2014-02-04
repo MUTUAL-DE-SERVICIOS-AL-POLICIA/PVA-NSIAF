@@ -66,21 +66,6 @@ class UsersController < ApplicationController
     end
   end
 
-  ##
-  # GET /users/dbf
-  # Muestra el formulario para poder seleccionar un archivo *.dbf y luego proceder
-  # a la importación de los datos de Usuarios desde el archivo *.dbf
-  def dbf
-  end
-
-  ##
-  # POST /users/import
-  # Importa los datos del archivo DBF dentro de la tabla usuarios.
-  def import
-    inserted, nils = User.import_dbf(params[:dbf])
-    redirect_to :back, notice: "#{inserted + nils} total registros. #{inserted} registros insertados. #{nils} registros nulos."
-  end
-
   def change_status
     @user.change_status
   end
