@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140204190653) do
+ActiveRecord::Schema.define(version: 20140204193616) do
 
   create_table "accounts", force: true do |t|
     t.string   "code",       limit: 50
@@ -19,6 +19,18 @@ ActiveRecord::Schema.define(version: 20140204190653) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "assets", force: true do |t|
+    t.string   "code",         limit: 50
+    t.text     "description"
+    t.integer  "auxiliary_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "assets", ["auxiliary_id"], name: "index_assets_on_auxiliary_id", using: :btree
+  add_index "assets", ["user_id"], name: "index_assets_on_user_id", using: :btree
 
   create_table "auxiliaries", force: true do |t|
     t.string   "code",       limit: 50

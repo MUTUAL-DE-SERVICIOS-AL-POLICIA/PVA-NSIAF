@@ -2,7 +2,7 @@
 %td= user.code
 %td= user.name
 %td= user.title
-%td= link_to user.department.name, department_path(user.department.id)
+%td= link_to_if user.department, user.department_name, user.department
 %td= type_status(user.status)
 %td.td_actions
   = link_to user, class: 'btn btn-primary' do

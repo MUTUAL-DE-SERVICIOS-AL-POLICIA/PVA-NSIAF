@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Code:
+  = @asset.code
+%p
+  %b Description:
+  = @asset.description
+%p
+  %b Auxiliary:
+  = @asset.auxiliary
+%p
+  %b User:
+  = @asset.user
+
+= link_to 'Edit', edit_asset_path(@asset)
+\|
+= link_to 'Back', assets_path
