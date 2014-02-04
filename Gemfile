@@ -48,6 +48,7 @@ gem 'devise'
 gem 'simple_form'
 gem 'bootstrap-sass', '~> 3.1.0'
 gem 'haml-rails'
+gem 'cancan'
 
 # Gem for read DBF files
 gem 'dbf'

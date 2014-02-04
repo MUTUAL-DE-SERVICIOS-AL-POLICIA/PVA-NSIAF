@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   validates :phone, :mobile, numericality: { only_integer: true }
   validates :department_id, presence: true
 
-  before_create :user_inactive
+  before_create :status_role
 
   def change_status
     state = self.status == '0' ? '1' : '0'
@@ -56,7 +56,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def user_inactive
+  def status_role
     self.status = '0'
+    self.role = 'Admin'
   end
 end

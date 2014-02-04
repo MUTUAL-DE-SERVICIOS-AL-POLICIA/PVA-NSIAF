@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140204193616) do
+ActiveRecord::Schema.define(version: 20140204200956) do
 
   create_table "accounts", force: true do |t|
     t.string   "code",       limit: 50
@@ -92,8 +92,9 @@ ActiveRecord::Schema.define(version: 20140204193616) do
     t.integer  "ci"
     t.string   "phone",                  limit: 230
     t.string   "mobile",                 limit: 230
-    t.string   "status",                 limit: 1
+    t.string   "status",                 limit: 2
     t.integer  "department_id"
+    t.string   "role"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
