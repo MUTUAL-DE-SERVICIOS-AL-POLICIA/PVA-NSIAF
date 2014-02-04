@@ -1,4 +1,6 @@
 Nsiaf::Application.routes.draw do
+  resources :auxiliaries
+
   resources :accounts
 
   resources :departments do

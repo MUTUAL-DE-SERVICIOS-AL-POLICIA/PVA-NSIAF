@@ -54,6 +54,9 @@ es:
   auxiliaries:
     title:
       title: "Auxiliares"
+      list: "Listado de Auxiliares"
+      new: "Nuevo Auxiliar"
+      edit: "Editar Auxiliar"
   buildings:
     title:
       title: "Edificios"
@@ -87,6 +90,15 @@ es:
       models:
         account:
           attributes:
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
+        auxiliary:
+          attributes:
+            account_id:
+              blank: "es obligatorio"
             code:
               taken: "ya existe"
               blank: "es obligatorio"
@@ -153,6 +165,7 @@ es:
 
     models:
       account: "Cuenta"
+      auxiliary: "Auxiliar"
       building: "Edificio"
       department: "Departamento"
       entity: "Entidad"
@@ -162,6 +175,10 @@ es:
       account:
         code: "Código"
         name: "Nombre"
+      auxiliary:
+        code: "Código"
+        name: "Nombre"
+        account: "Cuenta"
       building:
         code: "Código"
         entity: "Entidad"
