@@ -30,7 +30,7 @@
   = @user.mobile
 %p
   %b #{User.human_attribute_name('department')}:
-  = @user.department.name
+  = @user.department_name
 %p
   %b #{t('general.status')}:
   = type_status(@user.status)

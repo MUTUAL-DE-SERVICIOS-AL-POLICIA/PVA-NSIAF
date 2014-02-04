@@ -18,7 +18,7 @@
   = @department.status
 %p
   %b #{Department.human_attribute_name('building')}:
-  = @department.building.name
+  = @department.building_name
 %p
   %b #{t('general.status')}:
   = type_status(@department.status)
