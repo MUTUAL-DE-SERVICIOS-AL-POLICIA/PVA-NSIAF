@@ -5,7 +5,7 @@ module ImportDbf
 
   included do
     unless self.const_defined?(:CORRELATIONS)
-      self.const_set :CORRELATIONS, Auth::CORRELATIONS
+      self.const_set :CORRELATIONS, ImportDbf::CORRELATIONS
     end
   end
 
@@ -18,9 +18,9 @@ module ImportDbf
       transaction do
         users.each_with_index do |record, index|
           print "#{index + 1}.-\t"
-          self.const_get(:CORRELATIONS).each { |k, v| print "#{record[k].inspect}, " }
           if record.present?
             save_correlations(record)
+            self.const_get(:CORRELATIONS).each { |k, v| print "#{record[k].inspect}, " }
             i += 1
           else
             j += 1
