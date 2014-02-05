@@ -5,3 +5,8 @@ jQuery ->
     bProcessing: true
     bServerSide: true
     sAjaxSource: $('.datatable').data('source')
+    bLengthChange: false
+    iDisplayLength: 15
+    aoColumnDefs: [
+      { bSortable: false, aTargets: [ -1 ] }
+    ]

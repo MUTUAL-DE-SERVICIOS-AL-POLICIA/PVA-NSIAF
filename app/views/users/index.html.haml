@@ -3,12 +3,12 @@
 %table.table.table-striped.table-hover.datatable.display{'data-source' => users_url(format: "json")}
   %thead
     %tr
-      %th= User.human_attribute_name('code')
+      %th.col-md-1= User.human_attribute_name('code')
       %th= User.human_attribute_name('name')
       %th= User.human_attribute_name('title')
-      %th= User.human_attribute_name('department')
-      %th= t('general.status')
-      %th= t('general.actions')
+      %th.col-md-2= User.human_attribute_name('department')
+      %th.col-md-1= t('general.status')
+      %th.col-md-2= t('general.actions')
 
   %tbody
 

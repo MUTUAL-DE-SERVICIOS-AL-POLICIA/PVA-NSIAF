@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(version: 20140204200956) do
     t.integer  "ci"
     t.string   "phone",                  limit: 230
     t.string   "mobile",                 limit: 230
-    t.string   "status",                 limit: 2
+    t.string   "status",                 limit: 1
     t.integer  "department_id"
     t.string   "role"
   end
