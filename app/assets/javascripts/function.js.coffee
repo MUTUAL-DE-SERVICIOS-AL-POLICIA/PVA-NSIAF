@@ -5,6 +5,11 @@ jQuery ->
     bProcessing: true
     bServerSide: true
     sAjaxSource: $('.datatable').data('source')
+    bLengthChange: false
+    iDisplayLength: 15
+    aoColumnDefs: [
+      { bSortable: false, aTargets: [ -1 ] }
+    ]
 
   $(document).on 'click', '.datatable .btn-warning', ->
     $span = $(this).find('span')
