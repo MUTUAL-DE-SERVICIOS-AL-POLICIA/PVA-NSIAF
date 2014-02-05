@@ -3,6 +3,8 @@
     = link_to edit_user_path(@user), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
+    = link_to t('users.title.title'), users_path, class: 'btn btn-primary'
+
   %h2 Usuario: #{@user.name}
 
 %p

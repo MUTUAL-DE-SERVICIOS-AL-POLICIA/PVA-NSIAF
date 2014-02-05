@@ -71,6 +71,9 @@ class UsersController < ApplicationController
 
   def change_status
     @user.change_status
+    respond_to do |format|
+      format.json { head :no_content }
+    end
   end
 
   private

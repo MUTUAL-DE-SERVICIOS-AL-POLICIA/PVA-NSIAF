@@ -218,7 +218,7 @@ es:
         title: "Cargo"
         ci: "C.I."
         username: "Usuario"
-        email: "Correo Electrónico"
+        email: "Email"
         password: "Contraseña"
         password_confirmation: "Confirmar Contraseña"
         phone: "Teléfono"
