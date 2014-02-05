@@ -2,10 +2,9 @@
 
 = currently_at t('users.title.title')
 
-%table.table.table-striped.table-hover
+%table.table.table-striped.table-hover.datatable.display{'data-source' => users_url(format: "json")}
   %thead
     %tr
-      %th= User.human_attribute_name('id')
       %th= User.human_attribute_name('code')
       %th= User.human_attribute_name('name')
       %th= User.human_attribute_name('title')
@@ -14,6 +13,4 @@
       %th= t('general.actions')
 
   %tbody
-    - @users.each do |user|
-      %tr{ id: dom_id(user) }
-        = render 'user', user: user
+

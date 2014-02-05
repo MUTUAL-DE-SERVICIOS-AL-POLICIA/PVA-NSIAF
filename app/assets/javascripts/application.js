@@ -14,3 +14,6 @@
 //= require jquery_ujs
 // Loads all Bootstrap javascripts
 //= require bootstrap
+//= require dataTables/jquery.dataTables
+//= require dataTables/jquery.dataTables.bootstrap3
+//= require function
