@@ -15,7 +15,11 @@ jQuery ->
     sDom: 'T<"clear">lfrtip',
     oTableTools:
       sSwfPath: "/swf/copy_csv_xls.swf"
-      aButtons: ['copy', 'csv', 'print']
+      aButtons: [
+        { sExtends: 'copy', sButtonText: 'Copiar' },
+        { sExtends: 'csv', sButtonText: 'CSV' },
+        { sExtends: 'print', sButtonText: 'Imprimir' }
+      ]
 
   # Change button status
   $(document).on 'click', '.datatable .btn-warning', ->
