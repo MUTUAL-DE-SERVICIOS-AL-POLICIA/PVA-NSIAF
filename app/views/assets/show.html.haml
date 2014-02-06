@@ -1,18 +1,23 @@
-%p#notice= notice
+.page-header
+  .pull-right
+    = link_to edit_asset_path(@asset), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+    = link_to assets_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("assets.title.title")
+
+  %h2 Activos
 
 %p
-  %b Code:
+  %b #{Asset.human_attribute_name('code')}:
   = @asset.code
 %p
-  %b Description:
+  %b #{Asset.human_attribute_name('description')}:
   = @asset.description
 %p
-  %b Auxiliary:
-  = @asset.auxiliary
+  %b #{Asset.human_attribute_name('user')}:
+  = @asset.user_name
 %p
-  %b User:
-  = @asset.user
-
-= link_to 'Edit', edit_asset_path(@asset)
-\|
-= link_to 'Back', assets_path
+  %b #{Asset.human_attribute_name('auxiliary')}:
+  = @asset.auxiliary_name

@@ -4,7 +4,10 @@ class AssetsController < ApplicationController
   # GET /assets
   # GET /assets.json
   def index
-    @assets = Asset.all
+    respond_to do |format|
+      format.html { render '/shared/index' }
+      format.json { render json: AssetsDatatable.new(view_context) }
+    end
   end
 
   # GET /assets/1
@@ -15,10 +18,16 @@ class AssetsController < ApplicationController
   # GET /assets/new
   def new
     @asset = Asset.new
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # GET /assets/1/edit
   def edit
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # POST /assets
@@ -31,7 +40,7 @@ class AssetsController < ApplicationController
         format.html { redirect_to assets_url, notice: t('general.created', model: Asset.model_name.human) }
         format.json { render action: 'show', status: :created, location: @asset }
       else
-        format.html { render action: 'new' }
+        format.html { render action: 'form' }
         format.json { render json: @asset.errors, status: :unprocessable_entity }
       end
     end
@@ -45,7 +54,7 @@ class AssetsController < ApplicationController
         format.html { redirect_to assets_url, notice: t('general.updated', model: Asset.model_name.human) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: 'form' }
         format.json { render json: @asset.errors, status: :unprocessable_entity }
       end
     end

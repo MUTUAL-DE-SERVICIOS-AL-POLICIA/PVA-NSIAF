@@ -57,7 +57,9 @@ es:
       title: "Activos"
       list: "Listado de Activos"
       new: "Nuevo Activo"
+      create: "Nuevo Activo"
       edit: "Editar Activo"
+      update: "Editar Activo"
   auxiliaries:
     title:
       title: "Auxiliares"
@@ -122,7 +124,7 @@ es:
             code:
               taken: "ya existe"
               blank: "es obligatorio"
-            name:
+            description:
               blank: "es obligatorio"
             user_id:
               blank: "es obligatorio"
