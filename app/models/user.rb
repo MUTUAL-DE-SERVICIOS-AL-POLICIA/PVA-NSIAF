@@ -15,9 +15,7 @@ class User < ActiveRecord::Base
 
   belongs_to :department
 
-  attr_accessor :is_migrate
-
-  after_initialize :init
+  include Migrated
 
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
@@ -49,18 +47,6 @@ class User < ActiveRecord::Base
     false
   end
 
-  def init
-    self.is_migrate ||= false
-  end
-
-  def is_migrate?
-    self.is_migrate == true
-  end
-
-  def is_not_migrate?
-    self.is_migrate == false
-  end
-
   private
 
   ##
@@ -71,8 +57,6 @@ class User < ActiveRecord::Base
       user.merge!({ destination => record[origin] })
     end
     d = Department.find_by_code(record['CODOFIC'])
-    ##u = new(user.merge!({ department: d }))
-    ##puts u.errors.messages.inspect unless u.valid?
     d.present? && user.present? && new(user.merge!({ department: d })).save
   end
 
