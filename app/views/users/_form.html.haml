@@ -14,9 +14,4 @@
 
     .form-group
       .col-lg-offset-5.col-lg-9
-        = button_tag class: 'btn btn-primary' do
-          %span.glyphicon.glyphicon-ok
-          Aceptar
-        = link_to users_path, class: 'btn btn-danger' do
-          %span.glyphicon.glyphicon-remove
-          Cancelar
+        = submit_and_cancel(users_path)
