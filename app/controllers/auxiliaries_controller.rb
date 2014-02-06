@@ -1,10 +1,13 @@
 class AuxiliariesController < ApplicationController
-  before_action :set_auxiliary, only: [:show, :edit, :update, :destroy]
+  before_action :set_auxiliary, only: [:show, :edit, :update, :destroy, :change_status]
 
   # GET /auxiliaries
   # GET /auxiliaries.json
   def index
-    @auxiliaries = Auxiliary.all
+    respond_to do |format|
+      format.html { render '/shared/index' }
+      format.json { render json: AuxiliariesDatatable.new(view_context) }
+    end
   end
 
   # GET /auxiliaries/1
@@ -15,10 +18,16 @@ class AuxiliariesController < ApplicationController
   # GET /auxiliaries/new
   def new
     @auxiliary = Auxiliary.new
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # GET /auxiliaries/1/edit
   def edit
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # POST /auxiliaries
@@ -31,7 +40,7 @@ class AuxiliariesController < ApplicationController
         format.html { redirect_to auxiliaries_url, notice: t('general.created', model: Auxiliary.model_name.human) }
         format.json { render action: 'show', status: :created, location: @auxiliary }
       else
-        format.html { render action: 'new' }
+        format.html { render action: 'form' }
         format.json { render json: @auxiliary.errors, status: :unprocessable_entity }
       end
     end
@@ -45,7 +54,7 @@ class AuxiliariesController < ApplicationController
         format.html { redirect_to auxiliaries_url, notice: t('general.updated', model: Auxiliary.model_name.human) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: 'form' }
         format.json { render json: @auxiliary.errors, status: :unprocessable_entity }
       end
     end
@@ -57,6 +66,13 @@ class AuxiliariesController < ApplicationController
     @auxiliary.destroy
     respond_to do |format|
       format.html { redirect_to auxiliaries_url, notice: t('general.destroy', name: @auxiliary.name) }
+      format.json { head :no_content }
+    end
+  end
+
+  def change_status
+    @auxiliary.change_status
+    respond_to do |format|
       format.json { head :no_content }
     end
   end

@@ -63,7 +63,9 @@ es:
       title: "Auxiliares"
       list: "Listado de Auxiliares"
       new: "Nuevo Auxiliar"
+      create: "Nuevo Auxiliar"
       edit: "Editar Auxiliar"
+      update: "Editar Auxiliar"
   buildings:
     title:
       title: "Edificios"

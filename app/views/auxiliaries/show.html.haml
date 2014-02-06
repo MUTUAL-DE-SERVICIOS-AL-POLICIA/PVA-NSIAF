@@ -1,15 +1,19 @@
-%p#notice= notice
+.page-header
+  .pull-right
+    = link_to edit_auxiliary_path(@auxiliary), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+    = link_to auxiliaries_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("auxiliaries.title.title")
 
+  %h2 Auxiliar
 %p
-  %b Code:
+  %b #{Auxiliary.human_attribute_name('code')}:
   = @auxiliary.code
 %p
-  %b Name:
+  %b #{Auxiliary.human_attribute_name('name')}:
   = @auxiliary.name
 %p
-  %b Account:
-  = @auxiliary.account
-
-= link_to 'Edit', edit_auxiliary_path(@auxiliary)
-\|
-= link_to 'Back', auxiliaries_path
+  %b #{Auxiliary.human_attribute_name('account')}:
+  = @auxiliary.account_name

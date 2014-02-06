@@ -1,7 +1,9 @@
 Nsiaf::Application.routes.draw do
   resources :assets
 
-  resources :auxiliaries
+  resources :auxiliaries do
+    get :change_status, on: :member
+  end
 
   resources :accounts
 
