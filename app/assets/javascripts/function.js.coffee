@@ -12,6 +12,7 @@ jQuery ->
     ]
     oLanguage:
       sInfo: "Mostrando _START_ al _END_ de _TOTAL_ registros"
+      sSearch: "Buscar:"
       oPaginate:
         sPrevious: "Anterior"
         sNext: "Siguiente"

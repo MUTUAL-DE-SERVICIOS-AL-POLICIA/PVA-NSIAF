@@ -32,6 +32,7 @@ es:
     actions: 'Acciones'
     active: 'ACTIVO'
     inactive: 'INACTIVO'
+    print: 'Imprimir'
     btn:
       cancel: "Cancelar"
       save: "Aceptar"
@@ -86,7 +87,9 @@ es:
       title: "Usuarios"
       list: "Listado de Usuarios"
       new: "Nuevo Usuario"
+      create: "Nuevo Usuario"
       edit: "Editar Usuario"
+      update: "Editar Usuario"
 
   activerecord:
     errors:

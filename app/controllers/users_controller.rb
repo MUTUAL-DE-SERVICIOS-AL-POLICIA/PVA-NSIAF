@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     respond_to do |format|
-      format.html
+      format.html { render '/shared/index' }
       format.json { render json: UsersDatatable.new(view_context) }
     end
   end
@@ -18,10 +18,16 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # GET /users/1/edit
   def edit
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # POST /users
@@ -34,7 +40,7 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: t('general.created', model: User.model_name.human) }
         format.json { render action: 'show', status: :created, location: @user }
       else
-        format.html { render action: 'new' }
+        format.html { render action: 'form' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -53,7 +59,7 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: t('general.updated', model: User.model_name.human) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: 'form' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
