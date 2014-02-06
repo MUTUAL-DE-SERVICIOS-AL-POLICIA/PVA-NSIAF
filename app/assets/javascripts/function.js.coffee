@@ -11,11 +11,7 @@ jQuery ->
       { bSortable: false, aTargets: [ -1 ] }
     ]
     oLanguage:
-      sInfo: "Mostrando _START_ al _END_ de _TOTAL_ registros"
-      sSearch: "Buscar:"
-      oPaginate:
-        sPrevious: "Anterior"
-        sNext: "Siguiente"
+      sUrl: '/locales/dataTables.spanish.txt'
     sDom: 'T<"clear">lfrtip',
     oTableTools:
       sSwfPath: "/swf/copy_csv_xls.swf"
