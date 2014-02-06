@@ -1,0 +1,30 @@
+- case controller_name
+- when 'users'
+  - new_url = new_user_path
+  - table_url = users_url(format: "json")
+- when 'departments'
+  - new_url = new_department_path
+  - table_url = departments_url(format: "json")
+- when 'buildings'
+  - new_url = new_building_path
+  - table_url = buildings_url(format: "json")
+
+
+.page-header
+  %h2= t("#{controller_name}.title.title")
+
+.col-xs-6.button_new
+  = link_to new_url, class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-plus
+    = t("#{controller_name}.title.new")
+  = link_to '', class: 'btn btn-default' do
+    %span.glyphicon.glyphicon-print
+    = t("general.print")
+
+%table.table.table-striped.table-hover.datatable{'data-source' => table_url}
+  %thead
+    %tr
+      = render "#{controller_name}/#{controller_name}"
+      %th.col-md-1= t('general.status')
+      %th.td_actions= t('general.actions')
+  %tbody

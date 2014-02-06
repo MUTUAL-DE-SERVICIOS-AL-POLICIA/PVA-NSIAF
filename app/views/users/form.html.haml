@@ -1,3 +1,6 @@
+.page-header
+  %h1= t("users.title.#{params[:action]}")
+
 .col-md-8.column.col-md-offset-1
   = simple_form_for @user, html: { class: 'form-horizontal' } do |f|
     = f.input :code, required: true
@@ -12,6 +15,4 @@
     = f.input :mobile
     = f.association :department, include_blank: false
 
-    .form-group
-      .col-lg-offset-5.col-lg-9
-        = submit_and_cancel(users_path)
+    = render 'shared/form_buttons'

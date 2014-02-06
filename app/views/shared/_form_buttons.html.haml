@@ -1,0 +1,13 @@
+- case controller_name
+- when 'users' then list_url = users_path
+- when 'departments' then list_url = departments_path
+- when 'buildings' then list_url = buildings_path
+
+.form-group
+  .col-lg-offset-5.col-lg-9
+    = button_tag class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-ok
+      = t('general.btn.save')
+    = link_to list_url , class: 'btn btn-danger' do
+      %span.glyphicon.glyphicon-remove
+      = t('general.btn.cancel')

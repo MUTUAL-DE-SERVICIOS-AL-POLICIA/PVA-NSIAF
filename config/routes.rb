@@ -9,7 +9,9 @@ Nsiaf::Application.routes.draw do
     get :change_status, on: :member
   end
 
-  resources :buildings
+  resources :buildings do
+    get :change_status, on: :member
+  end
 
   resources :entities
 

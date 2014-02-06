@@ -32,6 +32,7 @@ es:
     actions: 'Acciones'
     active: 'ACTIVO'
     inactive: 'INACTIVO'
+    print: 'Imprimir'
     migrate: 'Migrar'
     btn:
       cancel: "Cancelar"
@@ -66,13 +67,17 @@ es:
       title: "Edificios"
       list: "Listado de Edificios"
       new: "Nuevo Edificio"
+      create: "Nuevo Edificio"
       edit: "Editar Edificio"
+      update: "Editar Edificio"
   departments:
     title:
       title: "Departamentos"
       list: "Listado de Departamentos"
       new: "Nuevo Departamento"
+      create: "Nuevo Departamento"
       edit: "Editar Departamento"
+      update: "Editar Departamento"
   entities:
     title:
       title: "Entidades"
@@ -90,7 +95,9 @@ es:
       title: "Usuarios"
       list: "Listado de Usuarios"
       new: "Nuevo Usuario"
+      create: "Nuevo Usuario"
       edit: "Editar Usuario"
+      update: "Editar Usuario"
 
   activerecord:
     errors:
@@ -130,6 +137,8 @@ es:
             name:
               blank: "es obligatorio"
               invalid: "inválido"
+            entity_id:
+              blank: "es obligatorio"
         department:
           attributes:
             code:
