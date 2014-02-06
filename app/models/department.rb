@@ -42,6 +42,6 @@ class Department < ActiveRecord::Base
   end
 
   def department_inactive
-    self.status = '0'
+    self.status = '1'
   end
 end

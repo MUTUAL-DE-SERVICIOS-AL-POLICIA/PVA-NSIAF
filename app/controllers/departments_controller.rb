@@ -4,7 +4,10 @@ class DepartmentsController < ApplicationController
   # GET /departments
   # GET /departments.json
   def index
-    @departments = Department.all
+    respond_to do |format|
+      format.html { render '/shared/index' }
+      format.json { render json: DepartmentsDatatable.new(view_context) }
+    end
   end
 
   # GET /departments/1
@@ -15,10 +18,16 @@ class DepartmentsController < ApplicationController
   # GET /departments/new
   def new
     @department = Department.new
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # GET /departments/1/edit
   def edit
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # POST /departments
@@ -31,7 +40,7 @@ class DepartmentsController < ApplicationController
         format.html { redirect_to departments_url, notice: t('general.created', model:Department.model_name.human) }
         format.json { render action: 'show', status: :created, location: @department }
       else
-        format.html { render action: 'new' }
+        format.html { render action: 'form' }
         format.json { render json: @department.errors, status: :unprocessable_entity }
       end
     end
@@ -45,7 +54,7 @@ class DepartmentsController < ApplicationController
         format.html { redirect_to departments_url, notice: t('general.updated', model: Department.model_name.human) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: 'form' }
         format.json { render json: @department.errors, status: :unprocessable_entity }
       end
     end
@@ -63,6 +72,9 @@ class DepartmentsController < ApplicationController
 
   def change_status
     @department.change_status
+    respond_to do |format|
+      format.json { head :no_content }
+    end
   end
 
   private

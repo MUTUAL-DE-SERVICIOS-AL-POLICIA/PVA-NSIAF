@@ -73,7 +73,9 @@ es:
       title: "Departamentos"
       list: "Listado de Departamentos"
       new: "Nuevo Departamento"
+      create: "Nuevo Departamento"
       edit: "Editar Departamento"
+      update: "Editar Departamento"
   entities:
     title:
       title: "Entidades"

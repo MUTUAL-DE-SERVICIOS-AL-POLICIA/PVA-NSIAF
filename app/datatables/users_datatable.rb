@@ -9,7 +9,7 @@ class UsersDatatable
     {
       sEcho: params[:sEcho].to_i,
       iTotalRecords: User.count,
-      iTotalDisplayRecords: users.total_entries,
+      iTotalDisplayRecords: array.total_entries,
       aaData: data
     }
   end
@@ -17,7 +17,7 @@ class UsersDatatable
 private
 
   def data
-    users.map do |user|
+    array.map do |user|
       [
         user.code,
         user.name,
@@ -36,17 +36,17 @@ private
     end
   end
 
-  def users
-    @users ||= fetch_users
+  def array
+    @users ||= fetch_array
   end
 
-  def fetch_users
-    users = User.includes(:department).order("#{sort_column} #{sort_direction}")
-    users = users.page(page).per_page(per_page)
+  def fetch_array
+    array = User.includes(:department).order("#{sort_column} #{sort_direction}")
+    array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      users = users.where("users.code like :search or users.name like :search or title like :search or ci like :search or email like :search or username like :search or phone like :search or mobile like :search or departments.name like :search or users.status like :search", search: "%#{params[:sSearch]}%")
+      array = array.where("users.code like :search or users.name like :search or title like :search or ci like :search or email like :search or username like :search or phone like :search or mobile like :search or departments.name like :search or users.status like :search", search: "%#{params[:sSearch]}%")
     end
-    users
+    array
   end
 
   def page
