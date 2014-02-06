@@ -3,6 +3,10 @@
     = link_to edit_building_path(@building), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
+    = link_to buildings_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("buildings.title.title")
+
   %h2 Edificio
 
 %p
@@ -13,4 +17,4 @@
   = @building.name
 %p
   %b #{Building.human_attribute_name('entity')}:
-  = @building.entity.name
+  = @building.entity_name

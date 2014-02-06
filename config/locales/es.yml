@@ -67,7 +67,9 @@ es:
       title: "Edificios"
       list: "Listado de Edificios"
       new: "Nuevo Edificio"
+      create: "Nuevo Edificio"
       edit: "Editar Edificio"
+      update: "Editar Edificio"
   departments:
     title:
       title: "Departamentos"
@@ -135,6 +137,8 @@ es:
             name:
               blank: "es obligatorio"
               invalid: "inválido"
+            entity_id:
+              blank: "es obligatorio"
         department:
           attributes:
             code:
