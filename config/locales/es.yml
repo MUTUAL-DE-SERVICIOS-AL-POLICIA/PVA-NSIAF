@@ -83,7 +83,9 @@ es:
       title: "Entidades"
       list: "Listado de Entidades"
       new: "Nueva Entidad"
+      create: "Nueva Entidad"
       edit: "Editar Entidad"
+      update: "Editar Entidad"
   migration:
     alert_html: 'Especifique el archivo <b>%{model}</b> para migrar'
     file: 'Adjuntar Archivo'

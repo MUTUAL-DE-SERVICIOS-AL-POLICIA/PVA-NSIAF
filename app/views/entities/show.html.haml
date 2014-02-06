@@ -3,6 +3,10 @@
     = link_to edit_entity_path(@entity), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
+    = link_to entities_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("entities.title.title")
+
   %h2 Entidad
 
 %p

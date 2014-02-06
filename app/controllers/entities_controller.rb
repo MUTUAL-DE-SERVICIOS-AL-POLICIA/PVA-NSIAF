@@ -4,7 +4,10 @@ class EntitiesController < ApplicationController
   # GET /entities
   # GET /entities.json
   def index
-    @entities = Entity.all
+    respond_to do |format|
+      format.html { render '/shared/index' }
+      format.json { render json: EntitiesDatatable.new(view_context) }
+    end
   end
 
   def show
@@ -13,10 +16,16 @@ class EntitiesController < ApplicationController
   # GET /entities/new
   def new
     @entity = Entity.new
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # GET /entities/1/edit
   def edit
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # POST /entities
@@ -29,7 +38,7 @@ class EntitiesController < ApplicationController
         format.html { redirect_to entities_url, notice: t('general.created', model: Entity.model_name.human) }
         format.json { render action: 'show', status: :created, location: @entity }
       else
-        format.html { render action: 'new' }
+        format.html { render action: 'form' }
         format.json { render json: @entity.errors, status: :unprocessable_entity }
       end
     end
@@ -43,7 +52,7 @@ class EntitiesController < ApplicationController
         format.html { redirect_to entities_url, notice: t('general.updated', model: Entity.model_name.human) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: 'form' }
         format.json { render json: @entity.errors, status: :unprocessable_entity }
       end
     end
