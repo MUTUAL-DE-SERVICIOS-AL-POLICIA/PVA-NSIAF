@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 20140204200956) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "email",                              default: "", null: false
+    t.string   "email",                              default: ""
     t.string   "encrypted_password",                 default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(version: 20140204200956) do
     t.integer  "ci"
     t.string   "phone",                  limit: 230
     t.string   "mobile",                 limit: 230
-    t.string   "status",                 limit: 1
+    t.string   "status",                 limit: 2
     t.integer  "department_id"
     t.string   "role"
   end

@@ -153,6 +153,8 @@ es:
             code:
               blank: "es obligatorio"
               taken: "ya existe"
+            department_id:
+              blank: "es obligatorio"
             name:
               blank: "es obligatorio"
               invalid: "inválido"

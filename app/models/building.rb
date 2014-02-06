@@ -8,7 +8,7 @@ class Building < ActiveRecord::Base
 
   belongs_to :entity
 
-  validates :code, presence: true, uniqueness: true
+  validates :code, presence: true, uniqueness: { scope: :entity_id }
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
   validates :entity_id, presence: true
 

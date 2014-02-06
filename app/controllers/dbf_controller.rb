@@ -24,6 +24,7 @@ class DbfController < ApplicationController
   end
 
   def is_dbf_file?(dbf)
-    view_context.dbf_mime_types.include?(dbf.content_type) && view_context.get_filename(params[:model]) == dbf.original_filename
+    view_context.dbf_mime_types.include?(dbf.content_type) &&
+      view_context.get_filename(params[:model]).downcase == dbf.original_filename.downcase
   end
 end
