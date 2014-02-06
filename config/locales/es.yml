@@ -49,7 +49,9 @@ es:
       title: "Cuentas"
       list: "Listado de Cuentas"
       new: "Nueva Cuenta"
+      create: "Nueva Cuenta"
       edit: "Editar Cuenta"
+      update: "Editar Cuenta"
   assets:
     title:
       title: "Activos"
