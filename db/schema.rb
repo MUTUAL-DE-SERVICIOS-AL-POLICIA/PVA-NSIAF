@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140204200956) do
+ActiveRecord::Schema.define(version: 20140206212200) do
 
   create_table "accounts", force: true do |t|
     t.string   "code",       limit: 50
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20140204200956) do
     t.integer  "entity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "status"
   end
 
   add_index "buildings", ["code"], name: "index_buildings_on_code", unique: true, using: :btree
