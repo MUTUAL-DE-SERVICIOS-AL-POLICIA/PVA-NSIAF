@@ -5,7 +5,6 @@ class User < ActiveRecord::Base
     'CODRESP' => 'code',
     'NOMRESP' => 'name',
     'CARGO' => 'title',
-    #'CODOFIC' => 'department_id',
     'API_ESTADO' => 'status'
   }
 
@@ -16,12 +15,24 @@ class User < ActiveRecord::Base
 
   belongs_to :department
 
-  validates :code, presence: true, uniqueness: true
-  validates :name, :title, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
-  validates :ci, presence: true, uniqueness: true, numericality: { only_integer: true }
-  validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z]+\z/ }
-  validates :phone, :mobile, allow_blank: true, numericality: { only_integer: true }
-  validates :department_id, presence: true
+  attr_accessor :is_migrate
+
+  after_initialize :init
+
+  with_options if: :is_not_migrate? do |m|
+    m.validates :email, presence: false, allow_blank: true
+    m.validates :code, presence: true, uniqueness: { scope: :department_id }
+    m.validates :name, :title, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
+    m.validates :ci, uniqueness: true, numericality: { only_integer: true }, allow_blank: true
+    m.validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z]+\z/ }
+    m.validates :phone, :mobile, numericality: { only_integer: true }, allow_blank: true
+    m.validates :department_id, presence: true
+  end
+
+  with_options if: :is_migrate? do |m|
+    m.validates :code, presence: true, uniqueness: { scope: :department_id }
+    m.validates :department_id, presence: true
+  end
 
   before_create :status_role
 
@@ -34,26 +45,35 @@ class User < ActiveRecord::Base
     department.present? ? department.name : ''
   end
 
+  def email_required?
+    false
+  end
+
+  def init
+    self.is_migrate ||= false
+  end
+
+  def is_migrate?
+    self.is_migrate == true
+  end
+
+  def is_not_migrate?
+    self.is_migrate == false
+  end
+
   private
 
   ##
   # Guarda en la base de datos de acuerdo a la correspondencia de campos.
   def self.save_correlations(record)
-    # TODO falta asignar a un departamento
-    CORRELATIONS.each { |k, v| print "#{record[k].inspect}, " }
-    user = Hash.new
+    user = { is_migrate: true, password: 'Demo1234' }
     CORRELATIONS.each do |origin, destination|
       user.merge!({ destination => record[origin] })
     end
-    user.merge!({ 'password' => get_unique_tokens })
-    new(user).save(validate: false) if user.present?
-  end
-
-  def self.get_unique_tokens
-    loop do
-      token = SecureRandom.urlsafe_base64(7)
-      break token unless User.exists?(username: token)
-    end
+    d = Department.find_by_code(record['CODOFIC'])
+    ##u = new(user.merge!({ department: d }))
+    ##puts u.errors.messages.inspect unless u.valid?
+    d.present? && user.present? && new(user.merge!({ department: d })).save
   end
 
   def status_role

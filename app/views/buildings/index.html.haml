@@ -3,18 +3,16 @@
 %table.table.table-striped.table-hover
   %thead
     %tr
-      %th= Building.human_attribute_name('id')
+      %th= Building.human_attribute_name('entity')
       %th= Building.human_attribute_name('code')
       %th= Building.human_attribute_name('name')
-      %th= Building.human_attribute_name('entity')
       %th= t('general.actions')
   %tbody
     - @buildings.each do |building|
       %tr
-        %td= building.id
+        %td= link_to_if building.entity, building.entity_code, building.entity, title: building.entity_name, data: { toggle: 'tooltip' }
         %td= building.code
         %td= building.name
-        %td= link_to_if building.entity, building.entity_name, building.entity
         %td.td_actions
           = link_to building, class: 'btn btn-primary' do
             %span.glyphicon.glyphicon-eye-open

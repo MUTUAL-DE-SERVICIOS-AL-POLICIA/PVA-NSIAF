@@ -3,15 +3,18 @@ class Building < ActiveRecord::Base
 
   CORRELATIONS = {
     'UNIDAD' => 'code',
-    'DESCRIP' => 'name',
-    'ENTIDAD' => 'entity_id'
+    'DESCRIP' => 'name'
   }
 
   belongs_to :entity
 
-  validates :code, presence: true, uniqueness: true
+  validates :code, presence: true, uniqueness: { scope: :entity_id }
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
   validates :entity_id, presence: true
+
+  def entity_code
+    entity.present? ? entity.code : ''
+  end
 
   def entity_name
     entity.present? ? entity.name : ''
@@ -22,11 +25,11 @@ class Building < ActiveRecord::Base
   ##
   # Guarda en la base de datos de acuerdo a la correspondencia de campos.
   def self.save_correlations(record)
-    CORRELATIONS.each { |k, v| print "#{record[k].inspect}, " }
     building = Hash.new
     CORRELATIONS.each do |origin, destination|
       building.merge!({ destination => record[origin] })
     end
-    new(building).save(validate: false) if building.present?
+    e = Entity.find_by_code(record['ENTIDAD'])
+    e.present? && building.present? && new(building.merge!({ entity: e })).save
   end
 end

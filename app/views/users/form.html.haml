@@ -3,11 +3,11 @@
 
 .col-md-8.column.col-md-offset-1
   = simple_form_for @user, html: { class: 'form-horizontal' } do |f|
-    = f.input :code
-    = f.input :name
-    = f.input :title
+    = f.input :code, required: true
+    = f.input :name, required: true
+    = f.input :title, required: true
     = f.input :ci
-    = f.input :email, required: true
+    = f.input :email
     = f.input :username
     = f.input :password, required: true
     = f.input :password_confirmation
@@ -15,4 +15,10 @@
     = f.input :mobile
     = f.association :department, include_blank: false
 
+<<<<<<< HEAD:app/views/users/form.html.haml
     = render 'shared/form_buttons'
+=======
+    .form-group
+      .col-lg-offset-5.col-lg-9
+        = submit_and_cancel(users_path)
+>>>>>>> eb880259c6a20e6f2041ccaaf6934616bf97fe4a:app/views/users/_form.html.haml

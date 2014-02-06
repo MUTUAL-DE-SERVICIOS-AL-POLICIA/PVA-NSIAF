@@ -14,14 +14,13 @@ module ImportDbf
     # Importar el archivo DBF a la tabla de usuarios
     def import_dbf(dbf)
       users = DBF::Table.new(dbf.tempfile)
-      i = 0; j = 0
+      i = j = n = 0
       transaction do
         users.each_with_index do |record, index|
           print "#{index + 1}.-\t"
           if record.present?
-            save_correlations(record)
             self.const_get(:CORRELATIONS).each { |k, v| print "#{record[k].inspect}, " }
-            i += 1
+            save_correlations(record) ? i += 1 : n += 1
           else
             j += 1
             print record.inspect
@@ -29,7 +28,7 @@ module ImportDbf
           puts ''
         end
       end
-      [i, j] # insertados, nils
+      [i, n, j] # insertados, no insertados, nils
     end
 
     private
@@ -41,7 +40,7 @@ module ImportDbf
       self.const_get(:CORRELATIONS).each do |origin, destination|
         import_data.merge!({ destination => record[origin] })
       end
-      self.new(import_data).save(validate: false) if import_data.present?
+      import_data.present? && self.new(import_data).save
     end
   end
 end

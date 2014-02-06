@@ -5,6 +5,17 @@ module ApplicationHelper
     %w(application/dbase application/x-dbase application/dbf application/x-dbf zz-application/zz-winassoc-dbf)
   end
 
+  def submit_and_cancel(url)
+    content_tag(:button, class: 'btn btn-primary') do
+      content_tag(:span, '', class: 'glyphicon glyphicon-ok') + ' ' +
+      t("general.btn.save")
+    end + ' ' +
+    link_to(url, class: 'btn btn-danger') do
+      content_tag(:span, '', class: 'glyphicon glyphicon-remove') + ' ' +
+      t("general.btn.cancel")
+    end
+  end
+
   def type_status(status)
     state = status == '0' ? 'inactive' : 'active'
     t("general.#{state}")

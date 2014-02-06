@@ -33,6 +33,7 @@ es:
     active: 'ACTIVO'
     inactive: 'INACTIVO'
     print: 'Imprimir'
+    migrate: 'Migrar'
     btn:
       cancel: "Cancelar"
       save: "Aceptar"
@@ -80,6 +81,9 @@ es:
       new: "Nueva Entidad"
       edit: "Editar Entidad"
   migration:
+    alert_html: 'Especifique el archivo <b>%{model}</b> para migrar'
+    file: 'Adjuntar Archivo'
+    message_html: '<ul><li><b>%{inserted}</b> registros insertados</li><li><b>%{no_inserted}</b> registros no insertados</li></ul>'
     title:
       title: "Migración"
   users:
@@ -152,6 +156,8 @@ es:
             code:
               blank: "es obligatorio"
               taken: "ya existe"
+            department_id:
+              blank: "es obligatorio"
             name:
               blank: "es obligatorio"
               invalid: "inválido"
