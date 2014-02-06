@@ -10,15 +10,20 @@ jQuery ->
     aoColumnDefs: [
       { bSortable: false, aTargets: [ -1 ] }
     ]
+    oLanguage:
+      sInfo: "Mostrando _START_ al _END_ de _TOTAL_ registros"
+      oPaginate:
+        sPrevious: "Anterior"
+        sNext: "Siguiente"
 
   $(document).on 'click', '.datatable .btn-warning', ->
-    $span = $(this).find('span')
-    if $span.text() == 'Activar'
-      status_button = 'Desactivar'
+    if $(this).text() == 'Activar'
+      img = 'remove'
+      text = 'Desactivar'
       status_td = 'ACTIVO'
     else
-      status_button = 'Activar'
+      img = 'ok'
+      text = 'Activar'
       status_td = 'INACTIVO'
     $(this).parent().prev().text(status_td)
-    $span.text(status_button)
-    $span.toggleClass("glyphicon-remove")
+    $(this).empty().append("<span class='glyphicon glyphicon-#{img}'></span>#{text}")

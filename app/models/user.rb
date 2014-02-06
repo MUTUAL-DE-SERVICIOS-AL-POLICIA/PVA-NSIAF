@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   validates :name, :title, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
   validates :ci, presence: true, uniqueness: true, numericality: { only_integer: true }
   validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z]+\z/ }
-  validates :phone, :mobile, numericality: { only_integer: true }
+  validates :phone, :mobile, allow_blank: true, numericality: { only_integer: true }
   validates :department_id, presence: true
 
   before_create :status_role
@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
   end
 
   def status_role
-    self.status = '0'
+    self.status = '1'
     self.role = 'Admin'
   end
 end

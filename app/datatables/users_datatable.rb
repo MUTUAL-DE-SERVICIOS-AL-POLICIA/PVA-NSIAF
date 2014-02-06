@@ -1,5 +1,5 @@
 class UsersDatatable
-  delegate :params, :link_to, :content_tag, :change_status_user_path, :type_status, :title_status, to: :@view
+  delegate :params, :link_to, :content_tag, :change_status_user_path, :type_status, :img_status, :title_status, to: :@view
 
   def initialize(view)
     @view = view
@@ -29,9 +29,9 @@ private
         user.mobile,
         user.department_name,
         type_status(user.status),
-        link_to(content_tag(:span, "Ver", class: 'glyphicon glyphicon-eye-open'), user, class: 'btn btn-primary') + ' ' +
-        link_to(content_tag(:span, "Editar", class: 'glyphicon glyphicon-edit'), [:edit, user], class: 'btn btn-primary') + ' ' +
-        link_to(content_tag(:span, title_status(user.status), class: "glyphicon #{'glyphicon-remove' if user.status == '1'}"), change_status_user_path(user), class: 'btn btn-warning', remote: true)
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-sm') + ' ' +
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-sm') + ' ' +
+        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), change_status_user_path(user), class: 'btn btn-warning btn-sm', remote: true)
       ]
     end
   end
@@ -44,7 +44,7 @@ private
     users = User.includes(:department).order("#{sort_column} #{sort_direction}")
     users = users.page(page).per_page(per_page)
     if params[:sSearch].present?
-      users = users.where("name like :search", search: "%#{params[:sSearch]}%")
+      users = users.where("users.code like :search or users.name like :search or title like :search or ci like :search or email like :search or username like :search or phone like :search or mobile like :search or departments.name like :search or users.status like :search", search: "%#{params[:sSearch]}%")
     end
     users
   end
@@ -54,11 +54,11 @@ private
   end
 
   def per_page
-    params[:iDisplayLength].to_i > 0 ? params[:iDisplayLength].to_i : 15
+    params[:iDisplayLength].to_i
   end
 
   def sort_column
-    columns = %w[code name title ci email username phone mobile departments.name status]
+    columns = %w[users.code users.name title ci email username phone mobile departments.name users.status]
     columns[params[:iSortCol_0].to_i]
   end
 

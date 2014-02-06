@@ -14,4 +14,8 @@ module ApplicationHelper
     state = type == '0' ? 'active' : 'deactive'
     t("general.btn.#{state}")
   end
+
+  def img_status(status)
+    status == '0' ? 'ok' : 'remove'
+  end
 end
