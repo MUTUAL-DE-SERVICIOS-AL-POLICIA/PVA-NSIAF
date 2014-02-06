@@ -22,3 +22,9 @@ jQuery ->
     $(this).parent().prev().text(status_td)
     $span.text(status_button)
     $span.toggleClass("glyphicon-remove")
+
+  # Ajax loading
+  $(document).on 'ajaxStart', (e, xhr, settings, exception) ->
+    NProgress.start()
+  $(document).on 'ajaxComplete', (e, xhr, settings, exception) ->
+    NProgress.done()
