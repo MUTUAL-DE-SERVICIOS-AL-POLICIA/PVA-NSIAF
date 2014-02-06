@@ -4,7 +4,10 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.json
   def index
-    @accounts = Account.all
+    respond_to do |format|
+      format.html { render '/shared/index' }
+      format.json { render json: AccountsDatatable.new(view_context) }
+    end
   end
 
   # GET /accounts/1
@@ -15,10 +18,16 @@ class AccountsController < ApplicationController
   # GET /accounts/new
   def new
     @account = Account.new
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # GET /accounts/1/edit
   def edit
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # POST /accounts
@@ -31,7 +40,7 @@ class AccountsController < ApplicationController
         format.html { redirect_to accounts_url, notice: t('general.created', model: Account.model_name.human) }
         format.json { render action: 'show', status: :created, location: @account }
       else
-        format.html { render action: 'new' }
+        format.html { render action: 'form' }
         format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
@@ -45,7 +54,7 @@ class AccountsController < ApplicationController
         format.html { redirect_to accounts_url, notice: t('general.updated', model: Account.model_name.human) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: 'form' }
         format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end

@@ -11,6 +11,9 @@
 - when 'entities'
   - new_url = new_entity_path
   - table_url = entities_url(format: "json")
+- when 'accounts'
+  - new_url = new_account_path
+  - table_url = accounts_url(format: "json")
 
 
 .page-header
@@ -29,5 +32,6 @@
     %tr
       %th= User.human_attribute_name('code')
       %th{ class: "#{'col-md-2' if controller_name == 'users'}" }= User.human_attribute_name('name')
-      = render "#{controller_name}/#{controller_name}"
+      = render "#{controller_name}/#{controller_name}" unless controller_name == 'accounts'
+      %th.td_actions= t('general.actions')
   %tbody
