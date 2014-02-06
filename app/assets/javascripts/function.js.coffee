@@ -16,6 +16,7 @@ jQuery ->
         sPrevious: "Anterior"
         sNext: "Siguiente"
 
+  # Change button status
   $(document).on 'click', '.datatable .btn-warning', ->
     if $(this).text() == 'Activar'
       img = 'remove'
@@ -27,3 +28,9 @@ jQuery ->
       status_td = 'INACTIVO'
     $(this).parent().prev().text(status_td)
     $(this).empty().append("<span class='glyphicon glyphicon-#{img}'></span>#{text}")
+
+  # Ajax loading
+  $(document).on 'ajaxStart', (e, xhr, settings, exception) ->
+    NProgress.start()
+  $(document).on 'ajaxComplete', (e, xhr, settings, exception) ->
+    NProgress.done()
