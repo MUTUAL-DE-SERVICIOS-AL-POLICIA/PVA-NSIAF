@@ -10,10 +10,10 @@ class DbfController < ApplicationController
   def import
     if check_dbf_file(params[:dbf])
       klass = params[:model].classify.safe_constantize
-      inserted, nils = klass.import_dbf(params[:dbf])
-      redirect_to :back, notice: "#{inserted + nils} total registros. #{inserted} registros insertados. #{nils} registros nulos."
+      inserted, no_inserted, nils = klass.import_dbf(params[:dbf])
+      redirect_to :back, notice: t('migration.message_html', inserted: inserted, no_inserted: no_inserted)
     else
-      redirect_to :back, alert: "Especifique el archivo <b>#{view_context.get_filename(params[:model])}</b> para migrar"
+      redirect_to :back, alert: t('migration.alert_html', model: view_context.get_filename(params[:model]))
     end
   end
 
