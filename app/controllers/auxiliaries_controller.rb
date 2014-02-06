@@ -69,6 +69,6 @@ class AuxiliariesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def auxiliary_params
-      params.require(:auxiliary).permit(:code, :name, :account_id)
+      params.require(:auxiliary).permit(:code, :name, :account_id, :status)
     end
 end
