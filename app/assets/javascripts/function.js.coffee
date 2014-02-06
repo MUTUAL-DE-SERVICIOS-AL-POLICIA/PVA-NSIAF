@@ -16,6 +16,10 @@ jQuery ->
       oPaginate:
         sPrevious: "Anterior"
         sNext: "Siguiente"
+    sDom: 'T<"clear">lfrtip',
+    oTableTools:
+      sSwfPath: "/swf/copy_csv_xls.swf"
+      aButtons: ['copy', 'csv', 'print']
 
   # Change button status
   $(document).on 'click', '.datatable .btn-warning', ->
