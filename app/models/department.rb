@@ -2,7 +2,6 @@ class Department < ActiveRecord::Base
   include ImportDbf
 
   CORRELATIONS = {
-    'ENTIDAD' => 'building_id',
     'CODOFIC' => 'code',
     'NOMOFIC' => 'name',
     'API_ESTADO' => 'status'
@@ -10,8 +9,8 @@ class Department < ActiveRecord::Base
 
   belongs_to :building
 
-  validates :code, presence: true, uniqueness: true
-  validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
+  validates :code, presence: true, uniqueness: { scope: :building_id }
+  validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z|\"|\.|-/u }, allow_blank: true
   validates :building_id, presence: true
 
   before_create :department_inactive
@@ -19,6 +18,10 @@ class Department < ActiveRecord::Base
   def change_status
     state = self.status == '0' ? '1' : '0'
     self.update_attribute(:status, state)
+  end
+
+  def building_code
+    building.present? ? building.code : ''
   end
 
   def building_name
@@ -30,13 +33,12 @@ class Department < ActiveRecord::Base
   ##
   # Guarda en la base de datos de acuerdo a la correspondencia de campos.
   def self.save_correlations(record)
-    # TODO falta asociar con el Edificio, y tambien su Estado (A, C, y D)
-    CORRELATIONS.each { |k, v| print "#{record[k].inspect}, " }
     department = Hash.new
     CORRELATIONS.each do |origin, destination|
       department.merge!({ destination => record[origin] })
     end
-    new(department).save(validate: false) if department.present?
+    b = Building.find_by_code(record['UNIDAD'])
+    b.present? && department.present? && new(department.merge!({ building: b })).save
   end
 
   def department_inactive
