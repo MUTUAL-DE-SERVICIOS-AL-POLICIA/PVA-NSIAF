@@ -3,14 +3,12 @@
 %table.table.table-striped.table-hover
   %thead
     %tr
-      %th= Account.human_attribute_name('id')
       %th= Account.human_attribute_name('code')
       %th= Account.human_attribute_name('name')
       %th= t('general.actions')
   %tbody
     - @accounts.each do |account|
       %tr
-        %td= account.id
         %td= account.code
         %td= account.name
         %td{style: 'width: 22%;'}

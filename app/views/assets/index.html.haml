@@ -3,21 +3,19 @@
 %table.table.table-striped.table-hover
   %thead
     %tr
-      %th= Asset.human_attribute_name('id')
+      %th= Asset.human_attribute_name('auxiliary')
       %th= Asset.human_attribute_name('code')
       %th= Asset.human_attribute_name('description')
-      %th= Asset.human_attribute_name('auxiliary')
       %th= Asset.human_attribute_name('user')
       %th= t('general.actions')
 
   %tbody
     - @assets.each do |asset|
       %tr
-        %td= asset.id
+        %td= link_to_if asset.auxiliary, asset.auxiliary_code, asset.auxiliary, title: asset.auxiliary_name, data: { toggle: 'tooltip' }
         %td= asset.code
         %td= asset.description
-        %td= link_to_if asset.auxiliary, asset.auxiliary_name, asset.auxiliary
-        %td= link_to_if asset.user, asset.user_name, asset.user
+        %td= link_to_if asset.user, asset.user_code, asset.user, title: asset.user_name, data:{ toggle: 'tooltip' }
         %td.td_actions
           = link_to asset, class: 'btn btn-primary' do
             %span.glyphicon.glyphicon-eye-open
