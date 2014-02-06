@@ -8,6 +8,9 @@
 - when 'buildings'
   - new_url = new_building_path
   - table_url = buildings_url(format: "json")
+- when 'entities'
+  - new_url = new_entity_path
+  - table_url = entities_url(format: "json")
 
 
 .page-header
@@ -24,7 +27,7 @@
 %table.table.table-striped.table-hover.datatable{'data-source' => table_url}
   %thead
     %tr
+      %th= User.human_attribute_name('code')
+      %th{ class: "#{'col-md-2' if controller_name == 'users'}" }= User.human_attribute_name('name')
       = render "#{controller_name}/#{controller_name}"
-      %th.col-md-1= t('general.status')
-      %th.td_actions= t('general.actions')
   %tbody

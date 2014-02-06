@@ -1,5 +1,3 @@
-%th= User.human_attribute_name('code')
-%th.col-md-2= User.human_attribute_name('name')
 %th.col-md-2= User.human_attribute_name('title')
 %th= User.human_attribute_name('ci')
 %th= User.human_attribute_name('email')
@@ -7,3 +5,5 @@
 %th= User.human_attribute_name('phone')
 %th= User.human_attribute_name('mobile')
 %th.col-md-2= User.human_attribute_name('department')
+%th.col-md-1= t('general.status')
+%th.td_actions= t('general.actions')
