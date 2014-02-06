@@ -3,19 +3,17 @@
 %table.table.table-striped.table-hover
   %thead
     %tr
-      %th= Auxiliary.human_attribute_name('id')
+      %th= Auxiliary.human_attribute_name('account')
       %th= Auxiliary.human_attribute_name('code')
       %th= Auxiliary.human_attribute_name('name')
-      %th= Auxiliary.human_attribute_name('account')
       %th= t('general.actions')
 
   %tbody
     - @auxiliaries.each do |auxiliary|
       %tr
-        %td= auxiliary.id
+        %td= link_to_if auxiliary.account, auxiliary.account_code, auxiliary.account, title: auxiliary.account_name, data: { toggle: 'tooltip' }
         %td= auxiliary.code
         %td= auxiliary.name
-        %td= link_to_if auxiliary.account, auxiliary.account_name, auxiliary.account
         %td{style: 'width: 22%;'}
           = link_to [:edit, auxiliary], class: 'btn btn-primary' do
             %span.glyphicon.glyphicon-edit
