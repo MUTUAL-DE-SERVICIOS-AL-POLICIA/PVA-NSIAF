@@ -32,6 +32,8 @@ es:
     actions: 'Acciones'
     active: 'ACTIVO'
     inactive: 'INACTIVO'
+    migration: 'Migrar'
+    migration_file: 'Adjuntar Archivo'
     btn:
       cancel: "Cancelar"
       save: "Aceptar"
