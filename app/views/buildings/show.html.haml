@@ -9,12 +9,10 @@
 
   %h2 Edificio
 
-%p
-  %b #{Building.human_attribute_name('code')}:
-  = @building.code
-%p
-  %b #{Building.human_attribute_name('name')}:
-  = @building.name
-%p
-  %b #{Building.human_attribute_name('entity')}:
-  = @building.entity_name
+%dl.dl-horizontal
+  %dt= Building.human_attribute_name('code')
+  %dd= @building.code
+  %dt= Building.human_attribute_name('name')
+  %dd= @building.name
+  %dt= Building.human_attribute_name('entity')
+  %dd= @building.entity_code
