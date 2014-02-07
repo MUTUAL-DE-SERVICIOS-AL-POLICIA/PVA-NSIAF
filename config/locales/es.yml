@@ -99,6 +99,9 @@ es:
     title:
       title: "Migración"
   users:
+    roles:
+      super_admin: "Super Administrador"
+      admin: "Administrador"
     title:
       title: "Usuarios"
       list: "Listado de Usuarios"
@@ -247,3 +250,4 @@ es:
         phone: "Teléfono"
         mobile: "Celular"
         department: "Departamento"
+        role: "Rol"
