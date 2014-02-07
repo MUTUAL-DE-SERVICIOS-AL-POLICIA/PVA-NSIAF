@@ -110,6 +110,10 @@ es:
       edit: "Editar Usuario"
       update: "Editar Usuario"
 
+  unauthorized:
+    manage:
+      all: "No estás autorizado para acceder a ésta página."
+
   activerecord:
     errors:
       models:
