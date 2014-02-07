@@ -14,10 +14,11 @@ jQuery ->
       sUrl: '/locales/dataTables.spanish.txt'
     sDom: 'T<"clear">lfrtip',
     oTableTools:
-      sSwfPath: "/swf/copy_csv_xls.swf"
+      sSwfPath: "/swf/copy_csv_xls_pdf.swf"
       aButtons: [
         { sExtends: 'copy', sButtonText: 'Copiar' },
         { sExtends: 'csv', sButtonText: 'CSV' },
+        { sExtends: 'pdf', sButtonText: 'PDF' },
         { sExtends: 'print', sButtonText: 'Imprimir' }
       ]
 
