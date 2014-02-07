@@ -1,13 +1,16 @@
 class DbfController < ApplicationController
+  load_and_authorize_resource class: false
 
   # GET /dbf/:model
   def index
+    authorize! :index, :dbf
   end
 
   ##
   # POST /dbf/:model/import
   # Importa los datos del archivo DBF dentro de la tabla usuarios.
   def import
+    authorize! :import, :dbf
     if check_dbf_file(params[:dbf])
       klass = params[:model].classify.safe_constantize
       inserted, no_inserted, nils = klass.import_dbf(params[:dbf])

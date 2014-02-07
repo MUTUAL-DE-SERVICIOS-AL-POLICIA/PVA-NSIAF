@@ -5,6 +5,10 @@ module ApplicationHelper
     %w(application/dbase application/x-dbase application/dbf application/x-dbf zz-application/zz-winassoc-dbf)
   end
 
+  def get_i18n_roles
+    User::ROLES.map { |r| [t(r, scope: 'users.roles'), r] }
+  end
+
   def submit_and_cancel(url)
     content_tag(:button, class: 'btn btn-primary') do
       content_tag(:span, '', class: 'glyphicon glyphicon-ok') + ' ' +
