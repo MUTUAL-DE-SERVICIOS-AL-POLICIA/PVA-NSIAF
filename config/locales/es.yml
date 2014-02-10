@@ -110,11 +110,13 @@ es:
       edit: "Editar Usuario"
       update: "Editar Usuario"
   versions:
-    update: 'Actualización'
-    create: 'Nuevo'
-    inactive: 'Inactivo'
     active: 'Activo'
-    destroy: 'Eliminado'
+    create: 'Nuevo'
+    destroy: 'Eliminación'
+    inactive: 'Inactivo'
+    login: 'Iniciar Sesión'
+    logout: 'Cerrar Sesión'
+    update: 'Modificación'
 
   unauthorized:
     manage:

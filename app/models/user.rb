@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
 
   belongs_to :department
 
-  include Migrated
+  include Migrated, VersionLog
 
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
 
   before_create :status_role
 
-  has_paper_trail class_name: 'Version'
+  has_paper_trail class_name: 'Version', ignore: [:last_sign_in_at, :current_sign_in_at, :sign_in_count, :updated_at]
 
   def change_status
     state = self.status == '0' ? '1' : '0'
