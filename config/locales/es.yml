@@ -109,6 +109,12 @@ es:
       create: "Nuevo Usuario"
       edit: "Editar Usuario"
       update: "Editar Usuario"
+  versions:
+    update: 'Actualización'
+    create: 'Nuevo'
+    inactive: 'Inactivo'
+    active: 'Activo'
+    destroy: 'Eliminado'
 
   unauthorized:
     manage:
@@ -255,3 +261,9 @@ es:
         mobile: "Celular"
         department: "Departamento"
         role: "Rol"
+      version:
+        item_id: "Código"
+        created_at: "Fecha"
+        event: "Acción"
+        whodunnit: "Administrador"
+        item_type: "Tipo"

@@ -21,10 +21,10 @@ private
       [
         version.id,
         version.item_id,
-        I18n.l(version.created_at, format: :short),
-        version.event,
+        I18n.l(version.created_at, format: :version),
+        I18n.t(version.event, scope: 'versions'),
         version.whodunnit,
-        version.item_type
+        I18n.t(version.item_type.to_s.downcase.singularize, scope: 'activerecord.models')
       ]
     end
   end
