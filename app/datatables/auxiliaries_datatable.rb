@@ -21,7 +21,7 @@ private
       [
         auxiliary.code,
         auxiliary.name,
-        auxiliary.account_name,
+        auxiliary.account_code,
         type_status(auxiliary.status),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), auxiliary, class: 'btn btn-default btn-sm') + ' ' +
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, auxiliary], class: 'btn btn-primary btn-sm') + ' ' +
@@ -38,7 +38,7 @@ private
     array = Auxiliary.includes(:account).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      array = array.where("auxiliaries.code like :search or auxiliaries.name like :search or accounts.name like :search or status like :search", search: "%#{params[:sSearch]}%")
+      array = array.where("auxiliaries.code like :search or auxiliaries.name like :search or accounts.code like :search or status like :search", search: "%#{params[:sSearch]}%")
     end
     array
   end
@@ -52,7 +52,7 @@ private
   end
 
   def sort_column
-    columns = %w[auxiliaries.code auxiliaries.name accounts.name status]
+    columns = %w[auxiliaries.code auxiliaries.name accounts.code status]
     columns[params[:iSortCol_0].to_i]
   end
 
