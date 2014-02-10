@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
 
   before_create :status_role
 
+  has_paper_trail class_name: 'Version'
+
   def change_status
     state = self.status == '0' ? '1' : '0'
     self.update_attribute(:status, state)

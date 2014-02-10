@@ -6,6 +6,7 @@ class Ability
     if user.is_super_admin?
       can :manage, Entity
       can :manage, User
+      can :manage, Version
     elsif user.is_admin?
       can :manage, Building
       can :manage, Department
