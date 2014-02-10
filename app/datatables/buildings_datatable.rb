@@ -21,7 +21,7 @@ private
       [
         building.code,
         building.name,
-        building.entity_code,
+        content_tag(:span, building.entity_code, title: building.entity_name),
         type_status(building.status),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), building, class: 'btn btn-default btn-sm') + ' ' +
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, building], class: 'btn btn-primary btn-sm') + ' ' +

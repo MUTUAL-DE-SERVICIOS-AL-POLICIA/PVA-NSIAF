@@ -21,7 +21,7 @@ private
       [
         asset.code,
         asset.description,
-        asset.user_name,
+        link_to_if(asset.user, asset.user_code, asset.user, title: asset.user_name),
         link_to_if(asset.auxiliary, asset.auxiliary_code, asset.auxiliary, title: asset.auxiliary_name),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), asset, class: 'btn btn-default btn-sm') + ' ' +
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-sm')
@@ -37,7 +37,7 @@ private
     array = Asset.includes(:auxiliary, :user).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      array = array.where("assets.code like :search or description like :search or users.name like :search or auxiliaries.code like :search", search: "%#{params[:sSearch]}%")
+      array = array.where("assets.code like :search or description like :search or users.code like :search or auxiliaries.code like :search", search: "%#{params[:sSearch]}%")
     end
     array
   end
@@ -51,7 +51,7 @@ private
   end
 
   def sort_column
-    columns = %w[assets.code description users.name auxiliaries.code]
+    columns = %w[assets.code description users.code auxiliaries.code]
     columns[params[:iSortCol_0].to_i]
   end
 
