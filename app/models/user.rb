@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  include ImportDbf
+  include ImportDbf, Migrated, VersionLog, ManageStatus
 
   CORRELATIONS = {
     'CODRESP' => 'code',
@@ -17,8 +17,6 @@ class User < ActiveRecord::Base
 
   belongs_to :department
 
-  include Migrated, VersionLog
-
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
     m.validates :code, presence: true, uniqueness: { scope: :department_id }
@@ -34,14 +32,7 @@ class User < ActiveRecord::Base
     m.validates :department_id, presence: true
   end
 
-  before_create :set_params
-
   has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :sign_in_count, :updated_at, :status]
-
-  def change_status
-    state = self.status == '0' ? '1' : '0'
-    register_log(get_status(state)) if self.update_attribute(:status, state)
-  end
 
   def department_code
     department.present? ? department.code : ''
@@ -74,12 +65,6 @@ class User < ActiveRecord::Base
     end
     d = Department.find_by_code(record['CODOFIC'])
     d.present? && user.present? && new(user.merge!({ department: d })).save
-  end
-
-  def get_status(state)
-    status = { '0' => 'inactive',
-               '1' => 'active' }
-    status[state]
   end
 
   def set_params
