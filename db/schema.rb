@@ -11,10 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140206230226) do
+ActiveRecord::Schema.define(version: 20140210133723) do
 
   create_table "accounts", force: true do |t|
-    t.string   "code",       limit: 50
+    t.integer  "code"
     t.string   "name",       limit: 230
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20140206230226) do
   add_index "assets", ["user_id"], name: "index_assets_on_user_id", using: :btree
 
   create_table "auxiliaries", force: true do |t|
-    t.string   "code",       limit: 50
+    t.integer  "code"
     t.string   "name",       limit: 230
     t.integer  "account_id"
     t.datetime "created_at"
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 20140206230226) do
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
 
   create_table "departments", force: true do |t|
-    t.string   "code",        limit: 50
+    t.integer  "code"
     t.string   "name",        limit: 230
     t.string   "status",      limit: 2
     t.integer  "building_id"
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 20140206230226) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username",               limit: 230, default: "", null: false
-    t.string   "code",                   limit: 230
+    t.integer  "code"
     t.string   "name",                   limit: 230
     t.string   "title",                  limit: 230
     t.integer  "ci"

@@ -41,6 +41,10 @@ class User < ActiveRecord::Base
     self.update_attribute(:status, state)
   end
 
+  def department_code
+    department.present? ? department.code : ''
+  end
+
   def department_name
     department.present? ? department.name : ''
   end
