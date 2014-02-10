@@ -21,7 +21,7 @@
 
 es:
   sessions:
-    log_in: 'Iniciar Sesión'
+    log_in: 'Ingreso al Sistema'
     new_password: '¿Olvidaste tu contraseña?'
   general:
     are_you_sure: '¿Estás seguro?'
