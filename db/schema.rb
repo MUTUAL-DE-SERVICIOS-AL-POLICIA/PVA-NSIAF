@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140210125836) do
+ActiveRecord::Schema.define(version: 20140210133133) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 20140210125836) do
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
 
   create_table "departments", force: true do |t|
-    t.string   "code",        limit: 50
+    t.integer  "code"
     t.string   "name",        limit: 230
     t.string   "status",      limit: 2
     t.integer  "building_id"
