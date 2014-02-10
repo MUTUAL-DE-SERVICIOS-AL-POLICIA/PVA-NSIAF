@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
     m.validates :department_id, presence: true
   end
 
-  before_create :status_role
+  before_create :set_params
 
   has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :sign_in_count, :updated_at, :status]
 
@@ -82,7 +82,8 @@ class User < ActiveRecord::Base
     status[state]
   end
 
-  def status_role
+  def set_params
     self.status = '1'
+    self.password = self.username
   end
 end
