@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
     m.validates :department_id, presence: true
   end
 
-  before_create :status_role
+  before_create :set_params
 
   def change_status
     state = self.status == '0' ? '1' : '0'
@@ -70,7 +70,8 @@ class User < ActiveRecord::Base
     d.present? && user.present? && new(user.merge!({ department: d })).save
   end
 
-  def status_role
+  def set_params
     self.status = '1'
+    self.password = self.username
   end
 end
