@@ -54,3 +54,5 @@ gem 'will_paginate'
 
 # Gem for read DBF files
 gem 'dbf'
+
+gem 'paper_trail', '~> 3.0.0'

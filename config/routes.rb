@@ -1,4 +1,6 @@
 Nsiaf::Application.routes.draw do
+  resources :versions, only: [:index]
+
   resources :assets
 
   resources :auxiliaries do
