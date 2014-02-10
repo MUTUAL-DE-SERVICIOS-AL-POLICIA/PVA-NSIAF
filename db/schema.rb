@@ -11,10 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140206230226) do
+ActiveRecord::Schema.define(version: 20140210125017) do
 
   create_table "accounts", force: true do |t|
-    t.string   "code",       limit: 50
+    t.integer  "code"
     t.string   "name",       limit: 230
     t.datetime "created_at"
     t.datetime "updated_at"
