@@ -36,11 +36,11 @@ class User < ActiveRecord::Base
 
   before_create :status_role
 
-  has_paper_trail class_name: 'Version', ignore: [:last_sign_in_at, :current_sign_in_at, :sign_in_count, :updated_at]
+  has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :sign_in_count, :updated_at, :status]
 
   def change_status
     state = self.status == '0' ? '1' : '0'
-    self.update_attribute(:status, state)
+    register_log(get_status(state)) if self.update_attribute(:status, state)
   end
 
   def department_code
@@ -74,6 +74,12 @@ class User < ActiveRecord::Base
     end
     d = Department.find_by_code(record['CODOFIC'])
     d.present? && user.present? && new(user.merge!({ department: d })).save
+  end
+
+  def get_status(state)
+    status = { '0' => 'inactive',
+               '1' => 'active' }
+    status[state]
   end
 
   def status_role
