@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140210133133) do
+ActiveRecord::Schema.define(version: 20140210133723) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 20140210133133) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username",               limit: 230, default: "", null: false
-    t.string   "code",                   limit: 230
+    t.integer  "code"
     t.string   "name",                   limit: 230
     t.string   "title",                  limit: 230
     t.integer  "ci"
