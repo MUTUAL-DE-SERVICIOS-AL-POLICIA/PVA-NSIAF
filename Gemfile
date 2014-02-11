@@ -60,3 +60,5 @@ gem 'paper_trail', '~> 3.0.0'
 gem 'simple_captcha', :git => 'git://github.com/galetahub/simple-captcha.git'
 gem 'redis'
 gem 'redis-namespace'
+
+gem 'autocomplete-off'

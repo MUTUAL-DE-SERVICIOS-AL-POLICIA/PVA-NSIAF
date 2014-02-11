@@ -41,6 +41,9 @@ GEM
       tzinfo (~> 0.3.37)
     arel (4.0.1)
     atomic (1.1.14)
+    autocomplete-off (0.2.0)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     bcrypt-ruby (3.1.2)
     bootstrap-sass (3.1.0.0)
       sass (~> 3.2)
@@ -162,6 +165,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  autocomplete-off
   bcrypt-ruby (~> 3.1.2)
   bootstrap-sass (~> 3.1.0)
   cancan
