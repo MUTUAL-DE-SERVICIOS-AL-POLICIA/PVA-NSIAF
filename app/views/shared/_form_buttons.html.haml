@@ -9,9 +9,4 @@
 
 .form-group
   .col-lg-offset-5.col-lg-9
-    = button_tag class: 'btn btn-primary' do
-      %span.glyphicon.glyphicon-ok
-      = t('general.btn.save')
-    = link_to list_url , class: 'btn btn-danger' do
-      %span.glyphicon.glyphicon-remove
-      = t('general.btn.cancel')
+    = submit_and_cancel(list_url)
