@@ -1,5 +1,5 @@
 class Account < ActiveRecord::Base
-  include ImportDbf
+  include ImportDbf, VersionLog
 
   CORRELATIONS = {
     'CODCONT' => 'code',
@@ -8,4 +8,6 @@ class Account < ActiveRecord::Base
 
   validates :code, presence: true, uniqueness: true
   validates :name, presence: true
+
+  has_paper_trail
 end

@@ -1,5 +1,5 @@
 class Asset < ActiveRecord::Base
-  include ImportDbf, Migrated
+  include ImportDbf, Migrated, VersionLog
 
   CORRELATIONS = {
     'CODIGO' => 'code',

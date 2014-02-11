@@ -116,6 +116,7 @@ es:
     inactive: 'Inactivo'
     login: 'Iniciar Sesión'
     logout: 'Cerrar Sesión'
+    migrated: 'Migración'
     update: 'Modificación'
 
   unauthorized:
