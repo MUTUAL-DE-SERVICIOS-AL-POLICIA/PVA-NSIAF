@@ -1,5 +1,5 @@
 class Department < ActiveRecord::Base
-  include ImportDbf
+  include ImportDbf, VersionLog, ManageStatus
 
   CORRELATIONS = {
     'CODOFIC' => 'code',
@@ -15,10 +15,7 @@ class Department < ActiveRecord::Base
 
   before_create :department_inactive
 
-  def change_status
-    state = self.status == '0' ? '1' : '0'
-    self.update_attribute(:status, state)
-  end
+  has_paper_trail ignore: [:status, :updated_at]
 
   def building_code
     building.present? ? building.code : ''
@@ -39,9 +36,5 @@ class Department < ActiveRecord::Base
     end
     b = Building.find_by_code(record['UNIDAD'])
     b.present? && department.present? && new(department.merge!({ building: b })).save
-  end
-
-  def department_inactive
-    self.status = '1'
   end
 end
