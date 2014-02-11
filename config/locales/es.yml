@@ -110,6 +110,8 @@ es:
       edit: "Editar Usuario"
       update: "Editar Usuario"
   versions:
+    title:
+      title: "Histórico"
     active: 'Activo'
     create: 'Creado'
     destroy: 'Eliminación'
