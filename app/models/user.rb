@@ -32,7 +32,15 @@ class User < ActiveRecord::Base
     m.validates :department_id, presence: true
   end
 
-  has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :sign_in_count, :updated_at, :status]
+  with_options if: :is_admin_or_super? do |m|
+    m.validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
+    m.validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z]+\z/ }
+    m.validates :role, presence: true, format: { with: /#{ROLES.join('|')}/ }
+  end
+
+  before_validation :set_defaults
+
+  has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :last_sign_in_ip, :current_sign_in_ip, :sign_in_count, :updated_at, :status]
 
   def department_code
     department.present? ? department.code : ''
@@ -46,12 +54,26 @@ class User < ActiveRecord::Base
     false
   end
 
+  def is_admin?
+    self.role == 'admin'
+  end
+
+  def is_admin_or_super?
+    is_super_admin? || is_admin?
+  end
+
   def is_super_admin?
     self.role == 'super_admin'
   end
 
-  def is_admin?
-    self.role == 'admin'
+  def users
+    if is_super_admin?
+      User.where.not(role: nil)
+    elsif is_admin?
+      User.joins(department: :building)
+    else
+      User.none
+    end
   end
 
   private
@@ -67,8 +89,9 @@ class User < ActiveRecord::Base
     d.present? && user.present? && new(user.merge!({ department: d })).save
   end
 
-  def set_params
-    self.status = '1'
-    self.password ||= self.username
+  def set_defaults
+    if is_admin_or_super? && new_record? && password.nil? && !username.nil?
+      self.password ||= self.username
+    end
   end
 end

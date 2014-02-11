@@ -1,6 +1,6 @@
 class Version < PaperTrail::Version
   def item_code
-    item.present? ? item.code : ''
+    item.present? ? (item.code || item.try(:username)) : ''
   end
 
   def item_name
@@ -9,7 +9,7 @@ class Version < PaperTrail::Version
 
   def whodunnit_code
     user = whodunnit_obj
-    user.present? ? user.code : ''
+    user.present? ? (user.code || user.username || user.name) : ''
   end
 
   def whodunnit_name

@@ -35,10 +35,9 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: t('general.created', model: User.model_name.human) }
+        format.html { redirect_to users_url, notice: t('general.created', model: User.model_name.human) }
         format.json { render action: 'show', status: :created, location: @user }
       else
         format.html { render action: 'form' }
@@ -57,7 +56,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: t('general.updated', model: User.model_name.human) }
+        format.html { redirect_to users_url, notice: t('general.updated', model: User.model_name.human) }
         format.json { head :no_content }
       else
         format.html { render action: 'form' }
@@ -92,10 +91,10 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       if current_user.is_super_admin?
-        params[:user][:role] = 'admin'
+        params.require(:user).permit(:name, :username, :role)
       else
         params[:user][:department_id] = current_user.department_id
+        params.require(:user).permit(:code, :name, :title, :ci, :username, :email, :password, :password_confirmation, :phone, :mobile, :department_id)
       end
-      params.require(:user).permit(:code, :name, :title, :ci, :username, :email, :password, :password_confirmation, :phone, :mobile, :department_id, :role)
     end
 end

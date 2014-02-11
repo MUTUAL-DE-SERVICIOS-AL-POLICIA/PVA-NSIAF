@@ -2,17 +2,8 @@
   %h1= t("users.title.#{params[:action]}")
 
 .col-md-8.column.col-md-offset-1
-  = simple_form_for @user, html: { class: 'form-horizontal' } do |f|
-    = f.input :code, required: true
-    = f.input :name, required: true
-    = f.input :title, required: true
-    = f.input :ci
-    = f.input :email
-    = f.input :username
-    = f.input :password, required: true
-    = f.input :password_confirmation
-    = f.input :phone
-    = f.input :mobile
-    = f.association :department, include_blank: false if current_user.is_super_admin?
+  - if current_user.is_super_admin?
+    = render 'user_super_admin', user: @user
+  - elsif current_user.is_admin?
+    = render 'user_admin', user: @user
 
-    = render 'shared/form_buttons'
