@@ -13,8 +13,6 @@ class Department < ActiveRecord::Base
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z|\"|\.|-/u }, allow_blank: true
   validates :building_id, presence: true
 
-  before_create :department_inactive
-
   has_paper_trail ignore: [:status, :updated_at]
 
   def building_code

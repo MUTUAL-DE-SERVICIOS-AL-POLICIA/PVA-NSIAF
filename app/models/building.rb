@@ -12,8 +12,6 @@ class Building < ActiveRecord::Base
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
   validates :entity_id, presence: true
 
-  before_create :building_active
-
   has_paper_trail ignore: [:status, :updated_at]
 
   def entity_code
