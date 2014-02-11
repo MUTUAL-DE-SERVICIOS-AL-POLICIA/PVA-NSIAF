@@ -110,12 +110,15 @@ es:
       edit: "Editar Usuario"
       update: "Editar Usuario"
   versions:
+    title:
+      title: "Histórico"
     active: 'Activo'
-    create: 'Nuevo'
+    create: 'Creado'
     destroy: 'Eliminación'
     inactive: 'Inactivo'
     login: 'Iniciar Sesión'
     logout: 'Cerrar Sesión'
+    migrated: 'Migración'
     update: 'Modificación'
 
   unauthorized:

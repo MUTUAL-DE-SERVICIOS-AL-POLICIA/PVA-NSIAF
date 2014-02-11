@@ -1,5 +1,5 @@
 class UsersDatatable
-  delegate :params, :link_to, :link_to_if, :content_tag, :change_status_user_path, :type_status, :img_status, :title_status, to: :@view
+  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :change_status_user_path, :type_status, :img_status, :title_status, to: :@view
 
   def initialize(view)
     @view = view
@@ -41,7 +41,7 @@ private
   end
 
   def fetch_array
-    array = User.includes(:department).order("#{sort_column} #{sort_direction}")
+    array = current_user.users.includes(:department).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
       type_search = params[:search_column] == 'department' ? 'departments.code' : "users.#{params[:search_column]}"

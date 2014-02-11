@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  include ImportDbf
+  include ImportDbf, Migrated, VersionLog, ManageStatus
 
   CORRELATIONS = {
     'CODRESP' => 'code',
@@ -17,8 +17,6 @@ class User < ActiveRecord::Base
 
   belongs_to :department
 
-  include Migrated, VersionLog
-
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
     m.validates :code, presence: true, uniqueness: { scope: :department_id }
@@ -34,14 +32,15 @@ class User < ActiveRecord::Base
     m.validates :department_id, presence: true
   end
 
-  before_create :set_params
-
-  has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :sign_in_count, :updated_at, :status]
-
-  def change_status
-    state = self.status == '0' ? '1' : '0'
-    register_log(get_status(state)) if self.update_attribute(:status, state)
+  with_options if: :is_admin_or_super? do |m|
+    m.validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
+    m.validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z]+\z/ }
+    m.validates :role, presence: true, format: { with: /#{ROLES.join('|')}/ }
   end
+
+  before_validation :set_defaults
+
+  has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :last_sign_in_ip, :current_sign_in_ip, :sign_in_count, :updated_at, :status]
 
   def department_code
     department.present? ? department.code : ''
@@ -55,12 +54,26 @@ class User < ActiveRecord::Base
     false
   end
 
+  def is_admin?
+    self.role == 'admin'
+  end
+
+  def is_admin_or_super?
+    is_super_admin? || is_admin?
+  end
+
   def is_super_admin?
     self.role == 'super_admin'
   end
 
-  def is_admin?
-    self.role == 'admin'
+  def users
+    if is_super_admin?
+      User.where.not(role: nil)
+    elsif is_admin?
+      User.joins(department: :building)
+    else
+      User.none
+    end
   end
 
   def self.set_columns
@@ -81,14 +94,9 @@ class User < ActiveRecord::Base
     d.present? && user.present? && new(user.merge!({ department: d })).save
   end
 
-  def get_status(state)
-    status = { '0' => 'inactive',
-               '1' => 'active' }
-    status[state]
-  end
-
-  def set_params
-    self.status = '1'
-    self.password = self.username
+  def set_defaults
+    if is_admin_or_super? && new_record? && password.nil? && !username.nil?
+      self.password ||= self.username
+    end
   end
 end

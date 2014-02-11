@@ -1,5 +1,5 @@
 class VersionsDatatable
-  delegate :params, :link_to, :content_tag, to: :@view
+  delegate :params, :link_to_if, :content_tag, to: :@view
 
   def initialize(view)
     @view = view
@@ -20,10 +20,10 @@ private
     array.map do |version|
       [
         version.id,
-        version.item_id,
+        content_tag(:span, version.item_code, title: version.item_name),
         I18n.l(version.created_at, format: :version),
         I18n.t(version.event, scope: 'versions'),
-        version.whodunnit,
+        link_to_if(version.whodunnit_obj, version.whodunnit_code, version.whodunnit_obj, title: version.whodunnit_name),
         I18n.t(version.item_type.to_s.downcase.singularize, scope: 'activerecord.models')
       ]
     end

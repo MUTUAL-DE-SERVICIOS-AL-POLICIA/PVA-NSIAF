@@ -11,11 +11,10 @@ module Migrated
   end
 
   def is_migrate?
-    self.is_migrate == true
+    self.is_migrate == true && role.nil?
   end
 
   def is_not_migrate?
-    self.is_migrate == false
+    self.is_migrate == false && role.nil?
   end
-
 end

@@ -1,5 +1,5 @@
 class Building < ActiveRecord::Base
-  include ImportDbf
+  include ImportDbf, VersionLog, ManageStatus
 
   CORRELATIONS = {
     'UNIDAD' => 'code',
@@ -12,12 +12,7 @@ class Building < ActiveRecord::Base
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
   validates :entity_id, presence: true
 
-  before_create :building_active
-
-  def change_status
-    state = self.status == '0' ? '1' : '0'
-    self.update_attribute(:status, state)
-  end
+  has_paper_trail ignore: [:status, :updated_at]
 
   def entity_code
     entity.present? ? entity.code : ''
@@ -38,9 +33,5 @@ class Building < ActiveRecord::Base
     end
     e = Entity.find_by_code(record['ENTIDAD'])
     e.present? && building.present? && new(building.merge!({ entity: e })).save
-  end
-
-  def building_active
-    self.status = '1'
   end
 end

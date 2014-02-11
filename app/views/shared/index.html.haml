@@ -12,7 +12,6 @@
   - new_url = new_entity_path
   - table_url = entities_url(format: "json")
 - when 'accounts'
-  - new_url = new_account_path
   - table_url = accounts_url(format: "json")
 - when 'auxiliaries'
   - new_url = new_auxiliary_path
@@ -29,6 +28,12 @@
   = link_to new_url, class: 'btn btn-primary' do
     %span.glyphicon.glyphicon-plus
     = t("#{controller_name}.title.new")
+
+.col-xs-6.button_new
+  - if new_url.present?
+    = link_to new_url, class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-plus
+      = t("#{controller_name}.title.new")
 
 .col-xs-2.col-md-offset-6
   = select_tag "credit_card", options_for_select(controller_name.classify.constantize.set_columns), id: 'select_column', class: 'form-control'
