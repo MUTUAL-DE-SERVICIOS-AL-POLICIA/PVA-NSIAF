@@ -111,7 +111,7 @@ es:
       update: "Editar Usuario"
   versions:
     active: 'Activo'
-    create: 'Nuevo'
+    create: 'Creado'
     destroy: 'Eliminación'
     inactive: 'Inactivo'
     login: 'Iniciar Sesión'
