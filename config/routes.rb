@@ -7,7 +7,7 @@ Nsiaf::Application.routes.draw do
     get :change_status, on: :member
   end
 
-  resources :accounts
+  resources :accounts, only: [:index, :show]
 
   resources :departments do
     get :change_status, on: :member
