@@ -12,7 +12,6 @@
   - new_url = new_entity_path
   - table_url = entities_url(format: "json")
 - when 'accounts'
-  - new_url = new_account_path
   - table_url = accounts_url(format: "json")
 - when 'auxiliaries'
   - new_url = new_auxiliary_path
@@ -26,9 +25,10 @@
   %h2= t("#{controller_name}.title.title")
 
 .col-xs-6.button_new
-  = link_to new_url, class: 'btn btn-primary' do
-    %span.glyphicon.glyphicon-plus
-    = t("#{controller_name}.title.new")
+  - if new_url.present?
+    = link_to new_url, class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-plus
+      = t("#{controller_name}.title.new")
 
 %table.table.table-striped.table-hover.datatable{'data-source' => table_url}
   %thead

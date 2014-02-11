@@ -13,10 +13,16 @@ module ManageStatus
     before_create :set_params
   end
 
+  ##
+  # Para utilizar ésta función es necesario tener incluida el módulo VersionLog
   def change_status
     state = self.status == '0' ? '1' : '0'
     if self.update_attribute(:status, state)
-      register_log(get_status(state))
+      if respond_to?(:register_log)
+        register_log(get_status(state))
+      else
+        logger.info "** Need include module VersionLog in your model"
+      end
     end
   end
 

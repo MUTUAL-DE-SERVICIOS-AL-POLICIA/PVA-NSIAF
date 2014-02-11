@@ -1,5 +1,5 @@
 class Auxiliary < ActiveRecord::Base
-  include ImportDbf
+  include ImportDbf, VersionLog, ManageStatus
 
   CORRELATIONS = {
     'CODAUX' => 'code',
@@ -11,13 +11,7 @@ class Auxiliary < ActiveRecord::Base
   validates :code, presence: true, uniqueness: { scope: :account_id }
   validates :name, :account_id, presence: true
 
-  before_create :auxiliary_active
-
-  def change_status
-    state = self.status == '0' ? '1' : '0'
-    self.update_attribute(:status, state)
-  end
-
+  has_paper_trail ignore: [:status, :updated_at]
 
   def account_code
     account.present? ? account.code : ''
@@ -38,9 +32,5 @@ class Auxiliary < ActiveRecord::Base
     end
     a = Account.find_by_code(record['CODCONT'])
     a.present? && aux.present? && new(aux.merge!({ account: a })).save
-  end
-
-  def auxiliary_active
-    self.status = '1'
   end
 end

@@ -69,6 +69,6 @@ class User < ActiveRecord::Base
 
   def set_params
     self.status = '1'
-    self.password = self.username
+    self.password ||= self.username
   end
 end

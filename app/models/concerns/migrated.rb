@@ -17,5 +17,4 @@ module Migrated
   def is_not_migrate?
     self.is_migrate == false
   end
-
 end

@@ -1,5 +1,5 @@
 class Asset < ActiveRecord::Base
-  include ImportDbf
+  include ImportDbf, Migrated, VersionLog
 
   CORRELATIONS = {
     'CODIGO' => 'code',
@@ -8,8 +8,6 @@ class Asset < ActiveRecord::Base
 
   belongs_to :auxiliary
   belongs_to :user
-
-  include Migrated
 
   with_options if: :is_not_migrate? do |m|
     m.validates :code, presence: true, uniqueness: { scope: [:auxiliary_id, :user_id] }
@@ -21,12 +19,18 @@ class Asset < ActiveRecord::Base
     m.validates :description, presence: true
   end
 
+  has_paper_trail
+
   def auxiliary_code
     auxiliary.present? ? auxiliary.code : ''
   end
 
   def auxiliary_name
     auxiliary.present? ? auxiliary.name : ''
+  end
+
+  def name
+    description
   end
 
   def user_code
