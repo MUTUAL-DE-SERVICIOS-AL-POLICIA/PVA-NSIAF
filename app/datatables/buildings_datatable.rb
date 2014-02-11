@@ -38,7 +38,8 @@ private
     array = Building.includes(:entity).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      array = array.where("buildings.code like :search or buildings.name like :search or entities.code like :search or status like :search", search: "%#{params[:sSearch]}%")
+      type_search = params[:search_column] == 'entity' ? 'entities.code' : "buildings.#{params[:search_column]}"
+      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
     end
     array
   end

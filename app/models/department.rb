@@ -23,6 +23,11 @@ class Department < ActiveRecord::Base
     building.present? ? building.name : ''
   end
 
+  def self.set_columns
+    h = ApplicationController.helpers
+    [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'building')]
+  end
+
   private
 
   ##

@@ -38,7 +38,8 @@ private
     array = Auxiliary.includes(:account).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      array = array.where("auxiliaries.code like :search or auxiliaries.name like :search or accounts.code like :search or status like :search", search: "%#{params[:sSearch]}%")
+      type_search = params[:search_column] == 'account' ? 'accounts.code' : "auxiliaries.#{params[:search_column]}"
+      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
     end
     array
   end

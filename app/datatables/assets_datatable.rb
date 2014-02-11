@@ -37,7 +37,14 @@ private
     array = Asset.includes(:auxiliary, :user).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      array = array.where("assets.code like :search or description like :search or users.code like :search or auxiliaries.code like :search", search: "%#{params[:sSearch]}%")
+      if params[:search_column] == 'user'
+        type_search = 'users.code'
+      elsif params[:search_column] == 'auxiliary'
+        type_search = 'auxiliaries.code'
+      else
+        type_search = "assets.#{params[:search_column]}"
+      end
+      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
     end
     array
   end

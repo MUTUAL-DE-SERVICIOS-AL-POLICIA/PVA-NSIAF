@@ -36,7 +36,7 @@ private
     array = Entity.order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      array = array.where("code like :search or name like :search or acronym like :search", search: "%#{params[:sSearch]}%")
+      array = array.where("#{params[:search_column]} like :search", search: "%#{params[:sSearch]}%")
     end
     array
   end

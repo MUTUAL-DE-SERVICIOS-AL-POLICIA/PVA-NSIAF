@@ -22,6 +22,11 @@ class Building < ActiveRecord::Base
     entity.present? ? entity.name : ''
   end
 
+  def self.set_columns
+    h = ApplicationController.helpers
+    [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'entity')]
+  end
+
   private
 
   ##

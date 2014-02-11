@@ -33,4 +33,9 @@ class Auxiliary < ActiveRecord::Base
     a = Account.find_by_code(record['CODCONT'])
     a.present? && aux.present? && new(aux.merge!({ account: a })).save
   end
+
+  def self.set_columns
+    h = ApplicationController.helpers
+    [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'account')]
+  end
 end

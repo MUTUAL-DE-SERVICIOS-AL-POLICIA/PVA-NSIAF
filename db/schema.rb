@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 20140210151839) do
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false
-    t.integer  "item_id"
+    t.integer  "item_id",    null: false
     t.string   "event",      null: false
     t.string   "whodunnit"
     t.text     "object"

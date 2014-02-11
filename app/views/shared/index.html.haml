@@ -25,11 +25,6 @@
   %h2= t("#{controller_name}.title.title")
 
 .col-xs-2.button_new
-  = link_to new_url, class: 'btn btn-primary' do
-    %span.glyphicon.glyphicon-plus
-    = t("#{controller_name}.title.new")
-
-.col-xs-6.button_new
   - if new_url.present?
     = link_to new_url, class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-plus

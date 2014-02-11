@@ -41,6 +41,11 @@ class Asset < ActiveRecord::Base
     user.present? ? user.name : ''
   end
 
+  def self.set_columns
+    h = ApplicationController.helpers
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(self, 'auxiliary')]
+  end
+
   private
 
   ##
