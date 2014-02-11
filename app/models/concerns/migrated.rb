@@ -11,10 +11,18 @@ module Migrated
   end
 
   def is_migrate?
-    self.is_migrate == true && role.nil?
+    if respond_to?(:role)
+      self.is_migrate == true && role.nil?
+    else
+      self.is_migrate == true
+    end
   end
 
   def is_not_migrate?
-    self.is_migrate == false && role.nil?
+    if respond_to?(:role)
+      self.is_migrate == false && role.nil?
+    else
+      self.is_migrate == false
+    end
   end
 end
