@@ -1,4 +1,6 @@
 class Version < PaperTrail::Version
+  default_scope -> { order(id: :desc) }
+
   def item_code
     item.present? ? item.code : ''
   end
