@@ -6,4 +6,6 @@
     .form-group
       = f.password_field :password, class: 'span12 form-control', placeholder: User.human_attribute_name('password')
 
+    = show_simple_captcha
+
     %div= f.submit t('general.btn.sign_in'), class: 'btn btn-primary login'

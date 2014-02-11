@@ -54,5 +54,5 @@ gem 'will_paginate'
 
 # Gem for read DBF files
 gem 'dbf'
-
 gem 'paper_trail', '~> 3.0.0'
+gem 'simple_captcha', :git => 'git://github.com/galetahub/simple-captcha.git'
