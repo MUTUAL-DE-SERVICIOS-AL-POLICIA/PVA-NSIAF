@@ -33,4 +33,8 @@ module ApplicationHelper
   def img_status(status)
     status == '0' ? 'ok' : 'remove'
   end
+
+  def get_column(model, column)
+    [model.human_attribute_name(column), column]
+  end
 end

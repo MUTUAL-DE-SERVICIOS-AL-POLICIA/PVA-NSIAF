@@ -7,7 +7,7 @@
     "sInfoEmpty":      "Mostrando 0 al 0 de 0 registros",
     "sInfoFiltered":   "(filtrado de _MAX_ registros)",
     "sInfoPostFix":    "",
-    "sSearch":         "Buscar:",
+    "sSearch":         "",
     "sUrl":            "",
     "sInfoThousands":  ",",
     "sLoadingRecords": "Cargando...",

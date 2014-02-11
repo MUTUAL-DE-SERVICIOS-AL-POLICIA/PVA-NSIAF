@@ -44,7 +44,8 @@ private
     array = current_user.users.includes(:department).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      array = array.where("users.code like :search or users.name like :search or title like :search or ci like :search or email like :search or username like :search or phone like :search or mobile like :search or departments.code like :search or users.status like :search", search: "%#{params[:sSearch]}%")
+      type_search = params[:search_column] == 'department' ? 'departments.code' : "users.#{params[:search_column]}"
+      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
     end
     array
   end
