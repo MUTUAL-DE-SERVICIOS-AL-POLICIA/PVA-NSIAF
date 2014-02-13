@@ -7,6 +7,7 @@ class Building < ActiveRecord::Base
   }
 
   belongs_to :entity
+  has_many :departments
 
   validates :code, presence: true, uniqueness: { scope: :entity_id }
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
@@ -25,6 +26,10 @@ class Building < ActiveRecord::Base
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'entity')]
+  end
+
+  def verify_assignment
+    departments.present?
   end
 
   private
