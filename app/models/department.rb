@@ -30,7 +30,8 @@ class Department < ActiveRecord::Base
   end
 
   def verify_assignment
-    users.present?
+    total_users = users.map{|u| u.status.to_i}.sum
+    total_users > 0 ? true : false
   end
 
   private

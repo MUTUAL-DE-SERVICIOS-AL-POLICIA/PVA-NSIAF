@@ -29,7 +29,8 @@ class Building < ActiveRecord::Base
   end
 
   def verify_assignment
-    departments.present?
+    total_departments = departments.map{|d| d.status.to_i}.sum
+    total_departments > 0 ? true : false
   end
 
   private

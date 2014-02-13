@@ -83,7 +83,7 @@ es:
       modal: "Activación/Desactivación de Edificio"
       confirm-activate: "¿Está seguro de activar el edificio <strong>%{name}</strong>?"
       confirm-deactivate: "¿Está seguro de desactivar el edificio <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar el edificio <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO</strong>"
+      confirm-cannot_disable: "No se puede desactivar el edificio <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO activado</strong>"
   departments:
     title:
       title: "Departamentos"
@@ -95,7 +95,7 @@ es:
       modal: "Activación/Desactivación de Departamento"
       confirm-activate: "¿Está seguro de activar el departamento <strong>%{name}</strong>?"
       confirm-deactivate: "¿Está seguro de desactivar el departamento <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar el departamento <strong>%{name}</strong> porque está asignado por lo menos a un <strong>USUARIO</strong>"
+      confirm-cannot_disable: "No se puede desactivar el departamento <strong>%{name}</strong> porque está asignado por lo menos a un <strong>USUARIO activado</strong>"
   entities:
     title:
       title: "Entidades"
