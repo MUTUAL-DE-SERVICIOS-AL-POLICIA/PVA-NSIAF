@@ -1,25 +1,10 @@
 - case controller_name
-- when 'users'
-  - new_url = new_user_path
-  - table_url = users_url(format: "json")
-- when 'departments'
-  - new_url = new_department_path
-  - table_url = departments_url(format: "json")
-- when 'buildings'
-  - new_url = new_building_path
-  - table_url = buildings_url(format: "json")
-- when 'entities'
-  - new_url = new_entity_path
-  - table_url = entities_url(format: "json")
-- when 'accounts'
-  - table_url = accounts_url(format: "json")
-- when 'auxiliaries'
-  - new_url = new_auxiliary_path
-  - table_url = auxiliaries_url(format: "json")
-- when 'assets'
-  - new_url = new_asset_path
-  - table_url = assets_url(format: "json")
-
+- when 'users' then new_url = new_user_path
+- when 'departments' then new_url = new_department_path
+- when 'buildings' then new_url = new_building_path
+- when 'entities' then new_url = new_entity_path
+- when 'auxiliaries' then new_url = new_auxiliary_path
+- when 'assets' then new_url = new_asset_path
 
 .page-header
   %h2= t("#{controller_name}.title.title")
@@ -31,13 +16,15 @@
       = t("#{controller_name}.title.new")
 
 .col-xs-2.col-md-offset-6
-  = select_tag "credit_card", options_for_select(controller_name.classify.constantize.set_columns), id: 'select_column', class: 'form-control'
+  = select_tag "column", options_for_select(controller_name.classify.constantize.set_columns), id: 'select_column', class: 'form-control'
 
-%table.table.table-striped.table-hover.datatable{'data-source' => table_url}
+%table.table.table-striped.table-hover.datatable
   %thead
     %tr
-      %th= User.human_attribute_name('code')
-      %th{ class: "#{'col-md-2' if controller_name == 'users'}" }= controller_name == 'assets' ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
+      - unless controller_name == 'versions'
+        %th= User.human_attribute_name('code')
+        %th{ class: "#{'col-md-2' if controller_name == 'users'}" }= controller_name == 'assets' ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
       = render "#{controller_name}/#{controller_name}" unless controller_name == 'accounts'
-      %th.td_actions= t('general.actions')
+      - unless controller_name == 'versions'
+        %th.td_actions= t('general.actions')
   %tbody

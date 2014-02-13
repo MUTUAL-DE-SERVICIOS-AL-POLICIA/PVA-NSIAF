@@ -4,7 +4,6 @@ jQuery ->
     bJQueryUI: true
     bProcessing: true
     bServerSide: true
-    sAjaxSource: $('.datatable').data('source')
     bLengthChange: false
     iDisplayLength: 15
     aoColumnDefs: [
@@ -28,6 +27,7 @@ jQuery ->
     fnInitComplete: ->
       $('.dataTables_filter input').attr('placeholder', 'Buscar...')
       $('.dataTables_filter input').addClass('form-control')
+      $('.DTTT_container').css('margin-left', 0) unless $('.DTTT_container').parents('.main').find('.button_new .btn').length
 
   # Change button status
   $(document).on 'click', '.datatable .btn-warning', ->
@@ -47,3 +47,4 @@ jQuery ->
     NProgress.start()
   $(document).on 'ajaxComplete', (e, xhr, settings, exception) ->
     NProgress.done()
+

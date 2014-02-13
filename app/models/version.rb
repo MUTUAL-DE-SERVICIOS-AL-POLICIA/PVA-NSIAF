@@ -20,4 +20,9 @@ class Version < PaperTrail::Version
   def whodunnit_obj
     User.find_by_id(whodunnit)
   end
+
+  def self.set_columns
+   h = ApplicationController.helpers
+   column_names.map{ |c| h.get_column(self, c) unless c == 'object' }.compact
+  end
 end

@@ -37,7 +37,7 @@ private
     array = Version.order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      array = array.where("item_id like :search", search: "%#{params[:sSearch]}%")
+      array = array.where("#{params[:search_column]} like :search", search: "%#{params[:sSearch]}%")
     end
     array
   end

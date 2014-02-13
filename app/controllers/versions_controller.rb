@@ -3,7 +3,7 @@ class VersionsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.html
+      format.html { render '/shared/index' }
       format.json { render json: VersionsDatatable.new(view_context) }
     end
   end
