@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :change_status]
+  before_action :set_user, only: [:show, :edit, :update, :change_status]
 
   # GET /users
   # GET /users.json
@@ -62,16 +62,6 @@ class UsersController < ApplicationController
         format.html { render action: 'form' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /users/1
-  # DELETE /users/1.json
-  def destroy
-    @user.destroy
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: t('general.destroy', name: @user.name) }
-      format.json { head :no_content }
     end
   end
 

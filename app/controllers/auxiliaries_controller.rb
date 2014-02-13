@@ -1,6 +1,6 @@
 class AuxiliariesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_auxiliary, only: [:show, :edit, :update, :destroy, :change_status]
+  before_action :set_auxiliary, only: [:show, :edit, :update, :change_status]
 
   # GET /auxiliaries
   # GET /auxiliaries.json
@@ -58,16 +58,6 @@ class AuxiliariesController < ApplicationController
         format.html { render action: 'form' }
         format.json { render json: @auxiliary.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /auxiliaries/1
-  # DELETE /auxiliaries/1.json
-  def destroy
-    @auxiliary.destroy
-    respond_to do |format|
-      format.html { redirect_to auxiliaries_url, notice: t('general.destroy', name: @auxiliary.name) }
-      format.json { head :no_content }
     end
   end
 

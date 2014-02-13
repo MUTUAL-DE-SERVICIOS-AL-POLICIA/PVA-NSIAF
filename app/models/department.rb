@@ -8,6 +8,7 @@ class Department < ActiveRecord::Base
   }
 
   belongs_to :building
+  has_many :users
 
   validates :code, presence: true, uniqueness: { scope: :building_id }
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z|\"|\.|-/u }, allow_blank: true
@@ -26,6 +27,10 @@ class Department < ActiveRecord::Base
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'building')]
+  end
+
+  def verify_assignment
+    users.present?
   end
 
   private

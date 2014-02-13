@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :department
+  has_many :assets
 
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
@@ -79,6 +80,10 @@ class User < ActiveRecord::Base
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'title'), h.get_column(self, 'ci'), h.get_column(self, 'email'), h.get_column(self, 'username'), h.get_column(self, 'phone'), h.get_column(self, 'mobile'), h.get_column(self, 'department')]
+  end
+
+  def verify_assignment
+    assets.present?
   end
 
   private

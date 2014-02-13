@@ -19,4 +19,5 @@
 //= require dataTables/jquery.dataTables.bootstrap3
 //= require dataTables/extras/TableTools
 //= require dataTables/extras/ZeroClipboard.js
+//= require hogan-2.0.0
 //= require function

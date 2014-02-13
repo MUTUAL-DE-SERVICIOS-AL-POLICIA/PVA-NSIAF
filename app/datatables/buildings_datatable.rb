@@ -1,5 +1,5 @@
 class BuildingsDatatable
-  delegate :params, :link_to, :content_tag, :change_status_building_path, :type_status, :img_status, :title_status, to: :@view
+  delegate :params, :link_to, :content_tag, :data_link, :type_status, :img_status, :title_status, to: :@view
 
   def initialize(view)
     @view = view
@@ -25,7 +25,7 @@ private
         type_status(building.status),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), building, class: 'btn btn-default btn-sm') + ' ' +
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, building], class: 'btn btn-primary btn-sm') + ' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(building.status)}") + title_status(building.status), change_status_building_path(building), class: 'btn btn-warning btn-sm', remote: true)
+        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(building.status)}") + title_status(building.status), '#', class: 'btn btn-warning btn-sm', data: data_link(building))
       ]
     end
   end

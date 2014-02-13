@@ -1,6 +1,6 @@
 class BuildingsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_building, only: [:edit, :update, :show, :destroy, :change_status]
+  before_action :set_building, only: [:edit, :update, :show, :change_status]
 
   # GET /buildings
   # GET /buildings.json
@@ -56,16 +56,6 @@ class BuildingsController < ApplicationController
         format.html { render action: 'form' }
         format.json { render json: @building.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /buildings/1
-  # DELETE /buildings/1.json
-  def destroy
-    @building.destroy
-    respond_to do |format|
-      format.html { redirect_to buildings_url, notice: t('general.destroy', name: @building.name) }
-      format.json { head :no_content }
     end
   end
 

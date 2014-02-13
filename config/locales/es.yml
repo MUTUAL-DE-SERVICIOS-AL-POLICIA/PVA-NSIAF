@@ -68,6 +68,10 @@ es:
       create: "Nuevo Auxiliar"
       edit: "Editar Auxiliar"
       update: "Editar Auxiliar"
+      modal: "Activación/Desactivación de Auxiliar"
+      confirm-activate: "¿Está seguro de activar el auxiliar <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de desactivar el auxiliar <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el auxiliar <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ACTIVO</strong>"
   buildings:
     title:
       title: "Edificios"
@@ -76,6 +80,10 @@ es:
       create: "Nuevo Edificio"
       edit: "Editar Edificio"
       update: "Editar Edificio"
+      modal: "Activación/Desactivación de Edificio"
+      confirm-activate: "¿Está seguro de activar el edificio <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de desactivar el edificio <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el edificio <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO</strong>"
   departments:
     title:
       title: "Departamentos"
@@ -84,6 +92,10 @@ es:
       create: "Nuevo Departamento"
       edit: "Editar Departamento"
       update: "Editar Departamento"
+      modal: "Activación/Desactivación de Departamento"
+      confirm-activate: "¿Está seguro de activar el departamento <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de desactivar el departamento <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el departamento <strong>%{name}</strong> porque está asignado por lo menos a un <strong>USUARIO</strong>"
   entities:
     title:
       title: "Entidades"
@@ -109,6 +121,10 @@ es:
       create: "Nuevo Usuario"
       edit: "Editar Usuario"
       update: "Editar Usuario"
+      modal: "Activación/Desactivación de Usuario"
+      confirm-activate: "¿Está seguro de activar el usuario <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de desactivar el usuario <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el usuario <strong>%{name}</strong> porque está asignado(a) por lo menos a un <strong>ACTIVO</strong>"
   versions:
     title:
       title: "Histórico"
