@@ -109,6 +109,10 @@ es:
       create: "Nuevo Usuario"
       edit: "Editar Usuario"
       update: "Editar Usuario"
+      modal: "Activación/Desactivación de Usuario"
+      confirm-activate: "¿Está seguro de activar el usuario <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de desactivar el usuario <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el usuario <strong>%{name}</strong> porque está asignado(a) por lo menos a un <strong>ACTIVO</strong>"
   versions:
     title:
       title: "Histórico"

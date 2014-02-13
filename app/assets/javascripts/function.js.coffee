@@ -30,8 +30,19 @@ jQuery ->
       $('.DTTT_container').css('margin-left', 0) unless $('.DTTT_container').parents('.main').find('.button_new .btn').length
 
   # Change button status
-  $(document).on 'click', '.datatable .btn-warning', ->
-    if $(this).text() == 'Activar'
+  $(document).on 'click', '.datatable .btn-warning', (evt) ->
+    tpl = $('#destroy-modal').html()
+    data = $(@).data()
+    html = Hogan.compile(tpl).render(data)
+    $('#confirm-modal').html(html)
+    $("#modal-#{ $(@).data('dom-id') }").modal('toggle')
+    evt.preventDefault()
+
+  $(document).on 'click', '.modal .btn-primary', ->
+    $(this).parents('.modal').modal('hide')
+    id = $(this).closest('.modal').attr('id').substr(6)
+    $user = $(this).closest('#confirm-modal').prev().find("[data-dom-id=#{id}]")
+    if $user.text() == 'Activar'
       img = 'remove'
       text = 'Desactivar'
       status_td = 'ACTIVO'
@@ -39,8 +50,8 @@ jQuery ->
       img = 'ok'
       text = 'Activar'
       status_td = 'INACTIVO'
-    $(this).parent().prev().text(status_td)
-    $(this).empty().append("<span class='glyphicon glyphicon-#{img}'></span>#{text}")
+    $user.parent().prev().text(status_td)
+    $user.empty().append("<span class='glyphicon glyphicon-#{img}'></span>#{text}")
 
   # Ajax loading
   $(document).on 'ajaxStart', (e, xhr, settings, exception) ->

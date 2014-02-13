@@ -65,16 +65,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
-  # DELETE /users/1.json
-  def destroy
-    @user.destroy
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: t('general.destroy', name: @user.name) }
-      format.json { head :no_content }
-    end
-  end
-
   def change_status
     @user.change_status
     respond_to do |format|

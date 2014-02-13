@@ -37,4 +37,21 @@ module ApplicationHelper
   def get_column(model, column)
     [model.human_attribute_name(column), column]
   end
+
+  def data_link(model)
+    assignment = model.verify_assignment
+    if model.status == '1'
+      state = assignment ? 'cannot_disable' : 'deactivate'
+    else
+      state = 'activate'
+    end
+    klass = model.class.name
+    {
+      dom_id: dom_id(model),
+      title: t("#{ klass.tableize }.title.modal"),
+      confirm_message: t("#{ klass.tableize }.title.confirm-#{ state }", name: model.name),
+      url: eval("change_status_#{ klass.underscore }_path(model)"),
+      unassigned: !assignment
+    }
+  end
 end
