@@ -7,6 +7,7 @@ class Auxiliary < ActiveRecord::Base
   }
 
   belongs_to :account
+  has_many :assets
 
   validates :code, presence: true, uniqueness: { scope: :account_id }
   validates :name, :account_id, presence: true
@@ -19,6 +20,10 @@ class Auxiliary < ActiveRecord::Base
 
   def account_name
     account.present? ? account.name : ''
+  end
+
+  def verify_assignment
+    assets.present?
   end
 
   private

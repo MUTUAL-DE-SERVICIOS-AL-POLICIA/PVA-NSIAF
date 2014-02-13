@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :change_status]
+  before_action :set_user, only: [:show, :edit, :update, :change_status]
 
   # GET /users
   # GET /users.json
