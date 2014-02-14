@@ -54,4 +54,10 @@ module ApplicationHelper
       unassigned: !assignment
     }
   end
+
+  def link_deactivate(user)
+    unless user.role == 'super_admin'
+      link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-sm', data: data_link(user))
+    end
+  end
 end
