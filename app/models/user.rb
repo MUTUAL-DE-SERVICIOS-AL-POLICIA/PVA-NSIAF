@@ -77,9 +77,13 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.set_columns
+  def self.set_columns(cu = nil)
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'title'), h.get_column(self, 'ci'), h.get_column(self, 'email'), h.get_column(self, 'username'), h.get_column(self, 'phone'), h.get_column(self, 'mobile'), h.get_column(self, 'department')]
+    if cu
+      [h.get_column(self, 'name'), h.get_column(self, 'username'), h.get_column(self, 'role')]
+    else
+      [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'title'), h.get_column(self, 'ci'), h.get_column(self, 'email'), h.get_column(self, 'username'), h.get_column(self, 'phone'), h.get_column(self, 'mobile'), h.get_column(self, 'department')]
+    end
   end
 
   def verify_assignment

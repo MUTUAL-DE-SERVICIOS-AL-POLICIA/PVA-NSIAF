@@ -10,11 +10,25 @@ class UsersDatatable
       sEcho: params[:sEcho].to_i,
       iTotalRecords: User.count,
       iTotalDisplayRecords: array.total_entries,
-      aaData: data
+      aaData: current_user.is_super_admin? ? data_admin : data
     }
   end
 
 private
+
+  def data_admin
+    array.map do |user|
+      [
+        user.name,
+        user.username,
+        user.role,
+        type_status(user.status),
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-sm') + ' ' +
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-sm') + ' ' +
+        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-sm', data: data_link(user))
+      ]
+    end
+  end
 
   def data
     array.map do |user|
@@ -35,7 +49,6 @@ private
       ]
     end
   end
-
   def array
     @users ||= fetch_array
   end
@@ -59,7 +72,7 @@ private
   end
 
   def sort_column
-    columns = %w[users.code users.name title ci email username phone mobile departments.code users.status]
+    columns = current_user.is_super_admin? ? %w[users.name username role users.status] : %w[users.code users.name title ci email username phone mobile departments.code users.status]
     columns[params[:iSortCol_0].to_i]
   end
 
