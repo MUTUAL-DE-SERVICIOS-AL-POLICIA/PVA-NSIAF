@@ -51,7 +51,6 @@ gem 'bootstrap-sass', '~> 3.1.0'
 gem 'haml-rails'
 gem 'cancan'
 gem 'will_paginate'
-gem "recaptcha", require: "recaptcha/rails"
 
 # Gem for read DBF files
 gem 'dbf'

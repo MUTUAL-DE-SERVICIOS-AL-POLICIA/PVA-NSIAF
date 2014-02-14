@@ -21,6 +21,7 @@ Nsiaf::Application.routes.draw do
 
   resources :users, except: [:destroy] do
     get :change_status, on: :member
+    get :welcome, on: :collection
   end
 
   post '/dbf/:model/import', to: 'dbf#import', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'import_dbf'
@@ -38,5 +39,5 @@ Nsiaf::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'users#index'
+  root 'users#welcome'
 end
