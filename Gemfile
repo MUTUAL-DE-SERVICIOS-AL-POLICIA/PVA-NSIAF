@@ -64,3 +64,4 @@ gem 'redis'
 gem 'redis-namespace'
 
 gem 'autocomplete-off'
+gem 'newrelic_rpm'
