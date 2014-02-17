@@ -60,7 +60,7 @@ class BuildingsController < ApplicationController
   end
 
   def change_status
-    @building.change_status
+    @building.change_status unless @building.verify_assignment
     respond_to do |format|
       format.json { head :no_content }
     end

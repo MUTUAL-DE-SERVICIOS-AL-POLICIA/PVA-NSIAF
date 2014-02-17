@@ -62,7 +62,7 @@ class AuxiliariesController < ApplicationController
   end
 
   def change_status
-    @auxiliary.change_status
+    @auxiliary.change_status unless @auxiliary.verify_assignment
     respond_to do |format|
       format.json { head :no_content }
     end

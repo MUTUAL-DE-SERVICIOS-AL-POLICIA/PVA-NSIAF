@@ -44,12 +44,12 @@
         = link_to 'Histórico', versions_path
     %li.dropdown
       = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
-        = current_user.name
+        = current_user.name || current_user.username
         %b.caret
       %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets' }
         - unless current_user.is_super_admin?
           %li
-            = link_to 'Informacion Personal', user_path(current_user)
+            = link_to 'Información Personal', user_path(current_user)
           %li
             = link_to 'Cambiar Contraseña', dashboard_path
         %li

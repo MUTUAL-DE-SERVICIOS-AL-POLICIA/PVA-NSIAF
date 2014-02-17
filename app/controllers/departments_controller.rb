@@ -62,7 +62,7 @@ class DepartmentsController < ApplicationController
   end
 
   def change_status
-    @department.change_status
+    @department.change_status unless @department.verify_assignment
     respond_to do |format|
       format.json { head :no_content }
     end

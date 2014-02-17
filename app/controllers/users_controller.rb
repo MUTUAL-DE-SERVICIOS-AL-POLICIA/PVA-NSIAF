@@ -66,7 +66,7 @@ class UsersController < ApplicationController
   end
 
   def change_status
-    @user.change_status
+    @user.change_status unless @user.verify_assignment
     respond_to do |format|
       format.json { head :no_content }
     end

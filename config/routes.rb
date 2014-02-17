@@ -4,23 +4,23 @@ Nsiaf::Application.routes.draw do
   resources :assets
 
   resources :auxiliaries, except: [:destroy] do
-    get :change_status, on: :member
+    post :change_status, on: :member
   end
 
   resources :accounts, only: [:index, :show]
 
   resources :departments, except: [:destroy] do
-    get :change_status, on: :member
+    post :change_status, on: :member
   end
 
   resources :buildings, except: [:destroy] do
-    get :change_status, on: :member
+    post :change_status, on: :member
   end
 
   resources :entities
 
   resources :users, except: [:destroy] do
-    get :change_status, on: :member
+    post :change_status, on: :member
     get :welcome, on: :collection
   end
 
