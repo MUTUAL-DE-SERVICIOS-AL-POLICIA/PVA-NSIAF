@@ -23,6 +23,7 @@ rerun.txt
 pickle-email-*.html
 .project
 config/database.yml
+config/newrelic.yml
 .ruby-version
 .ruby-gemset
 /public/assets

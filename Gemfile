@@ -40,7 +40,9 @@ end
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-# gem 'capistrano', group: :development
+gem 'capistrano', '~> 3.1.0'
+gem 'capistrano-rails'
+gem 'capistrano-rvm'
 
 # Use debugger
 gem 'debugger', group: [:development, :test]
@@ -62,3 +64,4 @@ gem 'redis'
 gem 'redis-namespace'
 
 gem 'autocomplete-off'
+gem 'newrelic_rpm'
