@@ -24,6 +24,9 @@ Nsiaf::Application.routes.draw do
     get :welcome, on: :collection
   end
 
+  get '/dashboard', to: 'dashboard#index', as: :dashboard
+  patch '/dashboard/update_password', to: 'dashboard#update_password', as: :update_password_dashboard
+
   post '/dbf/:model/import', to: 'dbf#import', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'import_dbf'
   get '/dbf/:model', to: 'dbf#index', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'dbf'
   get '/dbf', to: redirect('/dbf/buildings'), as: 'migration'

@@ -87,7 +87,6 @@ class UsersController < ApplicationController
       if current_user.is_super_admin?
         params.require(:user).permit(:name, :username, :role)
       else
-        params[:user][:department_id] = current_user.department_id
         params.require(:user).permit(:code, :name, :title, :ci, :username, :email, :password, :password_confirmation, :phone, :mobile, :department_id)
       end
     end

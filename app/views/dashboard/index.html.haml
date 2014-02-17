@@ -1,0 +1,12 @@
+= simple_form_for @user, url: update_password_dashboard_path, html: { class: 'form-horizontal' } do |f|
+  .page-header
+    .pull-right
+      %button.btn.btn-primary
+        %span.glyphicon.glyphicon-ok
+        = t("general.btn.save")
+    %h1 Cambiar Contraseña
+
+  .col-md-8.column.col-md-offset-1
+    = f.input :current_password, as: :password, required: true
+    = f.input :password, as: :password
+    = f.input :password_confirmation, as: :password

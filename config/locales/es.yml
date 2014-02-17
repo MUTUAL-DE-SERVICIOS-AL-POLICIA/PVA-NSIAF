@@ -226,7 +226,7 @@ es:
               taken: "ya existe"
             password:
               blank: "es obligatorio"
-              too_short: "mínimo 8 caractéres"
+              too_short: "mínimo 6 caractéres"
             password_confirmation:
               confirmation: "deben ser iguales"
             phone:
@@ -282,6 +282,7 @@ es:
         mobile: "Celular"
         department: "Departamento"
         role: "Rol"
+        current_password: "Contraseña Actual"
       version:
         item_id: "Código"
         created_at: "Fecha"

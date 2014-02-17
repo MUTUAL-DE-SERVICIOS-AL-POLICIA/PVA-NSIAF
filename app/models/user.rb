@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
     m.validates :code, presence: true, uniqueness: { scope: :department_id }
     m.validates :name, :title, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
     m.validates :ci, uniqueness: true, numericality: { only_integer: true }, allow_blank: true
-    m.validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z]+\z/ }
+    m.validates :username, presence: true, length: {minimum: 6, maximum: 128}, uniqueness: true, format: { with: /\A[a-z]+\z/ }
     m.validates :phone, :mobile, numericality: { only_integer: true }, allow_blank: true
     m.validates :department_id, presence: true
   end
@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
 
   with_options if: :is_admin_or_super? do |m|
     m.validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
-    m.validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z]+\z/ }
+    m.validates :username, presence: true, length: {minimum: 6, maximum: 128}, uniqueness: true, format: { with: /\A[a-z]+\z/ }
     m.validates :role, presence: true, format: { with: /#{ROLES.join('|')}/ }
   end
 
@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
     if is_super_admin?
       User.where.not(role: nil)
     elsif is_admin?
-      User.joins(department: :building)
+      User.where(role: nil)
     else
       User.none
     end
@@ -104,7 +104,7 @@ class User < ActiveRecord::Base
   end
 
   def set_defaults
-    if is_admin_or_super? && new_record? && password.nil? && !username.nil?
+    if new_record? && password.nil? && !username.nil?
       self.password ||= self.username
     end
   end

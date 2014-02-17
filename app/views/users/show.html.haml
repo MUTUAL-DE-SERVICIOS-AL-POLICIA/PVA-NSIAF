@@ -37,5 +37,8 @@
   %b #{User.human_attribute_name('department')}:
   = @user.department_name
 %p
+  %b #{User.human_attribute_name('role')}:
+  = t("users.roles.#{@user.role}")
+%p
   %b #{t('general.status')}:
   = type_status(@user.status)
