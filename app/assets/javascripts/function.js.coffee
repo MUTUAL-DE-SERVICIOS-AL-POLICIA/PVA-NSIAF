@@ -50,6 +50,8 @@ jQuery ->
       img = 'ok'
       text = 'Activar'
       status_td = 'INACTIVO'
+    message = $user.data('confirm-message').replace($user.text(), text)
+    $user.data('confirm-message', message)
     $user.parent().prev().text(status_td)
     $user.empty().append("<span class='glyphicon glyphicon-#{img}'></span>#{text}")
 

@@ -47,10 +47,9 @@
         = current_user.name || current_user.username
         %b.caret
       %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets' }
-        - unless current_user.is_super_admin?
-          %li
-            = link_to 'Información Personal', user_path(current_user)
-          %li
-            = link_to 'Cambiar Contraseña', dashboard_path
+        %li
+          = link_to 'Información Personal', user_path(current_user)
+        %li
+          = link_to 'Cambiar Contraseña', dashboard_path
         %li
           = link_to 'Cerrar Sesión', destroy_user_session_path, method: :delete

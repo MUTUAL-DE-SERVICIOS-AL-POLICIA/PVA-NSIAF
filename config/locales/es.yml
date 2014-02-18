@@ -69,8 +69,8 @@ es:
       edit: "Editar Auxiliar"
       update: "Editar Auxiliar"
       modal: "Activación/Desactivación de Auxiliar"
-      confirm-activate: "¿Está seguro de activar el auxiliar <strong>%{name}</strong>?"
-      confirm-deactivate: "¿Está seguro de desactivar el auxiliar <strong>%{name}</strong>?"
+      confirm-activate: "¿Está seguro de Activar el auxiliar <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el auxiliar <strong>%{name}</strong>?"
       confirm-cannot_disable: "No se puede desactivar el auxiliar <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ACTIVO</strong>"
   buildings:
     title:
@@ -81,8 +81,8 @@ es:
       edit: "Editar Edificio"
       update: "Editar Edificio"
       modal: "Activación/Desactivación de Edificio"
-      confirm-activate: "¿Está seguro de activar el edificio <strong>%{name}</strong>?"
-      confirm-deactivate: "¿Está seguro de desactivar el edificio <strong>%{name}</strong>?"
+      confirm-activate: "¿Está seguro de Activar el edificio <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el edificio <strong>%{name}</strong>?"
       confirm-cannot_disable: "No se puede desactivar el edificio <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO activado</strong>"
   departments:
     title:
@@ -93,8 +93,8 @@ es:
       edit: "Editar Departamento"
       update: "Editar Departamento"
       modal: "Activación/Desactivación de Departamento"
-      confirm-activate: "¿Está seguro de activar el departamento <strong>%{name}</strong>?"
-      confirm-deactivate: "¿Está seguro de desactivar el departamento <strong>%{name}</strong>?"
+      confirm-activate: "¿Está seguro de Activar el departamento <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el departamento <strong>%{name}</strong>?"
       confirm-cannot_disable: "No se puede desactivar el departamento <strong>%{name}</strong> porque está asignado por lo menos a un <strong>USUARIO activado</strong>"
   entities:
     title:
@@ -122,8 +122,8 @@ es:
       edit: "Editar Usuario"
       update: "Editar Usuario"
       modal: "Activación/Desactivación de Usuario"
-      confirm-activate: "¿Está seguro de activar el usuario <strong>%{name}</strong>?"
-      confirm-deactivate: "¿Está seguro de desactivar el usuario <strong>%{name}</strong>?"
+      confirm-activate: "¿Está seguro de Activar el usuario <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el usuario <strong>%{name}</strong>?"
       confirm-cannot_disable: "No se puede desactivar el usuario <strong>%{name}</strong> porque está asignado(a) por lo menos a un <strong>ACTIVO</strong>"
   versions:
     title:
