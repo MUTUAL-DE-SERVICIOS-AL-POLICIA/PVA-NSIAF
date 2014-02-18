@@ -17,5 +17,6 @@ class Ability
       can :index, :dbf
       can :import, :dbf
     end
+    cannot :update, User, id: user.id
   end
 end
