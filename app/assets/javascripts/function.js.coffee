@@ -60,4 +60,3 @@ jQuery ->
     NProgress.start()
   $(document).on 'ajaxComplete', (e, xhr, settings, exception) ->
     NProgress.done()
-

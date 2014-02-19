@@ -11,6 +11,7 @@ class Ability
       can :manage, Building
       can :manage, Department
       can :manage, User
+      cannot [:show, :update], User, role: 'super_admin'
       can :manage, Account
       can :manage, Auxiliary
       can :manage, Asset
