@@ -58,12 +58,14 @@ namespace :deploy do
     end
   end
 
-  desc "Run rake db:seed"
-  task :seed do
-    on roles(:db), in: :sequence, wait: 5 do
-      within release_path do
-        with rails_env: :production do
-          rake "db:seed"
+  %w(seed drop create setup reset).each do |command|
+    desc "Run rake db:#{command}"
+    task command do
+      on roles(:db), in: :sequence, wait: 5 do
+        within release_path do
+          with rails_env: :production do
+            rake "db:#{command}"
+          end
         end
       end
     end
