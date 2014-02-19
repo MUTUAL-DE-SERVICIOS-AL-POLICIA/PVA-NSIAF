@@ -62,4 +62,8 @@ module ApplicationHelper
       link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-sm', data: data_link(user))
     end
   end
+
+  def status_active(model)
+    model.where(status: '1')
+  end
 end

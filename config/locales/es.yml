@@ -140,6 +140,7 @@ es:
   unauthorized:
     manage:
       all: "No estás autorizado para acceder a ésta página."
+      user_inactive: "Lo sentimos, esta cuenta ha sido desactivada."
 
   activerecord:
     errors:
