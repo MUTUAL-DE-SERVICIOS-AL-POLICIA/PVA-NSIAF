@@ -66,7 +66,7 @@ private
   end
 
   def per_page
-    params[:iDisplayLength].to_i < 0 ? User.count : params[:iDisplayLength].to_i
+    params[:iDisplayLength].to_i < 0 ? User.count + 1 : params[:iDisplayLength].to_i
   end
 
   def sort_column
