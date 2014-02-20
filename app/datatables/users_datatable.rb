@@ -21,7 +21,7 @@ private
       [
         user.name,
         user.username,
-        user.role,
+        I18n.t(user.role, scope: 'users.roles'),
         type_status(user.status),
         links_actions(user)
       ]

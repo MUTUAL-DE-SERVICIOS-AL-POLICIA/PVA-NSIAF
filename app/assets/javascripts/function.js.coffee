@@ -1,8 +1,7 @@
 jQuery ->
   $(".datatable").dataTable
     sPaginationType: "bootstrap"
-    bJQueryUI: true
-    bProcessing: true
+    bProcessing: false
     bServerSide: true
     bLengthChange: false
     iDisplayLength: 15
