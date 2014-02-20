@@ -28,6 +28,9 @@ jQuery ->
       $('.dataTables_filter input').attr('placeholder', 'Buscar...')
       $('.dataTables_filter input').addClass('form-control')
       $('.DTTT_container').css('margin-left', 0) unless $('.DTTT_container').parents('.main').find('.button_new .btn').length
+      table = $.fn.dataTable.fnTables(true)
+      if table.length > 0
+        $(table).dataTable().fnAdjustColumnSizing()
 
   # Change button status
   $(document).on 'click', '.datatable .btn-warning', (evt) ->
