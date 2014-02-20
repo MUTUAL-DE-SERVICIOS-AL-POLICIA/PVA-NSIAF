@@ -20,6 +20,10 @@ module ApplicationHelper
     end
   end
 
+  def title(page_title)
+    content_for(:title) { page_title }
+  end
+
   def type_status(status)
     state = status == '0' ? 'inactive' : 'active'
     t("general.#{state}")
@@ -65,5 +69,9 @@ module ApplicationHelper
 
   def status_active(model)
     model.where(status: '1')
+  end
+
+  def yield_or_default(section, default = "")
+    content_for?(section) ? content_for(section) : default
   end
 end

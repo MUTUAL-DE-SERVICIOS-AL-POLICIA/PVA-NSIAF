@@ -5,7 +5,7 @@
     %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}/
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}/
 
-    %title NVSIAF
+    %title VSIAF - #{ yield_or_default(:title, 'Sistema de Activos Fijos y Almacenes') }
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body
