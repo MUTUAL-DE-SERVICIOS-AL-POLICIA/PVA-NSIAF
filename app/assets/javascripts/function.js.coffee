@@ -1,8 +1,7 @@
 jQuery ->
   $(".datatable").dataTable
     sPaginationType: "bootstrap"
-    bJQueryUI: true
-    bProcessing: true
+    bProcessing: false
     bServerSide: true
     bLengthChange: false
     iDisplayLength: 15
@@ -28,6 +27,9 @@ jQuery ->
       $('.dataTables_filter input').attr('placeholder', 'Buscar...')
       $('.dataTables_filter input').addClass('form-control')
       $('.DTTT_container').css('margin-left', 0) unless $('.DTTT_container').parents('.main').find('.button_new .btn').length
+      table = $.fn.dataTable.fnTables(true)
+      if table.length > 0
+        $(table).dataTable().fnAdjustColumnSizing()
 
   # Change button status
   $(document).on 'click', '.datatable .btn-warning', (evt) ->
@@ -60,3 +62,9 @@ jQuery ->
     NProgress.start()
   $(document).on 'ajaxComplete', (e, xhr, settings, exception) ->
     NProgress.done()
+
+  $('#announcements').bind 'close.bs.alert', ->
+    $.ajax
+      url: '/dashboard/announcements/hide'
+      dataType: 'json'
+      type: 'POST'

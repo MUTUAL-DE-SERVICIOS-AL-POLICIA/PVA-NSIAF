@@ -137,6 +137,7 @@ es:
     login: 'Iniciar Sesión'
     logout: 'Cerrar Sesión'
     migrated: 'Migración'
+    password_changed: 'Contraseña actualizada'
     update: 'Modificación'
 
   unauthorized:

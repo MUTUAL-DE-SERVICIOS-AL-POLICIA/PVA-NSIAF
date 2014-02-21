@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20140221215141) do
+=======
+ActiveRecord::Schema.define(version: 20140221200122) do
+>>>>>>> d27077658b0cb14697bdb3cea2cfe28c4f285be5
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -76,19 +80,19 @@ ActiveRecord::Schema.define(version: 20140221215141) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "email",                              default: "", null: false
-    t.string   "encrypted_password",                 default: "", null: false
+    t.string   "email",                              default: "",    null: false
+    t.string   "encrypted_password",                 default: "",    null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0,  null: false
+    t.integer  "sign_in_count",                      default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "username",               limit: 230, default: "", null: false
+    t.string   "username",               limit: 230, default: "",    null: false
     t.integer  "code"
     t.string   "name",                   limit: 230
     t.string   "title",                  limit: 230
@@ -98,6 +102,7 @@ ActiveRecord::Schema.define(version: 20140221215141) do
     t.string   "status",                 limit: 2
     t.integer  "department_id"
     t.string   "role"
+    t.boolean  "password_change",                    default: false, null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

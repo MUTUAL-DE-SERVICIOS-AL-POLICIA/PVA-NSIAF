@@ -21,7 +21,7 @@ private
       [
         user.name,
         user.username,
-        user.role,
+        I18n.t(user.role, scope: 'users.roles'),
         type_status(user.status),
         links_actions(user)
       ]
@@ -39,7 +39,7 @@ private
         user.username,
         user.phone,
         user.mobile,
-        link_to_if(user.department, user.department_code, user.department, title: user.department_name),
+        link_to_if(user.department, user.department_name, user.department, title: user.department_code),
         type_status(user.status),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-sm') + ' ' +
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-sm') + ' ' +
@@ -55,7 +55,7 @@ private
     array = current_user.users.includes(:department).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      type_search = params[:search_column] == 'department' ? 'departments.code' : "users.#{params[:search_column]}"
+      type_search = params[:search_column] == 'department' ? 'departments.name' : "users.#{params[:search_column]}"
       array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
     end
     array
@@ -66,11 +66,11 @@ private
   end
 
   def per_page
-    params[:iDisplayLength].to_i < 0 ? User.count : params[:iDisplayLength].to_i
+    params[:iDisplayLength].to_i < 0 ? User.count + 1 : params[:iDisplayLength].to_i
   end
 
   def sort_column
-    columns = current_user.is_super_admin? ? %w[users.name username role users.status] : %w[users.code users.name title ci email username phone mobile departments.code users.status]
+    columns = current_user.is_super_admin? ? %w[users.name username role users.status] : %w[users.code users.name title ci email username phone mobile departments.name users.status]
     columns[params[:iSortCol_0].to_i]
   end
 

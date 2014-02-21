@@ -43,7 +43,7 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(self, 'auxiliary')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user')]
   end
 
   def verify_assignment

@@ -28,6 +28,7 @@ Nsiaf::Application.routes.draw do
 
   get '/dashboard', to: 'dashboard#index', as: :dashboard
   patch '/dashboard/update_password', to: 'dashboard#update_password', as: :update_password_dashboard
+  post '/dashboard/announcements/hide', to: 'dashboard#hide', as: :hide_announcement
 
   post '/dbf/:model/import', to: 'dbf#import', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'import_dbf'
   get '/dbf/:model', to: 'dbf#index', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'dbf'

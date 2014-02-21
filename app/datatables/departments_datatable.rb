@@ -21,7 +21,7 @@ private
       [
         department.code,
         department.name,
-        link_to_if(department.building, department.building_code, department.building, title: department.building_name),
+        link_to_if(department.building, department.building_name, department.building, title: department.building_code),
         type_status(department.status),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), department, class: 'btn btn-default btn-sm') + ' ' +
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, department], class: 'btn btn-primary btn-sm') + ' ' +
@@ -38,8 +38,8 @@ private
     array = Department.includes(:building).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
-      type_search = params[:search_column] == 'building' ? 'buildings.code' : "departments.#{params[:search_column]}"
-      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
+      type_search = params[:search_column] == 'building' ? 'buildings.name' : "departments.#{params[:search_column]}"
+      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%").references(:building)
     end
     array
   end
@@ -49,11 +49,11 @@ private
   end
 
   def per_page
-    params[:iDisplayLength].to_i < 0 ? Department.count : params[:iDisplayLength].to_i
+    params[:iDisplayLength].to_i < 0 ? Department.count + 1 : params[:iDisplayLength].to_i
   end
 
   def sort_column
-    columns = %w[departments.code departments.name buildings.code departments.status]
+    columns = %w[departments.code departments.name buildings.name departments.status]
     columns[params[:iSortCol_0].to_i]
   end
 

@@ -74,6 +74,10 @@ class AssetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def asset_params
-      params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id)
+      if @asset.new_record?
+        params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id)
+      else
+        params.require(:asset).permit(:code, :description)
+      end
     end
 end
