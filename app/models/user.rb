@@ -41,10 +41,18 @@ class User < ActiveRecord::Base
 
   before_validation :set_defaults
 
-  has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :last_sign_in_ip, :current_sign_in_ip, :sign_in_count, :updated_at, :status, :password_change]
+  has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :last_sign_in_ip, :current_sign_in_ip, :sign_in_count, :updated_at, :status, :password_change, :encrypted_password]
 
   def active_for_authentication?
     super && self.status == '1'
+  end
+
+  def change_password(user_params)
+    transaction do
+      update_with_password(user_params) &&
+        hide_announcement &&
+        register_log(:password_changed)
+    end
   end
 
   def inactive_message
