@@ -21,8 +21,7 @@ private
       [
         asset.code,
         asset.description,
-        link_to_if(asset.user, asset.user_code, asset.user, title: asset.user_name),
-        link_to_if(asset.auxiliary, asset.auxiliary_code, asset.auxiliary, title: asset.auxiliary_name),
+        link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), asset, class: 'btn btn-default btn-sm') + ' ' +
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-sm')
       ]
@@ -34,13 +33,11 @@ private
   end
 
   def fetch_array
-    array = Asset.includes(:auxiliary, :user).order("#{sort_column} #{sort_direction}")
+    array = Asset.includes(:user).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
       if params[:search_column] == 'user'
-        type_search = 'users.code'
-      elsif params[:search_column] == 'auxiliary'
-        type_search = 'auxiliaries.code'
+        type_search = 'users.name'
       else
         type_search = "assets.#{params[:search_column]}"
       end
@@ -58,7 +55,7 @@ private
   end
 
   def sort_column
-    columns = %w[assets.code description users.code auxiliaries.code]
+    columns = %w[assets.code description users.name]
     columns[params[:iSortCol_0].to_i]
   end
 
