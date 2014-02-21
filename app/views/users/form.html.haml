@@ -1,0 +1,8 @@
+.page-header
+  %h1= t("users.title.#{params[:action]}")
+
+.col-md-8.column.col-md-offset-1
+  - if current_user.is_super_admin?
+    = render 'user_super_admin', user: @user
+  - elsif current_user.is_admin?
+    = render 'user_admin', user: @user

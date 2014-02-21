@@ -1,0 +1,14 @@
+.page-header
+  .pull-right
+    = link_to accounts_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("accounts.title.title")
+
+  %h2 Cuenta
+
+%p
+  %b #{Account.human_attribute_name('code')}:
+  = @account.code
+%p
+  %b #{Account.human_attribute_name('name')}:
+  = @account.name

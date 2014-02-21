@@ -1,0 +1,38 @@
+- case controller_name
+- when 'users' then new_url = new_user_path
+- when 'departments' then new_url = new_department_path
+- when 'buildings' then new_url = new_building_path
+- when 'entities' then new_url = new_entity_path
+- when 'auxiliaries' then new_url = new_auxiliary_path
+- when 'assets' then new_url = new_asset_path
+
+= title t("#{controller_name}.title.title")
+
+.page-header
+  %h2= t("#{controller_name}.title.title")
+
+.col-xs-2.button_new
+  - if new_url.present?
+    = link_to new_url, class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-plus
+      = t("#{controller_name}.title.new")
+
+.col-xs-2.col-md-offset-6
+  - columns = controller_name.classify.constantize
+  - columns = current_user.is_super_admin? && controller_name == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
+  = select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control'
+
+%table.table.table-striped.table-hover.datatable
+  %thead
+    %tr
+      - unless controller_name == 'versions'
+        - unless current_user.is_super_admin? && controller_name == 'users'
+          %th= User.human_attribute_name('code')
+        %th{ class: "#{'col-md-2' if controller_name == 'users'}" }= controller_name == 'assets' ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
+      = render "#{controller_name}/#{controller_name}" unless controller_name == 'accounts'
+      - unless controller_name == 'versions'
+        %th.td_actions= t('general.actions')
+  %tbody
+
+#confirm-modal
+= render 'shared/confirm_modal'

@@ -1,0 +1,50 @@
+.page-header
+  .pull-right
+    - unless current_user.id == @user.id
+      = link_to edit_user_path(@user), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+      = link_to users_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        = t("users.title.title")
+
+  %h2 Usuario
+
+- if @user.role.blank?
+  %p
+    %b #{User.human_attribute_name('code')}:
+    = @user.code
+%p
+  %b #{User.human_attribute_name('name')}:
+  = @user.name
+- if @user.role.blank?
+  %p
+    %b #{User.human_attribute_name('title')}:
+    = @user.title
+  %p
+    %b #{User.human_attribute_name('ci')}:
+    = @user.ci
+  %p
+    %b #{User.human_attribute_name('email')}:
+    = @user.email
+%p
+  %b #{User.human_attribute_name('username')}:
+  = @user.username
+- if @user.role.blank?
+  %p
+    %b #{User.human_attribute_name('phone')}:
+    = @user.phone
+  %p
+    %b #{User.human_attribute_name('mobile')}:
+    = @user.mobile
+  %p
+    %b #{User.human_attribute_name('department')}:
+    = @user.department_name
+- if @user.role.present?
+  %p
+    %b #{User.human_attribute_name('role')}:
+    = t("users.roles.#{@user.role}")
+
+%p
+  %b #{t('general.status')}:
+  = type_status(@user.status)

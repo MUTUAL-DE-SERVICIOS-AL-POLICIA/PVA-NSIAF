@@ -1,0 +1,15 @@
+.page-header
+  %h3
+    = t('general.migrate')
+    #{t("#{params[:model]}.title.title")}:
+    %span.text-info= get_filename(params[:model])
+
+.col-md-8.column.col-md-offset-1
+  = form_tag import_dbf_path(params[:model]), class: 'form-horizontal', role: 'form', multipart: true do
+    .form-group
+      = label :dbf, t('migration.file'), class: 'col-md-3 control-label'
+      .col-md-9
+        = file_field_tag :dbf, class: 'form-control', accept: dbf_mime_types.join(',')
+    .form-group
+      .col-md-offset-5.col-md-9
+        = submit_and_cancel(root_path)

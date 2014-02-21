@@ -1,0 +1,293 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+es:
+  sessions:
+    log_in: 'Ingreso al Sistema'
+    new_password: '¿Olvidaste tu contraseña?'
+  general:
+    are_you_sure: '¿Estás seguro?'
+    destroy: "<strong>%{name}</strong> ha sido eliminado."
+    created: "%{model} ha sido creado correctamente."
+    updated: "%{model} ha sido actualizado correctamente."
+    status: 'Estado'
+    actions: 'Acciones'
+    active: 'ACTIVO'
+    inactive: 'INACTIVO'
+    print: 'Imprimir'
+    migrate: 'Migrar'
+    btn:
+      cancel: "Cancelar"
+      save: "Aceptar"
+      edit: "Editar"
+      show: "Ver"
+      destroy: "Eliminar"
+      active: 'Activar'
+      deactive: 'Desactivar'
+      sign_in: 'INGRESAR'
+      send: 'ENVIAR'
+  accounts:
+    title:
+      title: "Cuentas"
+      list: "Listado de Cuentas"
+      new: "Nueva Cuenta"
+      create: "Nueva Cuenta"
+      edit: "Editar Cuenta"
+      update: "Editar Cuenta"
+  assets:
+    title:
+      title: "Activos"
+      list: "Listado de Activos"
+      new: "Nuevo Activo"
+      create: "Nuevo Activo"
+      edit: "Editar Activo"
+      update: "Editar Activo"
+  auxiliaries:
+    title:
+      title: "Auxiliares"
+      list: "Listado de Auxiliares"
+      new: "Nuevo Auxiliar"
+      create: "Nuevo Auxiliar"
+      edit: "Editar Auxiliar"
+      update: "Editar Auxiliar"
+      modal: "Activación/Desactivación de Auxiliar"
+      confirm-activate: "¿Está seguro de Activar el auxiliar <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el auxiliar <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el auxiliar <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ACTIVO</strong>"
+  buildings:
+    title:
+      title: "Edificios"
+      list: "Listado de Edificios"
+      new: "Nuevo Edificio"
+      create: "Nuevo Edificio"
+      edit: "Editar Edificio"
+      update: "Editar Edificio"
+      modal: "Activación/Desactivación de Edificio"
+      confirm-activate: "¿Está seguro de Activar el edificio <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el edificio <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el edificio <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO activado</strong>"
+  departments:
+    title:
+      title: "Departamentos"
+      list: "Listado de Departamentos"
+      new: "Nuevo Departamento"
+      create: "Nuevo Departamento"
+      edit: "Editar Departamento"
+      update: "Editar Departamento"
+      modal: "Activación/Desactivación de Departamento"
+      confirm-activate: "¿Está seguro de Activar el departamento <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el departamento <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el departamento <strong>%{name}</strong> porque está asignado por lo menos a un <strong>USUARIO activado</strong>"
+  entities:
+    title:
+      title: "Entidades"
+      list: "Listado de Entidades"
+      new: "Nueva Entidad"
+      create: "Nueva Entidad"
+      edit: "Editar Entidad"
+      update: "Editar Entidad"
+  migration:
+    alert_html: 'Especifique el archivo <b>%{model}</b> para migrar'
+    file: 'Adjuntar Archivo'
+    message_html: '<ul><li><b>%{inserted}</b> registros insertados</li><li><b>%{no_inserted}</b> registros no insertados</li></ul>'
+    title:
+      title: "Migración"
+  users:
+    roles:
+      super_admin: "Super Administrador"
+      admin: "Administrador"
+    title:
+      title: "Usuarios"
+      list: "Listado de Usuarios"
+      new: "Nuevo Usuario"
+      create: "Nuevo Usuario"
+      edit: "Editar Usuario"
+      update: "Editar Usuario"
+      modal: "Activación/Desactivación de Usuario"
+      confirm-activate: "¿Está seguro de Activar el usuario <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el usuario <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el usuario <strong>%{name}</strong> porque está asignado(a) por lo menos a un <strong>ACTIVO</strong>"
+  versions:
+    title:
+      title: "Histórico"
+    active: 'Activo'
+    create: 'Creado'
+    destroy: 'Eliminación'
+    inactive: 'Inactivo'
+    login: 'Iniciar Sesión'
+    logout: 'Cerrar Sesión'
+    migrated: 'Migración'
+    password_changed: 'Contraseña actualizada'
+    update: 'Modificación'
+
+  unauthorized:
+    manage:
+      all: "No estás autorizado para acceder a ésta página."
+      user_inactive: "Lo sentimos, esta cuenta ha sido desactivada."
+
+  activerecord:
+    errors:
+      models:
+        account:
+          attributes:
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
+        asset:
+          attributes:
+            auxiliary_id:
+              blank: "es obligatorio"
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            description:
+              blank: "es obligatorio"
+            user_id:
+              blank: "es obligatorio"
+        auxiliary:
+          attributes:
+            account_id:
+              blank: "es obligatorio"
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
+        building:
+          attributes:
+            code:
+              blank: "es obligatorio"
+              taken: "ya existe"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+            entity_id:
+              blank: "es obligatorio"
+        department:
+          attributes:
+            code:
+              blank: "es obligatorio"
+              taken: "ya existe"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+        entity:
+          attributes:
+            code:
+              blank: "es obligatorio"
+              taken: "ya existe"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+            acronym:
+              blank: "es obligatorio"
+        user:
+          attributes:
+            code:
+              blank: "es obligatorio"
+              taken: "ya existe"
+            department_id:
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+            title:
+              blank: "es obligatorio"
+              invalid: "inválido"
+            ci:
+              blank: "es obligatorio"
+              not_a_number: "no es un número"
+              taken: "ya existe"
+            email:
+              blank: "es obligatorio"
+              invalid: "inválido"
+              taken: "ya existe"
+            username:
+              blank: "es obligatorio"
+              invalid: "inválido"
+              taken: "ya existe"
+            password:
+              blank: "es obligatorio"
+              too_short: "mínimo 6 caractéres"
+            password_confirmation:
+              confirmation: "deben ser iguales"
+            phone:
+              not_a_number: "no es un número"
+            mobile:
+              not_a_number: "no es un número"
+
+    models:
+      account: "Cuenta"
+      asset: "Activo"
+      auxiliary: "Auxiliar"
+      building: "Edificio"
+      department: "Departamento"
+      entity: "Entidad"
+      user: "Usuario"
+
+    attributes:
+      account:
+        code: "Código"
+        name: "Nombre"
+      asset:
+        code: "Código"
+        description: "Descripción"
+        auxiliary: "Auxiliar"
+        user: "Usuario"
+      auxiliary:
+        code: "Código"
+        name: "Nombre"
+        account: "Cuenta"
+      building:
+        code: "Código"
+        entity: "Entidad"
+        name: "Nombre"
+      department:
+        code: "Código"
+        name: "Nombre"
+        building: "Edificio"
+        status: "Estado"
+      entity:
+        acronym: "Sigla"
+        code: "Código"
+        name: "Nombre"
+      user:
+        code: "Código"
+        name: "Nombre"
+        title: "Cargo"
+        ci: "C.I."
+        username: "Usuario"
+        email: "Email"
+        password: "Contraseña"
+        password_confirmation: "Confirmar Contraseña"
+        phone: "Teléfono"
+        mobile: "Celular"
+        department: "Departamento"
+        role: "Rol"
+        current_password: "Contraseña Actual"
+      version:
+        item_id: "Código"
+        created_at: "Fecha"
+        event: "Acción"
+        whodunnit: "Administrador"
+        item_type: "Tipo"
