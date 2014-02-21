@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
 
   before_validation :set_defaults
 
-  has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :last_sign_in_ip, :current_sign_in_ip, :sign_in_count, :updated_at, :status]
+  has_paper_trail ignore: [:last_sign_in_at, :current_sign_in_at, :last_sign_in_ip, :current_sign_in_ip, :sign_in_count, :updated_at, :status, :password_change]
 
   def active_for_authentication?
     super && self.status == '1'
@@ -61,6 +61,10 @@ class User < ActiveRecord::Base
 
   def email_required?
     false
+  end
+
+  def hide_announcement
+    update_column(:password_change, true)
   end
 
   def is_admin?

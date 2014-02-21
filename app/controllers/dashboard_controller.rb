@@ -13,6 +13,14 @@ class DashboardController < ApplicationController
     end
   end
 
+  ##
+  # Ocultar la alerta de cambiar contraseña para cada usuario
+  def hide
+    @user = User.find(current_user.id)
+    @user.hide_announcement
+    render nothing: true
+  end
+
   private
 
   def user_params
