@@ -1,0 +1,30 @@
+%p#notice= notice
+
+%p
+  %b Asset code:
+  = @decline.asset_code
+%p
+  %b Account code:
+  = @decline.account_code
+%p
+  %b Auxiliary code:
+  = @decline.auxiliary_code
+%p
+  %b Department code:
+  = @decline.department_code
+%p
+  %b User code:
+  = @decline.user_code
+%p
+  %b Description:
+  = @decline.description
+%p
+  %b Reason:
+  = @decline.reason
+%p
+  %b User:
+  = @decline.user
+
+= link_to 'Edit', edit_decline_path(@decline)
+\|
+= link_to 'Back', declines_path

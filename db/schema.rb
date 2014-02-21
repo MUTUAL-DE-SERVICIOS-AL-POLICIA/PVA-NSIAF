@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20140221215141) do
-=======
-ActiveRecord::Schema.define(version: 20140221200122) do
->>>>>>> d27077658b0cb14697bdb3cea2cfe28c4f285be5
+ActiveRecord::Schema.define(version: 20140221223439) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -59,6 +55,21 @@ ActiveRecord::Schema.define(version: 20140221200122) do
 
   add_index "buildings", ["code"], name: "index_buildings_on_code", unique: true, using: :btree
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
+
+  create_table "declines", force: true do |t|
+    t.string   "asset_code"
+    t.string   "account_code"
+    t.string   "auxiliary_code"
+    t.string   "department_code"
+    t.string   "user_code"
+    t.string   "description"
+    t.string   "reason"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "declines", ["user_id"], name: "index_declines_on_user_id", using: :btree
 
   create_table "departments", force: true do |t|
     t.integer  "code"

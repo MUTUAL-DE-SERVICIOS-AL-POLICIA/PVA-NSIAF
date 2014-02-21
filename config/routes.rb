@@ -1,4 +1,6 @@
 Nsiaf::Application.routes.draw do
+  resources :declines
+
   resources :versions, only: [:index]
 
   resources :assets, except: [:destroy] do

@@ -264,6 +264,15 @@ es:
         code: "Código"
         entity: "Entidad"
         name: "Nombre"
+      decline:
+        asset_code: "Activo"
+        account_code: "Cuenta"
+        auxiliary_code: "Auxiliar"
+        department_code: "Departamento"
+        user_code: "Usuario"
+        description: "Descripción"
+        reason: "Motivo"
+        user_id: "Administrador"
       department:
         code: "Código"
         name: "Nombre"

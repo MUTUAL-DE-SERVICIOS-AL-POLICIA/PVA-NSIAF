@@ -1,0 +1,33 @@
+%h1 Listing declines
+
+%table
+  %tr
+    %th Asset code
+    %th Account code
+    %th Auxiliary code
+    %th Department code
+    %th User code
+    %th Description
+    %th Reason
+    %th User
+    %th
+    %th
+    %th
+
+  - @declines.each do |decline|
+    %tr
+      %td= decline.asset_code
+      %td= decline.account_code
+      %td= decline.auxiliary_code
+      %td= decline.department_code
+      %td= decline.user_code
+      %td= decline.description
+      %td= decline.reason
+      %td= decline.user
+      %td= link_to 'Show', decline
+      %td= link_to 'Edit', edit_decline_path(decline)
+      %td= link_to 'Destroy', decline, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Decline', new_decline_path
