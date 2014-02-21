@@ -62,3 +62,9 @@ jQuery ->
     NProgress.start()
   $(document).on 'ajaxComplete', (e, xhr, settings, exception) ->
     NProgress.done()
+
+  $('#announcements').bind 'close.bs.alert', ->
+    $.ajax
+      url: '/dashboard/announcements/hide'
+      dataType: 'json'
+      type: 'POST'
