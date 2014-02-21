@@ -1,5 +1,5 @@
 class AssetsDatatable
-  delegate :params, :link_to, :link_to_if, :content_tag, to: :@view
+  delegate :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, to: :@view
 
   def initialize(view)
     @view = view
@@ -24,7 +24,8 @@ private
         link_to_if(asset.user, asset.user_code, asset.user, title: asset.user_name),
         link_to_if(asset.auxiliary, asset.auxiliary_code, asset.auxiliary, title: asset.auxiliary_name),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), asset, class: 'btn btn-default btn-sm') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-sm')
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-sm') +' ' +
+        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}") + 'Baja', '#', class: 'btn btn-warning btn-sm', data: data_link(asset))
       ]
     end
   end
@@ -34,7 +35,7 @@ private
   end
 
   def fetch_array
-    array = Asset.includes(:auxiliary, :user).order("#{sort_column} #{sort_direction}")
+    array = Asset.includes(:auxiliary, :user).order("#{sort_column} #{sort_direction}").where(status: '1')
     array = array.page(page).per_page(per_page)
     if params[:sSearch].present?
       if params[:search_column] == 'user'

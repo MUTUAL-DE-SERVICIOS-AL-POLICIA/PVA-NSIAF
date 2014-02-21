@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140210151839) do
+ActiveRecord::Schema.define(version: 20140221215141) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20140210151839) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "status",       limit: 2
   end
 
   add_index "assets", ["auxiliary_id"], name: "index_assets_on_auxiliary_id", using: :btree

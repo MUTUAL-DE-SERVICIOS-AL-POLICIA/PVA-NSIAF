@@ -1,6 +1,6 @@
 class AssetsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_asset, only: [:show, :edit, :update, :destroy]
+  before_action :set_asset, only: [:show, :edit, :update, :change_status]
 
   # GET /assets
   # GET /assets.json
@@ -61,14 +61,9 @@ class AssetsController < ApplicationController
     end
   end
 
-  # DELETE /assets/1
-  # DELETE /assets/1.json
-  def destroy
-    @asset.destroy
-    respond_to do |format|
-      format.html { redirect_to assets_url, notice: t('general.destroy', name: @asset.description) }
-      format.json { head :no_content }
-    end
+  def change_status
+    @asset.change_status
+    redirect_to assets_url
   end
 
   private

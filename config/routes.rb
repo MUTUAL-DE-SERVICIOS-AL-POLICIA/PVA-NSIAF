@@ -1,7 +1,9 @@
 Nsiaf::Application.routes.draw do
   resources :versions, only: [:index]
 
-  resources :assets
+  resources :assets, except: [:destroy] do
+    post :change_status, on: :member
+  end
 
   resources :auxiliaries, except: [:destroy] do
     post :change_status, on: :member

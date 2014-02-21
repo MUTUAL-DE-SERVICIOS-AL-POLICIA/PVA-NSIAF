@@ -60,6 +60,8 @@ es:
       create: "Nuevo Activo"
       edit: "Editar Activo"
       update: "Editar Activo"
+      modal: "Baja de Activo"
+      confirm-deactivate: "¿Está seguro de dar de Baja el activo <strong>%{name}</strong>?"
   auxiliaries:
     title:
       title: "Auxiliares"

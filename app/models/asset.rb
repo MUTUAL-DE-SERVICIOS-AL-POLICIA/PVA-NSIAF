@@ -1,5 +1,5 @@
 class Asset < ActiveRecord::Base
-  include ImportDbf, Migrated, VersionLog
+  include ImportDbf, Migrated, VersionLog, ManageStatus
 
   CORRELATIONS = {
     'CODIGO' => 'code',
@@ -44,6 +44,10 @@ class Asset < ActiveRecord::Base
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(self, 'auxiliary')]
+  end
+
+  def verify_assignment
+    false
   end
 
   private

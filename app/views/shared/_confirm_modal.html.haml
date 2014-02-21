@@ -9,5 +9,5 @@
         .modal-footer
           %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('general.forms.btn.cancel')
           {{#unassigned}}
-          = link_to t('general.btn.save'), "{{url}}", class: 'btn btn-primary', method: :post, remote: true
+          = link_to t('general.btn.save'), "{{url}}", class: 'btn btn-primary', method: :post, remote: controller_name == 'assets' ? false : true
           {{/unassigned}}
