@@ -75,6 +75,10 @@ class User < ActiveRecord::Base
     self.role == 'super_admin'
   end
 
+  def password_changed?
+    password_change == true
+  end
+
   def users
     if is_super_admin?
       User.where.not(role: nil)
