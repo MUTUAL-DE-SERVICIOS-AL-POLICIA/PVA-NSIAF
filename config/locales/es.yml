@@ -86,6 +86,9 @@ es:
       confirm-activate: "¿Está seguro de Activar el edificio <strong>%{name}</strong>?"
       confirm-deactivate: "¿Está seguro de Desactivar el edificio <strong>%{name}</strong>?"
       confirm-cannot_disable: "No se puede desactivar el edificio <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO activado</strong>"
+  declines:
+    title:
+      title: "Bajas"
   departments:
     title:
       title: "Departamentos"
