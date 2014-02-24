@@ -6,6 +6,6 @@
     = f.input :code
     = f.input :description
     = f.association :auxiliary, collection: status_active(Auxiliary), include_blank: false, disabled: !@asset.new_record?, readonly: !@asset.new_record?
-    = f.association :user, collection: status_active(User), include_blank: false, disabled: !@asset.new_record?, readonly: !@asset.new_record?
+    = f.association :user, collection: [@asset.new_record? ? current_user : @asset.user], include_blank: false, disabled: true, readonly: true
 
     = render 'shared/form_buttons'

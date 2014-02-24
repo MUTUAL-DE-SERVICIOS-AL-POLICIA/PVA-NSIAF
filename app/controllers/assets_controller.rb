@@ -74,7 +74,8 @@ class AssetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def asset_params
-      if @asset.new_record?
+      if action_name == 'create'
+        params[:asset][:user_id] = current_user.id
         params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id)
       else
         params.require(:asset).permit(:code, :description)
