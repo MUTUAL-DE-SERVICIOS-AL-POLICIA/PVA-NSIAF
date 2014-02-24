@@ -41,18 +41,7 @@
               = link_to t("#{model}.title.title"), dbf_path(model), role: 'menuitem'
     - if current_user.is_admin?
       %li.dropdown
-        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_' do
-          Activos
-          %b.caret
-        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_' }
-          %li{ role: 'presentation' }
-            = link_to 'Asignación', '#', role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to 'Devolución', '#', role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to 'Reportes', '#', role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to 'Bajas', declines_path, role: 'menuitem'
+        = link_to 'Adm. Activos', users_assets_path
     - if can? :read, Version
       %li
         = link_to 'Histórico', versions_path

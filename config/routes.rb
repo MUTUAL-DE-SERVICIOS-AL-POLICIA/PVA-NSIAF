@@ -5,6 +5,7 @@ Nsiaf::Application.routes.draw do
 
   resources :assets, except: [:destroy] do
     post :change_status, on: :member
+    get :users, on: :collection
   end
 
   resources :auxiliaries, except: [:destroy] do
