@@ -5,9 +5,23 @@
         .modal-header
           %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
           %h4.modal-title {{title}}
-        .modal-body {{{confirmMessage}}}
+        .modal-body
+          .title_message {{{confirmMessage}}}
+          - if controller_name == 'assets'
+            = form_tag "{{url}}", class: 'form-horizontal' do
+              .form-group
+                %label.col-sm-2.control-label= Decline.human_attribute_name('description')
+                .col-sm-10
+                  = text_area_tag :description, '', class: 'form-control'
+              .form-group
+                %label.col-sm-2.control-label= Decline.human_attribute_name('motivo')
+                .col-sm-10
+                  = text_area_tag :reason, '', class: 'form-control'
         .modal-footer
           %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('general.forms.btn.cancel')
           {{#unassigned}}
-          = link_to t('general.btn.save'), "{{url}}", class: 'btn btn-primary', method: :post, remote: controller_name == 'assets' ? false : true
+          - if controller_name == 'assets'
+            = button_tag t('general.btn.save'), class: 'btn btn-primary deregister'
+          - else
+            = link_to t('general.btn.save'), "{{url}}", class: 'btn btn-primary change_status', method: :post, remote: true
           {{/unassigned}}
