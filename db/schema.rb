@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140225223301) do
+ActiveRecord::Schema.define(version: 20140225224514) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -19,6 +19,16 @@ ActiveRecord::Schema.define(version: 20140225223301) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "asset_proceedings", force: true do |t|
+    t.integer  "proceeding_id"
+    t.integer  "asset_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "asset_proceedings", ["asset_id"], name: "index_asset_proceedings_on_asset_id", using: :btree
+  add_index "asset_proceedings", ["proceeding_id"], name: "index_asset_proceedings_on_proceeding_id", using: :btree
 
   create_table "assets", force: true do |t|
     t.string   "code",         limit: 50
