@@ -6,8 +6,8 @@ class CreateDeclines < ActiveRecord::Migration
       t.string :auxiliary_code
       t.string :department_code
       t.string :user_code
-      t.string :description
-      t.string :reason
+      t.text :description
+      t.text :reason
       t.belongs_to :user, index: true
 
       t.timestamps
