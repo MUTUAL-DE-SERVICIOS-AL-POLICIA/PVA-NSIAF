@@ -1,4 +1,6 @@
 Nsiaf::Application.routes.draw do
+  resources :proceedings
+
   resources :declines, only: [:index]
 
   resources :versions, only: [:index]

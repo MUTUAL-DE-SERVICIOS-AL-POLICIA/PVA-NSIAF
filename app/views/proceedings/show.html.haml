@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @proceeding.user
+%p
+  %b Admin:
+  = @proceeding.admin
+%p
+  %b Proceeding type:
+  = @proceeding.proceeding_type
+
+= link_to 'Edit', edit_proceeding_path(@proceeding)
+\|
+= link_to 'Back', proceedings_path
