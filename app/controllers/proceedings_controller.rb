@@ -22,11 +22,17 @@ class ProceedingsController < ApplicationController
   # POST /proceedings
   def create
     @proceeding = Proceeding.new(proceeding_params)
-
-    if @proceeding.save
-      redirect_to @proceeding, notice: 'Proceeding was successfully created.'
-    else
-      render action: 'new'
+    @proceeding.admin_id = current_user.id
+    respond_to do |format|
+      if @proceeding.save
+        # TODO al guardar, tambien tiene que asignar al usuario (user_id)
+        # en la tabla de Activos
+        format.html { redirect_to @proceeding, notice: 'Proceeding was successfully created.' }
+        format.js
+      else
+        format.html { render action: 'new' }
+        format.js
+      end
     end
   end
 
@@ -53,6 +59,6 @@ class ProceedingsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def proceeding_params
-      params.require(:proceeding).permit(:user_id, :admin_id, :proceeding_type)
+      params.require(:proceeding).permit(:user_id, { asset_ids: [] }, :proceeding_type)
     end
 end

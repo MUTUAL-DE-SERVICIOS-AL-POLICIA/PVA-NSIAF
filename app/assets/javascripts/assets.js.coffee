@@ -9,6 +9,7 @@ class AssetEvents
   cacheElements: ->
     # variables
     @assetIds = []
+    @proceeding_type = null
     # containers
     @$selectUserAssets = $('#select-user-assets')
     @$container = $('#assig_devol')
@@ -23,11 +24,13 @@ class AssetEvents
     @$btnDevolution = $('#btn_devolution')
     @$btnCancel = $('#btn_cancel')
     # Hogan templates
-    @$templateAssigDevol = Hogan.compile $('#tpl_assig_devol').html()
-    @$templateFixedAssets = Hogan.compile $('#tpl-fixed-assets').html()
+    @$templateAssigDevol = Hogan.compile $('#tpl_assig_devol').html() || ''
+    @$templateFixedAssets = Hogan.compile $('#tpl-fixed-assets').html() || ''
     # urls
     @not_assigned_url = '/assets/not_assigned'
     @display_assets_url = '/assets/assign'
+    @proceedings_url = '/proceedings'
+    @assets_url = '/assets'
 
   cacheElementsTpl: ->
     @$btnCancelAssig = $('#btn_cancel_assig')
@@ -46,12 +49,25 @@ class AssetEvents
     @$department.remoteChained('#building', '/assets/departments.json')
     @$user.remoteChained('#department', '/assets/users.json')
     @$btnAssignation.on 'click', (e) => @displayContainer(e)
+    @$btnDevolution.on 'click', (e) => @displayDevolution(e)
+    @$btnCancel.on 'click', (e) => @redirectToAssets(e)
 
   displayContainer: (e) ->
     e.preventDefault()
     if @checkSelectedUser()
+      @proceeding_type = 'E' # Entrega
       @disableForm()
       @displayAllAssets()
+      @$container.show()
+    else
+      alert('Seleccione Edificio, Departamento, y Usuario')
+
+  displayDevolution: (e) ->
+    e.preventDefault()
+    if @checkSelectedUser()
+      @proceeding_type = 'D' # Devolución
+      #@disableForm()
+      @displayAssignedAssets()
       @$container.show()
     else
       alert('Seleccione Edificio, Departamento, y Usuario')
@@ -86,9 +102,8 @@ class AssetEvents
 
   generatePDF: (e) ->
     e.preventDefault()
-    alert 'generando PDF ' + @assetIds + ' -> ' + @$user.val()
-    # TODO Enviar por post para generar el Acta de Entrega en PDF y
-    # registrar las asociaciones en la base de datos
+    json_data = { user_id: @$user.val(), asset_ids: @assetIds, proceeding_type: @proceeding_type }
+    $.post @proceedings_url, { proceeding: json_data }, null, 'script'
 
   renderSelectedAssets: (data) ->
     @assetIds = $.map(data.assets, (val, i) -> val.id)
@@ -102,7 +117,16 @@ class AssetEvents
     user_data = { user_id: @$user.val() }
     $.getJSON @not_assigned_url, user_data, (data) => @renderTemplate(data)
 
+  displayAssignedAssets: ->
+    alert 'Mostrando Activos del usuario :P'
+    # TODO mostrar los Activos asignados al usuario, y el formulario para
+    # realizar la devolución
+
   renderTemplate: (data) ->
     @$container.html @$templateAssigDevol.render(data)
     @cacheElementsTpl()
     @bindEventsTpl()
+
+  redirectToAssets: (e) ->
+    e.preventDefault()
+    window.location = @assets_url

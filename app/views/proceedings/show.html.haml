@@ -1,15 +1,17 @@
-%p#notice= notice
-
 %p
   %b User:
-  = @proceeding.user
+  = @proceeding.user_name
 %p
   %b Admin:
-  = @proceeding.admin
+  = @proceeding.admin_name
 %p
   %b Proceeding type:
   = @proceeding.proceeding_type
-
-= link_to 'Edit', edit_proceeding_path(@proceeding)
-\|
-= link_to 'Back', proceedings_path
+%p
+  %b Date:
+  = l @proceeding.created_at, format: :version
+%p
+  %b Assets:
+  %ul
+    - @proceeding.assets.each do |asset|
+      %li= asset.code

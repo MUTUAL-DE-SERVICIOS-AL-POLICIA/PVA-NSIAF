@@ -9,8 +9,8 @@ class Asset < ActiveRecord::Base
   belongs_to :auxiliary
   belongs_to :user
 
-  has_many :assets_proceedings
-  has_many :proceedings, through: :assets_proceedings
+  has_many :asset_proceedings
+  has_many :proceedings, through: :asset_proceedings
 
   with_options if: :is_not_migrate? do |m|
     m.validates :code, presence: true, uniqueness: { scope: [:auxiliary_id, :user_id] }
