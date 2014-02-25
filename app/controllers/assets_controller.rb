@@ -66,6 +66,20 @@ class AssetsController < ApplicationController
     redirect_to assets_url
   end
 
+  def users
+    respond_to do |format|
+      format.html
+      format.json { render json: User.search_by(params[:department]) }
+    end
+  end
+
+  def departments
+    respond_to do |format|
+      format.html
+      format.json { render json: Department.search_by(params[:building]) }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_asset

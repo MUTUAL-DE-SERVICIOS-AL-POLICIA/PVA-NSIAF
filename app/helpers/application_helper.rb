@@ -5,6 +5,10 @@ module ApplicationHelper
     %w(application/dbase application/x-dbase application/dbf application/x-dbf zz-application/zz-winassoc-dbf)
   end
 
+  def get_buildings
+    Building.all.map { |b| [b.name, b.id] }
+  end
+
   def get_i18n_roles
     User::ROLES.map { |r| [t(r, scope: 'users.roles'), r] }
   end

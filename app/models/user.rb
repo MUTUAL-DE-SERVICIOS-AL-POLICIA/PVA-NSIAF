@@ -101,6 +101,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.search_by(department_id)
+    users = []
+    users = where(department_id: department_id) if department_id.present?
+    [['', '--']] + users.map { |u| [u.id, u.name] }
+  end
+
   def self.set_columns(cu = nil)
     h = ApplicationController.helpers
     if cu
