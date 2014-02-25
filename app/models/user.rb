@@ -87,6 +87,12 @@ class User < ActiveRecord::Base
     self.role == 'super_admin'
   end
 
+  def not_assigned_assets
+    # TODO Tiene que definirse que activos no están asignados,
+    # tambien se debe tomar en cuenta las auto-asignaciones del admin
+    assets
+  end
+
   def password_changed?
     password_change == true
   end

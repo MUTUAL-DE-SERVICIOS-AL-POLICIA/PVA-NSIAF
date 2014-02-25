@@ -1,0 +1,30 @@
+%script{ type: 'text/html', id: 'tpl_assig_devol' }
+  %h3.text-center Asignar Activos Fijos
+  %form
+    %table.table.table-striped.table-hover.table-condensed
+      %thead
+        %tr
+          %th.col-sm-1
+          %th.col-sm-9 Descripción
+          %th.col-sm-2 Código
+      %tbody
+        {{#assets}}
+        %tr
+          %td= check_box_tag 'assets[]', '{{id}}', false, class: 'selected-assets'
+          %td {{description}}
+          %td {{code}}
+        {{/assets}}
+  .row
+    .col-md-12.col-sm-12
+      %h4 A:
+    .col-md-6.col-sm-6
+      %h4
+        %span.text-muted Funcionario:
+        %strong {{user_name}}
+    .col-md-6.col-sm-6
+      %h4
+        %span.text-muted Cargo:
+        %strong {{user_title}}
+    .col-md-offset-3.col-sm-offset-3.col-md-9.col-sm-9
+      = button_tag 'Continuar', class: 'btn btn-default', id: 'btn_continue'
+      = button_tag 'Cancelar', class: 'btn btn-danger', id: 'btn_cancel_assig'

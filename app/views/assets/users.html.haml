@@ -1,7 +1,7 @@
-.row
-  .col-lg-offset-1.col-lg-4.col-md-6.col-sm-6
+#select-user-assets.row
+  .col-lg-4.col-md-6.col-sm-6
     %h3.text-center Selección de Usuarios
-    %form.form-horizontal{ role: 'form' }
+    %form#select_user.form-horizontal{ role: 'form' }
       .form-group
         %label.col-md-3.col-sm-3.control-label Edificio
         .col-md-9.col-sm-9
@@ -9,37 +9,19 @@
       .form-group
         %label.col-md-3.col-sm-3.control-label Departamento
         .col-md-9.col-sm-9
-          = select_tag :department, options_for_select([]), class: 'form-control', prompt: '--'
+          = select_tag :department, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       .form-group
         %label.col-md-3.col-sm-3.control-label Usuario
         .col-md-9.col-sm-9
-          = select_tag :user, options_for_select([]), class: 'form-control', prompt: '--'
+          = select_tag :user, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       .form-group
         .col-md-offset-3.col-sm-offset-1.col-md-9.col-sm-10
-          = button_tag 'Asignación', class: 'btn btn-default'
-          = button_tag 'Devolución', class: 'btn btn-primary'
-          = link_to 'Cancelar', assets_path, class: 'btn btn-danger'
-  .col-lg-offset-1.col-lg-4.col-md-6.col-sm-6
-    %h3.text-center Asignar Activos Fijos
-    %table.table
-      %thead
-        %tr
-          %th.col-sm-1
-          %th.col-sm-9 Descripción
-          %th.col-sm-2 Código
-      %tbody
-        - (1..10).each do |i|
-          %tr
-            %td= check_box_tag '', false
-            %td XXXXXXXXXXXXXXX#{ i }
-            %td AAA-#{ i }
-    .row
-      .col-md-12.col-sm-12
-        %h4 A:
-      .col-md-6.col-sm-6
-        %h4 Funcionario: Pepito Perez
-      .col-md-6.col-sm-6
-        %h4 Cargo: Responsable de todo
-      .col-md-offset-3.col-sm-offset-3.col-md-9.col-sm-9
-        = button_tag 'Continuar', class: 'btn btn-default'
-        = link_to 'Cancelar', '#', class: 'btn btn-danger'
+          = button_tag 'Asignación', class: 'btn btn-default', id: 'btn_assignation'
+          = button_tag 'Devolución', class: 'btn btn-primary', id: 'btn_devolution'
+          = button_tag 'Cancelar', class: 'btn btn-danger', id: 'btn_cancel'
+  #assig_devol.col-lg-8.col-md-6.col-sm-6{ style: 'display: none;' }
+
+#display-user-assets.row{ style: 'display: none;' }
+
+= render 'tpl_assign_devol'
+= render 'tpl_fixed_assets'

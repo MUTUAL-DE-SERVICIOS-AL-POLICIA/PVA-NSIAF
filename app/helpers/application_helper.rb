@@ -1,4 +1,10 @@
 module ApplicationHelper
+  def assets_json(assets, user)
+    assets = assets.each_with_index.map do |a, index|
+      { index: index + 1, id: a.id, description: a.description, code: a.code }
+    end
+    { assets: assets.as_json, user_name: user.name, user_title: user.title}
+  end
   ##
   # Mime-types para los archivos *.dbf
   def dbf_mime_types
