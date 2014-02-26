@@ -40,7 +40,7 @@ jQuery ->
     $("#modal-#{ $(@).data('dom-id') }").modal('toggle')
     evt.preventDefault()
 
-  $(document).on 'click', '.modal .btn-primary', ->
+  $(document).on 'click', '.modal .change_status', ->
     $(this).parents('.modal').modal('hide')
     id = $(this).closest('.modal').attr('id').substr(6)
     $user = $(this).closest('#confirm-modal').prev().find("[data-dom-id=#{id}]")
@@ -68,3 +68,16 @@ jQuery ->
       url: '/dashboard/announcements/hide'
       dataType: 'json'
       type: 'POST'
+
+  # Form decline
+  $(document).on 'click', '.deregister', ->
+    $form = $(this).parents('.modal-dialog').find('form')
+    if $form.find('#description').val() != '' && $form.find('#reason').val() != ''
+      $.ajax
+        url: $form.attr('action')
+        type: "post"
+        data: $form.serialize()
+        complete: (data, xhr) ->
+          window.location = window.location
+    else
+      alert('Llenar los campos')

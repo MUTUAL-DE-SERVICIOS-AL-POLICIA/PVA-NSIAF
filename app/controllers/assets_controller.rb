@@ -63,7 +63,8 @@ class AssetsController < ApplicationController
 
   def change_status
     @asset.change_status
-    redirect_to assets_url
+    Decline.deregister(@asset, params[:description], params[:reason], current_user.id)
+    render nothing: true
   end
 
   def users
