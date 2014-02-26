@@ -11,6 +11,24 @@ class ProceedingsController < ApplicationController
 
   # GET /proceedings/1
   def show
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: @proceeding.user_name.to_param || 'ActaDeEntrega',
+               disposition: 'attachment',
+               template: 'proceedings/show.html.haml',
+               show_as_html: params[:debug].present?,
+               orientation: 'Portrait',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               margin: {
+                 top: 15,
+                 bottom: 15,
+                 left: 20,
+                 right: 15
+               }
+      end
+    end
   end
 
   # GET /proceedings/new
