@@ -25,8 +25,6 @@ class ProceedingsController < ApplicationController
     @proceeding.admin_id = current_user.id
     respond_to do |format|
       if @proceeding.save
-        # TODO al guardar, tambien tiene que asignar al usuario (user_id)
-        # en la tabla de Activos
         format.html { redirect_to @proceeding, notice: 'Proceeding was successfully created.' }
         format.js
       else
