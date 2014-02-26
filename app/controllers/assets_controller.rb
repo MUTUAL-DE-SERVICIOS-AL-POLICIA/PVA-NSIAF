@@ -66,6 +66,34 @@ class AssetsController < ApplicationController
     redirect_to assets_url
   end
 
+  def users
+    respond_to do |format|
+      format.html
+      format.json { render json: User.search_by(params[:department]) }
+    end
+  end
+
+  def departments
+    respond_to do |format|
+      format.html
+      format.json { render json: Department.search_by(params[:building]) }
+    end
+  end
+
+  def not_assigned
+    user = User.find(params[:user_id])
+    assets = current_user.not_assigned_assets
+    render json: view_context.assets_json(assets, user)
+  end
+
+  def assign
+    asset_ids = params[:assets].map { |e| e.to_i }
+    user = User.find(params[:user_id])
+    asset_ids &= current_user.not_assigned_assets.pluck(:id)
+    assets = current_user.not_assigned_assets.where(id: asset_ids)
+    render json: view_context.assets_json(assets, user)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_asset

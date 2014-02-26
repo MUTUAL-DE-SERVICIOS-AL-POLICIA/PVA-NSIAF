@@ -1,0 +1,20 @@
+#proceeding-delivery {
+  font-size: 14px;
+
+  .proceeding-assets {
+    font-size: 13px;
+    margin: 20px 0 0;
+    td:last-child {
+      white-space: nowrap;
+    }
+  }
+  .proceeding-date {
+    margin: 30px 0 0;
+  }
+  .proceeding-signature {
+    margin: 100px 0 50px;
+  }
+  .proceeding-title {
+    margin: 0 0 30px 0;
+  }
+}

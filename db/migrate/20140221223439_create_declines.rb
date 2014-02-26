@@ -1,13 +1,13 @@
 class CreateDeclines < ActiveRecord::Migration
   def change
     create_table :declines do |t|
-      t.string :asset_code
-      t.string :account_code
-      t.string :auxiliary_code
-      t.string :department_code
-      t.string :user_code
-      t.string :description
-      t.string :reason
+      t.string :asset_code, limit: 50
+      t.string :account_code, limit: 50
+      t.string :auxiliary_code, limit: 50
+      t.string :department_code, limit: 50
+      t.string :user_code, limit: 50
+      t.text :description
+      t.text :reason
       t.belongs_to :user, index: true
 
       t.timestamps

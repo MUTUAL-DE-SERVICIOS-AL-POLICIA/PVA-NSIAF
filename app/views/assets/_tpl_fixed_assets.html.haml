@@ -1,0 +1,29 @@
+%script{ type: 'text/html', id: 'tpl-fixed-assets' }
+  .col-md-offset-2.col-md-8
+    %h3.text-center Asignación de Activos Fijos
+    %form
+      %table.table.table-striped.table-hover
+        %thead
+          %tr
+            %th.col-sm-1
+            %th.col-sm-9 Descripción
+            %th.col-sm-2 Código
+        %tbody
+          {{#assets}}
+          %tr
+            %td
+              {{index}}
+            %td {{description}}
+            %td {{code}}
+          {{/assets}}
+    .row
+      .col-md-offset-1.col-md-10
+        %h4
+          %span.text-muted Funcionario:
+          %strong {{user_name}}
+        %h4
+          %span.text-muted Cargo:
+          %strong {{user_title}}
+      .col-md-offset-1.col-md-10.text-center
+        = button_tag 'Aceptar', class: 'btn btn-primary', id: 'btn_accept'
+        = button_tag 'Cancelar', class: 'btn btn-danger', id: 'btn_cancel_'

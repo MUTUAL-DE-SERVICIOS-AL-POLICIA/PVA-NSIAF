@@ -1,12 +1,37 @@
 module ApplicationHelper
+  def assets_json(assets, user)
+    assets = assets.each_with_index.map do |a, index|
+      { index: index + 1, id: a.id, description: a.description, code: a.code }
+    end
+    { assets: assets.as_json, user_name: user.name, user_title: user.title}
+  end
   ##
   # Mime-types para los archivos *.dbf
   def dbf_mime_types
     %w(application/dbase application/x-dbase application/dbf application/x-dbf zz-application/zz-winassoc-dbf)
   end
 
+  def get_buildings
+    Building.all.map { |b| [b.name, b.id] }
+  end
+
   def get_i18n_roles
     User::ROLES.map { |r| [t(r, scope: 'users.roles'), r] }
+  end
+
+  def is_pdf?
+    params['format'] == 'pdf'
+  end
+
+  def proceeding_to_json(proceeding)
+    assets = proceeding.assets.each_with_index.map do |a, index|
+      { index: index + 1, id: a.id, description: a.description, code: a.code }
+    end
+    {
+      admin_name: proceeding.admin_name,
+      assets: assets.to_json,
+      proceeding_date: I18n.l(proceeding.created_at.to_date, format: :long )
+    }
   end
 
   def submit_and_cancel(url)

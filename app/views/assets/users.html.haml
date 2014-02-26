@@ -1,0 +1,27 @@
+#select-user-assets.row
+  .col-lg-4.col-md-6.col-sm-6
+    %h3.text-center Selección de Usuarios
+    %form#select_user.form-horizontal{ role: 'form' }
+      .form-group
+        %label.col-md-3.col-sm-3.control-label Edificio
+        .col-md-9.col-sm-9
+          = select_tag :building, options_for_select(get_buildings), class: 'form-control', prompt: '--'
+      .form-group
+        %label.col-md-3.col-sm-3.control-label Departamento
+        .col-md-9.col-sm-9
+          = select_tag :department, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
+      .form-group
+        %label.col-md-3.col-sm-3.control-label Usuario
+        .col-md-9.col-sm-9
+          = select_tag :user, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
+      .form-group
+        .col-md-offset-3.col-sm-offset-1.col-md-9.col-sm-10
+          = button_tag 'Asignación', class: 'btn btn-default', id: 'btn_assignation'
+          = button_tag 'Devolución', class: 'btn btn-primary', id: 'btn_devolution'
+          = button_tag 'Cancelar', class: 'btn btn-danger', id: 'btn_cancel'
+  #assig_devol.col-lg-8.col-md-6.col-sm-6{ style: 'display: none;' }
+
+#display-user-assets.row{ style: 'display: none;' }
+
+= render 'tpl_assign_devol'
+= render 'tpl_fixed_assets'

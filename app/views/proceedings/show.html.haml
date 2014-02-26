@@ -1,0 +1,9 @@
+#proceeding-delivery{ data: proceeding_to_json(@proceeding).as_json }
+
+- unless is_pdf?
+  %p.proceeding-pdf.text-center
+    = link_to proceeding_path(@proceeding, format: :pdf), class: 'btn btn-primary btn-lg' do
+      %span.glyphicon.glyphicon-print
+      Imprimir PDF
+
+= render 'tpl_proceeding_delivery'

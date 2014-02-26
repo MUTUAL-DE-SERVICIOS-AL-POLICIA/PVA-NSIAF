@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140221223439) do
+ActiveRecord::Schema.define(version: 20140225224514) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -19,6 +19,16 @@ ActiveRecord::Schema.define(version: 20140221223439) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "asset_proceedings", force: true do |t|
+    t.integer  "proceeding_id"
+    t.integer  "asset_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "asset_proceedings", ["asset_id"], name: "index_asset_proceedings_on_asset_id", using: :btree
+  add_index "asset_proceedings", ["proceeding_id"], name: "index_asset_proceedings_on_proceeding_id", using: :btree
 
   create_table "assets", force: true do |t|
     t.string   "code",         limit: 50
@@ -57,13 +67,13 @@ ActiveRecord::Schema.define(version: 20140221223439) do
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
 
   create_table "declines", force: true do |t|
-    t.string   "asset_code"
-    t.string   "account_code"
-    t.string   "auxiliary_code"
-    t.string   "department_code"
-    t.string   "user_code"
-    t.string   "description"
-    t.string   "reason"
+    t.string   "asset_code",      limit: 50
+    t.string   "account_code",    limit: 50
+    t.string   "auxiliary_code",  limit: 50
+    t.string   "department_code", limit: 50
+    t.string   "user_code",       limit: 50
+    t.text     "description"
+    t.text     "reason"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -89,6 +99,17 @@ ActiveRecord::Schema.define(version: 20140221223439) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "proceedings", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "admin_id"
+    t.string   "proceeding_type", limit: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "proceedings", ["admin_id"], name: "index_proceedings_on_admin_id", using: :btree
+  add_index "proceedings", ["user_id"], name: "index_proceedings_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                              default: "",    null: false

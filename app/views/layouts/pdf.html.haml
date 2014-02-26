@@ -1,0 +1,9 @@
+!!!
+%html
+  %head
+    %meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
+    = wicked_pdf_stylesheet_link_tag 'pdf', media: 'all'
+    = wicked_pdf_javascript_include_tag 'pdf'
+    = csrf_meta_tags
+  %body
+    = yield

@@ -1,10 +1,16 @@
 Nsiaf::Application.routes.draw do
+  resources :proceedings
+
   resources :declines, only: [:index]
 
   resources :versions, only: [:index]
 
   resources :assets, except: [:destroy] do
     post :change_status, on: :member
+    get :users, on: :collection
+    get :departments, on: :collection
+    get :not_assigned, on: :collection
+    get :assign, on: :collection
   end
 
   resources :auxiliaries, except: [:destroy] do

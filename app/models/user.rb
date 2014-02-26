@@ -87,6 +87,12 @@ class User < ActiveRecord::Base
     self.role == 'super_admin'
   end
 
+  def not_assigned_assets
+    # TODO Tiene que definirse que activos no están asignados,
+    # tambien se debe tomar en cuenta las auto-asignaciones del admin
+    assets
+  end
+
   def password_changed?
     password_change == true
   end
@@ -99,6 +105,12 @@ class User < ActiveRecord::Base
     else
       User.none
     end
+  end
+
+  def self.search_by(department_id)
+    users = []
+    users = where(department_id: department_id) if department_id.present?
+    [['', '--']] + users.map { |u| [u.id, u.name] }
   end
 
   def self.set_columns(cu = nil)

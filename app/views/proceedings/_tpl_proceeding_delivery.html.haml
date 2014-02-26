@@ -1,0 +1,38 @@
+%script{ id: 'tpl-proceeding-delivery', type: 'text/html' }
+  .row
+    .col-md-offset-2.col-md-8
+      %h1.proceeding-title.text-center Acta de Entrega
+
+      %p.proceeding-description.text-justify
+        Yo, {{adminName}} Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+      %table.table.table-striped.table-condensed.proceeding-assets
+        %thead
+          %tr
+            %th.col-sm-1
+            %th.col-sm-9 Descripción
+            %th.col-sm-2 Código
+        %tbody
+          {{#assets}}
+          %tr
+            %td
+              {{index}}
+            %td {{description}}
+            %td {{code}}
+          {{/assets}}
+
+      %p.proceeding-date.text-right
+        La Paz, {{proceedingDate}}
+
+      .proceeding-signature
+        %table{ style: 'width: 100%' }
+          %tr
+            %td.text-center
+              %p _______________________
+              %p ENTREGUÉ CONFORME
+            %td.text-center
+              %p _______________________
+              %p Vo. Bo.
+            %td.text-center
+              %p _______________________
+              %p RECIBÍ CONFORME
