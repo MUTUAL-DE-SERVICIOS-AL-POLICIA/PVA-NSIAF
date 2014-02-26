@@ -12,10 +12,11 @@ class AssetEvents
     @proceeding_type = null
     # containers
     @$selectUserAssets = $('#select-user-assets')
+    @$selectUser = $('#select-user')
     @$container = $('#assig_devol')
     @$displayUserAssets = $('#display-user-assets')
     # forms & inputs
-    @$frmSelectUser = $('#select_user')
+    @$frmSelectUser = @$selectUser.find('form')
     @$building = $('#building')
     @$department = $('#department')
     @$user = $('#user')
@@ -82,9 +83,11 @@ class AssetEvents
 
   disableForm: ->
     @$frmSelectUser.find(':input').prop('disabled', true)
+    @$selectUser.hide()
 
   enableForm: ->
     @$frmSelectUser.find(':input').prop('disabled', false)
+    @$selectUser.show()
 
   sendAssignation: (e) ->
     e.preventDefault()

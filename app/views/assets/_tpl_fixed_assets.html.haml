@@ -1,21 +1,20 @@
 %script{ type: 'text/html', id: 'tpl-fixed-assets' }
   .col-md-offset-2.col-md-8
     %h3.text-center Asignación de Activos Fijos
-    %form
-      %table.table.table-striped.table-hover
-        %thead
-          %tr
-            %th.col-sm-1
-            %th.col-sm-9 Descripción
-            %th.col-sm-2 Código
-        %tbody
-          {{#assets}}
-          %tr
-            %td
-              {{index}}
-            %td {{description}}
-            %td {{code}}
-          {{/assets}}
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th.col-sm-1
+          %th.col-sm-9 Descripción
+          %th.col-sm-2 Código
+      %tbody
+        {{#assets}}
+        %tr
+          %td
+            {{index}}
+          %td {{description}}
+          %td {{code}}
+        {{/assets}}
     .row
       .col-md-offset-1.col-md-10
         %h4
