@@ -22,3 +22,4 @@
 //= require jquery.chained.remote
 //= require function
 //= require assets
+//= require proceedings

@@ -1,17 +1,3 @@
-%p
-  %b User:
-  = @proceeding.user_name
-%p
-  %b Admin:
-  = @proceeding.admin_name
-%p
-  %b Proceeding type:
-  = @proceeding.proceeding_type
-%p
-  %b Date:
-  = l @proceeding.created_at, format: :version
-%p
-  %b Assets:
-  %ul
-    - @proceeding.assets.each do |asset|
-      %li= asset.code
+#proceeding-delivery{ data: proceeding_to_json(@proceeding).as_json }
+
+= render 'tpl_proceeding_delivery'

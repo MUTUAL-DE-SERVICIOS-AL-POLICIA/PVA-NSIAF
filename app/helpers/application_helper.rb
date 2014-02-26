@@ -19,6 +19,17 @@ module ApplicationHelper
     User::ROLES.map { |r| [t(r, scope: 'users.roles'), r] }
   end
 
+  def proceeding_to_json(proceeding)
+    assets = proceeding.assets.each_with_index.map do |a, index|
+      { index: index + 1, id: a.id, description: a.description, code: a.code }
+    end
+    {
+      admin_name: proceeding.admin_name,
+      assets: assets.to_json,
+      proceeding_date: I18n.l(proceeding.created_at.to_date, format: :long )
+    }
+  end
+
   def submit_and_cancel(url)
     content_tag(:button, class: 'btn btn-primary') do
       content_tag(:span, '', class: 'glyphicon glyphicon-ok') + ' ' +
