@@ -32,7 +32,8 @@ module ApplicationHelper
     {
       admin_name: proceeding.admin_name,
       assets: assets.to_json,
-      proceeding_date: I18n.l(proceeding.created_at.to_date, format: :long )
+      proceeding_date: I18n.l(proceeding.created_at.to_date, format: :long),
+      devolution: proceeding.is_devolution?
     }
   end
 

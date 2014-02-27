@@ -8,8 +8,10 @@ class AssetEvents
 
   cacheElements: ->
     # variables
+    @assets = []
     @assetIds = []
     @proceeding_type = null
+    @glyphiconOk= '<span class="glyphicon glyphicon-ok"></span>'
     # containers
     @$selectUserAssets = $('#select-user-assets')
     @$selectUser = $('#select-user')
@@ -31,6 +33,7 @@ class AssetEvents
     @not_assigned_url = '/assets/not_assigned'
     @assigned_url = '/assets/assigned'
     @display_assets_url = '/assets/assign'
+    @deallocate_assets_url = '/assets/deallocate'
     @proceedings_url = '/proceedings'
     @assets_url = '/assets'
 
@@ -39,43 +42,36 @@ class AssetEvents
     @$btnContinue = $('#btn_continue')
     @$btnAccept = $('#btn_accept')
     @$btnCancel_ = $('#btn_cancel_')
+    @$btnSend = $('#btn-send')
     @$chkSelectedAssets = $('input[type=checkbox].selected-assets')
+    @$code = $('#code')
 
   bindEventsTpl: ->
     @$btnCancelAssig.on 'click', (e) => @hideContainer(e)
     @$btnContinue.on 'click', (e) => @sendAssignation(e)
     @$btnCancel_.on 'click', (e) => @displaySelectUserAsset(e)
     @$btnAccept.on 'click', (e) => @generatePDF(e)
+    @$btnSend.on 'click', (e) => @checkAssetIfExists(e)
 
   bindEvents: ->
     @$department.remoteChained('#building', '/assets/departments.json')
     @$user.remoteChained('#department', '/assets/users.json')
-    @$btnAssignation.on 'click', (e) => @displayContainer(e)
-    @$btnDevolution.on 'click', (e) => @displayDevolution(e)
+    @$btnAssignation.on 'click', (e) => @displayContainer(e, 'E', @not_assigned_url)
+    @$btnDevolution.on 'click', (e) => @displayContainer(e, 'D', @assigned_url)
     @$btnCancel.on 'click', (e) => @redirectToAssets(e)
 
-  displayContainer: (e) ->
+  displayContainer: (e, proceeding_type, url) ->
     e.preventDefault()
     if @checkSelectedUser()
-      @proceeding_type = 'E' # Entrega
+      @proceeding_type = proceeding_type # E = Entrega, D = Devolución
       @disableForm()
-      @displayAllAssets(@not_assigned_url)
-    else
-      alert('Seleccione Edificio, Departamento, y Usuario')
-
-  displayDevolution: (e) ->
-    e.preventDefault()
-    if @checkSelectedUser()
-      @proceeding_type = 'D' # Devolución
-      @disableForm()
-      @displayAllAssets(@assigned_url)
+      @displayAllAssets(url)
     else
       alert('Seleccione Edificio, Departamento, y Usuario')
 
   hideContainer: (e) ->
     e.preventDefault()
-    @$container.hide()
-    @$container.html('')
+    @$container.html('').hide()
     @enableForm()
 
   checkSelectedUser: ->
@@ -91,12 +87,18 @@ class AssetEvents
 
   sendAssignation: (e) ->
     e.preventDefault()
-    assets_ = @$chkSelectedAssets.closest('form').serialize()
+    if @proceeding_type is 'E'
+      assets_ = @$chkSelectedAssets.closest('form.selected-assets').serialize()
+      url = @display_assets_url
+    else
+      assets_ = @$container.find('form.selected-assets input[type=hidden]').filter(-> @.value != '').serialize()
+      url = @deallocate_assets_url
     if assets_
       assets_ = assets_ + '&user_id=' + @$user.val()
-      $.getJSON @display_assets_url, assets_, (data) => @renderSelectedAssets(data)
+      $.getJSON url, assets_, (data) => @renderSelectedAssets(data)
     else
       alert 'Debe asignar al menos un activo'
+
 
   displaySelectUserAsset: (e) ->
     e.preventDefault()
@@ -107,6 +109,30 @@ class AssetEvents
     e.preventDefault()
     json_data = { user_id: @$user.val(), asset_ids: @assetIds, proceeding_type: @proceeding_type }
     $.post @proceedings_url, { proceeding: json_data }, null, 'script'
+
+  checkAssetIfExists: (e) ->
+    e.preventDefault()
+    code = @$code.val().trim()
+    if code
+      if (asset_id = @searchInAssets(code)) > 0
+        @selectAssetRow(asset_id)
+      else
+        alert "El código de Activo '#{code}' no se encuentra en la lista"
+    else
+      alert 'Introduzca un código de Activo'
+    @$code.select()
+
+  searchInAssets: (code) ->
+    asset_id = 0
+    $.each @assets, (key, obj) ->
+      asset_id = obj.id if obj.code is code
+    return asset_id
+
+  selectAssetRow: (asset_id) ->
+    $input = $("#asset_#{asset_id}")
+    $input.addClass('info')
+    $input.find('td:last-child').html(@glyphiconOk)
+    $input.find('td:first-child input[type=hidden]').val(asset_id)
 
   renderSelectedAssets: (data) ->
     @assetIds = $.map(data.assets, (val, i) -> val.id)
@@ -122,6 +148,7 @@ class AssetEvents
     @$container.show()
 
   renderTemplate: (data) ->
+    @assets = data.assets
     @$container.html @$templateAssigDevol.render(data)
     @cacheElementsTpl()
     @bindEventsTpl()

@@ -12,6 +12,7 @@ Nsiaf::Application.routes.draw do
     get :assigned, on: :collection
     get :not_assigned, on: :collection
     get :assign, on: :collection
+    get :deallocate, on: :collection
   end
 
   resources :auxiliaries, except: [:destroy] do

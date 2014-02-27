@@ -101,6 +101,14 @@ class AssetsController < ApplicationController
     render json: view_context.assets_json(assets, user)
   end
 
+  def deallocate
+    asset_ids = params[:assets].map { |e| e.to_i }
+    user = User.find(params[:user_id])
+    asset_ids &= user.asset_ids
+    assets = user.assets.where(id: asset_ids)
+    render json: view_context.assets_json(assets, user, true)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_asset

@@ -1,6 +1,14 @@
 %script{ type: 'text/html', id: 'tpl-fixed-assets' }
   .col-md-offset-2.col-md-8
-    %h3.text-center Asignación de Activos Fijos
+    %h3.text-center {{title}}
+    {{#devolution}}
+    %h4
+      %span.text-muted Funcionario:
+      {{user_name}}
+    %h4
+      %span.text-muted Cargo:
+      {{user_title}}
+    {{/devolution}}
     %table.table.table-striped.table-hover
       %thead
         %tr
@@ -16,6 +24,7 @@
           %td {{code}}
         {{/assets}}
     .row
+      {{^devolution}}
       .col-md-offset-1.col-md-10
         %h4
           %span.text-muted Funcionario:
@@ -23,6 +32,11 @@
         %h4
           %span.text-muted Cargo:
           %strong {{user_title}}
+      {{/devolution}}
       .col-md-offset-1.col-md-10.text-center
-        = button_tag 'Aceptar', class: 'btn btn-primary', id: 'btn_accept'
-        = button_tag 'Cancelar', class: 'btn btn-danger', id: 'btn_cancel_'
+        = button_tag class: 'btn btn-primary', id: 'btn_accept' do
+          %span.glyphicon.glyphicon-ok
+          Aceptar
+        = button_tag class: 'btn btn-danger', id: 'btn_cancel_' do
+          %span.glyphicon.glyphicon-ban-circle
+          Cancelar
