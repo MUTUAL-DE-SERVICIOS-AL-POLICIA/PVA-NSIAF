@@ -28,7 +28,7 @@ Nsiaf::Application.configure do
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   # http://stackoverflow.com/questions/7275636/rails-3-1-0-actionviewtemplateerror-application-css-isnt-precompiled
-  config.assets.compile = true
+  config.assets.compile = false
 
   # Generate digests for assets URLs.
   config.assets.digest = true

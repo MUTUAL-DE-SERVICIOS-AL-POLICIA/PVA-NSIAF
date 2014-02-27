@@ -14,7 +14,8 @@ class ProceedingsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: @proceeding.user_name.to_param || 'ActaDeEntrega',
+        filename = @proceeding.user_name.parameterize || 'acta'
+        render pdf: "VSIAF-#{filename}",
                disposition: 'attachment',
                template: 'proceedings/show.html.haml',
                show_as_html: params[:debug].present?,
