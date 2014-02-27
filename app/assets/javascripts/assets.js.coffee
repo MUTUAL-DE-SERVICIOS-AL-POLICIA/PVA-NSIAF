@@ -35,7 +35,6 @@ class AssetEvents
     @display_assets_url = '/assets/assign'
     @deallocate_assets_url = '/assets/deallocate'
     @proceedings_url = '/proceedings'
-    @assets_url = '/assets'
 
   cacheElementsTpl: ->
     @$btnCancelAssig = $('#btn_cancel_assig')
@@ -155,4 +154,4 @@ class AssetEvents
 
   redirectToAssets: (e) ->
     e.preventDefault()
-    window.location = @assets_url
+    window.location = @proceedings_url
