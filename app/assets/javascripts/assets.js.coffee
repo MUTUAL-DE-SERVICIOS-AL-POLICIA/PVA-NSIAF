@@ -29,6 +29,7 @@ class AssetEvents
     @$templateFixedAssets = Hogan.compile $('#tpl-fixed-assets').html() || ''
     # urls
     @not_assigned_url = '/assets/not_assigned'
+    @assigned_url = '/assets/assigned'
     @display_assets_url = '/assets/assign'
     @proceedings_url = '/proceedings'
     @assets_url = '/assets'
@@ -58,8 +59,7 @@ class AssetEvents
     if @checkSelectedUser()
       @proceeding_type = 'E' # Entrega
       @disableForm()
-      @displayAllAssets()
-      @$container.show()
+      @displayAllAssets(@not_assigned_url)
     else
       alert('Seleccione Edificio, Departamento, y Usuario')
 
@@ -67,15 +67,15 @@ class AssetEvents
     e.preventDefault()
     if @checkSelectedUser()
       @proceeding_type = 'D' # Devolución
-      #@disableForm()
-      @displayAssignedAssets()
-      @$container.show()
+      @disableForm()
+      @displayAllAssets(@assigned_url)
     else
       alert('Seleccione Edificio, Departamento, y Usuario')
 
   hideContainer: (e) ->
     e.preventDefault()
     @$container.hide()
+    @$container.html('')
     @enableForm()
 
   checkSelectedUser: ->
@@ -116,14 +116,10 @@ class AssetEvents
     @cacheElementsTpl()
     @bindEventsTpl()
 
-  displayAllAssets: ->
+  displayAllAssets: (url)->
     user_data = { user_id: @$user.val() }
-    $.getJSON @not_assigned_url, user_data, (data) => @renderTemplate(data)
-
-  displayAssignedAssets: ->
-    alert 'Mostrando Activos del usuario :P'
-    # TODO mostrar los Activos asignados al usuario, y el formulario para
-    # realizar la devolución
+    $.getJSON url, user_data, (data) => @renderTemplate(data)
+    @$container.show()
 
   renderTemplate: (data) ->
     @$container.html @$templateAssigDevol.render(data)

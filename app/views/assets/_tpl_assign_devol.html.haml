@@ -1,20 +1,53 @@
 %script{ type: 'text/html', id: 'tpl_assig_devol' }
-  %h3.text-center Asignar Activos Fijos
-  %form
+  %h3.text-center {{title}}
+  {{#devolution}}
+  %h4
+    %span.text-muted Funcionario:
+    {{user_name}}
+  %h4
+    %span.text-muted Cargo:
+    {{user_title}}
+  {{/devolution}}
+  %form.selected-assets
     %table.table.table-striped.table-hover.table-condensed
       %thead
         %tr
           %th.col-sm-1
           %th.col-sm-9 Descripción
           %th.col-sm-2 Código
+          {{#devolution}}
+          %th
+          {{/devolution}}
       %tbody
         {{#assets}}
         %tr
+          {{#devolution}}
+          %td {{index}}
+          {{/devolution}}
+          {{^devolution}}
           %td= check_box_tag 'assets[]', '{{id}}', false, class: 'selected-assets'
+          {{/devolution}}
           %td {{description}}
           %td {{code}}
+          {{#devolution}}
+          %td
+            %span.glyphicon.glyphicon-ok
+          {{/devolution}}
         {{/assets}}
+
   .row
+    {{#devolution}}
+    .col-md-12.col-sm-12
+      %form.asset-code{ role: 'form' }
+        .row
+          .col-md-offset-2.col-md-6
+            = text_field_tag :code, '', class: 'form-control', placeholder: 'Código de Activo'
+          .col-md-2
+            = button_tag class: 'btn btn-success col-md-12', id: 'btn-send' do
+              %span.glyphicon.glyphicon-ok
+              Enviar
+    {{/devolution}}
+    {{^devolution}}
     .col-md-12.col-sm-12
       %h4 A:
     .col-md-6.col-sm-6
@@ -25,6 +58,12 @@
       %h4
         %span.text-muted Cargo:
         %strong {{user_title}}
-    .col-md-offset-3.col-sm-offset-3.col-md-9.col-sm-9
-      = button_tag 'Continuar', class: 'btn btn-default', id: 'btn_continue'
-      = button_tag 'Cancelar', class: 'btn btn-danger', id: 'btn_cancel_assig'
+    {{/devolution}}
+    .action-buttons.col-md-12.col-sm-12.text-center
+      = button_tag class: 'btn btn-default', id: 'btn_continue' do
+        %span.glyphicon.glyphicon-list-alt
+        Continuar
+
+      = button_tag class: 'btn btn-danger', id: 'btn_cancel_assig' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar

@@ -1,9 +1,11 @@
 module ApplicationHelper
-  def assets_json(assets, user)
+  def assets_json(assets, user, assigned = false)
     assets = assets.each_with_index.map do |a, index|
-      { index: index + 1, id: a.id, description: a.description, code: a.code }
+      { index: index + 1, id: a.id, description: a.description, code: a.code}
     end
-    { assets: assets.as_json, user_name: user.name, user_title: user.title}
+    title = 'Asignar Activos Fijos'
+    title = 'Devolución de Activos Fijos' if assigned == true
+    { assets: assets.as_json, user_name: user.name, user_title: user.title, devolution: assigned, title: title }
   end
   ##
   # Mime-types para los archivos *.dbf
