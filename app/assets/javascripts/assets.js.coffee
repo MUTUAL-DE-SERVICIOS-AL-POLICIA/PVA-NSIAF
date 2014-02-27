@@ -72,6 +72,7 @@ class AssetEvents
     e.preventDefault()
     @$container.html('').hide()
     @enableForm()
+    @$btnCancel.get(0).focus()
 
   checkSelectedUser: ->
     @$building.val() && @$department.val() && @$user.val()
@@ -86,23 +87,29 @@ class AssetEvents
 
   sendAssignation: (e) ->
     e.preventDefault()
-    if @proceeding_type is 'E'
+    if @isAssignation()
       assets_ = @$chkSelectedAssets.closest('form.selected-assets').serialize()
       url = @display_assets_url
+      message = 'Debe asignar al menos un activo'
     else
       assets_ = @$container.find('form.selected-assets input[type=hidden]').filter(-> @.value != '').serialize()
       url = @deallocate_assets_url
+      message = 'Seleccione al menos un activo para devolver'
     if assets_
       assets_ = assets_ + '&user_id=' + @$user.val()
       $.getJSON url, assets_, (data) => @renderSelectedAssets(data)
     else
-      alert 'Debe asignar al menos un activo'
+      alert message
 
 
   displaySelectUserAsset: (e) ->
     e.preventDefault()
     @$displayUserAssets.hide()
     @$selectUserAssets.show()
+    if @isAssignation()
+      @$btnCancelAssig.get(0).focus()
+    else
+      @$code.slideDown -> @.focus()
 
   generatePDF: (e) ->
     e.preventDefault()
@@ -140,18 +147,25 @@ class AssetEvents
     @$displayUserAssets.show()
     @cacheElementsTpl()
     @bindEventsTpl()
+    @$btnCancel_.get(0).focus()
 
   displayAllAssets: (url)->
     user_data = { user_id: @$user.val() }
     $.getJSON url, user_data, (data) => @renderTemplate(data)
-    @$container.show()
 
   renderTemplate: (data) ->
     @assets = data.assets
     @$container.html @$templateAssigDevol.render(data)
+    @$container.show()
     @cacheElementsTpl()
     @bindEventsTpl()
+    if @isAssignation()
+      @$container.find('form.selected-assets td:first input[type=checkbox]').focus()
+
 
   redirectToAssets: (e) ->
     e.preventDefault()
     window.location = @proceedings_url
+
+  isAssignation: ->
+    @proceeding_type is 'E'
