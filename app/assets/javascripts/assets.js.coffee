@@ -18,7 +18,6 @@ class AssetEvents
     @$container = $('#assig_devol')
     @$displayUserAssets = $('#display-user-assets')
     # forms & inputs
-    @$frmSelectUser = @$selectUser.find('form')
     @$building = $('#building')
     @$department = $('#department')
     @$user = $('#user')
@@ -63,7 +62,7 @@ class AssetEvents
     e.preventDefault()
     if @checkSelectedUser()
       @proceeding_type = proceeding_type # E = Entrega, D = Devolución
-      @disableForm()
+      @$selectUser.hide()
       @displayAllAssets(url)
     else
       alert('Seleccione Edificio, Departamento, y Usuario')
@@ -71,19 +70,11 @@ class AssetEvents
   hideContainer: (e) ->
     e.preventDefault()
     @$container.html('').hide()
-    @enableForm()
+    @$selectUser.show()
     @$btnCancel.get(0).focus()
 
   checkSelectedUser: ->
     @$building.val() && @$department.val() && @$user.val()
-
-  disableForm: ->
-    @$frmSelectUser.find(':input').prop('disabled', true)
-    @$selectUser.hide()
-
-  enableForm: ->
-    @$frmSelectUser.find(':input').prop('disabled', false)
-    @$selectUser.show()
 
   sendAssignation: (e) ->
     e.preventDefault()
@@ -161,7 +152,8 @@ class AssetEvents
     @bindEventsTpl()
     if @isAssignation()
       @$container.find('form.selected-assets td:first input[type=checkbox]').focus()
-
+    else
+      @$code.slideDown -> @.focus()
 
   redirectToAssets: (e) ->
     e.preventDefault()

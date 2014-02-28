@@ -1,4 +1,6 @@
 class Proceeding < ActiveRecord::Base
+  include VersionLog
+
   PROCEEDING_TYPE = {
     'E' => 'assignation',
     'D' => 'devolution'
@@ -12,6 +14,8 @@ class Proceeding < ActiveRecord::Base
 
   after_create :update_assignations
 
+  has_paper_trail on: [:destroy]
+
   def self.set_columns
    h = ApplicationController.helpers
    c_names = column_names - %w(id created_at updated_at proceeding_type)
@@ -20,6 +24,14 @@ class Proceeding < ActiveRecord::Base
 
   def admin_name
     admin ? admin.name : ''
+  end
+
+  def code
+    user ? user.id : ''
+  end
+
+  def name
+    user ? user.name : ''
   end
 
   def get_type
@@ -46,7 +58,12 @@ class Proceeding < ActiveRecord::Base
 
   def update_assignations
     user_id = self.admin_id
-    user_id = self.user_id if is_assignation?
+    event = 'devolution'
+    if is_assignation?
+      user_id = self.user_id
+      event = 'assignation'
+    end
     assets.update_all(user_id: user_id)
+    register_log(event)
   end
 end

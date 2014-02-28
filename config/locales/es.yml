@@ -140,8 +140,10 @@ es:
     title:
       title: "Histórico"
     active: 'Activo'
+    assignation: 'Asignación'
     create: 'Creado'
     destroy: 'Eliminación'
+    devolution: 'Devolución'
     inactive: 'Inactivo'
     login: 'Iniciar Sesión'
     logout: 'Cerrar Sesión'
@@ -254,6 +256,7 @@ es:
       building: "Edificio"
       department: "Departamento"
       entity: "Entidad"
+      proceeding: "Acta"
       user: "Usuario"
 
     attributes:
