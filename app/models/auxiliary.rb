@@ -9,7 +9,7 @@ class Auxiliary < ActiveRecord::Base
   belongs_to :account
   has_many :assets
 
-  validates :code, presence: true, uniqueness: { scope: :account_id }
+  validates :code, presence: true, uniqueness: { scope: :account_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :name, :account_id, presence: true
 
   has_paper_trail ignore: [:status, :updated_at]

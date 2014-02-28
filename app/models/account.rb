@@ -6,7 +6,7 @@ class Account < ActiveRecord::Base
     'NOMBRE' => 'name'
   }
 
-  validates :code, presence: true, uniqueness: true
+  validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :name, presence: true
 
   has_paper_trail

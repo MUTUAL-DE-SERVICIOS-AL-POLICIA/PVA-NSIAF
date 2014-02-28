@@ -10,7 +10,7 @@ class Department < ActiveRecord::Base
   belongs_to :building
   has_many :users
 
-  validates :code, presence: true, uniqueness: { scope: :building_id }
+  validates :code, presence: true, uniqueness: { scope: :building_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z|\"|\.|-/u }, allow_blank: true
   validates :building_id, presence: true
 
