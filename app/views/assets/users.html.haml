@@ -1,5 +1,5 @@
 #select-user-assets.row
-  #select-user.col-md-offset-3.col-md-6.col-sm-6
+  #select-user.col-lg-offset-3.col-md-offset-2.col-lg-6.col-md-8.col-sm-12
     %h3.col-md-offset-2.col-md-9.text-center Selección de Usuarios
     %form.form-horizontal{ role: 'form' }
       .form-group
@@ -15,17 +15,17 @@
         .col-md-9.col-sm-9
           = select_tag :user, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       .form-group
-        .col-md-offset-2.col-sm-offset-1.col-md-9.col-sm-10.text-center
+        .col-md-offset-2.col-sm-offset-2.col-md-9.col-sm-9.text-center
           .row.text-center
-            .col-md-4
+            .col-md-4.col-sm-4
               = button_tag class: 'btn btn-default btn-block', id: 'btn_assignation' do
                 %span.glyphicon.glyphicon-plus
                 Asignación
-            .col-md-4
+            .col-md-4.col-sm-4
               = button_tag class: 'btn btn-primary btn-block', id: 'btn_devolution' do
                 %span.glyphicon.glyphicon-minus
                 Devolución
-            .col-md-4
+            .col-md-4.col-sm-4
               = button_tag class: 'btn btn-danger btn-block', id: 'btn_cancel' do
                 %span.glyphicon.glyphicon-ban-circle
                 Cancelar
