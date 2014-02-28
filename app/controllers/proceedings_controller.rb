@@ -1,5 +1,5 @@
 class ProceedingsController < ApplicationController
-  before_action :set_proceeding, only: [:show, :edit, :update, :destroy]
+  before_action :set_proceeding, only: [:show]
 
   # GET /proceedings
   def index
@@ -32,15 +32,6 @@ class ProceedingsController < ApplicationController
     end
   end
 
-  # GET /proceedings/new
-  def new
-    @proceeding = Proceeding.new
-  end
-
-  # GET /proceedings/1/edit
-  def edit
-  end
-
   # POST /proceedings
   def create
     @proceeding = Proceeding.new(proceeding_params)
@@ -54,21 +45,6 @@ class ProceedingsController < ApplicationController
         format.js
       end
     end
-  end
-
-  # PATCH/PUT /proceedings/1
-  def update
-    if @proceeding.update(proceeding_params)
-      redirect_to @proceeding, notice: 'Proceeding was successfully updated.'
-    else
-      render action: 'edit'
-    end
-  end
-
-  # DELETE /proceedings/1
-  def destroy
-    @proceeding.destroy
-    redirect_to proceedings_url, notice: 'Proceeding was successfully destroyed.'
   end
 
   private

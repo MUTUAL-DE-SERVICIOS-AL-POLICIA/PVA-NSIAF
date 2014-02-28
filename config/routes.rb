@@ -1,5 +1,5 @@
 Nsiaf::Application.routes.draw do
-  resources :proceedings
+  resources :proceedings, only: [:index, :show, :create]
 
   resources :declines, only: [:index]
 
