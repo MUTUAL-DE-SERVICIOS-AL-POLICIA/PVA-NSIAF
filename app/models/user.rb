@@ -67,6 +67,14 @@ class User < ActiveRecord::Base
     department.present? ? department.name : ''
   end
 
+  def depto_code
+    "#{department_code}#{code}"
+  end
+
+  def depto_name
+    "#{department_name} - #{name}"
+  end
+
   def email_required?
     false
   end

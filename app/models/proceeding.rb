@@ -27,11 +27,11 @@ class Proceeding < ActiveRecord::Base
   end
 
   def code
-    user ? user.id : ''
+    user ? user.depto_code : ''
   end
 
   def name
-    user ? user.name : ''
+    user ? user.depto_name : ''
   end
 
   def get_type
