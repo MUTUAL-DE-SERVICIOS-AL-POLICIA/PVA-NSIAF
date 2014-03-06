@@ -13,12 +13,12 @@ class Asset < ActiveRecord::Base
   has_many :proceedings, through: :asset_proceedings
 
   with_options if: :is_not_migrate? do |m|
-    m.validates :code, presence: true, uniqueness: { scope: [:auxiliary_id, :user_id] }
+    m.validates :code, presence: true, uniqueness: true
     m.validates :description, :auxiliary_id, :user_id, presence: true
   end
 
   with_options if: :is_migrate? do |m|
-    m.validates :code, presence: true, uniqueness: { scope: [:auxiliary_id, :user_id] }
+    m.validates :code, presence: true, uniqueness: true
     m.validates :description, presence: true
   end
 
