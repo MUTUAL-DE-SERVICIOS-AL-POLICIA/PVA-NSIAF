@@ -53,7 +53,7 @@ private
   end
 
   def fetch_array
-    User.array_users(current_user, sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
+    User.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], current_user)
   end
 
   def page

@@ -5,19 +5,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: UsersDatatable.new(view_context) }
-      @users = User.array_users(current_user, 'code', 'asc', '', '', params[:sSearch], params[:search_column])
-      format.csv { render text: @users.to_csv(['code', 'name', 'title', 'ci', 'email', 'username', 'phone', 'mobile', 'department', 'status']) }
-      format.pdf do
-        render pdf: "VSIAF-Usuarios",
-               disposition: 'attachment',
-               layout: 'pdf.html',
-               page_size: 'Letter',
-               margin: { top: 15, bottom: 15, left: 20, right: 15 }
-      end
-    end
+    format_to('users', UsersDatatable, ['code', 'name', 'title', 'ci', 'email', 'username', 'phone', 'mobile', 'department', 'status'])
   end
 
   # GET /users/1
@@ -99,4 +87,6 @@ class UsersController < ApplicationController
         params.require(:user).permit(:code, :name, :title, :ci, :username, :email, :password, :password_confirmation, :phone, :mobile, :department_id)
       end
     end
+
+
 end
