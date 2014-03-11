@@ -1,0 +1,12 @@
+%table.table
+  %thead
+    %tr
+      %th Código
+      %th Descripción
+      %th Usuario
+  %tbody
+    - @array.each do |asset|
+      %tr
+        %td= asset.code
+        %td= asset.description
+        %td= asset.user_name

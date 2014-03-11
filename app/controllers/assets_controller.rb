@@ -5,10 +5,7 @@ class AssetsController < ApplicationController
   # GET /assets
   # GET /assets.json
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: AssetsDatatable.new(view_context) }
-    end
+    format_to('assets', AssetsDatatable, ['code', 'description', 'user'])
   end
 
   # GET /assets/1
