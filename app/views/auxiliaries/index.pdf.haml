@@ -1,0 +1,14 @@
+%table.table
+  %thead
+    %tr
+      %th Código
+      %th Nombre
+      %th Cuenta
+      %th Estado
+  %tbody
+    - @array.each do |auxiliary|
+      %tr
+        %td= auxiliary.code
+        %td= auxiliary.name
+        %td= auxiliary.account_name
+        %td= type_status(auxiliary.status)
