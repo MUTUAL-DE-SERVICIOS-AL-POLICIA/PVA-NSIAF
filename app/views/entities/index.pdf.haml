@@ -1,0 +1,12 @@
+%table.table
+  %thead
+    %tr
+      %th Código
+      %th Nombre
+      %th Cargo
+  %tbody
+    - @array.each do |entity|
+      %tr
+        %td= entity.code
+        %td= entity.name
+        %td= entity.acronym

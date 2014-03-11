@@ -1,0 +1,12 @@
+%table.table
+  %thead
+    %tr
+      %th Usuario
+      %th Administrador
+      %th Tipo
+  %tbody
+    - @array.each do |proceeding|
+      %tr
+        %td= proceeding.user_name
+        %td= proceeding.admin_name
+        %td= t(proceeding.get_type, scope: 'proceedings.type')

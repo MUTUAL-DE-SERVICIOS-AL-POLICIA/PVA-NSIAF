@@ -3,10 +3,7 @@ class ProceedingsController < ApplicationController
 
   # GET /proceedings
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: ProceedingsDatatable.new(view_context) }
-    end
+    format_to('proceedings', ProceedingsDatatable, ['user', 'admin', 'proceeding_type'])
   end
 
   # GET /proceedings/1

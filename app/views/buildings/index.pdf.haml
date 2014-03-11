@@ -1,0 +1,12 @@
+%table.table
+  %thead
+    %tr
+      %th Código
+      %th Nombre
+      %th Estado
+  %tbody
+    - @array.each do |building|
+      %tr
+        %td= building.code
+        %td= building.name
+        %td= type_status(building.status)

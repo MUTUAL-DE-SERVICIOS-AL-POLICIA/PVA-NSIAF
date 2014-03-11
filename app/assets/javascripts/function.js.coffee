@@ -1,4 +1,31 @@
 jQuery ->
+  TableTools.BUTTONS.download =
+    sAction: "text"
+    sTag: "default"
+    sFieldBoundary: ""
+    sFieldSeperator: "\t"
+    sNewLine: "<br>"
+    sToolTip: ""
+    sButtonClass: "DTTT_button_text"
+    sButtonClassHover: "DTTT_button_text_hover"
+    sButtonText: "Download"
+    mColumns: "all"
+    bHeader: true
+    bFooter: true
+    sDiv: ""
+    fnMouseover: null
+    fnMouseout: null
+    fnClick: (nButton, oConfig) ->
+      oParams = @s.dt.oApi._fnAjaxParameters(@s.dt)
+      iframe = document.createElement("iframe")
+      iframe.style.height = "0px"
+      iframe.style.width = "0px"
+      iframe.src = oConfig.sUrl + "?" + $.param(oParams) + "&search_column=#{ $('#select_column').val() }"
+      document.body.appendChild iframe
+    fnSelect: null
+    fnComplete: null
+    fnInit: null
+
   $(".datatable").dataTable
     sPaginationType: "bootstrap"
     bProcessing: false
@@ -11,14 +38,6 @@ jQuery ->
     oLanguage:
       sUrl: '/locales/dataTables.spanish.txt'
     sDom: 'T<"clear">lfrtip',
-    oTableTools:
-      sSwfPath: "/swf/copy_csv_xls_pdf.swf"
-      aButtons: [
-        { sExtends: 'copy', sButtonText: 'Copiar' },
-        { sExtends: 'csv', sButtonText: 'CSV' },
-        { sExtends: 'pdf', sButtonText: 'PDF' },
-        { sExtends: 'print', sButtonText: 'Imprimir' }
-      ]
     fnServerParams: (aoData) ->
       aoData.push
         name: "search_column"
@@ -30,6 +49,14 @@ jQuery ->
       table = $.fn.dataTable.fnTables(true)
       if table.length > 0
         $(table).dataTable().fnAdjustColumnSizing()
+     oTableTools:
+         aButtons: [
+            { sExtends: "download", sButtonText: "CSV", sUrl: "#{ $('.button_new span.controller_name').text() }.csv" }
+            { sExtends: "download", sButtonText: "PDF", sUrl: "#{ $('.button_new span.controller_name').text() }.pdf" }
+         ]
+
+
+
 
   # Change button status
   $(document).on 'click', '.datatable .btn-warning', (evt) ->

@@ -5,10 +5,7 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.json
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: AccountsDatatable.new(view_context) }
-    end
+    format_to('accounts', AccountsDatatable, ['code', 'name'])
   end
 
   # GET /accounts/1

@@ -35,13 +35,7 @@ private
   end
 
   def fetch_array
-    array = Building.includes(:entity).order("#{sort_column} #{sort_direction}")
-    array = array.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      type_search = params[:search_column] == 'entity' ? 'entities.code' : "buildings.#{params[:search_column]}"
-      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
-    end
-    array
+    Building.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page

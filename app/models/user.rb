@@ -134,6 +134,16 @@ class User < ActiveRecord::Base
     assets.present?
   end
 
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user)
+    array = current_user.users.includes(:department).order("#{sort_column} #{sort_direction}")
+    array = array.page(page).per_page(per_page) if per_page.present?
+    if sSearch.present?
+      type_search = search_column == 'department' ? 'departments.name' : "users.#{search_column}"
+      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+    end
+    array
+  end
+
   private
 
   ##

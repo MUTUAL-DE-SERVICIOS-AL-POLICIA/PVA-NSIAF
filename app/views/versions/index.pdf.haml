@@ -1,0 +1,18 @@
+%table.table
+  %thead
+    %tr
+      %th Id
+      %th Código
+      %th Fecha
+      %th Acción
+      %th Administrador
+      %th Tipo
+  %tbody
+    - @array.each do |version|
+      %tr
+        %td= version.id
+        %td= content_tag(:span, version.item_code, title: version.item_name)
+        %td= I18n.l(version.created_at, format: :version)
+        %td= I18n.t(version.event, scope: 'versions')
+        %td= version.whodunnit_name
+        %td= I18n.t(version.item_type.to_s.downcase.singularize, scope: 'activerecord.models')

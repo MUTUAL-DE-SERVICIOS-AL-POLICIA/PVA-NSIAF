@@ -31,12 +31,7 @@ private
   end
 
   def fetch_array
-    array = Account.order("#{sort_column} #{sort_direction}")
-    array = array.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      array = array.where("#{params[:search_column]} like :search", search: "%#{params[:sSearch]}%")
-    end
-    array
+    Account.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page

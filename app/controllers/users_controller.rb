@@ -5,10 +5,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: UsersDatatable.new(view_context) }
-    end
+    format_to('users', UsersDatatable, ['code', 'name', 'title', 'ci', 'email', 'username', 'phone', 'mobile', 'department', 'status'])
   end
 
   # GET /users/1
@@ -90,4 +87,6 @@ class UsersController < ApplicationController
         params.require(:user).permit(:code, :name, :title, :ci, :username, :email, :password, :password_confirmation, :phone, :mobile, :department_id)
       end
     end
+
+
 end

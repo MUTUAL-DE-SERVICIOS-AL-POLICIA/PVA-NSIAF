@@ -34,17 +34,7 @@ private
   end
 
   def fetch_array
-    array = Asset.includes(:user).order("#{sort_column} #{sort_direction}").where(status: '1')
-    array = array.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      if params[:search_column] == 'user'
-        type_search = 'users.name'
-      else
-        type_search = "assets.#{params[:search_column]}"
-      end
-      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
-    end
-    array
+    Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page
