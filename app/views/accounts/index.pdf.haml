@@ -1,0 +1,10 @@
+%table.table
+  %thead
+    %tr
+      %th Código
+      %th Nombre
+  %tbody
+    - @array.each do |account|
+      %tr
+        %td= account.code
+        %td= account.name
