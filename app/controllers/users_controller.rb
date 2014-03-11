@@ -8,6 +8,15 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { render '/shared/index' }
       format.json { render json: UsersDatatable.new(view_context) }
+      @users = User.array_users(current_user, 'code', 'asc', '', '', params[:sSearch], params[:search_column])
+      format.csv { render text: @users.to_csv(['code', 'name', 'title', 'ci', 'email', 'username', 'phone', 'mobile', 'department', 'status']) }
+      format.pdf do
+        render pdf: "VSIAF-Usuarios",
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               margin: { top: 15, bottom: 15, left: 20, right: 15 }
+      end
     end
   end
 

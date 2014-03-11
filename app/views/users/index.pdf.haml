@@ -1,0 +1,26 @@
+%table.table
+  %thead
+    %tr
+      %th Código
+      %th Nombre
+      %th Cargo
+      %th C.I.
+      %th Email
+      %th Usuario
+      %th Teléfono
+      %th Celular
+      %th Departamento
+      %th Estado
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= user.code
+        %td= user.name
+        %td= user.title
+        %td= user.ci
+        %td= user.email
+        %td= user.username
+        %td= user.phone
+        %td= user.mobile
+        %td= user.department_name
+        %td= type_status(user.status)
