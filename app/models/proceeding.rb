@@ -1,5 +1,6 @@
 class Proceeding < ActiveRecord::Base
-  include VersionLog
+  include VersionLog, ImportDbf
+
 
   PROCEEDING_TYPE = {
     'E' => 'assignation',
@@ -52,6 +53,20 @@ class Proceeding < ActiveRecord::Base
 
   def user_name
     user ? user.name : ''
+  end
+
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
+    array = includes(:user, :admin).order("#{sort_column} #{sort_direction}")
+    array = array.page(page).per_page(per_page) if per_page.present?
+    if sSearch.present?
+      type_search = "proceedings.#{search_column}"
+      case search_column
+      when 'user_id' then type_search = 'users.name'
+      when 'admin_id' then type_search = 'admins_proceedings.name'
+      end
+      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user, :admin)
+    end
+    array
   end
 
   private

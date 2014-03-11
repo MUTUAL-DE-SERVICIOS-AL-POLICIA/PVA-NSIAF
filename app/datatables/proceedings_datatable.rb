@@ -32,17 +32,7 @@ private
   end
 
   def fetch_array
-    array = Proceeding.includes(:user, :admin).order("#{sort_column} #{sort_direction}")
-    array = array.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      type_search = "proceedings.#{params[:search_column]}"
-      case params[:search_column]
-      when 'user_id' then type_search = 'users.name'
-      when 'admin_id' then type_search = 'admins_proceedings.name'
-      end
-      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%").references(:user, :admin)
-    end
-    array
+    Proceeding.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page

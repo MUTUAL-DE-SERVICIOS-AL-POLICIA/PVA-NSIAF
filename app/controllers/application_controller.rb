@@ -19,7 +19,8 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.html { render '/shared/index' }
       format.json { render json: datatable.new(view_context) }
-      @array = name_model.classify.constantize.array_model('code', 'asc', '', '', params[:sSearch], params[:search_column], current_user)
+      column_order = name_model == 'proceedings' ? 'users.name' : 'code'
+      @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current_user)
       format.csv { render text: @array.to_csv(columns) }
       format.pdf do
         render pdf: "VSIAF-#{t("#{name_model}.title.title")}",
