@@ -38,7 +38,6 @@
         {{/assets}}
 
   .row
-    {{#devolution}}
     .col-md-12.col-sm-12
       %form.asset-code{ role: 'form' }
         .row
@@ -48,7 +47,6 @@
             = button_tag class: 'btn btn-success col-md-12 btn-lg', id: 'btn-send' do
               %span.glyphicon.glyphicon-ok
               Enviar
-    {{/devolution}}
     {{^devolution}}
     .col-md-12.col-sm-12
       %h4 A:

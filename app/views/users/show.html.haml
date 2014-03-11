@@ -8,43 +8,54 @@
         %span.glyphicon.glyphicon-list
         = t("users.title.title")
 
-  %h2 Usuario
+  %h2= @user.name
 
-- if @user.role.blank?
-  %p
-    %b #{User.human_attribute_name('code')}:
-    = @user.code
-%p
-  %b #{User.human_attribute_name('name')}:
-  = @user.name
-- if @user.role.blank?
-  %p
-    %b #{User.human_attribute_name('title')}:
-    = @user.title
-  %p
-    %b #{User.human_attribute_name('ci')}:
-    = @user.ci
-  %p
-    %b #{User.human_attribute_name('email')}:
-    = @user.email
-%p
-  %b #{User.human_attribute_name('username')}:
-  = @user.username
-- if @user.role.blank?
-  %p
-    %b #{User.human_attribute_name('phone')}:
-    = @user.phone
-  %p
-    %b #{User.human_attribute_name('mobile')}:
-    = @user.mobile
-  %p
-    %b #{User.human_attribute_name('department')}:
-    = @user.department_name
-- if @user.role.present?
-  %p
-    %b #{User.human_attribute_name('role')}:
-    = t("users.roles.#{@user.role}")
-
-%p
-  %b #{t('general.status')}:
-  = type_status(@user.status)
+.row
+  .col-lg-4.col-md-5.col-sm-12
+    %dl.dl-horizontal
+      - if @user.role.blank?
+        %dt= User.human_attribute_name('code')
+        %dd= @user.code
+        %dt= User.human_attribute_name('title')
+        %dd= @user.title
+        %dt= User.human_attribute_name('ci')
+        %dd= @user.ci
+        %dt= User.human_attribute_name('email')
+        %dd= @user.email
+      %dt= User.human_attribute_name('username')
+      %dd= @user.username
+      - if @user.role.blank?
+        %dt= User.human_attribute_name('phone')
+        %dd= @user.phone
+        %dt= User.human_attribute_name('mobile')
+        %dd= @user.mobile
+        %dt= User.human_attribute_name('department')
+        %dd= @user.department_name
+      - if @user.role.present?
+        %dt= User.human_attribute_name('role')
+        %dd= t("users.roles.#{@user.role}")
+      %dt= t('general.status')
+      %dd= type_status(@user.status)
+  .col-lg-8.col-md-7.col-sm-12
+    - if @user.assets.present?
+      %h4 Activos Fijos Asignados
+      %table.table.table-stripped.table-condensed
+        %thead
+          %tr
+            %th
+            %th Descripción
+            %th.col-sm-2 Código
+        %tbody
+          - @user.assets.each_with_index do |asset, index|
+            %tr
+              %td= index + 1
+              %td= asset.description
+              %td
+                - if current_user.is_super_admin?
+                  = asset.code
+                - else
+                  = link_to asset.code, asset
+    - else
+      .alert.alert-info.alert-dismissable
+        %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
+        No tiene activos asignados.

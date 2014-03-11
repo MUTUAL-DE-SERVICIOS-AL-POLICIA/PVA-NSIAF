@@ -23,9 +23,9 @@ private
         auxiliary.name,
         link_to_if(auxiliary.account, auxiliary.account_code, auxiliary.account, title: auxiliary.account_name),
         type_status(auxiliary.status),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), auxiliary, class: 'btn btn-default btn-sm') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, auxiliary], class: 'btn btn-primary btn-sm') + ' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(auxiliary.status)}") + title_status(auxiliary.status), '#', class: 'btn btn-warning btn-sm', data: data_link(auxiliary))
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), auxiliary, class: 'btn btn-default btn-xs') + ' ' +
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, auxiliary], class: 'btn btn-primary btn-xs') + ' ' +
+        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(auxiliary.status)}") + title_status(auxiliary.status), '#', class: 'btn btn-warning btn-xs', data: data_link(auxiliary))
       ]
     end
   end

@@ -50,6 +50,7 @@ class AssetEvents
     @$btnCancel_.on 'click', (e) => @displaySelectUserAsset(e)
     @$btnAccept.on 'click', (e) => @generatePDF(e)
     @$btnSend.on 'click', (e) => @checkAssetIfExists(e)
+    @$chkSelectedAssets.on 'change', (e) => @checkUncheck(e)
 
   bindEvents: ->
     @$department.remoteChained('#building', '/assets/departments.json')
@@ -97,10 +98,7 @@ class AssetEvents
     e.preventDefault()
     @$displayUserAssets.hide()
     @$selectUserAssets.show()
-    if @isAssignation()
-      @$btnCancelAssig.get(0).focus()
-    else
-      @$code.slideDown -> @.focus()
+    @$code.slideDown -> @.focus()
 
   generatePDF: (e) ->
     e.preventDefault()
@@ -119,6 +117,14 @@ class AssetEvents
       alert 'Introduzca un código de Activo'
     @$code.select()
 
+  checkUncheck: (e)->
+    $e = $(e.target)
+    $row = $("#asset_#{$e.val()}")
+    if $e.is(':checked')
+      $row.addClass('info')
+    else
+      $row.removeClass('info')
+
   searchInAssets: (code) ->
     asset_id = 0
     $.each @assets, (key, obj) ->
@@ -128,8 +134,11 @@ class AssetEvents
   selectAssetRow: (asset_id) ->
     $input = $("#asset_#{asset_id}")
     $input.addClass('info')
-    $input.find('td:last-child').html(@glyphiconOk)
-    $input.find('td:first-child input[type=hidden]').val(asset_id)
+    if @isAssignation()
+      $input.find('td:first-child input[type=checkbox]').prop('checked', true)
+    else
+      $input.find('td:last-child').html(@glyphiconOk)
+      $input.find('td:first-child input[type=hidden]').val(asset_id)
 
   renderSelectedAssets: (data) ->
     @assetIds = $.map(data.assets, (val, i) -> val.id)

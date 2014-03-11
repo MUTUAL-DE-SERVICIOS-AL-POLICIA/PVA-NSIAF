@@ -22,7 +22,7 @@ private
         proceeding.user_name,
         proceeding.admin_name,
         I18n.t(proceeding.get_type, scope: 'proceedings.type'),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), proceeding, class: 'btn btn-default btn-sm')
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), proceeding, class: 'btn btn-default btn-xs')
       ]
     end
   end
