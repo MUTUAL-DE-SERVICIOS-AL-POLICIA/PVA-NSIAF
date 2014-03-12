@@ -34,6 +34,7 @@ Nsiaf::Application.routes.draw do
   resources :users, except: [:destroy] do
     post :change_status, on: :member
     get :welcome, on: :collection
+    get :download, on: :member
   end
 
   get '/dashboard', to: 'dashboard#index', as: :dashboard
