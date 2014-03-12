@@ -91,6 +91,7 @@ class AssetsController < ApplicationController
   end
 
   def assign
+    params[:assets] ||= []
     asset_ids = params[:assets].map { |e| e.to_i }
     user = User.find(params[:user_id])
     asset_ids &= current_user.not_assigned_assets.pluck(:id)
@@ -99,6 +100,7 @@ class AssetsController < ApplicationController
   end
 
   def deallocate
+    params[:assets] ||= []
     asset_ids = params[:assets].map { |e| e.to_i }
     user = User.find(params[:user_id])
     asset_ids &= user.asset_ids

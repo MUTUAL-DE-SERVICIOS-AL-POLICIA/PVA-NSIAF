@@ -15,26 +15,17 @@
           %th.col-sm-1
           %th.col-sm-9 Descripción
           %th.col-sm-2 Código
-          {{#devolution}}
           %th
-          {{/devolution}}
       %tbody
         {{#assets}}
         %tr{ id: 'asset_{{id}}' }
-          {{#devolution}}
           %td
             {{index}}
-            = hidden_field_tag 'assets[]', ''
-          {{/devolution}}
-          {{^devolution}}
-          %td= check_box_tag 'assets[]', '{{id}}', false, class: 'selected-assets'
-          {{/devolution}}
+            = hidden_field_tag 'assets[]', nil
           %td {{description}}
           %td {{code}}
-          {{#devolution}}
           %td
             %span.text-muted.glyphicon.glyphicon-unchecked
-          {{/devolution}}
         {{/assets}}
 
   .row

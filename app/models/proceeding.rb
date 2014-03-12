@@ -1,7 +1,6 @@
 class Proceeding < ActiveRecord::Base
   include VersionLog
 
-
   PROCEEDING_TYPE = {
     'E' => 'assignation',
     'D' => 'devolution'
@@ -12,6 +11,8 @@ class Proceeding < ActiveRecord::Base
 
   has_many :asset_proceedings
   has_many :assets, through: :asset_proceedings
+
+  validates :assets, presence: true
 
   after_create :update_assignations
 

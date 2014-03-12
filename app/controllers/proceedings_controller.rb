@@ -35,10 +35,8 @@ class ProceedingsController < ApplicationController
     @proceeding.admin_id = current_user.id
     respond_to do |format|
       if @proceeding.save
-        format.html { redirect_to @proceeding, notice: 'Proceeding was successfully created.' }
         format.js
       else
-        format.html { render action: 'new' }
         format.js
       end
     end
