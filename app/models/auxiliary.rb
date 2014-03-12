@@ -36,6 +36,19 @@ class Auxiliary < ActiveRecord::Base
     array
   end
 
+  def self.to_csv(column_names)
+    h = ApplicationController.helpers
+    CSV.generate do |csv|
+      csv << column_names
+      all.each do |product|
+        a = product.attributes.values_at(*column_names)
+        a.pop(2)
+        a.push(product.account_code, h.type_status(product.status))
+        csv << a
+      end
+    end
+  end
+
   private
 
   ##

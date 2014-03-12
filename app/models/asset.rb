@@ -63,6 +63,18 @@ class Asset < ActiveRecord::Base
     array
   end
 
+  def self.to_csv(column_names)
+    CSV.generate do |csv|
+      csv << column_names
+      all.each do |product|
+        a = product.attributes.values_at(*column_names)
+        a.pop
+        a.push(product.user_name)
+        csv << a
+      end
+    end
+  end
+
   private
 
   ##

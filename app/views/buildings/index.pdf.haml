@@ -3,10 +3,12 @@
     %tr
       %th Código
       %th Nombre
+      %th Entidad
       %th Estado
   %tbody
     - @array.each do |building|
       %tr
         %td= building.code
         %td= building.name
+        %td= building.entity_code
         %td= type_status(building.status)
