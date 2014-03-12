@@ -108,3 +108,7 @@ jQuery ->
           window.location = window.location
     else
       alert('Llenar los campos')
+
+  $(document).on 'click', '.download-assets', (e) ->
+    e.preventDefault()
+    window.location = $(@).data('url')

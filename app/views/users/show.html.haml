@@ -41,26 +41,11 @@
       .pull-right
         Descargar:
         .btn-group.btn-group-xs
-          = button_tag 'CSV', class: 'download-assets btn btn-default', data: { url: '#' }
-          = button_tag 'PDF', class: 'download-assets btn btn-default', data: { url: '#' }
+          = button_tag 'CSV', class: 'download-assets btn btn-default', data: { url: download_user_path(@user, format: :csv) }
+          = button_tag 'PDF', class: 'download-assets btn btn-default', data: { url: download_user_path(@user, format: :pdf) }
       %h4 Activos Fijos Asignados
 
-      %table.table.table-stripped.table-condensed
-        %thead
-          %tr
-            %th
-            %th Descripción
-            %th.col-sm-2 Código
-        %tbody
-          - @user.assets.each_with_index do |asset, index|
-            %tr
-              %td= index + 1
-              %td= asset.description
-              %td
-                - if current_user.is_super_admin?
-                  = asset.code
-                - else
-                  = link_to asset.code, asset
+      = render 'user_assets.pdf.haml'
     - else
       .alert.alert-info.alert-dismissable
         %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;

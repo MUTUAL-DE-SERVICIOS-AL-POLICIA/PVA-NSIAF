@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-  before_action :set_user, only: [:show, :edit, :update, :change_status]
+  before_action :set_user, only: [:show, :edit, :update, :change_status, :csv, :pdf]
 
   # GET /users
   # GET /users.json
@@ -71,6 +71,26 @@ class UsersController < ApplicationController
 
   def welcome
     render 'shared/welcome'
+  end
+
+  def download
+    columns = ['code', 'description', 'user']
+    filename = @user.name.parameterize || 'activos'
+    respond_to do |format|
+      format.html { render nothing: true }
+      format.csv do
+        send_data @user.assets.to_csv(columns),
+          filename: "#{filename}.csv",
+          type: 'text/csv'
+      end
+      format.pdf do
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               margin: { top: 15, bottom: 15, left: 20, right: 15 }
+      end
+    end
   end
 
   private
