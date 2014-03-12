@@ -297,6 +297,7 @@ es:
       proceeding:
         user_id: "Usuario"
         admin_id: "Administrador"
+        created_at: "Fecha"
         proceeding_type: "Tipo"
       user:
         code: "Código"
