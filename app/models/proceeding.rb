@@ -87,9 +87,7 @@ class Proceeding < ActiveRecord::Base
     CSV.generate do |csv|
       csv << column_names
       all.each do |product|
-        a = product.attributes.values_at(*column_names)
-        a.pop(3)
-        a.push(product.user_name, product.admin_name, I18n.t(product.get_type, scope: 'proceedings.type'))
+        a = [product.user_name, product.admin_name, I18n.t(product.get_type, scope: 'proceedings.type'), I18n.l(product.created_at, format: :version)]
         csv << a
       end
     end
