@@ -21,7 +21,7 @@ private
       [
         auxiliary.code,
         auxiliary.name,
-        link_to_if(auxiliary.account, auxiliary.account_code, auxiliary.account, title: auxiliary.account_name),
+        link_to_if(auxiliary.account, auxiliary.account_name, auxiliary.account, title: auxiliary.account_code),
         type_status(auxiliary.status),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), auxiliary, class: 'btn btn-default btn-xs') + ' ' +
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, auxiliary], class: 'btn btn-primary btn-xs') + ' ' +
@@ -47,7 +47,7 @@ private
   end
 
   def sort_column
-    columns = %w[auxiliaries.code auxiliaries.name accounts.code status]
+    columns = %w[auxiliaries.code auxiliaries.name accounts.name status]
     columns[params[:iSortCol_0].to_i]
   end
 

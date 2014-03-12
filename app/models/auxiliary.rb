@@ -30,7 +30,7 @@ class Auxiliary < ActiveRecord::Base
     array = includes(:account).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = search_column == 'account' ? 'accounts.code' : "auxiliaries.#{search_column}"
+      type_search = search_column == 'account' ? 'accounts.name' : "auxiliaries.#{search_column}"
       array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
     end
     array
@@ -43,7 +43,7 @@ class Auxiliary < ActiveRecord::Base
       all.each do |product|
         a = product.attributes.values_at(*column_names)
         a.pop(2)
-        a.push(product.account_code, h.type_status(product.status))
+        a.push(product.account_name, h.type_status(product.status))
         csv << a
       end
     end
