@@ -22,6 +22,7 @@ private
         proceeding.user_name,
         proceeding.admin_name,
         I18n.t(proceeding.get_type, scope: 'proceedings.type'),
+        I18n.l(proceeding.created_at, format: :version),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), proceeding, class: 'btn btn-default btn-xs')
       ]
     end
@@ -44,7 +45,7 @@ private
   end
 
   def sort_column
-    columns = %w[users.name admins_proceedings.name proceeding_type]
+    columns = %w[users.name admins_proceedings.name proceeding_type created_at]
     columns[params[:iSortCol_0].to_i]
   end
 

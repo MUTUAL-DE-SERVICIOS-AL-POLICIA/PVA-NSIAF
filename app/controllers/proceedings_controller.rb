@@ -3,7 +3,7 @@ class ProceedingsController < ApplicationController
 
   # GET /proceedings
   def index
-    format_to('proceedings', ProceedingsDatatable, ['user', 'admin', 'proceeding_type'])
+    format_to('proceedings', ProceedingsDatatable, ['user', 'admin', 'proceeding_type', 'created_at'])
   end
 
   # GET /proceedings/1
