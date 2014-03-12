@@ -38,7 +38,13 @@
       %dd= type_status(@user.status)
   .col-lg-8.col-md-7.col-sm-12
     - if @user.assets.present?
+      .pull-right
+        Descargar:
+        .btn-group.btn-group-xs
+          = button_tag 'CSV', class: 'download-assets btn btn-default', data: { url: '#' }
+          = button_tag 'PDF', class: 'download-assets btn btn-default', data: { url: '#' }
       %h4 Activos Fijos Asignados
+
       %table.table.table-stripped.table-condensed
         %thead
           %tr
