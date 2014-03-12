@@ -34,7 +34,7 @@ class ProceedingsController < ApplicationController
     @proceeding = Proceeding.new(proceeding_params)
     @proceeding.admin_id = current_user.id
     respond_to do |format|
-      if @proceeding.save
+      if @proceeding.asset_ids.present? && @proceeding.save
         format.js
       else
         format.js

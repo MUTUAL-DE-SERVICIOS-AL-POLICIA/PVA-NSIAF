@@ -12,8 +12,6 @@ class Proceeding < ActiveRecord::Base
   has_many :asset_proceedings
   has_many :assets, through: :asset_proceedings
 
-  validates :assets, presence: true
-
   after_create :update_assignations
 
   has_paper_trail on: [:destroy]
