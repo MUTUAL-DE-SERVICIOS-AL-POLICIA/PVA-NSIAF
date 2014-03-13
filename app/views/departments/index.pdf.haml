@@ -1,11 +1,10 @@
 %table.table
   %thead
     %tr
-      %th Código
-      %th Nombre
-      %th Cargo
-      %th Edificio
-      %th Estado
+      %th= Department.human_attribute_name('code')
+      %th= Department.human_attribute_name('name')
+      %th= Department.human_attribute_name('building')
+      %th= Department.human_attribute_name('status')
   %tbody
     - @array.each do |department|
       %tr
