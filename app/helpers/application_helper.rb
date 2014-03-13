@@ -1,12 +1,41 @@
 module ApplicationHelper
+  def assets_json(assets, user, assigned = false)
+    assets = assets.each_with_index.map do |a, index|
+      { index: index + 1, id: a.id, description: a.description, code: a.code}
+    end
+    title = 'Asignar Activos Fijos'
+    title = 'Devolución de Activos Fijos' if assigned == true
+    { assets: assets.as_json, user_name: user.name, user_title: user.title, devolution: assigned, title: title }
+  end
   ##
   # Mime-types para los archivos *.dbf
   def dbf_mime_types
     %w(application/dbase application/x-dbase application/dbf application/x-dbf zz-application/zz-winassoc-dbf)
   end
 
+  def get_buildings
+    Building.all.map { |b| [b.name, b.id] }
+  end
+
   def get_i18n_roles
     User::ROLES.map { |r| [t(r, scope: 'users.roles'), r] }
+  end
+
+  def is_pdf?
+    params['format'] == 'pdf'
+  end
+
+  def proceeding_to_json(proceeding)
+    assets = proceeding.assets.each_with_index.map do |a, index|
+      { index: index + 1, id: a.id, description: a.description, code: a.code }
+    end
+    {
+      admin_name: proceeding.admin_name.titleize,
+      assets: assets.to_json,
+      proceeding_date: I18n.l(proceeding.created_at.to_date, format: :long),
+      devolution: proceeding.is_devolution?,
+      user_name: proceeding.user_name.titleize
+    }
   end
 
   def submit_and_cancel(url)
@@ -61,9 +90,9 @@ module ApplicationHelper
 
   def links_actions(user)
     unless user.role == 'super_admin'
-      link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-sm') + ' ' +
-      link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-sm') + ' ' +
-      link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-sm', data: data_link(user))
+      link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-xs') + ' ' +
+      link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-xs') + ' ' +
+      link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-xs', data: data_link(user))
     end
   end
 

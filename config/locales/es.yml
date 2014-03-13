@@ -60,6 +60,8 @@ es:
       create: "Nuevo Activo"
       edit: "Editar Activo"
       update: "Editar Activo"
+      modal: "Baja de Activo"
+      confirm-deactivate: "<strong>%{name}</strong>"
   auxiliaries:
     title:
       title: "Auxiliares"
@@ -84,6 +86,9 @@ es:
       confirm-activate: "¿Está seguro de Activar el edificio <strong>%{name}</strong>?"
       confirm-deactivate: "¿Está seguro de Desactivar el edificio <strong>%{name}</strong>?"
       confirm-cannot_disable: "No se puede desactivar el edificio <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO activado</strong>"
+  declines:
+    title:
+      title: "Bajas"
   departments:
     title:
       title: "Departamentos"
@@ -110,6 +115,12 @@ es:
     message_html: '<ul><li><b>%{inserted}</b> registros insertados</li><li><b>%{no_inserted}</b> registros no insertados</li></ul>'
     title:
       title: "Migración"
+  proceedings:
+    title:
+      title: "Actas"
+    type:
+      assignation: "Asignación"
+      devolution: "Devolución"
   users:
     roles:
       super_admin: "Super Administrador"
@@ -129,8 +140,10 @@ es:
     title:
       title: "Histórico"
     active: 'Activo'
+    assignation: 'Asignación'
     create: 'Creado'
     destroy: 'Eliminación'
+    devolution: 'Devolución'
     inactive: 'Inactivo'
     login: 'Iniciar Sesión'
     logout: 'Cerrar Sesión'
@@ -243,6 +256,7 @@ es:
       building: "Edificio"
       department: "Departamento"
       entity: "Entidad"
+      proceeding: "Acta"
       user: "Usuario"
 
     attributes:
@@ -258,10 +272,20 @@ es:
         code: "Código"
         name: "Nombre"
         account: "Cuenta"
+        status: "Estado"
       building:
         code: "Código"
         entity: "Entidad"
         name: "Nombre"
+      decline:
+        asset_code: "Activo"
+        account_code: "Cuenta"
+        auxiliary_code: "Auxiliar"
+        department_code: "Departamento"
+        user_code: "Usuario"
+        description: "Descripción"
+        reason: "Motivo"
+        user_id: "Administrador"
       department:
         code: "Código"
         name: "Nombre"
@@ -271,6 +295,11 @@ es:
         acronym: "Sigla"
         code: "Código"
         name: "Nombre"
+      proceeding:
+        user_id: "Usuario"
+        admin_id: "Administrador"
+        created_at: "Fecha"
+        proceeding_type: "Tipo"
       user:
         code: "Código"
         name: "Nombre"
@@ -285,6 +314,7 @@ es:
         department: "Departamento"
         role: "Rol"
         current_password: "Contraseña Actual"
+        status: "Estado"
       version:
         item_id: "Código"
         created_at: "Fecha"

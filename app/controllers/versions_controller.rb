@@ -2,9 +2,6 @@ class VersionsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: VersionsDatatable.new(view_context) }
-    end
+    format_to('versions', VersionsDatatable, ['id', 'item_id', 'created_at', 'event', 'whodunnit', 'item_type'])
   end
 end

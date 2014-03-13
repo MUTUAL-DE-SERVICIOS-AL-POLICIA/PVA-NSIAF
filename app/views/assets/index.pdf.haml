@@ -1,0 +1,14 @@
+%h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed
+  %thead
+    %tr
+      %th= Asset.human_attribute_name('code')
+      %th= Asset.human_attribute_name('description')
+      %th= Asset.human_attribute_name('user')
+  %tbody
+    - @array.each do |asset|
+      %tr
+        %td{ style: 'white-space: nowrap;' }= asset.code
+        %td= asset.description
+        %td= asset.user_name

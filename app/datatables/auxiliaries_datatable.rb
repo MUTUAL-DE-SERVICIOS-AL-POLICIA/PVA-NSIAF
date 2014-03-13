@@ -21,11 +21,11 @@ private
       [
         auxiliary.code,
         auxiliary.name,
-        link_to_if(auxiliary.account, auxiliary.account_code, auxiliary.account, title: auxiliary.account_name),
+        link_to_if(auxiliary.account, auxiliary.account_name, auxiliary.account, title: auxiliary.account_code),
         type_status(auxiliary.status),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), auxiliary, class: 'btn btn-default btn-sm') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, auxiliary], class: 'btn btn-primary btn-sm') + ' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(auxiliary.status)}") + title_status(auxiliary.status), '#', class: 'btn btn-warning btn-sm', data: data_link(auxiliary))
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), auxiliary, class: 'btn btn-default btn-xs') + ' ' +
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, auxiliary], class: 'btn btn-primary btn-xs') + ' ' +
+        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(auxiliary.status)}") + title_status(auxiliary.status), '#', class: 'btn btn-warning btn-xs', data: data_link(auxiliary))
       ]
     end
   end
@@ -35,13 +35,7 @@ private
   end
 
   def fetch_array
-    array = Auxiliary.includes(:account).order("#{sort_column} #{sort_direction}")
-    array = array.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      type_search = params[:search_column] == 'account' ? 'accounts.code' : "auxiliaries.#{params[:search_column]}"
-      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
-    end
-    array
+    Auxiliary.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page
@@ -53,7 +47,7 @@ private
   end
 
   def sort_column
-    columns = %w[auxiliaries.code auxiliaries.name accounts.code status]
+    columns = %w[auxiliaries.code auxiliaries.name accounts.name status]
     columns[params[:iSortCol_0].to_i]
   end
 

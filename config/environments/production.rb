@@ -27,6 +27,7 @@ Nsiaf::Application.configure do
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
+  # http://stackoverflow.com/questions/7275636/rails-3-1-0-actionviewtemplateerror-application-css-isnt-precompiled
   config.assets.compile = false
 
   # Generate digests for assets URLs.
@@ -59,7 +60,7 @@ Nsiaf::Application.configure do
 
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  config.assets.precompile += %w( login.css )
+  config.assets.precompile += %w( login.css pdf.css pdf.js )
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

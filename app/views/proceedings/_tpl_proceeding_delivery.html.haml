@@ -1,0 +1,48 @@
+%script{ id: 'tpl-proceeding-delivery', type: 'text/html' }
+  .row
+    .col-md-offset-2.col-md-8
+      %h1.proceeding-title.text-center
+        {{^devolution}}
+        Acta de Entrega
+        {{/devolution}}
+        {{#devolution}}
+        Acta de Devolución
+        {{/devolution}}
+
+      %p.proceeding-description.text-justify
+        {{^devolution}}
+        Yo, {{adminName}} Encargado de Activos Fijos, procedo hacer la entrega de los siguientes Activos al Señor(a) {{userName}}.
+        {{/devolution}}
+        {{#devolution}}
+        Yo, {{userName}} procedo hacer la devolución de los siguientes Activos al Encargado de Activos Fijos {{adminName}}.
+        {{/devolution}}
+      %table.table.table-striped.table-condensed.proceeding-assets
+        %thead
+          %tr
+            %th.col-sm-1
+            %th.col-sm-9 Descripción
+            %th.col-sm-2 Código
+        %tbody
+          {{#assets}}
+          %tr
+            %td
+              {{index}}
+            %td {{description}}
+            %td {{code}}
+          {{/assets}}
+
+      %p.proceeding-date.text-right
+        La Paz, {{proceedingDate}}
+
+      .proceeding-signature
+        %table{ style: 'width: 100%' }
+          %tr
+            %td.text-center
+              %p _______________________
+              %p ENTREGUÉ CONFORME
+            %td.text-center
+              %p _______________________
+              %p Vo. Bo.
+            %td.text-center
+              %p _______________________
+              %p RECIBÍ CONFORME

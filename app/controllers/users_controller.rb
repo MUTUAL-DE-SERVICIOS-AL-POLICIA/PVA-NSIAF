@@ -1,14 +1,11 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-  before_action :set_user, only: [:show, :edit, :update, :change_status]
+  before_action :set_user, only: [:show, :edit, :update, :change_status, :csv, :pdf]
 
   # GET /users
   # GET /users.json
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: UsersDatatable.new(view_context) }
-    end
+    format_to('users', UsersDatatable)
   end
 
   # GET /users/1
@@ -76,6 +73,25 @@ class UsersController < ApplicationController
     render 'shared/welcome'
   end
 
+  def download
+    filename = @user.name.parameterize || 'activos'
+    respond_to do |format|
+      format.html { render nothing: true }
+      format.csv do
+        send_data @user.assets.to_csv,
+          filename: "#{filename}.csv",
+          type: 'text/csv'
+      end
+      format.pdf do
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               margin: { top: 15, bottom: 15, left: 20, right: 15 }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -90,4 +106,6 @@ class UsersController < ApplicationController
         params.require(:user).permit(:code, :name, :title, :ci, :username, :email, :password, :password_confirmation, :phone, :mobile, :department_id)
       end
     end
+
+
 end

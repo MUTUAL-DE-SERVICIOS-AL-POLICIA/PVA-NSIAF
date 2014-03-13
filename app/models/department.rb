@@ -10,7 +10,7 @@ class Department < ActiveRecord::Base
   belongs_to :building
   has_many :users
 
-  validates :code, presence: true, uniqueness: { scope: :building_id }
+  validates :code, presence: true, uniqueness: { scope: :building_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z|\"|\.|-/u }, allow_blank: true
   validates :building_id, presence: true
 
@@ -24,6 +24,12 @@ class Department < ActiveRecord::Base
     building.present? ? building.name : ''
   end
 
+  def self.search_by(building_id)
+    departments = []
+    departments = where(building_id: building_id) if building_id.present?
+    [['', '--']] + departments.map { |d| [d.id, d.name] }
+  end
+
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'building')]
@@ -32,6 +38,32 @@ class Department < ActiveRecord::Base
   def verify_assignment
     total_users = users.map{|u| u.status.to_i}.sum
     total_users > 0 ? true : false
+  end
+
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
+    array = includes(:building).order("#{sort_column} #{sort_direction}")
+    array = array.page(page).per_page(per_page) if per_page.present?
+    if sSearch.present?
+      type_search = search_column == 'building' ? 'buildings.name' : "departments.#{search_column}"
+      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:building)
+    end
+    array
+  end
+
+  def self.to_csv
+    columns = %w(code name building status)
+    h = ApplicationController.helpers
+    CSV.generate do |csv|
+      csv << columns.map { |c| Department.human_attribute_name(c) }
+      all.each do |department|
+        a = Array.new
+        a << department.code
+        a << department.name
+        a << department.building_name
+        a << h.type_status(department.status)
+        csv << a
+      end
+    end
   end
 
   private

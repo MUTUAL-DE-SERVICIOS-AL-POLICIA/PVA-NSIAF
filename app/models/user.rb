@@ -20,16 +20,16 @@ class User < ActiveRecord::Base
 
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
-    m.validates :code, presence: true, uniqueness: { scope: :department_id }
+    m.validates :code, presence: true, uniqueness: { scope: :department_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     m.validates :name, :title, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
-    m.validates :ci, uniqueness: true, numericality: { only_integer: true }, allow_blank: true
+    m.validates :ci, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_blank: true
     m.validates :username, presence: true, length: {minimum: 4, maximum: 128}, uniqueness: true, format: { with: /\A[a-z]+\z/ }
     m.validates :phone, :mobile, numericality: { only_integer: true }, allow_blank: true
     m.validates :department_id, presence: true
   end
 
   with_options if: :is_migrate? do |m|
-    m.validates :code, presence: true, uniqueness: { scope: :department_id }
+    m.validates :code, presence: true, uniqueness: { scope: :department_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     m.validates :department_id, presence: true
   end
 
@@ -67,6 +67,14 @@ class User < ActiveRecord::Base
     department.present? ? department.name : ''
   end
 
+  def depto_code
+    "#{department_code}#{code}"
+  end
+
+  def depto_name
+    "#{department_name} - #{name}"
+  end
+
   def email_required?
     false
   end
@@ -87,6 +95,12 @@ class User < ActiveRecord::Base
     self.role == 'super_admin'
   end
 
+  def not_assigned_assets
+    # TODO Tiene que definirse que activos no están asignados,
+    # tambien se debe tomar en cuenta las auto-asignaciones del admin
+    assets
+  end
+
   def password_changed?
     password_change == true
   end
@@ -101,6 +115,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.search_by(department_id)
+    users = []
+    users = where(department_id: department_id) if department_id.present?
+    [['', '--']] + users.map { |u| [u.id, u.name] }
+  end
+
   def self.set_columns(cu = nil)
     h = ApplicationController.helpers
     if cu
@@ -112,6 +132,30 @@ class User < ActiveRecord::Base
 
   def verify_assignment
     assets.present?
+  end
+
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user)
+    array = current_user.users.includes(:department).order("#{sort_column} #{sort_direction}")
+    array = array.page(page).per_page(per_page) if per_page.present?
+    if sSearch.present?
+      type_search = search_column == 'department' ? 'departments.name' : "users.#{search_column}"
+      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+    end
+    array
+  end
+
+  def self.to_csv
+    columns = %w(code name title ci email username phone mobile department status)
+    h = ApplicationController.helpers
+    CSV.generate do |csv|
+      csv << columns.map { |c| self.human_attribute_name(c) }
+      all.each do |user|
+        a = user.attributes.values_at(*columns)
+        a.pop(2)
+        a.push(user.department_name, h.type_status(user.status))
+        csv << a
+      end
+    end
   end
 
   private

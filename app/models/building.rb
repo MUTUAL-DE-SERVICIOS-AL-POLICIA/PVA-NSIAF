@@ -33,6 +33,32 @@ class Building < ActiveRecord::Base
     total_departments > 0 ? true : false
   end
 
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
+    array = includes(:entity).order("#{sort_column} #{sort_direction}")
+    array = array.page(page).per_page(per_page) if per_page.present?
+    if sSearch.present?
+      type_search = search_column == 'entity' ? 'entities.code' : "buildings.#{search_column}"
+      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+    end
+    array
+  end
+
+  def self.to_csv
+    columns = %w(code name entity status)
+    h = ApplicationController.helpers
+    CSV.generate do |csv|
+      csv << columns.map { |c| self.human_attribute_name(c) }
+      all.each do |building|
+        a = Array.new
+        a << building.code
+        a << building.name
+        a << building.entity_code
+        a << h.type_status(building.status)
+        csv << a
+      end
+    end
+  end
+
   private
 
   ##

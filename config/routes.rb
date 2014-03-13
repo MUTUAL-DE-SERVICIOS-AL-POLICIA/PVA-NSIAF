@@ -1,7 +1,19 @@
 Nsiaf::Application.routes.draw do
+  resources :proceedings, only: [:index, :show, :create]
+
+  resources :declines, only: [:index]
+
   resources :versions, only: [:index]
 
-  resources :assets
+  resources :assets, except: [:destroy] do
+    post :change_status, on: :member
+    get :users, on: :collection
+    get :departments, on: :collection
+    get :assigned, on: :collection
+    get :not_assigned, on: :collection
+    get :assign, on: :collection
+    get :deallocate, on: :collection
+  end
 
   resources :auxiliaries, except: [:destroy] do
     post :change_status, on: :member
@@ -22,6 +34,7 @@ Nsiaf::Application.routes.draw do
   resources :users, except: [:destroy] do
     post :change_status, on: :member
     get :welcome, on: :collection
+    get :download, on: :member
   end
 
   get '/dashboard', to: 'dashboard#index', as: :dashboard

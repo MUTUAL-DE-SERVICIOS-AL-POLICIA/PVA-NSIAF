@@ -5,10 +5,7 @@ class EntitiesController < ApplicationController
   # GET /entities
   # GET /entities.json
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: EntitiesDatatable.new(view_context) }
-    end
+    format_to('entities', EntitiesDatatable, ['code', 'name', 'acronym'])
   end
 
   def show

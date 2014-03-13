@@ -14,4 +14,22 @@ class ApplicationController < ActionController::Base
     method = "#{resource}_params"
     params[resource] &&= send(method) if respond_to?(method, true)
   end
+
+  def format_to(name_model, datatable)
+    respond_to do |format|
+      format.html { render '/shared/index' }
+      format.json { render json: datatable.new(view_context) }
+      column_order = name_model == 'proceedings' ? 'users.name' : name_model == 'versions' ? 'id' : 'code'
+      @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current_user)
+      filename = "VSIAF-#{t("#{name_model}.title.title")}".parameterize
+      format.csv { send_data @array.to_csv, filename: "#{filename}.csv" }
+      format.pdf do
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               margin: { top: 15, bottom: 15, left: 15, right: 15 }
+      end
+    end
+  end
 end

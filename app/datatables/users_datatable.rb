@@ -41,24 +41,19 @@ private
         user.mobile,
         link_to_if(user.department, user.department_name, user.department, title: user.department_code),
         type_status(user.status),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-sm') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-sm') + ' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-sm', data: data_link(user))
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-xs') + ' ' +
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-xs') + ' ' +
+        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-xs', data: data_link(user))
       ]
     end
   end
+
   def array
     @users ||= fetch_array
   end
 
   def fetch_array
-    array = current_user.users.includes(:department).order("#{sort_column} #{sort_direction}")
-    array = array.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      type_search = params[:search_column] == 'department' ? 'departments.name' : "users.#{params[:search_column]}"
-      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
-    end
-    array
+    User.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], current_user)
   end
 
   def page

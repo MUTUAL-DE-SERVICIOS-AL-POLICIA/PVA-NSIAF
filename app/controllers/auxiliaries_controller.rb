@@ -5,10 +5,7 @@ class AuxiliariesController < ApplicationController
   # GET /auxiliaries
   # GET /auxiliaries.json
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: AuxiliariesDatatable.new(view_context) }
-    end
+    format_to('auxiliaries', AuxiliariesDatatable)
   end
 
   # GET /auxiliaries/1

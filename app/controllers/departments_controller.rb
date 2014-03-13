@@ -5,10 +5,7 @@ class DepartmentsController < ApplicationController
   # GET /departments
   # GET /departments.json
   def index
-    respond_to do |format|
-      format.html { render '/shared/index' }
-      format.json { render json: DepartmentsDatatable.new(view_context) }
-    end
+    format_to('departments', DepartmentsDatatable)
   end
 
   # GET /departments/1

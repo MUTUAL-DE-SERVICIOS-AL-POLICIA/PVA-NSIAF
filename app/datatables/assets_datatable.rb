@@ -1,5 +1,5 @@
 class AssetsDatatable
-  delegate :params, :link_to, :link_to_if, :content_tag, to: :@view
+  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, to: :@view
 
   def initialize(view)
     @view = view
@@ -22,8 +22,8 @@ private
         asset.code,
         asset.description,
         link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), asset, class: 'btn btn-default btn-sm') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-sm')
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), asset, class: 'btn btn-default btn-xs') + ' ' +
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-xs') + ' ' + unsubscribe(asset)
       ]
     end
   end
@@ -33,17 +33,7 @@ private
   end
 
   def fetch_array
-    array = Asset.includes(:user).order("#{sort_column} #{sort_direction}")
-    array = array.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      if params[:search_column] == 'user'
-        type_search = 'users.name'
-      else
-        type_search = "assets.#{params[:search_column]}"
-      end
-      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
-    end
-    array
+    Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page
@@ -61,5 +51,12 @@ private
 
   def sort_direction
     params[:sSortDir_0] == "desc" ? "desc" : "asc"
+  end
+
+  def unsubscribe(asset)
+    if current_user.is_admin?
+      url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}") + 'Dar baja', '#', class: 'btn btn-warning btn-xs', data: data_link(asset))
+    end
+    url || ''
   end
 end

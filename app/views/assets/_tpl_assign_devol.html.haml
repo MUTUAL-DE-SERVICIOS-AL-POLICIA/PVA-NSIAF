@@ -1,0 +1,60 @@
+%script{ type: 'text/html', id: 'tpl_assig_devol' }
+  %h3.text-center {{title}}
+  {{#devolution}}
+  %h4
+    %span.text-muted Funcionario:
+    {{user_name}}
+  %h4
+    %span.text-muted Cargo:
+    {{user_title}}
+  {{/devolution}}
+  %form.selected-assets
+    %table.table.table-striped.table-hover.table-condensed
+      %thead
+        %tr
+          %th.col-sm-1
+          %th.col-sm-9 Descripción
+          %th.col-sm-2 Código
+          %th
+      %tbody
+        {{#assets}}
+        %tr{ id: 'asset_{{id}}' }
+          %td
+            {{index}}
+            = hidden_field_tag 'assets[]', nil
+          %td {{description}}
+          %td {{code}}
+          %td
+            %span.text-muted.glyphicon.glyphicon-unchecked
+        {{/assets}}
+
+  .row
+    .col-md-12.col-sm-12
+      %form.asset-code{ role: 'form' }
+        .row
+          .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
+            = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Activo', autofocus: true
+          .col-md-3.col-sm-3.col-xs-3
+            = button_tag class: 'btn btn-success col-md-12 btn-lg', id: 'btn-send' do
+              %span.glyphicon.glyphicon-ok
+              Enviar
+    {{^devolution}}
+    .col-md-12.col-sm-12
+      %h4 A:
+    .col-md-6.col-sm-6
+      %h4
+        %span.text-muted Funcionario:
+        %strong {{user_name}}
+    .col-md-6.col-sm-6
+      %h4
+        %span.text-muted Cargo:
+        %strong {{user_title}}
+    {{/devolution}}
+    .action-buttons.col-md-12.col-sm-12.text-center
+      = button_tag class: 'btn btn-default', id: 'btn_continue' do
+        %span.glyphicon.glyphicon-list-alt
+        Continuar
+
+      = button_tag class: 'btn btn-danger', id: 'btn_cancel_assig' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar

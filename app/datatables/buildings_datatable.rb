@@ -23,9 +23,9 @@ private
         building.name,
         content_tag(:span, building.entity_code, title: building.entity_name),
         type_status(building.status),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), building, class: 'btn btn-default btn-sm') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, building], class: 'btn btn-primary btn-sm') + ' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(building.status)}") + title_status(building.status), '#', class: 'btn btn-warning btn-sm', data: data_link(building))
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), building, class: 'btn btn-default btn-xs') + ' ' +
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, building], class: 'btn btn-primary btn-xs') + ' ' +
+        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(building.status)}") + title_status(building.status), '#', class: 'btn btn-warning btn-xs', data: data_link(building))
       ]
     end
   end
@@ -35,13 +35,7 @@ private
   end
 
   def fetch_array
-    array = Building.includes(:entity).order("#{sort_column} #{sort_direction}")
-    array = array.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      type_search = params[:search_column] == 'entity' ? 'entities.code' : "buildings.#{params[:search_column]}"
-      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%")
-    end
-    array
+    Building.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page

@@ -1,5 +1,5 @@
 class Asset < ActiveRecord::Base
-  include ImportDbf, Migrated, VersionLog
+  include ImportDbf, Migrated, VersionLog, ManageStatus
 
   CORRELATIONS = {
     'CODIGO' => 'code',
@@ -9,13 +9,16 @@ class Asset < ActiveRecord::Base
   belongs_to :auxiliary
   belongs_to :user
 
+  has_many :asset_proceedings
+  has_many :proceedings, through: :asset_proceedings
+
   with_options if: :is_not_migrate? do |m|
-    m.validates :code, presence: true, uniqueness: { scope: [:auxiliary_id, :user_id] }
+    m.validates :code, presence: true, uniqueness: true
     m.validates :description, :auxiliary_id, :user_id, presence: true
   end
 
   with_options if: :is_migrate? do |m|
-    m.validates :code, presence: true, uniqueness: { scope: [:auxiliary_id, :user_id] }
+    m.validates :code, presence: true, uniqueness: true
     m.validates :description, presence: true
   end
 
@@ -44,6 +47,33 @@ class Asset < ActiveRecord::Base
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user')]
+  end
+
+  def verify_assignment
+    false
+  end
+
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
+    array = includes(:user).order("#{sort_column} #{sort_direction}").where(status: '1')
+    array = array.page(page).per_page(per_page) if per_page.present?
+    if sSearch.present?
+      type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
+      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+    end
+    array
+  end
+
+  def self.to_csv
+    columns = %w(code description user)
+    CSV.generate do |csv|
+      csv << columns.map { |c| self.human_attribute_name(c) }
+      all.each do |asset|
+        a = asset.attributes.values_at(*columns)
+        a.pop
+        a.push(asset.user_name)
+        csv << a
+      end
+    end
   end
 
   private

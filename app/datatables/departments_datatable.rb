@@ -23,9 +23,9 @@ private
         department.name,
         link_to_if(department.building, department.building_name, department.building, title: department.building_code),
         type_status(department.status),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), department, class: 'btn btn-default btn-sm') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, department], class: 'btn btn-primary btn-sm') + ' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(department.status)}") + title_status(department.status), '#', class: 'btn btn-warning btn-sm', data: data_link(department))
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), department, class: 'btn btn-default btn-xs') + ' ' +
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, department], class: 'btn btn-primary btn-xs') + ' ' +
+        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(department.status)}") + title_status(department.status), '#', class: 'btn btn-warning btn-xs', data: data_link(department))
       ]
     end
   end
@@ -35,13 +35,7 @@ private
   end
 
   def fetch_array
-    array = Department.includes(:building).order("#{sort_column} #{sort_direction}")
-    array = array.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      type_search = params[:search_column] == 'building' ? 'buildings.name' : "departments.#{params[:search_column]}"
-      array = array.where("#{type_search} like :search", search: "%#{params[:sSearch]}%").references(:building)
-    end
-    array
+    Department.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page

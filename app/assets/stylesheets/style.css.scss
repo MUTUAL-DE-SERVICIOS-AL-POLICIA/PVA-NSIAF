@@ -3,6 +3,8 @@
 .button_new {
   padding-left: 0;
   margin-bottom: 20px;
+
+  span.controller_name{ display: none; }
 }
 
 .table .glyphicon { margin-right: 3px; }
@@ -18,11 +20,15 @@ div.DTTT_container {
   width: 98%;
 }
 
-.container{
+.container {
   width: 730px;
 
-  .j_bottom{
+  .j_bottom {
     margin-top: 50px;
     text-align: center;
   }
+}
+.title_message {
+  float: left;
+  margin-bottom: 25px;
 }

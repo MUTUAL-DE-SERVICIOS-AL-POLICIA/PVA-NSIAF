@@ -58,9 +58,9 @@ namespace :deploy do
     end
   end
 
-  %w(seed drop create setup reset).each do |command|
+  %w(seed drop create setup reset rollback).each do |command|
     desc "Run rake db:#{command}"
-    task command do
+    task "db:#{command}" do
       on roles(:db), in: :sequence, wait: 5 do
         within release_path do
           with rails_env: :production do

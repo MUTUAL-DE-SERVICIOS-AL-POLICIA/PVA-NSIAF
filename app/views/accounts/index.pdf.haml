@@ -1,0 +1,12 @@
+%h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed
+  %thead
+    %tr
+      %th= Account.human_attribute_name('code')
+      %th= Account.human_attribute_name('name')
+  %tbody
+    - @array.each do |account|
+      %tr
+        %td= account.code
+        %td= account.name

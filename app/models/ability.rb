@@ -15,6 +15,7 @@ class Ability
       can :manage, Account
       can :manage, Auxiliary
       can :manage, Asset
+      can :manage, Decline
       can :index, :dbf
       can :import, :dbf
     end
