@@ -74,12 +74,11 @@ class UsersController < ApplicationController
   end
 
   def download
-    columns = ['code', 'description', 'user']
     filename = @user.name.parameterize || 'activos'
     respond_to do |format|
       format.html { render nothing: true }
       format.csv do
-        send_data @user.assets.to_csv(columns),
+        send_data @user.assets.to_csv,
           filename: "#{filename}.csv",
           type: 'text/csv'
       end
