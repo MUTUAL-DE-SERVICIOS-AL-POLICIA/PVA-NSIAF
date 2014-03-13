@@ -272,6 +272,7 @@ es:
         code: "Código"
         name: "Nombre"
         account: "Cuenta"
+        status: "Estado"
       building:
         code: "Código"
         entity: "Entidad"
@@ -313,6 +314,7 @@ es:
         department: "Departamento"
         role: "Rol"
         current_password: "Contraseña Actual"
+        status: "Estado"
       version:
         item_id: "Código"
         created_at: "Fecha"

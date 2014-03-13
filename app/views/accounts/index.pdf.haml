@@ -1,8 +1,10 @@
-%table.table
+%h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed
   %thead
     %tr
-      %th Código
-      %th Nombre
+      %th= Account.human_attribute_name('code')
+      %th= Account.human_attribute_name('name')
   %tbody
     - @array.each do |account|
       %tr

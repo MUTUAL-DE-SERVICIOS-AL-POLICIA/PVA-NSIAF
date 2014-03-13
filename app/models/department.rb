@@ -50,14 +50,17 @@ class Department < ActiveRecord::Base
     array
   end
 
-  def self.to_csv(column_names)
+  def self.to_csv
+    columns = %w(code name building status)
     h = ApplicationController.helpers
     CSV.generate do |csv|
-      csv << column_names
-      all.each do |product|
-        a = product.attributes.values_at(*column_names)
-        a.pop(2)
-        a.push(product.building_name, h.type_status(product.status))
+      csv << columns.map { |c| Department.human_attribute_name(c) }
+      all.each do |department|
+        a = Array.new
+        a << department.code
+        a << department.name
+        a << department.building_name
+        a << h.type_status(department.status)
         csv << a
       end
     end

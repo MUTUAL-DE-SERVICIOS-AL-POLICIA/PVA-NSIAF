@@ -5,7 +5,7 @@ class AssetsController < ApplicationController
   # GET /assets
   # GET /assets.json
   def index
-    format_to('assets', AssetsDatatable, ['code', 'description', 'user'])
+    format_to('assets', AssetsDatatable)
   end
 
   # GET /assets/1

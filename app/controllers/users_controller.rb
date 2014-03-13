@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    format_to('users', UsersDatatable, ['code', 'name', 'title', 'ci', 'email', 'username', 'phone', 'mobile', 'department', 'status'])
+    format_to('users', UsersDatatable)
   end
 
   # GET /users/1
@@ -74,12 +74,11 @@ class UsersController < ApplicationController
   end
 
   def download
-    columns = ['code', 'description', 'user']
     filename = @user.name.parameterize || 'activos'
     respond_to do |format|
       format.html { render nothing: true }
       format.csv do
-        send_data @user.assets.to_csv(columns),
+        send_data @user.assets.to_csv,
           filename: "#{filename}.csv",
           type: 'text/csv'
       end
