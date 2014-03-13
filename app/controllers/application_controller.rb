@@ -21,9 +21,10 @@ class ApplicationController < ActionController::Base
       format.json { render json: datatable.new(view_context) }
       column_order = name_model == 'proceedings' ? 'users.name' : name_model == 'versions' ? 'id' : 'code'
       @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current_user)
-      format.csv { render text: @array.to_csv(columns) }
+      filename = "VSIAF-#{t("#{name_model}.title.title")}".parameterize
+      format.csv { send_data @array.to_csv(columns), filename: "#{filename}.csv" }
       format.pdf do
-        render pdf: "VSIAF-#{t("#{name_model}.title.title")}",
+        render pdf: filename,
                disposition: 'attachment',
                layout: 'pdf.html',
                page_size: 'Letter',

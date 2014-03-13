@@ -7,6 +7,6 @@
   %tbody
     - @array.each do |asset|
       %tr
-        %td= asset.code
+        %td{ style: 'white-space: nowrap;' }= asset.code
         %td= asset.description
         %td= asset.user_name
