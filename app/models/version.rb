@@ -1,6 +1,4 @@
 class Version < PaperTrail::Version
-  include ImportDbf
-
   def item_code
     item.present? ? (item.code || item.try(:username)) : ''
   end
@@ -35,5 +33,21 @@ class Version < PaperTrail::Version
       array = array.where("#{search_column} like :search", search: "%#{sSearch}%")
     end
     array
+  end
+
+  def self.to_csv(column_names)
+    CSV.generate do |csv|
+      csv << column_names.map { |c| Version.human_attribute_name(c) }
+      all.each do |version|
+        a = Array.new
+        a << version.id
+        a << version.item_code
+        a << I18n.l(version.created_at, format: :version)
+        a << I18n.t(version.event, scope: 'versions')
+        a << version.whodunnit_name
+        a << I18n.t(version.item_type.to_s.downcase.singularize, scope: 'activerecord.models')
+        csv << a
+      end
+    end
   end
 end
