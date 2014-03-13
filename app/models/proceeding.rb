@@ -81,12 +81,16 @@ class Proceeding < ActiveRecord::Base
     register_log(event)
   end
 
-  def self.to_csv(column_names)
-    h = ApplicationController.helpers
+  def self.to_csv
+    columns = %w(user_id admin_id proceeding_type created_at)
     CSV.generate do |csv|
-      csv << column_names
-      all.each do |product|
-        a = [product.user_name, product.admin_name, I18n.t(product.get_type, scope: 'proceedings.type'), I18n.l(product.created_at, format: :version)]
+      csv << columns.map { |c| self.human_attribute_name(c) }
+      all.each do |proceeding|
+        a = Array.new
+        a << proceeding.user_name
+        a << proceeding.admin_name
+        a << I18n.t(proceeding.get_type, scope: 'proceedings.type')
+        a << I18n.l(proceeding.created_at, format: :version)
         csv << a
       end
     end
