@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    format_to('users', UsersDatatable, ['code', 'name', 'title', 'ci', 'email', 'username', 'phone', 'mobile', 'department', 'status'])
+    format_to('users', UsersDatatable)
   end
 
   # GET /users/1

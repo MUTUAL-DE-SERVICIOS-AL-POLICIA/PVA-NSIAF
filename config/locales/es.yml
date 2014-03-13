@@ -313,6 +313,7 @@ es:
         department: "Departamento"
         role: "Rol"
         current_password: "Contraseña Actual"
+        status: "Estado"
       version:
         item_id: "Código"
         created_at: "Fecha"

@@ -1,16 +1,18 @@
-%table.table
+%h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed
   %thead
     %tr
-      %th Código
-      %th Nombre
-      %th Cargo
-      %th C.I.
-      %th Email
-      %th Usuario
-      %th Teléfono
-      %th Celular
-      %th Departamento
-      %th Estado
+      %th= User.human_attribute_name('code')
+      %th= User.human_attribute_name('name')
+      %th= User.human_attribute_name('title')
+      %th= User.human_attribute_name('ci')
+      %th= User.human_attribute_name('email')
+      %th= User.human_attribute_name('username')
+      %th= User.human_attribute_name('phone')
+      %th= User.human_attribute_name('mobile')
+      %th= User.human_attribute_name('department')
+      %th= User.human_attribute_name('status')
   %tbody
     - @array.each do |user|
       %tr
