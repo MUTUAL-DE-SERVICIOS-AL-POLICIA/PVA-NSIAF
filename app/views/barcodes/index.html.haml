@@ -1,0 +1,48 @@
+.row
+  .col-lg-offset-3.col-md-offset-2.col-lg-6.col-md-8.col-sm-12
+    %h3.col-md-offset-2.col-md-9.text-center Generar Código de Barras de Activos
+    %form.form-horizontal{ role: 'form' }
+      - if !@asset
+        .form-group
+          %label.col-md-2.col-sm-2.control-label Cuenta
+          .col-md-9.col-sm-9
+            = select_tag :building, options_for_select(get_accounts), class: 'form-control', prompt: '--', autofocus: true
+      - if !@asset && @auxiliary
+        .form-group
+          %label.col-md-2.col-sm-2.control-label Departamento
+          .col-md-9.col-sm-9
+            = select_tag :department, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
+      - if @asset
+        .form-group
+          %label.col-md-2.col-sm-2.control-label Buscar
+          .col-md-6.col-sm-6
+            = text_field_tag :q, '', class: 'form-control'
+          .col-md-3.col-sm-3
+            = select_tag :fields, options_for_select(['Código', 'Descripción', 'Usuario']), class: 'form-control'
+
+  .col-md-offset-2.col-md-8
+    %table.table.table-striped.table-hover.table-condensed
+      %thead
+        %tr
+          %th= check_box_tag 'asset_all', '{{id}}', false, title: 'Seleccionar todos'
+          %th= Asset.human_attribute_name('code')
+          %th.col-sm-6= Asset.human_attribute_name('description')
+          %th.col-sm-4= Asset.human_attribute_name('user')
+      %tbody
+        {{#assets}}
+        %tr{ id: 'asset_{{id}}' }
+          %td= check_box_tag 'assets', '{{id}}', false
+          %td {{code}}
+          %td {{description}}
+          %td {{user_name}}
+        {{/assets}}
+
+    .row
+      .action-buttons.col-md-12.col-sm-12.text-center
+        = button_tag class: 'btn btn-default', id: 'btn-print' do
+          %span.glyphicon.glyphicon-print
+          Imprimir
+
+        = button_tag class: 'btn btn-danger', id: 'btn-cancel' do
+          %span.glyphicon.glyphicon-ban-circle
+          Cancelar
