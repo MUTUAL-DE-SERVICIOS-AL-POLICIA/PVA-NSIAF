@@ -5,7 +5,7 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.json
   def index
-    format_to('accounts', AccountsDatatable, ['code', 'name'])
+    format_to('accounts', AccountsDatatable)
   end
 
   # GET /accounts/1
