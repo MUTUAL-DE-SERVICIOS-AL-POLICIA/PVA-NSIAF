@@ -1,8 +1,8 @@
 %table.table
   %thead
     %tr
-      %th Código
-      %th Nombre
+      %th= Account.human_attribute_name('code')
+      %th= Account.human_attribute_name('name')
   %tbody
     - @array.each do |account|
       %tr
