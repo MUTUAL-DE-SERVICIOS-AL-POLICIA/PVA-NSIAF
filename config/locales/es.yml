@@ -272,6 +272,7 @@ es:
         code: "Código"
         name: "Nombre"
         account: "Cuenta"
+        status: "Estado"
       building:
         code: "Código"
         entity: "Entidad"

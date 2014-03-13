@@ -36,14 +36,15 @@ class Auxiliary < ActiveRecord::Base
     array
   end
 
-  def self.to_csv(column_names)
+  def self.to_csv
+    columns = %w(code name account status)
     h = ApplicationController.helpers
     CSV.generate do |csv|
-      csv << column_names
-      all.each do |product|
-        a = product.attributes.values_at(*column_names)
+      csv << columns.map { |c| self.human_attribute_name(c) }
+      all.each do |auxiliary|
+        a = auxiliary.attributes.values_at(*columns)
         a.pop(2)
-        a.push(product.account_name, h.type_status(product.status))
+        a.push(auxiliary.account_name, h.type_status(auxiliary.status))
         csv << a
       end
     end

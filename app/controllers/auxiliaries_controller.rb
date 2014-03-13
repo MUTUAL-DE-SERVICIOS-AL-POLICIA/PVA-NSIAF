@@ -5,7 +5,7 @@ class AuxiliariesController < ApplicationController
   # GET /auxiliaries
   # GET /auxiliaries.json
   def index
-    format_to('auxiliaries', AuxiliariesDatatable, ['code', 'name', 'account', 'status'])
+    format_to('auxiliaries', AuxiliariesDatatable)
   end
 
   # GET /auxiliaries/1
