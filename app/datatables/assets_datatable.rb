@@ -1,5 +1,5 @@
 class AssetsDatatable
-  delegate :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, to: :@view
+  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, to: :@view
 
   def initialize(view)
     @view = view
@@ -23,8 +23,7 @@ private
         asset.description,
         link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code),
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), asset, class: 'btn btn-default btn-xs') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-xs') +' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}") + 'Dar baja', '#', class: 'btn btn-warning btn-xs', data: data_link(asset))
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-xs') + ' ' + unsubscribe(asset)
       ]
     end
   end
@@ -52,5 +51,12 @@ private
 
   def sort_direction
     params[:sSortDir_0] == "desc" ? "desc" : "asc"
+  end
+
+  def unsubscribe(asset)
+    if current_user.is_admin?
+      url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}") + 'Dar baja', '#', class: 'btn btn-warning btn-xs', data: data_link(asset))
+    end
+    url || ''
   end
 end
