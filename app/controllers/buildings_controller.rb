@@ -5,7 +5,7 @@ class BuildingsController < ApplicationController
   # GET /buildings
   # GET /buildings.json
   def index
-    format_to('buildings', BuildingsDatatable, ['code', 'name', 'entity', 'status'])
+    format_to('buildings', BuildingsDatatable)
   end
 
   # GET /buildings/new

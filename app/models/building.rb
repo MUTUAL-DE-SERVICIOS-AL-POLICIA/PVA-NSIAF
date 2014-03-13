@@ -43,14 +43,17 @@ class Building < ActiveRecord::Base
     array
   end
 
-  def self.to_csv(column_names)
+  def self.to_csv
+    columns = %w(code name entity status)
     h = ApplicationController.helpers
     CSV.generate do |csv|
-      csv << column_names
-      all.each do |product|
-        a = product.attributes.values_at(*column_names)
-        a.pop(2)
-        a.push(product.entity_code, h.type_status(product.status))
+      csv << columns.map { |c| self.human_attribute_name(c) }
+      all.each do |building|
+        a = Array.new
+        a << building.code
+        a << building.name
+        a << building.entity_code
+        a << h.type_status(building.status)
         csv << a
       end
     end
