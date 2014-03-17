@@ -9,7 +9,7 @@
     %tbody
       {{#assets}}
       %tr{ id: 'asset_{{id}}' }
-        %td= check_box_tag 'assets', '{{id}}', false
+        %td= check_box_tag 'assets', '{{code}}', false
         %td {{code}}
         %td {{description}}
         %td {{user_name}}
@@ -25,7 +25,6 @@
       = button_tag class: 'btn btn-default', id: 'btn-print' do
         %span.glyphicon.glyphicon-print
         Imprimir
-
-      = button_tag class: 'btn btn-danger', id: 'btn-cancel' do
+      = link_to root_path, class: 'btn btn-danger' do
         %span.glyphicon.glyphicon-ban-circle
         Cancelar

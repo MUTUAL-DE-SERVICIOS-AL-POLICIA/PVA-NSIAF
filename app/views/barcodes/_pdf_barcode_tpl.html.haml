@@ -1,0 +1,20 @@
+%script{ type: 'text/html', id: 'tpl-barcode' }
+  %h2.text-center Activos Fijos Seleccionados
+
+  .row
+    {{#assets}}
+    .col-xs-6.col-sm-4.col-md-4.col-lg-3
+      .thumbnail
+        .barcode{ style: 'margin: 5px auto 0;', data: { code: '{{code}}' } }
+          {{code}}
+    {{/assets}}
+
+  .row
+    .action-buttons.col-md-12.col-sm-12.text-center
+      = button_tag class: 'btn btn-default', id: 'btn-print-pdf' do
+        %span.glyphicon.glyphicon-print
+        Imprimir
+
+      = button_tag class: 'btn btn-danger', id: 'btn-cancel-pdf' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar

@@ -1,4 +1,4 @@
-.row
+#query-assets.row
   .col-lg-offset-3.col-md-offset-2.col-lg-6.col-md-8.col-sm-12
     %h3.col-md-offset-2.col-md-9.text-center Generar Código de Barras de Activos
     %form.form-horizontal{ role: 'form' }
@@ -22,4 +22,8 @@
 
   #pdf-assets.col-md-offset-2.col-md-8
 
+.row
+  #display-pdf-assets.col-md-offset-2.col-md-8{ style: 'display: none;' }
+
 = render 'pdf_assets_tpl'
+= render 'pdf_barcode_tpl'
