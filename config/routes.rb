@@ -3,6 +3,7 @@ Nsiaf::Application.routes.draw do
     collection do
       get :auxiliary
       get :asset
+      get :pdf
     end
   end
 

@@ -1,0 +1,27 @@
+.row
+  .col-md-offset-3.col-md-6
+    %h2.text-center Activos Fijos Seleccionados
+
+    %table#pdf-assets-print.table
+      %thead
+        %tr
+          %th.text-center
+          %th.text-center 1
+          %th.text-center 2
+          %th.text-center 3
+          %th.text-center 4
+      %tbody
+        - rows = (@assets.length / 4.to_f).ceil
+        - (1..rows).each_with_index do |e, index|
+          - limit = index * 4
+          %tr
+            %td= index + 1
+            - @assets[limit, 4].each do |asset|
+              %td
+                .barcode{ style: 'margin: 0 auto;', data: { code: asset.code.to_s } }
+                  = asset.code
+
+:coffeescript
+  $('#pdf-assets-print tr td .barcode').each (i, e) ->
+    code = $(e).data('code').toString()
+    $(e).barcode code, 'code128', { barWidth: 1, barHeight: 50 }

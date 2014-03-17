@@ -24,4 +24,27 @@ class BarcodesController < ApplicationController
       format.json { render json: Auxiliary.search_by(params[:account]) }
     end
   end
+
+  def pdf
+    @asset_ids = params[:asset_ids]
+    @assets = Asset.all
+    respond_to do |format|
+      format.pdf do
+        filename = 'barcodes'
+        render pdf: "VSIAF-#{filename}".parameterize,
+               disposition: 'attachment',
+               template: 'barcodes/show.pdf.haml',
+               show_as_html: params[:debug].present?,
+               orientation: 'Portrait',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               margin: {
+                 top: 10,
+                 bottom: 10,
+                 left: 10,
+                 right: 10
+               }
+      end
+    end
+  end
 end
