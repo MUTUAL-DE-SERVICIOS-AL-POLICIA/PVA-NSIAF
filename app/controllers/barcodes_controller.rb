@@ -10,7 +10,10 @@ class BarcodesController < ApplicationController
     @asset = true
     respond_to do |format|
       format.html { render :index }
-      format.json { render json: {} }
+      format.json do
+        assets = Asset.search_by(params[:account], params[:auxiliary])
+        render json: view_context.selected_assets_json(assets)
+      end
     end
   end
 
@@ -18,7 +21,7 @@ class BarcodesController < ApplicationController
     @auxiliary = true
     respond_to do |format|
       format.html { render :index }
-      format.json { render json: {} }
+      format.json { render json: Auxiliary.search_by(params[:account]) }
     end
   end
 end

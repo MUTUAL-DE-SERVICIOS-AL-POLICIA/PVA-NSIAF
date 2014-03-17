@@ -24,6 +24,16 @@ class Asset < ActiveRecord::Base
 
   has_paper_trail
 
+  def self.search_by(account_id, auxiliary_id)
+    if auxiliary_id.present?
+      assets = includes(:user).where(auxiliary_id: auxiliary_id)
+    elsif account_id.present?
+      assets = includes(:auxiliary, :user).where(auxiliaries: { account_id: account_id })
+    else
+      assets = self.none
+    end
+  end
+
   def auxiliary_code
     auxiliary.present? ? auxiliary.code : ''
   end

@@ -23,3 +23,4 @@
 //= require function
 //= require assets
 //= require proceedings
+//= require barcodes
