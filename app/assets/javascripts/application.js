@@ -21,6 +21,7 @@
 //= require hogan-2.0.0
 //= require jquery.chained.remote
 //= require jquery-barcode
+//= require jquery.fileDownload
 //= require function
 //= require assets
 //= require proceedings

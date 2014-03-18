@@ -2,7 +2,7 @@ jQuery ->
   barcode = new GenerateBarcodes()
 
 class GenerateBarcodes
-  asset_ids = []
+  asset_codes = []
 
   constructor: ->
     @cacheElements()
@@ -14,7 +14,9 @@ class GenerateBarcodes
     @$container = $('#pdf-assets')
     @$barcodes = $('#display-pdf-assets')
     # variables
-    @$assets_path = '/barcodes/asset'
+    @auxiliary_barcodes_path = '/barcodes/auxiliary.json'
+    @asset_barcodes_path = '/barcodes/asset'
+    @pdf_barcodes_path = '/barcodes/pdf.pdf'
     # selects, checkboxes, buttons
     @$account = $('#account')
     @$auxiliary = $('#auxiliary')
@@ -28,13 +30,14 @@ class GenerateBarcodes
     @$barcodeTpl = Hogan.compile $('#tpl-barcode').html() || ''
 
   bindEvents: ->
-    @$auxiliary.remoteChained(@$account.selector, '/barcodes/auxiliary.json')
+    @$auxiliary.remoteChained(@$account.selector, @auxiliary_barcodes_path)
     $(document).on 'change', @$account.selector, => @getAccounts()
     $(document).on 'change', @$auxiliary.selector, => @getAccounts()
     $(document).on 'change', @$assetAll.selector, => @selectAllAssets()
     $(document).on 'change', @$checkboxes.selector, (e) => @selectAsset(e)
     $(document).on 'click', @$btnPrint.selector, (e) => @displayBarcodes(e)
     $(document).on 'click', @$btnCancelPdf.selector, (e) => @showFilter(e)
+    $(document).on 'click', @$btnPrintPdf.selector, (e) => @printPdf(e)
 
   getAccounts: ->
     account_id = @$account.val()
@@ -43,8 +46,8 @@ class GenerateBarcodes
 
   getDataAccounts: (account_id, auxiliary_id) ->
     data = { account: account_id, auxiliary: auxiliary_id }
-    $.getJSON @$assets_path, data, (data) => @displayAccounts(data)
-    @asset_ids = []
+    $.getJSON @asset_barcodes_path, data, (data) => @displayAccounts(data)
+    @asset_codes = []
 
   displayAccounts: (data) ->
     html = @$assetTpl.render(data)
@@ -52,9 +55,9 @@ class GenerateBarcodes
 
   displayBarcodes: (e) ->
     e.preventDefault()
-    if @asset_ids.length > 0
+    if @asset_codes.length > 0
       @$queryAssets.hide()
-      data = { assets: $.map @asset_ids, (e, i) -> { code: e } }
+      data = { assets: $.map @asset_codes, (e, i) -> { code: e } }
       html = @$barcodeTpl.render(data)
       @$barcodes.html(html).show()
       @generateBarcodes()
@@ -65,22 +68,28 @@ class GenerateBarcodes
     @$barcodes.find('.row .thumbnail .barcode').each (i, e) ->
       $(e).barcode $(e).data('code').toString(), 'code128', { barWidth: 1, barHeight: 50 }
 
+  printPdf: ->
+    data =
+      asset_codes: @asset_codes
+      authenticity_token: $('meta[name="csrf-token"]').attr('content')
+    $.fileDownload @pdf_barcodes_path, { data: data, httpMethod: 'POST' }
+
   selectAllAssets: ->
     $checkboxes = @$container.find('table tbody td input[type=checkbox]')
     if $(@$assetAll.selector).is(':checked')
       $checkboxes.prop('checked', true)
-      @asset_ids = $.map $checkboxes, (e) -> $(e).val()
+      @asset_codes = $.map $checkboxes, (e) -> $(e).val()
     else
       $checkboxes.prop('checked', false)
-      @asset_ids = []
+      @asset_codes = []
 
   selectAsset: (e) ->
     $input = $(e.target)
     val = $input.val()
     if $input.is(':checked')
-      @asset_ids.push(val)
+      @asset_codes.push(val)
     else
-      @asset_ids = jQuery.grep @asset_ids, (value) -> value != val
+      @asset_codes = jQuery.grep @asset_codes, (value) -> value != val
 
   showFilter: (e) ->
     e.preventDefault()

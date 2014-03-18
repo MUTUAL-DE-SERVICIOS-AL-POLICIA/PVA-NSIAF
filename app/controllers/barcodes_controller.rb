@@ -26,8 +26,7 @@ class BarcodesController < ApplicationController
   end
 
   def pdf
-    @asset_ids = params[:asset_ids]
-    @assets = Asset.all
+    @assets = Asset.where(code: params[:asset_codes])
     respond_to do |format|
       format.pdf do
         filename = 'barcodes'
