@@ -68,3 +68,7 @@ gem 'newrelic_rpm'
 gem 'wicked_pdf'
 
 gem "non-stupid-digest-assets"
+
+group :development do
+  gem 'coffee-rails-source-maps'
+end

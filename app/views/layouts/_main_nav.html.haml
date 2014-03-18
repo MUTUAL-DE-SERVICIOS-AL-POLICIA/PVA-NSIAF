@@ -49,6 +49,20 @@
             = link_to 'Asignacion/devolución', users_assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Actas', proceedings_path, role: 'menuitem'
+    - if current_user.is_admin?
+      %li.dropdown
+        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_barcode' do
+          Código Barras
+          %b.caret
+        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_barcode' }
+          %li{ role: 'presentation' }
+            = link_to 'Cuentas', barcodes_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Auxiliares', auxiliary_barcodes_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Activos', asset_barcodes_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Pre Registros', '#', role: 'menuitem'
     - if can? :read, Version
       %li
         = link_to 'Histórico', versions_path

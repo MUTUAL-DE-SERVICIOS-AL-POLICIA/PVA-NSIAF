@@ -1,8 +1,7 @@
-#assig_devol {
-  .action-buttons {
-    margin: 30px 0 60px;
-  }
+.action-buttons {
+  margin: 30px 0 60px;
 }
+
 #proceeding-delivery {
   font-size: 14px;
 
@@ -21,5 +20,18 @@
   }
   .proceeding-title {
     margin: 0 0 30px 0;
+  }
+}
+
+#pdf-assets-print {
+  tbody {
+    tr {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      td {
+        padding: 8px 0 5px;
+      }
+    }
   }
 }

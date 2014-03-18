@@ -7,10 +7,15 @@ module ApplicationHelper
     title = 'Devolución de Activos Fijos' if assigned == true
     { assets: assets.as_json, user_name: user.name, user_title: user.title, devolution: assigned, title: title }
   end
+
   ##
   # Mime-types para los archivos *.dbf
   def dbf_mime_types
     %w(application/dbase application/x-dbase application/dbf application/x-dbf zz-application/zz-winassoc-dbf)
+  end
+
+  def get_accounts
+    Account.all.map { |b| [b.name, b.id] }
   end
 
   def get_buildings
@@ -36,6 +41,13 @@ module ApplicationHelper
       devolution: proceeding.is_devolution?,
       user_name: proceeding.user_name.titleize
     }
+  end
+
+  def selected_assets_json(assets)
+    assets = assets.each_with_index.map do |a, index|
+      { index: index + 1, id: a.id, description: a.description, code: a.code, user_name: a.user_name }
+    end
+    { assets: assets.as_json }
   end
 
   def submit_and_cancel(url)

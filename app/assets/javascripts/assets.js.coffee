@@ -47,8 +47,9 @@ class AssetEvents
     @$code = $('#code')
 
   bindEvents: ->
-    @$department.remoteChained(@$building.selector, '/assets/departments.json')
-    @$user.remoteChained(@$department.selector, '/assets/users.json')
+    if @$building?
+      @$department.remoteChained(@$building.selector, '/assets/departments.json')
+      @$user.remoteChained(@$department.selector, '/assets/users.json')
     $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e, 'E', @not_assigned_url)
     $(document).on 'click', @$btnDevolution.selector, (e) => @displayContainer(e, 'D', @assigned_url)
     $(document).on 'click', @$btnCancel.selector, (e) => @redirectToAssets(e)

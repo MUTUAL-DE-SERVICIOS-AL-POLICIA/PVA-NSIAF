@@ -1,4 +1,12 @@
 Nsiaf::Application.routes.draw do
+  resources :barcodes, only: [:index] do
+    collection do
+      get :auxiliary
+      get :asset
+      post :pdf
+    end
+  end
+
   resources :proceedings, only: [:index, :show, :create]
 
   resources :declines, only: [:index]
