@@ -277,6 +277,7 @@ es:
         code: "Código"
         entity: "Entidad"
         name: "Nombre"
+        status: "Estado"
       decline:
         asset_code: "Activo"
         account_code: "Cuenta"

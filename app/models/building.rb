@@ -37,8 +37,8 @@ class Building < ActiveRecord::Base
     array = includes(:entity).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = search_column == 'entity' ? 'entities.code' : "buildings.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      type_search = search_column == 'entity' ? 'entities.name' : "buildings.#{search_column}"
+      array = array.where("#{type_search} like :search", search: "%#{sSearch}%").references(:entity)
     end
     array
   end
@@ -52,7 +52,7 @@ class Building < ActiveRecord::Base
         a = Array.new
         a << building.code
         a << building.name
-        a << building.entity_code
+        a << building.entity_name
         a << h.type_status(building.status)
         csv << a
       end

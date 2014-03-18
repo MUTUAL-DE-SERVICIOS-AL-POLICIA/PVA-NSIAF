@@ -1,9 +1,11 @@
+%h3= t("#{controller_name}.title.title")
+
 %table.table
   %thead
     %tr
-      %th Código
-      %th Nombre
-      %th Cargo
+      %th= Entity.human_attribute_name('code')
+      %th= Entity.human_attribute_name('name')
+      %th= Entity.human_attribute_name('acronym')
   %tbody
     - @array.each do |entity|
       %tr
