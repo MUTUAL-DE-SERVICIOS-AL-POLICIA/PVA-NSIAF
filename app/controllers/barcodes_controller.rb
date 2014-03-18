@@ -8,8 +8,10 @@ class BarcodesController < ApplicationController
 
   def asset
     @asset = true
+    @assets = Asset.array_model('assets.code', 'asc', '', '', params[:sSearch], params[:search_column])
     respond_to do |format|
       format.html { render :index }
+      format.js
       format.json do
         assets = Asset.search_by(params[:account], params[:auxiliary])
         render json: view_context.selected_assets_json(assets)

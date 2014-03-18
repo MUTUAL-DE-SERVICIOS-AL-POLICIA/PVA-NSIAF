@@ -1,7 +1,11 @@
 #query-assets.row
   .col-lg-offset-3.col-md-offset-2.col-lg-6.col-md-8.col-sm-12
-    %h3.col-md-offset-2.col-md-9.text-center Generar Código de Barras de Activos
-    %form.form-horizontal{ role: 'form' }
+    %h3.col-md-offset-2.col-md-9.text-center
+      - if @asset
+        Listado de Activos asignados
+      - else
+        Generar Código de Barras de Activos
+    .form-horizontal{ role: 'form' }
       - if !@asset
         .form-group
           %label.col-md-2.col-sm-2.control-label Cuenta
@@ -14,13 +18,17 @@
             = select_tag :auxiliary, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       - if @asset
         .form-group
-          %label.col-md-2.col-sm-2.control-label Buscar
+          .col-md-2.col-sm-2
+            = button_tag class: 'search_asset btn btn-primary' do
+              %span.glyphicon.glyphicon-search
+              Buscar
           .col-md-6.col-sm-6
-            = text_field_tag :q, '', class: 'form-control'
+            = text_field_tag :sSearch, '', class: 'form-control'
           .col-md-3.col-sm-3
-            = select_tag :fields, options_for_select(['Código', 'Descripción', 'Usuario']), class: 'form-control'
+            = select_tag :search_column, options_for_select(Asset.set_columns), class: 'form-control'
 
   #pdf-assets.col-md-offset-2.col-md-8
+    = render 'table' if @asset
 
 .row
   #display-pdf-assets.col-md-offset-2.col-md-8{ style: 'display: none;' }

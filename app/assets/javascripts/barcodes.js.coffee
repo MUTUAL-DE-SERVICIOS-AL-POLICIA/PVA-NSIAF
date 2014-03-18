@@ -7,6 +7,7 @@ class GenerateBarcodes
   constructor: ->
     @cacheElements()
     @bindEvents()
+    @asset_codes = []
 
   cacheElements: ->
     # containers
@@ -20,6 +21,7 @@ class GenerateBarcodes
     # selects, checkboxes, buttons
     @$account = $('#account')
     @$auxiliary = $('#auxiliary')
+    @$asset = $('.search_asset')
     @$assetAll = $('#asset_all')
     @$checkboxes = @$container.find('table tbody td input[type=checkbox]')
     @$btnPrint = $('#btn-print')
@@ -38,6 +40,7 @@ class GenerateBarcodes
     $(document).on 'click', @$btnPrint.selector, (e) => @displayBarcodes(e)
     $(document).on 'click', @$btnCancelPdf.selector, (e) => @showFilter(e)
     $(document).on 'click', @$btnPrintPdf.selector, (e) => @printPdf(e)
+    $(document).on 'click', @$asset.selector, => @searchAssets()
 
   getAccounts: ->
     account_id = @$account.val()
@@ -95,3 +98,9 @@ class GenerateBarcodes
     e.preventDefault()
     @$barcodes.html('').hide()
     @$queryAssets.show()
+
+  searchAssets: ->
+    $.ajax
+      url: @asset_barcodes_path
+      data: { search_column: $('#search_column').val(), sSearch: $('#sSearch').val() }
+      dataType: "script"
