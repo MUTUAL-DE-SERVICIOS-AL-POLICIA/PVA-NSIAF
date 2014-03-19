@@ -74,6 +74,10 @@ class AssetEvents
     @$selectUser.show()
     @$btnCancel.get(0).focus()
 
+  changeToHyphens: ->
+    value = @$code.val().toString().trim()
+    @$code.val value.replace(/\'/g, '-')
+
   checkSelectedUser: ->
     @$building.val() && @$department.val() && @$user.val()
 
@@ -105,6 +109,7 @@ class AssetEvents
 
   checkAssetIfExists: (e) ->
     e.preventDefault()
+    @changeToHyphens()
     code = @$code.val().trim()
     if code
       if (asset_id = @searchInAssets(code)) > 0
