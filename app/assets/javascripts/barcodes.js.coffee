@@ -21,7 +21,7 @@ class GenerateBarcodes
     # selects, checkboxes, buttons
     @$account = $('#account')
     @$auxiliary = $('#auxiliary')
-    @$asset = $('.search_asset')
+    @$sSearch = $('#sSearch')
     @$assetAll = $('#asset_all')
     @$checkboxes = @$container.find('table tbody td input[type=checkbox]')
     @$btnPrint = $('#btn-print')
@@ -40,7 +40,7 @@ class GenerateBarcodes
     $(document).on 'click', @$btnPrint.selector, (e) => @displayBarcodes(e)
     $(document).on 'click', @$btnCancelPdf.selector, (e) => @showFilter(e)
     $(document).on 'click', @$btnPrintPdf.selector, (e) => @printPdf(e)
-    $(document).on 'click', @$asset.selector, => @searchAssets()
+    $(document).on 'keyup', @$sSearch.selector, => @searchAssets()
 
   getAccounts: ->
     account_id = @$account.val()

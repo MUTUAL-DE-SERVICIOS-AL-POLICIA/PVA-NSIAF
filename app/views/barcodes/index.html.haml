@@ -18,10 +18,6 @@
             = select_tag :auxiliary, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       - if @asset
         .form-group
-          .col-md-2.col-sm-2
-            = button_tag class: 'search_asset btn btn-primary' do
-              %span.glyphicon.glyphicon-search
-              Buscar
           .col-md-6.col-sm-6
             = text_field_tag :sSearch, '', class: 'form-control'
           .col-md-3.col-sm-3
