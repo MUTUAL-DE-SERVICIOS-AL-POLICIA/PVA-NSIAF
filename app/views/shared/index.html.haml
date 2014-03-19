@@ -28,7 +28,7 @@
     %tr
       - unless %w(versions declines proceedings).include?(controller_name)
         - unless current_user.is_super_admin? && controller_name == 'users'
-          %th= User.human_attribute_name('code')
+          %th.col-md-1= User.human_attribute_name('code')
         %th{ class: "#{'col-md-2' if controller_name == 'users'}" }= controller_name == 'assets' ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
       = render "#{controller_name}/#{controller_name}" unless controller_name == 'accounts'
       - unless %w(versions declines).include?(controller_name)
