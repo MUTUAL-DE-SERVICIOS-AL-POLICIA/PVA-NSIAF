@@ -18,6 +18,7 @@
             = select_tag :auxiliary, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       - if @asset
         .form-group
+          %label.col-md-2.col-sm-2.control-label
           .col-md-6.col-sm-6
             = text_field_tag :sSearch, '', class: 'form-control'
           .col-md-3.col-sm-3
