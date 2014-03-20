@@ -35,7 +35,8 @@ class Version < PaperTrail::Version
     array
   end
 
-  def self.to_csv(column_names)
+  def self.to_csv
+    column_names = ['id', 'item_id', 'created_at', 'event', 'whodunnit', 'item_type']
     CSV.generate do |csv|
       csv << column_names.map { |c| Version.human_attribute_name(c) }
       all.each do |version|
