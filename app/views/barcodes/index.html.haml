@@ -10,7 +10,7 @@
         .form-group
           %label.col-md-2.col-sm-2.control-label Cuenta
           .col-md-9.col-sm-9
-            = select_tag :account, options_for_select(get_accounts), class: 'form-control', prompt: '--', autofocus: true
+            = select_tag :account, options_for_select(get_accounts(true)), class: 'form-control', prompt: '--', autofocus: true
       - if !@asset && @auxiliary
         .form-group
           %label.col-md-2.col-sm-2.control-label Auxiliar

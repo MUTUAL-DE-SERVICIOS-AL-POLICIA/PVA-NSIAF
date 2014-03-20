@@ -36,4 +36,9 @@ class Account < ActiveRecord::Base
       end
     end
   end
+
+  def self.with_assets
+    conditions = { assets: { id: nil }, auxiliaries: { id: nil } }
+    joins(auxiliaries: :assets).where.not(conditions).uniq
+  end
 end

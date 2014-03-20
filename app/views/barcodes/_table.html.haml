@@ -3,8 +3,8 @@
     %tr
       %th= check_box_tag 'asset_all', '', false, title: 'Seleccionar todos'
       %th= Asset.human_attribute_name('code')
-      %th.col-sm-6= Asset.human_attribute_name('description')
-      %th.col-sm-4= Asset.human_attribute_name('user')
+      %th.col-sm-7= Asset.human_attribute_name('description')
+      %th.col-sm-3= Asset.human_attribute_name('user')
   %tbody#asset
     - if @asset
       = render 'asset'

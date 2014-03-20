@@ -16,7 +16,7 @@ class Auxiliary < ActiveRecord::Base
 
   def self.search_by(account_id)
     auxiliaries = []
-    auxiliaries = where(account_id: account_id) if account_id.present?
+    auxiliaries = joins(:assets).where(account_id: account_id).where.not(assets: { id: nil }).uniq if account_id.present?
     [['', '--']] + auxiliaries.map { |d| [d.id, d.name] }
   end
 
