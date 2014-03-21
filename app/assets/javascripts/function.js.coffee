@@ -33,7 +33,8 @@ jQuery ->
     bLengthChange: false
     iDisplayLength: 15
     aoColumnDefs: [
-      { bSortable: false, aTargets: [ -1 ] }
+      { sClass: 'nowrap', bSortable: false, aTargets: [ -1 ] },
+      { sClass: 'nowrap', aTargets: [ 0 ] }
     ]
     oLanguage:
       sUrl: '/locales/dataTables.spanish.txt'
