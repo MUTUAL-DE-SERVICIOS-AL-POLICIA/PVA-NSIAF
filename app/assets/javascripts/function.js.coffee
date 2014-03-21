@@ -54,8 +54,8 @@ jQuery ->
             { sExtends: "download", sButtonText: "CSV", sUrl: "#{ $('.button_new span.controller_name').text() }.csv" }
             { sExtends: "download", sButtonText: "PDF", sUrl: "#{ $('.button_new span.controller_name').text() }.pdf" }
          ]
-
-
+     fnDrawCallback: (oSettings) ->
+       $('#select_column').appendTo $('.dataTables_filter')
 
 
   # Change button status
@@ -112,3 +112,4 @@ jQuery ->
   $(document).on 'click', '.download-assets', (e) ->
     e.preventDefault()
     window.location = $(@).data('url')
+

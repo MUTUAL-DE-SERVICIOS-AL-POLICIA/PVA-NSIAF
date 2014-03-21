@@ -18,22 +18,21 @@
       %span.glyphicon.glyphicon-plus
       = t("#{controller_name}.title.new")
 
-.col-xs-2.col-md-offset-6
-  - columns = controller_name.classify.constantize
-  - columns = current_user.is_super_admin? && controller_name == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
-  = select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control'
-
 %table.table.table-striped.table-hover.datatable
   %thead
     %tr
       - unless %w(versions declines proceedings).include?(controller_name)
         - unless current_user.is_super_admin? && controller_name == 'users'
-          %th.col-md-1= User.human_attribute_name('code')
-        %th{ class: "#{'col-md-2' if controller_name == 'users'}" }= controller_name == 'assets' ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
+          %th= User.human_attribute_name('code')
+        %th= controller_name == 'assets' ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
       = render "#{controller_name}/#{controller_name}" unless controller_name == 'accounts'
       - unless %w(versions declines).include?(controller_name)
-        %th.td_actions= t('general.actions')
+        %th= t('general.actions')
   %tbody
 
 #confirm-modal
 = render 'shared/confirm_modal'
+
+- columns = controller_name.classify.constantize
+- columns = current_user.is_super_admin? && controller_name == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
+= select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control col-md-2'

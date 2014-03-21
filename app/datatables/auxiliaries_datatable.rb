@@ -1,5 +1,5 @@
 class AuxiliariesDatatable
-  delegate :params, :link_to, :link_to_if, :content_tag, :data_link, :type_status, :img_status, :title_status, to: :@view
+  delegate :params, :link_to_if, :type_status, :links_actions, to: :@view
 
   def initialize(view)
     @view = view
@@ -23,9 +23,7 @@ private
         auxiliary.name,
         link_to_if(auxiliary.account, auxiliary.account_name, auxiliary.account, title: auxiliary.account_code),
         type_status(auxiliary.status),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), auxiliary, class: 'btn btn-default btn-xs') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, auxiliary], class: 'btn btn-primary btn-xs') + ' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(auxiliary.status)}") + title_status(auxiliary.status), '#', class: 'btn btn-warning btn-xs', data: data_link(auxiliary))
+        links_actions(auxiliary)
       ]
     end
   end

@@ -1,5 +1,5 @@
 class AssetsDatatable
-  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, to: :@view
+  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, :links_actions, to: :@view
 
   def initialize(view)
     @view = view
@@ -22,8 +22,7 @@ private
         asset.code,
         asset.description,
         link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), asset, class: 'btn btn-default btn-xs') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-xs') + ' ' + unsubscribe(asset)
+        links_actions(asset, 'asset') + unsubscribe(asset)
       ]
     end
   end
@@ -55,7 +54,7 @@ private
 
   def unsubscribe(asset)
     if current_user.is_admin?
-      url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}") + 'Dar baja', '#', class: 'btn btn-warning btn-xs', data: data_link(asset))
+      url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(asset), title: 'Dar baja')
     end
     url || ''
   end

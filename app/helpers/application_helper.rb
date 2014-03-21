@@ -101,12 +101,10 @@ module ApplicationHelper
     }
   end
 
-  def links_actions(user)
-    unless user.role == 'super_admin'
-      link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-xs') + ' ' +
-      link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-xs') + ' ' +
-      link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-xs', data: data_link(user))
-    end
+  def links_actions(user, type= '')
+    link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), user, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) + ' ' +
+    link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), [:edit, user], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit')) + ' ' +
+    (link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(user), title: title_status(user.status)) unless type == 'asset')
   end
 
   def status_active(model)

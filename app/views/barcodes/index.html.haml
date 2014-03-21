@@ -1,5 +1,5 @@
 #query-assets.row
-  .col-lg-offset-3.col-md-offset-2.col-lg-6.col-md-8.col-sm-12
+  .col-lg-offset-1.col-md-offset-2.col-lg-10.col-md-8.col-sm-12
     %h3.col-md-offset-2.col-md-9.text-center
       - if @asset
         Listado de Activos asignados
@@ -24,11 +24,11 @@
           .col-md-3.col-sm-3
             = select_tag :search_column, options_for_select(Asset.set_columns), class: 'form-control'
 
-  #pdf-assets.col-md-offset-2.col-md-8
+  #pdf-assets.col-md-12
     = render 'table' if @asset
 
 .row
-  #display-pdf-assets.col-md-offset-2.col-md-8{ style: 'display: none;' }
+  #display-pdf-assets.col-md-offset-1.col-md-10{ style: 'display: none;' }
 
 = render 'pdf_assets_tpl'
 = render 'pdf_barcode_tpl'

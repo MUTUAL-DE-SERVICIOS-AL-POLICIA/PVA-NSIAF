@@ -1,5 +1,5 @@
 class DepartmentsDatatable
-  delegate :params, :link_to, :link_to_if, :content_tag, :data_link, :type_status, :img_status, :title_status, to: :@view
+  delegate :params, :link_to_if, :type_status, :links_actions, to: :@view
 
   def initialize(view)
     @view = view
@@ -23,9 +23,7 @@ private
         department.name,
         link_to_if(department.building, department.building_name, department.building, title: department.building_code),
         type_status(department.status),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), department, class: 'btn btn-default btn-xs') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, department], class: 'btn btn-primary btn-xs') + ' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(department.status)}") + title_status(department.status), '#', class: 'btn btn-warning btn-xs', data: data_link(department))
+        links_actions(department)
       ]
     end
   end
