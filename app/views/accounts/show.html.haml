@@ -6,9 +6,8 @@
 
   %h2 Cuenta
 
-%p
-  %b #{Account.human_attribute_name('code')}:
-  = @account.code
-%p
-  %b #{Account.human_attribute_name('name')}:
-  = @account.name
+%dl.dl-horizontal
+  %dt= Account.human_attribute_name('code')
+  %dd= @account.code
+  %dt= Account.human_attribute_name('name')
+  %dd= @account.name

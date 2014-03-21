@@ -4,7 +4,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.use :placeholder
     b.use :label
-    b.wrapper tag: 'div', class: 'controls col-md-9 col-lg-9' do |ba|
+    b.wrapper tag: 'div', class: 'controls col-sm-9 col-md-9 col-lg-9' do |ba|
       ba.use :input
       ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
       ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
@@ -41,6 +41,6 @@ SimpleForm.setup do |config|
   # Check the Bootstrap docs (http://twitter.github.com/bootstrap)
   # to learn about the different styles for forms and inputs,
   # buttons and other elements.
-  config.label_class = "col-md-3 col-lg-3 control-label"
+  config.label_class = "col-sm-3 col-md-3 col-lg-3 control-label"
   config.default_wrapper = :bootstrap
 end
