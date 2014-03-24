@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140225224514) do
+ActiveRecord::Schema.define(version: 20140324204659) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -38,8 +38,10 @@ ActiveRecord::Schema.define(version: 20140225224514) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "status",       limit: 2
+    t.integer  "account_id"
   end
 
+  add_index "assets", ["account_id"], name: "index_assets_on_account_id", using: :btree
   add_index "assets", ["auxiliary_id"], name: "index_assets_on_auxiliary_id", using: :btree
   add_index "assets", ["user_id"], name: "index_assets_on_user_id", using: :btree
 

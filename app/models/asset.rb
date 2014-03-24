@@ -6,6 +6,7 @@ class Asset < ActiveRecord::Base
     'DESCRIP' => 'description'
   }
 
+  belongs_to :account
   belongs_to :auxiliary
   belongs_to :user
 
@@ -28,7 +29,7 @@ class Asset < ActiveRecord::Base
     if auxiliary_id.present?
       assets = includes(:user).where(auxiliary_id: auxiliary_id)
     elsif account_id.present?
-      assets = includes(:auxiliary, :user).where(auxiliaries: { account_id: account_id })
+      assets = includes(:user).where(account_id: account_id)
     else
       assets = self.none
     end
@@ -95,8 +96,9 @@ class Asset < ActiveRecord::Base
     CORRELATIONS.each do |origin, destination|
       asset.merge!({ destination => record[origin] })
     end
-    a = Auxiliary.joins(:account).where(code: record['CODAUX'], accounts: { code: record['CODCONT'] }).take
+    ac = Account.find_by_code(record['CODCONT'])
+    ax = Auxiliary.joins(:account).where(code: record['CODAUX'], accounts: { code: record['CODCONT'] }).take
     u = User.joins(:department).where(code: record['CODRESP'], departments: { code: record['CODOFIC'] }).take
-    asset.present? && new(asset.merge!({ auxiliary: a, user: u })).save
+    asset.present? && new(asset.merge!({ account: ac, auxiliary: ax, user: u })).save
   end
 end
