@@ -95,7 +95,7 @@ class Asset < ActiveRecord::Base
     CORRELATIONS.each do |origin, destination|
       asset.merge!({ destination => record[origin] })
     end
-    a = Auxiliary.find_by_code(record['CODAUX'])
+    a = Auxiliary.joins(:account).where(code: record['CODAUX'], accounts: { code: record['CODCONT'] }).take
     u = User.joins(:department).where(code: record['CODRESP'], departments: { code: record['CODOFIC'] }).take
     asset.present? && new(asset.merge!({ auxiliary: a, user: u })).save
   end

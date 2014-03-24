@@ -1,5 +1,8 @@
 class BarcodesController < ApplicationController
+  load_and_authorize_resource class: false
+
   def index
+    authorize! :index, :barcode
     respond_to do |format|
       format.html
       format.json { render json: {} }
@@ -7,6 +10,7 @@ class BarcodesController < ApplicationController
   end
 
   def asset
+    authorize! :asset, :barcode
     @asset = true
     @assets = Asset.array_model('assets.code', 'asc', '', '', params[:sSearch], params[:search_column])
     respond_to do |format|
@@ -20,6 +24,7 @@ class BarcodesController < ApplicationController
   end
 
   def auxiliary
+    authorize! :auxiliary, :barcode
     @auxiliary = true
     respond_to do |format|
       format.html { render :index }
@@ -28,10 +33,11 @@ class BarcodesController < ApplicationController
   end
 
   def pdf
+    authorize! :pdf, :barcode
     @assets = Asset.where(code: params[:asset_codes])
     respond_to do |format|
       format.pdf do
-        filename = 'barcodes'
+        filename = 'código de barras'
         render pdf: "VSIAF-#{filename}".parameterize,
                disposition: 'attachment',
                template: 'barcodes/show.pdf.haml',

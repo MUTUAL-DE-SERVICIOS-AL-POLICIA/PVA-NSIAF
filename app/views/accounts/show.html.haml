@@ -11,3 +11,5 @@
   %dd= @account.code
   %dt= Account.human_attribute_name('name')
   %dd= @account.name
+  %dt= Account.human_attribute_name('auxiliaries')
+  %dd= pluralize @account.auxiliaries.count, 'auxiliary'
