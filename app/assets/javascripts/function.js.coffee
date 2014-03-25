@@ -33,7 +33,8 @@ jQuery ->
     bLengthChange: false
     iDisplayLength: 15
     aoColumnDefs: [
-      { bSortable: false, aTargets: [ -1 ] }
+      { sClass: 'nowrap', bSortable: false, aTargets: [ -1 ] },
+      { sClass: 'nowrap', aTargets: [ 0 ] }
     ]
     oLanguage:
       sUrl: '/locales/dataTables.spanish.txt'
@@ -49,13 +50,13 @@ jQuery ->
       table = $.fn.dataTable.fnTables(true)
       if table.length > 0
         $(table).dataTable().fnAdjustColumnSizing()
-     oTableTools:
-         aButtons: [
-            { sExtends: "download", sButtonText: "CSV", sUrl: "#{ $('.button_new span.controller_name').text() }.csv" }
-            { sExtends: "download", sButtonText: "PDF", sUrl: "#{ $('.button_new span.controller_name').text() }.pdf" }
-         ]
-     fnDrawCallback: (oSettings) ->
-       $('#select_column').appendTo $('.dataTables_filter')
+    oTableTools:
+      aButtons: [
+        { sExtends: "download", sButtonText: "CSV", sUrl: "#{ $('.button_new span.controller_name').text() }.csv" }
+        { sExtends: "download", sButtonText: "PDF", sUrl: "#{ $('.button_new span.controller_name').text() }.pdf" }
+      ]
+    fnDrawCallback: (oSettings) ->
+      $('#select_column').appendTo $('.dataTables_filter')
 
 
   # Change button status

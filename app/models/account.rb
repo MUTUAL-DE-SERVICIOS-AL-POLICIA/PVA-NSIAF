@@ -10,6 +10,7 @@ class Account < ActiveRecord::Base
   validates :name, presence: true
 
   has_many :auxiliaries
+  has_many :assets
 
   has_paper_trail
 
@@ -38,7 +39,7 @@ class Account < ActiveRecord::Base
   end
 
   def self.with_assets
-    conditions = { assets: { id: nil }, auxiliaries: { id: nil } }
-    joins(auxiliaries: :assets).where.not(conditions).uniq
+    conditions = { assets: { id: nil } }
+    joins(:assets).where.not(conditions).uniq
   end
 end

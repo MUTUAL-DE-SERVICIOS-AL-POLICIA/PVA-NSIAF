@@ -16,8 +16,9 @@ class Ability
       can :manage, Auxiliary
       can :manage, Asset
       can :manage, Decline
-      can :index, :dbf
-      can :import, :dbf
+      can :manage, Proceeding
+      can [:index, :import], :dbf
+      can [:index, :asset, :auxiliary, :pdf], :barcode
     end
     cannot :update, User, id: user.id
   end

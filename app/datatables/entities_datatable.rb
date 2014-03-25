@@ -22,8 +22,8 @@ private
         entity.code,
         entity.name,
         entity.acronym,
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), entity, class: 'btn btn-default btn-sm') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, entity], class: 'btn btn-primary btn-sm')
+        link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-eye-open'), entity, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) + ' ' +
+        link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-edit'), [:edit, entity], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit'))
       ]
     end
   end

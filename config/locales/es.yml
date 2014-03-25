@@ -261,6 +261,7 @@ es:
 
     attributes:
       account:
+        auxiliaries: "Auxiliares"
         code: "Código"
         name: "Nombre"
       asset:
