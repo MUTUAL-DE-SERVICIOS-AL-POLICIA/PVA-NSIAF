@@ -24,7 +24,9 @@ class ProceedingsController < ApplicationController
                  bottom: 15,
                  left: 20,
                  right: 15
-               }
+               },
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
     end
   end

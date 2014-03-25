@@ -35,3 +35,34 @@
     }
   }
 }
+
+#header{
+  float: left;
+  text-align: center;
+  width: 100%;
+
+  .logo{ float: left; }
+
+  h3{ margin-top: 10px; }
+}
+
+.title_pdf{
+  float: left;
+  margin: 60px 0 -70px;
+}
+
+.separator{
+  border-bottom: 1px solid #DDDDDD !important;
+  float: left;
+  margin-top: 70px;
+}
+
+#footer{
+  border-top: 2px solid;
+  text-align: center;
+
+  .text{
+    line-height: 10px;
+    margin-top: 7px;
+  }
+}

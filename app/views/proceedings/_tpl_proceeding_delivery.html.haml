@@ -1,5 +1,5 @@
 %script{ id: 'tpl-proceeding-delivery', type: 'text/html' }
-  .row
+  .row{ class: "#{'separator' if is_pdf?}" }
     .col-md-offset-1.col-md-10
       %h1.proceeding-title.text-center
         {{^devolution}}

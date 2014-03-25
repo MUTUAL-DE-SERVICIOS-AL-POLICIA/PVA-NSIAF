@@ -1,9 +1,10 @@
-%h3= t("#{controller_name}.title.title")
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
 
 %table.table.table-condensed
   %thead
     %tr
-      %th= User.human_attribute_name('code')
+      %th.separator= User.human_attribute_name('code')
       %th= User.human_attribute_name('name')
       %th= User.human_attribute_name('title')
       %th= User.human_attribute_name('ci')
