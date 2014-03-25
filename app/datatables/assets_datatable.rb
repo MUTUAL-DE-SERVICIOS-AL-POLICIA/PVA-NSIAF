@@ -1,5 +1,5 @@
 class AssetsDatatable
-  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, :links_actions, to: :@view
+  delegate :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, :links_actions, to: :@view
 
   def initialize(view)
     @view = view
@@ -53,7 +53,7 @@ private
   end
 
   def unsubscribe(asset)
-    if current_user.is_admin?
+    if asset.user.present? && asset.user.is_admin?
       url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(asset), title: 'Dar baja')
     end
     url || ''
