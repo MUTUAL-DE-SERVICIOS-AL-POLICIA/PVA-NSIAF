@@ -26,3 +26,4 @@
 //= require assets
 //= require proceedings
 //= require barcodes
+//= require typeahead

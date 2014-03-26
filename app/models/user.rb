@@ -158,6 +158,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.search_user(q)
+    where("name LIKE ? AND username != ?", "%#{q}%", 'admin')
+  end
+
   private
 
   ##

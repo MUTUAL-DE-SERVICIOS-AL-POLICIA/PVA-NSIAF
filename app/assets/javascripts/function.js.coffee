@@ -114,3 +114,30 @@ jQuery ->
     e.preventDefault()
     window.location = $(@).data('url')
 
+  #USER AUTOCOMPLETE
+  $("#user_name").keyup (e) ->
+    unless e.which == 13
+      $form = $('#new_user')
+      if $form.find('input:hidden[value="patch"]').length > 0
+        $form.find('input:hidden:first').next().remove()
+        $form.attr('action', "/users")
+        $form.find('#user_username').val('')
+        $form.find('#user_role').val('super_admin')
+
+  bestPictures = new Bloodhound(
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
+    queryTokenizer: Bloodhound.tokenizers.whitespace
+    limit: 100
+    remote: "/users/autocomplete.json?q=%QUERY"
+  )
+  bestPictures.initialize()
+  $("input#user_name").typeahead null,
+    displayKey: "name"
+    source: bestPictures.ttAdapter()
+  .on 'typeahead:selected', (evt, data) ->
+    $form = $('#new_user')
+    if $form.find('input:hidden[value="patch"]').length == 0
+      $('<input type="hidden" value="patch" name="_method" autocomplete="off">').insertAfter( $form.find('input:hidden:first') )
+      $form.attr('action', "/users/#{data.id}")
+      $form.find('#user_username').val(data.username)
+      $form.find('#user_role').val(data.role)

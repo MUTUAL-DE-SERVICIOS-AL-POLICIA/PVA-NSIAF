@@ -94,6 +94,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def autocomplete
+    @users = User.search_user(params[:q])
+    respond_to do |format|
+      format.json { render json: @users.map { |s| { id: s.id, name: s.name, username: s.username, role: s.role } } }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
