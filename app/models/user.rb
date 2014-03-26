@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
     if is_super_admin?
       User.where.not(role: nil)
     elsif is_admin?
-      User.where(role: nil)
+      User.where('role IS NULL OR role = ?', 'admin')
     else
       User.none
     end

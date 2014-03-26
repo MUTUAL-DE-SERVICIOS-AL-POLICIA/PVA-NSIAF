@@ -1,39 +1,35 @@
 .page-header
   .pull-right
-    - unless current_user.id == @user.id
-      = link_to edit_user_path(@user), class: 'btn btn-primary' do
-        %span.glyphicon.glyphicon-edit
-        = t("general.btn.edit")
-      = link_to users_path, class: 'btn btn-default' do
-        %span.glyphicon.glyphicon-list
-        = t("users.title.title")
+    = link_to edit_user_path(@user), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+    = link_to users_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("users.title.title")
 
   %h2= @user.name
 
 .row
   .col-lg-4.col-md-5.col-sm-12
     %dl.dl-horizontal
-      - if @user.role.blank?
-        %dt= User.human_attribute_name('code')
-        %dd= @user.code
-        %dt= User.human_attribute_name('title')
-        %dd= @user.title
-        %dt= User.human_attribute_name('ci')
-        %dd= @user.ci
-        %dt= User.human_attribute_name('email')
-        %dd= @user.email
+      %dt= User.human_attribute_name('code')
+      %dd= @user.code
+      %dt= User.human_attribute_name('title')
+      %dd= @user.title
+      %dt= User.human_attribute_name('ci')
+      %dd= @user.ci
+      %dt= User.human_attribute_name('email')
+      %dd= @user.email
       %dt= User.human_attribute_name('username')
       %dd= @user.username
-      - if @user.role.blank?
-        %dt= User.human_attribute_name('phone')
-        %dd= @user.phone
-        %dt= User.human_attribute_name('mobile')
-        %dd= @user.mobile
-        %dt= User.human_attribute_name('department')
-        %dd= @user.department_name
-      - if @user.role.present?
-        %dt= User.human_attribute_name('role')
-        %dd= t("users.roles.#{@user.role}")
+      %dt= User.human_attribute_name('phone')
+      %dd= @user.phone
+      %dt= User.human_attribute_name('mobile')
+      %dd= @user.mobile
+      %dt= User.human_attribute_name('department')
+      %dd= @user.department_name
+      %dt= User.human_attribute_name('role')
+      %dd= t("users.roles.#{@user.role}") if @user.role.present?
       %dt= t('general.status')
       %dd= type_status(@user.status)
   .col-lg-8.col-md-7.col-sm-12
