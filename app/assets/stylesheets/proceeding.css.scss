@@ -41,32 +41,36 @@
 }
 
 #header{
+  border-bottom: 1px solid;
   float: left;
   text-align: center;
   width: 100%;
 
-  .logo{ float: left; }
+  .logo{
+    float: left;
+    margin-bottom: 10px;
+  }
 
-  h3{ margin-top: 10px; }
+  .logo1{ float: right; }
 }
 
 .title_pdf{
   float: left;
-  margin: 60px 0 -70px;
+  margin: 90px 0 -100px;
 }
 
 .separator{
   border-bottom: 1px solid #DDDDDD !important;
   float: left;
-  margin-top: 70px;
+  margin-top: 100px;
 }
 
 #footer{
-  border-top: 2px solid;
-  text-align: center;
+  table{
+    font-size: 7px;
+    margin-left: 58%;
+    width: 42%;
 
-  .text{
-    line-height: 10px;
-    margin-top: 7px;
+    td{ padding: 0 5px; }
   }
 }

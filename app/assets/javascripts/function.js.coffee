@@ -115,7 +115,7 @@ jQuery ->
     window.location = $(@).data('url')
 
   #USER AUTOCOMPLETE
-  $("#user_name").keyup (e) ->
+  $(".typeahead").keyup (e) ->
     unless e.which == 13
       $form = $('#new_user')
       if $form.find('input:hidden[value="patch"]').length > 0
@@ -131,7 +131,7 @@ jQuery ->
     remote: "/users/autocomplete.json?q=%QUERY"
   )
   bestPictures.initialize()
-  $("input#user_name").typeahead null,
+  $("input.typeahead").typeahead null,
     displayKey: "name"
     source: bestPictures.ttAdapter()
   .on 'typeahead:selected', (evt, data) ->
