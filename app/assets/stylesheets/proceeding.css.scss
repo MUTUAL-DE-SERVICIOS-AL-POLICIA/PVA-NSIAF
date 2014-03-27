@@ -63,12 +63,18 @@
   border-bottom: 1px solid #DDDDDD !important;
   float: left;
   margin-top: 100px;
+  width: 100%;
 }
 
 #footer{
+  .page_Numbering{
+    float: left;
+    margin-top: 15px;
+  }
+
   table{
+    float: right;
     font-size: 7px;
-    margin-left: 58%;
     width: 42%;
 
     td{ padding: 0 5px; }
