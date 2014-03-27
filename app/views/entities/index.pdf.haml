@@ -1,9 +1,10 @@
-%h3= t("#{controller_name}.title.title")
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
 
 %table.table
   %thead
     %tr
-      %th= Entity.human_attribute_name('code')
+      %th.separator= Entity.human_attribute_name('code')
       %th= Entity.human_attribute_name('name')
       %th= Entity.human_attribute_name('acronym')
   %tbody
