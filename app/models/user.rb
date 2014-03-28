@@ -176,7 +176,7 @@ class User < ActiveRecord::Base
   end
 
   def set_defaults
-    if new_record? && password.nil? && !username.nil?
+    if password.nil? && !username.nil?
       self.password ||= self.username
     end
   end
