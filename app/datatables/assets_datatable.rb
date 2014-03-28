@@ -1,5 +1,5 @@
 class AssetsDatatable
-  delegate :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, :links_actions, to: :@view
+  delegate :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, :links_actions, :current_user, to: :@view
 
   def initialize(view)
     @view = view
@@ -32,7 +32,8 @@ private
   end
 
   def fetch_array
-    Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
+    status = @view.url_for == '/assets/derecognised' ? '0' : ''
+    Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], status)
   end
 
   def page
@@ -53,7 +54,7 @@ private
   end
 
   def unsubscribe(asset)
-    if asset.user.present? && asset.user.is_admin?
+    if @view.url_for == '/assets' && asset.user.present? && asset.user.id == current_user.id
       url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(asset), title: 'Dar baja')
     end
     url || ''

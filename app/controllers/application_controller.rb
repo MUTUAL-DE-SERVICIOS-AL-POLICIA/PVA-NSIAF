@@ -19,12 +19,14 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.html { render '/shared/index' }
       format.json { render json: datatable.new(view_context) }
-      column_order = name_model == 'proceedings' ? 'users.name' : name_model == 'versions' ? 'id' : 'code'
-      @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current_user)
+      column_order = name_model == 'proceedings' ? 'users.name' : name_model == 'versions' ? 'id' : "#{name_model}.code"
+      current = action_name == 'derecognised' ? '0' : current_user
+      @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)
       filename = "VSIAF-#{t("#{name_model}.title.title")}".parameterize
       format.csv { send_data @array.to_csv, filename: "#{filename}.csv" }
       format.pdf do
         render pdf: filename,
+               template: "#{name_model}/index.pdf.haml",
                disposition: 'attachment',
                layout: 'pdf.html',
                page_size: 'Letter',

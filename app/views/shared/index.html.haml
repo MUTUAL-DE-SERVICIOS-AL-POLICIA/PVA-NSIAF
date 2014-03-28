@@ -4,15 +4,15 @@
 - when 'buildings' then new_url = new_building_path
 - when 'entities' then new_url = new_entity_path
 - when 'auxiliaries' then new_url = new_auxiliary_path
-- when 'assets' then new_url = new_asset_path
+- when 'assets' then new_url = new_asset_path if action_name != 'derecognised'
 
 = title t("#{controller_name}.title.title")
 
 .page-header
-  %h2= t("#{controller_name}.title.title")
+  %h2 #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
 
 .col-xs-2.button_new
-  %span.controller_name= controller_name
+  %span.controller_name= action_name == 'derecognised' ? action_name : controller_name
   - if new_url.present?
     = link_to new_url, class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-plus

@@ -29,6 +29,8 @@
             = link_to t('auxiliaries.title.title'), auxiliaries_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to t('assets.title.title'), assets_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Bajas', derecognised_assets_path, role: 'menuitem'
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do
           Migración

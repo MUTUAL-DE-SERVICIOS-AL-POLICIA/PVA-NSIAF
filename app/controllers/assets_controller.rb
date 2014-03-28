@@ -108,6 +108,10 @@ class AssetsController < ApplicationController
     render json: view_context.assets_json(assets, user, true)
   end
 
+  def derecognised
+    format_to('assets', AssetsDatatable)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_asset
