@@ -18,8 +18,8 @@ class Ability
       can :manage, Asset
       can :manage, Decline
       can :manage, Proceeding
-      can [:index, :import], :dbf
       can [:index, :asset, :auxiliary, :pdf], :barcode
     end
+    can [:index, :import], :dbf
   end
 end

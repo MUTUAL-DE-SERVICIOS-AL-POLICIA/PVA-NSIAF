@@ -31,12 +31,13 @@
             = link_to t('assets.title.title'), assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Bajas', derecognised_assets_path, role: 'menuitem'
-      %li.dropdown
-        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do
-          Migración
-          %b.caret
-        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_migration' }
-          - import_models.each_with_index do |model, index|
+    %li.dropdown
+      = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do
+        Migración
+        %b.caret
+      %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_migration' }
+        - import_models.each_with_index do |model, index|
+          - if index < 3 || !current_user.is_super_admin?
             - if index == 3
               %li.divider{ role: 'presentation' }
             %li{ role: 'presentation' }
@@ -51,7 +52,6 @@
             = link_to 'Asignacion/devolución', users_assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Actas', proceedings_path, role: 'menuitem'
-    - if current_user.is_admin?
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_barcode' do
           Código Barras

@@ -3,7 +3,11 @@ class DbfController < ApplicationController
 
   # GET /dbf/:model
   def index
-    authorize! :index, :dbf
+    if %w(buildings departments users).include?(params[:model]) || !current_user.is_super_admin?
+      authorize! :index, :dbf
+    else
+      redirect_to root_url, :alert => 'No estás autorizado para acceder a ésta página.'
+    end
   end
 
   ##
@@ -11,17 +15,19 @@ class DbfController < ApplicationController
   # Importa los datos del archivo DBF dentro de la tabla usuarios.
   def import
     authorize! :import, :dbf
-    if check_dbf_file(params[:dbf])
-      klass = params[:model].classify.safe_constantize
+    if %w(buildings departments users).include?(params[:model]) || !current_user.is_admin?
+      if check_dbf_file(params[:dbf])
+        klass = params[:model].classify.safe_constantize
 
-      klass.paper_trail_off
-      inserted, no_inserted, nils = klass.import_dbf(params[:dbf])
-      klass.paper_trail_on
-      klass.register_log('migrated') if inserted > 0
+        klass.paper_trail_off
+        inserted, no_inserted, nils = klass.import_dbf(params[:dbf])
+        klass.paper_trail_on
+        klass.register_log('migrated') if inserted > 0
 
-      redirect_to :back, notice: t('migration.message_html', inserted: inserted, no_inserted: no_inserted)
-    else
-      redirect_to :back, alert: t('migration.alert_html', model: view_context.get_filename(params[:model]))
+        redirect_to :back, notice: t('migration.message_html', inserted: inserted, no_inserted: no_inserted)
+      else
+        redirect_to :back, alert: t('migration.alert_html', model: view_context.get_filename(params[:model]))
+      end
     end
   end
 
