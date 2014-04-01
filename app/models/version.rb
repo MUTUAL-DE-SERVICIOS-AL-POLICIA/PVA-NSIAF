@@ -9,7 +9,7 @@ class Version < PaperTrail::Version
 
   def whodunnit_code
     user = whodunnit_obj
-    user.present? ? (user.code || user.username || user.name) : ''
+    user.present? ? (user.username || user.name) : ''
   end
 
   def whodunnit_name

@@ -23,7 +23,7 @@ private
         content_tag(:span, version.item_code, title: version.item_name),
         I18n.l(version.created_at, format: :version),
         I18n.t(version.event, scope: 'versions'),
-        link_to_if(version.whodunnit_obj, version.whodunnit_code, version.whodunnit_obj, title: version.whodunnit_name),
+        link_admin(version),
         I18n.t(version.item_type.to_s.downcase.singularize, scope: 'activerecord.models')
       ]
     end
@@ -52,5 +52,13 @@ private
 
   def sort_direction
     params[:sSortDir_0] == "desc" ? "desc" : "asc"
+  end
+
+  def link_admin(version)
+    if version.whodunnit_obj.present? && !version.whodunnit_obj.is_super_admin?
+      link_to_if(version.whodunnit_obj, version.whodunnit_code, version.whodunnit_obj, title: version.whodunnit_name)
+    else
+      version.whodunnit_code
+    end
   end
 end
