@@ -36,12 +36,9 @@
         Migración
         %b.caret
       %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_migration' }
-        - import_models.each_with_index do |model, index|
-          - if index < 3 || !current_user.is_super_admin?
-            - if index == 3
-              %li.divider{ role: 'presentation' }
-            %li{ role: 'presentation' }
-              = link_to t("#{model}.title.title"), dbf_path(model), role: 'menuitem'
+        - import_models_user.each_with_index do |model, index|
+          %li{ role: 'presentation' }
+            = link_to t("#{model}.title.title"), dbf_path(model), role: 'menuitem'
     - if current_user.is_admin?
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do

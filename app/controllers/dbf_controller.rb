@@ -1,6 +1,7 @@
 class DbfController < ApplicationController
   load_and_authorize_resource class: false
   before_action :check_roles, only: [:index, :import]
+  include NavigationHelper
 
   # GET /dbf/:model
   def index
@@ -38,7 +39,7 @@ class DbfController < ApplicationController
   end
 
   def check_roles
-    if !(%w(buildings departments users).include?(params[:model]) || !current_user.is_super_admin?)
+    if !(import_models_user.include?(params[:model]))
       redirect_to root_url, alert: 'No estás autorizado para acceder a ésta página.'
     end
   end
