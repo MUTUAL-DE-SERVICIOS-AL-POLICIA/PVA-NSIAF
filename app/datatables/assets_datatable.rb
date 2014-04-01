@@ -18,13 +18,15 @@ private
 
   def data
     array.map do |asset|
-      [
-        asset.code,
-        asset.description,
-        link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code),
-        links_actions(asset, 'asset') + unsubscribe(asset)
-      ]
+      as = []
+      as << asset.code
+      as << asset.description
+      as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
+      as << asset.updated_at.to_date if @view.url_for == '/assets/derecognised'
+      as << links_actions(asset, 'asset') + unsubscribe(asset)
+      as
     end
+
   end
 
   def array

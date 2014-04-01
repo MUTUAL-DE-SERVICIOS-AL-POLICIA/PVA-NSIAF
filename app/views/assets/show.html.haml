@@ -3,7 +3,7 @@
     = link_to edit_asset_path(@asset), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    = link_to assets_path, class: 'btn btn-default' do
+    = link_to URI(request.referer).path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("assets.title.title")
 

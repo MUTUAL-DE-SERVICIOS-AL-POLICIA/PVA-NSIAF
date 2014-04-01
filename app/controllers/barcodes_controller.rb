@@ -12,7 +12,7 @@ class BarcodesController < ApplicationController
   def asset
     authorize! :asset, :barcode
     @asset = true
-    @assets = Asset.array_model('assets.code', 'asc', '', '', params[:sSearch], params[:search_column])
+    @assets = Asset.array_model('assets.code', 'asc', '', '', params[:sSearch], params[:search_column], 1)
     respond_to do |format|
       format.html { render :index }
       format.js
