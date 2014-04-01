@@ -88,6 +88,14 @@ class Asset < ActiveRecord::Base
     end
   end
 
+  def derecognised_date
+    update_attribute(:derecognised, Time.now)
+  end
+
+  def get_decline
+    Decline.where(asset_code: code).first
+  end
+
   private
 
   ##

@@ -61,6 +61,7 @@ class AssetsController < ApplicationController
 
   def change_status
     @asset.change_status
+    @asset.derecognised_date
     Decline.deregister(@asset, params[:description], params[:reason], current_user.id)
     render nothing: true
   end
