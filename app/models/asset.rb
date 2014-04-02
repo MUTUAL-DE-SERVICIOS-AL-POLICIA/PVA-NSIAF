@@ -75,14 +75,16 @@ class Asset < ActiveRecord::Base
     array
   end
 
-  def self.to_csv
+  def self.to_csv(is_low = false)
     columns = %w(code description user)
+    columns_title = columns
+    columns_title += %w(derecognised) if is_low
     CSV.generate do |csv|
-      csv << columns.map { |c| self.human_attribute_name(c) }
+      csv << columns_title.map { |c| self.human_attribute_name(c) }
       all.each do |asset|
-        a = asset.attributes.values_at(*columns)
-        a.pop
+        a = asset.attributes.values_at(*columns).compact
         a.push(asset.user_name)
+        a.push(I18n.l(asset.derecognised, format: :version)) if asset.derecognised.present?
         csv << a
       end
     end
