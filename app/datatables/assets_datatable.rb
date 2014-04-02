@@ -23,11 +23,7 @@ private
       as << asset.description
       as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
       if @view.url_for == '/assets/derecognised'
-        if asset.derecognised.present?
-          as << I18n.l(asset.derecognised, format: :version)
-        else
-          as << ''
-        end
+        as << (asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : '')
       end
       as << links_actions(asset, 'asset') + unsubscribe(asset)
       as

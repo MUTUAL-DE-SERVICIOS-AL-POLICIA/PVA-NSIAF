@@ -7,9 +7,13 @@
       %th.separator= Asset.human_attribute_name('code')
       %th= Asset.human_attribute_name('description')
       %th= Asset.human_attribute_name('user')
+      - if action_name == 'derecognised'
+        %th Baja
   %tbody
     - @array.each do |asset|
       %tr
         %td.nowrap= asset.code
         %td= asset.description
         %td= asset.user_name
+        - if asset.status == '0'
+          %td= asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : ''
