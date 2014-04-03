@@ -5,6 +5,7 @@
 - when 'entities' then new_url = new_entity_path
 - when 'auxiliaries' then new_url = new_auxiliary_path
 - when 'assets' then new_url = new_asset_path if action_name != 'derecognised'
+- when 'versions' then new_url = '#' if current_user.is_admin?
 
 = title t("#{controller_name}.title.title")
 

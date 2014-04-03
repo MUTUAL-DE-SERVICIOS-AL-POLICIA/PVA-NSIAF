@@ -11,7 +11,9 @@ Nsiaf::Application.routes.draw do
 
   resources :declines, only: [:index]
 
-  resources :versions, only: [:index]
+  resources :versions, only: [:index] do
+    post :export, on: :collection
+  end
 
   resources :assets, except: [:destroy] do
     post :change_status, on: :member

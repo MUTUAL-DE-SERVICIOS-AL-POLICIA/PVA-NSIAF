@@ -141,3 +141,18 @@ jQuery ->
       $form.attr('action', "/users/#{data.id}")
       $form.find('#user_username').val(data.username)
       $form.find('#user_role').val(data.role)
+
+  #Version select
+  $('.btn-primary').click (e) ->
+    versions = $('table.table input:checkbox:checked')
+    if $(this).prev().text() is 'versions' && versions.length > 0
+      ids = versions.map(->
+        $(this).val()
+      ).get()
+      $.ajax
+        url: "/versions/export"
+        type: "post"
+        data: { ids: ids }
+        complete: (data, xhr) ->
+          window.location = window.location
+    e.preventDefault()

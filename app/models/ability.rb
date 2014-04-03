@@ -6,7 +6,6 @@ class Ability
     if user.is_super_admin?
       can :manage, Entity
       can :manage, User
-      can :manage, Version
       cannot [:show, :update], User, id: user.id
     elsif user.is_admin?
       can :manage, Building
@@ -21,5 +20,6 @@ class Ability
       can [:index, :asset, :auxiliary, :pdf], :barcode
     end
     can [:index, :import], :dbf
+    can :manage, Version
   end
 end
