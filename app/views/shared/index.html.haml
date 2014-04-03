@@ -15,8 +15,9 @@
 .col-xs-2.button_new
   %span.controller_name= action_name == 'derecognised' ? action_name : controller_name
   - if new_url.present?
-    = link_to new_url, class: 'btn btn-primary' do
-      %span.glyphicon.glyphicon-plus
+    - is_versions = controller_name == 'versions'
+    = link_to new_url, class: "btn btn-#{ is_versions ? 'danger' : 'primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }"do
+      %span{ class: "glyphicon glyphicon-#{ is_versions ? 'remove' : 'plus' }" }
       = t("#{controller_name}.title.new")
 
 %table.table.table-striped.table-hover.datatable

@@ -139,6 +139,7 @@ es:
   versions:
     title:
       title: "Histórico"
+      new: "Historial seleccionado"
     active: 'Activo'
     assignation: 'Asignación'
     create: 'Creado'
