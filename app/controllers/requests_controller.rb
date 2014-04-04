@@ -1,9 +1,10 @@
 class RequestsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_request, only: [:show, :edit, :update, :destroy]
 
   # GET /requests
   def index
-    @requests = Request.all
+    format_to('requests', RequestsDatatable)
   end
 
   # GET /requests/1

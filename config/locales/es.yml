@@ -128,6 +128,10 @@ es:
     type:
       assignation: "Asignación"
       devolution: "Devolución"
+  requests:
+    title:
+      title: "Solicitud de Materiales"
+      new: "Nueva Solicitud"
   users:
     roles:
       super_admin: "Super Administrador"
@@ -316,6 +320,11 @@ es:
         admin_id: "Administrador"
         created_at: "Fecha"
         proceeding_type: "Tipo"
+      request:
+        id: "Número"
+        created_at: "Fecha"
+        name: "Nombre"
+        title: "Cargo"
       user:
         code: "Código"
         name: "Nombre"

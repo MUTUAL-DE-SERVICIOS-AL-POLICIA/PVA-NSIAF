@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.html { render '/shared/index' }
       format.json { render json: datatable.new(view_context) }
-      column_order = name_model == 'proceedings' ? 'users.name' : name_model == 'versions' ? 'id' : "#{name_model}.code"
+      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests).include?(name_model) ? 'id' : "#{name_model}.code"
       current = action_name == 'derecognised' ? '0' : current_user
       @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)
       array_csv = action_name == 'derecognised' ? @array.to_csv(true) : @array.to_csv
