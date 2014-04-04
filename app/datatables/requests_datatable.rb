@@ -45,7 +45,7 @@ private
   end
 
   def sort_column
-    columns = %w[requests.id requests.created_at user.name user.title]
+    columns = %w[requests.id requests.created_at users.name users.title]
     columns[params[:iSortCol_0].to_i]
   end
 
