@@ -143,9 +143,9 @@ jQuery ->
       $form.find('#user_role').val(data.role)
 
   #Version select
-  $('.btn-danger').click (e) ->
+  $('.remove_version').click (e) ->
     versions = $('table.table input:checkbox:checked')
-    if $(this).prev().text() is 'versions' && versions.length > 0
+    if versions.length > 0
       ids = versions.map(->
         $(this).val()
       ).get()

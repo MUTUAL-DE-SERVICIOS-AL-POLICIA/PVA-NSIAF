@@ -109,6 +109,13 @@ es:
       create: "Nueva Entidad"
       edit: "Editar Entidad"
       update: "Editar Entidad"
+  materials:
+    title:
+      title: "Materiales"
+      new: "Nuevo Material"
+      create: "Nuevo Material"
+      edit: "Editar Material"
+      update: "Editar Material"
   migration:
     alert_html: 'Especifique el archivo <b>%{model}</b> para migrar'
     file: 'Adjuntar Archivo'
@@ -299,6 +306,11 @@ es:
         acronym: "Sigla"
         code: "Código"
         name: "Nombre"
+      material:
+        code: "Código"
+        name: "Nombre"
+        unit: "Unidad"
+        description: "Descripción"
       proceeding:
         user_id: "Usuario"
         admin_id: "Administrador"

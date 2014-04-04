@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
                disposition: 'attachment',
                layout: 'pdf.html',
                page_size: 'Letter',
-               margin: { top: 15, bottom: 20, left: 15, right: 15 },
+               margin: { top: 10, bottom: 20, left: 15, right: 15 },
                header: { html: { template: 'shared/header.pdf.haml' } },
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end

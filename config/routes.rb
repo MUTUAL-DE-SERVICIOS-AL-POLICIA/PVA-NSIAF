@@ -1,4 +1,6 @@
 Nsiaf::Application.routes.draw do
+  resources :materials, except: [:destroy]
+
   resources :barcodes, only: [:index] do
     collection do
       get :auxiliary

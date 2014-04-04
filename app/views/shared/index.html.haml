@@ -6,6 +6,7 @@
 - when 'auxiliaries' then new_url = new_auxiliary_path
 - when 'assets' then new_url = new_asset_path if action_name != 'derecognised'
 - when 'versions' then new_url = '#' if current_user.is_admin?
+- when 'materials' then new_url = new_material_path
 
 = title t("#{controller_name}.title.title")
 
@@ -16,7 +17,7 @@
   %span.controller_name= action_name == 'derecognised' ? action_name : controller_name
   - if new_url.present?
     - is_versions = controller_name == 'versions'
-    = link_to new_url, class: "btn btn-#{ is_versions ? 'danger' : 'primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }"do
+    = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }"do
       %span{ class: "glyphicon glyphicon-#{ is_versions ? 'remove' : 'plus' }" }
       = t("#{controller_name}.title.new")
 

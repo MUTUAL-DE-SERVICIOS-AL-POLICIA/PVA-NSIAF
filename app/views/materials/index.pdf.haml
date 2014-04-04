@@ -1,0 +1,17 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed
+  %thead
+    %tr
+      %th.separator= Material.human_attribute_name('code')
+      %th= Material.human_attribute_name('name')
+      %th= Material.human_attribute_name('unit')
+      %th= Material.human_attribute_name('descripción')
+  %tbody
+    - @array.each do |material|
+      %tr
+        %td= material.code
+        %td= material.name
+        %td= material.unit
+        %td= material.description
