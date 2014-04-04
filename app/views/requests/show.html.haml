@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Admin:
+  = @request.admin_id
+%p
+  %b User:
+  = @request.user_id
+%p
+  %b Material:
+  = @request.material_id
+%p
+  %b Amount:
+  = @request.amount
+
+= link_to 'Edit', edit_request_path(@request)
+\|
+= link_to 'Back', requests_path

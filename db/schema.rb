@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140403232128) do
+ActiveRecord::Schema.define(version: 20140404133200) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -122,6 +122,15 @@ ActiveRecord::Schema.define(version: 20140403232128) do
 
   add_index "proceedings", ["admin_id"], name: "index_proceedings_on_admin_id", using: :btree
   add_index "proceedings", ["user_id"], name: "index_proceedings_on_user_id", using: :btree
+
+  create_table "requests", force: true do |t|
+    t.integer  "admin_id"
+    t.integer  "user_id"
+    t.integer  "material_id"
+    t.integer  "amount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                              default: "",    null: false
