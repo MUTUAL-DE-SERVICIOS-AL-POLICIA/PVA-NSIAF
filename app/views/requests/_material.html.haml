@@ -1,0 +1,9 @@
+%script{ type: 'text/html', id: 'new_material' }
+  %tr{ id: '{{id}}' }
+    %td {{code}}
+    %td {{unit}}
+    %td {{description}}
+    %td 1
+    %td
+      = button_tag class: 'btn btn-warning btn-xs', title: 'Reducir cantidad', id: 'minus_material' do
+        %span.glyphicon.glyphicon-minus-sign

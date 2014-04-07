@@ -1,3 +1,5 @@
+- is_request = controller_name == 'requests'
+
 #select-user-assets.row
   #select-user.col-lg-offset-2.col-md-offset-2.col-lg-8.col-md-8.col-sm-12
     %h3.col-md-offset-2.col-md-9.text-center Selección de Usuarios
@@ -17,15 +19,16 @@
       .form-group
         .col-md-offset-2.col-sm-offset-2.col-md-9.col-sm-9.text-center
           .row.text-center
+            - unless is_request
+              .col-md-4.col-sm-4
+                = button_tag class: 'btn btn-default btn-block', id: 'btn_assignation' do
+                  %span.glyphicon.glyphicon-plus
+                  Asignación
             .col-md-4.col-sm-4
-              = button_tag class: 'btn btn-default btn-block', id: 'btn_assignation' do
-                %span.glyphicon.glyphicon-plus
-                Asignación
-            .col-md-4.col-sm-4
-              = button_tag class: 'btn btn-primary btn-block', id: 'btn_devolution' do
-                %span.glyphicon.glyphicon-minus
-                Devolución
-            .col-md-4.col-sm-4
+              = button_tag class: 'btn btn-primary btn-block', id: "#{ is_request ? 'btn_request' : 'btn_devolution' }" do
+                %span.glyphicon{ class: "glyphicon-#{ is_request ? 'ok' : 'minus' }" }
+                = t("#{controller_name}.title.users")
+            .col-md-4.col-sm-4{ class: "#{'col-md-offset-4 col-sm-offset-4' if is_request}" }
               = button_tag class: 'btn btn-danger btn-block', id: 'btn_cancel' do
                 %span.glyphicon.glyphicon-ban-circle
                 Cancelar
@@ -34,5 +37,6 @@
 
 #display-user-assets.row{ style: 'display: none;' }
 
-= render 'tpl_assign_devol'
-= render 'tpl_fixed_assets'
+= render 'assets/tpl_assign_devol'
+= render 'assets/tpl_fixed_assets'
+= render 'requests/material' if is_request

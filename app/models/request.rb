@@ -2,8 +2,8 @@ class Request < ActiveRecord::Base
   belongs_to :user
   belongs_to :admin, class_name: 'User'
 
-  has_many :material_request
-  has_many :materials, through: :material_request
+  has_many :material_requests
+  has_many :materials, through: :material_requests
 
   def user_name
     user.present? ? user.name : ''

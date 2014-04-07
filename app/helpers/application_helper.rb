@@ -114,4 +114,13 @@ module ApplicationHelper
   def yield_or_default(section, default = "")
     content_for?(section) ? content_for(section) : default
   end
+
+  def assets_json_request(user)
+    title = 'Pedido de Material'
+    { user_name: user.name, user_title: user.title, request_date: Time.now.to_formatted_s(:db), title: title , devolution: true }
+  end
+
+  def assets_json_material(material)
+    { id: material.id, code: material.code, unit: material.unit, description: material.description }
+  end
 end

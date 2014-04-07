@@ -1,6 +1,6 @@
 class Material < ActiveRecord::Base
-  has_many :material_request
-  has_many :requests, through: :material_request
+  has_many :material_requests
+  has_many :requests, through: :material_requests
 
   def self.set_columns
     h = ApplicationController.helpers

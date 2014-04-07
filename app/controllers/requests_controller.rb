@@ -13,7 +13,10 @@ class RequestsController < ApplicationController
 
   # GET /requests/new
   def new
-    @request = Request.new
+    respond_to do |format|
+      format.html { render 'assets/users' }
+      format.json { render json: view_context.assets_json_request(User.find(params[:user_id])) }
+    end
   end
 
   # GET /requests/1/edit

@@ -7,8 +7,6 @@
   span.controller_name{ display: none; }
 }
 
-.table .glyphicon { margin-right: 3px; }
-
 div.DTTT_container {
   margin-left: 170px;
   position: absolute;
@@ -36,4 +34,14 @@ div.DTTT_container {
 #select_column{
   float: right;
   margin-right: 5px;
+}
+
+/*requests*/
+.request_title{
+  float: right;
+  margin-top: -50px;
+}
+
+.selected-assets{
+  table{ margin: 45px 0 !important; }
 }

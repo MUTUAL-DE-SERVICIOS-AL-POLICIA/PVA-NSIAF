@@ -1,10 +1,16 @@
+- is_request = controller_name == 'requests'
+
 %script{ type: 'text/html', id: 'tpl_assig_devol' }
   %h3.text-center {{title}}
   {{#devolution}}
   %h4
     %span.text-muted Funcionario:
     {{user_name}}
-  %h4
+  - if is_request
+    %h4
+      %span.text-muted Fecha:
+      {{request_date}}
+  %h4{ class: "#{ 'request_title' if is_request }" }
     %span.text-muted Cargo:
     {{user_title}}
   {{/devolution}}
@@ -12,11 +18,18 @@
     %table.table.table-striped.table-hover.table-condensed
       %thead
         %tr
-          %th.col-sm-1
-          %th.col-sm-9 Descripción
-          %th.col-sm-2 Código
-          %th
-      %tbody
+          - if is_request
+            %th Código
+            %th Unidad
+            %th Descripción
+            %th Cantidades
+            %th Opción
+          - else
+            %th.col-sm-1
+            %th.col-sm-9 Descripción
+            %th.col-sm-2 Código
+            %th
+      %tbody#materials
         {{#assets}}
         %tr{ id: 'asset_{{id}}' }
           %td
@@ -35,7 +48,7 @@
           .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
             = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Activo', autofocus: true
           .col-md-3.col-sm-3.col-xs-3
-            = button_tag class: 'btn btn-success col-md-12 btn-lg', id: 'btn-send' do
+            = button_tag class: 'btn btn-success col-md-12 btn-lg', id: "btn-send#{ '-request' if is_request }" do
               %span.glyphicon.glyphicon-ok
               Enviar
     {{^devolution}}
@@ -51,7 +64,7 @@
         %strong {{user_title}}
     {{/devolution}}
     .action-buttons.col-md-12.col-sm-12.text-center
-      = button_tag class: 'btn btn-default', id: 'btn_continue' do
+      = button_tag class: 'btn btn-default', id: "#{ is_request ? 'btn_save' : 'btn_continue' }" do
         %span.glyphicon.glyphicon-list-alt
         Continuar
 
