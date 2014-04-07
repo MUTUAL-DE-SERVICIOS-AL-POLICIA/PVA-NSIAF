@@ -5,5 +5,7 @@
     %td {{description}}
     %td 1
     %td
-      = button_tag class: 'btn btn-warning btn-xs', title: 'Reducir cantidad', id: 'minus_material' do
+      %button.btn.btn-warning.btn-xs{ type: 'button', title: 'Reducir cantidad', id: 'minus_material' }
         %span.glyphicon.glyphicon-minus-sign
+      %button.btn.btn-danger.btn-xs{ type: 'button', title: 'Retirar Material', id: 'remove_material' }
+        %span.glyphicon.glyphicon-remove-sign
