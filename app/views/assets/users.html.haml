@@ -29,7 +29,7 @@
                 %span.glyphicon{ class: "glyphicon-#{ is_request ? 'ok' : 'minus' }" }
                 = t("#{controller_name}.title.users")
             .col-md-4.col-sm-4{ class: "#{'col-md-offset-4 col-sm-offset-4' if is_request}" }
-              = button_tag class: 'btn btn-danger btn-block', id: 'btn_cancel' do
+              = button_tag class: 'btn btn-danger btn-block', id: "#{ is_request ? 'btn_cancel-request' : 'btn_cancel' }" do
                 %span.glyphicon.glyphicon-ban-circle
                 Cancelar
 

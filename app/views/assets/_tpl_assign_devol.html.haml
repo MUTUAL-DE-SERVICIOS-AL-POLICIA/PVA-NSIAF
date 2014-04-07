@@ -23,13 +23,13 @@
             %th Unidad
             %th Descripción
             %th Cantidades
-            %th Opción
+            %th.actions-request Opción
           - else
             %th.col-sm-1
             %th.col-sm-9 Descripción
             %th.col-sm-2 Código
             %th
-      %tbody#materials
+      %tbody{ id: "#{ 'materials' if is_request }" }
         {{#assets}}
         %tr{ id: 'asset_{{id}}' }
           %td
@@ -64,7 +64,7 @@
         %strong {{user_title}}
     {{/devolution}}
     .action-buttons.col-md-12.col-sm-12.text-center
-      = button_tag class: 'btn btn-default', id: "#{ is_request ? 'btn_save' : 'btn_continue' }" do
+      = button_tag class: 'btn btn-default', id: "#{ is_request ? 'btn-show-material' : 'btn_continue' }" do
         %span.glyphicon.glyphicon-list-alt
         Continuar
 

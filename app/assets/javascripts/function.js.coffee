@@ -160,9 +160,7 @@ jQuery ->
   #Material
   $(document).on 'click', '#minus_material', ->
     amount = $(this).parent().prev()
-    amount.text(parseInt(amount.text()) - 1) unless amount.text() is '0'
+    amount.text(parseInt(amount.text()) - 1) unless amount.text() is '1'
 
   $(document).on 'click', '#remove_material', ->
-    $tr = $(this).parents('tr')
-    alert ("Material con código '#{ $tr.find('td:first').text() }' fue retirado del pedido")
-    $tr.remove()
+    $(this).parents('tr').remove()

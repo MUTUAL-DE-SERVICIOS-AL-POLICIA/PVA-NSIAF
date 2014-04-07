@@ -27,6 +27,7 @@ class AssetEvents
     @$btnDevolution = $('#btn_devolution')
     @$btnCancel = $('#btn_cancel')
     @$btnRequest = $('#btn_request')
+    @$btnCancelRequest = $('#btn_cancel-request')
     # Hogan templates
     @$templateAssigDevol = Hogan.compile $('#tpl_assig_devol').html() || ''
     @$templateFixedAssets = Hogan.compile $('#tpl-fixed-assets').html() || ''
@@ -39,6 +40,7 @@ class AssetEvents
     @proceedings_url = '/proceedings'
     @request_url = '/requests/new'
     @request_material_url = "/materials/return_material"
+    @request_cancel_url = '/requests'
     # Hogan template elements
     @cacheElementsTpl()
 
@@ -50,6 +52,7 @@ class AssetEvents
     @$btnSend = $('#btn-send')
     @$code = $('#code')
     @$btnSendRequest = $('#btn-send-request')
+    @$btnShowMaterial = $('#btn-show-material')
 
   bindEvents: ->
     if @$building?
@@ -57,7 +60,7 @@ class AssetEvents
       @$user.remoteChained(@$department.selector, '/assets/users.json')
     $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e, 'E', @not_assigned_url)
     $(document).on 'click', @$btnDevolution.selector, (e) => @displayContainer(e, 'D', @assigned_url)
-    $(document).on 'click', @$btnCancel.selector, (e) => @redirectToAssets(e)
+    $(document).on 'click', @$btnCancel.selector, (e) => @redirectToAssets(e, @proceedings_url)
     $(document).on 'click', @$btnCancelAssig.selector, (e) => @hideContainer(e)
     $(document).on 'click', @$btnContinue.selector, (e) => @sendAssignation(e)
     $(document).on 'click', @$btnCancel_.selector, (e) => @displaySelectUserAsset(e)
@@ -65,6 +68,8 @@ class AssetEvents
     $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e, false)
     $(document).on 'click', @$btnRequest.selector, (e) => @displayContainer(e, '', @request_url)
     $(document).on 'click', @$btnSendRequest.selector, (e) => @checkAssetIfExists(e, true)
+    $(document).on 'click', @$btnShowMaterial.selector, => @showMaterials()
+    $(document).on 'click', @$btnCancelRequest.selector, (e) => @redirectToAssets(e, @request_cancel_url)
 
   displayContainer: (e, proceeding_type, url) ->
     e.preventDefault()
@@ -157,7 +162,7 @@ class AssetEvents
 
   addMaterial: (material) ->
     if $("#materials tr##{material.id}").length
-      amount = $("tr##{material.id} td:nth-last-child(2)")
+      amount = $("tr##{material.id} .amount")
       amount.text(parseInt(amount.text()) + 1)
     else
       $('#materials').append @$templateNewMaterial.render(material)
@@ -181,9 +186,21 @@ class AssetEvents
     @cacheElementsTpl()
     @$code.slideDown -> @.focus()
 
-  redirectToAssets: (e) ->
+  redirectToAssets: (e, url) ->
     e.preventDefault()
-    window.location = @proceedings_url
+    window.location = url
 
   isAssignation: ->
     @proceeding_type is 'E'
+
+  showMaterials: ->
+    if $('tbody#materials tr').length
+      table = $('#assig_devol').clone().removeAttr('id')
+      table.find('.row:first').remove()
+      @$selectUserAssets.hide()
+      @$displayUserAssets.html(table).show()
+      @$displayUserAssets.find('.actions-request').remove()
+      @$displayUserAssets.find('td').removeClass('amount')
+      @$displayUserAssets.append @$templateFixedAssets.render()
+    else
+      alert 'Debe seleccionar al menos un material'

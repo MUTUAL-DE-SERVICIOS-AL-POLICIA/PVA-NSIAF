@@ -121,6 +121,6 @@ module ApplicationHelper
   end
 
   def assets_json_material(material)
-    { id: material.id, code: material.code, unit: material.unit, description: material.description }
+    { id: material.id, code: material.code, unit: material.unit, description: material.description } if material.present?
   end
 end
