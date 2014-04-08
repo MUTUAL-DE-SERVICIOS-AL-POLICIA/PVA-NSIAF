@@ -37,7 +37,7 @@
           %strong {{user_title}}
       {{/devolution}}
     .col-md-offset-1.col-md-10.text-center
-      = button_tag class: 'btn btn-primary', id: 'btn_accept' do
+      = button_tag class: 'btn btn-primary', id: "btn_#{ is_request ? 'save' : 'accept' }" do
         %span.glyphicon.glyphicon-ok
         = is_request ? 'Grabar' : 'Aceptar'
       = button_tag class: 'btn btn-danger', id: 'btn_cancel_' do

@@ -117,7 +117,7 @@ module ApplicationHelper
 
   def assets_json_request(user)
     title = 'Pedido de Material'
-    { user_name: user.name, user_title: user.title, request_date: Time.now.to_formatted_s(:db), title: title , devolution: true }
+    { user_name: user.name, user_title: user.title, request_date: I18n.l(Time.now, format: :version), title: title , devolution: true }
   end
 
   def assets_json_material(material)

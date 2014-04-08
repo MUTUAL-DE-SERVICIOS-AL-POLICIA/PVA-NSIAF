@@ -53,6 +53,7 @@ class AssetEvents
     @$code = $('#code')
     @$btnSendRequest = $('#btn-send-request')
     @$btnShowMaterial = $('#btn-show-material')
+    @$btnSaveRequest = $('#btn_save')
 
   bindEvents: ->
     if @$building?
@@ -70,6 +71,7 @@ class AssetEvents
     $(document).on 'click', @$btnSendRequest.selector, (e) => @checkAssetIfExists(e, true)
     $(document).on 'click', @$btnShowMaterial.selector, => @showMaterials()
     $(document).on 'click', @$btnCancelRequest.selector, (e) => @redirectToAssets(e, @request_cancel_url)
+    $(document).on 'click', @$btnSaveRequest.selector, => @save_request()
 
   displayContainer: (e, proceeding_type, url) ->
     e.preventDefault()
@@ -197,10 +199,20 @@ class AssetEvents
     if $('tbody#materials tr').length
       table = $('#assig_devol').clone().removeAttr('id')
       table.find('.row:first').remove()
+      table.find('tbody').removeAttr('id')
       @$selectUserAssets.hide()
       @$displayUserAssets.html(table).show()
+      @$displayUserAssets.find('tr').removeAttr('id')
       @$displayUserAssets.find('.actions-request').remove()
       @$displayUserAssets.find('td').removeClass('amount')
       @$displayUserAssets.append @$templateFixedAssets.render()
     else
       alert 'Debe seleccionar al menos un material'
+
+  save_request: ->
+    materials = $.map($('tbody#materials tr'), (val, i) ->
+      material_id: val.id
+      amount: $(val).find('td.amount').text()
+    )
+    json_data = { user_id: @$user.val(), material_requests_attributes: materials }
+    $.post @request_cancel_url, { request: json_data } , null, 'script'

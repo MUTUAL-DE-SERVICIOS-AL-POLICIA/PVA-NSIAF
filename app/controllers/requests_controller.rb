@@ -1,6 +1,6 @@
 class RequestsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_request, only: [:show, :edit, :update, :destroy]
+  before_action :set_request, only: [:show]
 
   # GET /requests
   def index
@@ -19,34 +19,11 @@ class RequestsController < ApplicationController
     end
   end
 
-  # GET /requests/1/edit
-  def edit
-  end
-
   # POST /requests
   def create
     @request = Request.new(request_params)
-
-    if @request.save
-      redirect_to @request, notice: 'Request was successfully created.'
-    else
-      render action: 'new'
-    end
-  end
-
-  # PATCH/PUT /requests/1
-  def update
-    if @request.update(request_params)
-      redirect_to @request, notice: 'Request was successfully updated.'
-    else
-      render action: 'edit'
-    end
-  end
-
-  # DELETE /requests/1
-  def destroy
-    @request.destroy
-    redirect_to requests_url, notice: 'Request was successfully destroyed.'
+    @request.admin_id = current_user.id
+    @request.save
   end
 
   private
@@ -57,6 +34,6 @@ class RequestsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def request_params
-      params.require(:request).permit(:admin_id, :user_id, :material_id, :amount)
+      params.require(:request).permit(:user_id, { material_requests_attributes: [ :material_id, :amount ] } )
     end
 end

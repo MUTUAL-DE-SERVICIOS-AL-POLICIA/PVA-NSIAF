@@ -4,6 +4,7 @@ class Request < ActiveRecord::Base
 
   has_many :material_requests
   has_many :materials, through: :material_requests
+  accepts_nested_attributes_for :material_requests
 
   def user_name
     user.present? ? user.name : ''
