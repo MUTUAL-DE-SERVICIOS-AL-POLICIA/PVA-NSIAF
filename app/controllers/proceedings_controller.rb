@@ -21,7 +21,7 @@ class ProceedingsController < ApplicationController
                layout: 'pdf.html',
                page_size: 'Letter',
                margin: {
-                 top: 15,
+                 top: 10,
                  bottom: 15,
                  left: 20,
                  right: 15

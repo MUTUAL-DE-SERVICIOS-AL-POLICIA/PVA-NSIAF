@@ -8,12 +8,12 @@
     %h4
       %span.text-muted Funcionario:
       = @request.user_name
+      .request_title
+        %span.text-muted Cargo:
+        = @request.user_title
     %h4
       %span.text-muted Fecha:
       = I18n.l(@request.created_at, format: :version)
-    %h4.request_title
-      %span.text-muted Cargo:
-      = @request.user_title
     %table.table.table-striped.table-condensed.proceeding-assets
       %thead
         %tr
