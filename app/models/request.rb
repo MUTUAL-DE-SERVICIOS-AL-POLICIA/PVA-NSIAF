@@ -20,11 +20,11 @@ class Request < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = includes(:user).order("#{sort_column} #{sort_direction}")
+    array = joins(:user).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       type_search = %w(name title).include?(search_column) ? "users.#{search_column}" : "requests.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%").references(:user)
+      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user)
     end
     array
   end
