@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140403232128) do
+ActiveRecord::Schema.define(version: 20140407224022) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -70,13 +70,13 @@ ActiveRecord::Schema.define(version: 20140403232128) do
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
 
   create_table "declines", force: true do |t|
-    t.string   "asset_code"
-    t.string   "account_code"
-    t.string   "auxiliary_code"
-    t.string   "department_code"
-    t.string   "user_code"
-    t.string   "description"
-    t.string   "reason"
+    t.string   "asset_code",      limit: 50
+    t.string   "account_code",    limit: 50
+    t.string   "auxiliary_code",  limit: 50
+    t.string   "department_code", limit: 50
+    t.string   "user_code",       limit: 50
+    t.text     "description"
+    t.text     "reason"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -103,6 +103,15 @@ ActiveRecord::Schema.define(version: 20140403232128) do
     t.datetime "updated_at"
   end
 
+  create_table "material_requests", force: true do |t|
+    t.integer "material_id"
+    t.integer "request_id"
+    t.integer "amount"
+  end
+
+  add_index "material_requests", ["material_id"], name: "index_material_requests_on_material_id", using: :btree
+  add_index "material_requests", ["request_id"], name: "index_material_requests_on_request_id", using: :btree
+
   create_table "materials", force: true do |t|
     t.string   "code",        limit: 50
     t.string   "name"
@@ -122,6 +131,13 @@ ActiveRecord::Schema.define(version: 20140403232128) do
 
   add_index "proceedings", ["admin_id"], name: "index_proceedings_on_admin_id", using: :btree
   add_index "proceedings", ["user_id"], name: "index_proceedings_on_user_id", using: :btree
+
+  create_table "requests", force: true do |t|
+    t.integer  "admin_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                              default: "",    null: false

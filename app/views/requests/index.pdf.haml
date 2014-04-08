@@ -1,0 +1,17 @@
+.title_pdf
+  %h3 #{t("#{controller_name}.title.title")}
+
+%table.table.table-condensed
+  %thead
+    %tr
+      %th.separator= Request.human_attribute_name('id')
+      %th= Request.human_attribute_name('create_at')
+      %th= Request.human_attribute_name('name')
+      %th= Request.human_attribute_name('title')
+  %tbody
+    - @array.each do |r|
+      %tr
+        %td.nowrap= r.id
+        %td= I18n.l(r.created_at, format: :version)
+        %td= r.user_name
+        %td= r.user_title

@@ -18,6 +18,7 @@ class Ability
       can :manage, Decline
       can :manage, Proceeding
       can :manage, Material
+      can :manage, Request
       can [:index, :asset, :auxiliary, :pdf], :barcode
     end
     can [:index, :import], :dbf

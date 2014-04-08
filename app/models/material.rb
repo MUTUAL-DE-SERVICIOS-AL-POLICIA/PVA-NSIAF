@@ -1,4 +1,7 @@
 class Material < ActiveRecord::Base
+  has_many :material_requests
+  has_many :requests, through: :material_requests
+
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'unit'), h.get_column(self, 'description')]
