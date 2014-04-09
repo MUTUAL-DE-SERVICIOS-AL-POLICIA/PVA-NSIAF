@@ -1,9 +1,9 @@
 Nsiaf::Application.routes.draw do
-  resources :requests, only: [:index, :show, :new, :create]
+#  resources :requests, only: [:index, :show, :new, :create]
 
-  resources :materials, except: [:destroy] do
-    get :return_material, on: :collection
-  end
+  #resources :materials, except: [:destroy] do
+    #get :return_material, on: :collection
+  #end
 
   resources :barcodes, only: [:index] do
     collection do
