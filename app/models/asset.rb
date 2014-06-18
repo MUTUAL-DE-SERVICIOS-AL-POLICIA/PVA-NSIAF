@@ -6,6 +6,7 @@ class Asset < ActiveRecord::Base
     'DESCRIP' => 'description'
   }
 
+  belongs_to :account
   belongs_to :auxiliary
   belongs_to :user
 
@@ -23,6 +24,16 @@ class Asset < ActiveRecord::Base
   end
 
   has_paper_trail
+
+  def self.search_by(account_id, auxiliary_id)
+    if auxiliary_id.present?
+      assets = includes(:user).where(auxiliary_id: auxiliary_id)
+    elsif account_id.present?
+      assets = includes(:user).where(account_id: account_id)
+    else
+      assets = self.none
+    end
+  end
 
   def auxiliary_code
     auxiliary.present? ? auxiliary.code : ''
@@ -53,8 +64,9 @@ class Asset < ActiveRecord::Base
     false
   end
 
-  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = includes(:user).order("#{sort_column} #{sort_direction}").where(status: '1')
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
+    status = '1' if status != '0'
+    array = includes(:user).order("#{sort_column} #{sort_direction}").where(status: status)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
@@ -63,17 +75,27 @@ class Asset < ActiveRecord::Base
     array
   end
 
-  def self.to_csv
+  def self.to_csv(is_low = false)
     columns = %w(code description user)
+    columns_title = columns
+    columns_title += %w(derecognised) if is_low
     CSV.generate do |csv|
-      csv << columns.map { |c| self.human_attribute_name(c) }
+      csv << columns_title.map { |c| self.human_attribute_name(c) }
       all.each do |asset|
-        a = asset.attributes.values_at(*columns)
-        a.pop
+        a = asset.attributes.values_at(*columns).compact
         a.push(asset.user_name)
+        a.push(I18n.l(asset.derecognised, format: :version)) if asset.derecognised.present?
         csv << a
       end
     end
+  end
+
+  def derecognised_date
+    update_attribute(:derecognised, Time.now)
+  end
+
+  def get_decline
+    Decline.where(asset_code: code).first
   end
 
   private
@@ -85,8 +107,9 @@ class Asset < ActiveRecord::Base
     CORRELATIONS.each do |origin, destination|
       asset.merge!({ destination => record[origin] })
     end
-    a = Auxiliary.find_by_code(record['CODAUX'])
+    ac = Account.find_by_code(record['CODCONT'])
+    ax = Auxiliary.joins(:account).where(code: record['CODAUX'], accounts: { code: record['CODCONT'] }).take
     u = User.joins(:department).where(code: record['CODRESP'], departments: { code: record['CODOFIC'] }).take
-    asset.present? && new(asset.merge!({ auxiliary: a, user: u })).save
+    asset.present? && new(asset.merge!({ account: ac, auxiliary: ax, user: u })).save
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140225224514) do
+ActiveRecord::Schema.define(version: 20140407224022) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -38,8 +38,11 @@ ActiveRecord::Schema.define(version: 20140225224514) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "status",       limit: 2
+    t.integer  "account_id"
+    t.datetime "derecognised"
   end
 
+  add_index "assets", ["account_id"], name: "index_assets_on_account_id", using: :btree
   add_index "assets", ["auxiliary_id"], name: "index_assets_on_auxiliary_id", using: :btree
   add_index "assets", ["user_id"], name: "index_assets_on_user_id", using: :btree
 
@@ -100,6 +103,24 @@ ActiveRecord::Schema.define(version: 20140225224514) do
     t.datetime "updated_at"
   end
 
+  create_table "material_requests", force: true do |t|
+    t.integer "material_id"
+    t.integer "request_id"
+    t.integer "amount"
+  end
+
+  add_index "material_requests", ["material_id"], name: "index_material_requests_on_material_id", using: :btree
+  add_index "material_requests", ["request_id"], name: "index_material_requests_on_request_id", using: :btree
+
+  create_table "materials", force: true do |t|
+    t.string   "code",        limit: 50
+    t.string   "name"
+    t.string   "unit"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "proceedings", force: true do |t|
     t.integer  "user_id"
     t.integer  "admin_id"
@@ -110,6 +131,13 @@ ActiveRecord::Schema.define(version: 20140225224514) do
 
   add_index "proceedings", ["admin_id"], name: "index_proceedings_on_admin_id", using: :btree
   add_index "proceedings", ["user_id"], name: "index_proceedings_on_user_id", using: :btree
+
+  create_table "requests", force: true do |t|
+    t.integer  "admin_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                              default: "",    null: false
@@ -142,12 +170,13 @@ ActiveRecord::Schema.define(version: 20140225224514) do
   add_index "users", ["username"], name: "index_users_on_username", using: :btree
 
   create_table "versions", force: true do |t|
-    t.string   "item_type",  null: false
+    t.string   "item_type",                 null: false
     t.integer  "item_id"
-    t.string   "event",      null: false
+    t.string   "event",                     null: false
     t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
+    t.boolean  "active",     default: true
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree

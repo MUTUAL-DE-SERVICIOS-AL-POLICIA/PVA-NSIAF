@@ -1,4 +1,5 @@
 class ProceedingsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_proceeding, only: [:show]
 
   # GET /proceedings
@@ -20,11 +21,13 @@ class ProceedingsController < ApplicationController
                layout: 'pdf.html',
                page_size: 'Letter',
                margin: {
-                 top: 15,
+                 top: 10,
                  bottom: 15,
                  left: 20,
                  right: 15
-               }
+               },
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
     end
   end

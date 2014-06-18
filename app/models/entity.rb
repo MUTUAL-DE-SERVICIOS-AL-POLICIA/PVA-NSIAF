@@ -20,9 +20,10 @@ class Entity < ActiveRecord::Base
     array
   end
 
-  def self.to_csv(column_names)
+  def self.to_csv
+    column_names = ['code', 'name', 'acronym']
     CSV.generate do |csv|
-      csv << column_names
+      csv << column_names.map { |c| self.human_attribute_name(c) }
       all.each do |product|
         csv << product.attributes.values_at(*column_names)
       end

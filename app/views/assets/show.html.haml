@@ -3,21 +3,23 @@
     = link_to edit_asset_path(@asset), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    = link_to assets_path, class: 'btn btn-default' do
+    = link_to URI(request.referer).path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("assets.title.title")
 
-  %h2 Activos
+  %h2 Activo
 
-%p
-  %b #{Asset.human_attribute_name('code')}:
-  = @asset.code
-%p
-  %b #{Asset.human_attribute_name('description')}:
-  = @asset.description
-%p
-  %b #{Asset.human_attribute_name('user')}:
-  = @asset.user_name
-%p
-  %b #{Asset.human_attribute_name('auxiliary')}:
-  = @asset.auxiliary_name
+%dl.dl-horizontal
+  %dt= Asset.human_attribute_name('code')
+  %dd= @asset.code
+  %dt= Asset.human_attribute_name('description')
+  %dd= @asset.description
+  %dt= Asset.human_attribute_name('user')
+  %dd= link_to_if @asset.user, @asset.user_name, @asset.user, title: @asset.user_code
+  %dt= Asset.human_attribute_name('auxiliary')
+  %dd= link_to_if @asset.auxiliary, @asset.auxiliary_name, @asset.auxiliary, title: @asset.auxiliary_code
+  - if @asset.status == '0'
+    %dt= Decline.human_attribute_name('description')
+    %dd= @asset.get_decline.description
+    %dt= Decline.human_attribute_name('motivo')
+    %dd= @asset.get_decline.reason

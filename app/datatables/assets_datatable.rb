@@ -1,5 +1,5 @@
 class AssetsDatatable
-  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, to: :@view
+  delegate :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, :links_actions, :current_user, to: :@view
 
   def initialize(view)
     @view = view
@@ -18,14 +18,17 @@ private
 
   def data
     array.map do |asset|
-      [
-        asset.code,
-        asset.description,
-        link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), asset, class: 'btn btn-default btn-xs') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, asset], class: 'btn btn-primary btn-xs') + ' ' + unsubscribe(asset)
-      ]
+      as = []
+      as << asset.code
+      as << asset.description
+      as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
+      if asset.status == '0'
+        as << (asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : '')
+      end
+      as << links_actions(asset, 'asset') + unsubscribe(asset)
+      as
     end
+
   end
 
   def array
@@ -33,7 +36,8 @@ private
   end
 
   def fetch_array
-    Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
+    status = @view.url_for == '/assets/derecognised' ? '0' : ''
+    Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], status)
   end
 
   def page
@@ -54,8 +58,8 @@ private
   end
 
   def unsubscribe(asset)
-    if current_user.is_admin?
-      url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}") + 'Dar baja', '#', class: 'btn btn-warning btn-xs', data: data_link(asset))
+    if @view.url_for == '/assets' && asset.user.present? && asset.user.id == current_user.id
+      url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(asset), title: 'Dar baja')
     end
     url || ''
   end

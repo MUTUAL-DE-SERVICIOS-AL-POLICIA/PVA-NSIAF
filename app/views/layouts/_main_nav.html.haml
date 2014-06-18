@@ -29,16 +29,16 @@
             = link_to t('auxiliaries.title.title'), auxiliaries_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to t('assets.title.title'), assets_path, role: 'menuitem'
-      %li.dropdown
-        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do
-          Migración
-          %b.caret
-        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_migration' }
-          - import_models.each_with_index do |model, index|
-            - if index == 3
-              %li.divider{ role: 'presentation' }
-            %li{ role: 'presentation' }
-              = link_to t("#{model}.title.title"), dbf_path(model), role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Bajas', derecognised_assets_path, role: 'menuitem'
+    %li.dropdown
+      = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do
+        Migración
+        %b.caret
+      %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_migration' }
+        - import_models_user.each_with_index do |model, index|
+          %li{ role: 'presentation' }
+            = link_to t("#{model}.title.title"), dbf_path(model), role: 'menuitem'
     - if current_user.is_admin?
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do
@@ -49,6 +49,28 @@
             = link_to 'Asignacion/devolución', users_assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Actas', proceedings_path, role: 'menuitem'
+      -#%li.dropdown
+        -#= link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do
+          -#Almacenes
+          -#%b.caret
+        -#%ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
+          -#%li{ role: 'presentation' }
+            -#= link_to 'Materiales', materials_path, role: 'menuitem'
+          -#%li{ role: 'presentation' }
+            -#= link_to 'Solicitud de Material', requests_path, role: 'menuitem'
+      %li.dropdown
+        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_barcode' do
+          Código Barras
+          %b.caret
+        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_barcode' }
+          %li{ role: 'presentation' }
+            = link_to 'Cuentas', barcodes_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Auxiliares', auxiliary_barcodes_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Activos', asset_barcodes_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Pre Registros', '#', role: 'menuitem'
     - if can? :read, Version
       %li
         = link_to 'Histórico', versions_path

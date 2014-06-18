@@ -1,0 +1,56 @@
+#request.row{ class: "#{'separator' if is_pdf?}" }
+  .col-md-12
+    %h1.proceeding-title.text-center
+      Pedido de Material
+      .nro_request
+        Nro. #{@request.id}
+    %p.proceeding-description.text-justify
+    %h4
+      %span.text-muted Funcionario:
+      = @request.user_name
+      .request_title
+        %span.text-muted Cargo:
+        = @request.user_title
+    %h4
+      %span.text-muted Fecha:
+      = I18n.l(@request.created_at, format: :version)
+    %table.table.table-striped.table-condensed.proceeding-assets
+      %thead
+        %tr
+          %th.col-sm-2 Cantidad
+          %th.col-sm-2 Unidad
+          %th.col-sm-6 Descripción
+          %th.col-sm-2 Código
+      %tbody
+        - @request.material_requests.each do |material|
+          %tr
+            %td= material.amount
+            %td= material.material_unit
+            %td= material.material_description
+            %td= material.material_code
+
+    %p.proceeding-date.text-right
+      La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
+
+    .proceeding-signature
+      %table{ style: 'width: 100%' }
+        %tr
+          %td.text-center
+            %p _______________________
+            %p Entregué Conforme
+          %td.text-center
+            %p _______________________
+            %p Vo. Bo.
+          %td.text-center
+            %p _______________________
+            %p Recibí Conforme
+
+  - unless is_pdf?
+    %p.proceeding-pdf.text-center
+      = link_to request_path(@request, format: :pdf), class: 'btn btn-primary btn-lg' do
+        %span.glyphicon.glyphicon-print
+        Imprimir PDF
+
+      = link_to requests_path, class: 'btn btn-danger btn-lg' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar

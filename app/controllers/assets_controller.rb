@@ -47,9 +47,10 @@ class AssetsController < ApplicationController
   # PATCH/PUT /assets/1
   # PATCH/PUT /assets/1.json
   def update
+    url = @asset.status == '0' ? derecognised_assets_path : assets_url
     respond_to do |format|
       if @asset.update(asset_params)
-        format.html { redirect_to assets_url, notice: t('general.updated', model: Asset.model_name.human) }
+        format.html { redirect_to url, notice: t('general.updated', model: Asset.model_name.human) }
         format.json { head :no_content }
       else
         format.html { render action: 'form' }
@@ -60,6 +61,7 @@ class AssetsController < ApplicationController
 
   def change_status
     @asset.change_status
+    @asset.derecognised_date
     Decline.deregister(@asset, params[:description], params[:reason], current_user.id)
     render nothing: true
   end
@@ -106,6 +108,10 @@ class AssetsController < ApplicationController
     asset_ids &= user.asset_ids
     assets = user.assets.where(id: asset_ids)
     render json: view_context.assets_json(assets, user, true)
+  end
+
+  def derecognised
+    format_to('assets', AssetsDatatable)
   end
 
   private

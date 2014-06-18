@@ -1,5 +1,7 @@
 class DbfController < ApplicationController
   load_and_authorize_resource class: false
+  before_action :check_roles, only: [:index, :import]
+  include NavigationHelper
 
   # GET /dbf/:model
   def index
@@ -34,5 +36,11 @@ class DbfController < ApplicationController
   def is_dbf_file?(dbf)
     view_context.dbf_mime_types.include?(dbf.content_type) &&
       view_context.get_filename(params[:model]).downcase == dbf.original_filename.downcase
+  end
+
+  def check_roles
+    if !(import_models_user.include?(params[:model]))
+      redirect_to root_url, alert: 'No estás autorizado para acceder a ésta página.'
+    end
   end
 end

@@ -5,7 +5,7 @@ class EntitiesController < ApplicationController
   # GET /entities
   # GET /entities.json
   def index
-    format_to('entities', EntitiesDatatable, ['code', 'name', 'acronym'])
+    format_to('entities', EntitiesDatatable)
   end
 
   def show

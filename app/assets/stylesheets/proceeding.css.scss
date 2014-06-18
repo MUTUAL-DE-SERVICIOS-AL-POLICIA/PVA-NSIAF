@@ -1,9 +1,12 @@
-#assig_devol {
-  .action-buttons {
-    margin: 30px 0 60px;
-  }
+.nowrap {
+  white-space: nowrap;
 }
-#proceeding-delivery {
+
+.action-buttons {
+  margin: 30px 0 60px;
+}
+
+#proceeding-delivery, #request {
   font-size: 14px;
 
   .proceeding-assets {
@@ -22,4 +25,69 @@
   .proceeding-title {
     margin: 0 0 30px 0;
   }
+}
+
+#pdf-assets-print {
+  tbody {
+    tr {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      td {
+        padding: 8px 0 5px;
+      }
+    }
+  }
+}
+
+#header{
+  border-bottom: 1px solid;
+  float: left;
+  text-align: center;
+  width: 100%;
+
+  .logo{
+    float: left;
+    margin-bottom: 10px;
+  }
+
+  .logo1{ float: right; }
+}
+
+.title_pdf{
+  float: left;
+  margin: 90px 0 -100px;
+}
+
+.separator{
+  border-bottom: 1px solid #DDDDDD !important;
+  float: left;
+  margin-top: 100px;
+  width: 100%;
+}
+
+#footer{
+  .page_Numbering{
+    float: left;
+    margin-top: 15px;
+  }
+
+  table{
+    float: right;
+    font-size: 7px;
+    width: 42%;
+
+    td{ padding: 0 5px; }
+  }
+}
+
+.acta{ font-size: 12px; }
+
+/*requests*/
+.request_title{ float: right; }
+
+.nro_request{
+  float: right;
+  font-size: 17px;
+  font-weight: bold;
 }

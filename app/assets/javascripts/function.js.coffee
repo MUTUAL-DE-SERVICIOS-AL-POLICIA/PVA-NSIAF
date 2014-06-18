@@ -33,7 +33,8 @@ jQuery ->
     bLengthChange: false
     iDisplayLength: 15
     aoColumnDefs: [
-      { bSortable: false, aTargets: [ -1 ] }
+      { sClass: 'nowrap', bSortable: false, aTargets: [ -1 ] },
+      { sClass: 'nowrap', aTargets: [ 0 ] }
     ]
     oLanguage:
       sUrl: '/locales/dataTables.spanish.txt'
@@ -49,13 +50,13 @@ jQuery ->
       table = $.fn.dataTable.fnTables(true)
       if table.length > 0
         $(table).dataTable().fnAdjustColumnSizing()
-     oTableTools:
-         aButtons: [
-            { sExtends: "download", sButtonText: "CSV", sUrl: "#{ $('.button_new span.controller_name').text() }.csv" }
-            { sExtends: "download", sButtonText: "PDF", sUrl: "#{ $('.button_new span.controller_name').text() }.pdf" }
-         ]
-
-
+    oTableTools:
+      aButtons: [
+        { sExtends: "download", sButtonText: "CSV", sUrl: "#{ $('.button_new span.controller_name').text() }.csv" }
+        { sExtends: "download", sButtonText: "PDF", sUrl: "#{ $('.button_new span.controller_name').text() }.pdf" }
+      ]
+    fnDrawCallback: (oSettings) ->
+      $('#select_column').appendTo $('.dataTables_filter')
 
 
   # Change button status
@@ -112,3 +113,54 @@ jQuery ->
   $(document).on 'click', '.download-assets', (e) ->
     e.preventDefault()
     window.location = $(@).data('url')
+
+  #USER AUTOCOMPLETE
+  $(".typeahead").keyup (e) ->
+    unless e.which == 13
+      $form = $('#new_user')
+      if $form.find('input:hidden[value="patch"]').length > 0
+        $form.find('input:hidden:first').next().remove()
+        $form.attr('action', "/users")
+        $form.find('#user_username').val('')
+        $form.find('#user_role').val('super_admin')
+
+  bestPictures = new Bloodhound(
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
+    queryTokenizer: Bloodhound.tokenizers.whitespace
+    limit: 100
+    remote: "/users/autocomplete.json?q=%QUERY"
+  )
+  bestPictures.initialize()
+  $("input.typeahead").typeahead null,
+    displayKey: "name"
+    source: bestPictures.ttAdapter()
+  .on 'typeahead:selected', (evt, data) ->
+    $form = $('#new_user')
+    if $form.find('input:hidden[value="patch"]').length == 0
+      $('<input type="hidden" value="patch" name="_method" autocomplete="off">').insertAfter( $form.find('input:hidden:first') )
+      $form.attr('action', "/users/#{data.id}")
+      $form.find('#user_username').val(data.username)
+      $form.find('#user_role').val(data.role)
+
+  #Version select
+  $('.remove_version').click (e) ->
+    versions = $('table.table input:checkbox:checked')
+    if versions.length > 0
+      ids = versions.map(->
+        $(this).val()
+      ).get()
+      $.ajax
+        url: "/versions/export"
+        type: "post"
+        data: { ids: ids }
+        complete: (data, xhr) ->
+          window.location = window.location
+    e.preventDefault()
+
+  #Material
+  $(document).on 'click', '#minus_material', ->
+    amount = $(this).parent().prev()
+    amount.text(parseInt(amount.text()) - 1) unless amount.text() is '1'
+
+  $(document).on 'click', '#remove_material', ->
+    $(this).parents('tr').remove()

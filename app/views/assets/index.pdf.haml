@@ -1,14 +1,19 @@
-%h3= t("#{controller_name}.title.title")
+.title_pdf
+  %h3 #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
 
 %table.table.table-condensed
   %thead
     %tr
-      %th= Asset.human_attribute_name('code')
+      %th.separator= Asset.human_attribute_name('code')
       %th= Asset.human_attribute_name('description')
       %th= Asset.human_attribute_name('user')
+      - if action_name == 'derecognised'
+        %th Baja
   %tbody
     - @array.each do |asset|
       %tr
-        %td{ style: 'white-space: nowrap;' }= asset.code
+        %td.nowrap= asset.code
         %td= asset.description
         %td= asset.user_name
+        - if asset.status == '0'
+          %td= asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : ''

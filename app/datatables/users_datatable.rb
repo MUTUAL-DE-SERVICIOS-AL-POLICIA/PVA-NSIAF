@@ -1,5 +1,5 @@
 class UsersDatatable
-  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :links_actions, :data_link, :type_status, :img_status, :title_status, to: :@view
+  delegate :current_user, :params, :link_to_if, :links_actions, :type_status, to: :@view
 
   def initialize(view)
     @view = view
@@ -23,7 +23,7 @@ private
         user.username,
         I18n.t(user.role, scope: 'users.roles'),
         type_status(user.status),
-        links_actions(user)
+        (links_actions(user) unless user.role == 'super_admin')
       ]
     end
   end
@@ -41,9 +41,7 @@ private
         user.mobile,
         link_to_if(user.department, user.department_name, user.department, title: user.department_code),
         type_status(user.status),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-xs') + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-xs') + ' ' +
-        link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-xs', data: data_link(user))
+        links_actions(user)
       ]
     end
   end

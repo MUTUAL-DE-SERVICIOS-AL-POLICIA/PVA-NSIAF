@@ -1,9 +1,10 @@
-%h3= t("#{controller_name}.title.title")
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
 
 %table.table.table-condensed
   %thead
     %tr
-      %th= Account.human_attribute_name('code')
+      %th.separator= Account.human_attribute_name('code')
       %th= Account.human_attribute_name('name')
   %tbody
     - @array.each do |account|

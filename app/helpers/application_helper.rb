@@ -7,10 +7,16 @@ module ApplicationHelper
     title = 'Devolución de Activos Fijos' if assigned == true
     { assets: assets.as_json, user_name: user.name, user_title: user.title, devolution: assigned, title: title }
   end
+
   ##
   # Mime-types para los archivos *.dbf
   def dbf_mime_types
     %w(application/dbase application/x-dbase application/dbf application/x-dbf zz-application/zz-winassoc-dbf)
+  end
+
+  def get_accounts(assets = false)
+    accounts = assets == true ? Account.with_assets : Account.all
+    accounts.map { |b| [b.name, b.id] }
   end
 
   def get_buildings
@@ -30,12 +36,20 @@ module ApplicationHelper
       { index: index + 1, id: a.id, description: a.description, code: a.code }
     end
     {
-      admin_name: proceeding.admin_name.titleize,
+      #admin_name: proceeding.admin_name.titleize,
       assets: assets.to_json,
       proceeding_date: I18n.l(proceeding.created_at.to_date, format: :long),
       devolution: proceeding.is_devolution?,
-      user_name: proceeding.user_name.titleize
+      user_name: proceeding.user_name.titleize,
+      user_title: proceeding.user_title.titleize
     }
+  end
+
+  def selected_assets_json(assets)
+    assets = assets.each_with_index.map do |a, index|
+      { index: index + 1, id: a.id, description: a.description, code: a.code, user_name: a.user_name }
+    end
+    { assets: assets.as_json }
   end
 
   def submit_and_cancel(url)
@@ -88,12 +102,10 @@ module ApplicationHelper
     }
   end
 
-  def links_actions(user)
-    unless user.role == 'super_admin'
-      link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), user, class: 'btn btn-default btn-xs') + ' ' +
-      link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit') + I18n.t('general.btn.edit'), [:edit, user], class: 'btn btn-primary btn-xs') + ' ' +
-      link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}") + title_status(user.status), '#', class: 'btn btn-warning btn-xs', data: data_link(user))
-    end
+  def links_actions(user, type= '')
+    link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), user, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) + ' ' +
+    link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), [:edit, user], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit')) + ' ' +
+    (link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(user), title: title_status(user.status)) unless type == 'asset')
   end
 
   def status_active(model)
@@ -102,5 +114,14 @@ module ApplicationHelper
 
   def yield_or_default(section, default = "")
     content_for?(section) ? content_for(section) : default
+  end
+
+  def assets_json_request(user)
+    title = 'Pedido de Material'
+    { user_name: user.name, user_title: user.title, request_date: I18n.l(Time.now, format: :version), title: title , devolution: true }
+  end
+
+  def assets_json_material(material)
+    { id: material.id, code: material.code, unit: material.unit, description: material.description } if material.present?
   end
 end

@@ -1,5 +1,7 @@
+- is_request = controller_name == 'requests'
+
 %script{ type: 'text/html', id: 'tpl-fixed-assets' }
-  .col-md-offset-2.col-md-8
+  - unless is_request
     %h3.text-center {{title}}
     {{#devolution}}
     %h4
@@ -23,7 +25,8 @@
           %td {{description}}
           %td {{code}}
         {{/assets}}
-    .row
+  .row
+    - unless is_request
       {{^devolution}}
       .col-md-offset-1.col-sm-offset-1.col-md-10.col-sm-10
         %h4
@@ -33,10 +36,10 @@
           %span.text-muted Cargo:
           %strong {{user_title}}
       {{/devolution}}
-      .col-md-offset-1.col-md-10.text-center
-        = button_tag class: 'btn btn-primary', id: 'btn_accept' do
-          %span.glyphicon.glyphicon-ok
-          Aceptar
-        = button_tag class: 'btn btn-danger', id: 'btn_cancel_' do
-          %span.glyphicon.glyphicon-ban-circle
-          Cancelar
+    .col-md-offset-1.col-md-10.text-center
+      = button_tag class: 'btn btn-primary', id: "btn_#{ is_request ? 'save' : 'accept' }" do
+        %span.glyphicon.glyphicon-ok
+        = is_request ? 'Grabar' : 'Aceptar'
+      = button_tag class: 'btn btn-danger', id: 'btn_cancel_' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar

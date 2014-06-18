@@ -1,3 +1,5 @@
+- if current_user.is_admin?
+  %th
 %th= Version.human_attribute_name('id')
 %th= Version.human_attribute_name('item_id')
 %th= Version.human_attribute_name('created_at')

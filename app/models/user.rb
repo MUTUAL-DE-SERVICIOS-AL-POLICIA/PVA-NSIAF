@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
     if is_super_admin?
       User.where.not(role: nil)
     elsif is_admin?
-      User.where(role: nil)
+      User.where('role IS NULL OR role = ?', 'admin')
     else
       User.none
     end
@@ -158,6 +158,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.search_user(q)
+    where("name LIKE ? AND username != ?", "%#{q}%", 'admin')
+  end
+
   private
 
   ##
@@ -172,7 +176,7 @@ class User < ActiveRecord::Base
   end
 
   def set_defaults
-    if new_record? && password.nil? && !username.nil?
+    if password.nil? && !username.nil?
       self.password ||= self.username
     end
   end

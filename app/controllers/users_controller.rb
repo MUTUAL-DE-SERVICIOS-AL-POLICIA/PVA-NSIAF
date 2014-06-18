@@ -87,8 +87,17 @@ class UsersController < ApplicationController
                disposition: 'attachment',
                layout: 'pdf.html',
                page_size: 'Letter',
-               margin: { top: 15, bottom: 15, left: 20, right: 15 }
+               margin: { top: 15, bottom: 20, left: 15, right: 15 },
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
+    end
+  end
+
+  def autocomplete
+    @users = User.search_user(params[:q])
+    respond_to do |format|
+      format.json { render json: @users.map { |s| { id: s.id, name: s.name, username: s.username, role: s.role } } }
     end
   end
 

@@ -21,7 +21,7 @@ private
       [
         account.code,
         account.name,
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open') + I18n.t('general.btn.show'), account, class: 'btn btn-default btn-xs')
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), account, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show'))
       ]
     end
   end

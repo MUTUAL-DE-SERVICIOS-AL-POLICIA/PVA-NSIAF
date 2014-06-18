@@ -35,5 +35,6 @@
           %strong Alerta!
           Por seguridad es necesario que cambie su contraseña, puede hacer click en el enlace #{link_to "Cambiar Contraseña", dashboard_path }
 
-      = yield
+      .col-md-offset-1.col-lg-offset-2.col-md-10.col-lg-8
+        = yield
     = javascript_include_tag "application", "data-turbolinks-track" => true

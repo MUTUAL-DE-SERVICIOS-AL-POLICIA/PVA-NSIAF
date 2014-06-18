@@ -19,16 +19,21 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.html { render '/shared/index' }
       format.json { render json: datatable.new(view_context) }
-      column_order = name_model == 'proceedings' ? 'users.name' : name_model == 'versions' ? 'id' : 'code'
-      @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current_user)
+      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests).include?(name_model) ? 'id' : "#{name_model}.code"
+      current = action_name == 'derecognised' ? '0' : current_user
+      @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)
+      array_csv = action_name == 'derecognised' ? @array.to_csv(true) : @array.to_csv
       filename = "VSIAF-#{t("#{name_model}.title.title")}".parameterize
-      format.csv { send_data @array.to_csv, filename: "#{filename}.csv" }
+      format.csv { send_data array_csv, filename: "#{filename}.csv" }
       format.pdf do
         render pdf: filename,
+               template: "#{name_model}/index.pdf.haml",
                disposition: 'attachment',
                layout: 'pdf.html',
                page_size: 'Letter',
-               margin: { top: 15, bottom: 15, left: 15, right: 15 }
+               margin: { top: 10, bottom: 20, left: 15, right: 15 },
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
     end
   end

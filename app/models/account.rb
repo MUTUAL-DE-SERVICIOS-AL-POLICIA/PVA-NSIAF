@@ -9,6 +9,9 @@ class Account < ActiveRecord::Base
   validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :name, presence: true
 
+  has_many :auxiliaries
+  has_many :assets
+
   has_paper_trail
 
   def self.set_columns
@@ -33,5 +36,10 @@ class Account < ActiveRecord::Base
         csv << account.attributes.values_at(*columns)
       end
     end
+  end
+
+  def self.with_assets
+    conditions = { assets: { id: nil } }
+    joins(:assets).where.not(conditions).uniq
   end
 end

@@ -1,9 +1,25 @@
 Nsiaf::Application.routes.draw do
+#  resources :requests, only: [:index, :show, :new, :create]
+
+  #resources :materials, except: [:destroy] do
+    #get :return_material, on: :collection
+  #end
+
+  resources :barcodes, only: [:index] do
+    collection do
+      get :auxiliary
+      get :asset
+      post :pdf
+    end
+  end
+
   resources :proceedings, only: [:index, :show, :create]
 
   resources :declines, only: [:index]
 
-  resources :versions, only: [:index]
+  resources :versions, only: [:index] do
+    post :export, on: :collection
+  end
 
   resources :assets, except: [:destroy] do
     post :change_status, on: :member
@@ -13,6 +29,7 @@ Nsiaf::Application.routes.draw do
     get :not_assigned, on: :collection
     get :assign, on: :collection
     get :deallocate, on: :collection
+    get :derecognised, on: :collection
   end
 
   resources :auxiliaries, except: [:destroy] do
@@ -35,6 +52,7 @@ Nsiaf::Application.routes.draw do
     post :change_status, on: :member
     get :welcome, on: :collection
     get :download, on: :member
+    get :autocomplete, on: :collection
   end
 
   get '/dashboard', to: 'dashboard#index', as: :dashboard

@@ -8,12 +8,10 @@
       = t("auxiliaries.title.title")
 
   %h2 Auxiliar
-%p
-  %b #{Auxiliary.human_attribute_name('code')}:
-  = @auxiliary.code
-%p
-  %b #{Auxiliary.human_attribute_name('name')}:
-  = @auxiliary.name
-%p
-  %b #{Auxiliary.human_attribute_name('account')}:
-  = @auxiliary.account_name
+%dl.dl-horizontal
+  %dt= Auxiliary.human_attribute_name('code')
+  %dd= @auxiliary.code
+  %dt= Auxiliary.human_attribute_name('name')
+  %dd= @auxiliary.name
+  %dt= Auxiliary.human_attribute_name('account')
+  %dd= link_to_if @auxiliary.account, @auxiliary.account_name, @auxiliary.account, title: @auxiliary.account_code

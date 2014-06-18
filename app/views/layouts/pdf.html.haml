@@ -5,5 +5,5 @@
     = wicked_pdf_stylesheet_link_tag 'pdf'
     = wicked_pdf_javascript_include_tag 'pdf'
     = csrf_meta_tags
-  %body
+  %body{onload: "number_pages()"}
     = yield

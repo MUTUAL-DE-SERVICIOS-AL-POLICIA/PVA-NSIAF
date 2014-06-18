@@ -1,35 +1,50 @@
 %script{ id: 'tpl-proceeding-delivery', type: 'text/html' }
-  .row
-    .col-md-offset-2.col-md-8
-      %h1.proceeding-title.text-center
+  .row{ class: "#{'separator' if is_pdf?}" }
+    .col-md-offset-1.col-md-10
+      %h3.proceeding-title.text-center
+        ACTA DE
         {{^devolution}}
-        Acta de Entrega
+        ENTREGA
         {{/devolution}}
         {{#devolution}}
-        Acta de Devolución
+        DEVOLUCIÓN
         {{/devolution}}
-
+        DE ACTIVOS FIJOS
       %p.proceeding-description.text-justify
         {{^devolution}}
-        Yo, {{adminName}} Encargado de Activos Fijos, procedo hacer la entrega de los siguientes Activos al Señor(a) {{userName}}.
+        La Unidad Administrativa Financiera de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia – ADSIB hace entrega de Activos Fijos al Señor. {{userName}} – ({{userTitle}}), hasta el cumplimiento de su contrato, conforme al siguiente detalle:
         {{/devolution}}
         {{#devolution}}
-        Yo, {{userName}} procedo hacer la devolución de los siguientes Activos al Encargado de Activos Fijos {{adminName}}.
+        Por conclusión al Contrato Administrativo, el Señor {{userName}} – ({{userTitle}}) de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia - ADSIB hace la devolución de los Activos Fijos a ADSIB, conforme al siguiente detalle:
         {{/devolution}}
       %table.table.table-striped.table-condensed.proceeding-assets
         %thead
           %tr
-            %th.col-sm-1
-            %th.col-sm-9 Descripción
+            %th.col-sm-10 Descripción
             %th.col-sm-2 Código
         %tbody
           {{#assets}}
           %tr
-            %td
-              {{index}}
             %td {{description}}
             %td {{code}}
           {{/assets}}
+      .acta
+        %p.proceeding-date.text-justify
+          {{^devolution}}
+          %p NOTA: LOS EQUIPOS Y MUEBLES DETALLADOS ANTERIORMENTE SON DE RESPONSABILIDAD DEL FUNCIONARIO, EL CUAL ESTA PROHIBIDO DE:
+          %p A) USAR LOS BIENES PARA BENEFICIO PARTICULAR O PRIVADO
+          %p B) PERMITIR EL USO PARA BENEFICIO PARTICULAR O PRIVADO
+          %p C) PRESTAR O TRANSFERIR EL BIEN A OTRO FUNCIONARIO O SERVIDOR PUBLICO
+          %p D) ENAJENAR EL BIEN POR CUENTA PROPIA
+          %p E) DAÑAR O ALTERAR SUS CARACTERISTICAS FISICAS O TECNICAS
+          %p F) PONER EN RIESGO EL BIEN
+          %p G) INGRESAR BIENES PARTICULAES SIN AUTORIZACION DE LA UNIDAD O RESPONSABLE DE 	ACTIVOS FIJOS (D.S. 181 ART. 157, NB SABS)
+          %p H) SACAR BIENES DE LA INSTITUCION SIN AUTORIZACION DE LA UNIDAD RESPONSABLE DE 	ACTIVOS FIJOS (D.S. 181 ART. 157, NB SABS)
+          %p LA NO OBSERVACION A ESTAS PROHIBICIONES GENERARA RESPONSABILIDADES ESTABLECIDAS EN LA LEY N°1178 Y SUS REGLAMENTOS
+          {{/devolution}}
+          {{#devolution}}
+          NOTA: EN CUMPLIMIENTO AL ART. 148 (LIBERACION DE AL RESPONSABILIDAD) DEL D.S. 181, SE PROCEDIO A LA VERIFICACION FISICA DE LOS ACTIVOS FIJOS.:
+          {{/devolution}}
 
       %p.proceeding-date.text-right
         La Paz, {{proceedingDate}}

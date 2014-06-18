@@ -14,6 +14,12 @@ class Auxiliary < ActiveRecord::Base
 
   has_paper_trail ignore: [:status, :updated_at]
 
+  def self.search_by(account_id)
+    auxiliaries = []
+    auxiliaries = joins(:assets).where(account_id: account_id).where.not(assets: { id: nil }).uniq if account_id.present?
+    [['', '--']] + auxiliaries.map { |d| [d.id, d.name] }
+  end
+
   def account_code
     account.present? ? account.code : ''
   end

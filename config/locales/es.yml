@@ -62,6 +62,7 @@ es:
       update: "Editar Activo"
       modal: "Baja de Activo"
       confirm-deactivate: "<strong>%{name}</strong>"
+      users: 'Devolución'
   auxiliaries:
     title:
       title: "Auxiliares"
@@ -109,6 +110,13 @@ es:
       create: "Nueva Entidad"
       edit: "Editar Entidad"
       update: "Editar Entidad"
+  materials:
+    title:
+      title: "Materiales"
+      new: "Nuevo Material"
+      create: "Nuevo Material"
+      edit: "Editar Material"
+      update: "Editar Material"
   migration:
     alert_html: 'Especifique el archivo <b>%{model}</b> para migrar'
     file: 'Adjuntar Archivo'
@@ -121,6 +129,11 @@ es:
     type:
       assignation: "Asignación"
       devolution: "Devolución"
+  requests:
+    title:
+      title: "Solicitud de Materiales"
+      new: "Nueva Solicitud"
+      users: "Enviar"
   users:
     roles:
       super_admin: "Super Administrador"
@@ -139,6 +152,7 @@ es:
   versions:
     title:
       title: "Histórico"
+      new: "Historial seleccionado"
     active: 'Activo'
     assignation: 'Asignación'
     create: 'Creado'
@@ -261,6 +275,7 @@ es:
 
     attributes:
       account:
+        auxiliaries: "Auxiliares"
         code: "Código"
         name: "Nombre"
       asset:
@@ -268,6 +283,7 @@ es:
         description: "Descripción"
         auxiliary: "Auxiliar"
         user: "Usuario"
+        derecognised: "Baja"
       auxiliary:
         code: "Código"
         name: "Nombre"
@@ -277,6 +293,7 @@ es:
         code: "Código"
         entity: "Entidad"
         name: "Nombre"
+        status: "Estado"
       decline:
         asset_code: "Activo"
         account_code: "Cuenta"
@@ -295,11 +312,21 @@ es:
         acronym: "Sigla"
         code: "Código"
         name: "Nombre"
+      material:
+        code: "Código"
+        name: "Nombre"
+        unit: "Unidad"
+        description: "Descripción"
       proceeding:
         user_id: "Usuario"
         admin_id: "Administrador"
         created_at: "Fecha"
         proceeding_type: "Tipo"
+      request:
+        id: "Número"
+        created_at: "Fecha"
+        name: "Nombre"
+        title: "Cargo"
       user:
         code: "Código"
         name: "Nombre"
