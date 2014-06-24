@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407224022) do
+ActiveRecord::Schema.define(version: 20140624153627) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -114,11 +114,10 @@ ActiveRecord::Schema.define(version: 20140407224022) do
 
   create_table "materials", force: true do |t|
     t.string   "code",        limit: 50
-    t.string   "name"
-    t.string   "unit"
-    t.text     "description"
+    t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "status",      limit: 2
   end
 
   create_table "proceedings", force: true do |t|

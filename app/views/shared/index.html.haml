@@ -28,7 +28,7 @@
       - unless %w(versions declines proceedings requests).include?(controller_name)
         - unless current_user.is_super_admin? && controller_name == 'users'
           %th= User.human_attribute_name('code')
-        %th= controller_name == 'assets' ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
+        %th= %w(assets materials).include?(controller_name) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
       = render "#{controller_name}/#{controller_name}" unless controller_name == 'accounts'
       - unless %w(versions declines).include?(controller_name)
         %th= t('general.actions')

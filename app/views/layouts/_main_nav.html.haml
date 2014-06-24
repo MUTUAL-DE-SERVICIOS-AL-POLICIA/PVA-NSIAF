@@ -49,15 +49,15 @@
             = link_to 'Asignacion/devolución', users_assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Actas', proceedings_path, role: 'menuitem'
-      -#%li.dropdown
-        -#= link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do
-          -#Almacenes
-          -#%b.caret
-        -#%ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
-          -#%li{ role: 'presentation' }
-            -#= link_to 'Materiales', materials_path, role: 'menuitem'
-          -#%li{ role: 'presentation' }
-            -#= link_to 'Solicitud de Material', requests_path, role: 'menuitem'
+      %li.dropdown
+        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do
+          Almacenes
+          %b.caret
+        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
+          %li{ role: 'presentation' }
+            = link_to 'Materiales', materials_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Solicitud de Material', requests_path, role: 'menuitem'
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_barcode' do
           Código Barras

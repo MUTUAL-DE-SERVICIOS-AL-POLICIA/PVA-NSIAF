@@ -5,13 +5,11 @@
   %thead
     %tr
       %th.separator= Material.human_attribute_name('code')
-      %th= Material.human_attribute_name('name')
-      %th= Material.human_attribute_name('unit')
       %th= Material.human_attribute_name('descripción')
+      %th= Auxiliary.human_attribute_name('status')
   %tbody
     - @array.each do |material|
       %tr
         %td= material.code
-        %td= material.name
-        %td= material.unit
         %td= material.description
+        %td= type_status(material.status)

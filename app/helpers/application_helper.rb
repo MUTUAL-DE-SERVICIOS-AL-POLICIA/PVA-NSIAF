@@ -96,7 +96,7 @@ module ApplicationHelper
     {
       dom_id: dom_id(model),
       title: t("#{ klass.tableize }.title.modal"),
-      confirm_message: t("#{ klass.tableize }.title.confirm-#{ state }", name: model.name),
+      confirm_message: t("#{ klass.tableize }.title.confirm-#{ state }", name: %w(Material).include?(klass) ? model.description : model.name),
       url: eval("change_status_#{ klass.underscore }_path(model)"),
       unassigned: !assignment
     }

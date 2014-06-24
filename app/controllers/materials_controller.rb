@@ -50,9 +50,11 @@ class MaterialsController < ApplicationController
     end
   end
 
-  def return_material
-    material = Material.where(code: params[:code])
-    render json: view_context.assets_json_material(material.first)
+  def change_status
+    @material.change_status unless @material.verify_assignment
+    respond_to do |format|
+      format.json { head :no_content }
+    end
   end
 
   private
@@ -63,6 +65,6 @@ class MaterialsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def material_params
-      params.require(:material).permit(:code, :name, :unit, :description)
+      params.require(:material).permit(:code, :description, :status)
     end
 end
