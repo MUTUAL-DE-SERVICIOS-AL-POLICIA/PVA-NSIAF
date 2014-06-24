@@ -296,6 +296,7 @@ es:
       article:
         code: "Código"
         description: "Descripción"
+        status: "Estado"
       asset:
         code: "Código"
         description: "Descripción"
@@ -333,6 +334,7 @@ es:
       material:
         code: "Código"
         description: "Descripción"
+        status: "Estado"
       proceeding:
         user_id: "Usuario"
         admin_id: "Administrador"

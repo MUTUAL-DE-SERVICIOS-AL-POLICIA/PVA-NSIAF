@@ -4,7 +4,7 @@ class Material < ActiveRecord::Base
   has_many :articles
 
   def verify_assignment
-    false
+    articles.present?
   end
 
   def self.set_columns
