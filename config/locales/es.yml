@@ -54,7 +54,7 @@ es:
       update: "Editar Cuenta"
   articles:
     title:
-      title: "Artículos"
+      title: "Artículos de Materiales"
       new: "Nuevo Artículo"
       create: "Nuevo Artículo"
       edit: "Editar Artículo"

@@ -1,9 +1,10 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
+  before_action :set_article, only: [:show, :edit, :update]
 
   # GET /articles
   def index
-    @articles = Article.all
+    format_to('articles', ArticlesDatatable)
   end
 
   # GET /articles/1

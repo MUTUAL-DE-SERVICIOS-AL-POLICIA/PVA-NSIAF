@@ -7,6 +7,7 @@
 - when 'assets' then new_url = new_asset_path if action_name != 'derecognised'
 - when 'versions' then new_url = '#' if current_user.is_admin?
 - when 'materials' then new_url = new_material_path
+- when 'articles' then new_url = new_article_path
 - when 'requests' then new_url = new_request_path
 
 = title t("#{controller_name}.title.title")
@@ -28,7 +29,7 @@
       - unless %w(versions declines proceedings requests).include?(controller_name)
         - unless current_user.is_super_admin? && controller_name == 'users'
           %th= User.human_attribute_name('code')
-        %th= %w(assets materials).include?(controller_name) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
+        %th= %w(assets materials articles).include?(controller_name) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
       = render "#{controller_name}/#{controller_name}" unless controller_name == 'accounts'
       - unless %w(versions declines).include?(controller_name)
         %th= t('general.actions')
