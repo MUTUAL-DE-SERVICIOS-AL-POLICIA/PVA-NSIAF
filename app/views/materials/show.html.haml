@@ -14,3 +14,5 @@
   %dd= @material.code
   %dt= Material.human_attribute_name('description')
   %dd= @material.description
+  %dt= t('general.status')
+  %dd= type_status(@material.status)

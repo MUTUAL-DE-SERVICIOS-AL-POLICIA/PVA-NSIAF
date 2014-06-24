@@ -1,15 +1,19 @@
-%p#notice= notice
+.page-header
+  .pull-right
+    = link_to edit_article_path(@article), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+    = link_to articles_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("articles.title.title")
 
-%p
-  %b Code:
-  = @article.code
-%p
-  %b Description:
-  = @article.description
-%p
-  %b Status:
-  = @article.status
-
-= link_to 'Edit', edit_article_path(@article)
-\|
-= link_to 'Back', articles_path
+  %h2 Artículo
+%dl.dl-horizontal
+  %dt= Article.human_attribute_name('code')
+  %dd= @article.code
+  %dt= Article.human_attribute_name('name')
+  %dd= @article.description
+  %dt Material
+  %dd= link_to_if @article.material, @article.material_name, @article.material, title: @article.material_code
+  %dt= t('general.status')
+  %dd= type_status(@article.status)
