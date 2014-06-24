@@ -13,36 +13,40 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # GET /articles/1/edit
   def edit
+    respond_to do |format|
+      format.html { render 'form' }
+    end
   end
 
   # POST /articles
   def create
     @article = Article.new(article_params)
 
-    if @article.save
-      redirect_to @article, notice: 'Article was successfully created.'
-    else
-      render action: 'new'
+    respond_to do |format|
+      if @article.save
+        format.html { redirect_to articles_url, notice: t('general.created', model: Article.model_name.human) }
+      else
+        format.html { render action: 'form' }
+      end
     end
   end
 
   # PATCH/PUT /articles/1
   def update
-    if @article.update(article_params)
-      redirect_to @article, notice: 'Article was successfully updated.'
-    else
-      render action: 'edit'
+    respond_to do |format|
+      if @article.update(article_params)
+        format.html { redirect_to articles_url, notice: t('general.updated', model: Article.model_name.human) }
+      else
+        format.html { render action: 'form' }
+      end
     end
-  end
-
-  # DELETE /articles/1
-  def destroy
-    @article.destroy
-    redirect_to articles_url, notice: 'Article was successfully destroyed.'
   end
 
   private
@@ -53,6 +57,6 @@ class ArticlesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def article_params
-      params.require(:article).permit(:code, :description, :status)
+      params.require(:article).permit(:code, :description, :status, :material_id)
     end
 end

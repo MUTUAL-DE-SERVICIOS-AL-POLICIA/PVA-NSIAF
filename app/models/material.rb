@@ -1,6 +1,8 @@
 class Material < ActiveRecord::Base
   include ManageStatus
 
+  has_many :articles
+
   def verify_assignment
     false
   end
