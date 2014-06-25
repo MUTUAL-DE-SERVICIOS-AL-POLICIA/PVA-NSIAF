@@ -4,6 +4,9 @@ class Article < ActiveRecord::Base
   belongs_to :material
   has_many :subarticles
 
+  validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :description, :material_id, presence: true
+
   def material_code
     material.present? ? material.code : ''
   end

@@ -13,12 +13,12 @@ class Ability
       can :manage, User
       cannot [:show, :update], User, role: 'super_admin'
       can :manage, Account
+      can :manage, Article
       can :manage, Auxiliary
       can :manage, Asset
       can :manage, Decline
-      can :manage, Proceeding
       can :manage, Material
-      can :manage, Article
+      can :manage, Proceeding
       can :manage, Subarticle
       can :manage, Request
       can [:index, :asset, :auxiliary, :pdf], :barcode
