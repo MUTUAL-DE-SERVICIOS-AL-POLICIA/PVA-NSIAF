@@ -5,16 +5,14 @@
       = t("general.btn.edit")
     = link_to materials_path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
-      = t("departments.title.title")
+      = t("materials.title.title")
 
   %h2 Material
 
 %dl.dl-horizontal
   %dt= Material.human_attribute_name('code')
   %dd= @material.code
-  %dt= Material.human_attribute_name('name')
-  %dd= @material.name
-  %dt= Material.human_attribute_name('unit')
-  %dd= @material.unit
   %dt= Material.human_attribute_name('description')
   %dd= @material.description
+  %dt= t('general.status')
+  %dd= type_status(@material.status)

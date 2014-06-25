@@ -71,19 +71,21 @@ jQuery ->
   $(document).on 'click', '.modal .change_status', ->
     $(this).parents('.modal').modal('hide')
     id = $(this).closest('.modal').attr('id').substr(6)
-    $user = $(this).closest('#confirm-modal').prev().find("[data-dom-id=#{id}]")
-    if $user.text() == 'Activar'
+    $user = $("table [data-dom-id=#{id}]")
+    if $user.find('span').attr('class').substr(20) == 'ok'
       img = 'remove'
+      text_old = 'Activar'
       text = 'Desactivar'
       status_td = 'ACTIVO'
     else
       img = 'ok'
+      text_old = 'Desactivar'
       text = 'Activar'
       status_td = 'INACTIVO'
-    message = $user.data('confirm-message').replace($user.text(), text)
+    message = $user.data('confirm-message').replace(text_old, text)
     $user.data('confirm-message', message)
     $user.parent().prev().text(status_td)
-    $user.empty().append("<span class='glyphicon glyphicon-#{img}'></span>#{text}")
+    $user.empty().append("<span class='glyphicon glyphicon-#{img}'></span>")
 
   # Ajax loading
   $(document).on 'ajaxStart', (e, xhr, settings, exception) ->

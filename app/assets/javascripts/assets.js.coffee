@@ -86,7 +86,7 @@ class AssetEvents
     e.preventDefault()
     @$container.html('').hide()
     @$selectUser.show()
-    @$btnCancel.get(0).focus()
+    #@$btnCancel.get(0).focus()
 
   changeToHyphens: ->
     value = @$code.val().toString().trim()

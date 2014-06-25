@@ -15,3 +15,5 @@
   %dd= @auxiliary.name
   %dt= Auxiliary.human_attribute_name('account')
   %dd= link_to_if @auxiliary.account, @auxiliary.account_name, @auxiliary.account, title: @auxiliary.account_code
+  %dt= t('general.status')
+  %dd= type_status(@auxiliary.status)
