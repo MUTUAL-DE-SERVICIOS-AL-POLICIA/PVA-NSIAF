@@ -11,7 +11,7 @@
 %dl.dl-horizontal
   %dt= Article.human_attribute_name('code')
   %dd= @article.code
-  %dt= Article.human_attribute_name('name')
+  %dt= Article.human_attribute_name('description')
   %dd= @article.description
   %dt Material
   %dd= link_to_if @article.material, @article.material_name, @article.material, title: @article.material_code

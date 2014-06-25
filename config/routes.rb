@@ -9,6 +9,10 @@ Nsiaf::Application.routes.draw do
     post :change_status, on: :member
   end
 
+  resources :subarticles, except: [:destroy] do
+    post :change_status, on: :member
+  end
+
   resources :barcodes, only: [:index] do
     collection do
       get :auxiliary

@@ -149,6 +149,17 @@ es:
       title: "Solicitud de Materiales"
       new: "Nueva Solicitud"
       users: "Enviar"
+  subarticles:
+    title:
+      title: "Sub Artículos de Materiales"
+      new: "Nuevo Sub Artículo"
+      create: "Nuevo Sub Artículo"
+      edit: "Editar Sub Artículo"
+      update: "Editar Sub Artículo"
+      modal: "Activación/Desactivación de Sub Artículo"
+      confirm-activate: "¿Está seguro de Activar el sub artículo <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el sub artículo <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el sub artículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>Usuario</strong>"
   users:
     roles:
       super_admin: "Super Administrador"
@@ -280,11 +291,13 @@ es:
 
     models:
       account: "Cuenta"
+      article: "Artículo"
       asset: "Activo"
       auxiliary: "Auxiliar"
       building: "Edificio"
       department: "Departamento"
       entity: "Entidad"
+      subarticle: "Sub Artículo"
       proceeding: "Acta"
       user: "Usuario"
 
@@ -345,6 +358,12 @@ es:
         created_at: "Fecha"
         name: "Nombre"
         title: "Cargo"
+      subarticle:
+        code: "Código"
+        description: "Descripción"
+        unit: "Unidad"
+        article: "Artículo"
+        status: "Estado"
       user:
         code: "Código"
         name: "Nombre"

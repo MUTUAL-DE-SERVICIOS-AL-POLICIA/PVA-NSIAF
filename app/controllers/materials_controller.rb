@@ -1,6 +1,6 @@
 class MaterialsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_material, only: [:show, :edit, :update]
+  before_action :set_material, only: [:show, :edit, :update, :change_status]
 
   # GET /materials
   def index

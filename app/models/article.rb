@@ -2,6 +2,7 @@ class Article < ActiveRecord::Base
   include ManageStatus
 
   belongs_to :material
+  has_many :subarticles
 
   def material_code
     material.present? ? material.code : ''
@@ -12,7 +13,7 @@ class Article < ActiveRecord::Base
   end
 
   def verify_assignment
-    false
+    subarticles.present?
   end
 
   def self.set_columns
