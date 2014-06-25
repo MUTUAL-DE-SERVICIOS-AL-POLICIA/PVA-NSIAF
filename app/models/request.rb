@@ -2,9 +2,9 @@ class Request < ActiveRecord::Base
   belongs_to :user
   belongs_to :admin, class_name: 'User'
 
-  has_many :material_requests
-  has_many :materials, through: :material_requests
-  accepts_nested_attributes_for :material_requests
+  has_many :subarticle_requests
+  has_many :subarticles, through: :subarticle_requests
+  accepts_nested_attributes_for :subarticle_requests
 
   def user_name
     user.present? ? user.name : ''

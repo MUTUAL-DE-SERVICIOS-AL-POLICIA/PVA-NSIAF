@@ -11,6 +11,7 @@ Nsiaf::Application.routes.draw do
 
   resources :subarticles, except: [:destroy] do
     post :change_status, on: :member
+    get :return_subarticle, on: :collection
   end
 
   resources :barcodes, only: [:index] do

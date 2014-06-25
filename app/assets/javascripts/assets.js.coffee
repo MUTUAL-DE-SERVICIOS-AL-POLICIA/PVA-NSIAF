@@ -39,7 +39,7 @@ class AssetEvents
     @deallocate_assets_url = '/assets/deallocate'
     @proceedings_url = '/proceedings'
     @request_url = '/requests/new'
-    @request_material_url = "/materials/return_material"
+    @request_material_url = "/subarticles/return_subarticle"
     @request_cancel_url = '/requests'
     # Hogan template elements
     @cacheElementsTpl()
@@ -125,7 +125,7 @@ class AssetEvents
     e.preventDefault()
     @changeToHyphens()
     code = @$code.val().trim()
-    title = if request then 'Material' else 'Activo'
+    title = if request then 'Sub Atículo' else 'Activo'
     if code
       asset_id = if request then @verifyCodeMaterial(code) else @searchInAssets(code)
       if asset_id
@@ -211,8 +211,8 @@ class AssetEvents
 
   save_request: ->
     materials = $.map($('tbody#materials tr'), (val, i) ->
-      material_id: val.id
+      subarticle_id: val.id
       amount: $(val).find('td.amount').text()
     )
-    json_data = { user_id: @$user.val(), material_requests_attributes: materials }
+    json_data = { user_id: @$user.val(), subarticle_requests_attributes: materials }
     $.post @request_cancel_url, { request: json_data } , null, 'script'

@@ -12,7 +12,7 @@ class RequestsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "VSIAF-Pedido-Material",
+        render pdf: "VSIAF-Pedido-Artículo",
                disposition: 'attachment',
                template: 'requests/show.html.haml',
                layout: 'pdf.html',
@@ -47,6 +47,6 @@ class RequestsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def request_params
-      params.require(:request).permit(:user_id, { material_requests_attributes: [ :material_id, :amount ] } )
+      params.require(:request).permit(:user_id, { subarticle_requests_attributes: [ :subarticle_id, :amount ] } )
     end
 end

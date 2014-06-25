@@ -60,8 +60,8 @@
             = link_to 'Artículos', articles_path
           %li{ role: 'presentation' }
             = link_to 'Sub Artículos', subarticles_path
-          /%li{ role: 'presentation' }
-          /  = link_to 'Solicitud de Material', requests_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Solicitud de Material', requests_path, role: 'menuitem'
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_barcode' do
           Código Barras

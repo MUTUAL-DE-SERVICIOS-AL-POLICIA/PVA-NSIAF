@@ -1,7 +1,7 @@
 #request.row{ class: "#{'separator' if is_pdf?}" }
   .col-md-12
     %h1.proceeding-title.text-center
-      Pedido de Material
+      Pedido de Artículo
       .nro_request
         Nro. #{@request.id}
     %p.proceeding-description.text-justify
@@ -22,7 +22,7 @@
           %th.col-sm-6 Descripción
           %th.col-sm-2 Código
       %tbody
-        - @request.material_requests.each do |material|
+        - @request.subarticle_requests.each do |material|
           %tr
             %td= material.amount
             %td= material.material_unit

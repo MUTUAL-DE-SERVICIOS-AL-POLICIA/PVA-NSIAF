@@ -2,6 +2,8 @@ class Subarticle < ActiveRecord::Base
   include ManageStatus
 
   belongs_to :article
+  has_many :subarticle_requests
+  has_many :requests, through: :subarticle_requests
 
   validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :description, :unit, :article_id, presence: true

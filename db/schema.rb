@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140624235111) do
+ActiveRecord::Schema.define(version: 20140625145042) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -114,15 +114,6 @@ ActiveRecord::Schema.define(version: 20140624235111) do
     t.datetime "updated_at"
   end
 
-  create_table "material_requests", force: true do |t|
-    t.integer "material_id"
-    t.integer "request_id"
-    t.integer "amount"
-  end
-
-  add_index "material_requests", ["material_id"], name: "index_material_requests_on_material_id", using: :btree
-  add_index "material_requests", ["request_id"], name: "index_material_requests_on_request_id", using: :btree
-
   create_table "materials", force: true do |t|
     t.string   "code",        limit: 50
     t.string   "description"
@@ -148,6 +139,15 @@ ActiveRecord::Schema.define(version: 20140624235111) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "subarticle_requests", force: true do |t|
+    t.integer "subarticle_id"
+    t.integer "request_id"
+    t.integer "amount"
+  end
+
+  add_index "subarticle_requests", ["request_id"], name: "index_subarticle_requests_on_request_id", using: :btree
+  add_index "subarticle_requests", ["subarticle_id"], name: "index_subarticle_requests_on_subarticle_id", using: :btree
 
   create_table "subarticles", force: true do |t|
     t.string   "code"
