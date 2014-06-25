@@ -1,6 +1,8 @@
 class Article < ActiveRecord::Base
   include ManageStatus
 
+  UNITS = %w(Pieza Rollo Cinta Unidad Caja)
+
   belongs_to :material
   has_many :subarticles
 
