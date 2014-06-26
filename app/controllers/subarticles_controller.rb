@@ -58,7 +58,7 @@ class SubarticlesController < ApplicationController
   end
 
   def return_subarticle
-    material = Subarticle.where(code: params[:code])
+    material = Subarticle.where(code: params[:code], status: 1)
     render json: view_context.assets_json_material(material.first)
   end
 

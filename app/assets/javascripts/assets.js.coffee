@@ -125,13 +125,18 @@ class AssetEvents
     e.preventDefault()
     @changeToHyphens()
     code = @$code.val().trim()
-    title = if request then 'Sub Atículo' else 'Activo'
+    if request
+      title = 'Sub Atículo'
+      inactive = "o se encuentra en estado inactivo"
+    else
+      title = 'Activo'
+      inactive = ""
     if code
       asset_id = if request then @verifyCodeMaterial(code) else @searchInAssets(code)
       if asset_id
         if request then @addMaterial(asset_id) else @selectDeselectAssetRow(asset_id)
       else
-        alert "El código de #{title} '#{code}' no se encuentra en la lista"
+        alert "El código de #{title} '#{code}' no se encuentra en la lista #{inactive}"
     else
       alert "Introduzca un código de #{title}"
     @$code.select()
