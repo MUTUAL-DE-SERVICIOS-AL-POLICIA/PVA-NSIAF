@@ -49,7 +49,7 @@ private
   end
 
   def sort_column
-    columns = %w[assets.code description users.name]
+    columns = %w[assets.code description users.name derecognised]
     columns[params[:iSortCol_0].to_i]
   end
 

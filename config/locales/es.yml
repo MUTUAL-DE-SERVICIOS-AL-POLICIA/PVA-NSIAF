@@ -297,6 +297,7 @@ es:
       building: "Edificio"
       department: "Departamento"
       entity: "Entidad"
+      material: "Material"
       subarticle: "Sub Artículo"
       proceeding: "Acta"
       user: "Usuario"

@@ -124,4 +124,8 @@ module ApplicationHelper
   def assets_json_material(material)
     { id: material.id, code: material.code, unit: material.unit, description: material.description } if material.present?
   end
+
+  def add_check_box(version_id)
+    check_box_tag 'id', version_id, false if current_user.is_admin?
+  end
 end

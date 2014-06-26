@@ -44,7 +44,7 @@ private
   end
 
   def sort_column
-    columns = %w[code description]
+    columns = %w[code description status]
     columns[params[:iSortCol_0].to_i]
   end
 
