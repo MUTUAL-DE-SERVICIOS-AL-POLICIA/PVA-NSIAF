@@ -2,13 +2,13 @@
 lock '3.1.0'
 
 set :application, 'nsiaf'
-set :repo_url, 'git@github.com:elmerfreddy/nsiaf.git'
+set :repo_url, 'git@gitlab.geo.gob.bo:adsib/nsiaf.git'
 
 set :rvm_ruby_version, 'ruby-2.0.0-p353'
 set :rvm_roles, [:app, :web]
 
 # Default branch is :master
-ask :branch, 'design'
+ask :branch, 'develop'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/var/www/nsiaf'
