@@ -44,8 +44,12 @@ class Department < ActiveRecord::Base
     array = includes(:building).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = search_column == 'building' ? 'buildings.name' : "departments.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:building)
+      if search_column.present?
+        type_search = search_column == 'building' ? 'buildings.name' : "departments.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:building)
+      else
+        array = array.where("departments.code LIKE ? OR departments.name LIKE ? OR buildings.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
     end
     array
   end

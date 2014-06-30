@@ -69,8 +69,12 @@ class Asset < ActiveRecord::Base
     array = includes(:user).order("#{sort_column} #{sort_direction}").where(status: status)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      if search_column.present?
+        type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      else
+        array = array.where("assets.code LIKE ? OR assets.description LIKE ? OR users.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
     end
     array
   end

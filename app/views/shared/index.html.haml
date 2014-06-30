@@ -39,6 +39,7 @@
 #confirm-modal
 = render 'shared/confirm_modal'
 
-- columns = controller_name.classify.constantize
-- columns = current_user.is_super_admin? && controller_name == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
-= select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control col-md-2'
+- unless controller_name == 'versions'
+  - columns = controller_name.classify.constantize
+  - columns = current_user.is_super_admin? && controller_name == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
+  = select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control col-md-2', prompt: "Todos"

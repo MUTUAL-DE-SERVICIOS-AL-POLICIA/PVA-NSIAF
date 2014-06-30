@@ -1,4 +1,5 @@
 jQuery ->
+  filter = if $("h2:contains('Histórico')").length then false else true
   TableTools.BUTTONS.download =
     sAction: "text"
     sTag: "default"
@@ -29,6 +30,7 @@ jQuery ->
   $(".datatable").dataTable
     sPaginationType: "bootstrap"
     bProcessing: false
+    bFilter: filter
     bServerSide: true
     bLengthChange: false
     iDisplayLength: 15
@@ -44,8 +46,7 @@ jQuery ->
         name: "search_column"
         value: $('#select_column').val()
     fnInitComplete: ->
-      $('.dataTables_filter input').attr('placeholder', 'Buscar...')
-      $('.dataTables_filter input').addClass('form-control')
+      $('.dataTables_filter input').attr('placeholder', 'Buscar...').addClass('form-control')
       $('.DTTT_container').css('margin-left', 0) unless $('.DTTT_container').parents('.main').find('.button_new .btn').length
       table = $.fn.dataTable.fnTables(true)
       if table.length > 0

@@ -37,8 +37,12 @@ class Building < ActiveRecord::Base
     array = includes(:entity).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = search_column == 'entity' ? 'entities.name' : "buildings.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%").references(:entity)
+      if search_column.present?
+        type_search = search_column == 'entity' ? 'entities.name' : "buildings.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%").references(:entity)
+      else
+        array = array.where("buildings.code LIKE ? OR buildings.name LIKE ? OR entities.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
     end
     array
   end

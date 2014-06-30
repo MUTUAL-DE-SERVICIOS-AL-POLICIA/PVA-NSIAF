@@ -62,12 +62,16 @@ class Proceeding < ActiveRecord::Base
     array = includes(:user, :admin).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = "proceedings.#{search_column}"
-      case search_column
-      when 'user_id' then type_search = 'users.name'
-      when 'admin_id' then type_search = 'admins_proceedings.name'
+      if search_column.present?
+        type_search = "proceedings.#{search_column}"
+        case search_column
+        when 'user_id' then type_search = 'users.name'
+        when 'admin_id' then type_search = 'admins_proceedings.name'
+        end
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user, :admin)
+      else
+        array = array.where("users.name LIKE ? OR admins_proceedings.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%")
       end
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user, :admin)
     end
     array
   end
