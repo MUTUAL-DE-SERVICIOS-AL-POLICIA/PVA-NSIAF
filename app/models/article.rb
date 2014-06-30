@@ -56,9 +56,17 @@ class Article < ActiveRecord::Base
     end
   end
 
-  def self.search_by(building_id)
-    departments = []
-    departments = where(material_id: building_id) if building_id.present?
-    [['', '--']] + departments.map { |d| [d.id, d.description] }
+  def self.search_by(material_id)
+    articles = []
+    articles = where(material_id: material_id, status: 1) if material_id.present?
+    [['', '--']] + articles.map { |d| [d.id, d.description] }
+  end
+
+  def self.getMaterial(article_id)
+    find(article_id).material_id
+  end
+
+  def self.articlesMaterial(article_id)
+    where(material_id: self.getMaterial(article_id), status: 1).map { |b| [b.description, b.id] }
   end
 end

@@ -24,7 +24,7 @@ module ApplicationHelper
   end
 
   def get_materials
-    Material.all.map { |b| [b.description, b.id] }
+    status_active(Material).map { |b| [b.description, b.id] }
   end
 
   def get_i18n_roles
