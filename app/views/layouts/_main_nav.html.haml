@@ -54,8 +54,7 @@
           Almacenes
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
-          %li
-            = link_to 'Solicitud de Material', requests_path
+          /%li= link_to 'Solicitud de Material', requests_path
           %li{ role: 'presentation' }
             = link_to 'Materiales', materials_path, role: 'menuitem'
           %li{ role: 'presentation' }

@@ -22,6 +22,8 @@ class AssetEvents
     @$building = $('#building')
     @$department = $('#department')
     @$user = $('#user')
+    @$material = $('#material')
+    @$article = $('#subarticle_article_id')
     # buttons
     @$btnAssignation = $('#btn_assignation')
     @$btnDevolution = $('#btn_devolution')
@@ -59,6 +61,8 @@ class AssetEvents
     if @$building?
       @$department.remoteChained(@$building.selector, '/assets/departments.json')
       @$user.remoteChained(@$department.selector, '/assets/users.json')
+    if @$material?
+      @$article.remoteChained(@$material.selector, '/subarticles/articles.json')
     $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e, 'E', @not_assigned_url)
     $(document).on 'click', @$btnDevolution.selector, (e) => @displayContainer(e, 'D', @assigned_url)
     $(document).on 'click', @$btnCancel.selector, (e) => @redirectToAssets(e, @proceedings_url)

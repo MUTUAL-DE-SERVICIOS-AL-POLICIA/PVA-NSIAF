@@ -22,6 +22,7 @@ private
         subarticle.code,
         subarticle.description,
         subarticle.unit,
+        subarticle.barcode,
         link_to_if(subarticle.article, subarticle.article_name, subarticle.article, title: subarticle.article_code),
         type_status(subarticle.status),
         links_actions(subarticle)
@@ -46,7 +47,7 @@ private
   end
 
   def sort_column
-    columns = %w[subarticles.code subarticles.description subarticles.unit articles.description subarticles.status]
+    columns = %w[subarticles.code subarticles.description subarticles.unit articles.description barcode subarticles.status]
     columns[params[:iSortCol_0].to_i]
   end
 

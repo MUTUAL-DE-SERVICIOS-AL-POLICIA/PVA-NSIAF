@@ -7,6 +7,7 @@
       %th.separator= Subarticle.human_attribute_name('code')
       %th= Subarticle.human_attribute_name('description')
       %th= Subarticle.human_attribute_name('unit')
+      %th= Subarticle.human_attribute_name('barcode')
       %th= Subarticle.human_attribute_name('article')
       %th= Auxiliary.human_attribute_name('status')
   %tbody
@@ -15,5 +16,6 @@
         %td= subarticle.code
         %td= subarticle.description
         %td= subarticle.unit
+        %td= subarticle.barcode
         %td= subarticle.article_name
         %td= type_status(subarticle.status)

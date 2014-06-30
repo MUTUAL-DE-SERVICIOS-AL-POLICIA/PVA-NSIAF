@@ -6,6 +6,14 @@
     = f.input :code
     = f.input :description
     = f.input :unit, collection: Article::UNITS, include_blank: false
-    = f.association :article, collection: status_active(Article).map { |r| [r.description, r.id] }, include_blank: false
+    = f.input :amount
+    = f.input :minimum
+    = f.input :barcode
+    .form-group
+      %label.col-sm-3.col-md-3.col-lg-3.control-label
+        Material
+      .col-sm-9.col-md-9.col-lg-9
+        = select_tag :material, options_for_select(get_materials), class: 'form-control', prompt: '--'
+    = f.association :article, collection:[], prompt: '--', disabled: true
 
     = render 'shared/form_buttons'

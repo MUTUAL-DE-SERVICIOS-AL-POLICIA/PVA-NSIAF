@@ -62,6 +62,12 @@ class SubarticlesController < ApplicationController
     render json: view_context.assets_json_material(material.first)
   end
 
+  def articles
+    respond_to do |format|
+      format.json { render json: Article.search_by(params[:material]) }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subarticle
@@ -70,6 +76,6 @@ class SubarticlesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def subarticle_params
-      params.require(:subarticle).permit(:code, :description, :unit, :status, :article_id)
+      params.require(:subarticle).permit(:code, :description, :unit, :status, :article_id, :amount, :minimum, :barcode)
     end
 end

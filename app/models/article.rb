@@ -32,8 +32,12 @@ class Article < ActiveRecord::Base
     array = includes(:material).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = search_column == 'material' ? 'materials.description' : "articles.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      if search_column.present?
+        type_search = search_column == 'material' ? 'materials.description' : "articles.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      else
+        array = array.where("articles.code LIKE ? OR articles.description LIKE ? OR materials.description LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
     end
     array
   end
@@ -50,5 +54,11 @@ class Article < ActiveRecord::Base
         csv << a
       end
     end
+  end
+
+  def self.search_by(building_id)
+    departments = []
+    departments = where(material_id: building_id) if building_id.present?
+    [['', '--']] + departments.map { |d| [d.id, d.description] }
   end
 end

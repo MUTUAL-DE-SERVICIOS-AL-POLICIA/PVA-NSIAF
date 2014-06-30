@@ -365,6 +365,9 @@ es:
         unit: "Unidad"
         article: "Artículo"
         status: "Estado"
+        amount: "Stock"
+        minimum: "Stock mínimo"
+        barcode: "Código de Barra"
       user:
         code: "Código"
         name: "Nombre"

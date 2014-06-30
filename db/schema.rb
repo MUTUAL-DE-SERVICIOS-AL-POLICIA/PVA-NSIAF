@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140625145042) do
+ActiveRecord::Schema.define(version: 20140630202211) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -157,6 +157,9 @@ ActiveRecord::Schema.define(version: 20140625145042) do
     t.integer  "article_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "amount"
+    t.integer  "minimum"
+    t.string   "barcode"
   end
 
   add_index "subarticles", ["article_id"], name: "index_subarticles_on_article_id", using: :btree
