@@ -9,15 +9,18 @@
 - when 'materials' then new_url = new_material_path
 - when 'articles' then new_url = new_article_path
 - when 'subarticles' then new_url = new_subarticle_path
-- when 'requests' then new_url = new_request_path
 
 = title t("#{controller_name}.title.title")
 
 .page-header
-  %h2 #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
+  %h2
+    - if action_name == 'delivered'
+      = t("delivered.title")
+    - else
+      #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
 
 .col-xs-2.button_new
-  %span.controller_name= action_name == 'derecognised' ? action_name : controller_name
+  %span.controller_name= %w(derecognised delivered).include?(action_name) ? action_name : controller_name
   - if new_url.present?
     - is_versions = controller_name == 'versions'
     = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }"do

@@ -65,7 +65,6 @@ class Asset < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
-    status = '1' if status != '0'
     array = includes(:user).order("#{sort_column} #{sort_direction}").where(status: status)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?

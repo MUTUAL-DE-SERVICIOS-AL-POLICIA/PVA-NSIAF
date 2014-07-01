@@ -101,6 +101,8 @@ es:
   declines:
     title:
       title: "Bajas"
+  delivered:
+    title: 'Materiales Entregados'
   departments:
     title:
       title: "Departamentos"

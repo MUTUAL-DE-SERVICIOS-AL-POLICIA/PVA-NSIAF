@@ -1,5 +1,7 @@
 Nsiaf::Application.routes.draw do
-  resources :requests, only: [:index, :show, :new, :create]
+  resources :requests, only: [:index, :show, :new, :create] do
+    get :delivered, on: :collection
+  end
 
   resources :materials, except: [:destroy] do
     post :change_status, on: :member

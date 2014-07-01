@@ -19,12 +19,16 @@ class Request < ActiveRecord::Base
     [h.get_column(self, 'id'), h.get_column(self, 'created_at'), h.get_column(self, 'name'), h.get_column(self, 'title')]
   end
 
-  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = joins(:user).order("#{sort_column} #{sort_direction}")
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, delivered)
+    array = joins(:user).where(delivered: delivered).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = %w(name title).include?(search_column) ? "users.#{search_column}" : "requests.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user)
+      if search_column.present?
+        type_search = %w(name title).include?(search_column) ? "users.#{search_column}" : "requests.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user)
+      else
+        array = array.where("requests.id LIKE ? OR requests.created_at LIKE ? OR users.name LIKE ? OR users.title LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
     end
     array
   end
