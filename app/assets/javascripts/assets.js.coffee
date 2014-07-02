@@ -45,6 +45,8 @@ class AssetEvents
     @request_cancel_url = '/requests'
     # Hogan template elements
     @cacheElementsTpl()
+    # Growl Notices
+    @alert = new Notices({ele: 'div.main'})
 
   cacheElementsTpl: ->
     @$btnCancelAssig = $('#btn_cancel_assig')
@@ -85,7 +87,7 @@ class AssetEvents
       @$selectUser.hide()
       @displayAllAssets(url)
     else
-      alert('Seleccione Edificio, Departamento, y Usuario')
+      @alert.info 'Seleccione <b>Edificio</b>, <b>Departamento</b>, y <b>Usuario</b>'
 
   hideContainer: (e) ->
     e.preventDefault()
@@ -113,7 +115,7 @@ class AssetEvents
       assets_ = assets_ + '&user_id=' + @$user.val()
       $.getJSON url, assets_, (data) => @renderSelectedAssets(data)
     else
-      alert message
+      @alert.info message
 
   displaySelectUserAsset: (e) ->
     e.preventDefault()
@@ -141,9 +143,9 @@ class AssetEvents
       if asset_id
         if request then @addMaterial(asset_id) else @selectDeselectAssetRow(asset_id)
       else
-        alert "El código de #{title} '#{code}' no se encuentra en la lista #{inactive}"
+        @alert.danger "El Código de #{title} <b>#{code}</b> no se encuentra en la lista #{inactive}"
     else
-      alert "Introduzca un código de #{title}"
+      @alert.info "Introduzca un Código de #{title}"
     @$code.select()
 
   searchInAssets: (code) ->
@@ -217,7 +219,7 @@ class AssetEvents
       @$displayUserAssets.find('td').removeClass('amount')
       @$displayUserAssets.append @$templateFixedAssets.render()
     else
-      alert 'Debe seleccionar al menos un material'
+      @alert.info 'Debe seleccionar al menos un material'
 
   save_request: ->
     materials = $.map($('tbody#materials tr'), (val, i) ->
@@ -229,5 +231,5 @@ class AssetEvents
 
   setFocusToCode: ->
     setFocus = =>
-      @$code.select() if @$code.length > 0
-    setInterval(setFocus, 1000)
+      @$code.focus() if @$code.length > 0
+    setInterval(setFocus, 5000)
