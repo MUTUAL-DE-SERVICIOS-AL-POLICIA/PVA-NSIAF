@@ -19,8 +19,9 @@ class Request < ActiveRecord::Base
     [h.get_column(self, 'id'), h.get_column(self, 'created_at'), h.get_column(self, 'name'), h.get_column(self, 'title')]
   end
 
-  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, delivered)
-    array = joins(:user).where(delivered: delivered).order("#{sort_column} #{sort_direction}")
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
+    status = status || 'initiation'
+    array = joins(:user).where(status: status).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140701154149) do
+ActiveRecord::Schema.define(version: 20140702161118) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(version: 20140701154149) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "delivered",     default: false
+    t.string   "status",        default: "0"
     t.datetime "delivery_date"
   end
 
@@ -146,6 +146,7 @@ ActiveRecord::Schema.define(version: 20140701154149) do
     t.integer "subarticle_id"
     t.integer "request_id"
     t.integer "amount"
+    t.integer "amount_delivered"
   end
 
   add_index "subarticle_requests", ["request_id"], name: "index_subarticle_requests_on_request_id", using: :btree
