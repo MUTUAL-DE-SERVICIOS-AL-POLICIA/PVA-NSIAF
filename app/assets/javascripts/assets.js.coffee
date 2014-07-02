@@ -76,6 +76,7 @@ class AssetEvents
     $(document).on 'click', @$btnShowMaterial.selector, => @showMaterials()
     $(document).on 'click', @$btnCancelRequest.selector, (e) => @redirectToAssets(e, @request_cancel_url)
     $(document).on 'click', @$btnSaveRequest.selector, => @save_request()
+    @setFocusToCode()
 
   displayContainer: (e, proceeding_type, url) ->
     e.preventDefault()
@@ -225,3 +226,8 @@ class AssetEvents
     )
     json_data = { user_id: @$user.val(), subarticle_requests_attributes: materials }
     $.post @request_cancel_url, { request: json_data } , null, 'script'
+
+  setFocusToCode: ->
+    setFocus = =>
+      @$code.select() if @$code.length > 0
+    setInterval(setFocus, 1000)
