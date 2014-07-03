@@ -18,31 +18,32 @@ class AssetEvents
     @$selectUser = $('#select-user')
     @$container = $('#assig_devol')
     @$displayUserAssets = $('#display-user-assets')
+    @$request = $('#request')
     # forms & inputs
     @$building = $('#building')
     @$department = $('#department')
     @$user = $('#user')
-    @$material = $('#material')
-    @$article = $('#subarticle_article_id')
     # buttons
     @$btnAssignation = $('#btn_assignation')
     @$btnDevolution = $('#btn_devolution')
     @$btnCancel = $('#btn_cancel')
-    @$btnRequest = $('#btn_request')
-    @$btnCancelRequest = $('#btn_cancel-request')
+    @$btnEditRequest = $('#btn_edit_request')
+    @$btnShowRequest = $('#btn-show-request')
+    @$btnSaveRequest = $('#btn_save_request')
+    @$btnCancelRequest = $('#btn_cancel_request')
     # Hogan templates
     @$templateAssigDevol = Hogan.compile $('#tpl_assig_devol').html() || ''
     @$templateFixedAssets = Hogan.compile $('#tpl-fixed-assets').html() || ''
-    @$templateNewMaterial = Hogan.compile $('#new_material').html() || ''
+    @$templateRequestButtons = Hogan.compile $('#request_buttons').html() || ''
+    @$templateRequestAccept = Hogan.compile $('#request_accept').html() || ''
+    @$templateRequestInput = Hogan.compile $('#request_input').html() || ''
     # urls
     @not_assigned_url = '/assets/not_assigned'
     @assigned_url = '/assets/assigned'
     @display_assets_url = '/assets/assign'
     @deallocate_assets_url = '/assets/deallocate'
     @proceedings_url = '/proceedings'
-    @request_url = '/requests/new'
-    @request_material_url = "/subarticles/return_subarticle"
-    @request_cancel_url = '/requests'
+    @request_save_url = '/requests/'
     # Hogan template elements
     @cacheElementsTpl()
 
@@ -53,16 +54,11 @@ class AssetEvents
     @$btnCancel_ = $('#btn_cancel_')
     @$btnSend = $('#btn-send')
     @$code = $('#code')
-    @$btnSendRequest = $('#btn-send-request')
-    @$btnShowMaterial = $('#btn-show-material')
-    @$btnSaveRequest = $('#btn_save')
 
   bindEvents: ->
     if @$building?
       @$department.remoteChained(@$building.selector, '/assets/departments.json')
       @$user.remoteChained(@$department.selector, '/assets/users.json')
-    if @$material?
-      @$article.remoteChained(@$material.selector, '/subarticles/articles.json')
     $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e, 'E', @not_assigned_url)
     $(document).on 'click', @$btnDevolution.selector, (e) => @displayContainer(e, 'D', @assigned_url)
     $(document).on 'click', @$btnCancel.selector, (e) => @redirectToAssets(e, @proceedings_url)
@@ -71,11 +67,10 @@ class AssetEvents
     $(document).on 'click', @$btnCancel_.selector, (e) => @displaySelectUserAsset(e)
     $(document).on 'click', @$btnAccept.selector, (e) => @generatePDF(e)
     $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e, false)
-    $(document).on 'click', @$btnRequest.selector, (e) => @displayContainer(e, '', @request_url)
-    $(document).on 'click', @$btnSendRequest.selector, (e) => @checkAssetIfExists(e, true)
-    $(document).on 'click', @$btnShowMaterial.selector, => @showMaterials()
-    $(document).on 'click', @$btnCancelRequest.selector, (e) => @redirectToAssets(e, @request_cancel_url)
+    $(document).on 'click', @$btnShowRequest.selector, => @show_request()
+    $(document).on 'click', @$btnEditRequest.selector, => @edit_request()
     $(document).on 'click', @$btnSaveRequest.selector, => @save_request()
+    $(document).on 'click', @$btnCancelRequest.selector, => @cancel_request()
 
   displayContainer: (e, proceeding_type, url) ->
     e.preventDefault()
@@ -90,7 +85,7 @@ class AssetEvents
     e.preventDefault()
     @$container.html('').hide()
     @$selectUser.show()
-    #@$btnCancel.get(0).focus()
+    @$btnCancel.get(0).focus()
 
   changeToHyphens: ->
     value = @$code.val().toString().trim()
@@ -151,15 +146,6 @@ class AssetEvents
       asset_id = obj.id if obj.code is code
     return asset_id
 
-  verifyCodeMaterial: (code) ->
-    result = $.ajax(
-      url: @request_material_url
-      async: false
-      data:
-        code: code
-    )
-    result.responseJSON
-
   selectDeselectAssetRow: (asset_id) ->
     $input = $("#asset_#{asset_id}")
     if $input.hasClass('info')
@@ -170,13 +156,6 @@ class AssetEvents
       $input.addClass('info')
       $input.find('td:last-child').html(@glyphiconOk)
       $input.find('td:first-child input[type=hidden]').val(asset_id)
-
-  addMaterial: (material) ->
-    if $("#materials tr##{material.id}").length
-      amount = $("tr##{material.id} .amount")
-      amount.text(parseInt(amount.text()) + 1)
-    else
-      $('#materials').append @$templateNewMaterial.render(material)
 
   renderSelectedAssets: (data) ->
     @assetIds = $.map(data.assets, (val, i) -> val.id)
@@ -204,24 +183,42 @@ class AssetEvents
   isAssignation: ->
     @proceeding_type is 'E'
 
-  showMaterials: ->
-    if $('tbody#materials tr').length
-      table = $('#assig_devol').clone().removeAttr('id')
-      table.find('.row:first').remove()
-      table.find('tbody').removeAttr('id')
-      @$selectUserAssets.hide()
-      @$displayUserAssets.html(table).show()
-      @$displayUserAssets.find('tr').removeAttr('id')
-      @$displayUserAssets.find('.actions-request').remove()
-      @$displayUserAssets.find('td').removeClass('amount')
-      @$displayUserAssets.append @$templateFixedAssets.render()
+  #Request
+  show_request: ->
+    table = @$request.find('table').clone()
+    table.find('.col-md-2').each ->
+      val = $(this).find(':input').val()
+      val = if val then val else 0
+      $(this).html val
+    @$request.find('#table_request').hide()
+    @$request.find('#materials').append table
+    @$request.find('#materials').append @$templateRequestButtons.render()
+
+  edit_request: ->
+    $( ".page-header button:contains('Editar cantidad')" ).remove()
+    $( ".page-header button:contains('Entregar producto')" ).remove()
+    if @$request.find("table th:contains('Cantidad a entregar')").length
+      @$request.find('#table_request td.col-md-2').each ->
+        $(this).html "<input class='form-control input-sm' type='text' value=#{$(this).text()}>"
     else
-      alert 'Debe seleccionar al menos un material'
+      @$request.find('table thead tr').append '<th>Cantidad a entregar</th>'
+      @$request.find('table tbody tr').append @$templateRequestInput.render()
+    @$request.find('#table_request').append @$templateRequestAccept.render()
 
   save_request: ->
-    materials = $.map($('tbody#materials tr'), (val, i) ->
-      subarticle_id: val.id
-      amount: $(val).find('td.amount').text()
+    materials = $.map($('#request #materials tbody tr'), (val, i) ->
+      id: val.id
+      amount_delivered: $(val).find('td.col-md-2').text()
     )
-    json_data = { user_id: @$user.val(), subarticle_requests_attributes: materials }
-    $.post @request_cancel_url, { request: json_data } , null, 'script'
+    data = { status: 'pending', subarticle_requests_attributes: materials }
+    id = @$request.prev().find('h2 span').text()
+    $.ajax
+      type: "PUT"
+      url: @request_save_url + id
+      data: { request: data }
+      complete: (data, xhr) ->
+        window.location = window.location
+
+  cancel_request: ->
+    @$request.find('#table_request').show()
+    @$request.find('#materials').empty()

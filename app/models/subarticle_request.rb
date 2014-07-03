@@ -2,15 +2,19 @@ class SubarticleRequest < ActiveRecord::Base
   belongs_to :subarticle
   belongs_to :request
 
-  def material_unit
+  def subarticle_unit
     subarticle.present? ? subarticle.unit : ''
   end
 
-  def material_description
+  def subarticle_description
     subarticle.present? ? subarticle.description : ''
   end
 
-  def material_code
+  def subarticle_code
     subarticle.present? ? subarticle.code : ''
+  end
+
+  def subarticle_barcode
+    subarticle.present? ? subarticle.barcode : ''
   end
 end

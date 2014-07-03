@@ -1,56 +1,76 @@
+- unless is_pdf?
+  .page-header
+    .pull-right
+      - if @request.status == 'pending'
+        = button_tag class: 'btn btn-success', id: 'btn_deliver_request' do
+          %span.glyphicon.glyphicon-shopping-cart
+          Entregar producto
+      - if %w(initiation pending).include?(@request.status)
+        = button_tag class: 'btn btn-primary', id: "btn_edit_request" do
+          %span.glyphicon.glyphicon-edit
+          Editar cantidad
+      = link_to requests_path(status: @request.status), class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        Solicitudes
+    %h2
+      Requerimiento Nro.
+      %span #{@request.id}
+
 #request.row{ class: "#{'separator' if is_pdf?}" }
   .col-md-12
-    %h1.proceeding-title.text-center
-      Pedido de Artículo
-      .nro_request
-        Nro. #{@request.id}
-    %p.proceeding-description.text-justify
     %h4
       %span.text-muted Funcionario:
       = @request.user_name
-      .request_title
-        %span.text-muted Cargo:
-        = @request.user_title
     %h4
-      %span.text-muted Fecha:
+      %span.text-muted Cargo:
+      = @request.user_title
+    %h4
+      %span.text-muted Fecha de solicitud:
       = I18n.l(@request.created_at, format: :version)
-    %table.table.table-striped.table-condensed.proceeding-assets
-      %thead
-        %tr
-          %th.col-sm-2 Cantidad
-          %th.col-sm-2 Unidad
-          %th.col-sm-6 Descripción
-          %th.col-sm-2 Código
-      %tbody
-        - @request.subarticle_requests.each do |material|
+    - if @request.status == 'delivered'
+      %h4
+        %span.text-muted Fecha de entrega:
+        = I18n.l(@request.delivery_date, format: :version)
+
+    .selected-assets
+      #table_request
+        %table.table.table-striped.table-condensed
+          %thead
+            %tr
+              %th Código
+              %th Unidad
+              %th Descripción
+              %th Código de barra
+              %th Cantidad solicitada
+              - if @request.status == 'pending'
+                %th Cantidad a entregar
+          %tbody
+            - @request.subarticle_requests.each do |subarticle|
+              %tr{ id: subarticle.id }
+                %td= subarticle.subarticle_code
+                %td= subarticle.subarticle_unit
+                %td= subarticle.subarticle_description
+                %td= subarticle.subarticle_barcode
+                %td= subarticle.amount
+                - if @request.status == 'pending'
+                  %td.col-md-2= subarticle.amount_delivered
+      #materials
+
+    - if is_pdf?
+      %p.proceeding-date.text-right
+        La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
+
+      .proceeding-signature
+        %table{ style: 'width: 100%' }
           %tr
-            %td= material.amount
-            %td= material.material_unit
-            %td= material.material_description
-            %td= material.material_code
+            %td.text-center
+              %p _______________________
+              %p Entregué Conforme
+            %td.text-center
+              %p _______________________
+              %p Vo. Bo.
+            %td.text-center
+              %p _______________________
+              %p Recibí Conforme
 
-    %p.proceeding-date.text-right
-      La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
-
-    .proceeding-signature
-      %table{ style: 'width: 100%' }
-        %tr
-          %td.text-center
-            %p _______________________
-            %p Entregué Conforme
-          %td.text-center
-            %p _______________________
-            %p Vo. Bo.
-          %td.text-center
-            %p _______________________
-            %p Recibí Conforme
-
-  - unless is_pdf?
-    %p.proceeding-pdf.text-center
-      = link_to request_path(@request, format: :pdf), class: 'btn btn-primary btn-lg' do
-        %span.glyphicon.glyphicon-print
-        Imprimir PDF
-
-      = link_to requests_path, class: 'btn btn-danger btn-lg' do
-        %span.glyphicon.glyphicon-ban-circle
-        Cancelar
+= render 'material'

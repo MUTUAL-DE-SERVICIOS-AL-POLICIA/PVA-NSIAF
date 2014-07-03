@@ -39,8 +39,10 @@ class RequestsController < ApplicationController
     @request.save
   end
 
-  def delivered
-    format_to('requests', RequestsDatatable)
+  # PATCH/PUT /requests/1
+  def update
+    @request.update(request_params)
+    render nothing: true
   end
 
   private
@@ -51,6 +53,6 @@ class RequestsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def request_params
-      params.require(:request).permit(:user_id, { subarticle_requests_attributes: [ :subarticle_id, :amount ] } )
+      params.require(:request).permit(:user_id, :status, :delivery_date, { subarticle_requests_attributes: [ :id, :subarticle_id, :amount, :amount_delivered ] } )
     end
 end

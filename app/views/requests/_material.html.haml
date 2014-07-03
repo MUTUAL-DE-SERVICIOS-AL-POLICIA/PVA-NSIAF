@@ -1,11 +1,19 @@
-%script{ type: 'text/html', id: 'new_material' }
-  %tr{ id: '{{id}}' }
-    %td {{code}}
-    %td {{unit}}
-    %td {{description}}
-    %td.amount 1
-    %td.actions-request
-      %button.btn.btn-warning.btn-xs{ type: 'button', title: 'Reducir cantidad', id: 'minus_material' }
-        %span.glyphicon.glyphicon-minus-sign
-      %button.btn.btn-danger.btn-xs{ type: 'button', title: 'Retirar Material', id: 'remove_material' }
-        %span.glyphicon.glyphicon-remove-sign
+%script{ type: 'text/html', id: 'request_buttons' }
+  .row
+    .text-center
+      = button_tag class: 'btn btn-primary', id: "btn_save_request" do
+        %span.glyphicon.glyphicon-ok
+        Grabar
+      = button_tag class: 'btn btn-danger', id: 'btn_cancel_request' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar
+
+%script{ type: 'text/html', id: 'request_accept' }
+  .text-center
+    %button#btn-show-request.btn.btn-primary
+      %span.glyphicon.glyphicon-ok
+      Aceptar
+
+%script{ type: 'text/html', id: 'request_input' }
+  %td.col-md-2
+    = text_field_tag :amount, '', class: 'form-control input-sm'
