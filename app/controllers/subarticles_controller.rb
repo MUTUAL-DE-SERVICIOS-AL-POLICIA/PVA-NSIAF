@@ -57,11 +57,6 @@ class SubarticlesController < ApplicationController
     end
   end
 
-  def return_subarticle
-    material = Subarticle.where(code: params[:code], status: 1)
-    render json: view_context.assets_json_material(material.first)
-  end
-
   def articles
     respond_to do |format|
       format.json { render json: Article.search_by(params[:material]) }

@@ -1,7 +1,7 @@
 jQuery ->
   app = new AssetEvents()
 
-class AssetEvents
+class @AssetEvents
   constructor: ->
     @cacheElements()
     @bindEvents()
@@ -18,7 +18,6 @@ class AssetEvents
     @$selectUser = $('#select-user')
     @$container = $('#assig_devol')
     @$displayUserAssets = $('#display-user-assets')
-    @$request = $('#request')
     # forms & inputs
     @$building = $('#building')
     @$department = $('#department')
@@ -27,23 +26,17 @@ class AssetEvents
     @$btnAssignation = $('#btn_assignation')
     @$btnDevolution = $('#btn_devolution')
     @$btnCancel = $('#btn_cancel')
-    @$btnEditRequest = $('#btn_edit_request')
-    @$btnShowRequest = $('#btn-show-request')
-    @$btnSaveRequest = $('#btn_save_request')
-    @$btnCancelRequest = $('#btn_cancel_request')
+
     # Hogan templates
     @$templateAssigDevol = Hogan.compile $('#tpl_assig_devol').html() || ''
     @$templateFixedAssets = Hogan.compile $('#tpl-fixed-assets').html() || ''
-    @$templateRequestButtons = Hogan.compile $('#request_buttons').html() || ''
-    @$templateRequestAccept = Hogan.compile $('#request_accept').html() || ''
-    @$templateRequestInput = Hogan.compile $('#request_input').html() || ''
+
     # urls
     @not_assigned_url = '/assets/not_assigned'
     @assigned_url = '/assets/assigned'
     @display_assets_url = '/assets/assign'
     @deallocate_assets_url = '/assets/deallocate'
     @proceedings_url = '/proceedings'
-    @request_save_url = '/requests/'
     # Hogan template elements
     @cacheElementsTpl()
 
@@ -67,10 +60,6 @@ class AssetEvents
     $(document).on 'click', @$btnCancel_.selector, (e) => @displaySelectUserAsset(e)
     $(document).on 'click', @$btnAccept.selector, (e) => @generatePDF(e)
     $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e, false)
-    $(document).on 'click', @$btnShowRequest.selector, => @show_request()
-    $(document).on 'click', @$btnEditRequest.selector, => @edit_request()
-    $(document).on 'click', @$btnSaveRequest.selector, => @save_request()
-    $(document).on 'click', @$btnCancelRequest.selector, => @cancel_request()
 
   displayContainer: (e, proceeding_type, url) ->
     e.preventDefault()
@@ -182,43 +171,3 @@ class AssetEvents
 
   isAssignation: ->
     @proceeding_type is 'E'
-
-  #Request
-  show_request: ->
-    table = @$request.find('table').clone()
-    table.find('.col-md-2').each ->
-      val = $(this).find(':input').val()
-      val = if val then val else 0
-      $(this).html val
-    @$request.find('#table_request').hide()
-    @$request.find('#materials').append table
-    @$request.find('#materials').append @$templateRequestButtons.render()
-
-  edit_request: ->
-    $( ".page-header button:contains('Editar cantidad')" ).remove()
-    $( ".page-header button:contains('Entregar producto')" ).remove()
-    if @$request.find("table th:contains('Cantidad a entregar')").length
-      @$request.find('#table_request td.col-md-2').each ->
-        $(this).html "<input class='form-control input-sm' type='text' value=#{$(this).text()}>"
-    else
-      @$request.find('table thead tr').append '<th>Cantidad a entregar</th>'
-      @$request.find('table tbody tr').append @$templateRequestInput.render()
-    @$request.find('#table_request').append @$templateRequestAccept.render()
-
-  save_request: ->
-    materials = $.map($('#request #materials tbody tr'), (val, i) ->
-      id: val.id
-      amount_delivered: $(val).find('td.col-md-2').text()
-    )
-    data = { status: 'pending', subarticle_requests_attributes: materials }
-    id = @$request.prev().find('h2 span').text()
-    $.ajax
-      type: "PUT"
-      url: @request_save_url + id
-      data: { request: data }
-      complete: (data, xhr) ->
-        window.location = window.location
-
-  cancel_request: ->
-    @$request.find('#table_request').show()
-    @$request.find('#materials').empty()

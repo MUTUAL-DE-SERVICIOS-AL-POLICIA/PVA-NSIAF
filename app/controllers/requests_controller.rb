@@ -11,6 +11,7 @@ class RequestsController < ApplicationController
   def show
     respond_to do |format|
       format.html
+      format.json { render json: @request.delivery_verification(params[:barcode]) }
       format.pdf do
         render pdf: "VSIAF-Pedido-Artículo",
                disposition: 'attachment',

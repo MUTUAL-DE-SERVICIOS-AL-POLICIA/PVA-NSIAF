@@ -17,4 +17,17 @@ class SubarticleRequest < ActiveRecord::Base
   def subarticle_barcode
     subarticle.present? ? subarticle.barcode : ''
   end
+
+  def self.get_subarticle(subarticle_id)
+    where(subarticle_id: subarticle_id).first
+  end
+
+  def increase_total_delivered
+    increase = total_delivered + 1
+    update_attribute('total_delivered', increase)
+  end
+
+  def self.is_delivered?
+    where('total_delivered < amount_delivered').present?
+  end
 end
