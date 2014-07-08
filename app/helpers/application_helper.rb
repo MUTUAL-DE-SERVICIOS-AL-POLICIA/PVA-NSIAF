@@ -132,4 +132,16 @@ module ApplicationHelper
   def add_check_box(version_id)
     check_box_tag 'id', version_id, false if current_user.is_admin?
   end
+
+  def url_request(status)
+    requests_path(status: status)
+  end
+
+  def request_button(status)
+    request.fullpath == url_request(status) ? 'active' : ''
+  end
+
+  def get_url_request
+    URI(request.referer).path + '?' + URI(request.referer).query
+  end
 end

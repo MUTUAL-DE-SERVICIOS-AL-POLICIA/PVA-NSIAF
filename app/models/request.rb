@@ -19,8 +19,10 @@ class Request < ActiveRecord::Base
     [h.get_column(self, 'id'), h.get_column(self, 'created_at'), h.get_column(self, 'name'), h.get_column(self, 'title')]
   end
 
-  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, delivered)
-    array = joins(:user).where(delivered: delivered).order("#{sort_column} #{sort_direction}")
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
+    status = status == '' || status == nil ? 'all' : status
+    array = joins(:user).order("#{sort_column} #{sort_direction}")
+    array = array.where(status: status) unless status == 'all'
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
@@ -46,5 +48,29 @@ class Request < ActiveRecord::Base
         csv << a
       end
     end
+  end
+
+  def delivery_verification(barcode)
+    subarticles = Subarticle.get_barcode(barcode)
+    if subarticles.present?
+      if subarticles.exists_amount?
+        subarticle = subarticles.first
+        s_request = subarticle_requests.get_subarticle(subarticle.id)
+        if s_request.present?
+          if s_request.total_delivered < s_request.amount_delivered
+            subarticle.decrease_amount
+            s_request.increase_total_delivered
+            request_deliver unless subarticle_requests.is_delivered?
+          end
+        end
+      else
+        s_request = { amount: 0 }
+      end
+    end
+    s_request
+  end
+
+  def request_deliver
+    update_attributes(status: 'delivered', delivery_date: Time.now )
   end
 end

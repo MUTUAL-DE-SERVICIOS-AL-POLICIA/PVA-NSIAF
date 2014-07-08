@@ -24,6 +24,7 @@
 //= require jquery.fileDownload
 //= require function
 //= require assets
+//= require request
 //= require proceedings
 //= require barcodes
 //= require typeahead

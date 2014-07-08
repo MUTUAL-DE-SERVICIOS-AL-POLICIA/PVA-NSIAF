@@ -8,7 +8,7 @@ class Subarticle < ActiveRecord::Base
   validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :barcode, presence: true, uniqueness: true
   validates :description, :unit, :article_id, presence: true
-  validates :amount, :minimum, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   has_paper_trail
 
@@ -55,5 +55,18 @@ class Subarticle < ActiveRecord::Base
         csv << a
       end
     end
+  end
+
+  def self.get_barcode(barcode)
+    where(barcode: barcode)
+  end
+
+  def self.exists_amount?
+    where("amount > 0").present? ? true : false
+  end
+
+  def decrease_amount
+    decrease = amount - 1
+    update_attribute('amount', decrease)
   end
 end

@@ -21,7 +21,8 @@ jQuery ->
       iframe = document.createElement("iframe")
       iframe.style.height = "0px"
       iframe.style.width = "0px"
-      iframe.src = oConfig.sUrl + "?" + $.param(oParams) + "&search_column=#{ $('#select_column').val() }"
+      status = if $('.button_new span.controller_name').text() == 'requests' then "&status=#{window.location.search.substring(8)}" else ''
+      iframe.src = oConfig.sUrl + "?" + $.param(oParams) + "&search_column=#{ $('#select_column').val() }" + status
       document.body.appendChild iframe
     fnSelect: null
     fnComplete: null
@@ -159,11 +160,3 @@ jQuery ->
         complete: (data, xhr) ->
           window.location = window.location
     e.preventDefault()
-
-  #Material
-  $(document).on 'click', '#minus_material', ->
-    amount = $(this).parent().prev()
-    amount.text(parseInt(amount.text()) - 1) unless amount.text() is '1'
-
-  $(document).on 'click', '#remove_material', ->
-    $(this).parents('tr').remove()

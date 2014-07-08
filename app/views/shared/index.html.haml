@@ -19,8 +19,19 @@
     - else
       #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
 
+- if controller_name == 'requests'
+  .row{ style: 'margin-bottom: 30px;' }
+    .col-xs-12.col-sm-2.col-md-2
+      = link_to 'Nuevos', url_request('initiation'), class: "btn btn-primary btn-block #{request_button('initiation')}"
+    .col-xs-12.col-sm-2.col-md-2
+      = link_to 'Pendientes', url_request('pending'), class: "btn btn-primary btn-block #{request_button('pending')}"
+    .col-xs-12.col-sm-2.col-md-2
+      = link_to 'Entregados', url_request('delivered'), class: "btn btn-primary btn-block #{request_button('delivered')}"
+    .col-xs-12.col-sm-2.col-md-2
+      = link_to 'Todos', url_request('all'), class: "btn btn-primary btn-block #{request_button('all')}"
+
 .col-xs-2.button_new
-  %span.controller_name= %w(derecognised delivered).include?(action_name) ? action_name : controller_name
+  %span.controller_name= action_name == 'derecognised' ? action_name : controller_name
   - if new_url.present?
     - is_versions = controller_name == 'versions'
     = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }"do

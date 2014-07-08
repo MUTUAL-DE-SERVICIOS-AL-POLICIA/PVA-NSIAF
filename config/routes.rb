@@ -1,7 +1,5 @@
 Nsiaf::Application.routes.draw do
-  resources :requests, only: [:index, :show, :new, :create] do
-    get :delivered, on: :collection
-  end
+  resources :requests, except: [:edit, :destroy]
 
   resources :materials, except: [:destroy] do
     post :change_status, on: :member
@@ -13,7 +11,6 @@ Nsiaf::Application.routes.draw do
 
   resources :subarticles, except: [:destroy] do
     post :change_status, on: :member
-    get :return_subarticle, on: :collection
     get :articles, on: :collection
   end
 

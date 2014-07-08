@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
       column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests).include?(name_model) ? 'id' : "#{name_model}.code"
       case controller_name
       when 'assets' then current = action_name == 'derecognised' ? '0' : '1'
-      when 'requests' then current = action_name == 'delivered' ? '1' : '0'
+      when 'requests' then current = params[:status]
       else current = current_user
       end
       @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)

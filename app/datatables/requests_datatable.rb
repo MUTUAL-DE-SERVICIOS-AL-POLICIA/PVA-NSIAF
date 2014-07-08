@@ -33,8 +33,7 @@ private
   end
 
   def fetch_array
-    delivered = @view.url_for == '/requests/delivered' ? '1' : '0'
-    Request.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], delivered)
+    Request.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], params[:status])
   end
 
   def page
