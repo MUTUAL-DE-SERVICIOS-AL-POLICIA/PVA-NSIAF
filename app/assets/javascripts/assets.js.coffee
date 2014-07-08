@@ -39,6 +39,8 @@ class @AssetEvents
     @proceedings_url = '/proceedings'
     # Hogan template elements
     @cacheElementsTpl()
+    # Growl Notices
+    @alert = new Notices({ele: 'div.main'})
 
   cacheElementsTpl: ->
     @$btnCancelAssig = $('#btn_cancel_assig')
@@ -60,6 +62,7 @@ class @AssetEvents
     $(document).on 'click', @$btnCancel_.selector, (e) => @displaySelectUserAsset(e)
     $(document).on 'click', @$btnAccept.selector, (e) => @generatePDF(e)
     $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e, false)
+    @setFocusToCode()
 
   displayContainer: (e, proceeding_type, url) ->
     e.preventDefault()
@@ -68,7 +71,7 @@ class @AssetEvents
       @$selectUser.hide()
       @displayAllAssets(url)
     else
-      alert('Seleccione Edificio, Departamento, y Usuario')
+      @alert.info 'Seleccione <b>Edificio</b>, <b>Departamento</b>, y <b>Usuario</b>'
 
   hideContainer: (e) ->
     e.preventDefault()
@@ -96,7 +99,7 @@ class @AssetEvents
       assets_ = assets_ + '&user_id=' + @$user.val()
       $.getJSON url, assets_, (data) => @renderSelectedAssets(data)
     else
-      alert message
+      @alert.info message
 
   displaySelectUserAsset: (e) ->
     e.preventDefault()
@@ -124,9 +127,9 @@ class @AssetEvents
       if asset_id
         if request then @addMaterial(asset_id) else @selectDeselectAssetRow(asset_id)
       else
-        alert "El código de #{title} '#{code}' no se encuentra en la lista #{inactive}"
+        @alert.danger "El Código de #{title} <b>#{code}</b> no se encuentra en la lista #{inactive}"
     else
-      alert "Introduzca un código de #{title}"
+      @alert.info "Introduzca un Código de #{title}"
     @$code.select()
 
   searchInAssets: (code) ->
@@ -171,3 +174,8 @@ class @AssetEvents
 
   isAssignation: ->
     @proceeding_type is 'E'
+
+  setFocusToCode: ->
+    setFocus = =>
+      @$code.focus() if @$code.length > 0
+    setInterval(setFocus, 5000)

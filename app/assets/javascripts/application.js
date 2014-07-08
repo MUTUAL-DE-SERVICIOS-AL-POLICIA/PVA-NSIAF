@@ -22,9 +22,11 @@
 //= require jquery.chained.remote
 //= require jquery-barcode
 //= require jquery.fileDownload
+//= require bootstrap-growl
 //= require function
 //= require assets
 //= require request
 //= require proceedings
 //= require barcodes
 //= require typeahead
+//= require notices

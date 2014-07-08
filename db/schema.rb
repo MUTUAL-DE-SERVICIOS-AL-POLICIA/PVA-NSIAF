@@ -81,13 +81,13 @@ ActiveRecord::Schema.define(version: 20140704151611) do
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
 
   create_table "declines", force: true do |t|
-    t.string   "asset_code",      limit: 50
-    t.string   "account_code",    limit: 50
-    t.string   "auxiliary_code",  limit: 50
-    t.string   "department_code", limit: 50
-    t.string   "user_code",       limit: 50
-    t.text     "description"
-    t.text     "reason"
+    t.string   "asset_code"
+    t.string   "account_code"
+    t.string   "auxiliary_code"
+    t.string   "department_code"
+    t.string   "user_code"
+    t.string   "description"
+    t.string   "reason"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
