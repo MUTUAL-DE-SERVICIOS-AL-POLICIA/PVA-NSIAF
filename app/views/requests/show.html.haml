@@ -1,15 +1,18 @@
 - unless is_pdf?
   .page-header
     .pull-right
-      - if @request.status == 'pending'
-        = button_tag class: 'btn btn-success buttonRequest', id: 'btn_deliver_request' do
-          %span.glyphicon.glyphicon-shopping-cart
-          Entregar producto
-      - if %w(initiation pending).include?(@request.status)
+      - if @request.status == 'initiation'
         = button_tag class: 'btn btn-primary buttonRequest', id: "btn_edit_request" do
           %span.glyphicon.glyphicon-edit
           Editar cantidad
-      = link_to requests_path(status: @request.status), class: 'btn btn-default' do
+      - if @request.status == 'pending'
+        = link_to request_path(@request, format: :pdf), class: 'btn btn-primary buttonRequest' do
+          %span.glyphicon.glyphicon-print
+          Imprimir PDF
+        = button_tag class: 'btn btn-success buttonRequest', id: 'btn_deliver_request' do
+          %span.glyphicon.glyphicon-shopping-cart
+          Entregar producto
+      = link_to get_url_request, class: 'btn btn-default' do
         %span.glyphicon.glyphicon-list
         Solicitudes
     %h2
@@ -49,10 +52,11 @@
               %th Cantidad solicitada
               - if @request.status == 'pending'
                 %th Cantidad a entregar
-              - if %w(pending delivered).include?(@request.status)
-                %th.amount_delivered Cantidad entregada
-              - if @request.status == 'pending'
-                %th.delivered
+              - unless is_pdf?
+                - if %w(pending delivered).include?(@request.status)
+                  %th.amount_delivered Cantidad entregada
+                - if @request.status == 'pending'
+                  %th.delivered
           %tbody
             - @request.subarticle_requests.each do |s_request|
               %tr{ id: s_request.id }
@@ -63,17 +67,17 @@
                 %td= s_request.amount
                 - if @request.status == 'pending'
                   %td.col-md-2= s_request.amount_delivered
-                - if %w(pending delivered).include?(@request.status)
-                  %td.amount_delivered= s_request.total_delivered
-                - if @request.status == 'pending'
-                  %td.delivered
-                    %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
+                - unless is_pdf?
+                  - if %w(pending delivered).include?(@request.status)
+                    %td.amount_delivered= s_request.total_delivered
+                  - if @request.status == 'pending'
+                    %td.delivered
+                      %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
         .text-center
 
     - if is_pdf?
       %p.proceeding-date.text-right
         La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
-
       .proceeding-signature
         %table{ style: 'width: 100%' }
           %tr

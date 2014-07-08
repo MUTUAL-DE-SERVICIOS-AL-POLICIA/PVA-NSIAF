@@ -14,7 +14,6 @@ class Request extends AssetEvents
     @$btnEditRequest = $('#btn_edit_request')
     @$btnShowRequest = $('#btn-show-request')
     @$btnSaveRequest = $('#btn_save_request')
-    @$btnCancelRequestFirst = $('#btn_cancel_requestFirst')
     @$btnCancelRequest = $('#btn_cancel_request')
     @$btnDeliverRequest = $('#btn_deliver_request')
     @$btnSendRequest = $('#btn_send_request')
@@ -30,7 +29,6 @@ class Request extends AssetEvents
     $(document).on 'click', @$btnShowRequest.selector, => @show_request()
     $(document).on 'click', @$btnEditRequest.selector, => @edit_request()
     $(document).on 'click', @$btnSaveRequest.selector, => @save_request()
-    $(document).on 'click', @$btnCancelRequestFirst.selector, => @cancel_requestFirst()
     $(document).on 'click', @$btnCancelRequest.selector, => @cancel_request()
     $(document).on 'click', @$btnDeliverRequest.selector, => @deliver_request()
     $(document).on 'click', @$btnSendRequest.selector, => @send_request()
@@ -45,11 +43,8 @@ class Request extends AssetEvents
 
   edit_request: ->
     @show_buttons()
-    if @$request.find("table th:contains('Cantidad a entregar')").length
-      @input_to_text()
-    else
-      @$request.find('table thead tr').append '<th>Cantidad a entregar</th>'
-      @$request.find('table tbody tr').append @$templateRequestInput.render()
+    @$request.find('table thead tr').append '<th>Cantidad a entregar</th>'
+    @$request.find('table tbody tr').append @$templateRequestInput.render()
 
   save_request: ->
     materials = $.map(@$request.find('tbody tr'), (val, i) ->
@@ -63,14 +58,6 @@ class Request extends AssetEvents
       data: { request: data }
       complete: (data, xhr) ->
         window.location = window.location
-
-  cancel_requestFirst: ->
-    @$request.prev().find("button.buttonRequest").show()
-    @$table_request.find('.text-center').empty()
-    @$barcode.empty()
-    if @$request.find("table th:contains('Cantidad a entregar')").length
-      @$table_request.find('td.col-md-2').each ->
-        $(this).html $(this).find(':input').val()
 
   cancel_request: ->
     @$table_request.find('.text-center').show()
@@ -91,7 +78,7 @@ class Request extends AssetEvents
       @open_modal('Debe ingresar un código de barra')
 
   show_buttons: ->
-    @$request.prev().find("button.buttonRequest").hide()
+    @$request.prev().find(".buttonRequest").remove()
     @$table_request.find('.text-center').html @$templateRequestAccept.render()
 
   request_delivered: (data) ->

@@ -22,13 +22,13 @@
 - if controller_name == 'requests'
   .row{ style: 'margin-bottom: 30px;' }
     .col-xs-12.col-sm-2.col-md-2
-      = link_to 'Nuevos', requests_path(status: 'initiation'), class: 'btn btn-primary btn-block active'
+      = link_to 'Nuevos', url_request('initiation'), class: "btn btn-primary btn-block #{request_button('initiation')}"
     .col-xs-12.col-sm-2.col-md-2
-      = link_to 'Pendientes', requests_path(status: 'pending'), class: 'btn btn-primary btn-block'
+      = link_to 'Pendientes', url_request('pending'), class: "btn btn-primary btn-block #{request_button('pending')}"
     .col-xs-12.col-sm-2.col-md-2
-      = link_to 'Entregados', requests_path(status: 'delivered'), class: 'btn btn-primary btn-block'
+      = link_to 'Entregados', url_request('delivered'), class: "btn btn-primary btn-block #{request_button('delivered')}"
     .col-xs-12.col-sm-2.col-md-2
-      = link_to 'Todos', requests_path(status: 'all'), class: 'btn btn-primary btn-block'
+      = link_to 'Todos', url_request('all'), class: "btn btn-primary btn-block #{request_button('all')}"
 
 .col-xs-2.button_new
   %span.controller_name= action_name == 'derecognised' ? action_name : controller_name
