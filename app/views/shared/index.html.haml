@@ -9,6 +9,7 @@
 - when 'materials' then new_url = new_material_path
 - when 'articles' then new_url = new_article_path
 - when 'subarticles' then new_url = new_subarticle_path
+- when 'requests' then new_url = new_request_path
 
 = title t("#{controller_name}.title.title")
 
@@ -18,17 +19,17 @@
       = t("delivered.title")
     - else
       #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
-
-- if controller_name == 'requests'
-  .row{ style: 'margin-bottom: 30px;' }
-    .col-xs-12.col-sm-2.col-md-2
-      = link_to 'Nuevos', url_request('initiation'), class: "btn btn-primary btn-block #{request_button('initiation')}"
-    .col-xs-12.col-sm-2.col-md-2
-      = link_to 'Pendientes', url_request('pending'), class: "btn btn-primary btn-block #{request_button('pending')}"
-    .col-xs-12.col-sm-2.col-md-2
-      = link_to 'Entregados', url_request('delivered'), class: "btn btn-primary btn-block #{request_button('delivered')}"
-    .col-xs-12.col-sm-2.col-md-2
-      = link_to 'Todos', url_request('all'), class: "btn btn-primary btn-block #{request_button('all')}"
+      - if controller_name == 'requests'
+        .dropdown
+          %button#dropdownMenu.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button"}
+            Solicitudes:
+            %span= title_request(params[:status])
+            %span.caret
+          %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu"}
+            %li= link_request('initiation')
+            %li= link_request('pending')
+            %li= link_request('delivered')
+            %li= link_request('all')
 
 .col-xs-2.button_new
   %span.controller_name= action_name == 'derecognised' ? action_name : controller_name

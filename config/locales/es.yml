@@ -152,9 +152,10 @@ es:
       new: "Nueva Solicitud"
       users: "Enviar"
       status:
-        initiation: 'Nueva'
+        initiation: 'Nuevo'
         pending: 'Pendiente'
         delivered: 'Entregado'
+        all: 'Todo'
   subarticles:
     title:
       title: "Sub Artículos de Materiales"

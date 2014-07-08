@@ -60,6 +60,8 @@ jQuery ->
     fnDrawCallback: (oSettings) ->
       $('#select_column').appendTo $('.dataTables_filter')
 
+  #Dropdown
+  $('.dropdown-toggle').dropdown()
 
   # Change button status
   $(document).on 'click', '.datatable .btn-warning', (evt) ->

@@ -133,12 +133,13 @@ module ApplicationHelper
     check_box_tag 'id', version_id, false if current_user.is_admin?
   end
 
-  def url_request(status)
-    requests_path(status: status)
+  def link_request(status)
+    link_to title_request(status), requests_path(status: status)
   end
 
-  def request_button(status)
-    request.fullpath == url_request(status) ? 'active' : ''
+  def title_request(status)
+    status = status.present? ? status : 'initiation'
+    t("requests.title.status.#{status}") + 's'
   end
 
   def get_url_request
