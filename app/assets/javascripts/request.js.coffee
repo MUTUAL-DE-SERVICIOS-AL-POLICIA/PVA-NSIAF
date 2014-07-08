@@ -6,6 +6,8 @@ class Request extends AssetEvents
     @$request = $('#request')
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
+    @$alert_modal = $("#alert_modal")
+    @$content_modal = $('#content_modal')
 
     @$idRequest = $('#request_id').text()
 
@@ -86,27 +88,31 @@ class Request extends AssetEvents
       @changeToHyphens()
       $.getJSON "/requests/#{@$idRequest}", { barcode: @$code.val().trim(), user_id: @$functionary }, (data) => @request_delivered(data)
     else
-      alert 'Debe ingresar un código de barra'
+      @open_modal('Debe ingresar un código de barra')
 
   show_buttons: ->
     @$request.prev().find("button.buttonRequest").hide()
     @$table_request.find('.text-center').html @$templateRequestAccept.render()
 
   request_delivered: (data) ->
-    if data.amount
-      if data
+    if data
+      if data.amount
         if @$table_request.find("tr##{data.id} td.delivered span.glyphicon-ok").length
-          alert "#{data.amount_delivered} es límite de entrega del Sub Artículo con código de barra '#{@$code.val()}'"
+          @open_modal("#{data.amount_delivered} es límite de entrega del Sub Artículo con código de barra '#{@$code.val()}'")
         else
           @$table_request.find("tr##{data.id} td.amount_delivered").html data.total_delivered
           if data.total_delivered == data.amount_delivered
             @$table_request.find("tr##{data.id} td.delivered span").addClass 'glyphicon-ok'
             window.location = window.location unless @$table_request.find('.delivered span:hidden').length
       else
-        alert 'No se encuentra el Sub Artículo en la lista'
+        @open_modal("El inventario del Sub Artículo con código de barra '#{@$code.val()}' es 0")
     else
-      alert "El inventario del Sub Artículo con código de barra '#{@$code.val()}' es 0"
+      @open_modal('No se encuentra el Sub Artículo en la lista')
 
   input_to_text: ->
     @$table_request.find('td.col-md-2').each ->
       $(this).html "<input class='form-control input-sm' type='text' value=#{$(this).text()}>" if $(this).next().text() < $(this).text()
+
+  open_modal: (content) ->
+    @$content_modal.html(content)
+    @$alert_modal.modal('toggle')
