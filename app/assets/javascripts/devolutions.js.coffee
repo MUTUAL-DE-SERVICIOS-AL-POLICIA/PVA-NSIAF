@@ -19,7 +19,7 @@ class Devolutions extends BarcodeReader
     # textfields
     @$code = $form.find('input[type=text]')
     # buttons
-    @$btnContinue = @$containerTplSelectedAssets.find('button[data-type=continue]')
+    @$btnCancel = @$containerTplSelectedAssets.find('button[data-type=cancel]')
     @$btnSave = @$containerTplSelectedAssets.find('button[data-type=save]')
     @$btnSend = $form.find('button[type=submit]')
     # Growl Notices
@@ -33,6 +33,7 @@ class Devolutions extends BarcodeReader
     if @checkCodeExists()
       $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e)
     $(document).on 'click', @$btnSave.selector, (e) => @saveSelectedAssets(e)
+    $(document).on 'click', @$btnCancel.selector, (e) => @resetDevolutionViews(e)
 
   displayAssetRows: (asset = null) ->
     @$containerTplSelectedAssets.html @$templateSelectedAssets.render(@assetsJSON())
@@ -89,6 +90,13 @@ class Devolutions extends BarcodeReader
 
   removeAssetRow: (asset) ->
     $("#asset_#{asset.id}").hide 'slow', => @displayAssetRows()
+
+  resetDevolutionViews: (e) ->
+    _assets = []
+    _user = null
+    @$containerTplSelectedUser.html('')
+    @$containerTplSelectedAssets.html('')
+    @$code.val('').select()
 
   saveSelectedAssets: (e) ->
     e.preventDefault()
