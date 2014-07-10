@@ -1,7 +1,7 @@
 jQuery ->
   app = new AssetEvents()
 
-class @AssetEvents
+class AssetEvents extends BarcodeReader
   constructor: ->
     @cacheElements()
     @bindEvents()
@@ -61,7 +61,8 @@ class @AssetEvents
     $(document).on 'click', @$btnContinue.selector, (e) => @sendAssignation(e)
     $(document).on 'click', @$btnCancel_.selector, (e) => @displaySelectUserAsset(e)
     $(document).on 'click', @$btnAccept.selector, (e) => @generatePDF(e)
-    $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e, false)
+    if @checkCodeExists()
+      $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e)
     @setFocusToCode()
 
   displayContainer: (e, proceeding_type, url) ->
@@ -78,10 +79,6 @@ class @AssetEvents
     @$container.html('').hide()
     @$selectUser.show()
     @$btnCancel.get(0).focus()
-
-  changeToHyphens: ->
-    value = @$code.val().toString().trim()
-    @$code.val value.replace(/\'/g, '-')
 
   checkSelectedUser: ->
     @$building.val() && @$department.val() && @$user.val()
@@ -112,22 +109,15 @@ class @AssetEvents
     json_data = { user_id: @$user.val(), asset_ids: @assetIds, proceeding_type: @proceeding_type }
     $.post @proceedings_url, { proceeding: json_data }, null, 'script'
 
-  checkAssetIfExists: (e, request) ->
+  checkAssetIfExists: (e) ->
     e.preventDefault()
     @changeToHyphens()
     code = @$code.val().trim()
-    if request
-      title = 'Sub Atículo'
-      inactive = "o se encuentra en estado inactivo"
-    else
-      title = 'Activo'
-      inactive = ""
     if code
-      asset_id = if request then @verifyCodeMaterial(code) else @searchInAssets(code)
-      if asset_id
-        if request then @addMaterial(asset_id) else @selectDeselectAssetRow(asset_id)
+      if asset_id = @searchInAssets(code)
+        @selectDeselectAssetRow(asset_id)
       else
-        @alert.danger "El Código de #{title} <b>#{code}</b> no se encuentra en la lista #{inactive}"
+        @alert.danger "El Código de Activo <b>#{code}</b> no se encuentra en la lista"
     else
       @alert.info "Introduzca un Código de #{title}"
     @$code.select()
@@ -174,8 +164,3 @@ class @AssetEvents
 
   isAssignation: ->
     @proceeding_type is 'E'
-
-  setFocusToCode: ->
-    setFocus = =>
-      @$code.focus() if @$code.length > 0
-    setInterval(setFocus, 5000)

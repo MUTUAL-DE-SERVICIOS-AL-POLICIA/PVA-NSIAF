@@ -24,8 +24,10 @@
 //= require jquery.fileDownload
 //= require bootstrap-growl
 //= require function
+//= require barcode_reader
 //= require assets
 //= require request
+//= require devolutions
 //= require proceedings
 //= require barcodes
 //= require typeahead

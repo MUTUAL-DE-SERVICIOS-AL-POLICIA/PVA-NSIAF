@@ -66,6 +66,12 @@ class AssetsController < ApplicationController
     render nothing: true
   end
 
+  def devolution
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def users
     respond_to do |format|
       format.html
@@ -112,6 +118,20 @@ class AssetsController < ApplicationController
 
   def derecognised
     format_to('assets', AssetsDatatable)
+  end
+
+  def search
+    model = Asset.assigned
+    if params[:user_id].present?
+      user = User.find params[:user_id]
+      model = user.assets
+    end
+    asset = model.find_by_code params[:code]
+    respond_to do |format|
+      format.json { render json: asset,
+                           include: {user: {only: [:id, :name, :title]}},
+                           only: [:id, :description, :code] }
+    end
   end
 
   private

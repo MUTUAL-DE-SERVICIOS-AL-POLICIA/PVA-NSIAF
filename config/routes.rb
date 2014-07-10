@@ -31,7 +31,9 @@ Nsiaf::Application.routes.draw do
   end
 
   resources :assets, except: [:destroy] do
+    get :search, on: :collection
     post :change_status, on: :member
+    get :devolution, on: :collection
     get :users, on: :collection
     get :departments, on: :collection
     get :assigned, on: :collection

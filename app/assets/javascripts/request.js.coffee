@@ -1,7 +1,7 @@
 jQuery ->
   app = new Request()
 
-class Request extends AssetEvents
+class Request extends BarcodeReader
   cacheElements: ->
     @$request = $('#request')
     @$barcode = $('#barcode')
