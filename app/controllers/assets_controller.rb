@@ -121,12 +121,7 @@ class AssetsController < ApplicationController
   end
 
   def search
-    model = Asset.assigned
-    if params[:user_id].present?
-      user = User.find params[:user_id]
-      model = user.assets
-    end
-    asset = model.find_by_code params[:code]
+    asset = Asset.assigned.find_by_code params[:code]
     respond_to do |format|
       format.json { render json: asset,
                            include: {user: {only: [:id, :name, :title]}},

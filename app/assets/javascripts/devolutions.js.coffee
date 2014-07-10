@@ -60,9 +60,9 @@ class Devolutions extends BarcodeReader
       if @displaySelectedUser(data.user)
         @displaySelectedAssets(data)
       else
-        @alert.danger "El Usuario es distinto!<br/><b>#{data.user.name}</b><br/><em>#{data.user.title}</em>"
+        @alert.danger "El Activo con código <b>#{code}</b> pertenece a otro usuario: <br/><b>#{data.user.name}</b> (<em>#{data.user.title}</em>)"
     else
-      @alert.danger "El Código de Activo <b>#{code}</b> no se encuentra en la lista"
+      @alert.danger "El Código de Activo <b>#{code}</b> no está asignado o no existe"
 
   displaySelectedAssets: (asset) ->
     index = @searchInLocalAssets(asset)
@@ -100,7 +100,7 @@ class Devolutions extends BarcodeReader
       url: @assets_search_url
       type: 'GET'
       dataType: 'JSON'
-      data: { user_id: (if _user then _user.id else null), code: code }
+      data: { code: code }
     .done (data) -> callback(code, data)
 
   searchInLocalAssets: (asset) ->
