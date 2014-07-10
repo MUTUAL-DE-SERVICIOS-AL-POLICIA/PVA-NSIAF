@@ -21,9 +21,10 @@
 
 #request.row{ class: "#{'separator' if is_pdf?}" }
   .col-md-12
-    %h4
-      %span.text-muted Estado:
-      = t("requests.title.status.#{@request.status}")
+    - unless is_pdf?
+      %h4
+        %span.text-muted Estado:
+        = t("requests.title.status.#{@request.status}")
     %h4
       %span.text-muted Funcionario:
       = @request.user_name
