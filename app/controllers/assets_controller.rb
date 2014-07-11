@@ -129,6 +129,13 @@ class AssetsController < ApplicationController
     end
   end
 
+  def admin_assets
+    asset = current_user.not_assigned_assets.find_by_code params[:code]
+    respond_to do |format|
+      format.json { render json: asset, only: [:id, :description, :code] }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_asset
