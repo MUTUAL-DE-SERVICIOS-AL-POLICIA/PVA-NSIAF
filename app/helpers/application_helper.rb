@@ -137,4 +137,8 @@ module ApplicationHelper
     r_referer = request.referer
     r_referer.present? && URI(r_referer).query ? (URI(r_referer).path + '?' + URI(r_referer).query) : requests_path(status: status)
   end
+
+  def minimum_stock
+    status_active(Subarticle).where('amount <= minimum')
+  end
 end

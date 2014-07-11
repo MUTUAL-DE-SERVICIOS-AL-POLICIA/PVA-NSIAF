@@ -1,7 +1,16 @@
-.header
 .container
   .jumbotron.j_bottom
     %p.lead
       Bienvenidos al sistema de Activos Fijos de ADSIB
       %br
       donde podra gestionar los activos de su entidad.
+
+  - if minimum_stock.present?
+    .page-header
+      %h3 Stock Mínimo
+    - minimum_stock.each do |stock|
+      .message
+        %h4
+          %b= stock.code
+        %p= stock.description
+        = link_to 'Ver detalles »', subarticle_path(stock), class: 'btn btn-default btn-xs'
