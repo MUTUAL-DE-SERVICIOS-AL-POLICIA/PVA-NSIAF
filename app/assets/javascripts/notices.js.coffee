@@ -1,5 +1,7 @@
+root = exports ? this
+
 # Display growl notices with bootstrap-growl.js (http://bootstrap-growl.remabledesigns.com/)
-class @Notices
+class Notices
   constructor: (options) ->
     @options =
       ele: 'body'
@@ -15,3 +17,5 @@ class @Notices
 
   message: (message, type) ->
     $.growl message, $.extend @options, {type: type}
+
+root.Notices = Notices

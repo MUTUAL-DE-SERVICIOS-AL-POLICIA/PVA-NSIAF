@@ -13,6 +13,9 @@ class Asset < ActiveRecord::Base
   has_many :asset_proceedings
   has_many :proceedings, through: :asset_proceedings
 
+  scope :assigned, -> { where.not(user_id: nil) }
+  scope :unassigned, -> { where(user_id: nil) }
+
   with_options if: :is_not_migrate? do |m|
     m.validates :code, presence: true, uniqueness: true
     m.validates :description, :auxiliary_id, :user_id, presence: true
