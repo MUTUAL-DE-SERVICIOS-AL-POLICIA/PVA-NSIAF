@@ -17,5 +17,11 @@
   %dd= @subarticle.unit
   %dt= Subarticle.human_attribute_name('article')
   %dd= link_to_if @subarticle.article, @subarticle.article_name, @subarticle.article, title: @subarticle.article_code
+  %dt= Subarticle.human_attribute_name('amoun')
+  %dd= @subarticle.amount
+  %dt= Subarticle.human_attribute_name('minimum')
+  %dd= @subarticle.minimum
+  %dt= Subarticle.human_attribute_name('barcode')
+  %dd= @subarticle.barcode
   %dt= t('general.status')
   %dd= type_status(@subarticle.status)

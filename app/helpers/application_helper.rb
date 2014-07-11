@@ -120,15 +120,6 @@ module ApplicationHelper
     content_for?(section) ? content_for(section) : default
   end
 
-  def assets_json_request(user)
-    title = 'Pedido de Material'
-    { user_name: user.name, user_title: user.title, request_date: I18n.l(Time.now, format: :version), title: title , devolution: true }
-  end
-
-  def assets_json_material(material)
-    { id: material.id, code: material.code, unit: material.unit, description: material.description } if material.present?
-  end
-
   def add_check_box(version_id)
     check_box_tag 'id', version_id, false if current_user.is_admin?
   end
@@ -142,7 +133,8 @@ module ApplicationHelper
     t("requests.title.status.#{status}") + 's'
   end
 
-  def get_url_request
-    URI(request.referer).path + '?' + URI(request.referer).query
+  def get_url_request(status)
+    r_referer = request.referer
+    r_referer.present? && URI(r_referer).query ? (URI(r_referer).path + '?' + URI(r_referer).query) : requests_path(status: status)
   end
 end
