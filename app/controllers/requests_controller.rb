@@ -32,12 +32,13 @@ class RequestsController < ApplicationController
   # POST /requests
   def create
     @request = Request.new(request_params)
-    @request.admin_id = current_user.id
+    @request.user_id = current_user.id
     @request.save
   end
 
   # PATCH/PUT /requests/1
   def update
+    @request.admin_id = current_user.id
     @request.update(request_params)
     render nothing: true
   end

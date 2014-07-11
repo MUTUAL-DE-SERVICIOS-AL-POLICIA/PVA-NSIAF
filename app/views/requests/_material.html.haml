@@ -34,10 +34,19 @@
     %td {{description}}
     %td {{unit}}
     %td.amount 1
-    %td
+    %td.actions-request
       = button_tag class: 'btn btn-success btn-xs', title: 'Incrementar cantidad', id: 'plus_sr' do
         %span.glyphicon.glyphicon-plus-sign
       = button_tag class: 'btn btn-warning btn-xs', title: 'Reducir cantidad', id: 'minus_sr' do
         %span.glyphicon.glyphicon-minus-sign
       = button_tag class: 'btn btn-danger btn-xs', title: 'Eliminar Producto', id: 'remove_sr' do
         %span.glyphicon.glyphicon-remove-sign
+
+%script{ type: 'text/html', id: 'cancel_new_request' }
+  .text-center
+    = button_tag class: 'btn btn-primary', id: "btn_save_new_request" do
+      %span.glyphicon.glyphicon-ok
+      Enviar Solicitud
+    = button_tag class: 'btn btn-danger', id: 'btn_cancel_new_request' do
+      %span.glyphicon.glyphicon-ban-circle
+      Cancelar

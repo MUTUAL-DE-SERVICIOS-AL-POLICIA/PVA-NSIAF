@@ -12,6 +12,8 @@ class Request extends AssetEvents
     @$article = $('#subarticle_article_id')
     @$inputSubarticle = $('input#subarticle')
     @$subarticles = $('#subarticles')
+    @$selectionSubarticles = $('#selection_subarticles')
+    @$selected_subarticles = $('#selected_subarticles')
 
     @$idRequest = $('#request_id').text()
 
@@ -24,12 +26,16 @@ class Request extends AssetEvents
     @btnSubarticleRequestPlus = $('#plus_sr')
     @btnSubarticleRequestMinus = $('#minus_sr')
     @btnSubarticleRequestRemove = $('#remove_sr')
+    @btnShowNewRequest = $('#btn-show-new-request')
+    @$btnCancelNewRequest = $('#btn_cancel_new_request')
+    @$btnSaveNewRequest = $('#btn_save_new_request')
 
     @$templateRequestButtons = Hogan.compile $('#request_buttons').html() || ''
     @$templateRequestAccept = Hogan.compile $('#request_accept').html() || ''
     @$templateRequestInput = Hogan.compile $('#request_input').html() || ''
     @$templateRequestBarcode = Hogan.compile $('#request_barcode').html() || ''
     @$templateNewRequest = Hogan.compile $('#new_request').html() || ''
+    @$templateBtnsNewRequest = Hogan.compile $('#cancel_new_request').html() || ''
 
     @request_save_url = '/requests/'
     @articles_json_url = '/subarticles/articles.json'
@@ -38,13 +44,16 @@ class Request extends AssetEvents
   bindEvents: ->
     $(document).on 'click', @$btnShowRequest.selector, => @show_request()
     $(document).on 'click', @$btnEditRequest.selector, => @edit_request()
-    $(document).on 'click', @$btnSaveRequest.selector, => @save_request()
+    $(document).on 'click', @$btnSaveRequest.selector, => @update_request()
     $(document).on 'click', @$btnCancelRequest.selector, => @cancel_request()
     $(document).on 'click', @$btnDeliverRequest.selector, => @deliver_request()
     $(document).on 'click', @$btnSendRequest.selector, => @send_request()
     $(document).on 'click', @btnSubarticleRequestPlus.selector, (e) => @subarticle_request_plus(e)
     $(document).on 'click', @btnSubarticleRequestMinus.selector, (e) => @subarticle_request_minus(e)
     $(document).on 'click', @btnSubarticleRequestRemove.selector, (e) => @subarticle_request_remove(e)
+    $(document).on 'click', @btnShowNewRequest.selector, => @show_new_request()
+    $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
+    $(document).on 'click', @$btnSaveNewRequest.selector, => @save_new_request()
     if @$material?
       @$article.remoteChained(@$material.selector, @articles_json_url)
     if @$inputSubarticle?
@@ -63,7 +72,7 @@ class Request extends AssetEvents
     @$request.find('table thead tr').append '<th>Cantidad a entregar</th>'
     @$request.find('table tbody tr').append @$templateRequestInput.render()
 
-  save_request: ->
+  update_request: ->
     materials = $.map(@$request.find('tbody tr'), (val, i) ->
       id: val.id
       amount_delivered: $(val).find('td.col-md-2').text()
@@ -153,3 +162,30 @@ class Request extends AssetEvents
 
   get_amount: ($this) ->
     $($this.currentTarget).parent().prev()
+
+  show_new_request: ->
+    if @$subarticles.html() == ""
+      @open_modal("Debe seleccionar al menos un Sub Artículo")
+    else
+      @btnShowNewRequest.hide()
+      @$selectionSubarticles.hide()
+      table = @$subarticles.parent().clone()
+      table.find('.actions-request').remove()
+      table.find('thead tr').prepend '<th>#</th>'
+      table.find('#subarticles tr').each (i) ->
+        $(this).prepend "<td>#{ i+1 }</td>"
+      @$selected_subarticles.html table
+      @$selected_subarticles.append @$templateBtnsNewRequest.render()
+
+  cancel_new_request: ->
+    @btnShowNewRequest.show()
+    @$selectionSubarticles.show()
+    @$selected_subarticles.empty()
+
+  save_new_request: ->
+    subarticles = $.map(@$subarticles.find('tr'), (val, i) ->
+      subarticle_id: val.id
+      amount: $(val).find('td.amount').text()
+    )
+    json_data = { status: 'initiation', subarticle_requests_attributes: subarticles }
+    $.post @request_save_url, { request: json_data }, null, 'script'

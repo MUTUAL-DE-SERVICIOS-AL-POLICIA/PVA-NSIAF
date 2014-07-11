@@ -133,7 +133,8 @@ module ApplicationHelper
     t("requests.title.status.#{status}") + 's'
   end
 
-  def get_url_request
-    URI(request.referer).path + '?' + URI(request.referer).query
+  def get_url_request(status)
+    r_referer = request.referer
+    r_referer.present? && URI(r_referer).query ? (URI(r_referer).path + '?' + URI(r_referer).query) : requests_path(status: status)
   end
 end

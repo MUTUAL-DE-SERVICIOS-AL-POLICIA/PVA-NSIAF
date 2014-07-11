@@ -1,17 +1,23 @@
 .page-header
+  .pull-right
+    %button#btn-show-new-request.btn.btn-primary
+      %span.glyphicon.glyphicon-shopping-cart
+      Ver Solicitud
   %h2= t("requests.title.new")
-%p.bg-info En la caja de texto busque el Sub Artículo a desear, el cual sera añadido en la tabla una vez seleccionado
-.col-xs-12.col-sm-4.col-md-4
-  = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Sub Artículo'
-.col-xs-12.col-sm-8.col-md-8
-  %table.table.table-striped
-    %thead
-      %tr
-        %th= Subarticle.human_attribute_name('description')
-        %th= Subarticle.human_attribute_name('unit')
-        %th Cantidad
-        %th
-    %tbody#subarticles
+#selection_subarticles
+  %p.bg-info En la caja de texto busque el Sub Artículo a desear, el cual sera añadido en la tabla una vez seleccionado
+  .col-xs-12.col-sm-4.col-md-4
+    = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Sub Artículo'
+  .col-xs-12.col-sm-8.col-md-8
+    %table.table.table-striped
+      %thead
+        %tr
+          %th= Subarticle.human_attribute_name('description')
+          %th= Subarticle.human_attribute_name('unit')
+          %th Cantidad
+          %th.actions-request
+      %tbody#subarticles
+#selected_subarticles
 
 = render 'material'
 = render 'shared/alert_modal'
