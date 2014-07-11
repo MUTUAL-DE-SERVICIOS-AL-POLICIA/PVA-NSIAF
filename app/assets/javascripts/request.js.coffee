@@ -8,6 +8,10 @@ class Request extends AssetEvents
     @$table_request = $('#table_request')
     @$alert_modal = $("#alert_modal")
     @$content_modal = $('#content_modal')
+    @$material = $('#material')
+    @$article = $('#subarticle_article_id')
+    @$inputSubarticle = $('input#subarticle')
+    @$subarticles = $('#subarticles')
 
     @$idRequest = $('#request_id').text()
 
@@ -17,13 +21,19 @@ class Request extends AssetEvents
     @$btnCancelRequest = $('#btn_cancel_request')
     @$btnDeliverRequest = $('#btn_deliver_request')
     @$btnSendRequest = $('#btn_send_request')
+    @btnSubarticleRequestPlus = $('#plus_sr')
+    @btnSubarticleRequestMinus = $('#minus_sr')
+    @btnSubarticleRequestRemove = $('#remove_sr')
 
     @$templateRequestButtons = Hogan.compile $('#request_buttons').html() || ''
     @$templateRequestAccept = Hogan.compile $('#request_accept').html() || ''
     @$templateRequestInput = Hogan.compile $('#request_input').html() || ''
     @$templateRequestBarcode = Hogan.compile $('#request_barcode').html() || ''
+    @$templateNewRequest = Hogan.compile $('#new_request').html() || ''
 
     @request_save_url = '/requests/'
+    @articles_json_url = '/subarticles/articles.json'
+    @subarticles_json_url = '/subarticles/get_subarticles.json?q=%QUERY'
 
   bindEvents: ->
     $(document).on 'click', @$btnShowRequest.selector, => @show_request()
@@ -32,6 +42,13 @@ class Request extends AssetEvents
     $(document).on 'click', @$btnCancelRequest.selector, => @cancel_request()
     $(document).on 'click', @$btnDeliverRequest.selector, => @deliver_request()
     $(document).on 'click', @$btnSendRequest.selector, => @send_request()
+    $(document).on 'click', @btnSubarticleRequestPlus.selector, (e) => @subarticle_request_plus(e)
+    $(document).on 'click', @btnSubarticleRequestMinus.selector, (e) => @subarticle_request_minus(e)
+    $(document).on 'click', @btnSubarticleRequestRemove.selector, (e) => @subarticle_request_remove(e)
+    if @$material?
+      @$article.remoteChained(@$material.selector, @articles_json_url)
+    if @$inputSubarticle?
+      @get_subarticles()
 
   show_request: ->
     @$table_request.find('.col-md-2 :input').each ->
@@ -103,3 +120,36 @@ class Request extends AssetEvents
   open_modal: (content) ->
     @$content_modal.html(content)
     @$alert_modal.modal('toggle')
+
+  get_subarticles: ->
+    bestPictures = new Bloodhound(
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("description")
+      queryTokenizer: Bloodhound.tokenizers.whitespace
+      limit: 100
+      remote: @subarticles_json_url
+    )
+    bestPictures.initialize()
+    @$inputSubarticle.typeahead null,
+      displayKey: "description"
+      source: bestPictures.ttAdapter()
+    .on 'typeahead:selected', (evt, data) => @add_subarticle(evt, data)
+
+  add_subarticle: (evt, data) ->
+    if @$subarticles.find("tr##{data.id}").length
+      @open_modal("El Sub Artículo '#{data.description}' ya se encuentra en lista")
+    else
+      @$subarticles.append @$templateNewRequest.render(data)
+
+  subarticle_request_plus: ($this) ->
+    amount = @get_amount($this)
+    amount.text(parseInt(amount.text()) + 1)
+
+  subarticle_request_minus: ($this) ->
+    amount = @get_amount($this)
+    amount.text(parseInt(amount.text()) - 1) unless amount.text() is '1'
+
+  subarticle_request_remove: ($this) ->
+    @get_amount($this).parent().remove()
+
+  get_amount: ($this) ->
+    $($this.currentTarget).parent().prev()

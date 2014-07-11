@@ -28,3 +28,16 @@
             = button_tag class: 'btn btn-success col-md-12 btn-lg', id: "btn_send_request" do
               %span.glyphicon.glyphicon-ok
               Entregar
+
+%script{ type: 'text/html', id: 'new_request' }
+  %tr{ id: '{{id}}' }
+    %td {{description}}
+    %td {{unit}}
+    %td.amount 1
+    %td
+      = button_tag class: 'btn btn-success btn-xs', title: 'Incrementar cantidad', id: 'plus_sr' do
+        %span.glyphicon.glyphicon-plus-sign
+      = button_tag class: 'btn btn-warning btn-xs', title: 'Reducir cantidad', id: 'minus_sr' do
+        %span.glyphicon.glyphicon-minus-sign
+      = button_tag class: 'btn btn-danger btn-xs', title: 'Eliminar Producto', id: 'remove_sr' do
+        %span.glyphicon.glyphicon-remove-sign

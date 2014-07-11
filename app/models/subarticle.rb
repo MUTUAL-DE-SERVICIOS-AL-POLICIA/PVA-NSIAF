@@ -69,4 +69,8 @@ class Subarticle < ActiveRecord::Base
     decrease = amount - 1
     update_attribute('amount', decrease)
   end
+
+  def self.search_subarticle(q)
+    where("description LIKE ? AND status = ?", "%#{q}%", 1).map { |s| { id: s.id, description: s.description, unit: s.unit } }
+  end
 end
