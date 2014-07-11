@@ -1,5 +1,5 @@
 jQuery ->
-  app = new AssetEvents()
+  #app = new AssetEvents()
 
 class AssetEvents extends BarcodeReader
   constructor: ->

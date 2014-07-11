@@ -27,6 +27,7 @@
 //= require barcode_reader
 //= require assets
 //= require request
+//= require assignations
 //= require devolutions
 //= require proceedings
 //= require barcodes
