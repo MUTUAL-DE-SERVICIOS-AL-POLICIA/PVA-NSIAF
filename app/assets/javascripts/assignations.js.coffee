@@ -2,7 +2,7 @@ $ -> new Assignations()
 
 class Assignations extends BarcodeReader
   _assets = []
-  _proceeding_type = null
+  _proceeding_type = 'E'
   _user = null
 
   constructor: ->
@@ -46,7 +46,7 @@ class Assignations extends BarcodeReader
     if @$building?
       @$department.remoteChained(@$building.selector, '/assets/departments.json')
       @$user.remoteChained(@$department.selector, '/assets/users.json')
-    $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e, 'E', @not_assigned_url)
+    $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e, @not_assigned_url)
     $(document).on 'click', @$btnCancel.selector, (e) => @resetDevolutionViews(e)
     $(document).on 'click', @$btnReturn.selector, (e) => @redirectToAssets(e, @proceedings_url)
     $(document).on 'click', @$btnSave.selector, (e) => @saveSelectedAssets(e)
@@ -73,10 +73,9 @@ class Assignations extends BarcodeReader
   checkSelectedUser: ->
     @$building.val() && @$department.val() && @$user.val()
 
-  displayContainer: (e, proceeding_type, url) ->
+  displayContainer: (e, url) ->
     e.preventDefault()
     if @checkSelectedUser()
-      _proceeding_type = proceeding_type # E = Entrega, D = Devolución
       @$containerSelectUser.hide()
       @showUserInfo()
       @displayAssetRows()
@@ -98,17 +97,6 @@ class Assignations extends BarcodeReader
       _assets.unshift(asset)
       @displayAssetRows(asset)
 
-  displaySelectedUser: (user) ->
-    if @isUserSelected()
-      return _user.id is user.id
-    else
-      _user = user
-      @showUserInfo()
-      return true
-
-  isUserSelected: ->
-    _user?
-
   redirectToAssets: (e, url) ->
     e.preventDefault()
     window.location = url
@@ -126,13 +114,7 @@ class Assignations extends BarcodeReader
   saveSelectedAssets: (e) ->
     e.preventDefault()
     if _assets.length > 0
-      # TODO falta que guarde para asignación de activos
-      #
-      #
-      #
-      #
-      #
-      json_data = { user_id: _user.id, asset_ids: (_assets.map (a) -> a.id), proceeding_type: 'D' }
+      json_data = { user_id: _user.id, asset_ids: (_assets.map (a) -> a.id), proceeding_type: _proceeding_type }
       $.post @proceedings_url, { proceeding: json_data }, null, 'script'
     else
       @alert.danger 'Debe seleccionar al menos un Activo'
