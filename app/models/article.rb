@@ -29,7 +29,7 @@ class Article < ActiveRecord::Base
   end
 
    def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = includes(:material).order("#{sort_column} #{sort_direction}")
+    array = joins(:material).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
