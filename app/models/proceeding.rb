@@ -85,7 +85,9 @@ class Proceeding < ActiveRecord::Base
       user_id = self.user_id
       event = 'assignation'
     end
-    assets.update_all(user_id: user_id)
+    Asset.paper_trail_off
+    assets.map { |a| a.update_attributes(user_id: user_id) }
+    Asset.paper_trail_on
     register_log(event)
   end
 
