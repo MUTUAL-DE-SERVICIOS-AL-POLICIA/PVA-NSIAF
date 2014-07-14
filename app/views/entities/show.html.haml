@@ -18,3 +18,7 @@
 %p
   %b #{Entity.human_attribute_name('acronym')}:
   = @entity.acronym
+%p
+  = image_tag @entity.header_url(:thumb).to_s
+%p
+  = image_tag @entity.footer_url(:thumb).to_s
