@@ -2,6 +2,7 @@ $ -> new Devolutions()
 
 class Devolutions extends BarcodeReader
   _assets = []
+  _proceeding_type = 'D'
   _user = null
 
   constructor: ->
@@ -54,8 +55,6 @@ class Devolutions extends BarcodeReader
       @alert.info "Introduzca un Código de Activo"
     @$code.select()
 
-  displayAssetRow: (data) ->
-
   displaySearchAsset: (code, data) =>
     if data
       if @displaySelectedUser(data.user)
@@ -101,7 +100,7 @@ class Devolutions extends BarcodeReader
   saveSelectedAssets: (e) ->
     e.preventDefault()
     if _assets.length > 0
-      json_data = { user_id: _user.id, asset_ids: (_assets.map (a) -> a.id), proceeding_type: 'D' }
+      json_data = { user_id: _user.id, asset_ids: (_assets.map (a) -> a.id), proceeding_type: _proceeding_type }
       $.post @proceedings_url, { proceeding: json_data }, null, 'script'
     else
       @alert.danger 'Debe seleccionar al menos un Activo'

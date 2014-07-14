@@ -66,54 +66,16 @@ class AssetsController < ApplicationController
     render nothing: true
   end
 
-  def devolution
-    respond_to do |format|
-      format.html
-    end
-  end
-
   def users
     respond_to do |format|
-      format.html
       format.json { render json: User.search_by(params[:department]) }
     end
   end
 
   def departments
     respond_to do |format|
-      format.html
       format.json { render json: Department.search_by(params[:building]) }
     end
-  end
-
-  def assigned
-    user = User.includes(:assets).find(params[:user_id])
-    assets = user.assets
-    render json: view_context.assets_json(assets, user, true)
-  end
-
-  def not_assigned
-    user = User.find(params[:user_id])
-    assets = current_user.not_assigned_assets
-    render json: view_context.assets_json(assets, user)
-  end
-
-  def assign
-    params[:assets] ||= []
-    asset_ids = params[:assets].map { |e| e.to_i }
-    user = User.find(params[:user_id])
-    asset_ids &= current_user.not_assigned_assets.pluck(:id)
-    assets = current_user.not_assigned_assets.where(id: asset_ids)
-    render json: view_context.assets_json(assets, user)
-  end
-
-  def deallocate
-    params[:assets] ||= []
-    asset_ids = params[:assets].map { |e| e.to_i }
-    user = User.find(params[:user_id])
-    asset_ids &= user.asset_ids
-    assets = user.assets.where(id: asset_ids)
-    render json: view_context.assets_json(assets, user, true)
   end
 
   def derecognised
