@@ -6,7 +6,20 @@
     = f.input :code
     = f.input :name
     = f.input :acronym
-    = f.file_field :header
-    = f.file_field :footer
+    .form-group
+      .col-md-offset-2.col-sm-offset-2.col-lg-offset-2
+        #images_pdf Imágenes PDF
+        %hr
+        .row
+          .col-xs-12.col-sm-6.col-md-6
+            %label Cabecera
+            = link_to '#', class: 'thumbnail' do
+              = image_tag('', "data-src" => "holder.js/100%x180")
+            = f.file_field :header, class: 'image'
+          .col-xs-12.col-sm-6.col-md-6
+            %label Pie de página
+            = link_to '#', class: 'thumbnail' do
+              = image_tag('', "data-src" => "holder.js/100%x180")
+            = f.file_field :footer, class: 'image'
 
     = render 'shared/form_buttons'
