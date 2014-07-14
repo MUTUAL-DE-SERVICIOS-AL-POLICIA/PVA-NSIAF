@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140704151611) do
+ActiveRecord::Schema.define(version: 20140714151216) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 20140704151611) do
     t.integer  "department_id"
     t.string   "role"
     t.boolean  "password_change",                    default: false, null: false
+    t.integer  "assets_count",                       default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

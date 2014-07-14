@@ -8,7 +8,7 @@ class Asset < ActiveRecord::Base
 
   belongs_to :account
   belongs_to :auxiliary
-  belongs_to :user
+  belongs_to :user, counter_cache: true
 
   has_many :asset_proceedings
   has_many :proceedings, through: :asset_proceedings

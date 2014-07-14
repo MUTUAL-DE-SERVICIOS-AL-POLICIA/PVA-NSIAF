@@ -376,6 +376,7 @@ es:
         minimum: "Stock mínimo"
         barcode: "Código de Barra"
       user:
+        assets_count: "Nro. Activos"
         code: "Código"
         name: "Nombre"
         title: "Cargo"
