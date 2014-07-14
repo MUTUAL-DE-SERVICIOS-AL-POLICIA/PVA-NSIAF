@@ -47,7 +47,7 @@ private
   end
 
   def sort_column
-    columns = %w[subarticles.code subarticles.description subarticles.unit articles.description barcode subarticles.status]
+    columns = %w[subarticles.code subarticles.description subarticles.unit barcode articles.description subarticles.status]
     columns[params[:iSortCol_0].to_i]
   end
 

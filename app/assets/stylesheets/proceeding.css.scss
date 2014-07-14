@@ -20,7 +20,7 @@
     margin: 30px 0 0;
   }
   .proceeding-signature {
-    margin: 100px 0 50px;
+    margin-top: 100px;
   }
   .proceeding-title {
     margin: 0 0 30px 0;
@@ -60,11 +60,12 @@
 }
 
 .separator{
-  border-bottom: 1px solid #DDDDDD !important;
   float: left;
   margin-top: 100px;
   width: 100%;
 }
+
+.line{ border-bottom: 1px solid #DDDDDD !important; }
 
 #footer{
   .page_Numbering{

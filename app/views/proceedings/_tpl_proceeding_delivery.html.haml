@@ -49,7 +49,7 @@
       %p.proceeding-date.text-right
         La Paz, {{proceedingDate}}
 
-      .proceeding-signature
+      .proceeding-signature{ style: "#{'margin-bottom: 50px;' unless is_pdf?}" }
         %table{ style: 'width: 100%' }
           %tr
             %td.text-center
