@@ -39,10 +39,6 @@ Nsiaf::Application.routes.draw do
     get :devolution, on: :collection
     get :users, on: :collection
     get :departments, on: :collection
-    get :assigned, on: :collection
-    get :not_assigned, on: :collection
-    get :assign, on: :collection
-    get :deallocate, on: :collection
     get :derecognised, on: :collection
   end
 

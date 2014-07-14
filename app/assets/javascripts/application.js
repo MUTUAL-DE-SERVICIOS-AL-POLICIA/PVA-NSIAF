@@ -25,7 +25,6 @@
 //= require bootstrap-growl
 //= require function
 //= require barcode_reader
-//= require assets
 //= require request
 //= require assignations
 //= require devolutions
