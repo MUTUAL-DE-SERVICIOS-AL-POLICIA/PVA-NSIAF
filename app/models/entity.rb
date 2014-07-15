@@ -38,10 +38,10 @@ class Entity < ActiveRecord::Base
   end
 
   def get_header
-    header.present? ? header_url(:thumb).to_s : ''
+    header.present? ? header_url.to_s : ''
   end
 
   def get_footer
-    footer.present? ? footer_url(:thumb).to_s : ''
+    footer.present? ? footer_url.to_s : ''
   end
 end

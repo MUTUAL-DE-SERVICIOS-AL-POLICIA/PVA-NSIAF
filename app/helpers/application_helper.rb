@@ -138,7 +138,8 @@ module ApplicationHelper
     if belongs_department.present?
       entity = belongs_department.building.entity
       img = type == 'header' ? entity.get_header : entity.get_footer
-      pdf_image_tag(img)
+      height = type == 'header' ? "77" : '33'
+      pdf_image_tag(img, width: "685", height: height)
     end
   end
 
