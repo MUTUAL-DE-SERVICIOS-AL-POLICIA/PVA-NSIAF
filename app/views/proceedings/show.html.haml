@@ -1,4 +1,4 @@
-#proceeding-delivery{ data: proceeding_to_json(@proceeding).as_json }
+#proceeding-delivery{ data: proceeding_to_json(@proceeding).as_json.merge({type: 'proceeding'}) }
 
 - unless is_pdf?
   %p.proceeding-pdf.text-center
