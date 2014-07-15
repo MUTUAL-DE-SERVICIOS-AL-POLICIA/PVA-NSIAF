@@ -28,3 +28,4 @@ pickle-email-*.html
 .ruby-version
 .ruby-gemset
 /public/assets
+/public/uploads

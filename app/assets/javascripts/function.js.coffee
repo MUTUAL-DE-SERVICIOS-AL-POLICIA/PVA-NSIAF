@@ -162,3 +162,24 @@ jQuery ->
         complete: (data, xhr) ->
           window.location = window.location
     e.preventDefault()
+
+  #Img Entity
+  changeImg = (evt) ->
+    if window.FileReader
+      i = 0
+      while f = evt.target.files[i]
+        reader = new FileReader()
+        reader.onload = ((theFile) ->
+          (e) ->
+            img = $(evt.currentTarget).prev().find('img')
+            img.attr "src", e.target.result
+            img.attr "title", escape(theFile.name)
+        )(f)
+        reader.readAsDataURL f
+        i++
+    else
+      alert "El API File no es soportado por éste navegador"
+
+  $(".imgHeaderEntity").on "change", changeImg
+
+  $(".imgFooterEntity").on "change", changeImg
