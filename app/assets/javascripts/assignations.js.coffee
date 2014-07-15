@@ -1,4 +1,4 @@
-$ -> new Assignations()
+$ -> new Assignations() if $('[data-action=assignation]').length > 0
 
 class Assignations extends BarcodeReader
   _assets = []
@@ -15,21 +15,25 @@ class Assignations extends BarcodeReader
     @proceedings_url = '/proceedings'
     @user_url = '/users/{id}.json'
     # Containers
-    @$containerTplSelectedAssets = $('#container-tpl-selected-assets[data-action=assignation]')
+    @$containerTplSelectedAssets = $('#container-tpl-selected-assets')
     @$containerTplSelectedUser = $('#container-tpl-selected-user')
     @$containerSelectUser = $('#container-select-user')
+    @$containerTplProceedingDelivery = $('#proceeding-delivery')
     # forms & inputs
     @$building = $('#building')
     @$department = $('#department')
     @$user = $('#user')
     # buttons
     @$btnAssignation = $('#btn_assignation')
-    @$btnCancel = @$containerTplSelectedAssets.find('button[data-type=cancel]')
+    @$btnBack = @$containerTplSelectedAssets.find('button[data-type=back]')
+    @$btnCancel = @$containerTplProceedingDelivery.find('button[data-type=cancel]')
+    @$btnNext = @$containerTplSelectedAssets.find('button[data-type=next]')
     @$btnReturn = $('#btn_cancel')
-    @$btnSave = @$containerTplSelectedAssets.find('button[data-type=save]')
+    @$btnSave = @$containerTplProceedingDelivery.find('button[data-type=save]')
     # Growl Notices
     @alert = new Notices({ele: 'div.main'})
     # Hogan templates
+    @$templateProceedingDelivery = Hogan.compile $('#tpl-proceeding-delivery').html() || ''
     @$templateSelectedAssets = Hogan.compile $('#tpl-selected-assets').html() || ''
     @$templateSelectedUser = Hogan.compile $('#tpl-selected-user').html() || ''
     @cacheTplElements()
@@ -38,27 +42,42 @@ class Assignations extends BarcodeReader
     $form = $('form[data-action=assignation]')
     @$code = $form.find('input[type=text]')
     @$btnSend = $form.find('button[type=submit]')
-    if @checkCodeExists()
-      $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e)
 
   bindEvents: ->
     @setFocusToCode()
     if @$building?
       @$department.remoteChained(@$building.selector, '/assets/departments.json')
       @$user.remoteChained(@$department.selector, '/assets/users.json')
-    $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e, @not_assigned_url)
-    $(document).on 'click', @$btnCancel.selector, (e) => @resetDevolutionViews(e)
+    $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e)
+    $(document).on 'click', @$btnBack.selector, (e) => @backToSelectUser(e)
+    $(document).on 'click', @$btnCancel.selector, (e) => @backToSelectAssets(e)
+    $(document).on 'click', @$btnNext.selector, (e) => @previewProceeding(e)
     $(document).on 'click', @$btnReturn.selector, (e) => @redirectToAssets(e, @proceedings_url)
     $(document).on 'click', @$btnSave.selector, (e) => @saveSelectedAssets(e)
+    $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e)
 
   displayAssetRows: (asset = null) ->
     @$containerTplSelectedAssets.html @$templateSelectedAssets.render(@assetsJSON())
+    @$containerTplSelectedAssets.show()
     if asset
       $("#asset_#{asset.id}").hide().toggle('highlight')
 
   assetsJSON: ->
     assets: _assets.map (a, i) -> a.index = i + 1; a
     total: _assets.length
+
+  backToSelectUser: (e) ->
+    e.preventDefault()
+    @$containerSelectUser.show()
+    @$containerTplSelectedAssets.hide()
+    @$containerTplSelectedUser.hide()
+
+  backToSelectAssets: (e) ->
+    e.preventDefault()
+    @$containerTplProceedingDelivery.hide()
+    @$containerTplSelectedAssets.show()
+    @$containerTplSelectedUser.show()
+    @$code.focus()
 
   checkAssetIfExists: (e) ->
     e.preventDefault()
@@ -73,11 +92,11 @@ class Assignations extends BarcodeReader
   checkSelectedUser: ->
     @$building.val() && @$department.val() && @$user.val()
 
-  displayContainer: (e, url) ->
+  displayContainer: (e) ->
     e.preventDefault()
     if @checkSelectedUser()
       @$containerSelectUser.hide()
-      @showUserInfo()
+      @showUserInfo @$user.val()
       @displayAssetRows()
     else
       @alert.info 'Seleccione <b>Edificio</b>, <b>Departamento</b>, y <b>Usuario</b>'
@@ -97,19 +116,28 @@ class Assignations extends BarcodeReader
       _assets.unshift(asset)
       @displayAssetRows(asset)
 
+  previewProceeding: (e) ->
+    e.preventDefault()
+    if _assets.length > 0
+      assignation =
+        assets: _assets
+        devolution: false
+        proceedingDate: moment().format('LL')
+        userName: _user.name
+        userTitle: _user.title
+      @$containerTplProceedingDelivery.html @$templateProceedingDelivery.render(assignation)
+      @$containerTplProceedingDelivery.show()
+      @$containerTplSelectedAssets.hide()
+      @$containerTplSelectedUser.hide()
+    else
+      @alert.danger 'Debe seleccionar al menos un Activo'
+
   redirectToAssets: (e, url) ->
     e.preventDefault()
     window.location = url
 
   removeAssetRow: (asset) ->
     $("#asset_#{asset.id}").hide 'slow', => @displayAssetRows()
-
-  resetDevolutionViews: (e) ->
-    _assets = []
-    _user = null
-    @$containerTplSelectedUser.html('')
-    @$containerTplSelectedAssets.html('')
-    @$containerSelectUser.show()
 
   saveSelectedAssets: (e) ->
     e.preventDefault()
@@ -130,9 +158,14 @@ class Assignations extends BarcodeReader
         index = i
     return index
 
-  showUserInfo: ->
-    $.getJSON @user_url.replace(/{id}/g, @$user.val()), (data) =>
-      _user = data
-      @$containerTplSelectedUser.html @$templateSelectedUser.render(_user)
-      @cacheTplElements()
+  showUserInfo: (user_id) ->
+    if _user && _user.id is parseInt(user_id)
+      @$containerTplSelectedUser.show()
       @$code.select()
+    else
+      $.getJSON @user_url.replace(/{id}/g, @$user.val()), (data) =>
+        _user = data
+        @$containerTplSelectedUser.html @$templateSelectedUser.render(_user)
+        @$containerTplSelectedUser.show()
+        @cacheTplElements()
+        @$code.select()

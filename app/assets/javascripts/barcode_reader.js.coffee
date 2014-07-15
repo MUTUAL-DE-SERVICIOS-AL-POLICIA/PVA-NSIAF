@@ -20,7 +20,7 @@ class BarcodeReader
       @$code.val value.replace(/\'/g, '-')
 
   checkCodeExists: ->
-    @$code.length > 0
+    @$code && @$code.length > 0
 
   # Set focus to code textfield every 5 seconds
   setFocusToCode: ->

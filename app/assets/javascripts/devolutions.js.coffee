@@ -1,4 +1,4 @@
-$ -> new Devolutions()
+$ -> new Devolutions() if $('[data-action=devolution]').length > 0
 
 class Devolutions extends BarcodeReader
   _assets = []
@@ -10,12 +10,12 @@ class Devolutions extends BarcodeReader
     @bindEvents()
 
   cacheElements: ->
-    $form = $('form[data-action=devolution]')
+    $form = $('form')
     # URLs
     @assets_search_url = '/assets/search'
     @proceedings_url = '/proceedings'
     # Containers
-    @$containerTplSelectedAssets = $('#container-tpl-selected-assets[data-action=devolution]')
+    @$containerTplSelectedAssets = $('#container-tpl-selected-assets')
     @$containerTplSelectedUser = $('#container-tpl-selected-user')
     # textfields
     @$code = $form.find('input[type=text]')

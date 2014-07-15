@@ -1,3 +1,4 @@
+- display_buttons ||= false
 %script{ id: 'tpl-proceeding-delivery', type: 'text/html' }
   .row{ class: "#{'separator' if is_pdf?}" }
     .col-md-offset-1.col-md-10
@@ -61,3 +62,13 @@
             %td.text-center
               %p _______________________
               %p RECIBÍ CONFORME
+
+  - if display_buttons
+    %p.proceeding-pdf.text-center
+      = button_tag class: 'btn btn-primary btn-lg', data: {type: 'save'} do
+        %span.glyphicon.glyphicon-print
+        Imprimir PDF
+
+      = button_tag class: 'btn btn-danger btn-lg', data: {type: 'cancel'} do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar
