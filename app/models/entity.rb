@@ -37,4 +37,11 @@ class Entity < ActiveRecord::Base
     end
   end
 
+  def get_header
+    header.present? ? header_url(:thumb).to_s : ''
+  end
+
+  def get_footer
+    footer.present? ? footer_url(:thumb).to_s : ''
+  end
 end
