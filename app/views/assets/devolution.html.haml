@@ -1,10 +1,10 @@
-.row
+.row{data: {action: 'devolution'}}
   .col-md-12
     %h3.text-center Devolución de Activos Fijos
 
 .row
   .col-md-12.col-sm-12
-    %form.asset-code{ role: 'form', data: {action: 'devolution'} }
+    %form.asset-code{role: 'form'}
       .row
         .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
           = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Activo', autofocus: true
@@ -25,7 +25,7 @@
         %span.text-muted Cargo:
         %strong {{title}}
 
-#container-tpl-selected-assets{ data: {action: 'devolution'} }
+#container-tpl-selected-assets
 %script{type: 'text/html', id: 'tpl-selected-assets'}
   .row
     %table.table.table-striped.table-hover.table-condensed

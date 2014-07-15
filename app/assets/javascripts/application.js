@@ -23,6 +23,7 @@
 //= require jquery-barcode
 //= require jquery.fileDownload
 //= require bootstrap-growl
+//= require moment-with-langs
 //= require function
 //= require barcode_reader
 //= require request

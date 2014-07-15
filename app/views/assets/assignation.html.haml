@@ -1,4 +1,4 @@
-#container-select-user.row
+#container-select-user.row{ data: {action: 'assignation'} }
   .col-md-offset-2.col-md-8.col-sm-12
     %h3.col-md-offset-2.col-md-9.text-center Selección de Usuario
     %form.form-horizontal{ role: 'form' }
@@ -30,7 +30,7 @@
 %script{type: 'text/html', id: 'tpl-selected-user'}
   .row
     .col-md-12
-      %h3.text-center Assignación de Activos Fijos
+      %h3.text-center Asignación de Activos Fijos
 
   .row
     .col-md-12.col-sm-12
@@ -53,7 +53,7 @@
         %span.text-muted Cargo:
         %strong {{title}}
 
-#container-tpl-selected-assets{ data: {action: 'assignation'} }
+#container-tpl-selected-assets
 %script{type: 'text/html', id: 'tpl-selected-assets'}
   .row
     %table.table.table-striped.table-hover.table-condensed
@@ -72,10 +72,13 @@
           %td {{code}}
         {{/assets}}
     .col-md-12.col-sm-12.text-center
-      = button_tag class: 'btn btn-primary', data: {type: 'save'} do
-        %span.glyphicon.glyphicon-floppy-disk
-        Guardar
-
-      = button_tag class: 'btn btn-danger', data: {type: 'cancel'} do
+      = button_tag class: 'btn btn-default', data: {type: 'back'} do
         %span.glyphicon.glyphicon-arrow-left
-        Cancelar
+        Atrás
+
+      = button_tag class: 'btn btn-primary', data: {type: 'next'} do
+        %span.glyphicon.glyphicon-arrow-right
+        Siguiente
+
+#proceeding-delivery
+= render 'proceedings/tpl_proceeding_delivery', display_buttons: true
