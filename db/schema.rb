@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(version: 20140714193648) do
     t.integer  "department_id"
     t.string   "role"
     t.boolean  "password_change",                    default: false, null: false
+    t.integer  "assets_count",                       default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
