@@ -42,6 +42,8 @@ gem 'bootstrap-sass', '~> 3.1.1.0'
 gem 'haml-rails'
 gem 'cancan'
 gem 'will_paginate'
+gem 'carrierwave'
+gem "rmagick"
 
 # Gem for read DBF files
 gem 'dbf'

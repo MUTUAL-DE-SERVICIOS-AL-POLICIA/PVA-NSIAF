@@ -132,4 +132,19 @@ module ApplicationHelper
   def minimum_stock
     status_active(Subarticle).where('amount <= minimum')
   end
+
+  def img_pdf(type)
+    belongs_department = current_user.department
+    if belongs_department.present?
+      entity = belongs_department.building.entity
+      img = type == 'header' ? entity.get_header : entity.get_footer
+      height = type == 'header' ? "77" : '33'
+      pdf_image_tag(img, width: "685", height: height)
+    end
+  end
+
+  def pdf_image_tag(image, options = {})
+    options[:src] = File.expand_path(Rails.root) + '/public' + image
+    tag(:img, options)
+  end
 end

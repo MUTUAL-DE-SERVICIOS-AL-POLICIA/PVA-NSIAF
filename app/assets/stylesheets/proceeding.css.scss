@@ -43,15 +43,8 @@
 #header{
   border-bottom: 1px solid;
   float: left;
-  text-align: center;
+  height: 78px;
   width: 100%;
-
-  .logo{
-    float: left;
-    margin-bottom: 10px;
-  }
-
-  .logo1{ float: right; }
 }
 
 .title_pdf{
@@ -68,18 +61,12 @@
 .line{ border-bottom: 1px solid #DDDDDD !important; }
 
 #footer{
-  .page_Numbering{
-    float: left;
-    margin-top: 15px;
-  }
+  float: left;
+  height: 33px;
+  margin-top: 10px;
+  width: 100%;
 
-  table{
-    float: right;
-    font-size: 7px;
-    width: 42%;
-
-    td{ padding: 0 5px; }
-  }
+  .page_Numbering{ margin-top: -14px; }
 }
 
 .acta{ font-size: 12px; }

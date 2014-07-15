@@ -1,5 +1,8 @@
 class Entity < ActiveRecord::Base
 
+  mount_uploader :header, ImageUploader
+  mount_uploader :footer, ImageUploader
+
   validates :code, presence: true, uniqueness: true
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
   validates :acronym, presence: true
@@ -34,4 +37,11 @@ class Entity < ActiveRecord::Base
     end
   end
 
+  def get_header
+    header.present? ? header_url.to_s : ''
+  end
+
+  def get_footer
+    footer.present? ? footer_url.to_s : ''
+  end
 end

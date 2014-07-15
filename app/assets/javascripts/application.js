@@ -32,3 +32,4 @@
 //= require barcodes
 //= require typeahead
 //= require notices
+//= require holder
