@@ -164,9 +164,7 @@ class Request extends BarcodeReader
     $($this.currentTarget).parent().prev()
 
   show_new_request: ->
-    if @$subarticles.html() == ""
-      @open_modal("Debe seleccionar al menos un Sub Artículo")
-    else
+    if @$subarticles.find('tr').length
       @btnShowNewRequest.hide()
       @$selectionSubarticles.hide()
       table = @$subarticles.parent().clone()
@@ -176,6 +174,8 @@ class Request extends BarcodeReader
         $(this).prepend "<td>#{ i+1 }</td>"
       @$selected_subarticles.html table
       @$selected_subarticles.append @$templateBtnsNewRequest.render()
+    else
+      @open_modal("Debe seleccionar al menos un Sub Artículo")
 
   cancel_new_request: ->
     @btnShowNewRequest.show()
