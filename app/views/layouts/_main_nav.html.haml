@@ -31,14 +31,17 @@
             = link_to t('assets.title.title'), assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Bajas', derecognised_assets_path, role: 'menuitem'
-    %li.dropdown
-      = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do
-        Migración
-        %b.caret
-      %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_migration' }
-        - import_models_user.each_with_index do |model, index|
-          %li{ role: 'presentation' }
-            = link_to t("#{model}.title.title"), dbf_path(model), role: 'menuitem'
+    - if current_user.is_super_admin?
+      %li.dropdown
+        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do
+          Migración
+          %b.caret
+        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_migration' }
+          - import_models.each_with_index do |model, index|
+            %li{ role: 'presentation' }
+              = link_to t("#{model}.title.title"), dbf_path(model), role: 'menuitem'
+            - if index == 2
+              %li.divider
     - if current_user.is_admin?
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do
