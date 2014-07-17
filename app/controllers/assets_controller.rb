@@ -68,13 +68,13 @@ class AssetsController < ApplicationController
 
   def users
     respond_to do |format|
-      format.json { render json: User.search_by(params[:department]) }
+      format.json { render json: User.actives.search_by(params[:department]) }
     end
   end
 
   def departments
     respond_to do |format|
-      format.json { render json: Department.search_by(params[:building]) }
+      format.json { render json: Department.actives.search_by(params[:building]) }
     end
   end
 
