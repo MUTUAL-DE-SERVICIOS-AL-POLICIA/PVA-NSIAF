@@ -18,6 +18,7 @@ class Assignations extends BarcodeReader
     @$containerTplSelectedAssets = $('#container-tpl-selected-assets')
     @$containerTplSelectedUser = $('#container-tpl-selected-user')
     @$containerSelectUser = $('#container-select-user')
+    @$containerTplSuccessMessage = $('#success-message')
     @$containerTplProceedingDelivery = $('#proceeding-delivery')
     # forms & inputs
     @$building = $('#building')
@@ -36,6 +37,7 @@ class Assignations extends BarcodeReader
     @$templateProceedingDelivery = Hogan.compile $('#tpl-proceeding-delivery').html() || ''
     @$templateSelectedAssets = Hogan.compile $('#tpl-selected-assets').html() || ''
     @$templateSelectedUser = Hogan.compile $('#tpl-selected-user').html() || ''
+    @$templateSuccessMessage = Hogan.compile $('#tpl-success-message').html() || ''
     @cacheTplElements()
 
   cacheTplElements: ->
@@ -142,8 +144,25 @@ class Assignations extends BarcodeReader
   saveSelectedAssets: (e) ->
     e.preventDefault()
     if _assets.length > 0
+      @$btnSave.prop('disabled', true)
+      @$btnCancel.prop('disabled', true)
       json_data = { user_id: _user.id, asset_ids: (_assets.map (a) -> a.id), proceeding_type: _proceeding_type }
-      $.post @proceedings_url, { proceeding: json_data }, null, 'script'
+      $.post(@proceedings_url, { proceeding: json_data }, (data) =>
+        message =
+          devolution: false
+          proceeding_path: window.proceeding_path
+          user_name: _user.name
+          user_title: _user.title
+          total_assets: _assets.length
+        @$containerTplProceedingDelivery.hide()
+        @$containerTplSuccessMessage.html @$templateSuccessMessage.render(message)
+        @$containerTplSuccessMessage.show()
+      , 'script').fail =>
+        @alert.danger 'Ocurrió un error al guardar el Acta, vuelva a intentarlo por favor'
+        @$containerTplProceedingDelivery.show()
+        @$containerTplSuccessMessage.hide()
+        @$btnSave.prop('disabled', false)
+        @$btnCancel.prop('disabled', false)
     else
       @alert.danger 'Debe seleccionar al menos un Activo'
 
