@@ -7,6 +7,7 @@ class Ability
       can :manage, Entity
       can :manage, User
       cannot [:show, :update], User, id: user.id
+      can [:index, :import], :dbf
     elsif user.is_admin?
       can :manage, Building
       can :manage, Department
@@ -23,7 +24,6 @@ class Ability
       can :manage, Request
       can [:index, :asset, :auxiliary, :pdf], :barcode
     end
-    can [:index, :import], :dbf
     can :manage, Version
   end
 end
