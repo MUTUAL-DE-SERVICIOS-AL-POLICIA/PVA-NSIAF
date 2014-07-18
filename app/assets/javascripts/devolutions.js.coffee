@@ -15,26 +15,35 @@ class Devolutions extends BarcodeReader
     @assets_search_url = '/assets/search'
     @proceedings_url = '/proceedings'
     # Containers
+    @$containerBarcode = $('div[data-action=devolution]')
+    @$containerTplProceedingDelivery = $('#proceeding-delivery')
     @$containerTplSelectedAssets = $('#container-tpl-selected-assets')
     @$containerTplSelectedUser = $('#container-tpl-selected-user')
+    @$containerTplSuccessMessage = $('#success-message')
     # textfields
     @$code = $form.find('input[type=text]')
     # buttons
-    @$btnCancel = @$containerTplSelectedAssets.find('button[data-type=cancel]')
-    @$btnSave = @$containerTplSelectedAssets.find('button[data-type=save]')
+    @$btnBack = @$containerTplProceedingDelivery.find('button[data-type=cancel]')
+    @$btnCancel = @$containerTplSelectedAssets.find('button[data-type=reset]')
+    @$btnNext = @$containerTplSelectedAssets.find('button[data-type=next]')
+    @$btnSave = @$containerTplProceedingDelivery.find('button[data-type=save]')
     @$btnSend = $form.find('button[type=submit]')
     # Growl Notices
     @alert = new Notices({ele: 'div.main'})
     # Hogan templates
+    @$templateProceedingDelivery = Hogan.compile $('#tpl-proceeding-delivery').html() || ''
     @$templateSelectedAssets = Hogan.compile $('#tpl-selected-assets').html() || ''
     @$templateSelectedUser = Hogan.compile $('#tpl-selected-user').html() || ''
+    @$templateSuccessMessage = Hogan.compile $('#tpl-success-message').html() || ''
 
   bindEvents: ->
     @setFocusToCode()
     if @checkCodeExists()
       $(document).on 'click', @$btnSend.selector, (e) => @checkAssetIfExists(e)
-    $(document).on 'click', @$btnSave.selector, (e) => @saveSelectedAssets(e)
+    $(document).on 'click', @$btnBack.selector, (e) => @backToSelectUser(e)
     $(document).on 'click', @$btnCancel.selector, (e) => @resetDevolutionViews(e)
+    $(document).on 'click', @$btnNext.selector, (e) => @previewProceeding(e)
+    $(document).on 'click', @$btnSave.selector, (e) => @saveSelectedAssets(e)
 
   displayAssetRows: (asset = null) ->
     @$containerTplSelectedAssets.html @$templateSelectedAssets.render(@assetsJSON())
@@ -44,6 +53,14 @@ class Devolutions extends BarcodeReader
   assetsJSON: ->
     assets: _assets.map (a, i) -> a.index = i + 1; a
     total: _assets.length
+
+  backToSelectUser: (e) ->
+    e.preventDefault()
+    @$containerBarcode.show()
+    @$containerTplProceedingDelivery.hide()
+    @$containerTplSelectedAssets.show()
+    @$containerTplSelectedUser.show()
+    @$code.focus()
 
   checkAssetIfExists: (e) ->
     e.preventDefault()
@@ -87,6 +104,23 @@ class Devolutions extends BarcodeReader
   isUserSelected: ->
     _user?
 
+  previewProceeding: (e) ->
+    e.preventDefault()
+    if _assets.length > 0
+      assignation =
+        assets: _assets
+        devolution: true
+        proceedingDate: moment().format('LL')
+        userName: _user.name
+        userTitle: _user.title
+      @$containerTplProceedingDelivery.html @$templateProceedingDelivery.render(assignation)
+      @$containerTplProceedingDelivery.show()
+      @$containerTplSelectedAssets.hide()
+      @$containerTplSelectedUser.hide()
+      @$containerBarcode.hide()
+    else
+      @alert.danger 'Debe seleccionar al menos un Activo'
+
   removeAssetRow: (asset) ->
     $("#asset_#{asset.id}").hide 'slow', => @displayAssetRows()
 
@@ -100,8 +134,25 @@ class Devolutions extends BarcodeReader
   saveSelectedAssets: (e) ->
     e.preventDefault()
     if _assets.length > 0
+      @$btnSave.prop('disabled', true)
+      @$btnCancel.prop('disabled', true)
       json_data = { user_id: _user.id, asset_ids: (_assets.map (a) -> a.id), proceeding_type: _proceeding_type }
-      $.post @proceedings_url, { proceeding: json_data }, null, 'script'
+      $.post(@proceedings_url, { proceeding: json_data }, (data) =>
+        message =
+          devolution: true
+          proceeding_path: window.proceeding_path
+          user_name: _user.name
+          user_title: _user.title
+          total_assets: _assets.length
+        @$containerTplProceedingDelivery.hide()
+        @$containerTplSuccessMessage.html @$templateSuccessMessage.render(message)
+        @$containerTplSuccessMessage.show()
+      , 'script').fail =>
+        @alert.danger 'Ocurrió un error al guardar el Acta, vuelva a intentarlo por favor'
+        @$containerTplProceedingDelivery.show()
+        @$containerTplSuccessMessage.hide()
+        @$btnSave.prop('disabled', false)
+        @$btnCancel.prop('disabled', false)
     else
       @alert.danger 'Debe seleccionar al menos un Activo'
 
