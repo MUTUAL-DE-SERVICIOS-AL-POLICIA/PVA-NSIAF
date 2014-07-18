@@ -20,7 +20,7 @@
     - else
       #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
       - if controller_name == 'requests'
-        .dropdown
+        .dropdown{style: 'float: right;'}
           %button#dropdownMenu.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button"}
             Solicitudes:
             %span= title_request(params[:status])

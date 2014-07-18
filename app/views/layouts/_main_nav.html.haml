@@ -38,8 +38,7 @@
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_migration' }
           - import_models.each_with_index do |model, index|
-            %li{ role: 'presentation' }
-              = link_to t("#{model}.title.title"), dbf_path(model), role: 'menuitem'
+            %li= link_to t("#{model}.title.title"), dbf_path(model)
             - if index == 2
               %li.divider
     - if current_user.is_admin?

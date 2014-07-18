@@ -6,8 +6,6 @@ class Request extends BarcodeReader
     @$request = $('#request')
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
-    @$alert_modal = $("#alert_modal")
-    @$content_modal = $('#content_modal')
     @$material = $('#material')
     @$article = $('#subarticle_article_id')
     @$inputSubarticle = $('input#subarticle')
@@ -40,6 +38,8 @@ class Request extends BarcodeReader
     @request_save_url = '/requests/'
     @articles_json_url = '/subarticles/articles.json'
     @subarticles_json_url = '/subarticles/get_subarticles.json?q=%QUERY'
+
+    @alert = new Notices({ele: 'div.main'})
 
   bindEvents: ->
     $(document).on 'click', @$btnShowRequest.selector, => @show_request()
@@ -127,8 +127,7 @@ class Request extends BarcodeReader
       $(this).html "<input class='form-control input-sm' type='text' value=#{$(this).text()}>" if $(this).next().text() < $(this).text()
 
   open_modal: (content) ->
-    @$content_modal.html(content)
-    @$alert_modal.modal('toggle')
+    @alert.danger content
 
   get_subarticles: ->
     bestPictures = new Bloodhound(
