@@ -27,5 +27,6 @@ pickle-email-*.html
 /config/secrets.yml
 .ruby-version
 .ruby-gemset
+erd.pdf
 /public/assets
 /public/uploads

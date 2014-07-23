@@ -1,6 +1,6 @@
 class AssetsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_asset, only: [:show, :edit, :update, :change_status]
+  before_action :set_asset, only: [:show, :edit, :update, :change_status, :historical]
 
   # GET /assets
   # GET /assets.json
@@ -68,13 +68,13 @@ class AssetsController < ApplicationController
 
   def users
     respond_to do |format|
-      format.json { render json: User.search_by(params[:department]) }
+      format.json { render json: User.actives.search_by(params[:department]) }
     end
   end
 
   def departments
     respond_to do |format|
-      format.json { render json: Department.search_by(params[:building]) }
+      format.json { render json: Department.actives.search_by(params[:building]) }
     end
   end
 
@@ -95,6 +95,13 @@ class AssetsController < ApplicationController
     asset = current_user.not_assigned_assets.find_by_code params[:code]
     respond_to do |format|
       format.json { render json: asset, only: [:id, :description, :code] }
+    end
+  end
+
+  def historical
+    proceedings = Proceeding.includes(:user).joins(:asset_proceedings).where(asset_proceedings: {asset_id: @asset.id}).order(created_at: :desc)
+    respond_to do |format|
+      format.json { render json: view_context.proceedings_json(proceedings) }
     end
   end
 

@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   belongs_to :department
   has_many :assets
 
+  scope :actives, -> { where(status: '1') }
+
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
     m.validates :code, presence: true, uniqueness: { scope: :department_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }

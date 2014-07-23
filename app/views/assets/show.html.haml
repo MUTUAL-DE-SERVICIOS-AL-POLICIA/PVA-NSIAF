@@ -1,9 +1,13 @@
-.page-header
+.page-header{ data: {action: 'historical-reviews'} }
   .pull-right
+    = link_to historical_asset_path(@asset), class: 'btn btn-default historical' do
+      %span.glyphicon.glyphicon-list-alt
+      Histórico
+
     = link_to edit_asset_path(@asset), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    = link_to URI(request.referer).path, class: 'btn btn-default' do
+    = link_to request.referer || assets_path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("assets.title.title")
 
@@ -23,3 +27,51 @@
     %dd= @asset.get_decline.description
     %dt= Decline.human_attribute_name('motivo')
     %dd= @asset.get_decline.reason
+
+.row
+  .col-sm-12.historical-reviews
+
+  .col-sm-12.text-center.loading{style: 'display:none;'}
+    %center
+      %h4.page-title
+        = image_tag 'loader.gif'
+        %p.text-info Espere un momento por favor.
+
+%script{id: 'tpl-assets-historical', type: 'text/html'}
+  .page-header
+    %h3
+      Histórico
+      %small.text-muted
+        usuarios a los cuales estuvo asignado el Activo
+  {{^error}}
+  %table.table.table-striped
+    %thead
+      %tr
+        %th
+        %th Nombre Usuario
+        %th Fecha
+        %th Tipo
+    %tbody
+      {{#proceedings}}
+      %tr
+        %td {{index}}
+        %td
+          = link_to "{{user_name}}", "{{user_url}}"
+        %td {{created_at}}
+        {{^devolution}}
+        %td.text-success
+          %span.glyphicon.glyphicon-log-out
+          Asignación
+        {{/devolution}}
+        {{#devolution}}
+        %td.text-muted
+          %span.glyphicon.glyphicon-log-in
+          Devolución
+        {{/devolution}}
+      {{/proceedings}}
+  {{/error}}
+  {{#error}}
+  .alert.alert-danger{role: 'alert'}
+    %strong Ocurrió un error
+    al desplegar el histórico, vuelva a intentarlo dentro de unos minutos.
+  {{/error}}

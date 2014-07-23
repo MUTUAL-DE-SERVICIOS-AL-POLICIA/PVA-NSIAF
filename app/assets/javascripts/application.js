@@ -27,6 +27,7 @@
 //= require function
 //= require barcode_reader
 //= require request
+//= require assets_historical
 //= require assignations
 //= require devolutions
 //= require proceedings

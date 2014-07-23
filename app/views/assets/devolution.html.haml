@@ -2,7 +2,7 @@
   .col-md-12
     %h3.text-center Devolución de Activos Fijos
 
-.row
+.row{data: {action: 'devolution'}}
   .col-md-12.col-sm-12
     %form.asset-code{role: 'form'}
       .row
@@ -44,10 +44,16 @@
           %td {{code}}
         {{/assets}}
     .col-md-12.col-sm-12.text-center
-      = button_tag class: 'btn btn-primary', data: {type: 'save'} do
-        %span.glyphicon.glyphicon-floppy-disk
-        Guardar
-
-      = button_tag class: 'btn btn-danger', data: {type: 'cancel'} do
-        %span.glyphicon.glyphicon-arrow-left
+      = button_tag class: 'btn btn-danger', data: {type: 'reset'} do
+        %span.glyphicon.glyphicon-ban-circle
         Cancelar
+
+      = button_tag class: 'btn btn-primary', data: {type: 'next'} do
+        %span.glyphicon.glyphicon-arrow-right
+        Siguiente
+
+#proceeding-delivery
+= render 'proceedings/tpl_proceeding_delivery', display_buttons: true
+
+#success-message
+= render 'assets/tpl_success_message'

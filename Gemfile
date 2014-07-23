@@ -61,4 +61,5 @@ gem "non-stupid-digest-assets"
 
 group :development do
   gem 'coffee-rails-source-maps'
+  gem 'rails-erd'
 end
