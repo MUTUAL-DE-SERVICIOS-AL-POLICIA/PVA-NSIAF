@@ -22,7 +22,7 @@ class AssetsHistorical
     @$containerHistoricalReviews.hide()
     @$containerLoader.show()
     $.getJSON e.target.href, (data) =>
-      @$containerHistoricalReviews.html @$templateAssetsHistorical.render(data)
+      @$containerHistoricalReviews.html @$templateAssetsHistorical.render({proceedings: data})
       @$containerHistoricalReviews.show()
       @$containerLoader.hide()
     .fail (e) =>

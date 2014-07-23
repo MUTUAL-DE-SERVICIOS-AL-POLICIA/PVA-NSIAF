@@ -1,6 +1,6 @@
 class AssetsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_asset, only: [:show, :edit, :update, :change_status]
+  before_action :set_asset, only: [:show, :edit, :update, :change_status, :historical]
 
   # GET /assets
   # GET /assets.json
@@ -99,14 +99,9 @@ class AssetsController < ApplicationController
   end
 
   def historical
+    proceedings = Proceeding.includes(:user).joins(:asset_proceedings).where(asset_proceedings: {asset_id: @asset.id}).order(created_at: :desc)
     respond_to do |format|
-      format.json { render json: [] }
-    end
-  end
-
-  def reviews
-    respond_to do |format|
-      format.json { render json: [] }
+      format.json { render json: view_context.proceedings_json(proceedings) }
     end
   end
 

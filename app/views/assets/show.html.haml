@@ -40,9 +40,9 @@
 %script{id: 'tpl-assets-historical', type: 'text/html'}
   .page-header
     %h3
-      Histórico de usuarios
+      Histórico
       %small.text-muted
-        Funcionarios a los cuales estuvo asignado el Activo
+        usuarios a los cuales estuvo asignado el Activo
   {{^error}}
   %table.table.table-striped
     %thead
@@ -52,20 +52,23 @@
         %th Fecha
         %th Tipo
     %tbody
+      {{#proceedings}}
       %tr
-        %td 1
-        %td Pepito de los palotes
-        %td 13/04/2011
+        %td {{index}}
+        %td
+          = link_to "{{user_name}}", "{{user_url}}"
+        %td {{created_at}}
+        {{^devolution}}
         %td.text-success
           %span.glyphicon.glyphicon-log-out
           Asignación
-      %tr
-        %td 2
-        %td Merengano Díaz
-        %td 11/03/2012
-        %td.text-info
+        {{/devolution}}
+        {{#devolution}}
+        %td.text-muted
           %span.glyphicon.glyphicon-log-in
           Devolución
+        {{/devolution}}
+      {{/proceedings}}
   {{/error}}
   {{#error}}
   .alert.alert-danger{role: 'alert'}
