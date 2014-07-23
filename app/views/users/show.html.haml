@@ -1,5 +1,15 @@
-.page-header
+.page-header{ data: {action: 'historical-current'} }
   .pull-right
+    .btn-group{data: {toggle: 'buttons'}}
+      %label.btn.btn-default
+        = radio_button_tag 'reports', 'historical'
+        %span.glyphicon.glyphicon-list-alt
+        Histórico
+      %label.btn.btn-default.active
+        = radio_button_tag 'reports', 'current', true
+        %span.glyphicon.glyphicon-th-list
+        Designación Actual
+
     = link_to edit_user_path(@user), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
@@ -32,7 +42,8 @@
       %dd= t("users.roles.#{@user.role}") if @user.role.present?
       %dt= t('general.status')
       %dd= type_status(@user.status)
-  .col-lg-8.col-md-7.col-sm-12
+
+  #current-assets.col-lg-8.col-md-7.col-sm-12
     - if @user.assets.present?
       .pull-right
         Descargar:
@@ -46,3 +57,18 @@
       .alert.alert-info.alert-dismissable
         %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
         No tiene activos asignados.
+
+  #historical.col-lg-8.col-md-7.col-sm-12{style: 'display: none;'}
+    - if @user.assets.present?
+      .pull-right
+        Descargar:
+        .btn-group.btn-group-xs
+          = button_tag 'CSV', class: 'download-assets btn btn-default', data: { url: download_user_path(@user, format: :csv) }
+          = button_tag 'PDF', class: 'download-assets btn btn-default', data: { url: download_user_path(@user, format: :pdf) }
+      %h4 Histórico Activos Fijos Asignados
+
+      = render 'user_assets.pdf.haml'
+    - else
+      .alert.alert-info.alert-dismissable
+        %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
+        No tiene histórico de activos que le fueron asignados.

@@ -32,6 +32,7 @@
 //= require devolutions
 //= require proceedings
 //= require barcodes
+//= require users
 //= require typeahead
 //= require notices
 //= require holder
