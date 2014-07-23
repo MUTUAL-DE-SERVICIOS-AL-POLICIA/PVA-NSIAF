@@ -32,16 +32,17 @@ Nsiaf::Application.routes.draw do
   end
 
   resources :assets, except: [:destroy] do
+    member do
+      post :change_status
+      get :historical
+    end
     get :admin_assets, on: :collection
     get :search, on: :collection
-    post :change_status, on: :member
     get :assignation, on: :collection
     get :devolution, on: :collection
     get :users, on: :collection
     get :departments, on: :collection
     get :derecognised, on: :collection
-    get :historical, on: :collection
-    get :reviews, on: :collection
   end
 
   resources :auxiliaries, except: [:destroy] do

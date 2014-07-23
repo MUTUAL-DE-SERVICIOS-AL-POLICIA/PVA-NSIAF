@@ -1,14 +1,8 @@
 .page-header{ data: {action: 'historical-reviews'} }
   .pull-right
-    .historical.btn-group{ data: {toggle: 'buttons'} }
-      %label.btn.btn-default
-        = radio_button_tag 'options', 'historical'
-        %span.glyphicon.glyphicon-list-alt
-        Histórico
-      %label.btn.btn-default
-        = radio_button_tag 'options', 'reviews'
-        %span.glyphicon.glyphicon-saved
-        Revisiones
+    = link_to historical_asset_path(@asset), class: 'btn btn-default historical' do
+      %span.glyphicon.glyphicon-list-alt
+      Histórico
 
     = link_to edit_asset_path(@asset), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
@@ -49,48 +43,32 @@
       Histórico de usuarios
       %small.text-muted
         Funcionarios a los cuales estuvo asignado el Activo
+  {{^error}}
   %table.table.table-striped
     %thead
       %tr
         %th
         %th Nombre Usuario
-        %th Desde
-        %th Hasta
+        %th Fecha
+        %th Tipo
     %tbody
       %tr
         %td 1
         %td Pepito de los palotes
         %td 13/04/2011
-        %td 14/04/2014
+        %td.text-success
+          %span.glyphicon.glyphicon-log-out
+          Asignación
       %tr
         %td 2
         %td Merengano Díaz
         %td 11/03/2012
-        %td 01/12/2013
-
-%script{id: 'tpl-assets-reviews', type: 'text/html'}
-  .page-header
-    %h3
-      Revisiones
-      %small.text-muted
-        Listado de estados del Activo en las revisiones
-  %table.table.table-striped
-    %thead
-      %tr
-        %th
-        %th Revisión
-        %th Fecha
-        %th Estado
-    %tbody
-      %tr
-        %td 1
-        %td Revisión 2012
-        %td 14/12/2013
-        %td
-          %span.label.label-success Encontrado
-      %tr
-        %td 2
-        %td Revisión 2013
-        %td 01/12/2013
-        %td
-          %span.label.label-warning No encontrado
+        %td.text-info
+          %span.glyphicon.glyphicon-log-in
+          Devolución
+  {{/error}}
+  {{#error}}
+  .alert.alert-danger{role: 'alert'}
+    %strong Ocurrió un error
+    al desplegar el histórico, vuelva a intentarlo dentro de unos minutos.
+  {{/error}}

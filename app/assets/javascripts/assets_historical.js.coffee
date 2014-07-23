@@ -6,41 +6,26 @@ class AssetsHistorical
     @bindEvents()
 
   cacheElements: ->
-    # URLs
-    @historical_url = '/assets/historical'
-    @reviews_url = '/assets/reviews'
     # containers
     @$containerHistoricalReviews = $('.historical-reviews')
     @$containerLoader = $('.loading')
     # buttons
-    @$radioOptionsHistorical = $('#options_historical')
-    @$radioOptionsReviews = $('#options_reviews')
+    @$buttonHistorical = $('.historical')
     # templates
     @$templateAssetsHistorical = Hogan.compile $('#tpl-assets-historical').html() || ''
-    @$templateAssetsReviews = Hogan.compile $('#tpl-assets-reviews').html() || ''
 
   bindEvents: ->
-    $(document).on 'change', @$radioOptionsHistorical.selector, (e) => @displayHistorical(e)
-    $(document).on 'change', @$radioOptionsReviews.selector, (e) => @displayReviews(e)
+    $(document).on 'click', @$buttonHistorical.selector, (e) => @displayHistorical(e)
 
   displayHistorical: (e) ->
+    e.preventDefault()
     @$containerHistoricalReviews.hide()
     @$containerLoader.show()
-    $.getJSON @historical_url, {asset_id: 49}, (data) =>
-      console.log data
+    $.getJSON e.target.href, (data) =>
       @$containerHistoricalReviews.html @$templateAssetsHistorical.render(data)
       @$containerHistoricalReviews.show()
       @$containerLoader.hide()
-
-  displayReviews: (e) ->
-    @$containerHistoricalReviews.hide()
-    @$containerLoader.show()
-    $.getJSON @reviews_url, {asset_id: 49}, (data) =>
-      @$containerHistoricalReviews.html @$templateAssetsReviews.render(data)
-      @$containerHistoricalReviews.show()
-      @$containerHistoricalReviews.show()
-      @$containerLoader.hide()
     .fail (e) =>
+      @$containerHistoricalReviews.html @$templateAssetsHistorical.render({error: true})
       @$containerHistoricalReviews.show()
       @$containerLoader.hide()
-
