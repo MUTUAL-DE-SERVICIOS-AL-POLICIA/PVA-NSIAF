@@ -40,6 +40,8 @@ Nsiaf::Application.routes.draw do
     get :users, on: :collection
     get :departments, on: :collection
     get :derecognised, on: :collection
+    get :historical, on: :collection
+    get :reviews, on: :collection
   end
 
   resources :auxiliaries, except: [:destroy] do
