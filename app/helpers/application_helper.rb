@@ -47,6 +47,18 @@ module ApplicationHelper
     { assets: assets.as_json }
   end
 
+  def proceedings_json(proceedings)
+    proceedings = proceedings.each_with_index.map do |p, index|
+      {
+        index: index + 1,
+        created_at: I18n.l(p.created_at, format: :version),
+        devolution: p.is_devolution?,
+        user_name: p.user_name.titleize,
+        user_url: user_url(p.user)
+      }
+    end
+  end
+
   def submit_and_cancel(url)
     content_tag(:button, class: 'btn btn-primary') do
       content_tag(:span, '', class: 'glyphicon glyphicon-ok') + ' ' +
