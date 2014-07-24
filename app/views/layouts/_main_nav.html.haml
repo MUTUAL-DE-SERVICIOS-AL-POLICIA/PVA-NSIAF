@@ -24,11 +24,13 @@
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets' }
           %li{ role: 'presentation' }
-            = link_to t('accounts.title.title'), accounts_path, role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to t('auxiliaries.title.title'), auxiliaries_path, role: 'menuitem'
-          %li{ role: 'presentation' }
             = link_to t('assets.title.title'), assets_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Asignación/Devolución', assignation_assets_path, role: 'menuitem'
+          /%li{ role: 'presentation' }
+          /  = link_to 'Devolución', devolution_assets_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Actas', proceedings_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Bajas', derecognised_assets_path, role: 'menuitem'
     - if current_user.is_super_admin?
@@ -38,22 +40,10 @@
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_migration' }
           - import_models.each_with_index do |model, index|
-            %li{ role: 'presentation' }
-              = link_to t("#{model}.title.title"), dbf_path(model), role: 'menuitem'
+            %li= link_to t("#{model}.title.title"), dbf_path(model)
             - if index == 2
               %li.divider
     - if current_user.is_admin?
-      %li.dropdown
-        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do
-          Adm. Activos
-          %b.caret
-        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
-          %li{ role: 'presentation' }
-            = link_to 'Asignación', assignation_assets_path, role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to 'Devolución', devolution_assets_path, role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to 'Actas', proceedings_path, role: 'menuitem'
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do
           Almacenes

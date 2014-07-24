@@ -13,6 +13,7 @@ Nsiaf::Application.routes.draw do
     post :change_status, on: :member
     get :articles, on: :collection
     get :get_subarticles, on: :collection
+    get :verify_amount, on: :member
   end
 
   resources :barcodes, only: [:index] do

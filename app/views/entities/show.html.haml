@@ -26,10 +26,8 @@
       - if @entity.header.present?
         .col-sm-offset-1.col-md-offset-1.col-xs-12.col-sm-10.col-md-10
           %label Cabecera
-          .thumbnail
-            = image_tag @entity.get_header
+          .thumbnail= image_tag @entity.get_header
       - if @entity.footer.present?
         .col-sm-offset-1.col-md-offset-1.col-xs-12.col-sm-10.col-md-10
           %label Pie de página
-          .thumbnail
-            = image_tag @entity.get_footer
+          .thumbnail= image_tag @entity.get_footer

@@ -58,15 +58,15 @@ class SubarticlesController < ApplicationController
   end
 
   def articles
-    respond_to do |format|
-      format.json { render json: Article.search_by(params[:material]) }
-    end
+    render json: Article.search_by(params[:material])
   end
 
   def get_subarticles
-    respond_to do |format|
-      format.json { render json: Subarticle.search_subarticle(params[:q]) }
-    end
+    render json: Subarticle.search_subarticle(params[:q])
+  end
+
+  def verify_amount
+    render json: @subarticle.verify_amount(params[:amount])
   end
 
   private
