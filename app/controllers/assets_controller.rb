@@ -108,6 +108,14 @@ class AssetsController < ApplicationController
   def recode
   end
 
+  # search by code and description
+  def autocomplete
+    assets = Asset.search_asset(params[:q])
+    respond_to do |format|
+      format.json { render json: view_context.assets_json(assets) }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_asset

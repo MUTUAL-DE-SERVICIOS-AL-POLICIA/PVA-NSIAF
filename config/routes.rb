@@ -38,6 +38,7 @@ Nsiaf::Application.routes.draw do
       get :historical
     end
     collection do
+      get :autocomplete
       get :admin_assets
       get :search
       get :assignation

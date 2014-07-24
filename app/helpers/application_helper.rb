@@ -41,10 +41,13 @@ module ApplicationHelper
   end
 
   def selected_assets_json(assets)
-    assets = assets.each_with_index.map do |a, index|
+    { assets: assets_json(assets) }
+  end
+
+  def assets_json(assets)
+    assets.each_with_index.map do |a, index|
       { index: index + 1, id: a.id, description: a.description, code: a.code, user_name: a.user_name }
     end
-    { assets: assets.as_json }
   end
 
   def proceedings_json(proceedings)

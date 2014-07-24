@@ -4,38 +4,35 @@
   .col-sm-offset-2.col-sm-8
     %form.recoding{role: 'form'}
       .row
-        .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
+        .col-sm-offset-2.col-sm-8
           = text_field_tag 'q', '', class: 'form-control input-lg', placeholder: 'Introduce Código o Nombre', autofocus: true
-        .col-md-3.col-sm-3.col-xs-3
-          = button_tag class: 'btn btn-success col-md-12 btn-lg' do
-            %span.glyphicon.glyphicon-ok
-            Buscar
 
   %br/
   #element-found.col-sm-offset-2.col-sm-8
-    %h3.text-center Activo Encontrado
-    %table.table.table-bordered
-      %tbody
-        %tr
-          %th.code.col-sm-3 Código
-          %td.code 05-16-0023
-        %tr
-          %th.barcode Código de Barras
-          %td.barcode
-            %form{role: 'form'}
-              .row
-                .col-sm-6
-                  = text_field_tag 'code', '', class: 'form-control'
-                .col-sm-6
-                  = button_tag class: 'btn btn-default' do
-                    %span.glyphicon.glyphicon-floppy-save
-                    %strong Asignar
-                  = button_tag class: 'btn btn-default', type: 'reset' do
-                    %span.glyphicon.glyphicon-ban-circle.text-danger
-                    %span.text-danger Cancelar
-        %tr
-          %th.description Descripción
-          %td.description APARATO TELEFONICO MARCA SIEMENS DIGITAL MODELO EUROSET 210 SERIE S30054-S5723-D851 PANASONIC DIGITAL MODELO KXT2315
-        %tr
-          %th.usuario Usuario
-          %td.usuario VERONICA INES PEREZ FLORES
+%script{id: 'tpl-element-found', type: 'text/html'}
+  %h3.text-center Activo Encontrado
+  %table.table.table-bordered
+    %tbody
+      %tr
+        %th.code.col-sm-3 Código
+        %td.code {{code}}
+      %tr
+        %th.barcode Código de Barras
+        %td.barcode
+          %form{role: 'form'}
+            .row
+              .col-sm-6
+                = text_field_tag 'code', '{{barcode}}', class: 'form-control'
+              .col-sm-6
+                = button_tag class: 'btn btn-default' do
+                  %span.glyphicon.glyphicon-floppy-save
+                  %strong Asignar
+                = button_tag class: 'btn btn-default', type: 'reset' do
+                  %span.glyphicon.glyphicon-ban-circle.text-danger
+                  %span.text-danger Cancelar
+      %tr
+        %th.description Descripción
+        %td.description {{description}}
+      %tr
+        %th.usuario Usuario
+        %td.usuario {{user_name}}
