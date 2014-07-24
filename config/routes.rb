@@ -37,13 +37,16 @@ Nsiaf::Application.routes.draw do
       post :change_status
       get :historical
     end
-    get :admin_assets, on: :collection
-    get :search, on: :collection
-    get :assignation, on: :collection
-    get :devolution, on: :collection
-    get :users, on: :collection
-    get :departments, on: :collection
-    get :derecognised, on: :collection
+    collection do
+      get :admin_assets
+      get :search
+      get :assignation
+      get :devolution
+      get :users
+      get :departments
+      get :derecognised
+      get :recode
+    end
   end
 
   resources :auxiliaries, except: [:destroy] do

@@ -35,4 +35,5 @@
 //= require users
 //= require typeahead
 //= require notices
+//= require recoding
 //= require holder
