@@ -1,5 +1,15 @@
-.page-header
+.page-header{ data: {action: 'historical-current'} }
   .pull-right
+    .btn-group{data: {toggle: 'buttons'}}
+      %label.btn.btn-default
+        = radio_button_tag 'reports', 'historical', false, data: {url: historical_user_path(@user)}
+        %span.glyphicon.glyphicon-list-alt
+        Histórico
+      %label.btn.btn-default.active
+        = radio_button_tag 'reports', 'current', true
+        %span.glyphicon.glyphicon-th-list
+        Designación Actual
+
     = link_to edit_user_path(@user), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
@@ -32,7 +42,8 @@
       %dd= t("users.roles.#{@user.role}") if @user.role.present?
       %dt= t('general.status')
       %dd= type_status(@user.status)
-  .col-lg-8.col-md-7.col-sm-12
+
+  #current-assets.col-lg-8.col-md-7.col-sm-12
     - if @user.assets.present?
       .pull-right
         Descargar:
@@ -46,3 +57,29 @@
       .alert.alert-info.alert-dismissable
         %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
         No tiene activos asignados.
+
+  #historical.col-lg-8.col-md-7.col-sm-12{style: 'display: none;'}
+
+%script{id: 'tpl-historical-assets', type: 'text/html'}
+  {{#assets?}}
+  %h4 Histórico Activos Fijos Asignados
+
+  %table.table.table-striped.table-condensed
+    %thead
+      %tr
+        %th
+        %th= Asset.human_attribute_name('description')
+        %th= Asset.human_attribute_name('code')
+    %tbody
+      {{#assets}}
+      %tr
+        %td {{index}}
+        %td {{description}}
+        %td.nowrap {{code}}
+      {{/assets}}
+  {{/assets?}}
+  {{^assets}}
+  .alert.alert-info.alert-dismissable
+    %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
+    No tiene histórico de activos que le fueron asignados.
+  {{/assets}}

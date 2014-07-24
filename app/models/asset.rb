@@ -38,6 +38,10 @@ class Asset < ActiveRecord::Base
     end
   end
 
+  def self.historical_assets(user)
+    includes(:user).joins(:asset_proceedings).where(asset_proceedings: {proceeding_id: user.proceeding_ids})
+  end
+
   def auxiliary_code
     auxiliary.present? ? auxiliary.code : ''
   end
