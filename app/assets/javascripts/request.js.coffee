@@ -150,7 +150,14 @@ class Request extends BarcodeReader
 
   subarticle_request_plus: ($this) ->
     amount = @get_amount($this)
-    amount.text(parseInt(amount.text()) + 1)
+    $.getJSON "/subarticles/#{ amount.parent().attr('id') }/verify_amount", { amount: parseInt(amount.text()) + 1 }, (data) => @verify_amount(data)
+
+  verify_amount: (data, amount) ->
+    if data.there_amount
+      amount = @$subarticles.find("tr##{data.id} .amount")
+      amount.text(parseInt(amount.text()) + 1)
+    else
+      @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo '#{data.description}'")
 
   subarticle_request_minus: ($this) ->
     amount = @get_amount($this)
