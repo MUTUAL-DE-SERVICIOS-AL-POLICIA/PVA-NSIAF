@@ -110,7 +110,7 @@ class AssetsController < ApplicationController
 
   # search by code and description
   def autocomplete
-    assets = Asset.search_asset(params[:q])
+    assets = Asset.search_asset(params[:q]).limit 5
     respond_to do |format|
       format.json { render json: view_context.assets_json(assets) }
     end
@@ -126,9 +126,9 @@ class AssetsController < ApplicationController
     def asset_params
       if action_name == 'create'
         params[:asset][:user_id] = current_user.id
-        params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id)
+        params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id, :barcode)
       else
-        params.require(:asset).permit(:code, :description)
+        params.require(:asset).permit(:code, :description, :barcode)
       end
     end
 end

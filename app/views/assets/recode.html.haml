@@ -22,7 +22,7 @@
           %form{role: 'form'}
             .row
               .col-sm-6
-                = text_field_tag 'code', '{{barcode}}', class: 'form-control'
+                = text_field_tag 'code', '', class: 'form-control', placeholder: '{{barcode}}'
               .col-sm-6
                 = button_tag class: 'btn btn-default' do
                   %span.glyphicon.glyphicon-floppy-save

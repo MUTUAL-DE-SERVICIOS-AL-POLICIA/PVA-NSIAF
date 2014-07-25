@@ -46,7 +46,7 @@ module ApplicationHelper
 
   def assets_json(assets)
     assets.each_with_index.map do |a, index|
-      { index: index + 1, id: a.id, description: a.description, code: a.code, user_name: a.user_name }
+      { index: index + 1, id: a.id, description: a.description, code: a.code, barcode: a.barcode, user_name: a.user_name }
     end
   end
 
