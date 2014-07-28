@@ -50,6 +50,7 @@ class BarcodesController < ApplicationController
   def pdf
     authorize! :pdf, :barcode
     @assets = generate_array_with_codes(params[:quantity].to_i)
+    Barcode.register_assets(@assets) if @assets.length > 0
     respond_to do |format|
       format.pdf do
         filename = 'código de barras'
