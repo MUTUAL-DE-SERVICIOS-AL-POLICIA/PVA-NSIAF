@@ -67,6 +67,7 @@ Nsiaf::Application.routes.draw do
     get :welcome, on: :collection
     get :download, on: :member
     get :autocomplete, on: :collection
+    get :historical, on: :member
   end
 
   get '/dashboard', to: 'dashboard#index', as: :dashboard
