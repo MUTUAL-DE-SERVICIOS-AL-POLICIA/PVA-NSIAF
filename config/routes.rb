@@ -18,6 +18,7 @@ Nsiaf::Application.routes.draw do
 
   resources :barcodes, only: [:index] do
     collection do
+      get :account
       get :auxiliary
       get :asset
       post :pdf

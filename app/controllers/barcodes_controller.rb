@@ -9,6 +9,14 @@ class BarcodesController < ApplicationController
     end
   end
 
+  def account
+    authorize! :account, :barcode
+    respond_to do |format|
+      format.html
+      format.json { render json: {} }
+    end
+  end
+
   def asset
     authorize! :asset, :barcode
     @asset = true

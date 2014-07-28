@@ -65,13 +65,17 @@
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_barcode' }
           %li{ role: 'presentation' }
-            = link_to 'Cuentas', barcodes_path, role: 'menuitem'
+            = link_to 'Cuentas', account_barcodes_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Auxiliares', auxiliary_barcodes_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Activos', asset_barcodes_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Pre Registros', '#', role: 'menuitem'
+          %li.divider
+          %li{ role: 'presentation' }
+            = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
+
     - if can? :read, Version
       %li
         = link_to 'Histórico', versions_path

@@ -22,7 +22,7 @@ class Ability
       can :manage, Proceeding
       can :manage, Subarticle
       can :manage, Request
-      can [:index, :asset, :auxiliary, :pdf], :barcode
+      can [:index, :account, :asset, :auxiliary, :pdf], :barcode
     end
     can :manage, Version
   end
