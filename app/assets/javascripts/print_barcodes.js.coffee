@@ -2,30 +2,28 @@ $ -> new PrintBarcodes() if $('[data-action=print-barcode]').length > 0
 
 class PrintBarcodes
   _last_value = null
-  _first_value = null
-  _quantity = 0
+  _quantity = 48
 
   constructor: ->
     @cacheElements()
     @bindEvents()
+    @loadDataAndDisplay()
 
   cacheElements: ->
-    # variables
-    _first_value = $('h4 span.from').text()
-    _last_value = $('h4 span.to').text()
+    # urls
+    @load_data_path = '/barcodes/load_data'
+    @pdf_barcodes_path = '/barcodes/pdf.pdf'
     # containers
     @$containerPreviewBarcodes = $('#preview-barcodes')
+    # buttons
+    @$btnPrint = @$containerPreviewBarcodes.find('button[type=submit]')
     # Growl Notices
     @alert = new Notices({ele: 'div.main'})
-    # inputs
-    $form = $('form')
-    @$btnPreview = $form.find('button[type=submit]')
-    @$txtQuantity = $form.find('input[type=text]')
     # templates
     @$templatePdfBarcode = Hogan.compile $('#tpl-barcode').html() || ''
 
   bindEvents: ->
-    $(document).on 'click', @$btnPreview.selector, (e) => @previewBarcodes(e)
+    $(document).on 'click', @$btnPrint.selector, (e) => @printPdf(e)
 
   displayBarcodes: ->
     @$containerPreviewBarcodes.find('.row .thumbnail .barcode').each (i, e) ->
@@ -33,22 +31,29 @@ class PrintBarcodes
 
   generateCodes: ->
     codes = []
+    acronym = _last_value.split('-')[0]
     inc = parseInt(_last_value.split('-')[1]) || 0
     if _quantity > 0
       for q in [1.._quantity]
-        codes.push {code: "ADSIB-#{q + inc}"}
+        codes.push {code: "#{acronym}-#{q + inc}"}
       {assets: codes}
     else
       {}
 
-  getQuantity: ->
-    _quantity = parseInt(@$txtQuantity.val()) || 0
+  loadDataAndDisplay: ->
+    $.getJSON @load_data_path, (data) =>
+      _last_value = data.last_value
+      @previewBarcodes()
+    .fail =>
+      @alert.danger "Error al conectarse con el servidor, vuelva a intentarlo en unos minutos"
 
-  previewBarcodes: (e) ->
+  previewBarcodes: ->
+    @$containerPreviewBarcodes.html @$templatePdfBarcode.render(@generateCodes())
+    @displayBarcodes()
+
+  printPdf: (e)->
     e.preventDefault()
-    if @getQuantity() > 0
-      @$containerPreviewBarcodes.html @$templatePdfBarcode.render(@generateCodes())
-      @$containerPreviewBarcodes.show()
-      @displayBarcodes()
-    else
-      @alert.info "La cantidad a imprimir tiene que ser mayor a cero"
+    data =
+      quantity: _quantity
+      authenticity_token: $('meta[name="csrf-token"]').attr('content')
+    $.fileDownload @pdf_barcodes_path, { data: data, httpMethod: 'POST' }

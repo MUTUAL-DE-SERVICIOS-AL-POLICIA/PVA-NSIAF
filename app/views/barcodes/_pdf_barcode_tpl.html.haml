@@ -1,5 +1,5 @@
 %script{ type: 'text/html', id: 'tpl-barcode' }
-  %h2.text-center Activos Fijos Seleccionados
+  %h2.text-center Código de Barras
 
   .row
     {{#assets}}
@@ -11,9 +11,6 @@
 
   .row
     .action-buttons.col-md-12.col-sm-12.text-center
-      = button_tag class: 'btn btn-default', id: 'btn-print-pdf' do
+      = button_tag class: 'btn btn-default' do
         %span.glyphicon.glyphicon-print
         Imprimir
-      = button_tag class: 'btn btn-danger', id: 'btn-cancel-pdf' do
-        %span.glyphicon.glyphicon-ban-circle
-        Cancelar

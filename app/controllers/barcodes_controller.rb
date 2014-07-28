@@ -40,9 +40,16 @@ class BarcodesController < ApplicationController
     end
   end
 
+  def load_data
+    authorize! :load_data, :barcode
+    respond_to do |format|
+      format.json { render json: {last_value: get_last_value()} }
+    end
+  end
+
   def pdf
     authorize! :pdf, :barcode
-    @assets = Asset.where(code: params[:asset_codes])
+    @assets = generate_array_with_codes(params[:quantity].to_i)
     respond_to do |format|
       format.pdf do
         filename = 'código de barras'
@@ -61,5 +68,27 @@ class BarcodesController < ApplicationController
                }
       end
     end
+  end
+
+  private
+
+  def generate_array_with_codes(quantity)
+    last_value = get_last_value()
+    acronym = last_value.split('-').first
+    offset = last_value.split('-').last.to_i
+    (1..quantity).to_a.map {|i| {code: "#{acronym}-#{offset + i}"}}
+  end
+
+  def get_last_value()
+    last_value = Barcode.last
+    if last_value.present?
+      last_value = last_value.code
+    else
+      acronym = 'ADSIB'
+      entity = Entity.first
+      acronym = entity.acronym if entity.present?
+      last_value = "#{acronym}-0"
+    end
+    last_value
   end
 end

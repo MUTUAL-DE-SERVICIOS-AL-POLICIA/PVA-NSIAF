@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140724194838) do
+ActiveRecord::Schema.define(version: 20140728194802) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -68,6 +68,22 @@ ActiveRecord::Schema.define(version: 20140724194838) do
   end
 
   add_index "auxiliaries", ["account_id"], name: "index_auxiliaries_on_account_id", using: :btree
+
+  create_table "barcode_statuses", primary_key: "status", force: true do |t|
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "barcodes", force: true do |t|
+    t.string   "code"
+    t.integer  "entity_id"
+    t.integer  "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "barcodes", ["entity_id"], name: "index_barcodes_on_entity_id", using: :btree
 
   create_table "buildings", force: true do |t|
     t.string   "code",       limit: 50
