@@ -50,30 +50,37 @@
               %th Unidad
               %th Descripción
               %th Código de barra
-              %th Cantidad solicitada
-              - if @request.status == 'pending'
-                %th Cantidad a entregar
-              - unless is_pdf?
-                - if %w(pending delivered).include?(@request.status)
-                  %th.amount_delivered Cantidad entregada
+              - if is_pdf?
+                %th Cantidad
+              - else
+                %th Cantidad solicitada
                 - if @request.status == 'pending'
-                  %th.delivered
-          %tbody
-            - @request.subarticle_requests.each do |s_request|
-              %tr{ id: s_request.id }
-                %td= s_request.subarticle_code
-                %td= s_request.subarticle_unit
-                %td= s_request.subarticle_description
-                %td= s_request.subarticle_barcode
-                %td= s_request.amount
-                - if @request.status == 'pending'
-                  %td.col-md-2= s_request.amount_delivered
+                  %th Cantidad a entregar
                 - unless is_pdf?
                   - if %w(pending delivered).include?(@request.status)
-                    %td.amount_delivered= s_request.total_delivered
+                    %th.amount_delivered Cantidad entregada
                   - if @request.status == 'pending'
-                    %td.delivered
-                      %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
+                    %th.delivered
+          %tbody
+            - @request.subarticle_requests.each do |s_request|
+              - if s_request.amount_delivered != 0
+                %tr{ id: s_request.id }
+                  %td= s_request.subarticle_code
+                  %td= s_request.subarticle_unit
+                  %td= s_request.subarticle_description
+                  %td= s_request.subarticle_barcode
+                  - if is_pdf?
+                    %td= s_request.amount_delivered
+                  - else
+                    %td= s_request.amount
+                    - if @request.status == 'pending'
+                      %td.col-md-2= s_request.amount_delivered
+                    - unless is_pdf?
+                      - if %w(pending delivered).include?(@request.status)
+                        %td.amount_delivered= s_request.total_delivered
+                      - if @request.status == 'pending'
+                        %td.delivered
+                          %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
         .text-center
 
     - if is_pdf?

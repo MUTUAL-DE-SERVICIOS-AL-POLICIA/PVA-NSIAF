@@ -142,7 +142,7 @@ module ApplicationHelper
   end
 
   def minimum_stock
-    status_active(Subarticle).where('amount <= minimum')
+    status_active(Subarticle).where('amount <= (minimum * 1.25)')
   end
 
   def img_pdf(type)
