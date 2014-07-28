@@ -22,7 +22,7 @@ class BarcodesController < ApplicationController
     @asset = true
     @assets = Asset.array_model('assets.code', 'asc', '', '', params[:sSearch], params[:search_column], 1)
     respond_to do |format|
-      format.html { render :index }
+      format.html { render :account }
       format.js
       format.json do
         assets = Asset.search_by(params[:account], params[:auxiliary])
@@ -35,7 +35,7 @@ class BarcodesController < ApplicationController
     authorize! :auxiliary, :barcode
     @auxiliary = true
     respond_to do |format|
-      format.html { render :index }
+      format.html { render :account }
       format.json { render json: Auxiliary.search_by(params[:account]) }
     end
   end
