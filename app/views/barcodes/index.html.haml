@@ -1,2 +1,29 @@
-%h1
-  barcodes
+.row{data: {action: 'print-barcode'}}
+  .col-sm-12
+    %h3.text-center Generar código de barras
+    .row
+      .col-sm-6
+        %form.form-horizontal{role: 'form'}
+          .col-sm-offset-1.col-sm-6
+            = text_field_tag :quantity, '', class: 'form-control input-lg', placeholder: 'Cantidad a imprimir', autofocus: true
+          .col-sm-4
+            = button_tag class: 'btn btn-default btn-lg btn-block' do
+              %span.glyphicon.glyphicon-barcode
+              Previsualizar
+      .col-sm-6.bg-warning
+        .row.barcode-statistics
+          .col-sm-12.text-center
+            %h4
+              %strong Códigos de barras impresos
+          .col-sm-6
+            %h4
+              %span.text-muted Desde:
+              %span.text-info.from ADSIB-1
+          .col-sm-6
+            %h4
+              %span.text-muted Hasta:
+              %span.text-info.to ADSIB-200
+.row
+  #preview-barcodes.col-sm-12
+
+= render 'pdf_barcode_tpl'
