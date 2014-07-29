@@ -83,7 +83,7 @@ class AssetsController < ApplicationController
   end
 
   def search
-    asset = Asset.assigned.find_by_code params[:code]
+    asset = Asset.assigned.find_by_barcode params[:code]
     respond_to do |format|
       format.json { render json: asset,
                            include: {user: {only: [:id, :name, :title]}},
