@@ -16,6 +16,8 @@
 %dl.dl-horizontal
   %dt= Asset.human_attribute_name('code')
   %dd= @asset.code
+  %dt= Asset.human_attribute_name('barcode')
+  %dd= @asset.barcode || "<em>No asignado</em>".html_safe
   %dt= Asset.human_attribute_name('description')
   %dd= @asset.description
   %dt= Asset.human_attribute_name('user')

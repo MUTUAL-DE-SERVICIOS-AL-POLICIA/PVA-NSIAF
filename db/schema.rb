@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140714193648) do
+ActiveRecord::Schema.define(version: 20140728194802) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20140714193648) do
     t.string   "status",       limit: 2
     t.integer  "account_id"
     t.datetime "derecognised"
+    t.string   "barcode"
   end
 
   add_index "assets", ["account_id"], name: "index_assets_on_account_id", using: :btree
@@ -68,6 +69,22 @@ ActiveRecord::Schema.define(version: 20140714193648) do
 
   add_index "auxiliaries", ["account_id"], name: "index_auxiliaries_on_account_id", using: :btree
 
+  create_table "barcode_statuses", primary_key: "status", force: true do |t|
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "barcodes", force: true do |t|
+    t.string   "code"
+    t.integer  "entity_id"
+    t.integer  "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "barcodes", ["entity_id"], name: "index_barcodes_on_entity_id", using: :btree
+
   create_table "buildings", force: true do |t|
     t.string   "code",       limit: 50
     t.string   "name",       limit: 230
@@ -81,13 +98,13 @@ ActiveRecord::Schema.define(version: 20140714193648) do
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
 
   create_table "declines", force: true do |t|
-    t.string   "asset_code",      limit: 50
-    t.string   "account_code",    limit: 50
-    t.string   "auxiliary_code",  limit: 50
-    t.string   "department_code", limit: 50
-    t.string   "user_code",       limit: 50
-    t.text     "description"
-    t.text     "reason"
+    t.string   "asset_code"
+    t.string   "account_code"
+    t.string   "auxiliary_code"
+    t.string   "department_code"
+    t.string   "user_code"
+    t.string   "description"
+    t.string   "reason"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

@@ -9,12 +9,20 @@ class BarcodesController < ApplicationController
     end
   end
 
+  def account
+    authorize! :account, :barcode
+    respond_to do |format|
+      format.html
+      format.json { render json: {} }
+    end
+  end
+
   def asset
     authorize! :asset, :barcode
     @asset = true
     @assets = Asset.array_model('assets.code', 'asc', '', '', params[:sSearch], params[:search_column], 1)
     respond_to do |format|
-      format.html { render :index }
+      format.html { render :account }
       format.js
       format.json do
         assets = Asset.search_by(params[:account], params[:auxiliary])
@@ -27,14 +35,22 @@ class BarcodesController < ApplicationController
     authorize! :auxiliary, :barcode
     @auxiliary = true
     respond_to do |format|
-      format.html { render :index }
+      format.html { render :account }
       format.json { render json: Auxiliary.search_by(params[:account]) }
+    end
+  end
+
+  def load_data
+    authorize! :load_data, :barcode
+    respond_to do |format|
+      format.json { render json: {last_value: get_last_value()} }
     end
   end
 
   def pdf
     authorize! :pdf, :barcode
-    @assets = Asset.where(code: params[:asset_codes])
+    @assets = generate_array_with_codes(params[:quantity].to_i)
+    Barcode.register_assets(@assets) if @assets.length > 0
     respond_to do |format|
       format.pdf do
         filename = 'código de barras'
@@ -53,5 +69,27 @@ class BarcodesController < ApplicationController
                }
       end
     end
+  end
+
+  private
+
+  def generate_array_with_codes(quantity)
+    last_value = get_last_value()
+    acronym = last_value.split('-').first
+    offset = last_value.split('-').last.to_i
+    (1..quantity).to_a.map {|i| {code: "#{acronym}-#{offset + i}"}}
+  end
+
+  def get_last_value()
+    last_value = Barcode.last
+    if last_value.present?
+      last_value = last_value.code
+    else
+      acronym = 'ADSIB'
+      entity = Entity.first
+      acronym = entity.acronym if entity.present?
+      last_value = "#{acronym}-0"
+    end
+    last_value
   end
 end
