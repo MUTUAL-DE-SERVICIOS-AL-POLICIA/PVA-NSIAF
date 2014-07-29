@@ -28,17 +28,17 @@ class Recoding
 
   bindEvents: ->
     # typeahead for assets
-    assetList = new Bloodhound(
+    @assetList = new Bloodhound(
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace 'code'
       queryTokenizer: Bloodhound.tokenizers.whitespace
       remote: '/assets/autocomplete.json?q=%QUERY'
     )
-    assetList.initialize()
+    @assetList.initialize()
     @$codeName.typeahead
       hint: false
     ,
       displayKey: 'code'
-      source: assetList.ttAdapter()
+      source: @assetList.ttAdapter()
       templates: @typeaheadTemplates()
     .on 'typeahead:selected', (evt, data) => @displaySelectedElement(data)
     # events
@@ -85,8 +85,9 @@ class Recoding
       .done (data) =>
         @alert.success "<b>OK</b> Se actualizó correctamente el Activo Fijo"
         @resetSelectedElement()
+        @assetList.clearRemoteCache()
       .fail (data) =>
-        @alert.danger "<b>Error</b> Se produjo un error al guardar, vuelva a intentarlo en un instante"
+        @alert.danger "<b>Error</b> No se pudo guardar, puede ser que el código de barras no exista"
       .always =>
         @$buttonSave.prop('disabled', false)
     else
