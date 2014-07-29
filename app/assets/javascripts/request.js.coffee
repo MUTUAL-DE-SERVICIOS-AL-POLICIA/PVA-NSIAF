@@ -60,12 +60,22 @@ class Request extends BarcodeReader
       @get_subarticles()
 
   show_request: ->
+    sw = 0
     @$table_request.find('.col-md-2 :input').each ->
-      val = $(this).val()
-      val = if val then val else 0
-      $(this).parent().html val
-    @$table_request.find('.text-center').hide()
-    @$table_request.append @$templateRequestButtons.render()
+      if $(this).val() > $(this).parent().prev().text()
+        $(this).parent().addClass('has-error')
+        sw = 1
+      else
+        $(this).parent().removeClass('has-error')
+    if sw == 0
+      @$table_request.find('.col-md-2 :input').each ->
+        val = $(this).val()
+        val = if val then val else 0
+        $(this).parent().html val
+      @$table_request.find('.text-center').hide()
+      @$table_request.append @$templateRequestButtons.render()
+    else
+      @open_modal('La cantidad a entregar es mayor a la cantidad solicitada')
 
   edit_request: ->
     @show_buttons()
