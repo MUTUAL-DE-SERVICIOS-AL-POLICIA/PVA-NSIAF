@@ -16,3 +16,7 @@ El flujo de trabajo se está manejando con [git-flow](https://github.com/nvie/gi
 
 * Rama `master`: cualquier commit que pongamos en esta rama debe estar preparado para subir a producción
 * Rama `develop`: rama en la que está el código que conformará la siguiente versión planificada del proyecto
+
+### Instalación
+
+La instalación en modo `production` y `development` del Sistema está descrito en el archivo `INSTALL.md`
