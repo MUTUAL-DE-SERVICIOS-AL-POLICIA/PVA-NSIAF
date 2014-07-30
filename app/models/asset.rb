@@ -34,16 +34,6 @@ class Asset < ActiveRecord::Base
 
   has_paper_trail
 
-  def self.search_by(account_id, auxiliary_id)
-    if auxiliary_id.present?
-      assets = includes(:user).where(auxiliary_id: auxiliary_id)
-    elsif account_id.present?
-      assets = includes(:user).where(account_id: account_id)
-    else
-      assets = self.none
-    end
-  end
-
   def self.historical_assets(user)
     includes(:user).joins(:asset_proceedings).where(asset_proceedings: {proceeding_id: user.proceeding_ids})
   end

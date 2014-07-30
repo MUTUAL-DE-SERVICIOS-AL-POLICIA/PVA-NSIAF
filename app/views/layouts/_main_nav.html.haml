@@ -59,23 +59,8 @@
             = link_to 'Artículos', articles_path
           %li{ role: 'presentation' }
             = link_to 'Sub Artículos', subarticles_path
-      %li.dropdown
-        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_barcode' do
-          Código Barras
-          %b.caret
-        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_barcode' }
-          %li{ role: 'presentation' }
-            = link_to 'Cuentas', account_barcodes_path, role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to 'Auxiliares', auxiliary_barcodes_path, role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to 'Activos', asset_barcodes_path, role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to 'Pre Registros', '#', role: 'menuitem'
-          %li.divider
-          %li{ role: 'presentation' }
-            = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
-
+      %li
+        = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
     - if can? :read, Version
       %li
         = link_to 'Histórico', versions_path
