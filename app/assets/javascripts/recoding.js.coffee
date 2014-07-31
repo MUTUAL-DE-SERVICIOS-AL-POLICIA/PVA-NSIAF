@@ -57,7 +57,7 @@ class Recoding
     _asset_id = data.id
     @$containerElementFound.html @$templateElementFound.render(data)
     @$containerElementFound.show()
-    @$containerElementFound.find('input[type=text]').focus()
+    @setFocusBarcode()
 
   getBarcode: ->
     _barcode.toString().trim()
@@ -91,16 +91,21 @@ class Recoding
         @resetSelectedElement()
         @assetList.clearRemoteCache()
       .fail (data) =>
-        @alert.danger "<b>Error</b> No se pudo guardar, puede ser que el código de barras no exista"
+        @alert.danger "<b>Error</b> No se pudo guardar el Código de Barras <b>#{@getBarcode()}</b>, puede ser que no exista, ya esté en uso, o fue utilizado"
+        @setFocusBarcode()
       .always =>
         @$buttonSave.prop('disabled', false)
     else
       @alert.info "Por favor introduzca un Código de Barras"
+      @setFocusBarcode()
     e.preventDefault()
 
   setBarcodeValue: (e) ->
     @changeToHyphens $(e.target)
     _barcode = $(e.target).val()
+
+  setFocusBarcode: ->
+    @$containerElementFound.find('input[type=text]').select()
 
   typeaheadTemplates: ->
     empty: [
