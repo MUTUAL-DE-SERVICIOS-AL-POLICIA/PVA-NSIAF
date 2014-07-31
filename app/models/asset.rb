@@ -17,8 +17,12 @@ class Asset < ActiveRecord::Base
   scope :unassigned, -> { where(user_id: nil) }
 
   with_options if: :is_not_migrate? do |m|
+    m.validates :barcode, presence: true, uniqueness: true
     m.validates :code, presence: true, uniqueness: true
     m.validates :description, :auxiliary_id, :user_id, presence: true
+    m.validate do |asset|
+      BarcodeStatusValidator.new(asset).validate
+    end
   end
 
   with_options if: :is_migrate? do |m|
@@ -26,20 +30,16 @@ class Asset < ActiveRecord::Base
     m.validates :description, presence: true
   end
 
-  has_paper_trail
+  before_save :check_barcode
 
-  def self.search_by(account_id, auxiliary_id)
-    if auxiliary_id.present?
-      assets = includes(:user).where(auxiliary_id: auxiliary_id)
-    elsif account_id.present?
-      assets = includes(:user).where(account_id: account_id)
-    else
-      assets = self.none
-    end
-  end
+  has_paper_trail
 
   def self.historical_assets(user)
     includes(:user).joins(:asset_proceedings).where(asset_proceedings: {proceeding_id: user.proceeding_ids})
+  end
+
+  def self.search_asset(q)
+    where("code LIKE ? OR description LIKE ?", "%#{q}%", "%#{q}%")
   end
 
   def auxiliary_code
@@ -48,6 +48,21 @@ class Asset < ActiveRecord::Base
 
   def auxiliary_name
     auxiliary.present? ? auxiliary.name : ''
+  end
+
+  def change_barcode_to_deleted
+    if self.barcode_was.present? && self.barcode_was != self.barcode
+      bc = Barcode.find_by_code barcode_was
+      bc.change_to_deleted if bc.present?
+    end
+  end
+
+  def check_barcode
+    if is_not_migrate?
+      bcode = Barcode.find_by_code barcode
+      bcode.change_to_used
+      change_barcode_to_deleted
+    end
   end
 
   def name

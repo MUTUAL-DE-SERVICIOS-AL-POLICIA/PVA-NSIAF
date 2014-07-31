@@ -16,8 +16,8 @@
             %td= index + 1
             - @assets[limit, 4].each do |asset|
               %td
-                .barcode{ style: 'margin: 0 auto;', data: { code: asset.code.to_s } }
-                  = asset.code
+                .barcode{ style: 'margin: 0 auto;', data: { code: asset[:code].to_s } }
+                  = asset[:code]
 
 :coffeescript
   $('#pdf-assets-print tr td .barcode').each (i, e) ->

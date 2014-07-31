@@ -319,6 +319,7 @@ es:
         description: "Descripción"
         status: "Estado"
       asset:
+        barcode: "Código de Barras"
         code: "Código"
         description: "Descripción"
         auxiliary: "Auxiliar"

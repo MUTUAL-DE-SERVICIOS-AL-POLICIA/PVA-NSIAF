@@ -83,7 +83,7 @@ class AssetsController < ApplicationController
   end
 
   def search
-    asset = Asset.assigned.find_by_code params[:code]
+    asset = Asset.assigned.find_by_barcode params[:code]
     respond_to do |format|
       format.json { render json: asset,
                            include: {user: {only: [:id, :name, :title]}},
@@ -92,7 +92,7 @@ class AssetsController < ApplicationController
   end
 
   def admin_assets
-    asset = current_user.not_assigned_assets.find_by_code params[:code]
+    asset = current_user.not_assigned_assets.find_by_barcode params[:code]
     respond_to do |format|
       format.json { render json: asset, only: [:id, :description, :code] }
     end
@@ -102,6 +102,17 @@ class AssetsController < ApplicationController
     proceedings = Proceeding.includes(:user).joins(:asset_proceedings).where(asset_proceedings: {asset_id: @asset.id}).order(created_at: :desc)
     respond_to do |format|
       format.json { render json: view_context.proceedings_json(proceedings) }
+    end
+  end
+
+  def recode
+  end
+
+  # search by code and description
+  def autocomplete
+    assets = Asset.search_asset(params[:q]).limit 5
+    respond_to do |format|
+      format.json { render json: view_context.assets_json(assets) }
     end
   end
 
@@ -115,9 +126,9 @@ class AssetsController < ApplicationController
     def asset_params
       if action_name == 'create'
         params[:asset][:user_id] = current_user.id
-        params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id)
+        params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id, :barcode)
       else
-        params.require(:asset).permit(:code, :description)
+        params.require(:asset).permit(:code, :description, :barcode)
       end
     end
 end

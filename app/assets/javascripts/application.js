@@ -31,8 +31,9 @@
 //= require assignations
 //= require devolutions
 //= require proceedings
-//= require barcodes
+//= require print_barcodes
 //= require users
 //= require typeahead
 //= require notices
+//= require recoding
 //= require holder

@@ -12,3 +12,13 @@ unless u.present?
   u.save!(validate: false)
   puts "User '#{u.username}' created."
 end
+
+if BarcodeStatus.count() == 0
+  status = [
+    {status: 0, description: 'Libre'},
+    {status: 1, description: 'En uso'},
+    {status: 2, description: 'Eliminado'}
+  ]
+  BarcodeStatus.create!(status)
+  puts "3 estados adicionados"
+end
