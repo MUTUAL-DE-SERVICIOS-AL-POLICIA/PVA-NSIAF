@@ -49,6 +49,10 @@ class Recoding
     $(document).on 'keydown', @$codeName.selector, (e) => @preventEnterSubmit(e)
     @$codeName.focus()
 
+  changeToHyphens: ($e) ->
+    value = $e.val().toString().trim()
+    $e.val value.replace(/\'/g, '-')
+
   displaySelectedElement: (data) ->
     _asset_id = data.id
     @$containerElementFound.html @$templateElementFound.render(data)
@@ -74,7 +78,7 @@ class Recoding
     _asset_id = null
     _barcode = ''
     @$containerElementFound.hide()
-    @$codeName.focus()
+    @$codeName.select()
 
   saveNewBarcode: (e) ->
     url = @update_asset_url.replace(/{id}/g, _asset_id)
@@ -83,7 +87,7 @@ class Recoding
       @$buttonSave.prop('disabled', true)
       $.ajax {url: url, data: data, type: 'PUT', dataType: 'JSON'}
       .done (data) =>
-        @alert.success "<b>OK</b> Se actualizó correctamente el Activo Fijo"
+        @alert.success "<b>OK</b> Se actualizó correctamente el Activo Fijo con el Código de Barras <b>#{@getBarcode()}</b>"
         @resetSelectedElement()
         @assetList.clearRemoteCache()
       .fail (data) =>
@@ -95,6 +99,7 @@ class Recoding
     e.preventDefault()
 
   setBarcodeValue: (e) ->
+    @changeToHyphens $(e.target)
     _barcode = $(e.target).val()
 
   typeaheadTemplates: ->
