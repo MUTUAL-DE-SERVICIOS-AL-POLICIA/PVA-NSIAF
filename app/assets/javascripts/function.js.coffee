@@ -149,6 +149,10 @@ jQuery ->
       $form.find('#user_role').val(data.role)
 
   #Version select
+  $(document).on 'click', 'table.table input:checkbox', ->
+    disabled = if $("table.table input:checked").length == 0 then true else false
+    $("a.remove_version").attr("disabled", disabled)
+
   $('.remove_version').click (e) ->
     versions = $('table.table input:checkbox:checked')
     if versions.length > 0
