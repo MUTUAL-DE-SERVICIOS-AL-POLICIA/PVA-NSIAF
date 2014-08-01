@@ -5,7 +5,7 @@
 - when 'entities' then list_url = entities_path
 - when 'accounts' then list_url = accounts_path
 - when 'auxiliaries' then list_url = auxiliaries_path
-- when 'assets' then list_url = URI(request.referer).path
+- when 'assets' then list_url = URI(request.referer || assets_path).path
 - when 'materials' then list_url = materials_path
 - when 'articles' then list_url = articles_path
 - when 'subarticles' then list_url = subarticles_path

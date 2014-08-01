@@ -98,7 +98,7 @@ class Recoding
 
   setBarcodeValue: (e) ->
     $e = $(e.target)
-    $e.val Utils.changeToHyphens($e.val())
+    $e.val Utils.singleQuotesToHyphen($e.val())
     _barcode = $e.val()
 
   setFocusBarcode: ->

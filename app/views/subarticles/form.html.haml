@@ -8,7 +8,7 @@
     = f.input :unit, collection: Article::UNITS, include_blank: false
     = f.input :amount
     = f.input :minimum
-    = f.input :barcode
+    = f.input :barcode, input_html: { class: 'single-quotes-to-hyphen' }
     .form-group
       %label.col-sm-3.col-md-3.col-lg-3.control-label
         Material

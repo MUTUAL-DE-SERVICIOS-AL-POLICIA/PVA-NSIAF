@@ -187,3 +187,10 @@ jQuery ->
   $(".imgHeaderEntity").on "change", changeImg
 
   $(".imgFooterEntity").on "change", changeImg
+
+  # Change single quotes to hyphen text inputs
+  $(document).on 'keydown', '.single-quotes-to-hyphen', (e) ->
+    if e.keyCode is 13
+      $(e.target).val Utils.singleQuotesToHyphen($(e.target).val())
+      Utils.nextFieldFocus $(e.target)
+      return false
