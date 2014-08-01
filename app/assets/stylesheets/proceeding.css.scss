@@ -1,10 +1,6 @@
-.nowrap {
-  white-space: nowrap;
-}
+.nowrap { white-space: nowrap; }
 
-.action-buttons {
-  margin: 30px 0 60px;
-}
+.action-buttons { margin: 30px 0 60px; }
 
 #proceeding-delivery, #request {
   font-size: 14px;
@@ -12,19 +8,14 @@
   .proceeding-assets {
     font-size: 13px;
     margin: 20px 0 0;
-    td:last-child {
-      white-space: nowrap;
-    }
+    td:last-child { white-space: nowrap; }
   }
-  .proceeding-date {
-    margin: 30px 0 0;
-  }
-  .proceeding-signature {
-    margin-top: 100px;
-  }
-  .proceeding-title {
-    margin: 0 0 30px 0;
-  }
+
+  .proceeding-date { margin-top: 30px; }
+
+  .proceeding-signature { margin-top: 100px; }
+
+  .proceeding-title { margin: 0 0 30px 0; }
 }
 
 #pdf-assets-print {
@@ -33,9 +24,7 @@
       width: 100%;
       padding: 0;
       margin: 0;
-      td {
-        padding: 8px 0 5px;
-      }
+      td { padding: 8px 0 5px; }
     }
   }
 }
@@ -65,7 +54,7 @@
   .page_Numbering{ margin-top: -14px; }
 }
 
-.acta{ font-size: 12px; }
+.acta{ font-size: 9px; }
 
 /*requests*/
 .request_title{ float: right; }
