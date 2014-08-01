@@ -188,4 +188,5 @@ jQuery ->
   $(document).on 'keydown', '.single-quotes-to-hyphen', (e) ->
     if e.keyCode is 13
       $(e.target).val Utils.singleQuotesToHyphen($(e.target).val())
+      Utils.nextFieldFocus $(e.target)
       return false
