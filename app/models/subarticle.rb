@@ -9,6 +9,9 @@ class Subarticle < ActiveRecord::Base
   validates :barcode, presence: true, uniqueness: true
   validates :description, :unit, :article_id, presence: true
   validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validate do |subarticle|
+    BarcodeStatusValidator.new(subarticle).validate
+  end
 
   has_paper_trail
 
