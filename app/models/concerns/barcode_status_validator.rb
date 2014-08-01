@@ -1,12 +1,12 @@
 class BarcodeStatusValidator
-  def initialize(asset)
-    @asset = asset
+  def initialize(barcode_object)
+    @barcode_object = barcode_object
   end
 
   def validate
-    barcode = Barcode.find_by_code @asset.barcode
+    barcode = Barcode.find_by_code @barcode_object.barcode
     if !barcode.present? || !barcode.is_free?
-      @asset.errors[:base] << "Este Código de Barras no existe o ya está en uso"
+      @barcode_object.errors.add(:barcode, "no existe o ya está en uso")
     end
   end
 end

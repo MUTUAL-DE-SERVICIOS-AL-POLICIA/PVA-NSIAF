@@ -141,7 +141,7 @@ jQuery ->
     displayKey: "name"
     source: bestPictures.ttAdapter()
   .on 'typeahead:selected', (evt, data) ->
-    $form = $('#new_user')
+    $form = $('#admin-new-user')
     if $form.find('input:hidden[value="patch"]').length == 0
       $('<input type="hidden" value="patch" name="_method" autocomplete="off">').insertAfter( $form.find('input:hidden:first') )
       $form.attr('action', "/users/#{data.id}")
