@@ -35,7 +35,8 @@
   %span.controller_name= action_name == 'derecognised' ? action_name : controller_name
   - if new_url.present?
     - is_versions = controller_name == 'versions'
-    = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }"do
+    - disabled = is_versions ? true : false
+    = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }", disabled: disabled do
       %span{ class: "glyphicon glyphicon-#{ is_versions ? 'remove' : 'plus' }" }
       = t("#{controller_name}.title.new")
 
