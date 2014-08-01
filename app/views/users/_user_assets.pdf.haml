@@ -1,7 +1,7 @@
 %table.table.table-striped.table-condensed
   %thead
     %tr
-      %th
+      %th{ class: "#{ 'separator line' if is_pdf?}" }
       %th= Asset.human_attribute_name('description')
       %th= Asset.human_attribute_name('code')
   %tbody
