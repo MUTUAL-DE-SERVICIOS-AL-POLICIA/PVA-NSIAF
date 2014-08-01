@@ -49,10 +49,6 @@ class Recoding
     $(document).on 'keydown', @$codeName.selector, (e) => @preventEnterSubmit(e)
     @$codeName.focus()
 
-  changeToHyphens: ($e) ->
-    value = $e.val().toString().trim()
-    $e.val value.replace(/\'/g, '-')
-
   displaySelectedElement: (data) ->
     _asset_id = data.id
     @$containerElementFound.html @$templateElementFound.render(data)
@@ -101,8 +97,9 @@ class Recoding
     e.preventDefault()
 
   setBarcodeValue: (e) ->
-    @changeToHyphens $(e.target)
-    _barcode = $(e.target).val()
+    $e = $(e.target)
+    $e.val Utils.changeToHyphens($e.val())
+    _barcode = $e.val()
 
   setFocusBarcode: ->
     @$containerElementFound.find('input[type=text]').select()

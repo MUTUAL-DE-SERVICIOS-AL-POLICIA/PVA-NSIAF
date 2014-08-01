@@ -16,8 +16,7 @@ class BarcodeReader
 
   changeToHyphens: ->
     if @checkCodeExists()
-      value = @$code.val().toString().trim()
-      @$code.val value.replace(/\'/g, '-')
+      @$code.val Utils.singleQuotesToHiphen(@$code.val())
 
   checkCodeExists: ->
     @$code && @$code.length > 0

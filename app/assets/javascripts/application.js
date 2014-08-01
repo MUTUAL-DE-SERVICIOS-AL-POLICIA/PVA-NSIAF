@@ -25,6 +25,7 @@
 //= require bootstrap-growl
 //= require moment-with-langs
 //= require function
+//= require utils
 //= require barcode_reader
 //= require request
 //= require assets_historical
