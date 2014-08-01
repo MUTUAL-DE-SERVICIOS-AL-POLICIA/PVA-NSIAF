@@ -47,7 +47,7 @@ class Request extends BarcodeReader
     $(document).on 'click', @$btnSaveRequest.selector, => @update_request()
     $(document).on 'click', @$btnCancelRequest.selector, => @cancel_request()
     $(document).on 'click', @$btnDeliverRequest.selector, => @deliver_request()
-    $(document).on 'click', @$btnSendRequest.selector, => @send_request()
+    $(document).on 'click', @$btnSendRequest.selector, (e) => @send_request(e)
     $(document).on 'click', @btnSubarticleRequestPlus.selector, (e) => @subarticle_request_plus(e)
     $(document).on 'click', @btnSubarticleRequestMinus.selector, (e) => @subarticle_request_minus(e)
     $(document).on 'click', @btnSubarticleRequestRemove.selector, (e) => @subarticle_request_remove(e)
@@ -104,14 +104,16 @@ class Request extends BarcodeReader
     @show_buttons()
     $('#btn-show-request').remove()
     @$barcode.html @$templateRequestBarcode.render()
+    $('#code').focus()
 
-  send_request: ->
+  send_request: (e) ->
+    e.preventDefault()
     @$code = $('#code')
     if @$code.val()
       @changeToHyphens()
       $.getJSON "/requests/#{@$idRequest}", { barcode: @$code.val().trim(), user_id: @$functionary }, (data) => @request_delivered(data)
     else
-      @open_modal('Debe ingresar un código de barra')
+      @open_modal('Debe ingresar un Código de Barras')
 
   show_buttons: ->
     @$request.prev().find(".buttonRequest").remove()
@@ -131,6 +133,7 @@ class Request extends BarcodeReader
         @open_modal("El inventario del Sub Artículo con código de barra '#{@$code.val()}' es 0")
     else
       @open_modal('No se encuentra el Sub Artículo en la lista')
+    @$code.select()
 
   input_to_text: ->
     @$table_request.find('td.col-md-2').each ->

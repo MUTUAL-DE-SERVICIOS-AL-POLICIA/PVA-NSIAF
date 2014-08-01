@@ -20,10 +20,10 @@
 %script{ type: 'text/html', id: 'request_barcode' }
   .row
     .col-md-12.col-sm-12
-      .asset-code
+      %form.asset-code{role: 'form'}
         .row
           .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
-            = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barra'
+            = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Sub Artículo'
           .col-md-3.col-sm-3.col-xs-3
             = button_tag class: 'btn btn-success col-md-12 btn-lg', id: "btn_send_request" do
               %span.glyphicon.glyphicon-ok
