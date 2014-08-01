@@ -14,11 +14,11 @@
 
     .form-group
       .col-md-offset-2.col-sm-offset-2.col-lg-offset-2
-        #images_pdf Imágenes PDF
+        #images_pdf Personalizar Encabezado y Pie de Página del PDF
         %hr
         .row
           .col-xs-12.col-sm-6.col-md-6
-            %label Cabecera
+            %label Encabezado
             = link_to '#', class: 'thumbnail' do
               = image_tag img_header, "data-src" => data_header
             = f.file_field :header, class: 'image imgHeaderEntity'

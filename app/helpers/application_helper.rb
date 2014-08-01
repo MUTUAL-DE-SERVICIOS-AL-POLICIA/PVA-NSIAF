@@ -149,12 +149,16 @@ module ApplicationHelper
   end
 
   def img_pdf(type)
-    belongs_department = current_user.department
-    if belongs_department.present?
-      entity = belongs_department.building.entity
-      img = type == 'header' ? entity.get_header : entity.get_footer
+    if current_user.is_super_admin?
+      img = "/images/#{type}.jpg"
     else
-      img = ""
+      belongs_department = current_user.department
+      if belongs_department.present?
+        entity = belongs_department.building.entity
+        img = type == 'header' ? entity.get_header : entity.get_footer
+      else
+        img = ""
+      end
     end
     height = type == 'header' ? "77" : '33'
     pdf_image_tag(img, width: "685", height: height)
