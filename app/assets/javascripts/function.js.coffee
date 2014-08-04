@@ -114,7 +114,9 @@ jQuery ->
         complete: (data, xhr) ->
           window.location = window.location
     else
-      alert('Llenar los campos')
+      $div = $(this).parent().prev().find('.form-group')
+      $div.addClass('has-error')
+      $div.find('textarea').after('<span class="help-block">es obligatorio</span>')
 
   $(document).on 'click', '.download-assets', (e) ->
     e.preventDefault()
