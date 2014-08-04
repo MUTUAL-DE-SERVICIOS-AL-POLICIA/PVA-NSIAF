@@ -2,7 +2,7 @@ $ -> new PrintBarcodes() if $('[data-action=print-barcode]').length > 0
 
 class PrintBarcodes
   _last_value = null
-  _quantity = 48
+  _quantity = 30
 
   constructor: ->
     @cacheElements()

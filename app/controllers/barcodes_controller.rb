@@ -32,9 +32,9 @@ class BarcodesController < ApplicationController
                page_size: 'Letter',
                margin: {
                  top: 10,
-                 bottom: 10,
-                 left: 10,
-                 right: 10
+                 bottom: 0,
+                 left: 0,
+                 right: 0
                }
       end
     end
