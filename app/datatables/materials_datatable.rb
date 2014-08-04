@@ -1,5 +1,5 @@
 class MaterialsDatatable
-  delegate :params, :link_to, :content_tag, to: :@view
+  delegate :params, :link_to, :type_status, :links_actions, to: :@view
 
   def initialize(view)
     @view = view
@@ -20,11 +20,9 @@ private
     array.map do |material|
       [
         material.code,
-        material.name,
-        material.unit,
         material.description,
-        link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-eye-open'), material, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) + ' ' +
-        link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-edit'), [:edit, material], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit'))
+        type_status(material.status),
+        links_actions(material)
       ]
     end
   end
@@ -46,7 +44,7 @@ private
   end
 
   def sort_column
-    columns = %w[code name unit description]
+    columns = %w[code description status]
     columns[params[:iSortCol_0].to_i]
   end
 

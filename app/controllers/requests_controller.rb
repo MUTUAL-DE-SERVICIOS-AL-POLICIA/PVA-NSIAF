@@ -11,8 +11,9 @@ class RequestsController < ApplicationController
   def show
     respond_to do |format|
       format.html
+      format.json { render json: @request.delivery_verification(params[:barcode]) }
       format.pdf do
-        render pdf: "VSIAF-Pedido-Material",
+        render pdf: "VSIAF-Pedido-Artículo",
                disposition: 'attachment',
                template: 'requests/show.html.haml',
                layout: 'pdf.html',
@@ -26,17 +27,20 @@ class RequestsController < ApplicationController
 
   # GET /requests/new
   def new
-    respond_to do |format|
-      format.html { render 'assets/users' }
-      format.json { render json: view_context.assets_json_request(User.find(params[:user_id])) }
-    end
   end
 
   # POST /requests
   def create
     @request = Request.new(request_params)
-    @request.admin_id = current_user.id
+    @request.user_id = current_user.id
     @request.save
+  end
+
+  # PATCH/PUT /requests/1
+  def update
+    @request.admin_id = current_user.id
+    @request.update(request_params)
+    render nothing: true
   end
 
   private
@@ -47,6 +51,6 @@ class RequestsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def request_params
-      params.require(:request).permit(:user_id, { material_requests_attributes: [ :material_id, :amount ] } )
+      params.require(:request).permit(:user_id, :status, :delivery_date, { subarticle_requests_attributes: [ :id, :subarticle_id, :amount, :amount_delivered ] } )
     end
 end

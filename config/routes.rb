@@ -1,14 +1,24 @@
 Nsiaf::Application.routes.draw do
-#  resources :requests, only: [:index, :show, :new, :create]
+  resources :requests, except: [:edit, :destroy]
 
-  #resources :materials, except: [:destroy] do
-    #get :return_material, on: :collection
-  #end
+  resources :materials, except: [:destroy] do
+    post :change_status, on: :member
+  end
+
+  resources :articles, except: [:destroy] do
+    post :change_status, on: :member
+  end
+
+  resources :subarticles, except: [:destroy] do
+    post :change_status, on: :member
+    get :articles, on: :collection
+    get :get_subarticles, on: :collection
+    get :verify_amount, on: :member
+  end
 
   resources :barcodes, only: [:index] do
     collection do
-      get :auxiliary
-      get :asset
+      get :load_data
       post :pdf
     end
   end
@@ -22,14 +32,21 @@ Nsiaf::Application.routes.draw do
   end
 
   resources :assets, except: [:destroy] do
-    post :change_status, on: :member
-    get :users, on: :collection
-    get :departments, on: :collection
-    get :assigned, on: :collection
-    get :not_assigned, on: :collection
-    get :assign, on: :collection
-    get :deallocate, on: :collection
-    get :derecognised, on: :collection
+    member do
+      post :change_status
+      get :historical
+    end
+    collection do
+      get :autocomplete
+      get :admin_assets
+      get :search
+      get :assignation
+      get :devolution
+      get :users
+      get :departments
+      get :derecognised
+      get :recode
+    end
   end
 
   resources :auxiliaries, except: [:destroy] do
@@ -53,6 +70,7 @@ Nsiaf::Application.routes.draw do
     get :welcome, on: :collection
     get :download, on: :member
     get :autocomplete, on: :collection
+    get :historical, on: :member
   end
 
   get '/dashboard', to: 'dashboard#index', as: :dashboard

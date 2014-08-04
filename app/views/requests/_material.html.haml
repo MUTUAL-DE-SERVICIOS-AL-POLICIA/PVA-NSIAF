@@ -1,11 +1,52 @@
-%script{ type: 'text/html', id: 'new_material' }
+%script{ type: 'text/html', id: 'request_buttons' }
+  .row
+    .text-center
+      = button_tag class: 'btn btn-primary', id: "btn_save_request" do
+        %span.glyphicon.glyphicon-ok
+        Grabar
+      = button_tag class: 'btn btn-danger', id: 'btn_cancel_request' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar
+
+%script{ type: 'text/html', id: 'request_accept' }
+  %button#btn-show-request.btn.btn-primary
+    %span.glyphicon.glyphicon-ok
+    Aceptar
+
+%script{ type: 'text/html', id: 'request_input' }
+  %td.col-md-2
+    = text_field_tag :amount, '', class: 'form-control input-sm'
+
+%script{ type: 'text/html', id: 'request_barcode' }
+  .row
+    .col-md-12.col-sm-12
+      %form.asset-code{role: 'form'}
+        .row
+          .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
+            = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Sub Artículo'
+          .col-md-3.col-sm-3.col-xs-3
+            = button_tag class: 'btn btn-success col-md-12 btn-lg', id: "btn_send_request" do
+              %span.glyphicon.glyphicon-ok
+              Entregar
+
+%script{ type: 'text/html', id: 'new_request' }
   %tr{ id: '{{id}}' }
-    %td {{code}}
-    %td {{unit}}
     %td {{description}}
+    %td {{unit}}
     %td.amount 1
     %td.actions-request
-      %button.btn.btn-warning.btn-xs{ type: 'button', title: 'Reducir cantidad', id: 'minus_material' }
+      = button_tag class: 'btn btn-success btn-xs', title: 'Incrementar cantidad', id: 'plus_sr' do
+        %span.glyphicon.glyphicon-plus-sign
+      = button_tag class: 'btn btn-warning btn-xs', title: 'Reducir cantidad', id: 'minus_sr' do
         %span.glyphicon.glyphicon-minus-sign
-      %button.btn.btn-danger.btn-xs{ type: 'button', title: 'Retirar Material', id: 'remove_material' }
+      = button_tag class: 'btn btn-danger btn-xs', title: 'Eliminar Producto', id: 'remove_sr' do
         %span.glyphicon.glyphicon-remove-sign
+
+%script{ type: 'text/html', id: 'cancel_new_request' }
+  .text-center
+    = button_tag class: 'btn btn-primary', id: "btn_save_new_request" do
+      %span.glyphicon.glyphicon-ok
+      Enviar Solicitud
+    = button_tag class: 'btn btn-danger', id: 'btn_cancel_new_request' do
+      %span.glyphicon.glyphicon-ban-circle
+      Cancelar

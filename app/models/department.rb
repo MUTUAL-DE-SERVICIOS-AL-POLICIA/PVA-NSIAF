@@ -10,6 +10,8 @@ class Department < ActiveRecord::Base
   belongs_to :building
   has_many :users
 
+  scope :actives, -> { where(status: '1') }
+
   validates :code, presence: true, uniqueness: { scope: :building_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z|\"|\.|-/u }, allow_blank: true
   validates :building_id, presence: true
@@ -41,11 +43,15 @@ class Department < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = includes(:building).order("#{sort_column} #{sort_direction}")
+    array = joins(:building).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = search_column == 'building' ? 'buildings.name' : "departments.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:building)
+      if search_column.present?
+        type_search = search_column == 'building' ? 'buildings.name' : "departments.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:building)
+      else
+        array = array.where("departments.code LIKE ? OR departments.name LIKE ? OR buildings.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
     end
     array
   end

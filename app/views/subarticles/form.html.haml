@@ -1,0 +1,23 @@
+.page-header
+  %h2= t("subarticles.title.#{params[:action]}")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @subarticle, html: { class: 'form-horizontal' } do |f|
+    = f.input :code
+    = f.input :description
+    = f.input :unit, collection: Article::UNITS, include_blank: false
+    = f.input :amount
+    = f.input :minimum
+    = f.input :barcode, input_html: { class: 'single-quotes-to-hyphen' }
+    .form-group
+      %label.col-sm-3.col-md-3.col-lg-3.control-label
+        Material
+      .col-sm-9.col-md-9.col-lg-9
+        - selected = %w(edit update).include?(action_name) ? Article.getMaterial(@subarticle.article_id) : ''
+        = select_tag :material, options_for_select(get_materials, selected), class: 'form-control', prompt: '--'
+    - if %w(edit update).include?(action_name)
+      = f.association :article, collection: Article.articlesMaterial(@subarticle.article_id)
+    - else
+      = f.association :article, collection:[], prompt: '--', disabled: true
+
+    = render 'shared/form_buttons'

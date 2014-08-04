@@ -1,6 +1,6 @@
 class AssetsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_asset, only: [:show, :edit, :update, :change_status]
+  before_action :set_asset, only: [:show, :edit, :update, :change_status, :historical]
 
   # GET /assets
   # GET /assets.json
@@ -68,50 +68,52 @@ class AssetsController < ApplicationController
 
   def users
     respond_to do |format|
-      format.html
-      format.json { render json: User.search_by(params[:department]) }
+      format.json { render json: User.actives.search_by(params[:department]) }
     end
   end
 
   def departments
     respond_to do |format|
-      format.html
-      format.json { render json: Department.search_by(params[:building]) }
+      format.json { render json: Department.actives.search_by(params[:building]) }
     end
-  end
-
-  def assigned
-    user = User.includes(:assets).find(params[:user_id])
-    assets = user.assets
-    render json: view_context.assets_json(assets, user, true)
-  end
-
-  def not_assigned
-    user = User.find(params[:user_id])
-    assets = current_user.not_assigned_assets
-    render json: view_context.assets_json(assets, user)
-  end
-
-  def assign
-    params[:assets] ||= []
-    asset_ids = params[:assets].map { |e| e.to_i }
-    user = User.find(params[:user_id])
-    asset_ids &= current_user.not_assigned_assets.pluck(:id)
-    assets = current_user.not_assigned_assets.where(id: asset_ids)
-    render json: view_context.assets_json(assets, user)
-  end
-
-  def deallocate
-    params[:assets] ||= []
-    asset_ids = params[:assets].map { |e| e.to_i }
-    user = User.find(params[:user_id])
-    asset_ids &= user.asset_ids
-    assets = user.assets.where(id: asset_ids)
-    render json: view_context.assets_json(assets, user, true)
   end
 
   def derecognised
     format_to('assets', AssetsDatatable)
+  end
+
+  def search
+    asset = Asset.assigned.find_by_barcode params[:code]
+    respond_to do |format|
+      format.json { render json: asset,
+                           include: {user: {only: [:id, :name, :title]}},
+                           only: [:id, :description, :code] }
+    end
+  end
+
+  def admin_assets
+    asset = current_user.not_assigned_assets.find_by_barcode params[:code]
+    respond_to do |format|
+      format.json { render json: asset, only: [:id, :description, :code] }
+    end
+  end
+
+  def historical
+    proceedings = Proceeding.includes(:user).joins(:asset_proceedings).where(asset_proceedings: {asset_id: @asset.id}).order(created_at: :desc)
+    respond_to do |format|
+      format.json { render json: view_context.proceedings_json(proceedings) }
+    end
+  end
+
+  def recode
+  end
+
+  # search by code and description
+  def autocomplete
+    assets = Asset.search_asset(params[:q]).limit 5
+    respond_to do |format|
+      format.json { render json: view_context.assets_json(assets) }
+    end
   end
 
   private
@@ -124,9 +126,9 @@ class AssetsController < ApplicationController
     def asset_params
       if action_name == 'create'
         params[:asset][:user_id] = current_user.id
-        params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id)
+        params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id, :barcode)
       else
-        params.require(:asset).permit(:code, :description)
+        params.require(:asset).permit(:code, :description, :barcode)
       end
     end
 end

@@ -33,7 +33,7 @@ private
   end
 
   def fetch_array
-    Request.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
+    Request.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], params[:status])
   end
 
   def page

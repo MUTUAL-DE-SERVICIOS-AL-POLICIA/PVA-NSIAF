@@ -1,56 +1,102 @@
+- unless is_pdf?
+  .page-header
+    .pull-right
+      - if @request.status == 'initiation'
+        = button_tag class: 'btn btn-primary buttonRequest', id: "btn_edit_request" do
+          %span.glyphicon.glyphicon-edit
+          Editar cantidad
+      - if @request.status == 'pending'
+        = link_to request_path(@request, format: :pdf), class: 'btn btn-primary buttonRequest' do
+          %span.glyphicon.glyphicon-print
+          Imprimir PDF
+        = button_tag class: 'btn btn-success buttonRequest', id: 'btn_deliver_request' do
+          %span.glyphicon.glyphicon-shopping-cart
+          Entregar producto
+      = link_to get_url_request(@request.status), class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        Solicitudes
+    %h2
+      Requerimiento Nro.
+      %span#request_id #{@request.id}
+
 #request.row{ class: "#{'separator' if is_pdf?}" }
   .col-md-12
-    %h1.proceeding-title.text-center
-      Pedido de Material
-      .nro_request
-        Nro. #{@request.id}
-    %p.proceeding-description.text-justify
+    - unless is_pdf?
+      %h4
+        %span.text-muted Estado:
+        = t("requests.title.status.#{@request.status}")
     %h4
       %span.text-muted Funcionario:
       = @request.user_name
-      .request_title
-        %span.text-muted Cargo:
-        = @request.user_title
     %h4
-      %span.text-muted Fecha:
+      %span.text-muted Cargo:
+      = @request.user_title
+    %h4
+      %span.text-muted Fecha de solicitud:
       = I18n.l(@request.created_at, format: :version)
-    %table.table.table-striped.table-condensed.proceeding-assets
-      %thead
-        %tr
-          %th.col-sm-2 Cantidad
-          %th.col-sm-2 Unidad
-          %th.col-sm-6 Descripción
-          %th.col-sm-2 Código
-      %tbody
-        - @request.material_requests.each do |material|
+    - if @request.status == 'delivered'
+      %h4
+        %span.text-muted Fecha de entrega:
+        = I18n.l(@request.delivery_date, format: :version)
+
+    #barcode
+
+    .selected-assets
+      #table_request
+        %table.table.table-striped.table-condensed
+          %thead
+            %tr
+              %th Código
+              %th Unidad
+              %th Descripción
+              %th Código de barra
+              - if is_pdf?
+                %th Cantidad
+              - else
+                %th Cantidad solicitada
+                - if @request.status == 'pending'
+                  %th Cantidad a entregar
+                - unless is_pdf?
+                  - if %w(pending delivered).include?(@request.status)
+                    %th.amount_delivered Cantidad entregada
+                  - if @request.status == 'pending'
+                    %th.delivered
+          %tbody
+            - @request.subarticle_requests.each do |s_request|
+              - if s_request.amount_delivered != 0
+                %tr{ id: s_request.id }
+                  %td= s_request.subarticle_code
+                  %td= s_request.subarticle_unit
+                  %td= s_request.subarticle_description
+                  %td= s_request.subarticle_barcode
+                  - if is_pdf?
+                    %td= s_request.amount_delivered
+                  - else
+                    %td= s_request.amount
+                    - if @request.status == 'pending'
+                      %td.col-md-2= s_request.amount_delivered
+                    - unless is_pdf?
+                      - if %w(pending delivered).include?(@request.status)
+                        %td.amount_delivered= s_request.total_delivered
+                      - if @request.status == 'pending'
+                        %td.delivered
+                          %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
+        .text-center
+
+    - if is_pdf?
+      %p.proceeding-date.text-right
+        La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
+      .proceeding-signature
+        %table{ style: 'width: 100%' }
           %tr
-            %td= material.amount
-            %td= material.material_unit
-            %td= material.material_description
-            %td= material.material_code
+            %td.text-center
+              %p _______________________
+              %p Entregué Conforme
+            %td.text-center
+              %p _______________________
+              %p Vo. Bo.
+            %td.text-center
+              %p _______________________
+              %p Recibí Conforme
 
-    %p.proceeding-date.text-right
-      La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
-
-    .proceeding-signature
-      %table{ style: 'width: 100%' }
-        %tr
-          %td.text-center
-            %p _______________________
-            %p Entregué Conforme
-          %td.text-center
-            %p _______________________
-            %p Vo. Bo.
-          %td.text-center
-            %p _______________________
-            %p Recibí Conforme
-
-  - unless is_pdf?
-    %p.proceeding-pdf.text-center
-      = link_to request_path(@request, format: :pdf), class: 'btn btn-primary btn-lg' do
-        %span.glyphicon.glyphicon-print
-        Imprimir PDF
-
-      = link_to requests_path, class: 'btn btn-danger btn-lg' do
-        %span.glyphicon.glyphicon-ban-circle
-        Cancelar
+= render 'material'

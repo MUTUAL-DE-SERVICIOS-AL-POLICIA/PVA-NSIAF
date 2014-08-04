@@ -23,7 +23,7 @@ class DisplayProceeding
     @displayProceeding()
 
   cacheElements: ->
-    @$proceedingDelivery = $('#proceeding-delivery')
+    @$proceedingDelivery = $('#proceeding-delivery[data-type=proceeding]')
     @tplProceedingDelivery = Hogan.compile $('#tpl-proceeding-delivery').html() || ''
 
   displayProceeding: ->

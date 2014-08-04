@@ -1,5 +1,5 @@
 class VersionsDatatable
-  delegate :params, :link_to_if, :content_tag, :current_user, :check_box_tag, to: :@view
+  delegate :params, :link_to_if, :content_tag, :current_user, :add_check_box, to: :@view
 
   def initialize(view)
     @view = view
@@ -18,14 +18,15 @@ private
 
   def data
     array.map do |version|
-      v = []
-      v << (check_box_tag 'id', version.id, false) if current_user.is_admin?
-      v << version.id
-      v << content_tag(:span, version.item_code, title: version.item_name)
-      v << I18n.l(version.created_at, format: :version)
-      v << I18n.t(version.event, scope: 'versions')
-      v << link_admin(version)
-      v << I18n.t(version.item_type.to_s.downcase.singularize, scope: 'activerecord.models')
+      [
+        version.id,
+        content_tag(:span, version.item_code, title: version.item_name),
+        I18n.l(version.created_at, format: :version),
+        I18n.t(version.event, scope: 'versions'),
+        link_admin(version),
+        I18n.t(version.item_type.to_s.downcase.singularize, scope: 'activerecord.models'),
+        add_check_box(version.id)
+      ]
     end
   end
 

@@ -4,7 +4,7 @@ class Version < PaperTrail::Version
   end
 
   def item_name
-    item.present? ? item.name : ''
+    item.present? ? (%w(Material Article Subarticle).include?(item_type) ? item.description : item.name) : ''
   end
 
   def whodunnit_code
@@ -23,7 +23,7 @@ class Version < PaperTrail::Version
 
   def self.set_columns
    h = ApplicationController.helpers
-   column_names.map{ |c| h.get_column(self, c) unless c == 'object' }.compact
+   column_names.map{ |c| h.get_column(self, c) unless c == 'object' || c == 'active' }.compact
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user)
@@ -31,7 +31,7 @@ class Version < PaperTrail::Version
     array = array.joins('LEFT OUTER JOIN users ON users.id = versions.whodunnit').where("versions.active = ? AND users.role != ?", true, 'super_admin') if current_user.is_admin?
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      array = array.where("#{search_column} like :search", search: "%#{sSearch}%")
+      array = array.where("versions.#{search_column} like :search", search: "%#{sSearch}%")
     end
     array
   end
@@ -40,7 +40,7 @@ class Version < PaperTrail::Version
     column_names = ['id', 'item_id', 'created_at', 'event', 'whodunnit', 'item_type']
     CSV.generate do |csv|
       csv << column_names.map { |c| Version.human_attribute_name(c) }
-      all.each do |version|
+      self.all.each do |version|
         a = Array.new
         a << version.id
         a << version.item_code

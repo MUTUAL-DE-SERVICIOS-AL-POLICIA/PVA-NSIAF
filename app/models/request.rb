@@ -2,9 +2,9 @@ class Request < ActiveRecord::Base
   belongs_to :user
   belongs_to :admin, class_name: 'User'
 
-  has_many :material_requests
-  has_many :materials, through: :material_requests
-  accepts_nested_attributes_for :material_requests
+  has_many :subarticle_requests
+  has_many :subarticles, through: :subarticle_requests
+  accepts_nested_attributes_for :subarticle_requests
 
   def user_name
     user.present? ? user.name : ''
@@ -19,12 +19,18 @@ class Request < ActiveRecord::Base
     [h.get_column(self, 'id'), h.get_column(self, 'created_at'), h.get_column(self, 'name'), h.get_column(self, 'title')]
   end
 
-  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
+    status = status == '' || status == nil ? 'all' : status
     array = joins(:user).order("#{sort_column} #{sort_direction}")
+    array = array.where(status: status) unless status == 'all'
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = %w(name title).include?(search_column) ? "users.#{search_column}" : "requests.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user)
+      if search_column.present?
+        type_search = %w(name title).include?(search_column) ? "users.#{search_column}" : "requests.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user)
+      else
+        array = array.where("requests.id LIKE ? OR requests.created_at LIKE ? OR users.name LIKE ? OR users.title LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
     end
     array
   end
@@ -42,5 +48,29 @@ class Request < ActiveRecord::Base
         csv << a
       end
     end
+  end
+
+  def delivery_verification(barcode)
+    subarticles = Subarticle.get_barcode(barcode)
+    if subarticles.present?
+      if subarticles.exists_amount?
+        subarticle = subarticles.first
+        s_request = subarticle_requests.get_subarticle(subarticle.id)
+        if s_request.present?
+          if s_request.total_delivered < s_request.amount_delivered
+            subarticle.decrease_amount
+            s_request.increase_total_delivered
+            request_deliver unless subarticle_requests.is_delivered?
+          end
+        end
+      else
+        s_request = { amount: 0 }
+      end
+    end
+    s_request
+  end
+
+  def request_deliver
+    update_attributes(status: 'delivered', delivery_date: Time.now )
   end
 end

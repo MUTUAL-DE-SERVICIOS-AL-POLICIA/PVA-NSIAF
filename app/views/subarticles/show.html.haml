@@ -1,0 +1,27 @@
+.page-header
+  .pull-right
+    = link_to edit_subarticle_path(@subarticle), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+    = link_to subarticles_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("subarticles.title.title")
+
+  %h2 Sub Artículo
+%dl.dl-horizontal
+  %dt= Subarticle.human_attribute_name('code')
+  %dd= @subarticle.code
+  %dt= Subarticle.human_attribute_name('description')
+  %dd= @subarticle.description
+  %dt= Subarticle.human_attribute_name('unit')
+  %dd= @subarticle.unit
+  %dt= Subarticle.human_attribute_name('article')
+  %dd= link_to_if @subarticle.article, @subarticle.article_name, @subarticle.article, title: @subarticle.article_code
+  %dt= Subarticle.human_attribute_name('amount')
+  %dd= @subarticle.amount
+  %dt= Subarticle.human_attribute_name('minimum')
+  %dd= @subarticle.minimum
+  %dt= Subarticle.human_attribute_name('barcode')
+  %dd= @subarticle.barcode
+  %dt= t('general.status')
+  %dd= type_status(@subarticle.status)

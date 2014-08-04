@@ -14,12 +14,6 @@ class Auxiliary < ActiveRecord::Base
 
   has_paper_trail ignore: [:status, :updated_at]
 
-  def self.search_by(account_id)
-    auxiliaries = []
-    auxiliaries = joins(:assets).where(account_id: account_id).where.not(assets: { id: nil }).uniq if account_id.present?
-    [['', '--']] + auxiliaries.map { |d| [d.id, d.name] }
-  end
-
   def account_code
     account.present? ? account.code : ''
   end
@@ -33,11 +27,15 @@ class Auxiliary < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = includes(:account).order("#{sort_column} #{sort_direction}")
+    array = joins(:account).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = search_column == 'account' ? 'accounts.name' : "auxiliaries.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      if search_column.present?
+        type_search = search_column == 'account' ? 'accounts.name' : "auxiliaries.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      else
+        array = array.where("auxiliaries.code LIKE ? OR auxiliaries.name LIKE ? OR accounts.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
     end
     array
   end

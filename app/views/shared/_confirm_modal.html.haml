@@ -18,7 +18,7 @@
                 .col-sm-10
                   = text_area_tag :reason, '', class: 'form-control'
         .modal-footer
-          %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('general.forms.btn.cancel')
+          %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('general.btn.cancel')
           {{#unassigned}}
           - if controller_name == 'assets'
             = button_tag t('general.btn.save'), class: 'btn btn-primary deregister'

@@ -1,10 +1,6 @@
-.nowrap {
-  white-space: nowrap;
-}
+.nowrap { white-space: nowrap; }
 
-.action-buttons {
-  margin: 30px 0 60px;
-}
+.action-buttons { margin: 30px 0 60px; }
 
 #proceeding-delivery, #request {
   font-size: 14px;
@@ -12,19 +8,14 @@
   .proceeding-assets {
     font-size: 13px;
     margin: 20px 0 0;
-    td:last-child {
-      white-space: nowrap;
-    }
+    td:last-child { white-space: nowrap; }
   }
-  .proceeding-date {
-    margin: 30px 0 0;
-  }
-  .proceeding-signature {
-    margin: 100px 0 50px;
-  }
-  .proceeding-title {
-    margin: 0 0 30px 0;
-  }
+
+  .proceeding-date { margin-top: 30px; }
+
+  .proceeding-signature { margin-top: 100px; }
+
+  .proceeding-title { margin: 0 0 30px 0; }
 }
 
 #pdf-assets-print {
@@ -34,7 +25,11 @@
       padding: 0;
       margin: 0;
       td {
-        padding: 8px 0 5px;
+        border: none !important;
+        padding: 0 0 27px;
+      }
+      &:last-child {
+        td { padding: 0; }
       }
     }
   }
@@ -43,15 +38,6 @@
 #header{
   border-bottom: 1px solid;
   float: left;
-  text-align: center;
-  width: 100%;
-
-  .logo{
-    float: left;
-    margin-bottom: 10px;
-  }
-
-  .logo1{ float: right; }
 }
 
 .title_pdf{
@@ -60,28 +46,27 @@
 }
 
 .separator{
-  border-bottom: 1px solid #DDDDDD !important;
   float: left;
   margin-top: 100px;
   width: 100%;
 }
 
-#footer{
-  .page_Numbering{
-    float: left;
-    margin-top: 15px;
-  }
-
-  table{
-    float: right;
-    font-size: 7px;
-    width: 42%;
-
-    td{ padding: 0 5px; }
-  }
+.separator-assets{
+  float: left;
+  margin: 75px 0 -85px;
+  width: 100%;
 }
 
-.acta{ font-size: 12px; }
+.line{ border-bottom: 1px solid #DDDDDD !important; }
+
+#footer{
+  float: left;
+  margin-top: 10px;
+
+  .page_Numbering{ margin-top: -14px; }
+}
+
+.acta{ font-size: 9px; }
 
 /*requests*/
 .request_title{ float: right; }
@@ -90,4 +75,8 @@
   float: right;
   font-size: 17px;
   font-weight: bold;
+}
+
+.selected-assets{
+  table{ margin: 45px 0 !important; }
 }

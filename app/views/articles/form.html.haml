@@ -1,0 +1,10 @@
+.page-header
+  %h2= t("articles.title.#{params[:action]}")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @article, html: { class: 'form-horizontal' } do |f|
+    = f.input :code
+    = f.input :description
+    = f.association :material, collection: get_materials, include_blank: false
+
+    = render 'shared/form_buttons'

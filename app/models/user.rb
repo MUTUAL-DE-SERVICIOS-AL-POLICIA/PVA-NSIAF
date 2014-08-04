@@ -17,6 +17,9 @@ class User < ActiveRecord::Base
 
   belongs_to :department
   has_many :assets
+  has_many :proceedings, foreign_key: :user_id
+
+  scope :actives, -> { where(status: '1') }
 
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
@@ -124,9 +127,9 @@ class User < ActiveRecord::Base
   def self.set_columns(cu = nil)
     h = ApplicationController.helpers
     if cu
-      [h.get_column(self, 'name'), h.get_column(self, 'username'), h.get_column(self, 'role')]
+      [h.get_column(self, 'name'), h.get_column(self, 'role')]
     else
-      [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'title'), h.get_column(self, 'ci'), h.get_column(self, 'email'), h.get_column(self, 'username'), h.get_column(self, 'phone'), h.get_column(self, 'mobile'), h.get_column(self, 'department')]
+      [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'title'), h.get_column(self, 'department')]
     end
   end
 
@@ -135,17 +138,25 @@ class User < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user)
-    array = current_user.users.includes(:department).order("#{sort_column} #{sort_direction}")
+    array = current_user.users.joins(:department).order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      type_search = search_column == 'department' ? 'departments.name' : "users.#{search_column}"
-      array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      if search_column.present?
+        type_search = search_column == 'department' ? 'departments.name' : "users.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      else
+        if current_user.is_super_admin?
+          array = array.where("users.name LIKE ? OR users.role LIKE ?", "%#{sSearch}%", "%#{sSearch}%")
+        else
+          array = array.where("users.code LIKE ? OR users.name LIKE ? OR users.title LIKE ? OR departments.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+        end
+      end
     end
     array
   end
 
   def self.to_csv
-    columns = %w(code name title ci email username phone mobile department status)
+    columns = %w(code name title department status)
     h = ApplicationController.helpers
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }
@@ -176,7 +187,7 @@ class User < ActiveRecord::Base
   end
 
   def set_defaults
-    if password.nil? && !username.nil?
+    if new_record? && password.nil? && !username.nil?
       self.password ||= self.username
     end
   end

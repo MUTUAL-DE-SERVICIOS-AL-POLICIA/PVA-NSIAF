@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-  before_action :set_user, only: [:show, :edit, :update, :change_status, :csv, :pdf]
+  before_action :set_user, only: [:show, :edit, :update, :change_status, :csv, :pdf, :historical]
 
   # GET /users
   # GET /users.json
@@ -11,6 +11,10 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @user, only: [:id, :name, :title] }
+    end
   end
 
   # GET /users/new
@@ -91,6 +95,13 @@ class UsersController < ApplicationController
                header: { html: { template: 'shared/header.pdf.haml' } },
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
+    end
+  end
+
+  def historical
+    assets = Asset.historical_assets(@user)
+    respond_to do |format|
+      format.json { render json: view_context.selected_assets_json(assets) }
     end
   end
 

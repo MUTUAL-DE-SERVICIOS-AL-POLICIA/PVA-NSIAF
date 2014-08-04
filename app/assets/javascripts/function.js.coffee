@@ -1,4 +1,5 @@
 jQuery ->
+  filter = if $("h2:contains('Histórico')").length then false else true
   TableTools.BUTTONS.download =
     sAction: "text"
     sTag: "default"
@@ -20,7 +21,8 @@ jQuery ->
       iframe = document.createElement("iframe")
       iframe.style.height = "0px"
       iframe.style.width = "0px"
-      iframe.src = oConfig.sUrl + "?" + $.param(oParams) + "&search_column=#{ $('#select_column').val() }"
+      status = if $('.button_new span.controller_name').text() == 'requests' then "&status=#{window.location.search.substring(8)}" else ''
+      iframe.src = oConfig.sUrl + "?" + $.param(oParams) + "&search_column=#{ $('#select_column').val() }" + status
       document.body.appendChild iframe
     fnSelect: null
     fnComplete: null
@@ -29,6 +31,7 @@ jQuery ->
   $(".datatable").dataTable
     sPaginationType: "bootstrap"
     bProcessing: false
+    bFilter: filter
     bServerSide: true
     bLengthChange: false
     iDisplayLength: 15
@@ -44,8 +47,7 @@ jQuery ->
         name: "search_column"
         value: $('#select_column').val()
     fnInitComplete: ->
-      $('.dataTables_filter input').attr('placeholder', 'Buscar...')
-      $('.dataTables_filter input').addClass('form-control')
+      $('.dataTables_filter input').attr('placeholder', 'Buscar...').addClass('form-control')
       $('.DTTT_container').css('margin-left', 0) unless $('.DTTT_container').parents('.main').find('.button_new .btn').length
       table = $.fn.dataTable.fnTables(true)
       if table.length > 0
@@ -58,6 +60,8 @@ jQuery ->
     fnDrawCallback: (oSettings) ->
       $('#select_column').appendTo $('.dataTables_filter')
 
+  #Dropdown
+  $('.dropdown-toggle').dropdown()
 
   # Change button status
   $(document).on 'click', '.datatable .btn-warning', (evt) ->
@@ -71,19 +75,21 @@ jQuery ->
   $(document).on 'click', '.modal .change_status', ->
     $(this).parents('.modal').modal('hide')
     id = $(this).closest('.modal').attr('id').substr(6)
-    $user = $(this).closest('#confirm-modal').prev().find("[data-dom-id=#{id}]")
-    if $user.text() == 'Activar'
+    $user = $("table [data-dom-id=#{id}]")
+    if $user.find('span').attr('class').substr(20) == 'ok'
       img = 'remove'
+      text_old = 'Activar'
       text = 'Desactivar'
       status_td = 'ACTIVO'
     else
       img = 'ok'
+      text_old = 'Desactivar'
       text = 'Activar'
       status_td = 'INACTIVO'
-    message = $user.data('confirm-message').replace($user.text(), text)
+    message = $user.data('confirm-message').replace(text_old, text)
     $user.data('confirm-message', message)
     $user.parent().prev().text(status_td)
-    $user.empty().append("<span class='glyphicon glyphicon-#{img}'></span>#{text}")
+    $user.empty().append("<span class='glyphicon glyphicon-#{img}'></span>")
 
   # Ajax loading
   $(document).on 'ajaxStart', (e, xhr, settings, exception) ->
@@ -108,16 +114,18 @@ jQuery ->
         complete: (data, xhr) ->
           window.location = window.location
     else
-      alert('Llenar los campos')
+      $div = $(this).parent().prev().find('.form-group')
+      $div.addClass('has-error')
+      $div.find('textarea').after('<span class="help-block">es obligatorio</span>')
 
   $(document).on 'click', '.download-assets', (e) ->
     e.preventDefault()
     window.location = $(@).data('url')
 
   #USER AUTOCOMPLETE
-  $(".typeahead").keyup (e) ->
+  $("#admin-new-user .typeahead").keyup (e) ->
     unless e.which == 13
-      $form = $('#new_user')
+      $form = $('#admin-new-user')
       if $form.find('input:hidden[value="patch"]').length > 0
         $form.find('input:hidden:first').next().remove()
         $form.attr('action', "/users")
@@ -131,11 +139,11 @@ jQuery ->
     remote: "/users/autocomplete.json?q=%QUERY"
   )
   bestPictures.initialize()
-  $("input.typeahead").typeahead null,
+  $("#admin-new-user input.typeahead").typeahead null,
     displayKey: "name"
     source: bestPictures.ttAdapter()
   .on 'typeahead:selected', (evt, data) ->
-    $form = $('#new_user')
+    $form = $('#admin-new-user')
     if $form.find('input:hidden[value="patch"]').length == 0
       $('<input type="hidden" value="patch" name="_method" autocomplete="off">').insertAfter( $form.find('input:hidden:first') )
       $form.attr('action', "/users/#{data.id}")
@@ -143,6 +151,10 @@ jQuery ->
       $form.find('#user_role').val(data.role)
 
   #Version select
+  $(document).on 'click', 'table.table input:checkbox', ->
+    disabled = if $("table.table input:checked").length == 0 then true else false
+    $("a.remove_version").attr("disabled", disabled)
+
   $('.remove_version').click (e) ->
     versions = $('table.table input:checkbox:checked')
     if versions.length > 0
@@ -157,10 +169,30 @@ jQuery ->
           window.location = window.location
     e.preventDefault()
 
-  #Material
-  $(document).on 'click', '#minus_material', ->
-    amount = $(this).parent().prev()
-    amount.text(parseInt(amount.text()) - 1) unless amount.text() is '1'
+  #Img Entity
+  changeImg = (evt) ->
+    if window.FileReader
+      i = 0
+      while f = evt.target.files[i]
+        reader = new FileReader()
+        reader.onload = ((theFile) ->
+          (e) ->
+            img = $(evt.currentTarget).prev().find('img')
+            img.attr "src", e.target.result
+            img.attr "title", escape(theFile.name)
+        )(f)
+        reader.readAsDataURL f
+        i++
+    else
+      alert "El API File no es soportado por éste navegador"
 
-  $(document).on 'click', '#remove_material', ->
-    $(this).parents('tr').remove()
+  $(".imgHeaderEntity").on "change", changeImg
+
+  $(".imgFooterEntity").on "change", changeImg
+
+  # Change single quotes to hyphen text inputs
+  $(document).on 'keydown', '.single-quotes-to-hyphen', (e) ->
+    if e.keyCode is 13
+      $(e.target).val Utils.singleQuotesToHyphen($(e.target).val())
+      Utils.nextFieldFocus $(e.target)
+      return false

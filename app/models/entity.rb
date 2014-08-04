@@ -1,5 +1,8 @@
 class Entity < ActiveRecord::Base
 
+  mount_uploader :header, ImageUploader
+  mount_uploader :footer, ImageUploader
+
   validates :code, presence: true, uniqueness: true
   validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
   validates :acronym, presence: true
@@ -15,7 +18,11 @@ class Entity < ActiveRecord::Base
     array = order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
-      array = array.where("#{search_column} like :search", search: "%#{sSearch}%")
+      if search_column.present?
+        array = array.where("#{search_column} like :search", search: "%#{sSearch}%")
+      else
+        array = array.where("code LIKE ? OR name LIKE ? OR acronym LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
     end
     array
   end
@@ -30,4 +37,11 @@ class Entity < ActiveRecord::Base
     end
   end
 
+  def get_header
+    header.present? ? header_url.to_s : ''
+  end
+
+  def get_footer
+    footer.present? ? footer_url.to_s : ''
+  end
 end

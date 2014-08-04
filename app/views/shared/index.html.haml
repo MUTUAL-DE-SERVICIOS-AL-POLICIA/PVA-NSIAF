@@ -7,18 +7,36 @@
 - when 'assets' then new_url = new_asset_path if action_name != 'derecognised'
 - when 'versions' then new_url = '#' if current_user.is_admin?
 - when 'materials' then new_url = new_material_path
+- when 'articles' then new_url = new_article_path
+- when 'subarticles' then new_url = new_subarticle_path
 - when 'requests' then new_url = new_request_path
 
 = title t("#{controller_name}.title.title")
 
 .page-header
-  %h2 #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
+  %h2
+    - if action_name == 'delivered'
+      = t("delivered.title")
+    - else
+      #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
+      - if controller_name == 'requests'
+        .dropdown{style: 'float: right;'}
+          %button#dropdownMenu.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button"}
+            Solicitudes:
+            %span= title_request(params[:status])
+            %span.caret
+          %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu"}
+            %li= link_request('initiation')
+            %li= link_request('pending')
+            %li= link_request('delivered')
+            %li= link_request('all')
 
 .col-xs-2.button_new
   %span.controller_name= action_name == 'derecognised' ? action_name : controller_name
   - if new_url.present?
     - is_versions = controller_name == 'versions'
-    = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }"do
+    - disabled = is_versions ? true : false
+    = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }", disabled: disabled do
       %span{ class: "glyphicon glyphicon-#{ is_versions ? 'remove' : 'plus' }" }
       = t("#{controller_name}.title.new")
 
@@ -28,7 +46,7 @@
       - unless %w(versions declines proceedings requests).include?(controller_name)
         - unless current_user.is_super_admin? && controller_name == 'users'
           %th= User.human_attribute_name('code')
-        %th= controller_name == 'assets' ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
+        %th= %w(assets materials articles subarticles).include?(controller_name) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
       = render "#{controller_name}/#{controller_name}" unless controller_name == 'accounts'
       - unless %w(versions declines).include?(controller_name)
         %th= t('general.actions')
@@ -37,6 +55,7 @@
 #confirm-modal
 = render 'shared/confirm_modal'
 
-- columns = controller_name.classify.constantize
-- columns = current_user.is_super_admin? && controller_name == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
-= select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control col-md-2'
+- unless controller_name == 'versions'
+  - columns = controller_name.classify.constantize
+  - columns = current_user.is_super_admin? && controller_name == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
+  = select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control col-md-2', prompt: "Todos"

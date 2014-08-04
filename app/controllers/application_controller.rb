@@ -20,7 +20,11 @@ class ApplicationController < ActionController::Base
       format.html { render '/shared/index' }
       format.json { render json: datatable.new(view_context) }
       column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests).include?(name_model) ? 'id' : "#{name_model}.code"
-      current = action_name == 'derecognised' ? '0' : current_user
+      case controller_name
+      when 'assets' then current = action_name == 'derecognised' ? '0' : '1'
+      when 'requests' then current = params[:status]
+      else current = current_user
+      end
       @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)
       array_csv = action_name == 'derecognised' ? @array.to_csv(true) : @array.to_csv
       filename = "VSIAF-#{t("#{name_model}.title.title")}".parameterize

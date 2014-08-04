@@ -1,0 +1,17 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed
+  %thead
+    %tr
+      %th.separator.line= Article.human_attribute_name('code')
+      %th= Article.human_attribute_name('description')
+      %th Material
+      %th= Auxiliary.human_attribute_name('status')
+  %tbody
+    - @array.each do |article|
+      %tr
+        %td= article.code
+        %td= article.description
+        %td= article.material_name
+        %td= type_status(article.status)

@@ -1,25 +1,45 @@
 class Material < ActiveRecord::Base
-  has_many :material_requests
-  has_many :requests, through: :material_requests
+  include ManageStatus
+
+  has_many :articles
+
+  validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :description, presence: true
+
+  has_paper_trail
+
+  def verify_assignment
+    articles.present?
+  end
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'unit'), h.get_column(self, 'description')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description')]
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
     array = order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
-    array = array.where("#{search_column} like :search", search: "%#{sSearch}%") if sSearch.present?
+    if sSearch.present?
+      if search_column.present?
+        array = array.where("#{search_column} like :search", search: "%#{sSearch}%")
+      else
+        array = array.where("code LIKE ? OR description LIKE ?", "%#{sSearch}%", "%#{sSearch}%")
+      end
+    end
     array
   end
 
   def self.to_csv
-    column_names = ['code', 'name', 'unit', 'description']
+    columns = %w(code description status)
+    h = ApplicationController.helpers
     CSV.generate do |csv|
-      csv << column_names.map { |c| self.human_attribute_name(c) }
+      csv << columns.map { |c| self.human_attribute_name(c) }
       all.each do |product|
-        csv << product.attributes.values_at(*column_names)
+        a = product.attributes.values_at(*columns)
+        a.pop(1)
+        a.push(h.type_status(product.status))
+        csv << a
       end
     end
   end

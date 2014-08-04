@@ -1,3 +1,4 @@
+- display_buttons ||= false
 %script{ id: 'tpl-proceeding-delivery', type: 'text/html' }
   .row{ class: "#{'separator' if is_pdf?}" }
     .col-md-offset-1.col-md-10
@@ -31,7 +32,8 @@
       .acta
         %p.proceeding-date.text-justify
           {{^devolution}}
-          %p NOTA: LOS EQUIPOS Y MUEBLES DETALLADOS ANTERIORMENTE SON DE RESPONSABILIDAD DEL FUNCIONARIO, EL CUAL ESTA PROHIBIDO DE:
+          %p
+            %b NOTA: LOS EQUIPOS Y MUEBLES DETALLADOS ANTERIORMENTE SON DE RESPONSABILIDAD DEL FUNCIONARIO, EL CUAL ESTA PROHIBIDO DE:
           %p A) USAR LOS BIENES PARA BENEFICIO PARTICULAR O PRIVADO
           %p B) PERMITIR EL USO PARA BENEFICIO PARTICULAR O PRIVADO
           %p C) PRESTAR O TRANSFERIR EL BIEN A OTRO FUNCIONARIO O SERVIDOR PUBLICO
@@ -43,13 +45,14 @@
           %p LA NO OBSERVACION A ESTAS PROHIBICIONES GENERARA RESPONSABILIDADES ESTABLECIDAS EN LA LEY N°1178 Y SUS REGLAMENTOS
           {{/devolution}}
           {{#devolution}}
-          NOTA: EN CUMPLIMIENTO AL ART. 148 (LIBERACION DE AL RESPONSABILIDAD) DEL D.S. 181, SE PROCEDIO A LA VERIFICACION FISICA DE LOS ACTIVOS FIJOS.:
+          %b
+            NOTA: EN CUMPLIMIENTO AL ART. 148 (LIBERACION DE AL RESPONSABILIDAD) DEL D.S. 181, SE PROCEDIO A LA VERIFICACION FISICA DE LOS ACTIVOS FIJOS.:
           {{/devolution}}
 
       %p.proceeding-date.text-right
         La Paz, {{proceedingDate}}
 
-      .proceeding-signature
+      .proceeding-signature{ style: "#{'margin-bottom: 50px;' unless is_pdf?}" }
         %table{ style: 'width: 100%' }
           %tr
             %td.text-center
@@ -61,3 +64,13 @@
             %td.text-center
               %p _______________________
               %p RECIBÍ CONFORME
+
+  - if display_buttons
+    %p.proceeding-pdf.text-center
+      = button_tag class: 'btn btn-primary btn-lg', data: {type: 'save'} do
+        %span.glyphicon.glyphicon-print
+        Imprimir PDF
+
+      = button_tag class: 'btn btn-danger btn-lg', data: {type: 'cancel'} do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar

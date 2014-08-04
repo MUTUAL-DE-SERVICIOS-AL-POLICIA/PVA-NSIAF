@@ -20,7 +20,6 @@ private
     array.map do |user|
       [
         user.name,
-        user.username,
         I18n.t(user.role, scope: 'users.roles'),
         type_status(user.status),
         (links_actions(user) unless user.role == 'super_admin')
@@ -34,12 +33,8 @@ private
         user.code,
         user.name,
         user.title,
-        user.ci,
-        user.email,
-        user.username,
-        user.phone,
-        user.mobile,
         link_to_if(user.department, user.department_name, user.department, title: user.department_code),
+        user.assets_count,
         type_status(user.status),
         links_actions(user)
       ]
@@ -63,7 +58,7 @@ private
   end
 
   def sort_column
-    columns = current_user.is_super_admin? ? %w[users.name username role users.status] : %w[users.code users.name title ci email username phone mobile departments.name users.status]
+    columns = current_user.is_super_admin? ? %w[users.name role users.status] : %w[users.code users.name title departments.name users.assets_count users.status]
     columns[params[:iSortCol_0].to_i]
   end
 

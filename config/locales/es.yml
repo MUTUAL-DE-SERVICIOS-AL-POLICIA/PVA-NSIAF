@@ -52,6 +52,17 @@ es:
       create: "Nueva Cuenta"
       edit: "Editar Cuenta"
       update: "Editar Cuenta"
+  articles:
+    title:
+      title: "Artículos de Materiales"
+      new: "Nuevo Artículo"
+      create: "Nuevo Artículo"
+      edit: "Editar Artículo"
+      update: "Editar Artículo"
+      modal: "Activación/Desactivación de Artículo"
+      confirm-activate: "¿Está seguro de Activar el artículo <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el artículo <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el artículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>SUB-ARTCÍULO activado</strong>"
   assets:
     title:
       title: "Activos"
@@ -90,6 +101,8 @@ es:
   declines:
     title:
       title: "Bajas"
+  delivered:
+    title: 'Materiales Entregados'
   departments:
     title:
       title: "Departamentos"
@@ -117,6 +130,10 @@ es:
       create: "Nuevo Material"
       edit: "Editar Material"
       update: "Editar Material"
+      modal: "Activación/Desactivación de Material"
+      confirm-activate: "¿Está seguro de Activar el material <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el material <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el material <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ARTCÍULO activado</strong>"
   migration:
     alert_html: 'Especifique el archivo <b>%{model}</b> para migrar'
     file: 'Adjuntar Archivo'
@@ -134,6 +151,22 @@ es:
       title: "Solicitud de Materiales"
       new: "Nueva Solicitud"
       users: "Enviar"
+      status:
+        initiation: 'Nuevo'
+        pending: 'Pendiente'
+        delivered: 'Entregado'
+        all: 'Todo'
+  subarticles:
+    title:
+      title: "Sub Artículos de Materiales"
+      new: "Nuevo Sub Artículo"
+      create: "Nuevo Sub Artículo"
+      edit: "Editar Sub Artículo"
+      update: "Editar Sub Artículo"
+      modal: "Activación/Desactivación de Sub Artículo"
+      confirm-activate: "¿Está seguro de Activar el sub artículo <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el sub artículo <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el sub artículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>Usuario</strong>"
   users:
     roles:
       super_admin: "Super Administrador"
@@ -265,11 +298,14 @@ es:
 
     models:
       account: "Cuenta"
+      article: "Artículo"
       asset: "Activo"
       auxiliary: "Auxiliar"
       building: "Edificio"
       department: "Departamento"
       entity: "Entidad"
+      material: "Material"
+      subarticle: "Sub Artículo"
       proceeding: "Acta"
       user: "Usuario"
 
@@ -278,7 +314,12 @@ es:
         auxiliaries: "Auxiliares"
         code: "Código"
         name: "Nombre"
+      article:
+        code: "Código"
+        description: "Descripción"
+        status: "Estado"
       asset:
+        barcode: "Código de Barras"
         code: "Código"
         description: "Descripción"
         auxiliary: "Auxiliar"
@@ -314,9 +355,8 @@ es:
         name: "Nombre"
       material:
         code: "Código"
-        name: "Nombre"
-        unit: "Unidad"
         description: "Descripción"
+        status: "Estado"
       proceeding:
         user_id: "Usuario"
         admin_id: "Administrador"
@@ -327,7 +367,17 @@ es:
         created_at: "Fecha"
         name: "Nombre"
         title: "Cargo"
+      subarticle:
+        code: "Código"
+        description: "Descripción"
+        unit: "Unidad"
+        article: "Artículo"
+        status: "Estado"
+        amount: "Stock"
+        minimum: "Stock mínimo"
+        barcode: "Código de Barra"
       user:
+        assets_count: "Nro. Activos"
         code: "Código"
         name: "Nombre"
         title: "Cargo"
