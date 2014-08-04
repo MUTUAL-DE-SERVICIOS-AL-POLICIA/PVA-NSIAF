@@ -60,7 +60,7 @@ class Asset < ActiveRecord::Base
   def check_barcode
     if is_not_migrate?
       bcode = Barcode.find_by_code barcode
-      bcode.change_to_used
+      bcode.change_to_used if bcode.present?
       change_barcode_to_deleted
     end
   end
