@@ -24,7 +24,13 @@
       width: 100%;
       padding: 0;
       margin: 0;
-      td { padding: 8px 0 5px; }
+      td {
+        border: none !important;
+        padding: 0 0 27px;
+      }
+      &:last-child {
+        td { padding: 0; }
+      }
     }
   }
 }
