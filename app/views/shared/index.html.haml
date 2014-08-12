@@ -2,7 +2,6 @@
 - when 'users' then new_url = new_user_path
 - when 'departments' then new_url = new_department_path
 - when 'buildings' then new_url = new_building_path
-- when 'entities' then new_url = new_entity_path
 - when 'auxiliaries' then new_url = new_auxiliary_path
 - when 'assets' then new_url = new_asset_path if action_name != 'derecognised'
 - when 'versions' then new_url = '#' if current_user.is_admin?

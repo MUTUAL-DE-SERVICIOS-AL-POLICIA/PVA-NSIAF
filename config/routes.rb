@@ -63,7 +63,7 @@ Nsiaf::Application.routes.draw do
     post :change_status, on: :member
   end
 
-  resources :entities
+  resources :entities, except: [:new, :create, :destroy]
 
   resources :users, except: [:destroy] do
     post :change_status, on: :member
