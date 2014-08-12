@@ -30,6 +30,7 @@ jQuery ->
 
   $(".datatable").dataTable
     sPaginationType: "bootstrap"
+    aaSorting: if window.location.pathname == '/versions' then [[0, 'desc']] else [[0, 'asc']]
     bProcessing: false
     bFilter: filter
     bServerSide: true
