@@ -348,3 +348,15 @@ sudo a2dissite default
 sudo a2ensite activos.adsib.gob.bo
 sudo /etc/init.d/apache2 restart
 ```
+
+## Migración de archivos
+
+Para la migración se debe adjuntar los archivos con extensión DBF, una vez realizado dicha migración se presentara un mensaje de la cantidad de registros insertados y no insertados.
+A continuación se detalla los nombres para cada migración:
+
+* Edificios: unidadadmin.DBF
+* Departamentos: OFICINA.DBF
+* Usuarios: RESP.DBF
+* Cuentas: CODCONT.DBF
+* Auxiliares: auxiliar.DBF
+* Activos: ACTUAL.DBF
