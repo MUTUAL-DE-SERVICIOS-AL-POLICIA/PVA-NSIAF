@@ -11,7 +11,7 @@
     - minimum_stock.each do |stock|
       - color = stock.amount <= stock.minimum ? 'bg-danger' : 'bg-warning'
       .message{ class: color }
-        %h4
-          %b #{stock.amount} / #{stock.minimum}
-        %p= stock.code
+        %p
+          %b #{stock.code} - #{stock.description}
+        %p #{stock.amount} / #{stock.minimum}
         = link_to 'Ver »', subarticle_path(stock), class: 'btn btn-default btn-xs'
