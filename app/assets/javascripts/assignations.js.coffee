@@ -104,10 +104,12 @@ class Assignations extends BarcodeReader
       @alert.info 'Seleccione <b>Edificio</b>, <b>Departamento</b>, y <b>Usuario</b>'
 
   displaySearchAsset: (code, data) =>
-    if data
-      @displaySelectedAssets(data)
+    if data[1] == 1
+      @displaySelectedAssets(data[0])
+    else if data[1] == 2
+      @alert.danger "El Código de Activo <b>#{code}</b> ya está asignado al usuario <b>#{data[0].user.name}</b>"
     else
-      @alert.danger "El Código de Activo <b>#{code}</b> ya está asignado o no existe"
+      @alert.danger "El Código de Activo <b>#{code}</b> no existe"
 
   displaySelectedAssets: (asset) ->
     index = @searchInLocalAssets(asset)

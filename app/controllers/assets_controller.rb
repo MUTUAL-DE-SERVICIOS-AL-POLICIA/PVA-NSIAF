@@ -93,8 +93,13 @@ class AssetsController < ApplicationController
 
   def admin_assets
     asset = current_user.not_assigned_assets.find_by_barcode params[:code]
+    assign = 1
+    if asset.blank?
+      asset = Asset.find_by_barcode params[:code]
+      assign = asset.present? ? 2 : 0
+    end
     respond_to do |format|
-      format.json { render json: asset, only: [:id, :description, :code] }
+      format.json { render json: [asset, assign], only: [:id, :description, :code], include: {user: {only: [:name]}} }
     end
   end
 
