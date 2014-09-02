@@ -325,6 +325,7 @@ es:
         auxiliary: "Auxiliar"
         user: "Usuario"
         derecognised: "Baja"
+        state: "Estado"
       auxiliary:
         code: "Código"
         name: "Nombre"

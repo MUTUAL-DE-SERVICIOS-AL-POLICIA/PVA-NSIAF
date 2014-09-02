@@ -20,6 +20,8 @@
   %dd= @asset.barcode || "<em>No asignado</em>".html_safe
   %dt= Asset.human_attribute_name('description')
   %dd= @asset.description
+  %dt= Asset.human_attribute_name('state')
+  %dd= @asset.get_state
   %dt= Asset.human_attribute_name('user')
   %dd= link_to_if @asset.user, @asset.user_name, @asset.user, title: @asset.user_code
   %dt= Asset.human_attribute_name('auxiliary')

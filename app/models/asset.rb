@@ -6,6 +6,12 @@ class Asset < ActiveRecord::Base
     'DESCRIP' => 'description'
   }
 
+  STATE = {
+    'Bueno' => '1',
+    'Regular' => '2',
+    'Malo' => '3'
+  }
+
   belongs_to :account
   belongs_to :auxiliary
   belongs_to :user, counter_cache: true
@@ -121,6 +127,14 @@ class Asset < ActiveRecord::Base
 
   def get_decline
     Decline.where(asset_code: code).first
+  end
+
+  def get_state
+    case state
+    when 1 then 'Bueno'
+    when 2 then 'Regular'
+    when 3 then 'Malo'
+    end
   end
 
   private
