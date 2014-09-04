@@ -127,7 +127,7 @@ module ApplicationHelper
   end
 
   def add_check_box(version_id)
-    check_box_tag 'id', version_id if current_user.is_admin?
+    check_box_tag 'id', version_id unless current_user.is_super_admin?
   end
 
   def link_request(status)

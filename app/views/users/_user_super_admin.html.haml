@@ -3,4 +3,4 @@
   = f.input :username, required: true
   = f.input :role, as: :select, collection: get_i18n_roles, include_blank: false, required: true
 
-  = render 'shared/form_buttons'
+  = render 'shared/form_buttons', user: user

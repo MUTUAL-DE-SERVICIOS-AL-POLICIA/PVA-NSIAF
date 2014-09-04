@@ -4,5 +4,5 @@
 %th= Version.human_attribute_name('event')
 %th= Version.human_attribute_name('whodunnit')
 %th= Version.human_attribute_name('item_type')
-- if current_user.is_admin?
+- unless current_user.is_super_admin?
   %th

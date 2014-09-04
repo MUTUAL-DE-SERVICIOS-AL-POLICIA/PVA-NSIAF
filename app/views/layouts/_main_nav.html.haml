@@ -1,6 +1,6 @@
 .navbar-collapse.collapse
   %ul.nav.navbar-nav.navbar-right.right_menu
-    - if current_user.is_admin?
+    - unless current_user.is_admin_store?
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_admin' do
           Administración
@@ -60,7 +60,7 @@
             = link_to 'Artículos', articles_path
           %li{ role: 'presentation' }
             = link_to 'Sub Artículos', subarticles_path
-    - if current_user.is_super_admin?
+    - if current_user.is_admin?
       %li
         = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
     %li
