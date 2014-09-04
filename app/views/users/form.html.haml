@@ -4,5 +4,5 @@
 .col-sm-9.column.col-sm-offset-1
   - if current_user.is_super_admin?
     = render 'user_super_admin', user: @user
-  - elsif current_user.is_admin?
+  - elsif current_user.is_admin? || current_user.is_admin_store?
     = render 'user_admin', user: @user

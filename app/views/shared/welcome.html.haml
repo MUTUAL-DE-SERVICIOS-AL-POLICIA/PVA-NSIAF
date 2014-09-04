@@ -5,7 +5,7 @@
       %br
       donde podra gestionar los activos de su entidad.
 
-  - if minimum_stock.present? && current_user.is_admin?
+  - if minimum_stock.present? && current_user.is_admin_store?
     .page-header
       %h3 Stock Mínimo de Sub Artículos
     - minimum_stock.each do |stock|

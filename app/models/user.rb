@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
     'API_ESTADO' => 'status'
   }
 
-  ROLES = %w[super_admin admin]
+  ROLES = %w[super_admin admin admin_store]
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -88,6 +88,10 @@ class User < ActiveRecord::Base
 
   def is_admin?
     self.role == 'admin'
+  end
+
+  def is_admin_store?
+    self.role == 'admin_store'
   end
 
   def is_admin_or_super?

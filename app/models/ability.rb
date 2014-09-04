@@ -12,17 +12,21 @@ class Ability
       can :manage, Building
       can :manage, Department
       can :manage, User
-      cannot [:show, :update], User, role: 'super_admin'
+      cannot [:show, :update], User do |user|
+        %w(super_admin admin_store).include?(user.role)
+      end
       can :manage, Account
-      can :manage, Article
       can :manage, Auxiliary
       can :manage, Asset
       can :manage, Decline
-      can :manage, Material
       can :manage, Proceeding
-      can :manage, Subarticle
-      can :manage, Request
       can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
+    elsif user.is_admin_store?
+      can [:welcome, :show, :update], User, id: user.id
+      can :manage, Article
+      can :manage, Material
+      can :manage, Request
+      can :manage, Subarticle
     end
     can :manage, Version
   end

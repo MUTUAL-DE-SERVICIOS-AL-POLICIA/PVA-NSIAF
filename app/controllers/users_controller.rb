@@ -57,7 +57,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to users_url, notice: t('general.updated', model: User.model_name.human) }
+        list_url = @user.id == current_user.id ? @user : users_url
+        format.html { redirect_to list_url, notice: t('general.updated', model: User.model_name.human) }
         format.json { head :no_content }
       else
         format.html { render action: 'form' }
