@@ -44,8 +44,6 @@ gem 'cancan'
 gem 'will_paginate'
 gem 'carrierwave'
 
-# Gem for read DBF files
-gem 'dbf'
 gem 'paper_trail', '~> 3.0.0'
 
 # Simple captcha with redis
@@ -57,6 +55,8 @@ gem 'autocomplete-off'
 gem 'wicked_pdf'
 
 gem "non-stupid-digest-assets"
+
+gem 'rest_client'
 
 group :development do
   gem 'coffee-rails-source-maps'
