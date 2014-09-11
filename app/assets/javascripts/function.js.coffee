@@ -41,7 +41,7 @@ jQuery ->
       { sClass: 'nowrap', aTargets: [ 0 ] }
     ]
     oLanguage:
-      sUrl: '/locales/dataTables.spanish.txt'
+      sUrl: './locales/dataTables.spanish.txt'
     sDom: 'T<"clear">lfrtip',
     fnServerParams: (aoData) ->
       aoData.push
