@@ -13,7 +13,7 @@ module ImportDbf
     ##
     # Importar el archivo DBF a la tabla de usuarios
     def import_dbf(dbf)
-      url_base = 'http://localhost/conversion-formatos'
+      url_base = Rails.application.secrets.convert_api_url
       url_api = 'dbf/json' # DBF => JSON
       site = RestClient::Resource.new url_base
       file = File.new(dbf.tempfile, 'rb')
