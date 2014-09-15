@@ -13,7 +13,12 @@ module ImportDbf
     ##
     # Importar el archivo DBF a la tabla de usuarios
     def import_dbf(dbf)
-      users = DBF::Table.new(dbf.tempfile)
+      url_base = Rails.application.secrets.convert_api_url
+      url_api = 'dbf/json' # DBF => JSON
+      site = RestClient::Resource.new url_base
+      file = File.new(dbf.tempfile, 'rb')
+      users = JSON.parse(site[url_api].post(filedata: file))
+
       i = j = n = 0
       transaction do
         users.each_with_index do |record, index|

@@ -57,7 +57,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to users_url, notice: t('general.updated', model: User.model_name.human) }
+        list_url = @user.id == current_user.id ? @user : users_url
+        format.html { redirect_to list_url, notice: t('general.updated', model: User.model_name.human) }
         format.json { head :no_content }
       else
         format.html { render action: 'form' }
@@ -121,7 +122,7 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       if current_user.is_super_admin?
-        params.require(:user).permit(:name, :username, :role)
+        params.require(:user).permit(:name, :username, :role, :password, :password_confirmation)
       else
         params.require(:user).permit(:code, :name, :title, :ci, :username, :email, :password, :password_confirmation, :phone, :mobile, :department_id)
       end

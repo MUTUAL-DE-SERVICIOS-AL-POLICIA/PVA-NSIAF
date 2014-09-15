@@ -9,4 +9,4 @@
   = f.input :mobile
   = f.association :department, collection: status_active(Department), include_blank: false, required: true
 
-  = render 'shared/form_buttons'
+  = render 'shared/form_buttons', user: user

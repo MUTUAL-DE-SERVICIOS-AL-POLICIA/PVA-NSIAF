@@ -28,6 +28,9 @@ module Nsiaf
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :es
 
+    # This allows for setting the root either via config file or via environment variable.
+    config.relative_url_root = Rails.application.secrets.rails_relative_url_root
+
     # Change devise layout: https://github.com/plataformatec/devise/wiki/How-To%3a-Create-custom-layouts
     config.to_prepare do
       Devise::PasswordsController.layout "login"

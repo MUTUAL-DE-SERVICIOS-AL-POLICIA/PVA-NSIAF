@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
     'API_ESTADO' => 'status'
   }
 
-  ROLES = %w[super_admin admin]
+  ROLES = %w[admin admin_store]
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -90,6 +90,10 @@ class User < ActiveRecord::Base
     self.role == 'admin'
   end
 
+  def is_admin_store?
+    self.role == 'admin_store'
+  end
+
   def is_admin_or_super?
     is_super_admin? || is_admin?
   end
@@ -112,7 +116,7 @@ class User < ActiveRecord::Base
     if is_super_admin?
       User.where.not(role: nil)
     elsif is_admin?
-      User.where('role IS NULL OR role = ?', 'admin')
+      User.joins(:department).where('role IS NULL OR role = ?', 'admin')
     else
       User.none
     end
@@ -138,7 +142,7 @@ class User < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user)
-    array = current_user.users.joins(:department).order("#{sort_column} #{sort_direction}")
+    array = current_user.users.order("#{sort_column} #{sort_direction}")
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?

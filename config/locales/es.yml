@@ -170,7 +170,8 @@ es:
   users:
     roles:
       super_admin: "Super Administrador"
-      admin: "Administrador"
+      admin: "Administrador de Activos"
+      admin_store: "Administrador de Almacenes"
     title:
       title: "Usuarios"
       list: "Listado de Usuarios"
