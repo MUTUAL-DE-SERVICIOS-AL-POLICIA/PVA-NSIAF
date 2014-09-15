@@ -4,7 +4,7 @@ class Asset < ActiveRecord::Base
   CORRELATIONS = {
     'CODIGO' => 'code',
     'DESCRIP' => 'description',
-    'CODESTADO' => 'status'
+    'CODESTADO' => 'state'
   }
 
   STATE = {
@@ -150,6 +150,6 @@ class Asset < ActiveRecord::Base
     ac = Account.find_by_code(record['CODCONT'])
     ax = Auxiliary.joins(:account).where(code: record['CODAUX'], accounts: { code: record['CODCONT'] }).take
     u = User.joins(:department).where(code: record['CODRESP'], departments: { code: record['CODOFIC'] }).take
-    #asset.present? && new(asset.merge!({ account: ac, auxiliary: ax, user: u })).save
+    asset.present? && new(asset.merge!({ account: ac, auxiliary: ax, user: u })).save
   end
 end
