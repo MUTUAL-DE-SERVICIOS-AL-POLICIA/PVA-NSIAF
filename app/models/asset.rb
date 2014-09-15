@@ -4,7 +4,13 @@ class Asset < ActiveRecord::Base
   CORRELATIONS = {
     'CODIGO' => 'code',
     'DESCRIP' => 'description',
-    'CODESTADO' => 'status'
+    'CODESTADO' => 'state'
+  }
+
+  STATE = {
+    'Bueno' => '1',
+    'Regular' => '2',
+    'Malo' => '3'
   }
 
   belongs_to :account
@@ -124,6 +130,14 @@ class Asset < ActiveRecord::Base
     Decline.where(asset_code: code).first
   end
 
+  def get_state
+    case state
+    when 1 then 'Bueno'
+    when 2 then 'Regular'
+    when 3 then 'Malo'
+    end
+  end
+
   private
 
   ##
@@ -136,6 +150,6 @@ class Asset < ActiveRecord::Base
     ac = Account.find_by_code(record['CODCONT'])
     ax = Auxiliary.joins(:account).where(code: record['CODAUX'], accounts: { code: record['CODCONT'] }).take
     u = User.joins(:department).where(code: record['CODRESP'], departments: { code: record['CODOFIC'] }).take
-    #asset.present? && new(asset.merge!({ account: ac, auxiliary: ax, user: u })).save
+    asset.present? && new(asset.merge!({ account: ac, auxiliary: ax, user: u })).save
   end
 end

@@ -7,6 +7,7 @@
     = f.input :description, required: true
     = f.input :barcode, required: true, input_html: { class: 'single-quotes-to-hyphen' }
     = f.association :auxiliary, collection: status_active(Auxiliary), include_blank: false, disabled: !@asset.new_record?, readonly: !@asset.new_record?, required: true
+    = f.input :state, collection: Asset::STATE, include_blank: false
     = f.association :user, collection: [@asset.new_record? ? current_user : @asset.user], include_blank: false, disabled: true, readonly: true, required: true
 
     = render 'shared/form_buttons'
