@@ -10,8 +10,10 @@ class Recoding
 
   cacheElements: ->
     $form = $('form.recoding')
+    @is_assets = window.location.pathname.substr(1, 6) == 'assets'
+    @recode = if @is_assets then 'assets' else 'subarticles'
     # urls
-    @update_asset_url = '/assets/{id}'
+    @update_asset_url = "/#{@recode}/{id}"
     # containers
     @$containerElementFound = $('#element-found')
     # inputs
@@ -31,7 +33,7 @@ class Recoding
     @assetList = new Bloodhound(
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace 'code'
       queryTokenizer: Bloodhound.tokenizers.whitespace
-      remote: '/assets/autocomplete.json?q=%QUERY'
+      remote: "/#{@recode}/autocomplete.json?q=%QUERY"
     )
     @assetList.initialize()
     @$codeName.typeahead
@@ -78,8 +80,13 @@ class Recoding
 
   saveNewBarcode: (e) ->
     url = @update_asset_url.replace(/{id}/g, _asset_id)
-    data = {asset: {barcode: @getBarcode()}}
-    if data.asset.barcode
+    if @is_assets
+      data = {asset: {barcode: @getBarcode()}}
+      barcode = data.asset.barcode
+    else
+      data = {subarticle: {barcode: @getBarcode()}}
+      barcode = data.subarticle.barcode
+    if barcode
       @$buttonSave.prop('disabled', true)
       $.ajax {url: url, data: data, type: 'PUT', dataType: 'JSON'}
       .done (data) =>

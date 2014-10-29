@@ -10,7 +10,8 @@
   %br/
   #element-found.col-sm-offset-2.col-sm-8
 %script{id: 'tpl-element-found', type: 'text/html'}
-  %h3.text-center Activo Encontrado
+  - is_assets = params[:controller] == 'assets'
+  %h3.text-center #{ is_assets ? 'Activo' : 'Sub Artículo' } Encontrado
   %table.table.table-bordered
     %tbody
       %tr
@@ -33,6 +34,7 @@
       %tr
         %th.description Descripción
         %td.description {{description}}
-      %tr
-        %th.usuario Usuario
-        %td.usuario {{user_name}}
+      - if is_assets
+        %tr
+          %th.usuario Usuario
+          %td.usuario {{user_name}}

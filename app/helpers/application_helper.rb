@@ -50,6 +50,12 @@ module ApplicationHelper
     end
   end
 
+  def subarticles_json(subarticles)
+    subarticles.each.map do |a|
+      { id: a.id, description: a.description, code: a.code, barcode: a.barcode }
+    end
+  end
+
   def proceedings_json(proceedings)
     proceedings = proceedings.each_with_index.map do |p, index|
       {
@@ -167,5 +173,9 @@ module ApplicationHelper
   def pdf_image_tag(image, options = {})
     options[:src] = File.expand_path(Rails.root) + '/public' + image
     tag(:img, options)
+  end
+
+  def search_asset_subarticle(model, q)
+    model.where("code LIKE ? OR description LIKE ?", "%#{q}%", "%#{q}%").limit 5
   end
 end

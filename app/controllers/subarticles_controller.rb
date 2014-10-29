@@ -44,6 +44,7 @@ class SubarticlesController < ApplicationController
     respond_to do |format|
       if @subarticle.update(subarticle_params)
         format.html { redirect_to subarticles_url, notice: t('general.updated', model: Subarticle.model_name.human) }
+        format.json { head :no_content }
       else
         format.html { render action: 'form' }
       end
@@ -67,6 +68,17 @@ class SubarticlesController < ApplicationController
 
   def verify_amount
     render json: @subarticle.verify_amount(params[:amount])
+  end
+
+  def recode
+    render "assets/recode"
+  end
+
+  def autocomplete
+    subarticles = view_context.search_asset_subarticle(Subarticle, params[:q])
+    respond_to do |format|
+      format.json { render json: view_context.subarticles_json(subarticles) }
+    end
   end
 
   private

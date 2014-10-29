@@ -1,16 +1,23 @@
 class Subarticle < ActiveRecord::Base
-  include ManageStatus
+  include Migrated, ManageStatus
 
   belongs_to :article
   has_many :subarticle_requests
   has_many :requests, through: :subarticle_requests
 
-  validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :barcode, presence: true, uniqueness: true
-  validates :description, :unit, :article_id, presence: true
-  validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validate do |subarticle|
-    BarcodeStatusValidator.new(subarticle).validate
+  with_options if: :is_not_migrate? do |m|
+    m.validates :barcode, presence: true, uniqueness: true
+    m.validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    m.validates :description, :unit, :article_id, presence: true
+    m.validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    m.validate do |subarticle|
+      BarcodeStatusValidator.new(subarticle).validate
+    end
+  end
+
+  with_options if: :is_migrate? do |m|
+    m.validates :code, presence: true, uniqueness: true
+    m.validates :description, :unit, presence: true
   end
 
   has_paper_trail

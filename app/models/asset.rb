@@ -45,10 +45,6 @@ class Asset < ActiveRecord::Base
     includes(:user).joins(:asset_proceedings).where(asset_proceedings: {proceeding_id: user.proceeding_ids})
   end
 
-  def self.search_asset(q)
-    where("code LIKE ? OR description LIKE ?", "%#{q}%", "%#{q}%")
-  end
-
   def auxiliary_code
     auxiliary.present? ? auxiliary.code : ''
   end

@@ -60,7 +60,9 @@
             = link_to 'Artículos', articles_path
           %li{ role: 'presentation' }
             = link_to 'Sub Artículos', subarticles_path
-    - if current_user.is_admin?
+          %li{ role: 'presentation' }
+            = link_to 'Recodificar Sub Artículos', recode_subarticles_path
+    - unless current_user.is_super_admin?
       %li
         = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
     %li

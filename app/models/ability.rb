@@ -27,6 +27,7 @@ class Ability
       can :manage, Material
       can :manage, Request
       can :manage, Subarticle
+      can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
     end
     can :manage, Version
   end

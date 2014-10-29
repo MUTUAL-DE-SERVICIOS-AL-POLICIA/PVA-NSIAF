@@ -115,7 +115,7 @@ class AssetsController < ApplicationController
 
   # search by code and description
   def autocomplete
-    assets = Asset.search_asset(params[:q]).limit 5
+    assets = view_context.search_asset_subarticle(Asset, params[:q])
     respond_to do |format|
       format.json { render json: view_context.assets_json(assets) }
     end
