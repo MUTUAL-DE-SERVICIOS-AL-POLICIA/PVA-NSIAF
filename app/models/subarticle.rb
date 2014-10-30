@@ -4,6 +4,7 @@ class Subarticle < ActiveRecord::Base
   belongs_to :article
   has_many :subarticle_requests
   has_many :requests, through: :subarticle_requests
+  has_many :entry_subarticles
 
   with_options if: :is_not_migrate? do |m|
     m.validates :barcode, presence: true, uniqueness: true
