@@ -122,7 +122,7 @@ module ApplicationHelper
     link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), user, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) + ' ' +
     link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), [:edit, user], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit')) + ' ' +
     (link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(user), title: title_status(user.status)) unless type == 'asset') + ' ' +
-    (link_to(content_tag(:span, "", class: 'glyphicon glyphicon-plus-sign'), [:entry, user], class: 'btn btn-info btn-xs', title: "Ingresar Sub Artículo") if type == "subarticle")
+    (link_to(content_tag(:span, "", class: 'glyphicon glyphicon-plus-sign'), [:entry, user], class: 'btn btn-info btn-xs', title: "Ingreso") if type == "subarticle")
   end
 
   def status_active(model)
@@ -178,5 +178,9 @@ module ApplicationHelper
 
   def search_asset_subarticle(model, q)
     model.where("code LIKE ? OR description LIKE ?", "%#{q}%", "%#{q}%").limit 5
+  end
+  def new_entry_subarticle(i)
+    r_referer = request.referer
+    r_referer.present? && i == 0 && URI(r_referer).path != '/subarticles' ? 'success' : ''
   end
 end

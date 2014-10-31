@@ -3,11 +3,15 @@
     = link_to edit_subarticle_path(@subarticle), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
+    = link_to [:entry, @subarticle], class: 'btn btn-info' do
+      %span.glyphicon.glyphicon-plus-sign
+      Ingreso
     = link_to subarticles_path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("subarticles.title.title")
 
   %h2 Sub Artículo
+
 %dl.dl-horizontal
   %dt= Subarticle.human_attribute_name('code')
   %dd= @subarticle.code
@@ -25,3 +29,21 @@
   %dd= @subarticle.barcode
   %dt= t('general.status')
   %dd= type_status(@subarticle.status)
+%table.table.table-hover
+  %thead
+    %tr
+      %th #
+      %th= EntrySubarticle.human_attribute_name('amount')
+      %th= EntrySubarticle.human_attribute_name('unit_cost')
+      %th= EntrySubarticle.human_attribute_name('total_cost')
+      %th= EntrySubarticle.human_attribute_name('invoice')
+      %th= EntrySubarticle.human_attribute_name('date')
+  %tbody
+    - @subarticle.entry_subarticles.order("id DESC").each_with_index do |entry, index|
+      %tr{ class: new_entry_subarticle(index) }
+        %td= index + 1
+        %td= entry.amount
+        %td= entry.unit_cost
+        %td= entry.total_cost
+        %td= entry.invoice
+        %td= l entry.date

@@ -360,7 +360,7 @@ es:
         code: "Código"
         name: "Nombre"
       entry_subarticle:
-        amount: "Monto"
+        amount: "Cantidad"
         unit_cost: "Costo Unitario"
         total_cost: "Costo Total"
         invoice: "Factura"
