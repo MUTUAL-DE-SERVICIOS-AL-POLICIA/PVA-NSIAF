@@ -81,6 +81,20 @@ class SubarticlesController < ApplicationController
     end
   end
 
+  def entry
+    @entry_subarticle = EntrySubarticle.new
+  end
+
+  def entry_create
+    @entry_subarticle = EntrySubarticle.new(entry_subarticle_params)
+
+    if @entry_subarticle.save
+      redirect_to @subarticle, notice: t('general.created', model: EntrySubarticle.model_name.human)
+    else
+      render action: 'entry'
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subarticle
@@ -90,5 +104,9 @@ class SubarticlesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def subarticle_params
       params.require(:subarticle).permit(:code, :description, :unit, :status, :article_id, :amount, :minimum, :barcode)
+    end
+
+    def entry_subarticle_params
+      params.require(:entry_subarticle).permit(:amount, :unit_cost, :total_cost, :invoice, :date, :subarticle_id)
     end
 end

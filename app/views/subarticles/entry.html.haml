@@ -1,0 +1,25 @@
+.page-header
+  %h2= t("subarticles.entry_subarticles.#{params[:action]}")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @entry_subarticle, url: entry_create_subarticle_path, html: { class: 'form-horizontal' } do |f|
+    = f.input :subarticle_id, as: :hidden, input_html: { value: @subarticle.id }
+    .form-group
+      %label.col-sm-3.col-md-3.col-lg-3.control-label #{t("activerecord.attributes.subarticle.code")}
+      .col-sm-9.col-md-9.col-lg-9= text_field_tag 'code', @subarticle.code, class: 'form-control', disabled: true
+    .form-group
+      %label.col-sm-3.col-md-3.col-lg-3.control-label #{t("activerecord.attributes.subarticle.description")}
+      .col-sm-9.col-md-9.col-lg-9= text_field_tag 'description', @subarticle.description, class: 'form-control', disabled: true
+    .form-group
+      %label.col-sm-3.col-md-3.col-lg-3.control-label #{t("activerecord.attributes.subarticle.unit")}
+      .col-sm-9.col-md-9.col-lg-9= text_field_tag 'unit', @subarticle.unit, class: 'form-control', disabled: true
+    = f.input :amount
+    .form-group
+      %label.col-sm-3.col-md-3.col-lg-3.control-label #{t("activerecord.attributes.subarticle.barcode")}
+      .col-sm-9.col-md-9.col-lg-9= text_field_tag 'bar_code', @subarticle.barcode, class: 'form-control', disabled: true
+    = f.input :unit_cost
+    = f.input :total_cost
+    = f.input :invoice
+    = f.input :date, as: :string, input_html: { value: I18n.l(Time.now.to_date), class: 'date' }
+
+    = render 'shared/form_buttons'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140902203711) do
+ActiveRecord::Schema.define(version: 20141030140546) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -133,6 +133,19 @@ ActiveRecord::Schema.define(version: 20140902203711) do
     t.string   "header"
     t.string   "footer"
   end
+
+  create_table "entry_subarticles", force: true do |t|
+    t.integer  "amount"
+    t.decimal  "unit_cost",     precision: 10, scale: 2
+    t.decimal  "total_cost",    precision: 10, scale: 2
+    t.integer  "invoice"
+    t.date "date"
+    t.integer  "subarticle_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "entry_subarticles", ["subarticle_id"], name: "index_entry_subarticles_on_subarticle_id", using: :btree
 
   create_table "materials", force: true do |t|
     t.string   "code",        limit: 50

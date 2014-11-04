@@ -10,8 +10,12 @@ Nsiaf::Application.routes.draw do
   end
 
   resources :subarticles, except: [:destroy] do
-    post :change_status, on: :member
-    get :verify_amount, on: :member
+    member do
+      post :change_status
+      get :verify_amount
+      get :entry
+      post :entry_create
+    end
     collection do
       get :articles
       get :get_subarticles
