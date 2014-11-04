@@ -1,3 +1,8 @@
+total_cost = ->
+  amount = parseFloat($("input#entry_subarticle_amount").val() || 0)
+  unit_cost = parseFloat($("input#entry_subarticle_unit_cost").val() || 0)
+  $("input#entry_subarticle_total_cost").val(amount * unit_cost)
+
 jQuery ->
   filter = if $("h2:contains('Histórico')").length then false else true
   TableTools.BUTTONS.download =
@@ -197,3 +202,18 @@ jQuery ->
       $(e.target).val Utils.singleQuotesToHyphen($(e.target).val())
       Utils.nextFieldFocus $(e.target)
       return false
+
+  # Entry Subarticle
+  $("<div class='input-group'></div>").insertBefore("input#entry_subarticle_date")
+  $("input#entry_subarticle_date").appendTo(".input-group")
+  $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input#entry_subarticle_date")
+
+  $(".date").datepicker
+    format: "dd/mm/yyyy"
+    language: "es"
+
+  $("input#entry_subarticle_amount").keyup ->
+    total_cost()
+
+  $("input#entry_subarticle_unit_cost").keyup ->
+    total_cost()
