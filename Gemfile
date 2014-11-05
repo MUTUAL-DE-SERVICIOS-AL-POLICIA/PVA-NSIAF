@@ -34,7 +34,7 @@ gem 'capistrano-rails'
 gem 'capistrano-rvm'
 
 # Use debugger
-gem 'debugger', group: [:development, :test]
+gem 'byebug', group: [:development, :test]
 
 gem 'devise'
 gem 'simple_form'
@@ -62,3 +62,6 @@ group :development do
   gem 'coffee-rails-source-maps'
   gem 'rails-erd'
 end
+
+# Read Excel files
+gem 'roo'
