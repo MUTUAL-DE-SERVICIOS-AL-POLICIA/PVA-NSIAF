@@ -27,6 +27,9 @@
   %dt= Asset.human_attribute_name('auxiliary')
   %dd= link_to_if @asset.auxiliary, @asset.auxiliary_name, @asset.auxiliary, title: @asset.auxiliary_code
   - if @asset.status == '0'
+    %h3 Dado de baja
+    %dt Fecha de baja
+    %dd= l(@asset.derecognised, format: :version)
     %dt= Decline.human_attribute_name('description')
     %dd= @asset.get_decline.description
     %dt= Decline.human_attribute_name('motivo')

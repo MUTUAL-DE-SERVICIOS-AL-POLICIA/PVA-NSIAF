@@ -36,7 +36,7 @@ private
   end
 
   def fetch_array
-    status = @view.url_for == '/assets/derecognised' ? '0' : '1'
+    status = @view.url_for == '/assets' ? '1' : '0'
     Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], status)
   end
 

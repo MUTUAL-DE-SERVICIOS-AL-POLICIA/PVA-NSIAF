@@ -1,4 +1,6 @@
 Nsiaf::Application.routes.draw do
+  resources :derecognised, only: :index
+
   resources :requests, except: [:edit, :destroy]
 
   resources :materials, except: [:destroy] do
@@ -52,7 +54,6 @@ Nsiaf::Application.routes.draw do
       get :devolution
       get :users
       get :departments
-      get :derecognised
       get :recode
     end
   end

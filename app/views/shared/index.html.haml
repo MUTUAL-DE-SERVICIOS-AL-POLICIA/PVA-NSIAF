@@ -4,22 +4,24 @@
 - when 'departments' then new_url = new_department_path
 - when 'buildings' then new_url = new_building_path
 - when 'auxiliaries' then new_url = new_auxiliary_path
-- when 'assets' then new_url = new_asset_path if action_name != 'derecognised'
+- when 'assets' then new_url = new_asset_path
 - when 'versions' then new_url = '#' unless current_user.is_super_admin?
 - when 'materials' then new_url = new_material_path
 - when 'articles' then new_url = new_article_path
 - when 'subarticles' then new_url = new_subarticle_path
 - when 'requests' then new_url = new_request_path
 
-= title t("#{controller_name}.title.title")
+- control = controller_name == 'derecognised' ? 'assets' : controller_name
+
+= title t("#{control}.title.title")
 
 .page-header
   %h2
     - if action_name == 'delivered'
       = t("delivered.title")
     - else
-      #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
-      - if controller_name == 'requests'
+      #{t("#{control}.title.title")} #{' dados de Baja' if controller_name == 'derecognised'}
+      - if control == 'requests'
         .dropdown{style: 'float: right;'}
           %button#dropdownMenu.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button"}
             Solicitudes:
@@ -32,30 +34,30 @@
             %li= link_request('all')
 
 .col-xs-2.button_new
-  %span.controller_name= action_name == 'derecognised' ? action_name : controller_name
+  %span.controller_name= controller_name
   - if new_url.present?
-    - is_versions = controller_name == 'versions'
+    - is_versions = control == 'versions'
     - disabled = is_versions ? true : false
     = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }", disabled: disabled do
       %span{ class: "glyphicon glyphicon-#{ is_versions ? 'remove' : 'plus' }" }
-      = t("#{controller_name}.title.new")
+      = t("#{control}.title.new")
 
 %table.table.table-striped.table-hover.datatable
   %thead
     %tr
-      - unless %w(versions declines proceedings requests).include?(controller_name)
-        - unless current_user.is_super_admin? && controller_name == 'users'
+      - unless %w(versions declines proceedings requests).include?(control)
+        - unless current_user.is_super_admin? && control == 'users'
           %th= User.human_attribute_name('code')
-        %th= %w(assets materials articles subarticles).include?(controller_name) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
-      = render "#{controller_name}/#{controller_name}" unless controller_name == 'accounts'
-      - unless %w(versions declines).include?(controller_name)
+        %th= %w(assets materials articles subarticles).include?(control) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
+      = render "#{control}/#{control}" unless control == 'accounts'
+      - unless %w(versions declines).include?(control)
         %th= t('general.actions')
   %tbody
 
 #confirm-modal
 = render 'shared/confirm_modal'
 
-- unless controller_name == 'versions'
-  - columns = controller_name.classify.constantize
-  - columns = current_user.is_super_admin? && controller_name == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
+- unless control == 'versions'
+  - columns = control.classify.constantize
+  - columns = current_user.is_super_admin? && control == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
   = select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control col-md-2', prompt: "Todos"
