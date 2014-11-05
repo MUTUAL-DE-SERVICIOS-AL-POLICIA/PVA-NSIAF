@@ -35,7 +35,7 @@
           %li{ role: 'presentation' }
             = link_to 'Actas', proceedings_path, role: 'menuitem'
           %li{ role: 'presentation' }
-            = link_to 'Bajas', derecognised_assets_path, role: 'menuitem'
+            = link_to 'Bajas', derecognised_index_path, role: 'menuitem'
     - if current_user.is_super_admin?
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do

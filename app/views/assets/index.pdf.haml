@@ -1,5 +1,5 @@
 .title_pdf
-  %h3 #{t("#{controller_name}.title.title")} #{' dados de Baja' if action_name == 'derecognised'}
+  %h3 #{t("assets.title.title")} #{' dados de Baja' if controller_name == 'derecognised'}
 
 %table.table.table-condensed
   %thead
@@ -7,7 +7,7 @@
       %th.separator.line= Asset.human_attribute_name('code')
       %th= Asset.human_attribute_name('description')
       %th= Asset.human_attribute_name('user')
-      - if action_name == 'derecognised'
+      - if controller_name == 'derecognised'
         %th Baja
   %tbody
     - @array.each do |asset|

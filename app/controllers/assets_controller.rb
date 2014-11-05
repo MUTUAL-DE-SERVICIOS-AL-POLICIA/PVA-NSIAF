@@ -78,10 +78,6 @@ class AssetsController < ApplicationController
     end
   end
 
-  def derecognised
-    format_to('assets', AssetsDatatable)
-  end
-
   def search
     asset = Asset.assigned.find_by_barcode params[:code]
     respond_to do |format|
