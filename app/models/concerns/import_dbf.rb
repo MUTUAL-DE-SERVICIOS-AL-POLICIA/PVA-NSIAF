@@ -23,7 +23,7 @@ module ImportDbf
       transaction do
         users.each_with_index do |record, index|
           print "#{index + 1}.-\t"
-          if record.present?
+          if record.present? && record['deleted'] == 0
             self.const_get(:CORRELATIONS).each { |k, v| print "#{record[k].inspect}, " }
             save_correlations(record) ? i += 1 : n += 1
           else
