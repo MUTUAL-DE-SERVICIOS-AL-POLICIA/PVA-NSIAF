@@ -105,7 +105,7 @@ jQuery ->
 
   $('#announcements').bind 'close.bs.alert', ->
     $.ajax
-      url: '/dashboard/announcements/hide'
+      url: $('#announcements').data('url')
       dataType: 'json'
       type: 'POST'
 
