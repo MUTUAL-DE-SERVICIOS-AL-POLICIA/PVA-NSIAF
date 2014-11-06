@@ -10,7 +10,7 @@ class Subarticle < ActiveRecord::Base
     m.validates :barcode, presence: true, uniqueness: true
     m.validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     m.validates :description, :unit, :article_id, presence: true
-    m.validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    #m.validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     m.validate do |subarticle|
       BarcodeStatusValidator.new(subarticle).validate
     end
@@ -20,6 +20,8 @@ class Subarticle < ActiveRecord::Base
     m.validates :code, presence: true, uniqueness: true
     m.validates :description, :unit, presence: true
   end
+
+  before_save :check_barcode
 
   has_paper_trail
 
@@ -88,5 +90,12 @@ class Subarticle < ActiveRecord::Base
   def verify_amount(amount)
     check = amount.to_i <= self.amount ? true : false
     { id: self.id, description: self.description,  there_amount: check }
+  end
+
+  def check_barcode
+    if is_not_migrate?
+      bcode = Barcode.find_by_code barcode
+      bcode.change_to_used if bcode.present?
+    end
   end
 end

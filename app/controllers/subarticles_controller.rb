@@ -47,6 +47,7 @@ class SubarticlesController < ApplicationController
         format.json { head :no_content }
       else
         format.html { render action: 'form' }
+        format.json { render json: @subarticle.errors, status: :unprocessable_entity }
       end
     end
   end

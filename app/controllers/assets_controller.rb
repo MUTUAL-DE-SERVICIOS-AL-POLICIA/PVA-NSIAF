@@ -47,7 +47,7 @@ class AssetsController < ApplicationController
   # PATCH/PUT /assets/1
   # PATCH/PUT /assets/1.json
   def update
-    url = @asset.status == '0' ? derecognised_assets_path : assets_url
+    url = @asset.status == '0' ? derecognised_index_path : assets_url
     respond_to do |format|
       if @asset.update(asset_params)
         format.html { redirect_to url, notice: t('general.updated', model: Asset.model_name.human) }
