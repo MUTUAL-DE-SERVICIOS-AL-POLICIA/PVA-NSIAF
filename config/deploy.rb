@@ -70,4 +70,18 @@ namespace :deploy do
       end
     end
   end
+
+  # Carga manual de materiales, artículos, y subartículos
+  # a partir de una hoja de cálculo.
+  # TODO: Caso que sea reemplazado por una interfaz web, eliminar ésta tarea
+  desc "Run rake db:materiales"
+  task "db:materiales" do
+    on roles(:db), in: :sequence, wait: 5 do
+      within release_path do
+        with rails_env: :production do
+          rake "db:materiales"
+        end
+      end
+    end
+  end
 end

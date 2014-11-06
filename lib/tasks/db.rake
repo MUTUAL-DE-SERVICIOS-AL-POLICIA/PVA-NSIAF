@@ -1,4 +1,10 @@
 namespace :db do
+  ##
+  # Para el caso de los clasificadores públicos en la ADSIB tienen un listado
+  # el cual por el momento se importa a la base de datos mediante la tarea
+  # que está descrito a continuación.
+  # TODO: Lo ideal es tener una interfaz web que permita cargar estos datos a
+  # partir de una hoja de cálculo
   desc "Cargado de los clasificadores públicos para almacenes"
   task materiales: :environment do
     file_path = 'lib/tasks/files/ITEMS CON CODIGOS.ods'
