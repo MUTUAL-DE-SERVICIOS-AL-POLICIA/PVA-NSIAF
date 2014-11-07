@@ -5,10 +5,11 @@
         = button_tag class: 'btn btn-primary buttonRequest', id: "btn_edit_request" do
           %span.glyphicon.glyphicon-edit
           Editar cantidad
-      - if @request.status == 'pending'
-        = link_to request_path(@request, format: :pdf), class: 'btn btn-primary buttonRequest' do
+      - if %w(pending initiation).include?(@request.status)
+        = link_to request_path(@request, format: :pdf), class: 'btn btn-info buttonRequest' do
           %span.glyphicon.glyphicon-print
           Imprimir PDF
+      - if @request.status == 'pending'
         = button_tag class: 'btn btn-success buttonRequest', id: 'btn_deliver_request' do
           %span.glyphicon.glyphicon-shopping-cart
           Entregar producto
@@ -26,7 +27,10 @@
         %span.text-muted Estado:
         = t("requests.title.status.#{@request.status}")
     %h4
-      %span.text-muted Funcionario:
+      %span.text-muted Administrador:
+      = @request.admin_name
+    %h4
+      %span.text-muted Solicitante:
       = @request.user_name
     %h4
       %span.text-muted Cargo:
@@ -43,6 +47,8 @@
 
     .selected-assets
       #table_request
+        - if is_pdf?
+          %h3.text-center.proceeding-title= " #{'ENTREGA DE ' if @request.status == 'pending'} SOLICITUD DE MATERIAL"
         %table.table.table-striped.table-condensed
           %thead
             %tr
@@ -70,7 +76,7 @@
                   %td= s_request.subarticle_description
                   %td= s_request.subarticle_barcode
                   - if is_pdf?
-                    %td= s_request.amount_delivered
+                    %td= @request.status == 'initiation' ? s_request.amount : s_request.amount_delivered
                   - else
                     %td= s_request.amount
                     - if @request.status == 'pending'

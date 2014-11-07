@@ -14,6 +14,10 @@ class Request < ActiveRecord::Base
     user.present? ? user.title : ''
   end
 
+  def admin_name
+    admin.present? ? admin.name : ''
+  end
+
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'id'), h.get_column(self, 'created_at'), h.get_column(self, 'name'), h.get_column(self, 'title')]
