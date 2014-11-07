@@ -31,6 +31,21 @@ Instalar [Git](http://git-scm.com/)
 sudo apt-get install git git-core
 ```
 
+### wkhtmltopdf
+
+[wkhtmltopdf](http://wkhtmltopdf.org/) permite la conversión de HTML a PDF. En los respositorios oficiales de Debian está la versión `0.9.9` el cual no cumple correctamente con su función, debido a que estamos utilizando funciones nuevas. Se recomienda la versión `0.12.0` o superiores, el cual se puede descargar manualmente desde http://wkhtmltopdf.org/downloads.html
+
+Para el caso de Debian Wheezy descargué la versión de 64-bit:
+
+```
+wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.1/wkhtmltox-0.12.1_linux-wheezy-amd64.deb
+sudo dpkg -i wkhtmltox-0.12.1_linux-wheezy-amd64.deb
+```
+
+La instalación se hará en `/usr/local/bin/wkhtmltopdf`
+
+### Conversión de formatos
+
 Éste sistema depende del API de Conversión de Formatos para la importación de archivos `DBF`, cuyo repositorio es https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos
 
 La instalación del API de Conversión de Formatos está descrita en el archivo [INSTALL.md](https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos/blob/master/INSTALL.md)
@@ -202,8 +217,8 @@ Agregamos al final las siguientes líneas:
 ```apache
 LoadModule passenger_module /home/usuario1/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.50/buildout/apache2/mod_passenger.so
 <IfModule mod_passenger.c>
-	PassengerRoot /home/usuario1/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.50
-	PassengerDefaultRuby /home/usuario1/.rvm/gems/ruby-2.1.2/wrappers/ruby
+  PassengerRoot /home/usuario1/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.50
+  PassengerDefaultRuby /home/usuario1/.rvm/gems/ruby-2.1.2/wrappers/ruby
 </IfModule>
 ```
 
