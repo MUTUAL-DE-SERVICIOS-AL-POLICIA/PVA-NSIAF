@@ -206,5 +206,5 @@ class Request extends BarcodeReader
       subarticle_id: val.id
       amount: $(val).find('td.amount').text()
     )
-    json_data = { status: 'initiation', subarticle_requests_attributes: subarticles }
+    json_data = { status: 'initiation', user_id: $("select#people option:selected").val(), subarticle_requests_attributes: subarticles }
     $.post @request_save_url, { request: json_data }, null, 'script'

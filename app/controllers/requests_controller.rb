@@ -27,12 +27,13 @@ class RequestsController < ApplicationController
 
   # GET /requests/new
   def new
+    @users = view_context.status_active(User).where("id != 1")
   end
 
   # POST /requests
   def create
     @request = Request.new(request_params)
-    @request.user_id = current_user.id
+    @request.admin_id = current_user.id
     @request.save
   end
 
