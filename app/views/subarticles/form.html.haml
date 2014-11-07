@@ -6,7 +6,6 @@
     = f.input :code, required: true
     = f.input :description, required: true
     = f.input :unit, collection: Article::UNITS, include_blank: false
-    = f.input :amount
     = f.input :minimum
     = f.input :barcode, required: true, input_html: { class: 'single-quotes-to-hyphen' }
     .form-group
