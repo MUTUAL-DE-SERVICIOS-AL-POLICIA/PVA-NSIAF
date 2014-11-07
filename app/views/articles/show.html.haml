@@ -17,3 +17,19 @@
   %dd= link_to_if @article.material, @article.material_name, @article.material, title: @article.material_code
   %dt= t('general.status')
   %dd= type_status(@article.status)
+
+%h3 Sub Artículos
+%table.table.table-hover
+  %thead
+    %tr
+      %th #
+      %th= Subarticle.human_attribute_name('code')
+      %th= Subarticle.human_attribute_name('description')
+      %th= t('general.status')
+  %tbody
+    - @article.subarticles.each_with_index do |subarticle, index|
+      %tr
+        %td= index + 1
+        %td= subarticle.code
+        %td= link_to_if subarticle.description, subarticle.description, subarticle
+        %td= type_status(subarticle.status)

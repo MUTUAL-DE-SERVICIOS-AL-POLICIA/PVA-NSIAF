@@ -179,8 +179,10 @@ module ApplicationHelper
   def search_asset_subarticle(model, q)
     model.where("code LIKE ? OR description LIKE ?", "%#{q}%", "%#{q}%").limit 5
   end
+
   def new_entry_subarticle(i)
     r_referer = request.referer
-    r_referer.present? && i == 0 && URI(r_referer).path != '/subarticles' ? 'success' : ''
+    a = URI(r_referer).path
+    r_referer.present? && i == 0 && a["entry"] == "entry" ? 'success' : ''
   end
 end
