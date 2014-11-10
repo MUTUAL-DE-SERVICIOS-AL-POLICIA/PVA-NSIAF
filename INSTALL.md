@@ -31,6 +31,12 @@ Instalar [Git](http://git-scm.com/)
 sudo apt-get install git git-core
 ```
 
+Instalar [ImageMagick](http://www.imagemagick.org/)
+
+```console
+sudo apt-get install imagemagick
+```
+
 ### wkhtmltopdf
 
 [wkhtmltopdf](http://wkhtmltopdf.org/) permite la conversión de HTML a PDF. En los respositorios oficiales de Debian está la versión `0.9.9` el cual no cumple correctamente con su función, debido a que estamos utilizando funciones nuevas. Se recomienda la versión `0.12.0` o superiores, el cual se puede descargar manualmente desde http://wkhtmltopdf.org/downloads.html
