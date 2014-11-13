@@ -20,7 +20,7 @@ private
     array.map do |user|
       [
         user.name,
-        I18n.t(user.role, scope: 'users.roles'),
+        user.role.present? ? I18n.t(user.role, scope: 'users.roles') : '',
         type_status(user.status),
         (links_actions(user) unless user.role == 'super_admin')
       ]

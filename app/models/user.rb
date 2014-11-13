@@ -114,7 +114,8 @@ class User < ActiveRecord::Base
 
   def users
     if is_super_admin?
-      User.where.not(role: nil)
+      #User.where.not(role: nil)
+      User.where("id != ?", 1)
     elsif is_admin?
       User.joins(:department).where('role IS NULL OR role = ?', 'admin')
     else
