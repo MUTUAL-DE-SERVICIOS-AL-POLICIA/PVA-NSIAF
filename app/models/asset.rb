@@ -82,7 +82,7 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(self, 'barcode'), h.get_column(User, 'department')]
   end
 
   def verify_assignment
@@ -90,14 +90,18 @@ class Asset < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
-    array = joins(:user).order("#{sort_column} #{sort_direction}").where(status: status)
+    array = joins(user: :department).order("#{sort_column} #{sort_direction}").where(status: status)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
-        type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
-        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+        if search_column == 'department'
+          array = array.where("departments.name like ?", "%#{sSearch}%")
+        else
+          type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
+          array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+        end
       else
-        array = array.where("assets.code LIKE ? OR assets.description LIKE ? OR users.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+         array = array.where("assets.code LIKE ? OR assets.barcode LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR departments.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array
@@ -122,8 +126,10 @@ class Asset < ActiveRecord::Base
     update_attribute(:derecognised, Time.now)
   end
 
-  def get_decline
-    Decline.where(asset_code: code).first
+  def get_decline(column)
+    decline = Decline.where(asset_code: code).first
+    value = column == 'description' ? decline.description : decline.reason
+    value.present? ? value : ''
   end
 
   def get_state

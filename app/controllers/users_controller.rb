@@ -11,6 +11,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @assets = @user.assets
     respond_to do |format|
       format.html
       format.json { render json: @user, only: [:id, :name, :title] }
@@ -79,11 +80,12 @@ class UsersController < ApplicationController
   end
 
   def download
+    @assets = @user.assets
     filename = @user.name.parameterize || 'activos'
     respond_to do |format|
       format.html { render nothing: true }
       format.csv do
-        send_data @user.assets.to_csv,
+        send_data @assets.to_csv,
           filename: "#{filename}.csv",
           type: 'text/csv'
       end

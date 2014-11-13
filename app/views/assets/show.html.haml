@@ -31,9 +31,9 @@
     %dt Fecha de baja
     %dd= l(@asset.derecognised, format: :version)
     %dt= Decline.human_attribute_name('description')
-    %dd= @asset.get_decline.description
+    %dd= @asset.get_decline('description')
     %dt= Decline.human_attribute_name('motivo')
-    %dd= @asset.get_decline.reason
+    %dd= @asset.get_decline('reason')
 
 .row
   .col-sm-12.historical-reviews
