@@ -35,7 +35,7 @@ jQuery ->
 
   $(".datatable").dataTable
     sPaginationType: "bootstrap"
-    aaSorting: if window.location.pathname == '/versions' then [[0, 'desc']] else [[0, 'asc']]
+    aaSorting: if /\/versions$/.test(window.location.pathname) then [[0, 'desc']] else [[0, 'asc']]
     bProcessing: false
     bFilter: filter
     bServerSide: true
@@ -46,7 +46,7 @@ jQuery ->
       { sClass: 'nowrap', aTargets: [ 0 ] }
     ]
     oLanguage:
-      sUrl: './locales/dataTables.spanish.txt'
+      sUrl: $('#datatable-spanish').data('url')
     sDom: 'T<"clear">lfrtip',
     fnServerParams: (aoData) ->
       aoData.push

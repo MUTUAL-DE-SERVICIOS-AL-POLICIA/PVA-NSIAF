@@ -82,6 +82,7 @@ Nsiaf::Application.routes.draw do
     get :historical, on: :member
   end
 
+  get '/datatables-spanish', to: redirect('/locales/dataTables.spanish.txt'), as: :spanish_datatables
   get '/dashboard', to: 'dashboard#index', as: :dashboard
   patch '/dashboard/update_password', to: 'dashboard#update_password', as: :update_password_dashboard
   post '/dashboard/announcements/hide', to: 'dashboard#hide', as: :hide_announcement
