@@ -1,5 +1,5 @@
 = simple_form_for user, html: { class: 'form-horizontal', id: 'admin-new-user' } do |f|
-  = f.input :name, required: true, input_html: { class: 'typeahead' }
+  = f.input :name, required: true, input_html: { class: 'typeahead', 'data-url' => autocomplete_users_path(format: :json, q: '%QUERY') }
   = f.input :username, required: true
   = f.input :role, as: :select, collection: get_i18n_roles, include_blank: false, required: true
   - if %w(edit update).include?(params[:action])

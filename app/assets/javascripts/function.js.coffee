@@ -142,7 +142,7 @@ jQuery ->
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
     queryTokenizer: Bloodhound.tokenizers.whitespace
     limit: 100
-    remote: "/users/autocomplete.json?q=%QUERY"
+    remote: decodeURIComponent($("#admin-new-user .typeahead").data('url'))
   )
   bestPictures.initialize()
   $("#admin-new-user input.typeahead").typeahead null,
