@@ -169,7 +169,7 @@ jQuery ->
         $(this).val()
       ).get()
       $.ajax
-        url: "/versions/export"
+        url: $('#versions-export').data('url')
         type: "post"
         data: { ids: ids }
         complete: (data, xhr) ->
