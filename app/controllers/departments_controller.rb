@@ -102,6 +102,7 @@ class DepartmentsController < ApplicationController
 
     def department_assets
       users = @department.users
-      @assets = Asset.where(user_id: users)
+      assets = view_context.status_active(Asset)
+      @assets = assets.where(user_id: users)
     end
 end
