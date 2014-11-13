@@ -1,5 +1,7 @@
 = render 'header_assets'
 
+#assignation-urls{data: {'admin-assets' => admin_assets_assets_path, 'proceedings' => proceedings_path, 'users-id' => user_path('{id}', format: :json), 'assets-departments' => departments_assets_path(format: :json), 'assets-users' => users_assets_path(format: :json)}}
+
 #container-select-user.row{ data: {action: 'assignation'} }
   .col-md-offset-2.col-md-8.col-sm-12
     %h3.col-md-offset-2.col-md-9.text-center Selección de Usuario

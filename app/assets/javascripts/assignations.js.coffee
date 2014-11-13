@@ -10,10 +10,11 @@ class Assignations extends BarcodeReader
     @bindEvents()
 
   cacheElements: ->
+    @$assignation_urls = $('#assignation-urls')
     # URLs
-    @admin_assets_search_url = '/assets/admin_assets'
-    @proceedings_url = '/proceedings'
-    @user_url = '/users/{id}.json'
+    @admin_assets_search_url = @$assignation_urls.data('admin-assets')
+    @proceedings_url = @$assignation_urls.data('proceedings')
+    @user_url = decodeURIComponent(@$assignation_urls.data('users-id'))
     # Containers
     @$containerTplSelectedAssets = $('#container-tpl-selected-assets')
     @$containerTplSelectedUser = $('#container-tpl-selected-user')
@@ -48,8 +49,8 @@ class Assignations extends BarcodeReader
   bindEvents: ->
     @setFocusToCode()
     if @$building?
-      @$department.remoteChained(@$building.selector, '/assets/departments.json')
-      @$user.remoteChained(@$department.selector, '/assets/users.json')
+      @$department.remoteChained(@$building.selector, @$assignation_urls.data('assets-departments'))
+      @$user.remoteChained(@$department.selector, @$assignation_urls.data('assets-users'))
     $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e)
     $(document).on 'click', @$btnBack.selector, (e) => @backToSelectUser(e)
     $(document).on 'click', @$btnCancel.selector, (e) => @backToSelectAssets(e)
