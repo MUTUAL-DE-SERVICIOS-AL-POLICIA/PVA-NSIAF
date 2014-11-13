@@ -22,6 +22,7 @@ private
       as << asset.code
       as << asset.description
       as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
+      as << asset.barcode
       if asset.status == '0'
         as << (asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : '')
       end

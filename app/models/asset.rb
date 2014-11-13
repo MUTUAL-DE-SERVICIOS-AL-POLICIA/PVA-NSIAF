@@ -82,7 +82,7 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(User, 'department')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(self, 'barcode'), h.get_column(User, 'department')]
   end
 
   def verify_assignment
@@ -101,7 +101,7 @@ class Asset < ActiveRecord::Base
           array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
         end
       else
-         array = array.where("assets.code LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR departments.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+         array = array.where("assets.code LIKE ? OR assets.barcode LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR departments.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array
