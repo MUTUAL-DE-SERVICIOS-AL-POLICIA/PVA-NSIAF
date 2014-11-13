@@ -126,8 +126,10 @@ class Asset < ActiveRecord::Base
     update_attribute(:derecognised, Time.now)
   end
 
-  def get_decline
-    Decline.where(asset_code: code).first
+  def get_decline(column)
+    decline = Decline.where(asset_code: code).first
+    value = column == 'description' ? decline.description : decline.reason
+    value.present? ? value : ''
   end
 
   def get_state
