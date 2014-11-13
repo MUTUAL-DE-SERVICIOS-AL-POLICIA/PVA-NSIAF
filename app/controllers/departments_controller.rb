@@ -11,6 +11,7 @@ class DepartmentsController < ApplicationController
   # GET /departments/1
   # GET /departments/1.json
   def show
+    department_assets
   end
 
   # GET /departments/new
@@ -65,6 +66,29 @@ class DepartmentsController < ApplicationController
     end
   end
 
+  def download
+    department_assets
+    filename = @department.name.parameterize || 'activos'
+    respond_to do |format|
+      format.html { render nothing: true }
+      format.csv do
+        send_data @assets.to_csv,
+          filename: "#{filename}.csv",
+          type: 'text/csv'
+      end
+      format.pdf do
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               template: 'users/download.pdf.haml',
+               margin: { top: 15, bottom: 20, left: 15, right: 15 },
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_department
@@ -74,5 +98,10 @@ class DepartmentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def department_params
       params.require(:department).permit(:code, :name, :status, :building_id)
+    end
+
+    def department_assets
+      users = @department.users
+      @assets = Asset.where(user_id: users)
     end
 end

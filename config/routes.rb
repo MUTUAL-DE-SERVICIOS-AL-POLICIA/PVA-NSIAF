@@ -66,6 +66,7 @@ Nsiaf::Application.routes.draw do
 
   resources :departments, except: [:destroy] do
     post :change_status, on: :member
+    get :download, on: :member
   end
 
   resources :buildings, except: [:destroy] do
