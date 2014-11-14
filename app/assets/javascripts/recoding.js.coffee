@@ -10,10 +10,14 @@ class Recoding
 
   cacheElements: ->
     $form = $('form.recoding')
-    @is_assets = window.location.pathname.substr(1, 6) == 'assets'
-    @recode = if @is_assets then 'assets' else 'subarticles'
+    @$recoding_urls = $('#recoding-urls')
+    @is_assets = /\/assets\//.test(window.location.pathname)
     # urls
-    @update_asset_url = "/#{@recode}/{id}"
+    @update_recode_url = decodeURIComponent @$recoding_urls.data('recode-id')
+    @recode_autocomplete_url = decodeURIComponent @$recoding_urls.data('recode-autocomplete')
+    unless @is_assets
+      @update_recode_url = @update_recode_url.replace(/assets/, 'subarticles')
+      @recode_autocomplete_url = @recode_autocomplete_url.replace(/assets/, 'subarticles')
     # containers
     @$containerElementFound = $('#element-found')
     # inputs
@@ -33,7 +37,7 @@ class Recoding
     @assetList = new Bloodhound(
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace 'code'
       queryTokenizer: Bloodhound.tokenizers.whitespace
-      remote: "/#{@recode}/autocomplete.json?q=%QUERY"
+      remote: @recode_autocomplete_url
     )
     @assetList.initialize()
     @$codeName.typeahead
@@ -79,7 +83,7 @@ class Recoding
     @$codeName.select()
 
   saveNewBarcode: (e) ->
-    url = @update_asset_url.replace(/{id}/g, _asset_id)
+    url = @update_recode_url.replace(/{id}/g, _asset_id)
     if @is_assets
       data = {asset: {barcode: @getBarcode()}}
       barcode = data.asset.barcode
