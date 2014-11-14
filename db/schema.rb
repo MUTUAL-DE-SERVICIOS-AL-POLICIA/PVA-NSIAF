@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141030140546) do
+ActiveRecord::Schema.define(version: 20141114213130) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -139,7 +139,7 @@ ActiveRecord::Schema.define(version: 20141030140546) do
     t.decimal  "unit_cost",     precision: 10, scale: 2
     t.decimal  "total_cost",    precision: 10, scale: 2
     t.integer  "invoice"
-    t.date "date"
+    t.date     "date"
     t.integer  "subarticle_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -233,13 +233,14 @@ ActiveRecord::Schema.define(version: 20141030140546) do
   add_index "users", ["username"], name: "index_users_on_username", using: :btree
 
   create_table "versions", force: true do |t|
-    t.string   "item_type",                 null: false
+    t.string   "item_type",                   null: false
     t.integer  "item_id"
-    t.string   "event",                     null: false
+    t.string   "event",                       null: false
     t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
-    t.boolean  "active",     default: true
+    t.boolean  "active",       default: true
+    t.string   "item_spanish"
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree

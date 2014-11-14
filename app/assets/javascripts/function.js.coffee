@@ -4,7 +4,6 @@ total_cost = ->
   $("input#entry_subarticle_total_cost").val(amount * unit_cost)
 
 jQuery ->
-  filter = if $("h2:contains('Histórico')").length then false else true
   TableTools.BUTTONS.download =
     sAction: "text"
     sTag: "default"
@@ -37,7 +36,6 @@ jQuery ->
     sPaginationType: "bootstrap"
     aaSorting: if window.location.pathname == '/versions' then [[0, 'desc']] else [[0, 'asc']]
     bProcessing: false
-    bFilter: filter
     bServerSide: true
     bLengthChange: false
     iDisplayLength: 15
