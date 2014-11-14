@@ -1,5 +1,8 @@
-.page-header
+.page-header{data: {action: 'request'}}
   %h2= t("requests.title.new")
+
+#request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'subarticles-verify-amount' => verify_amount_subarticle_path('{id}')}}
+
 #selection_subarticles
   %p.bg-info En la caja de texto busque el Sub Artículo a desear, el cual sera añadido en la tabla una vez seleccionado
   .row{style: "margin-bottom: 15px"}
