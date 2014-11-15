@@ -85,6 +85,14 @@ class Asset < ActiveRecord::Base
     [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(self, 'barcode'), h.get_column(User, 'department')]
   end
 
+  def self.without_barcode
+    where("barcode IS NULL OR barcode = ''")
+  end
+
+  def self.without_user
+    where(user_id: nil)
+  end
+
   def verify_assignment
     false
   end
