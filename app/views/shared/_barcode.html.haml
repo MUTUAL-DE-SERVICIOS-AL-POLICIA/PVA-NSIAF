@@ -1,0 +1,17 @@
+.col-sm-6
+  %table.table.table-condensed.table-striped.table-bordered
+    %tbody
+      %tr
+        %td Código de Barras
+        %td.number
+          %span= number_with_delimiter Barcode.count
+      %tr
+        %td Código de Barras sin usar
+        %td.number= number_with_delimiter Barcode.barcode_unused.count
+      %tr
+        %td Código de Barras en uso
+        %td.number= number_with_delimiter Barcode.barcode_used.count
+      %tr
+        %td Código de Barras eliminados
+        %td.number
+          %span= number_with_delimiter Barcode.barcode_removed.count

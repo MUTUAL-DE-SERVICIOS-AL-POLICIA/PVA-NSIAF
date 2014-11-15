@@ -41,6 +41,10 @@ class Asset < ActiveRecord::Base
 
   has_paper_trail
 
+  def self.derecognised
+    where(status: 0)
+  end
+
   def self.historical_assets(user)
     includes(:user).joins(:asset_proceedings).where(asset_proceedings: {proceeding_id: user.proceeding_ids})
   end

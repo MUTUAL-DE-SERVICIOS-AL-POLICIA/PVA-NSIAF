@@ -16,4 +16,9 @@
         %p #{stock.amount} / #{stock.minimum}
         = link_to 'Ver »', subarticle_path(stock), class: 'btn btn-default btn-xs'
 
-  = render 'shared/activos'
+  - if current_user.is_admin?
+    .row
+      = render 'shared/admin'
+      = render 'shared/assets'
+      = render 'shared/barcode'
+      = render 'shared/derecognised'
