@@ -37,7 +37,7 @@ private
   end
 
   def fetch_array
-    status = @view.url_for == '/assets' ? '1' : '0'
+    status = @view.url_for == "#{Rails.application.config.action_controller.relative_url_root}/assets" ? '1' : '0'
     Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], status)
   end
 
@@ -59,7 +59,7 @@ private
   end
 
   def unsubscribe(asset)
-    if @view.url_for == '/assets' && asset.user.present? && asset.user.id == current_user.id
+    if @view.url_for == "#{Rails.application.config.action_controller.relative_url_root}/assets" && asset.user.present? && asset.user.id == current_user.id
       url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(asset), title: 'Dar baja')
     end
     url || ''
