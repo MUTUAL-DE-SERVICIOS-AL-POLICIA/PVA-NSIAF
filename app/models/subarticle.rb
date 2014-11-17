@@ -1,5 +1,5 @@
 class Subarticle < ActiveRecord::Base
-  include Migrated, ManageStatus
+  include Migrated, ManageStatus, VersionLog
 
   belongs_to :article
   has_many :subarticle_requests
