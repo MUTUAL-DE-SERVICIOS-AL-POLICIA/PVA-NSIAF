@@ -8,7 +8,7 @@ module VersionLog
         item_id: nil,
         item_spanish: I18n.t(self.name.to_s.downcase.singularize, scope: 'activerecord.models'),
         whodunnit: PaperTrail.whodunnit,
-        event: event
+        event: I18n.t(event, scope: 'versions')
       }
       PaperTrail::Version.create! self.new.set_merge_metadata(data)
     end
@@ -20,7 +20,7 @@ module VersionLog
       item_id: self.id,
       item_spanish: I18n.t(self.class.name.to_s.downcase.singularize, scope: 'activerecord.models'),
       whodunnit: PaperTrail.whodunnit,
-      event: event
+      event: I18n.t(event, scope: 'versions')
     }
     PaperTrail::Version.create! merge_metadata(data)
   end
