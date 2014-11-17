@@ -13,7 +13,7 @@
         DE ACTIVOS FIJOS
       %p.proceeding-description.text-justify
         {{^devolution}}
-        La Unidad Administrativa Financiera de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia – ADSIB hace entrega de Activos Fijos al Señor. {{userName}} – ({{userTitle}}), hasta el cumplimiento de su contrato, conforme al siguiente detalle:
+        La Unidad Administrativa Financiera de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia – ADSIB hace entrega de Activos Fijos al funcionario(a) {{userName}} – {{userTitle}} de ADSIB, conforme al siguiente detalle:
         {{/devolution}}
         {{#devolution}}
         Por conclusión al Contrato Administrativo, el Señor {{userName}} – ({{userTitle}}) de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia - ADSIB hace la devolución de los Activos Fijos a ADSIB, conforme al siguiente detalle:
@@ -32,37 +32,34 @@
       .acta
         %p.proceeding-date.text-justify
           {{^devolution}}
-          %p
-            %b NOTA: LOS EQUIPOS Y MUEBLES DETALLADOS ANTERIORMENTE SON DE RESPONSABILIDAD DEL FUNCIONARIO, EL CUAL ESTA PROHIBIDO DE:
-          %p A) USAR LOS BIENES PARA BENEFICIO PARTICULAR O PRIVADO
-          %p B) PERMITIR EL USO PARA BENEFICIO PARTICULAR O PRIVADO
-          %p C) PRESTAR O TRANSFERIR EL BIEN A OTRO FUNCIONARIO O SERVIDOR PUBLICO
-          %p D) ENAJENAR EL BIEN POR CUENTA PROPIA
-          %p E) DAÑAR O ALTERAR SUS CARACTERISTICAS FISICAS O TECNICAS
-          %p F) PONER EN RIESGO EL BIEN
-          %p G) INGRESAR BIENES PARTICULAES SIN AUTORIZACION DE LA UNIDAD O RESPONSABLE DE 	ACTIVOS FIJOS (D.S. 181 ART. 157, NB SABS)
-          %p H) SACAR BIENES DE LA INSTITUCION SIN AUTORIZACION DE LA UNIDAD RESPONSABLE DE 	ACTIVOS FIJOS (D.S. 181 ART. 157, NB SABS)
-          %p LA NO OBSERVACION A ESTAS PROHIBICIONES GENERARA RESPONSABILIDADES ESTABLECIDAS EN LA LEY N°1178 Y SUS REGLAMENTOS
+          %strong NOTA: LOS EQUIPOS Y MUEBLES DETALLADOS ANTERIORMENTE SON DE RESPONSABILIDAD DEL FUNCIONARIO, EL CUAL ESTA PROHIBIDO DE:
+          .prohibiciones
+            %p A).- USAR LOS BIENES PARA BENEFICIO PARTICULAR O PRIVADO
+            %p B).- PERMITIR EL USO PARA BENEFICIO PARTICULAR O PRIVADO
+            %p C).- PRESTAR O TRANSFERIR EL BIEN A OTRO FUNCIONARIO O SERVIDOR PUBLICO
+            %p D).- ENAJENAR EL BIEN POR CUENTA PROPIA
+            %p E).- DAÑAR O ALTERAR SUS CARACTERISTICAS FISICAS O TECNICAS
+            %p F).- PONER EN RIESGO EL BIEN
+            %p G).- INGRESAR BIENES PARTICULAES SIN AUTORIZACION DE LA UNIDAD O RESPONSABLE DE 	ACTIVOS FIJOS
+            %p H).- SACAR BIENES DE LA INSTITUCION SIN AUTORIZACION DE LA UNIDAD O RESPONSABLE DE ACTIVOS FIJOS (D.S. 181 ART. 157, NB SABS)
+            %p LA NO OBSERVACION A ESTAS PROHIBICIONES GENERARA RESPONSABILIDADES ESTABLECIDAS EN LA LEY N°1178 Y SUS REGLAMENTOS
           {{/devolution}}
           {{#devolution}}
-          %b
-            NOTA: EN CUMPLIMIENTO AL ART. 148 (LIBERACION DE AL RESPONSABILIDAD) DEL D.S. 181, SE PROCEDIO A LA VERIFICACION FISICA DE LOS ACTIVOS FIJOS.:
+          %strong
+            NOTA: EN CUMPLIMIENTO AL ART. 148 (LIBERACION DE LA RESPONSABILIDAD) DEL D.S. 181, SE PROCEDIO A LA VERIFICACION FISICA DE LOS ACTIVOS FIJOS.:
           {{/devolution}}
 
-      %p.proceeding-date.text-right
+      %p.proceeding-date.text-center
         La Paz, {{proceedingDate}}
 
       .proceeding-signature{ style: "#{'margin-bottom: 50px;' unless is_pdf?}" }
         %table{ style: 'width: 100%' }
           %tr
             %td.text-center
-              %p _______________________
               %p ENTREGUÉ CONFORME
             %td.text-center
-              %p _______________________
-              %p Vo. Bo.
+              %p VoBo
             %td.text-center
-              %p _______________________
               %p RECIBÍ CONFORME
 
   - if display_buttons
