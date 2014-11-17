@@ -16,7 +16,7 @@
         La Unidad Administrativa Financiera de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia – ADSIB hace entrega de Activos Fijos al funcionario(a) {{userName}} – {{userTitle}} de ADSIB, conforme al siguiente detalle:
         {{/devolution}}
         {{#devolution}}
-        Por conclusión al Contrato Administrativo, el Señor {{userName}} – ({{userTitle}}) de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia - ADSIB hace la devolución de los Activos Fijos a ADSIB, conforme al siguiente detalle:
+        El funcionario(a) {{userName}} – {{userTitle}} de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia - ADSIB hace la devolución de los Activos Fijos a ADSIB, conforme al siguiente detalle:
         {{/devolution}}
       %table.table.table-striped.table-condensed.proceeding-assets
         %thead
@@ -46,7 +46,7 @@
           {{/devolution}}
           {{#devolution}}
           %strong
-            NOTA: EN CUMPLIMIENTO AL ART. 148 (LIBERACION DE LA RESPONSABILIDAD) DEL D.S. 181, SE PROCEDIO A LA VERIFICACION FISICA DE LOS ACTIVOS FIJOS.:
+            NOTA: EN CUMPLIMIENTO A LAS NORMAS BÁSICAS DE ADMINISTRACION DE BIENES Y SERVICIOS EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIO CON EL ACTO DE DEVOLUCION DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
           {{/devolution}}
 
       %p.proceeding-date.text-center
@@ -55,12 +55,22 @@
       .proceeding-signature{ style: "#{'margin-bottom: 50px;' unless is_pdf?}" }
         %table{ style: 'width: 100%' }
           %tr
+            {{^devolution}}
             %td.text-center
               %p ENTREGUÉ CONFORME
             %td.text-center
               %p VoBo
             %td.text-center
               %p RECIBÍ CONFORME
+            {{/devolution}}
+            {{#devolution}}
+            %td.text-center
+              %p RECIBÍ CONFORME
+            %td.text-center
+              %p VoBo
+            %td.text-center
+              %p ENTREGUÉ CONFORME
+            {{/devolution}}
 
   - if display_buttons
     %p.proceeding-pdf.text-center
