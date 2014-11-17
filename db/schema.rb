@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141030140546) do
+ActiveRecord::Schema.define(version: 20141117213257) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20141030140546) do
     t.datetime "derecognised"
     t.string   "barcode"
     t.integer  "state"
+    t.text     "observation"
   end
 
   add_index "assets", ["account_id"], name: "index_assets_on_account_id", using: :btree
@@ -139,7 +140,7 @@ ActiveRecord::Schema.define(version: 20141030140546) do
     t.decimal  "unit_cost",     precision: 10, scale: 2
     t.decimal  "total_cost",    precision: 10, scale: 2
     t.integer  "invoice"
-    t.date "date"
+    t.date     "date"
     t.integer  "subarticle_id"
     t.datetime "created_at"
     t.datetime "updated_at"
