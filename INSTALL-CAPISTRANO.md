@@ -13,9 +13,9 @@ También se utiliza la gema `passenger` (Phusion Passenger) que es un servidor w
 Para el ejemplo de ésta instalación se cuenta con los siguientes datos:
 
 * Sistema Operativo: Debian Wheezy
-* Usuario: usuario1
-* Servidor: 166.114.1.10
-* Puerto SSH: 232
+* Usuario: uactivos
+* Servidor: www.dominio.com
+* Puerto SSH: 23
 * Usuario base de datos: root
 * Contraseña base de datos: root
 
@@ -39,6 +39,31 @@ Instalar [Git](http://git-scm.com/)
 sudo apt-get install git git-core
 ```
 
+Instalar [ImageMagick](http://www.imagemagick.org/)
+
+```console
+sudo apt-get install imagemagick
+```
+
+### wkhtmltopdf
+
+[wkhtmltopdf](http://wkhtmltopdf.org/) permite la conversión de HTML a PDF. En los respositorios oficiales de Debian está la versión `0.9.9` el cual no cumple correctamente con su función, debido a que estamos utilizando funciones nuevas. Se recomienda la versión `0.12.0` o superiores, el cual se puede descargar manualmente desde http://wkhtmltopdf.org/downloads.html
+
+Para el caso de Debian Wheezy descargué la versión de 64-bit:
+
+```
+wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.1/wkhtmltox-0.12.1_linux-wheezy-amd64.deb
+sudo dpkg -i wkhtmltox-0.12.1_linux-wheezy-amd64.deb
+```
+
+La instalación se hará en `/usr/local/bin/wkhtmltopdf`
+
+### Conversión de formatos
+
+Éste sistema depende del API de Conversión de Formatos para la importación de archivos `DBF`, cuyo repositorio es https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos
+
+La instalación del API de Conversión de Formatos está descrita en el archivo [INSTALL.md](https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos/blob/master/INSTALL.md)
+
 ## Ruby
 
 Instalando [Ruby Version Manager - RVM](https://rvm.io/)
@@ -50,7 +75,7 @@ curl -L get.rvm.io | bash -s stable
 Recargar el comando `rvm`
 
 ```console
-source /home/usuario1/.rvm/scripts/rvm
+source /home/uactivos/.rvm/scripts/rvm
 ```
 
 Instalando [Ruby](https://www.ruby-lang.org/)
@@ -136,82 +161,19 @@ mysql -u root -p
 mysql> CREATE DATABASE IF NOT EXISTS `nsiaf_production` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_unicode_ci`;
 ```
 
-## Desarrollo
-
-En la máquina local clonamos el repositorio del Sistema de Activos Fijos y Almacenes
-
-```console
-git clone git@gitlab.geo.gob.bo:adsib/nsiaf.git
-```
-
-Cambiar al branch `develop` que es el de desarrollo
-
-```console
-cd nsiaf
-git checkout develop
-```
-
-Renombramos los archivos de ejemplo
-
-```console
-cp config/database.yml.sample config/database.yml
-cp config/secrets.yml.sample config/secrets.yml
-```
-
-Editar `database.yml` con el siguiente contenido
-
-```yaml
-development:
-  adapter: mysql2
-  encoding: utf8
-  database: nsiaf_development
-  pool: 5
-  username: root
-  password: root
-  socket: /var/run/mysqld/mysqld.sock
-```
-
-Editar `secrets.yml` con el siguiente contenido
-
-```yaml
-development:
-  secret_key_base: d7c345615c14afe85dd35d9169e9743c4f24de413990b3133b93865f1f5f490db6a3c1327e9a5af3fc845937a7f489bbda865a25caa424144580d2d106cb121c
-```
-
-Instalar las gemas
-
-```console
-bundle install
-```
-
-Crear la base de datos e inicializar con la configuración por defecto
-
-```console
-bundle exec rake db:create
-bundle exec rake db:seed
-```
-
-Iniciar el servidor en modo desarrollo
-
-```console
-rails server
-```
-
-y visitar en el navegador el link `http://localhost:3000`
-
 ## Sistema de Activos Fijos y Almacenes
 
 Iniciamos sesión en el servidor remoto
 
 ```console
-ssh usuario1@166.114.1.10 -p 232
+ssh uactivos@dominio.com -p 23
 ```
 
 Creación de la carpeta donde se hará el deploy (`/var/www/nsiaf`)
 
 ```console
 sudo mkdir -p /var/www/nsiaf/shared/config
-sudo chown -R usuario1:usuario1 /var/www/nsiaf
+sudo chown -R uactivos:uactivos /var/www/nsiaf
 ```
 
 Creamos el archivo `database.yml` con la configuración de la Base de Datos
@@ -302,10 +264,10 @@ sudo nano /etc/apache2/apache2.conf
 Agregamos al final las siguientes líneas:
 
 ```apache
-LoadModule passenger_module /home/usuario1/.rvm/gems/ruby-2.0.0-p353/gems/passenger-4.0.37/buildout/apache2/mod_passenger.so
+LoadModule passenger_module /home/uactivos/.rvm/gems/ruby-2.0.0-p353/gems/passenger-4.0.37/buildout/apache2/mod_passenger.so
 <IfModule mod_passenger.c>
-  PassengerRoot /home/usuario1/.rvm/gems/ruby-2.0.0-p353/gems/passenger-4.0.37
-  PassengerDefaultRuby /home/usuario1/.rvm/gems/ruby-2.0.0-p353/wrappers/ruby
+  PassengerRoot /home/uactivos/.rvm/gems/ruby-2.0.0-p353/gems/passenger-4.0.37
+  PassengerDefaultRuby /home/uactivos/.rvm/gems/ruby-2.0.0-p353/wrappers/ruby
 </IfModule>
 ```
 
@@ -331,7 +293,7 @@ Adicionar el siguiente contenido
 
 ```apache
 <VirtualHost *:80>
-  ServerName 166.114.1.10
+  ServerName www.dominio.com
   DocumentRoot /var/www/nsiaf/current/public
   RailsEnv production
   <Directory /var/www/nsiaf/current/public>
@@ -348,15 +310,3 @@ sudo a2dissite default
 sudo a2ensite activos.adsib.gob.bo
 sudo /etc/init.d/apache2 restart
 ```
-
-## Migración de archivos
-
-Para la migración se debe adjuntar los archivos con extensión DBF, una vez realizado dicha migración se presentara un mensaje de la cantidad de registros insertados y no insertados.
-A continuación se detalla los nombres para cada migración:
-
-* Edificios: unidadadmin.DBF
-* Departamentos: OFICINA.DBF
-* Usuarios: RESP.DBF
-* Cuentas: CODCONT.DBF
-* Auxiliares: auxiliar.DBF
-* Activos: ACTUAL.DBF
