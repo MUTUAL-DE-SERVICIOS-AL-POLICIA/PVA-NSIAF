@@ -5,9 +5,8 @@
 Esta instalación se la realizó sobre lo siguiente:
 
 * Sistema Operativo: Debian Wheezy
-* Usuario: usuario1
-* Servidor: 166.114.1.10
-* Puerto SSH: 232
+* Usuario: uactivos
+* Servidor: www.dominio.com
 * Usuario base de datos: root
 * Contraseña base de datos: root
 
@@ -67,7 +66,7 @@ curl -L get.rvm.io | bash -s stable
 Recargar el comando `rvm`
 
 ```console
-source /home/usuario1/.rvm/scripts/rvm
+source /home/uactivos/.rvm/scripts/rvm
 ```
 
 Instalando [Ruby](https://www.ruby-lang.org/)
@@ -221,10 +220,10 @@ sudo nano /etc/apache2/apache2.conf
 Agregamos al final las siguientes líneas:
 
 ```apache
-LoadModule passenger_module /home/usuario1/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.50/buildout/apache2/mod_passenger.so
+LoadModule passenger_module /home/uactivos/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.50/buildout/apache2/mod_passenger.so
 <IfModule mod_passenger.c>
-  PassengerRoot /home/usuario1/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.50
-  PassengerDefaultRuby /home/usuario1/.rvm/gems/ruby-2.1.2/wrappers/ruby
+  PassengerRoot /home/uactivos/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.50
+  PassengerDefaultRuby /home/uactivos/.rvm/gems/ruby-2.1.2/wrappers/ruby
 </IfModule>
 ```
 
@@ -257,7 +256,7 @@ Adicionar el siguiente contenido si se va instalar la aplicación en la raiz del
 
 ```apache
 <VirtualHost *:80>
-  ServerName 166.114.1.10
+  ServerName www.dominio.com
   DocumentRoot /var/www/nsiaf/public
   RailsEnv production
   <Directory /var/www/nsiaf/public>
@@ -280,7 +279,7 @@ RailsBaseURI /activos
 <Directory /var/www/nsiaf/public>
     RailsEnv production
     PassengerAppRoot /var/www/nsiaf/
-    PassengerUser usuario1
+    PassengerUser uactivos
 
     Options FollowSymLinks -MultiViews
     AllowOverride All
@@ -298,23 +297,38 @@ sudo /etc/init.d/apache2 restart
 
 Visitamos el sitio http://activos.dominio.com o http://dominio.com/activos depende de la configuración que se haya elegido para el deploy.
 
-## Migración de archivos
+## Actualización
 
-Al iniciar sesión en el Sistema, es requisito que se registre una Entidad con los siguientes datos:
+Para actualizar a una versión reciente del sistema realizar los siguientes pasos:
 
-* `Código` de la Entidad, debe ser la que está registrada en el sistema VSIAF, porque es la que se utilizar para importar los archivos .DBF (obligatorio)
-* `Nombre` que describa a la institución
-* `Sigla` de la institución, se utiliza para generar los Códigos de Barras en el Sistema (obligatorio)
+Actualización del repositorio:
 
-Para la migración se debe adjuntar los archivos con extensión DBF, una vez realizado dicha migración se presentara un mensaje de la cantidad de registros insertados y no insertados.
+```console
+cd /var/www/nsiaf
+git pull origin master
+```
+Actualización de gemas:
 
-A continuación se detalla los nombres para cada migración:
+```console
+bundle install --without development test
+```
 
-1. Edificios: unidadadmin.DBF
-2. Departamentos: OFICINA.DBF
-3. Usuarios: RESP.DBF
-4. Cuentas: CODCONT.DBF
-5. Auxiliares: auxiliar.DBF
-6. Activos: ACTUAL.DBF
+Ejecución de migraciones:
 
-Se debe respetar el orden descrito en la lista para que la migración sea correcta.
+```console
+RAILS_ENV=production bundle exec rake db:migrate
+RAILS_ENV=production bundle exec rake db:seed
+```
+
+Compilación de archivos CSS y JS:
+
+```console
+RAILS_ENV=production bundle exec rake assets:clobber
+RAILS_ENV=production bundle exec rake assets:precompile
+```
+
+Reinicio del servidor mediante `passenger`:
+
+```console
+touch tmp/restart.txt
+```

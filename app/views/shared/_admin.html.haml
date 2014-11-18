@@ -1,0 +1,14 @@
+.col-sm-6
+  %table.table.table-condensed.table-striped.table-bordered
+    %tbody
+      %tr
+        %td Edificios
+        %td.number= number_with_delimiter Building.count
+      %tr
+        %td Departamentos
+        %td.number
+          %span= number_with_delimiter Department.count
+      %tr
+        %td Usuarios
+        %td.number
+          %span= number_with_delimiter User.count

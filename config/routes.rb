@@ -83,13 +83,14 @@ Nsiaf::Application.routes.draw do
     get :historical, on: :member
   end
 
+  get '/datatables-spanish', to: redirect("#{ Rails.application.config.action_controller.relative_url_root }/locales/dataTables.spanish.txt"), as: :spanish_datatables
   get '/dashboard', to: 'dashboard#index', as: :dashboard
   patch '/dashboard/update_password', to: 'dashboard#update_password', as: :update_password_dashboard
   post '/dashboard/announcements/hide', to: 'dashboard#hide', as: :hide_announcement
 
   post '/dbf/:model/import', to: 'dbf#import', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'import_dbf'
   get '/dbf/:model', to: 'dbf#index', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'dbf'
-  get '/dbf', to: redirect('/dbf/buildings'), as: 'migration'
+  get '/dbf', to: redirect("#{ Rails.application.config.action_controller.relative_url_root }/dbf/buildings"), as: 'migration'
 
   devise_for :users, controllers: { sessions: "sessions" }, skip: [ :sessions ]
   as :user do

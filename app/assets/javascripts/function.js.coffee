@@ -34,7 +34,7 @@ jQuery ->
 
   $(".datatable").dataTable
     sPaginationType: "bootstrap"
-    aaSorting: if window.location.pathname == '/versions' then [[0, 'desc']] else [[0, 'asc']]
+    aaSorting: if /\/versions$/.test(window.location.pathname) then [[0, 'desc']] else [[0, 'asc']]
     bProcessing: false
     bServerSide: true
     bLengthChange: false
@@ -44,7 +44,7 @@ jQuery ->
       { sClass: 'nowrap', aTargets: [ 0 ] }
     ]
     oLanguage:
-      sUrl: './locales/dataTables.spanish.txt'
+      sUrl: $('#datatable-spanish').data('url')
     sDom: 'T<"clear">lfrtip',
     fnServerParams: (aoData) ->
       aoData.push
@@ -132,7 +132,7 @@ jQuery ->
       $form = $('#admin-new-user')
       if $form.find('input:hidden[value="patch"]').length > 0
         $form.find('input:hidden:first').next().remove()
-        $form.attr('action', "/users")
+        $form.attr('action', $form.data('url-users'))
         $form.find('#user_username').val('')
         $form.find('#user_role').val('super_admin')
 
@@ -140,7 +140,7 @@ jQuery ->
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
     queryTokenizer: Bloodhound.tokenizers.whitespace
     limit: 100
-    remote: "/users/autocomplete.json?q=%QUERY"
+    remote: decodeURIComponent($("#admin-new-user .typeahead").data('url'))
   )
   bestPictures.initialize()
   $("#admin-new-user input.typeahead").typeahead null,
@@ -148,9 +148,10 @@ jQuery ->
     source: bestPictures.ttAdapter()
   .on 'typeahead:selected', (evt, data) ->
     $form = $('#admin-new-user')
+    url = decodeURIComponent($form.data('url-user'))
     if $form.find('input:hidden[value="patch"]').length == 0
       $('<input type="hidden" value="patch" name="_method" autocomplete="off">').insertAfter( $form.find('input:hidden:first') )
-      $form.attr('action', "/users/#{data.id}")
+      $form.attr('action', url.replace(/{id}/, data.id))
       $form.find('#user_username').val(data.username)
       $form.find('#user_role').val(data.role)
 
@@ -166,7 +167,7 @@ jQuery ->
         $(this).val()
       ).get()
       $.ajax
-        url: "/versions/export"
+        url: $('#versions-export').data('url')
         type: "post"
         data: { ids: ids }
         complete: (data, xhr) ->

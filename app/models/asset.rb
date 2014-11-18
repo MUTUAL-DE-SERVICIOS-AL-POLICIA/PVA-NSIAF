@@ -4,7 +4,8 @@ class Asset < ActiveRecord::Base
   CORRELATIONS = {
     'CODIGO' => 'code',
     'DESCRIP' => 'description',
-    'CODESTADO' => 'state'
+    'CODESTADO' => 'state',
+    'OBSERV' => 'observation'
   }
 
   STATE = {
@@ -40,6 +41,10 @@ class Asset < ActiveRecord::Base
   before_save :check_barcode
 
   has_paper_trail
+
+  def self.derecognised
+    where(status: 0)
+  end
 
   def self.historical_assets(user)
     includes(:user).joins(:asset_proceedings).where(asset_proceedings: {proceeding_id: user.proceeding_ids})
@@ -85,12 +90,20 @@ class Asset < ActiveRecord::Base
     [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(self, 'barcode'), h.get_column(User, 'department')]
   end
 
+  def self.without_barcode
+    where("barcode IS NULL OR barcode = ''")
+  end
+
+  def self.without_user
+    where(user_id: nil)
+  end
+
   def verify_assignment
     false
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
-    array = joins(user: :department).order("#{sort_column} #{sort_direction}").where(status: status)
+    array = includes(user: :department).order("#{sort_column} #{sort_direction}").where(status: status).references(user: :department)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?

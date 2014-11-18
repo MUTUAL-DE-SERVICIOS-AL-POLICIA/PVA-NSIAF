@@ -11,9 +11,10 @@ class Devolutions extends BarcodeReader
 
   cacheElements: ->
     $form = $('form')
+    @$devolution_urls = $('#devolution-urls')
     # URLs
-    @assets_search_url = '/assets/search'
-    @proceedings_url = '/proceedings'
+    @assets_search_url = @$devolution_urls.data('assets-search')
+    @proceedings_url = @$devolution_urls.data('proceedings')
     # Containers
     @$containerBarcode = $('div[data-action=devolution]')
     @$containerTplProceedingDelivery = $('#proceeding-delivery')

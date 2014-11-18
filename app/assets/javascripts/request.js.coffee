@@ -1,8 +1,9 @@
-jQuery ->
-  app = new Request()
+$ -> new Request() if $('[data-action=request]').length > 0
 
 class Request extends BarcodeReader
   cacheElements: ->
+    @$request_urls = $('#request-urls')
+
     @$request = $('#request')
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
@@ -35,9 +36,10 @@ class Request extends BarcodeReader
     @$templateNewRequest = Hogan.compile $('#new_request').html() || ''
     @$templateBtnsNewRequest = Hogan.compile $('#cancel_new_request').html() || ''
 
-    @request_save_url = '/requests/'
-    @articles_json_url = '/subarticles/articles.json'
-    @subarticles_json_url = '/subarticles/get_subarticles.json?q=%QUERY'
+    @request_save_url = decodeURIComponent @$request_urls.data('request-id')
+    @articles_json_url = @$request_urls.data('subarticles-articles')
+    @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
+    @verify_amount_subarticle_url = decodeURIComponent @$request_urls.data('subarticles-verify-amount')
 
     @alert = new Notices({ele: 'div.main'})
 
@@ -90,7 +92,7 @@ class Request extends BarcodeReader
     data = { status: 'pending', subarticle_requests_attributes: materials }
     $.ajax
       type: "PUT"
-      url: @request_save_url + @$idRequest
+      url: @request_save_url.replace(/{id}/, @$idRequest)
       data: { request: data }
       complete: (data, xhr) ->
         window.location = window.location
@@ -111,7 +113,8 @@ class Request extends BarcodeReader
     @$code = $('#code')
     if @$code.val()
       @changeToHyphens()
-      $.getJSON "/requests/#{@$idRequest}", { barcode: @$code.val().trim(), user_id: @$functionary }, (data) => @request_delivered(data)
+      url = @request_save_url.replace(/{id}/, @$idRequest)
+      $.getJSON url, { barcode: @$code.val().trim(), user_id: @$functionary }, (data) => @request_delivered(data)
     else
       @open_modal('Debe ingresar un Código de Barras')
 
@@ -163,7 +166,8 @@ class Request extends BarcodeReader
 
   subarticle_request_plus: ($this) ->
     amount = @get_amount($this)
-    $.getJSON "/subarticles/#{ amount.parent().attr('id') }/verify_amount", { amount: parseInt(amount.text()) + 1 }, (data) => @verify_amount(data)
+    url = @verify_amount_subarticle_url.replace(/{id}/, amount.parent().attr('id'))
+    $.getJSON url, { amount: parseInt(amount.text()) + 1 }, (data) => @verify_amount(data)
 
   verify_amount: (data, amount) ->
     if data.there_amount
@@ -207,4 +211,4 @@ class Request extends BarcodeReader
       amount: $(val).find('td.amount').text()
     )
     json_data = { status: 'initiation', user_id: $("select#people option:selected").val(), subarticle_requests_attributes: subarticles }
-    $.post @request_save_url, { request: json_data }, null, 'script'
+    $.post @request_save_url.replace(/{id}/, ''), { request: json_data }, null, 'script'

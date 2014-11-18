@@ -1,5 +1,8 @@
 .page-header{data: {action: 'recoding'}}
   %h2 Asignación de Código de Barras
+
+#recoding-urls{data: {'recode-id' => asset_path('{id}'), 'recode-autocomplete' => autocomplete_assets_path(format: :json, q: '%QUERY')}}
+
 .row
   .col-sm-offset-2.col-sm-8
     %form.recoding{role: 'form'}

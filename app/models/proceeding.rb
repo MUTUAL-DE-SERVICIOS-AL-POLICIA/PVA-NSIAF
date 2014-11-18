@@ -16,6 +16,14 @@ class Proceeding < ActiveRecord::Base
 
   has_paper_trail on: [:destroy]
 
+  def self.assignation
+    where(proceeding_type: 'E')
+  end
+
+  def self.devolution
+    where(proceeding_type: 'D')
+  end
+
   def self.set_columns
    h = ApplicationController.helpers
    c_names = column_names - %w(id created_at updated_at proceeding_type)

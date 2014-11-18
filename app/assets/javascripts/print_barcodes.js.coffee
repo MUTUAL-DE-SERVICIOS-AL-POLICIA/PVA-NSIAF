@@ -10,9 +10,10 @@ class PrintBarcodes
     @loadDataAndDisplay()
 
   cacheElements: ->
+    @$barcodes_urls = $('#barcodes-urls')
     # urls
-    @load_data_path = '/barcodes/load_data'
-    @pdf_barcodes_path = '/barcodes/pdf.pdf'
+    @load_data_path = @$barcodes_urls.data('barcodes-load-data')
+    @pdf_barcodes_path = @$barcodes_urls.data('barcodes-pdf')
     # containers
     @$containerPreviewBarcodes = $('#preview-barcodes')
     # buttons

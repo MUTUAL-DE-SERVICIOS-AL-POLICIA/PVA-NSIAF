@@ -17,6 +17,18 @@ class Barcode < ActiveRecord::Base
     end
   end
 
+  def self.barcode_unused
+    where(status: BarcodeStatus::INITIAL)
+  end
+
+  def self.barcode_used
+    where(status: BarcodeStatus::USED)
+  end
+
+  def self.barcode_removed
+    where(status: BarcodeStatus::DELETED)
+  end
+
   def change_to_deleted
     self.status = BarcodeStatus::DELETED
     self.save!

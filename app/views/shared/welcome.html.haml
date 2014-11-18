@@ -3,7 +3,7 @@
     %p.lead
       Bienvenidos al sistema de Activos Fijos de ADSIB
       %br
-      donde podra gestionar los activos de su entidad.
+      donde podrá gestionar los activos de su entidad.
 
   - if minimum_stock.present? && current_user.is_admin_store?
     .page-header
@@ -15,3 +15,10 @@
           %b #{stock.code} - #{stock.description}
         %p #{stock.amount} / #{stock.minimum}
         = link_to 'Ver »', subarticle_path(stock), class: 'btn btn-default btn-xs'
+
+  - if current_user.is_admin?
+    .row
+      = render 'shared/admin'
+      = render 'shared/assets'
+      = render 'shared/barcode'
+      = render 'shared/derecognised'
