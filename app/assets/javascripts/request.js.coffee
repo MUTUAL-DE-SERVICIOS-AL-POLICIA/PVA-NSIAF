@@ -4,6 +4,7 @@ class Request extends BarcodeReader
   cacheElements: ->
     @$request_urls = $('#request-urls')
 
+    @$user = $('#people')
     @$request = $('#request')
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
@@ -35,11 +36,13 @@ class Request extends BarcodeReader
     @$templateRequestBarcode = Hogan.compile $('#request_barcode').html() || ''
     @$templateNewRequest = Hogan.compile $('#new_request').html() || ''
     @$templateBtnsNewRequest = Hogan.compile $('#cancel_new_request').html() || ''
+    @$templateUserInfo = Hogan.compile $('#show_user_info').html() || ''
 
     @request_save_url = decodeURIComponent @$request_urls.data('request-id')
     @articles_json_url = @$request_urls.data('subarticles-articles')
     @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
     @verify_amount_subarticle_url = decodeURIComponent @$request_urls.data('subarticles-verify-amount')
+    @user_url = decodeURIComponent(@$request_urls.data('users-id'))
 
     @alert = new Notices({ele: 'div.main'})
 
@@ -195,8 +198,9 @@ class Request extends BarcodeReader
       table.find('thead tr').prepend '<th>#</th>'
       table.find('#subarticles tr').each (i) ->
         $(this).prepend "<td>#{ i+1 }</td>"
-      @$selected_subarticles.html table
+      @$selected_subarticles.append table
       @$selected_subarticles.append @$templateBtnsNewRequest.render()
+      @showUserInfo @$user.val()
     else
       @open_modal("Debe seleccionar al menos un Sub Artículo")
 
@@ -210,5 +214,11 @@ class Request extends BarcodeReader
       subarticle_id: val.id
       amount: $(val).find('td.amount').text()
     )
-    json_data = { status: 'initiation', user_id: $("select#people option:selected").val(), subarticle_requests_attributes: subarticles }
+    json_data = { status: 'initiation', user_id: @$user.val(), subarticle_requests_attributes: subarticles }
     $.post @request_save_url.replace(/{id}/, ''), { request: json_data }, null, 'script'
+
+  showUserInfo: (user_id) ->
+    $.getJSON @user_url.replace(/{id}/g, user_id), (data) =>
+      $user = @$templateUserInfo.render(data)
+      $table = @$selected_subarticles.find("table")
+      $($user).insertBefore($table)

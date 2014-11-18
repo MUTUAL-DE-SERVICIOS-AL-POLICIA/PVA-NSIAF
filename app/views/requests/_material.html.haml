@@ -50,3 +50,17 @@
     = button_tag class: 'btn btn-danger', id: 'btn_cancel_new_request' do
       %span.glyphicon.glyphicon-ban-circle
       Cancelar
+
+%script{ type: 'text/html', id: 'show_user_info' }
+  .row
+    .col-md-12
+      %h4
+        %span.text-muted Administrador:
+        = current_user.name
+      %h4
+        %span.text-muted Solicitante:
+        {{name}}
+      %h4
+        %span.text-muted Cargo:
+        {{title}}
+  %br
