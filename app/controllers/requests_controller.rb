@@ -35,6 +35,7 @@ class RequestsController < ApplicationController
     @request = Request.new(request_params)
     @request.admin_id = current_user.id
     @request.save
+    Subarticle.register_log("request")
   end
 
   # PATCH/PUT /requests/1

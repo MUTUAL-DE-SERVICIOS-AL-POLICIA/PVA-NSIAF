@@ -23,13 +23,21 @@ class Version < PaperTrail::Version
 
   def self.set_columns
    h = ApplicationController.helpers
-   column_names.map{ |c| h.get_column(self, c) unless c == 'object' || c == 'active' }.compact
+   column_names.map{ |c| h.get_column(self, c) if %w(event whodunnit item_spanish).include?(c) }.compact
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user)
-    array = order("#{sort_column} #{sort_direction}")
-    array = array.joins('LEFT OUTER JOIN users ON users.id = versions.whodunnit').where("versions.active = ? AND users.role like ?", true, current_user.role) unless current_user.is_super_admin?
+    array = joins('LEFT OUTER JOIN users ON users.id = versions.whodunnit').order("#{sort_column} #{sort_direction}")
+    array = array.where("versions.active = ? AND users.role like ?", true, current_user.role) unless current_user.is_super_admin?
     array = array.page(page).per_page(per_page) if per_page.present?
+    if sSearch.present?
+      if search_column.present?
+        type_search = search_column == 'whodunnit' ? 'users.username' : "versions.#{search_column}"
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+      else
+        array = array.where("versions.item_spanish LIKE ? OR versions.event LIKE ? OR users.username LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+      end
+    end
     array
   end
 
@@ -42,9 +50,9 @@ class Version < PaperTrail::Version
         a << version.id
         a << version.item_code
         a << I18n.l(version.created_at, format: :version)
-        a << I18n.t(version.event, scope: 'versions')
+        a << version.event
         a << version.whodunnit_name
-        a << I18n.t(version.item_type.to_s.downcase.singularize, scope: 'activerecord.models')
+        a << version.item_spanish
         csv << a
       end
     end

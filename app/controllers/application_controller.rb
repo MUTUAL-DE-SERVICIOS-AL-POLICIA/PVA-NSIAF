@@ -42,4 +42,10 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+  def info_for_paper_trail
+    unless %w(dbf sessions proceedings requests).include?(request[:controller]) || %w(change_status update_password).include?(request[:action])
+      { item_spanish: I18n.t(controller_name.to_s.downcase.singularize, scope: 'activerecord.models'), event: I18n.t(action_name, scope: 'versions') }
+    end
+  end
 end

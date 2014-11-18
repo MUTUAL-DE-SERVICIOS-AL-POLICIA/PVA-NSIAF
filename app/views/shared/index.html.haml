@@ -5,7 +5,7 @@
 - when 'buildings' then new_url = new_building_path
 - when 'auxiliaries' then new_url = new_auxiliary_path
 - when 'assets' then new_url = new_asset_path
-- when 'versions' then new_url = '#' unless current_user.is_super_admin?
+- when 'versions' then new_url = '#'
 - when 'materials' then new_url = new_material_path
 - when 'articles' then new_url = new_article_path
 - when 'subarticles' then new_url = new_subarticle_path
@@ -57,7 +57,6 @@
 #confirm-modal
 = render 'shared/confirm_modal'
 
-- unless control == 'versions'
-  - columns = control.classify.constantize
-  - columns = current_user.is_super_admin? && control == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
-  = select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control col-md-2', prompt: "Todos"
+- columns = control.classify.constantize
+- columns = current_user.is_super_admin? && control == 'users' ? columns.set_columns(current_user.is_super_admin?) : columns.set_columns
+= select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control col-md-2', prompt: "Todos"

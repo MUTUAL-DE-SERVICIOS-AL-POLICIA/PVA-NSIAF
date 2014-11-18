@@ -201,6 +201,8 @@ es:
     migrated: 'Migración'
     password_changed: 'Contraseña actualizada'
     update: 'Modificación'
+    entry_create: "Entrada de Sub Artículo"
+    request: "Requerimiento"
 
   unauthorized:
     manage:
@@ -308,7 +310,6 @@ es:
       building: "Edificio"
       department: "Departamento"
       entity: "Entidad"
-      entry_subarticle: "Entrada de Sub Artículo"
       material: "Material"
       subarticle: "Sub Artículo"
       proceeding: "Acta"
@@ -409,4 +410,4 @@ es:
         created_at: "Fecha"
         event: "Acción"
         whodunnit: "Administrador"
-        item_type: "Tipo"
+        item_spanish: "Tipo"

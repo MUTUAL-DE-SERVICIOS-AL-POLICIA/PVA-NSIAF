@@ -22,9 +22,9 @@ private
         version.id,
         content_tag(:span, version.item_code, title: version.item_name),
         I18n.l(version.created_at, format: :version),
-        I18n.t(version.event, scope: 'versions'),
+        version.event,
         link_admin(version),
-        I18n.t(version.item_type.to_s.downcase.singularize, scope: 'activerecord.models'),
+        version.item_spanish,
         add_check_box(version.id)
       ]
     end
@@ -47,7 +47,7 @@ private
   end
 
   def sort_column
-    columns = %w[id item_id created_at event whodunnit item_type]
+    columns = %w[id item_id created_at event whodunnit item_spanish]
     columns[params[:iSortCol_0].to_i]
   end
 
