@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @assets = @user.assets
+    @requests = SubarticleRequest.user_requests(@user.id)
     respond_to do |format|
       format.html
       format.json { render json: @user, only: [:id, :name, :title] }

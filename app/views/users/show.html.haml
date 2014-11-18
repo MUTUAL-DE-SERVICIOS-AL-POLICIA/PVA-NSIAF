@@ -14,10 +14,9 @@
     = link_to edit_user_path(@user), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    - unless current_user.is_admin_store?
-      = link_to users_path, class: 'btn btn-default' do
-        %span.glyphicon.glyphicon-list
-        = t("users.title.title")
+    = link_to users_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("users.title.title")
 
   %h2= @user.name
 
@@ -86,3 +85,21 @@
         %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
         No tiene histórico de activos que le fueron asignados.
       {{/assets}}
+
+  - elsif current_user.is_admin_store?
+    .col-lg-12.col-md-12.col-sm-12
+      %h3 Requerimiento de Sub Artículo
+      %table.table.table-hover
+        %thead
+          %tr
+            %th #
+            %th Sub Artículo
+            %th Cantidad
+            %th Ultima fecha
+        %tbody
+          - @requests.each_with_index do |request_subarticle, index|
+            %tr
+              %td= index + 1
+              %td= request_subarticle.description
+              %td= request_subarticle.total_amount
+              %td= l request_subarticle.created_at.to_date

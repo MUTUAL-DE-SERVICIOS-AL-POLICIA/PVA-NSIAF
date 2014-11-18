@@ -30,4 +30,8 @@ class SubarticleRequest < ActiveRecord::Base
   def self.is_delivered?
     where('total_delivered < amount_delivered').present?
   end
+
+  def self.user_requests(user_id)
+    joins(:subarticle, :request).group("subarticle_id").where("requests.user_id = ?", user_id).select("subarticles.description, sum(subarticle_requests.amount) as total_amount, requests.created_at")
+  end
 end
