@@ -1,4 +1,15 @@
 GIT
+  remote: git://github.com/activerecord-hackery/ransack.git
+  revision: a62be93fd5055b341da8298daa398af5ae14d846
+  specs:
+    ransack (1.5.1)
+      actionpack (>= 3.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
+      i18n
+      polyamorous (~> 1.1)
+
+GIT
   remote: git://github.com/galetahub/simple-captcha.git
   revision: 2602bf19a63df25929960b5a7721a9d265281ec1
   specs:
@@ -118,6 +129,8 @@ GEM
     paper_trail (3.0.0)
       activerecord (>= 3.0, < 5.0)
       activesupport (>= 3.0, < 5.0)
+    polyamorous (1.1.0)
+      activerecord (>= 3.0)
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -226,6 +239,7 @@ DEPENDENCIES
   paper_trail (~> 3.0.0)
   rails (= 4.1.7)
   rails-erd
+  ransack!
   redis
   redis-namespace
   rest_client

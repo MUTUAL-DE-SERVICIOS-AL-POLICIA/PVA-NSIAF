@@ -45,6 +45,15 @@ class RequestsController < ApplicationController
     render nothing: true
   end
 
+  def search_subarticles
+    @q = SubarticleRequest.search(params[:q])
+    @requests = @q.result.user_requests
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_request
