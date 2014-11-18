@@ -28,7 +28,12 @@ class Ability
       can :manage, Request
       can :manage, Subarticle
       can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
-      can [:show], User
+      can :manage, Building
+      can :manage, Department
+      can :manage, User
+      cannot [:show, :update], User do |user|
+        %w(super_admin admin).include?(user.role)
+      end
     end
     can :manage, Version
   end

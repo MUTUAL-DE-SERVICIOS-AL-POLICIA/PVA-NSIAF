@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
   def users
     if is_super_admin?
       users = User
-    elsif is_admin?
+    elsif is_admin? || is_admin_store?
       users = User.joins(:department)
     else
       users = User.none
