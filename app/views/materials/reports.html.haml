@@ -1,0 +1,56 @@
+#report_subarticle.page-header
+  %h2 Reportes
+
+%table.table.table-bordered.table-hover
+  %thead
+    %tr
+      %th{rowspan: "2"} Código
+      %th{rowspan: "2"} Descipción de Material
+      %th{rowspan: "2"} Unidad
+      %th{colspan: "3"} Saldos al 13/12/2012
+      %th{colspan: "3"} Entradas
+      %th{colspan: "2"} Salidas Exist Almacén
+      %th{rowspan: "2"} Costo Unit Bs.
+      %th{rowspan: "2"} Saldo Bs. al 31/12/2013
+      %th{rowspan: "2"} Recuento físico al 31/12/2013
+    %tr
+      %th Control Físico
+      %th Costo Unitario
+      %th Costo Total
+      %th Exist Almacacén
+      %th Costo Unit.
+      %th Costo Total
+      %th Salidas Exist Almacén
+      %th Saldos Exist Almacén
+  %tbody
+    - for material in @materials
+      %tr
+        %th= material.code
+        %th= material.description.upcase
+        %td{colspan: 12}
+      - for article in @articles
+        - if article.material == material
+          %tr
+            %th= article.code
+            %th
+              - description = article.description.downcase
+              - description[0] = description[0].capitalize
+              = description
+            %td{colspan: 12}
+          - for subarticle in @subarticles
+            - if subarticle.article == article
+              %tr
+                %td= subarticle.code
+                %td= subarticle.description
+                %td= subarticle.unit
+                %td= 1
+                %td= 1
+                %td= 1
+                %td= 1
+                %td= 1
+                %td= 1
+                %td= 1
+                %td= 1
+                %td= 1
+                %td= 1
+                %td= 1

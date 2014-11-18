@@ -64,6 +64,10 @@ jQuery ->
     fnDrawCallback: (oSettings) ->
       $('#select_column').appendTo $('.dataTables_filter')
 
+
+  #grid report subarticle
+  $("#report_subarticle").parent().attr('class','col-md-offset-1 col-lg-offset-1 col-md-10 col-lg-10')
+
   #Dropdown
   $('.dropdown-toggle').dropdown()
 

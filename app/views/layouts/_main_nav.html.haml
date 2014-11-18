@@ -64,6 +64,9 @@
     - unless current_user.is_super_admin?
       %li
         = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
+    - if current_user.is_admin_store?
+      %li
+        = link_to 'Reportes', reports_materials_path
     %li
       = link_to 'Histórico', versions_path
     %li.dropdown
