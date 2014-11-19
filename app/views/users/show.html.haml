@@ -14,10 +14,9 @@
     = link_to edit_user_path(@user), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    - unless current_user.is_admin_store?
-      = link_to users_path, class: 'btn btn-default' do
-        %span.glyphicon.glyphicon-list
-        = t("users.title.title")
+    = link_to users_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("users.title.title")
 
   %h2= @user.name
 

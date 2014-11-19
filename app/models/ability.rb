@@ -23,6 +23,7 @@ class Ability
       can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
     elsif user.is_admin_store?
       can [:welcome, :show, :update], User, id: user.id
+      #can :manage, Asset
       can :manage, Article
       can :manage, Material
       can :manage, Request

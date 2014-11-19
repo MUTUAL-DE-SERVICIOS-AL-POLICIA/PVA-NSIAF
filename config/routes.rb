@@ -1,7 +1,9 @@
 Nsiaf::Application.routes.draw do
   resources :derecognised, only: :index
 
-  resources :requests, except: [:edit, :destroy]
+  resources :requests, except: [:edit, :destroy] do
+    get :search_subarticles, on: :collection
+  end
 
   resources :materials, except: [:destroy] do
     post :change_status, on: :member

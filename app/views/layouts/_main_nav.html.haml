@@ -65,8 +65,15 @@
       %li
         = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
     - if current_user.is_admin_store?
-      %li
-        = link_to 'Reportes', reports_materials_path
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Reportes
+          %b.caret
+        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
+          %li
+            = link_to 'Búsqueda de requerimientos', search_subarticles_requests_path
+          %li
+            = link_to 'Reporte de Materiales', reports_materials_path
     %li
       = link_to 'Histórico', versions_path
     %li.dropdown
