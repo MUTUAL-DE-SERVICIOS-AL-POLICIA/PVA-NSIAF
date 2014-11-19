@@ -97,7 +97,7 @@ es:
       modal: "Activación/Desactivación de Entidad"
       confirm-activate: "¿Está seguro de Activar la entidad <strong>%{name}</strong>?"
       confirm-deactivate: "¿Está seguro de Desactivar la entidad <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar la entidad <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO activado</strong>"
+      confirm-cannot_disable: "No se puede desactivar la entidad <strong>%{name}</strong> porque está asignado por lo menos a una <strong>UNIDAD activa</strong>"
   declines:
     title:
       title: "Bajas"
@@ -105,16 +105,16 @@ es:
     title: 'Materiales Entregados'
   departments:
     title:
-      title: "Departamentos"
-      list: "Listado de Departamentos"
-      new: "Nuevo Departamento"
-      create: "Nuevo Departamento"
-      edit: "Editar Departamento"
-      update: "Editar Departamento"
-      modal: "Activación/Desactivación de Departamento"
-      confirm-activate: "¿Está seguro de Activar el departamento <strong>%{name}</strong>?"
-      confirm-deactivate: "¿Está seguro de Desactivar el departamento <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar el departamento <strong>%{name}</strong> porque está asignado por lo menos a un <strong>FUNCIONARIO activado</strong>"
+      title: "Unidades"
+      list: "Listado de Unidades"
+      new: "Nueva Unidad"
+      create: "Nueva Unidad"
+      edit: "Editar Unidad"
+      update: "Editar Unidad"
+      modal: "Activación/Desactivación de Unidad"
+      confirm-activate: "¿Está seguro de Activar la unidad <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar la unidad <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar la unidad <strong>%{name}</strong> porque está asignado por lo menos a un <strong>FUNCIONARIO activado</strong>"
   entities:
     title:
       title: "Instituciones"
@@ -308,7 +308,7 @@ es:
       asset: "Activo"
       auxiliary: "Auxiliar"
       building: "Entidad"
-      department: "Departamento"
+      department: "Unidad"
       entity: "Institución"
       material: "Material"
       subarticle: "Sub Artículo"
@@ -346,7 +346,7 @@ es:
         asset_code: "Activo"
         account_code: "Cuenta"
         auxiliary_code: "Auxiliar"
-        department_code: "Departamento"
+        department_code: "Unidad"
         user_code: "Funcionario"
         description: "Descripción"
         reason: "Motivo"
@@ -401,7 +401,7 @@ es:
         password_confirmation: "Confirmar Contraseña"
         phone: "Teléfono"
         mobile: "Celular"
-        department: "Departamento"
+        department: "Unidad"
         role: "Rol"
         current_password: "Contraseña Actual"
         status: "Estado"
