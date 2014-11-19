@@ -1,10 +1,10 @@
 ## Manual
 
-### Registro de la Entidad
+### Registro de la Institución
 
-Al iniciar sesión en el Sistema como `Super Administrador`, es requisito que se registre una Entidad con los siguientes datos:
+Al iniciar sesión en el Sistema como `Super Administrador`, es requisito que se registre una Institución con los siguientes datos:
 
-* `Código` de la Entidad, debe ser la que está registrada en el sistema VSIAF, porque es la que se utilizará para importar los archivos .DBF (obligatorio)
+* `Código` de la Institución, debe ser la que está registrada en el sistema VSIAF (campo `ENTIDAD` de la tabla `unidadadmin.DBF`), porque es la que se utilizará para importar los archivos .DBF (obligatorio)
 * `Nombre` que describa a la institución
 * `Sigla` de la institución, se utiliza para generar los Códigos de Barras en el Sistema (obligatorio)
 

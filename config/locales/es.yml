@@ -117,12 +117,12 @@ es:
       confirm-cannot_disable: "No se puede desactivar el departamento <strong>%{name}</strong> porque está asignado por lo menos a un <strong>USUARIO activado</strong>"
   entities:
     title:
-      title: "Entidades"
-      list: "Listado de Entidades"
-      new: "Nueva Entidad"
-      create: "Nueva Entidad"
-      edit: "Editar Entidad"
-      update: "Editar Entidad"
+      title: "Instituciones"
+      list: "Listado de Instituciones"
+      new: "Nueva Institución"
+      create: "Nueva Institución"
+      edit: "Editar Institución"
+      update: "Editar Institución"
   materials:
     title:
       title: "Materiales"
@@ -309,7 +309,7 @@ es:
       auxiliary: "Auxiliar"
       building: "Edificio"
       department: "Departamento"
-      entity: "Entidad"
+      entity: "Institución"
       material: "Material"
       subarticle: "Sub Artículo"
       proceeding: "Acta"
@@ -339,7 +339,7 @@ es:
         status: "Estado"
       building:
         code: "Código"
-        entity: "Entidad"
+        entity: "Institución"
         name: "Nombre"
         status: "Estado"
       decline:
