@@ -88,16 +88,16 @@ es:
       confirm-cannot_disable: "No se puede desactivar el auxiliar <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ACTIVO</strong>"
   buildings:
     title:
-      title: "Edificios"
-      list: "Listado de Edificios"
-      new: "Nuevo Edificio"
-      create: "Nuevo Edificio"
-      edit: "Editar Edificio"
-      update: "Editar Edificio"
-      modal: "Activación/Desactivación de Edificio"
-      confirm-activate: "¿Está seguro de Activar el edificio <strong>%{name}</strong>?"
-      confirm-deactivate: "¿Está seguro de Desactivar el edificio <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar el edificio <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO activado</strong>"
+      title: "Entidades"
+      list: "Listado de Entidades"
+      new: "Nueva Entidad"
+      create: "Nueva Entidad"
+      edit: "Editar Entidad"
+      update: "Editar Entidad"
+      modal: "Activación/Desactivación de Entidad"
+      confirm-activate: "¿Está seguro de Activar la entidad <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar la entidad <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar la entidad <strong>%{name}</strong> porque está asignado por lo menos a un <strong>DEPARTAMENTO activado</strong>"
   declines:
     title:
       title: "Bajas"
@@ -307,7 +307,7 @@ es:
       article: "Artículo"
       asset: "Activo"
       auxiliary: "Auxiliar"
-      building: "Edificio"
+      building: "Entidad"
       department: "Departamento"
       entity: "Institución"
       material: "Material"
@@ -354,7 +354,7 @@ es:
       department:
         code: "Código"
         name: "Nombre"
-        building: "Edificio"
+        building: "Entidad"
         status: "Estado"
       entity:
         acronym: "Sigla"

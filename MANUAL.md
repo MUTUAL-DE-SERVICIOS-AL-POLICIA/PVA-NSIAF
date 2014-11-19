@@ -14,9 +14,9 @@ Para la migración se debe adjuntar los archivos con extensión DBF, una vez rea
 
 A continuación se detalla los nombres para cada migración:
 
-1. Edificios: `unidadadmin.DBF`
+1. Entidades: `unidadadmin.DBF`
 2. Departamentos: `OFICINA.DBF`
-3. Usuarios: `RESP.DBF`
+3. Funcionarios: `RESP.DBF`
 4. Cuentas: `CODCONT.DBF`
 5. Auxiliares: `auxiliar.DBF`
 6. Activos: `ACTUAL.DBF`

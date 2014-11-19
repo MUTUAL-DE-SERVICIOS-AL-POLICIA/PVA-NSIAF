@@ -7,15 +7,15 @@
     %h3.col-md-offset-2.col-md-9.text-center Selección de Funcionario
     %form.form-horizontal{ role: 'form' }
       .form-group
-        %label.col-md-2.col-sm-2.control-label Edificio
+        %label.col-md-2.col-sm-2.control-label #{Building.model_name.human}
         .col-md-9.col-sm-9
           = select_tag :building, options_for_select(get_buildings), class: 'form-control', prompt: '--', autofocus: true
       .form-group
-        %label.col-md-2.col-sm-2.control-label Departamento
+        %label.col-md-2.col-sm-2.control-label #{Department.model_name.human}
         .col-md-9.col-sm-9
           = select_tag :department, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       .form-group
-        %label.col-md-2.col-sm-2.control-label Funcionario
+        %label.col-md-2.col-sm-2.control-label #{User.model_name.human}
         .col-md-9.col-sm-9
           = select_tag :user, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       .form-group

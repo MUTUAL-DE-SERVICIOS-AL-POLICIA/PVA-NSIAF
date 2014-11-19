@@ -102,7 +102,7 @@ class Assignations extends BarcodeReader
       @showUserInfo @$user.val()
       @displayAssetRows()
     else
-      @alert.info 'Seleccione <b>Edificio</b>, <b>Departamento</b>, y <b>Funcionario</b>'
+      @alert.info 'Seleccione <b>Entidad</b>, <b>Departamento</b>, y <b>Funcionario</b>'
 
   displaySearchAsset: (code, data) =>
     if data[1] == 1
