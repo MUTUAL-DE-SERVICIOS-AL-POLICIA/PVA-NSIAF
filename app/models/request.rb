@@ -56,6 +56,7 @@ class Request < ActiveRecord::Base
 
   def delivery_verification(barcode)
     subarticles = Subarticle.get_barcode(barcode)
+    s_request = nil
     if subarticles.present?
       if subarticles.exists_amount?
         subarticle = subarticles.first
