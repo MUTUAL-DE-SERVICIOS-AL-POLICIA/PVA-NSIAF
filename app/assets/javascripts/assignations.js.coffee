@@ -102,13 +102,13 @@ class Assignations extends BarcodeReader
       @showUserInfo @$user.val()
       @displayAssetRows()
     else
-      @alert.info 'Seleccione <b>Edificio</b>, <b>Departamento</b>, y <b>Usuario</b>'
+      @alert.info 'Seleccione <b>Entidad</b>, <b>Departamento</b>, y <b>Funcionario</b>'
 
   displaySearchAsset: (code, data) =>
     if data[1] == 1
       @displaySelectedAssets(data[0])
     else if data[1] == 2
-      @alert.danger "El Código de Activo <b>#{code}</b> ya está asignado al usuario <b>#{data[0].user.name}</b>"
+      @alert.danger "El Código de Activo <b>#{code}</b> ya está asignado al funcionario <b>#{data[0].user.name}</b>"
     else
       @alert.danger "El Código de Activo <b>#{code}</b> no existe"
 
