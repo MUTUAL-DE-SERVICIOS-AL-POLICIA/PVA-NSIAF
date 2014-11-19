@@ -114,7 +114,7 @@ es:
       modal: "Activación/Desactivación de Departamento"
       confirm-activate: "¿Está seguro de Activar el departamento <strong>%{name}</strong>?"
       confirm-deactivate: "¿Está seguro de Desactivar el departamento <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar el departamento <strong>%{name}</strong> porque está asignado por lo menos a un <strong>USUARIO activado</strong>"
+      confirm-cannot_disable: "No se puede desactivar el departamento <strong>%{name}</strong> porque está asignado por lo menos a un <strong>FUNCIONARIO activado</strong>"
   entities:
     title:
       title: "Instituciones"
@@ -133,7 +133,7 @@ es:
       modal: "Activación/Desactivación de Material"
       confirm-activate: "¿Está seguro de Activar el material <strong>%{name}</strong>?"
       confirm-deactivate: "¿Está seguro de Desactivar el material <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar el material <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ARTCÍULO activado</strong>"
+      confirm-cannot_disable: "No se puede desactivar el material <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ARTÍCULO activado</strong>"
   migration:
     alert_html: 'Especifique el archivo <b>%{model}</b> para migrar'
     file: 'Adjuntar Archivo'
@@ -166,7 +166,7 @@ es:
       modal: "Activación/Desactivación de Sub Artículo"
       confirm-activate: "¿Está seguro de Activar el sub artículo <strong>%{name}</strong>?"
       confirm-deactivate: "¿Está seguro de Desactivar el sub artículo <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar el sub artículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>Usuario</strong>"
+      confirm-cannot_disable: "No se puede desactivar el sub artículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>Funcionario</strong>"
     entry_subarticles:
       entry: "Ingreso de Sub Artículo"
       entry_create: "Ingreso de Sub Artículo"
@@ -176,16 +176,16 @@ es:
       admin: "Administrador de Activos"
       admin_store: "Administrador de Almacenes"
     title:
-      title: "Usuarios"
-      list: "Listado de Usuarios"
-      new: "Nuevo Usuario"
-      create: "Nuevo Usuario"
-      edit: "Editar Usuario"
-      update: "Editar Usuario"
-      modal: "Activación/Desactivación de Usuario"
-      confirm-activate: "¿Está seguro de Activar el usuario <strong>%{name}</strong>?"
-      confirm-deactivate: "¿Está seguro de Desactivar el usuario <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar el usuario <strong>%{name}</strong> porque está asignado(a) por lo menos a un <strong>ACTIVO</strong>"
+      title: "Funcionarios"
+      list: "Listado de Funcionarios"
+      new: "Nuevo Funcionario"
+      create: "Nuevo Funcionario"
+      edit: "Editar Funcionario"
+      update: "Editar Funcionario"
+      modal: "Activación/Desactivación de Funcionario"
+      confirm-activate: "¿Está seguro de Activar el funcionario <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el funcionario <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el funcionario <strong>%{name}</strong> porque está asignado(a) por lo menos a un <strong>ACTIVO</strong>"
   versions:
     title:
       title: "Histórico"
@@ -313,7 +313,7 @@ es:
       material: "Material"
       subarticle: "Sub Artículo"
       proceeding: "Acta"
-      user: "Usuario"
+      user: "Funcionario"
 
     attributes:
       account:
@@ -329,7 +329,7 @@ es:
         code: "Código"
         description: "Descripción"
         auxiliary: "Auxiliar"
-        user: "Usuario"
+        user: "Funcionario"
         derecognised: "Baja"
         state: "Estado"
       auxiliary:
@@ -347,7 +347,7 @@ es:
         account_code: "Cuenta"
         auxiliary_code: "Auxiliar"
         department_code: "Departamento"
-        user_code: "Usuario"
+        user_code: "Funcionario"
         description: "Descripción"
         reason: "Motivo"
         user_id: "Administrador"
@@ -371,7 +371,7 @@ es:
         description: "Descripción"
         status: "Estado"
       proceeding:
-        user_id: "Usuario"
+        user_id: "Funcionario"
         admin_id: "Administrador"
         created_at: "Fecha"
         proceeding_type: "Tipo"

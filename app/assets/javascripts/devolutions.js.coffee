@@ -78,7 +78,7 @@ class Devolutions extends BarcodeReader
       if @displaySelectedUser(data.user)
         @displaySelectedAssets(data)
       else
-        @alert.danger "El Activo con código <b>#{code}</b> pertenece a otro usuario: <br/><b>#{data.user.name}</b> (<em>#{data.user.title}</em>)"
+        @alert.danger "El Activo con código <b>#{code}</b> pertenece a otro funcionario: <br/><b>#{data.user.name}</b> (<em>#{data.user.title}</em>)"
     else
       @alert.danger "El Código de Activo <b>#{code}</b> no está asignado o no existe"
 

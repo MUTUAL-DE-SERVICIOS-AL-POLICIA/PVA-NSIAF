@@ -4,7 +4,7 @@
 
 #container-select-user.row{ data: {action: 'assignation'} }
   .col-md-offset-2.col-md-8.col-sm-12
-    %h3.col-md-offset-2.col-md-9.text-center Selección de Usuario
+    %h3.col-md-offset-2.col-md-9.text-center Selección de Funcionario
     %form.form-horizontal{ role: 'form' }
       .form-group
         %label.col-md-2.col-sm-2.control-label Edificio
@@ -15,7 +15,7 @@
         .col-md-9.col-sm-9
           = select_tag :department, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       .form-group
-        %label.col-md-2.col-sm-2.control-label Usuario
+        %label.col-md-2.col-sm-2.control-label Funcionario
         .col-md-9.col-sm-9
           = select_tag :user, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
       .form-group
