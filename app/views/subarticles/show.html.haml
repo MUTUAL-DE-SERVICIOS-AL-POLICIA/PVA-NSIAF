@@ -35,17 +35,17 @@
   %thead
     %tr
       %th #
-      %th= EntrySubarticle.human_attribute_name('amount')
-      %th= EntrySubarticle.human_attribute_name('unit_cost')
-      %th= EntrySubarticle.human_attribute_name('total_cost')
-      %th= EntrySubarticle.human_attribute_name('invoice')
-      %th= EntrySubarticle.human_attribute_name('date')
+      %th.number= EntrySubarticle.human_attribute_name('amount')
+      %th.number= EntrySubarticle.human_attribute_name('unit_cost')
+      %th.number= EntrySubarticle.human_attribute_name('total_cost')
+      %th.text-center= EntrySubarticle.human_attribute_name('invoice')
+      %th.text-center= EntrySubarticle.human_attribute_name('date')
   %tbody
     - @subarticle.entry_subarticles.order("id DESC").each_with_index do |entry, index|
       %tr{ class: new_entry_subarticle(index) }
         %td= index + 1
-        %td= entry.amount
-        %td= entry.unit_cost
-        %td= entry.total_cost
-        %td= entry.invoice
-        %td= l entry.date
+        %td.number= number_with_precision(entry.amount || 0, precision: 0, separator: ',', delimiter: '.')
+        %td.number= number_with_precision(entry.unit_cost || 0, precision: 2, separator: ',', delimiter: '.')
+        %td.number= number_with_precision(entry.total_cost || 0, precision: 2, separator: ',', delimiter: '.')
+        %td.text-center= entry.invoice
+        %td.text-center= l entry.date
