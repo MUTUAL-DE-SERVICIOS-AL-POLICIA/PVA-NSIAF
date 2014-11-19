@@ -1,13 +1,13 @@
 - unless is_pdf?
-  .page-header
+  .page-header{data: {action: 'request'}}
     .pull-right
       - if @request.status == 'initiation'
         = button_tag class: 'btn btn-primary buttonRequest', id: "btn_edit_request" do
           %span.glyphicon.glyphicon-edit
           Editar cantidad
-      - if %w(pending initiation).include?(@request.status)
-        = link_to request_path(@request, format: :pdf), class: 'btn btn-info buttonRequest' do
-          %span.glyphicon.glyphicon-print
+      - unless @request.status == 'pending'
+        = link_to request_path(@request, format: :pdf), class: 'btn btn-info' do
+          %span.glyphicon.glyphicon-prit
           Imprimir PDF
       - if @request.status == 'pending'
         = button_tag class: 'btn btn-success buttonRequest', id: 'btn_deliver_request' do
@@ -19,6 +19,8 @@
     %h2
       Requerimiento Nro.
       %span#request_id #{@request.id}
+
+    #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'subarticles-verify-amount' => verify_amount_subarticle_path('{id}'), 'users-id' => user_path('{id}', format: :json)}}
 
 #request.row{ class: "#{'separator' if is_pdf?}" }
   .col-md-12
@@ -48,7 +50,7 @@
     .selected-assets
       #table_request
         - if is_pdf?
-          %h3.text-center.proceeding-title= " #{'ENTREGA DE ' if @request.status == 'pending'} SOLICITUD DE MATERIAL"
+          %h3.text-center.proceeding-title= " #{'ENTREGA DE ' if @request.status == 'delivered'} SOLICITUD DE MATERIAL"
         %table.table.table-striped.table-condensed
           %thead
             %tr
@@ -76,7 +78,7 @@
                   %td= s_request.subarticle_description
                   %td= s_request.subarticle_barcode
                   - if is_pdf?
-                    %td= @request.status == 'initiation' ? s_request.amount : s_request.amount_delivered
+                    %td= @request.status == 'initiation' ? s_request.amount : s_request.total_delivered
                   - else
                     %td= s_request.amount
                     - if @request.status == 'pending'
