@@ -31,7 +31,7 @@ class Request < ActiveRecord::Base
     if sSearch.present?
       if search_column.present?
         type_search = %w(name title).include?(search_column) ? "users.#{search_column}" : "requests.#{search_column}"
-        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user)
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
       else
         array = array.where("requests.id LIKE ? OR requests.created_at LIKE ? OR users.name LIKE ? OR users.title LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end

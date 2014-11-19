@@ -113,14 +113,7 @@ class User < ActiveRecord::Base
   end
 
   def users
-    if is_super_admin?
-      users = User
-    elsif is_admin? || is_admin_store?
-      users = User.joins(:department)
-    else
-      users = User.none
-    end
-    users.where('role IS NULL OR role != ?', 'super_admin')
+    User.where('role IS NULL OR role != ?', 'super_admin')
   end
 
   def self.search_by(department_id)
@@ -143,7 +136,7 @@ class User < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user)
-    array = current_user.users.order("#{sort_column} #{sort_direction}")
+    array = current_user.users.includes(:department).order("#{sort_column} #{sort_direction}").references(:department)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
