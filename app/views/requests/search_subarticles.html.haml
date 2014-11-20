@@ -1,27 +1,32 @@
-#assignation-urls{data: {'admin-assets' => admin_assets_assets_path, 'proceedings' => proceedings_path, 'users-id' => user_path('{id}', format: :json), 'assets-departments' => departments_assets_path(format: :json), 'assets-users' => users_assets_path(format: :json)}}
-.page-header
+#assignation-urls{data: {'assets-departments' => departments_assets_path(format: :json), 'assets-users' => users_assets_path(format: :json)}}
+#request-urls{data: {'subarticles-articles' => articles_subarticles_path(format: :json), 'subarticles-array' => subarticles_array_subarticles_path(format: :json)}}
+
+.page-header{ data: {action: 'assignation'} }
   %h2 Búsqueda avanzada de requerimientos
 
-.row{ data: {action: 'assignation'} }
+.row{ data: {action: 'request'} }
   .col-lg-12.col-md-12.col-sm-12
     = search_form_for @q, url: search_subarticles_requests_path, remote: true do |f|
-      -#.form-group
-        -#%label.col-md-2.col-sm-2.control-label #{Building.model_name.human}
-        -#.col-md-9.col-sm-9
-          -#= select_tag :building, options_for_select(get_buildings), class: 'form-control', prompt: '--', autofocus: true
-      -#.form-group
-        -#%label.col-md-2.col-sm-2.control-label #{Department.model_name.human}
-        -#.col-md-9.col-sm-9
-          -#= select_tag :department, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
-      -#.form-group
-        -#%label.col-md-2.col-sm-2.control-label Usuario
-        -#.col-md-9.col-sm-9
-          -#= select_tag :user, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
-
-      = f.select :request_user_department_building_id_eq, options_for_select(get_buildings), include_blank: true#, {prompt: '--'}, {class: 'form-control', id: 'building'}
-      = f.select :request_user_department_id_eq, options_from_collection_for_select(Department.all, "id", "name"), include_blank: true #options_for_select([]), {prompt: '--'}, {class: 'form-control', id: 'department', disabled: true}
-      = f.select :request_user_id_eq, options_from_collection_for_select(User.all, "id", "name"), include_blank: true#, options_for_select([]), {prompt: '--'}, {class: 'form-control', id: 'user', disabled: true}
-      = f.submit "search"
+      .row.form-group
+        .col-xs-12.col-sm-4.col-md-4
+          = f.select :request_user_department_building_id_eq, options_for_select(get_buildings), {prompt: "--#{t('buildings.title.title')}--"}, {class: 'form-control', id: 'building'}
+        .col-xs-12.col-sm-4.col-md-4
+          = f.select :request_user_department_id_eq, options_for_select([]), {prompt: "--#{t('departments.title.title')}--"}, {class: 'form-control', id: 'department', disabled: true}
+        .col-xs-12.col-sm-4.col-md-4
+          = f.select :request_user_id_eq, options_for_select([]), {prompt: "--#{t('users.title.title')}--"}, {class: 'form-control', id: 'user', disabled: true}
+        .col-xs-12.col-sm-4.col-md-4
+      .row.form-group
+        .col-xs-12.col-sm-4.col-md-4
+          = f.select :subarticle_article_material_id_eq, options_for_select(get_materials), {prompt: "--#{t('materials.title.title')}--"}, {class: 'form-control', id: 'material'}
+        .col-xs-12.col-sm-4.col-md-4
+          = f.select :subarticle_article_id_eq, options_for_select([]), {prompt: "--#{t('articles.title.title')}--"}, {class: 'form-control', id: 'article', disabled: true}
+        .col-xs-12.col-sm-4.col-md-4
+          = f.select :subarticle_id_eq, options_for_select([]), {prompt: "--#{t('subarticles.title.title')}--"}, {class: 'form-control', id: 'subarticle', disabled: true}
+      .row.form-group
+        .col-md-2.col-md-offset-10
+          = f.button class: "btn btn-primary" do
+            %span.glyphicon.glyphicon-search
+            BUSCAR
     %table.table.table-hover
       %thead
         %tr

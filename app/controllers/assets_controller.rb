@@ -67,14 +67,16 @@ class AssetsController < ApplicationController
   end
 
   def users
+    department = params[:department].present? ? params[:department] : (params[:q].present? ? params[:q][:request_user_department_id_eq] : '')
     respond_to do |format|
-      format.json { render json: User.actives.search_by(params[:department]) }
+      format.json { render json: User.actives.search_by(department) }
     end
   end
 
   def departments
+    building = params[:building].present? ? params[:building] : params[:q][:request_user_department_building_id_eq]
     respond_to do |format|
-      format.json { render json: Department.actives.search_by(params[:building]) }
+      format.json { render json: Department.actives.search_by(building) }
     end
   end
 

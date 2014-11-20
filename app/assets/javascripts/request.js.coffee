@@ -9,7 +9,8 @@ class Request extends BarcodeReader
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
     @$material = $('#material')
-    @$article = $('#subarticle_article_id')
+    @$article = $('#article')
+    @$subarticle = $('#subarticle')
     @$inputSubarticle = $('input#subarticle')
     @$subarticles = $('#subarticles')
     @$selectionSubarticles = $('#selection_subarticles')
@@ -39,7 +40,6 @@ class Request extends BarcodeReader
     @$templateUserInfo = Hogan.compile $('#show_user_info').html() || ''
 
     @request_save_url = decodeURIComponent @$request_urls.data('request-id')
-    @articles_json_url = @$request_urls.data('subarticles-articles')
     @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
     @verify_amount_subarticle_url = decodeURIComponent @$request_urls.data('subarticles-verify-amount')
     @user_url = decodeURIComponent(@$request_urls.data('users-id'))
@@ -60,7 +60,8 @@ class Request extends BarcodeReader
     $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
     $(document).on 'click', @$btnSaveNewRequest.selector, => @save_new_request()
     if @$material?
-      @$article.remoteChained(@$material.selector, @articles_json_url)
+      @$article.remoteChained(@$material.selector, @$request_urls.data('subarticles-articles'))
+      @$subarticle.remoteChained(@$article.selector, @$request_urls.data('subarticles-array'))
     if @$inputSubarticle?
       @get_subarticles()
 

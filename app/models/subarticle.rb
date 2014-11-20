@@ -101,4 +101,10 @@ class Subarticle < ActiveRecord::Base
       end
     end
   end
+
+  def self.search_by(article_id)
+    subarticles = []
+    subarticles = where(article_id: article_id, status: 1) if article_id.present?
+    [['', '--']] + subarticles.map { |d| [d.id, d.description] }
+  end
 end
