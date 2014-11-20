@@ -95,7 +95,10 @@ class Subarticle < ActiveRecord::Base
   def check_barcode
     if is_not_migrate?
       bcode = Barcode.find_by_code barcode
-      bcode.change_to_used if bcode.present?
+      if bcode.present?
+        self.barcode = bcode.code
+        bcode.change_to_used
+      end
     end
   end
 
