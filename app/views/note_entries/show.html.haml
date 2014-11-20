@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Delivery note number:
+  = @note_entry.delivery_note_number
+%p
+  %b Delivery note date:
+  = @note_entry.delivery_note_date
+%p
+  %b Invoice number:
+  = @note_entry.invoice_number
+%p
+  %b Invoice date:
+  = @note_entry.invoice_date
+
+= link_to 'Edit', edit_note_entry_path(@note_entry)
+\|
+= link_to 'Back', note_entries_path
