@@ -1,0 +1,27 @@
+%h1 Listing kardexes
+
+%table
+  %tr
+    %th Kardex date
+    %th Invoice number
+    %th Order number
+    %th Detail
+    %th Subarticle
+    %th
+    %th
+    %th
+
+  - @kardexes.each do |kardex|
+    %tr
+      %td= kardex.kardex_date
+      %td= kardex.invoice_number
+      %td= kardex.order_number
+      %td= kardex.detail
+      %td= kardex.subarticle
+      %td= link_to 'Show', kardex
+      %td= link_to 'Edit', edit_kardex_path(kardex)
+      %td= link_to 'Destroy', kardex, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Kardex', new_kardex_path
