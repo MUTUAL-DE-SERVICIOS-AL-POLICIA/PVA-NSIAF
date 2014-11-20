@@ -26,6 +26,7 @@ Nsiaf::Application.routes.draw do
       get :get_subarticles
       get :recode
       get :autocomplete
+      get :subarticles_array
     end
   end
 

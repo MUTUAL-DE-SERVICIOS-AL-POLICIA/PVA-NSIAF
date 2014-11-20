@@ -60,7 +60,12 @@ class SubarticlesController < ApplicationController
   end
 
   def articles
-    render json: Article.search_by(params[:material])
+    material = params[:material].present? ? params[:material] : (params[:q].present? ? params[:q][:subarticle_article_material_id_eq] : '')
+    render json: Article.search_by(material)
+  end
+
+  def subarticles_array
+    render json: Subarticle.search_by(params[:q][:subarticle_article_id_eq])
   end
 
   def get_subarticles

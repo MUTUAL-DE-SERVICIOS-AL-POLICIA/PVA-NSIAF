@@ -54,11 +54,11 @@
           %li
             = link_to t("requests.title.title"), requests_path(status: 'initiation')
           %li{ role: 'presentation' }
-            = link_to 'Materiales', materials_path, role: 'menuitem'
+            = link_to t('materials.title.title'), materials_path, role: 'menuitem'
           %li{ role: 'presentation' }
-            = link_to 'Artículos', articles_path
+            = link_to t('articles.title.title'), articles_path
           %li{ role: 'presentation' }
-            = link_to 'Sub Artículos', subarticles_path
+            = link_to t('subarticles.title.title'), subarticles_path
           %li{ role: 'presentation' }
             = link_to 'Recodificar Sub Artículos', recode_subarticles_path
     - unless current_user.is_super_admin?
