@@ -1,6 +1,6 @@
 class SubarticlesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_subarticle, only: [:show, :edit, :update, :destroy, :change_status]
+  before_action :set_subarticle, only: [:show, :edit, :update, :destroy, :change_status, :kardex]
 
   # GET /subarticles
   def index
@@ -101,6 +101,9 @@ class SubarticlesController < ApplicationController
     else
       render action: 'entry'
     end
+  end
+
+  def kardex
   end
 
   private

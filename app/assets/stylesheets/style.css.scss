@@ -87,3 +87,10 @@ form .thumbnail{ height: 190px; }
 .number {
   text-align: right;
 }
+table {
+  tr.vertical-align {
+    th {
+      vertical-align: middle;
+    }
+  }
+}

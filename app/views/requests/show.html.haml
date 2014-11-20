@@ -7,7 +7,7 @@
           Editar cantidad
       - unless @request.status == 'pending'
         = link_to request_path(@request, format: :pdf), class: 'btn btn-info' do
-          %span.glyphicon.glyphicon-prit
+          %span.glyphicon.glyphicon-print
           Imprimir PDF
       - if @request.status == 'pending'
         = button_tag class: 'btn btn-success buttonRequest', id: 'btn_deliver_request' do
