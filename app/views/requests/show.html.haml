@@ -50,7 +50,10 @@
     .selected-assets
       #table_request
         - if is_pdf?
-          %h3.text-center.proceeding-title= " #{'ENTREGA DE ' if @request.status == 'delivered'} SOLICITUD DE MATERIAL"
+          - title = 'SOLICITUD DE MATERIALES'
+          - if @request.status == 'delivered'
+            - title = 'ENTREGA DE MATERIALES'
+          %h3.text-center.proceeding-title= title
         %table.table.table-striped.table-condensed
           %thead
             %tr
