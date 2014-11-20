@@ -1,16 +1,30 @@
-%h3.kardex-inventory
-  .title KARDEX DE INVENTARIOS
-  .title GESTION 2012
+.page-header
+  .pull-right
+    = link_to @subarticle, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-arrow-left
+      Atrás
+    = link_to subarticle_path(@subarticle, format: :pdf), class: 'btn btn-info' do
+      %span.glyphicon.glyphicon-print
+      Imprimir
+    = link_to subarticles_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      Subartículos
+
+  %h3.kardex-inventory
+    .title KARDEX DE INVENTARIOS
+    .title GESTION 2014
+
+  #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'subarticles-verify-amount' => verify_amount_subarticle_path('{id}'), 'users-id' => user_path('{id}', format: :json)}}
 
 %dl.dl-horizontal
-  %dt DESCRIPCIÓN:
-  %dd ARCHIVADOR DE PALANCA LOMO ANCHO
+  %dt DESCRIPCION:
+  %dd= @subarticle.description.upcase
   %dt Nº CODIGO:
-  %dd 11201
+  %dd= @subarticle.code
 
 %table.table.table-bordered
   %thead
-    %tr
+    %tr.vertical-align
       %th.text-center{rowspan: 2} FECHA
       %th.text-center{rowspan: 2} Nº DE FACTURA
       %th.text-center{rowspan: 2} Nº DE PEDIDO MAT
