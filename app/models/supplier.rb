@@ -1,3 +1,3 @@
 class Supplier < ActiveRecord::Base
-  has_many :note_entry
+  has_many :note_entries
 end

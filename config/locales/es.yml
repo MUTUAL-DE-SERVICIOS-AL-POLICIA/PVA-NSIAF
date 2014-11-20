@@ -140,6 +140,9 @@ es:
     message_html: '<ul><li><b>%{inserted}</b> registros insertados</li><li><b>%{no_inserted}</b> registros no insertados</li></ul>'
     title:
       title: "Migración"
+  note_entry:
+    title:
+      title: "Nota de Ingreso de Almacén"
   proceedings:
     title:
       title: "Actas"

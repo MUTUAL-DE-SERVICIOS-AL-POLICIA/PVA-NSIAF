@@ -25,7 +25,7 @@ private
         subarticle.barcode,
         link_to_if(subarticle.article, subarticle.article_name, subarticle.article, title: subarticle.article_code),
         type_status(subarticle.status),
-        links_actions(subarticle, 'subarticle')
+        links_actions(subarticle)
       ]
     end
   end

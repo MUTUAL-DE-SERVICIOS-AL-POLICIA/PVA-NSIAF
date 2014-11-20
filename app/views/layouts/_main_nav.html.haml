@@ -47,20 +47,27 @@
               %li.divider
     - if current_user.is_admin_store?
       %li.dropdown
-        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Materiales
+          %b.caret
+        %ul.dropdown-menu
+          %li
+            = link_to t('materials.title.title'), materials_path, role: 'menuitem'
+          %li
+            = link_to t('articles.title.title'), articles_path
+          %li
+            = link_to t('subarticles.title.title'), subarticles_path
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
           Almacenes
           %b.caret
-        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
+        %ul.dropdown-menu
+          %li
+            = link_to 'Recodificar Sub Artículos', recode_subarticles_path
+          %li
+            = link_to t('note_entry.title.title'), note_entries_path
           %li
             = link_to t("requests.title.title"), requests_path(status: 'initiation')
-          %li{ role: 'presentation' }
-            = link_to t('materials.title.title'), materials_path, role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to t('articles.title.title'), articles_path
-          %li{ role: 'presentation' }
-            = link_to t('subarticles.title.title'), subarticles_path
-          %li{ role: 'presentation' }
-            = link_to 'Recodificar Sub Artículos', recode_subarticles_path
     - unless current_user.is_super_admin?
       %li
         = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
