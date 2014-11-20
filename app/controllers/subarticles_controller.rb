@@ -103,6 +103,10 @@ class SubarticlesController < ApplicationController
     end
   end
 
+  def kardex
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subarticle

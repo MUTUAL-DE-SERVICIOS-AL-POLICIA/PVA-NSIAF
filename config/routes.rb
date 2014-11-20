@@ -22,6 +22,7 @@ Nsiaf::Application.routes.draw do
       post :entry_create
     end
     collection do
+      get :kardex
       get :articles
       get :get_subarticles
       get :recode
