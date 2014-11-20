@@ -19,6 +19,7 @@ Nsiaf::Application.routes.draw do
   end
 
   resources :subarticles, except: [:destroy] do
+    resources :kardexes
     member do
       post :change_status
       get :verify_amount

@@ -3,7 +3,12 @@ class KardexesController < ApplicationController
 
   # GET /kardexes
   def index
-    @kardexes = Kardex.all
+    if params[:subarticle_id].present?
+      @subarticle = Subarticle.includes(kardexes: :kardex_prices).find(params[:subarticle_id])
+      @kardexes = @subarticle.kardexes
+    else
+      @kardexes = Kardex.all
+    end
   end
 
   # GET /kardexes/1
