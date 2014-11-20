@@ -1,4 +1,8 @@
 Nsiaf::Application.routes.draw do
+  resources :kardex_prices
+
+  resources :kardexes
+
   resources :derecognised, only: :index
 
   resources :requests, except: [:edit, :destroy] do
