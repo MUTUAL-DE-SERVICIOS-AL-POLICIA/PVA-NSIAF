@@ -1,0 +1,53 @@
+#request-urls{data: {'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY')}}
+
+.page-header{data: {action: 'request'}}
+  %h2= t("note_entry.title.new")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @note_entry, html: { class: 'form-horizontal' } do |f|
+    .row
+      .col-sm-12.col-md-8.col-lg-8
+        .form-group
+          %label.col-sm-3.col-md-3.col-lg-3.control-label= t('activerecord.models.supplier')
+          .col-xs-9.col-sm-9.col-md-9
+            = text_field_tag :supplier_name, '', id: 'supplier', class: 'form-control'
+    .row
+      .col-sm-12.col-md-8.col-lg-8
+        = f.input :delivery_note_number
+      .col-sm-12.col-md-4.col-lg-4
+        = f.input :delivery_note_date, as: :string, input_html: { value: I18n.l(Time.now.to_date), class: 'note_entry_date date' }, label: false
+    .row
+      .col-sm-12.col-md-8.col-lg-8
+        = f.input :invoice_number
+      .col-sm-12.col-md-4.col-lg-4
+        = f.input :invoice_date, as: :string, input_html: { value: I18n.l(Time.now.to_date), class: 'note_entry_date date' }, label: false
+    .row
+      .col-sm-12.col-md-8.col-lg-8
+        .form-group
+          %label.col-sm-3.col-md-3.col-lg-3.control-label= t('activerecord.models.subarticle')
+          .col-xs-9.col-sm-9.col-md-9
+            = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control'
+    = render 'shared/form_buttons'
+
+-#= form_for @note_entry do |f|
+  -#- if @note_entry.errors.any?
+    -##error_explanation
+      -#%h2= "#{pluralize(@note_entry.errors.count, "error")} prohibited this note_entry from being saved:"
+      -#%ul
+        -#- @note_entry.errors.full_messages.each do |msg|
+          -#%li= msg
+
+  -#.field
+    -#= f.label :delivery_note_number
+    -#= f.number_field :delivery_note_number
+  -#.field
+    -#= f.label :delivery_note_date
+    -#= f.date_select :delivery_note_date
+  -#.field
+    -#= f.label :invoice_number
+    -#= f.number_field :invoice_number
+  -#.field
+    -#= f.label :invoice_date
+    -#= f.date_select :invoice_date
+  -#.actions
+    -#= f.submit 'Save'

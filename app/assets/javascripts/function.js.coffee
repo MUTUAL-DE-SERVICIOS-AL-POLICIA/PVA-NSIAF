@@ -3,6 +3,11 @@ total_cost = ->
   unit_cost = parseFloat($("input#entry_subarticle_unit_cost").val() || 0)
   $("input#entry_subarticle_total_cost").val(amount * unit_cost)
 
+style_date = (id)->
+  $("<div class='input-group #{id}'></div>").insertBefore("input##{id}")
+  $("input##{id}").appendTo(".input-group.#{id}")
+  $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
+
 jQuery ->
   TableTools.BUTTONS.download =
     sAction: "text"
@@ -207,9 +212,8 @@ jQuery ->
       return false
 
   # Entry Subarticle
-  $("<div class='input-group'></div>").insertBefore("input#entry_subarticle_date")
-  $("input#entry_subarticle_date").appendTo(".input-group")
-  $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input#entry_subarticle_date")
+  style_date("note_entry_delivery_note_date")
+  style_date("note_entry_invoice_date")
 
   $(".date").datepicker
     format: "dd/mm/yyyy"
