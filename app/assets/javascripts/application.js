@@ -40,3 +40,4 @@
 //= require holder
 //= require bootstrap-datepicker
 //= require bootstrap-datepicker.es
+//= require jquery_nested_form

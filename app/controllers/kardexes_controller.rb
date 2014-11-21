@@ -30,7 +30,7 @@ class KardexesController < ApplicationController
     @kardex = Kardex.new(kardex_params)
 
     if @kardex.save
-      redirect_to @kardex, notice: 'Kardex was successfully created.'
+      redirect_to :back, notice: t('general.created', model: Kardex.model_name.human)
     else
       render :new
     end
@@ -59,6 +59,6 @@ class KardexesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def kardex_params
-      params.require(:kardex).permit(:kardex_date, :invoice_number, :order_number, :detail, :subarticle_id)
+      params.require(:kardex).permit(:kardex_date, :invoice_number, :order_number, :detail, :subarticle_id, kardex_prices_attributes: [:id, :input_quantities, :output_quantities, :balance_quantities, :unit_cost, :input_amount, :output_amount, :balance_amount])
     end
 end

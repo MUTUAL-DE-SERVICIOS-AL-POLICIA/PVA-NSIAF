@@ -310,6 +310,8 @@ es:
       building: "Entidad"
       department: "Unidad"
       entity: "Institución"
+      kardex: "Kardex"
+      kardex_price: "Kardex Precios"
       material: "Material"
       subarticle: "Sub Artículo"
       proceeding: "Acta"
@@ -366,6 +368,19 @@ es:
         total_cost: "Costo Total"
         invoice: "Factura"
         date: "Fecha"
+      kardex:
+        kardex_date: "Fecha"
+        invoice_number: "Nº de Factura"
+        order_number: "Nº de Pedido Mat"
+        detail: "Detalle"
+      kardex_price:
+        input_quantities: "Entradas"
+        output_quantities: "Salidas"
+        balance_quantities: "Saldos"
+        unit_cost: "Costo Unitario"
+        input_amount: "Entradas"
+        output_amount: "Salidas"
+        balance_amount: "Saldos"
       material:
         code: "Código"
         description: "Descripción"

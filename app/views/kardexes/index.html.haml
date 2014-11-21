@@ -22,24 +22,56 @@
   %dt Nº CODIGO:
   %dd= @subarticle.code
 
-%table.table.table-bordered.table-condensed
-  %thead
-    %tr.vertical-align
-      %th.text-center{rowspan: 2} FECHA
-      %th.text-center{rowspan: 2} Nº DE FACTURA
-      %th.text-center{rowspan: 2} Nº DE PEDIDO MAT
-      %th.text-center{rowspan: 2} DETALLE
-      %th.text-center{colspan: 3} CANTIDADES
-      %th.text-center{rowspan: 2} COSTO UNITARIO
-      %th.text-center{colspan: 3} IMPORTES EN BOLIVIANOS
-    %tr
-      %th ENTRADAS
-      %th SALIDAS
-      %th SALDOS
-      %th ENTRADAS
-      %th SALIDAS
-      %th SALDOS
-  %tbody
-    = render @initial_kardex, initial: true
-    = render @kardexes
-    = render @kardexes.last, final: true
+- unless @initial_kardex.new_record?
+  %table.table.table-bordered.table-condensed
+    %thead
+      %tr.vertical-align
+        %th.text-center{rowspan: 2} FECHA
+        %th.text-center{rowspan: 2} Nº DE FACTURA
+        %th.text-center{rowspan: 2} Nº DE PEDIDO MAT
+        %th.text-center{rowspan: 2} DETALLE
+        %th.text-center{colspan: 3} CANTIDADES
+        %th.text-center{rowspan: 2} COSTO UNITARIO
+        %th.text-center{colspan: 3} IMPORTES EN BOLIVIANOS
+      %tr
+        %th ENTRADAS
+        %th SALIDAS
+        %th SALDOS
+        %th ENTRADAS
+        %th SALIDAS
+        %th SALDOS
+    %tbody
+      = render @initial_kardex, initial: true
+      = render @kardexes - [@initial_kardex]
+      = render @kardexes.last, final: true
+- else
+  .col-sm-9.column.col-sm-offset-1
+    %h2
+      Saldo Inicial
+      %small Saldo inicial del año actual
+    %br/
+    = simple_nested_form_for @initial_kardex, html: { class: 'form-horizontal' } do |f|
+      = f.input :subarticle_id, as: :hidden, input_html: {value: @subarticle.id}
+      = f.input :kardex_date, as: :string, input_html: {value: I18n.l(Time.now.to_date), class: 'date'}
+      = f.input :invoice_number
+      = f.input :order_number, input_html: {value: 0}
+      = f.input :detail, input_html: {value: 'SALDO INICIAL'}
+      = f.simple_fields_for :kardex_prices do |fkp|
+        = field_set_tag "Cantidades" do
+          .pull-right{style: 'margin-top: -35px;'}
+            = fkp.link_to_remove do
+              %span.glyphicon.glyphicon-remove
+              Eliminar
+          = fkp.input :input_quantities, input_html: {value: 0}
+          = fkp.input :output_quantities, input_html: {value: 0}
+          = fkp.input :balance_quantities, input_html: {value: 0}
+        = fkp.input :unit_cost, input_html: {value: '0.00'}
+        = field_set_tag "Importe en Bolivianos" do
+          = fkp.input :input_amount, input_html: {value: '0.00'}
+          = fkp.input :output_amount, input_html: {value: '0.00'}
+          = fkp.input :balance_amount, input_html: {value: '0.00'}
+      = f.link_to_add :kardex_prices, style: '' do
+        %span.glyphicon.glyphicon-plus
+        Precio Kardex
+
+      = render 'shared/form_buttons'
