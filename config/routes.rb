@@ -1,5 +1,7 @@
 Nsiaf::Application.routes.draw do
-  resources :note_entries, only: [:index, :show, :new, :create]
+  resources :note_entries, only: [:index, :show, :new, :create] do
+    get :get_suppliers, on: :collection
+  end
 
   resources :derecognised, only: :index
 

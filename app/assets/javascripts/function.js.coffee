@@ -233,3 +233,4 @@ jQuery ->
   # Clean input text autocomplete
   $(document).on 'click', '#clean_text', ->
     $("#subarticle").val('')
+    $('#subarticle').focus()
