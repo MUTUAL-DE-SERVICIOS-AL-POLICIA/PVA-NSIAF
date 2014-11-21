@@ -22,6 +22,7 @@ class NoteEntriesController < ApplicationController
       supplier_id = Supplier.new_object(params[:supplier])
       @note_entry.supplier_id = supplier_id
     end
+    @note_entry.user_id = current_user.id
 
     if @note_entry.save
       redirect_to @note_entry, notice: 'Note entry was successfully created.'
@@ -42,6 +43,6 @@ class NoteEntriesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def note_entry_params
-      params.require(:note_entry).permit(:delivery_note_number, :delivery_note_date, :invoice_number, :invoice_date, :supplier_id, {entry_subarticles_attributes: [ :id, :subarticle_id, :amount, :unit_cost, :total_cost]})
+      params.require(:note_entry).permit(:delivery_note_number, :delivery_note_date, :invoice_number, :invoice_date, :supplier_id, :total, {entry_subarticles_attributes: [ :id, :subarticle_id, :amount, :unit_cost, :total_cost]})
     end
 end

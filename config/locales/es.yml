@@ -378,6 +378,7 @@ es:
         delivery_note_number: "Nota de Entrega"
         invoice_number: "Factura"
         supplier_id: "Proveedora"
+        user_id: "Encargado(a)"
       proceeding:
         user_id: "Funcionario"
         admin_id: "Administrador"

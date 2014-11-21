@@ -24,6 +24,8 @@
     %span.col-xs-12.col-sm.col-md-3.padding-note= "##{@note_entry.invoice_number}"
     %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
     = l @note_entry.invoice_date
+  %dt= NoteEntry.human_attribute_name('user_id')
+  %dd= @note_entry.user_name
 
 %br
 %br
@@ -54,4 +56,4 @@
       %td
       %th TOTAL
       %th
-      %th
+      %th= @note_entry.total
