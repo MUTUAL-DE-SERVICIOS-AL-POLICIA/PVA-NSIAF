@@ -231,6 +231,9 @@ jQuery ->
   $(document).on 'keyup', 'input.unit_cost', ->
     total_cost($(this))
 
+  $(document).on 'click', 'span.glyphicon-remove.pointer', ->
+    $(this).parent().parent().remove()
+
   # Clean input text autocomplete
   $(document).on 'click', '#clean_text', ->
     $("#subarticle").val('')

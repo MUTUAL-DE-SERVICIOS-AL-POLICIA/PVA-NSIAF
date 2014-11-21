@@ -42,6 +42,7 @@
         %th{rowspan: "2"} CODIGO
         %th{rowspan: "2"} DETALLE
         %th{colspan: "2"} IMPORTE
+        %th{rowspan: "2"}
       %tr
         %th UNITARIO
         %th TOTAL
@@ -67,3 +68,5 @@
     %td.col-sm-2.col-md-2.note= text_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, {id:"unit_cost_{{id}}", class: 'form-control unit_cost', placeholder: 'precio unitario'}
     %td.col-sm-2.col-md-2.note= text_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, {id:"total_cost_{{id}}", class: 'form-control total_cost'}
     %td{style: "display: none;"}= hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
+    %td
+      %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }
