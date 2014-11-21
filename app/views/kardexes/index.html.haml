@@ -40,53 +40,6 @@
       %th SALIDAS
       %th SALDOS
   %tbody
-    %tr.info{style: 'font-weight: bold;'}
-      %td.text-center 01/01/2013
-      %td.text-center 0
-      %td.text-center 0
-      %td SALDO INICIAL
-      %td.text-center 0
-      %td.text-center 0
-      %td.text-center 9
-      %td.number 31.50
-      %td.number 0.00
-      %td.number 0.00
-      %td.number 283.50
-    - @kardexes.each do |kardex|
-      - kp = kardex.kardex_prices.count
-      %tr
-        %td.text-center{rowspan: kp}
-          = l kardex.kardex_date.to_date, format: :default
-        %td.text-center{rowspan: kp}= kardex.invoice_number
-        %td.text-center{rowspan: kp}= kardex.order_number
-        %td{rowspan: kp}= kardex.detail
-        - kardex.kardex_prices.each_with_index do |price, index|
-          - if index > 0
-            %tr
-              %td.text-center= price.input_quantities
-              %td.text-center= price.output_quantities
-              %td.text-center= price.balance_quantities
-              %td.number= price.unit_cost
-              %td.number= price.input_amount
-              %td.number= price.output_amount
-              %td.number= price.balance_amount
-          - else
-            %td.text-center= price.input_quantities
-            %td.text-center= price.output_quantities
-            %td.text-center= price.balance_quantities
-            %td.number= price.unit_cost
-            %td.number= price.input_amount
-            %td.number= price.output_amount
-            %td.number= price.balance_amount
-    %tr.info{style: 'font-weight: bold;'}
-      %td.text-center 31/12/2013
-      %td.text-center 0
-      %td.text-center 0
-      %td SALDO FINAL
-      %td.text-center 0
-      %td.text-center 0
-      %td.text-center 9
-      %td.number 31.50
-      %td.number 0.00
-      %td.number 0.00
-      %td.number 283.50
+    = render @initial_kardex, initial: true
+    = render @kardexes
+    = render @kardexes.last, final: true

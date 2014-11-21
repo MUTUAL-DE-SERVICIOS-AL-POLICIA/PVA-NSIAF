@@ -6,6 +6,7 @@ class KardexesController < ApplicationController
     if params[:subarticle_id].present?
       @subarticle = Subarticle.includes(kardexes: :kardex_prices).find(params[:subarticle_id])
       @kardexes = @subarticle.kardexes
+      @initial_kardex = Kardex.initial_kardex
     else
       @kardexes = Kardex.all
     end
