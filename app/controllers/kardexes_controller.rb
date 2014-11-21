@@ -6,9 +6,24 @@ class KardexesController < ApplicationController
     if params[:subarticle_id].present?
       @subarticle = Subarticle.includes(kardexes: :kardex_prices).find(params[:subarticle_id])
       @kardexes = @subarticle.kardexes
-      @initial_kardex = Kardex.initial_kardex
+      @initial_kardex = @kardexes.initial_kardex
     else
       @kardexes = Kardex.all
+    end
+    respond_to do |format|
+      format.html
+      format.pdf do
+        filename = @subarticle.description.parameterize || 'subarticulo'
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               template: 'kardexes/index.html.haml',
+               orientation: 'Landscape',
+               page_size: 'Letter',
+               margin: { top: 15, bottom: 20, left: 15, right: 15 },
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
     end
   end
 

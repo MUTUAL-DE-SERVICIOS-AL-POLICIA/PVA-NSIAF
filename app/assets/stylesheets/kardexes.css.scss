@@ -1,0 +1,23 @@
+table.kardex-table {
+  margin-bottom: 15px;
+  margin-left: 80px;
+  h3.title {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  tr td {
+    padding-right: 10px;
+  }
+}
+
+.number {
+  text-align: right;
+}
+
+table {
+  tr.vertical-align {
+    th {
+      vertical-align: middle;
+    }
+  }
+}
