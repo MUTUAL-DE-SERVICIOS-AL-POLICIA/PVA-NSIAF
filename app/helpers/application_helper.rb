@@ -185,4 +185,21 @@ module ApplicationHelper
     a = URI(r_referer).path
     r_referer.present? && i == 0 && a["entry"] == "entry" ? 'success' : ''
   end
+
+  # Unit for Bolivia
+  def number_to_money number
+    number_to_currency number,
+      precision: 2,
+      unit: 'Bs',
+      separator: '.',
+      delimiter: ',',
+      format: '%u%n'
+  end
+
+  def number_with_delimiter number
+    number_with_precision number,
+      precision: 2,
+      separator: '.',
+      delimiter: ','
+  end
 end
