@@ -27,7 +27,6 @@ Nsiaf::Application.routes.draw do
       get :verify_amount
       get :entry
       post :entry_create
-      get :kardex
     end
     collection do
       get :articles

@@ -6,7 +6,7 @@
     = link_to [:entry, @subarticle], class: 'btn btn-info' do
       %span.glyphicon.glyphicon-plus-sign
       Ingreso
-    = link_to [:kardex, @subarticle], class: 'btn btn-default' do
+    = link_to subarticle_kardexes_path(@subarticle), class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list-alt
       Kardex
     = link_to subarticles_path, class: 'btn btn-default' do
@@ -45,7 +45,7 @@
       %th.text-center= EntrySubarticle.human_attribute_name('date')
   %tbody
     - @subarticle.entry_subarticles.order("id DESC").each_with_index do |entry, index|
-      %tr{ class: new_entry_subarticle(index) }
+      %tr
         %td= index + 1
         %td.number= number_with_delimiter entry.amount || 0
         %td.number= number_with_delimiter entry.unit_cost || 0
