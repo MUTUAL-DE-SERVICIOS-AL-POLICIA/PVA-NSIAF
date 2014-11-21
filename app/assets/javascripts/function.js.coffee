@@ -3,6 +3,10 @@ total_cost = ($this) ->
   amount = parseFloat($("input#amount_#{id}").val() || 0)
   unit_cost = parseFloat($("input#unit_cost_#{id}").val() || 0)
   $("input#total_cost_#{id}").val(amount * unit_cost)
+  total = 0
+  $("input.total_cost").map ->
+    total += parseFloat($(this).val() || 0)
+    $("#totalNoteEntry").text(total)
 
 style_date = (id)->
   $("<div class='input-group #{id}'></div>").insertBefore("input##{id}")
