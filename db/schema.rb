@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20141120220915) do
+=======
+ActiveRecord::Schema.define(version: 20141120191600) do
+>>>>>>> afae6056e282583571c22a19056bff7b79e8d5c8
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -185,6 +189,18 @@ ActiveRecord::Schema.define(version: 20141120220915) do
     t.string   "status",      limit: 2
   end
 
+  create_table "note_entries", force: true do |t|
+    t.integer  "delivery_note_number"
+    t.date     "delivery_note_date"
+    t.integer  "invoice_number"
+    t.date     "invoice_date"
+    t.integer  "supplier_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree
+
   create_table "proceedings", force: true do |t|
     t.integer  "user_id"
     t.integer  "admin_id"
@@ -230,6 +246,12 @@ ActiveRecord::Schema.define(version: 20141120220915) do
   end
 
   add_index "subarticles", ["article_id"], name: "index_subarticles_on_article_id", using: :btree
+
+  create_table "suppliers", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                              default: "",    null: false

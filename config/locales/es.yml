@@ -140,6 +140,10 @@ es:
     message_html: '<ul><li><b>%{inserted}</b> registros insertados</li><li><b>%{no_inserted}</b> registros no insertados</li></ul>'
     title:
       title: "Migración"
+  note_entry:
+    title:
+      title: "Nota de Ingreso de Almacén"
+      new: "Nueva Nota de Ingreso"
   proceedings:
     title:
       title: "Actas"
@@ -314,6 +318,7 @@ es:
       kardex_price: "Kardex Precios"
       material: "Material"
       subarticle: "Sub Artículo"
+      supplier: "Empresa"
       proceeding: "Acta"
       user: "Funcionario"
 
@@ -385,6 +390,9 @@ es:
         code: "Código"
         description: "Descripción"
         status: "Estado"
+      note_entry:
+        delivery_note_number: "Nota de Entrega"
+        invoice_number: "Factura"
       proceeding:
         user_id: "Funcionario"
         admin_id: "Administrador"

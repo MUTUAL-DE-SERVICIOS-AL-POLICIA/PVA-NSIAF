@@ -3,6 +3,8 @@ Nsiaf::Application.routes.draw do
 
   resources :kardexes
 
+  resources :note_entries, only: [:index, :show, :new, :create]
+
   resources :derecognised, only: :index
 
   resources :requests, except: [:edit, :destroy] do
