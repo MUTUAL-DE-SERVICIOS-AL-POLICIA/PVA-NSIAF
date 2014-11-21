@@ -166,7 +166,7 @@ class Request extends BarcodeReader
     if @$subarticles.find("tr##{data.id}").length
       @open_modal("El Sub Artículo '#{data.description}' ya se encuentra en lista")
     else
-      @$subarticles.append @$templateNewRequest.render(data)
+      @$subarticles.prepend @$templateNewRequest.render(data)
 
   subarticle_request_plus: ($this) ->
     amount = @get_amount($this)

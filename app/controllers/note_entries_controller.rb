@@ -34,6 +34,6 @@ class NoteEntriesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def note_entry_params
-      params.require(:note_entry).permit(:delivery_note_number, :delivery_note_date, :invoice_number, :invoice_date)
+      params.require(:note_entry).permit(:delivery_note_number, :delivery_note_date, :invoice_number, :invoice_date, {entry_subarticles_attributes: [ :id, :subarticle_id, :amount, :unit_cost, :total_cost]})
     end
 end
