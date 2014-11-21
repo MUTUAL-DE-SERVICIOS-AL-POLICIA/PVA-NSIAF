@@ -13,7 +13,7 @@
   %dl.dl-horizontal
     %dt Nº
     %dd= @note_entry.id
-    %dt= NoteEntry.human_attribute_name('supplier_id')
+    %dt= NoteEntry.human_attribute_name('suppliers')
     %dd= @note_entry.supplier_name
     %dt= NoteEntry.human_attribute_name('delivery_note_number')
     %dd
@@ -25,7 +25,7 @@
       %span.col-xs-12.col-sm.col-md-3.padding-note= @note_entry.note_number(@note_entry.invoice_number)
       %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
       = @note_entry.note_date(@note_entry.invoice_date)
-    %dt= NoteEntry.human_attribute_name('user_id')
+    %dt= NoteEntry.human_attribute_name('users')
     %dd= @note_entry.user_name
 
   %br

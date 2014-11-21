@@ -28,6 +28,7 @@ class Ability
       can :manage, Material
       can :manage, Request
       can :manage, Subarticle
+      can :manage, NoteEntry
       can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
       can :manage, Building
       can :manage, Department

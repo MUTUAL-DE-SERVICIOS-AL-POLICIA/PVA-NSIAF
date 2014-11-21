@@ -1,9 +1,10 @@
 class NoteEntriesController < ApplicationController
+  load_and_authorize_resource
   before_action :set_note_entry, only: [:show, :edit, :update, :destroy]
 
   # GET /note_entries
   def index
-    @note_entries = NoteEntry.all
+    format_to('note_entries', NoteEntriesDatatable)
   end
 
   # GET /note_entries/1
