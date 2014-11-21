@@ -142,7 +142,7 @@ es:
       title: "Migración"
   note_entry:
     title:
-      title: "Nota de Ingreso de Almacén"
+      title: "Notas de Ingreso de Almacén"
       new: "Nueva Nota de Ingreso"
   proceedings:
     title:
@@ -316,7 +316,6 @@ es:
       entity: "Institución"
       material: "Material"
       subarticle: "Sub Artículo"
-      supplier: "Empresa"
       proceeding: "Acta"
       user: "Funcionario"
 
@@ -378,6 +377,7 @@ es:
       note_entry:
         delivery_note_number: "Nota de Entrega"
         invoice_number: "Factura"
+        supplier_id: "Proveedora"
       proceeding:
         user_id: "Funcionario"
         admin_id: "Administrador"

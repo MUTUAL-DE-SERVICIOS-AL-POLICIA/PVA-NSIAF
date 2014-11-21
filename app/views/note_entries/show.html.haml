@@ -1,18 +1,57 @@
-%p#notice= notice
+.page-header
+  .pull-right
+    = link_to '#', class: 'btn btn-info' do
+      %span.glyphicon.glyphicon-print
+      Imprimir PDF
+    = link_to note_entries_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("note_entry.title.title")
 
-%p
-  %b Delivery note number:
-  = @note_entry.delivery_note_number
-%p
-  %b Delivery note date:
-  = @note_entry.delivery_note_date
-%p
-  %b Invoice number:
-  = @note_entry.invoice_number
-%p
-  %b Invoice date:
-  = @note_entry.invoice_date
+  %h2 Nota de Ingreso
 
-= link_to 'Edit', edit_note_entry_path(@note_entry)
-\|
-= link_to 'Back', note_entries_path
+%dl.dl-horizontal
+  %dt Nº
+  %dd= @note_entry.id
+  %dt= NoteEntry.human_attribute_name('supplier_id')
+  %dd= @note_entry.supplier_name
+  %dt= NoteEntry.human_attribute_name('delivery_note_number')
+  %dd
+    %span.col-xs-12.col-sm-3.col-md-3.padding-note= "##{@note_entry.delivery_note_number}"
+    %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
+    = l @note_entry.delivery_note_date
+  %dt= NoteEntry.human_attribute_name('invoice_number')
+  %dd
+    %span.col-xs-12.col-sm.col-md-3.padding-note= "##{@note_entry.invoice_number}"
+    %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
+    = l @note_entry.invoice_date
+
+%br
+%br
+
+%table.table.table-bordered
+  %thead
+    %tr
+      %th{rowspan: "2"} CANTIDAD
+      %th{rowspan: "2"} UNIDAD
+      %th{rowspan: "2"} CODIGO
+      %th{rowspan: "2"} DETALLE
+      %th{colspan: "2"} IMPORTE
+    %tr
+      %th UNITARIO
+      %th TOTAL
+  %tbody
+    - @note_entry.entry_subarticles.each do |entry|
+      %tr
+        %td= entry.amount
+        %td= entry.subarticle_unit
+        %td= entry.subarticle_code
+        %td= entry.subarticle_name
+        %td= entry.unit_cost
+        %td= entry.total_cost
+    %tr
+      %td
+      %td
+      %td
+      %th TOTAL
+      %th
+      %th
