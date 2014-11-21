@@ -8,6 +8,19 @@ class NoteEntriesController < ApplicationController
 
   # GET /note_entries/1
   def show
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: "VSIAF-Nota de Ingreso Nº #{@note_entry.id}",
+               disposition: 'attachment',
+               template: 'note_entries/show.html.haml',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               margin: { top: 10, bottom: 15, left: 20, right: 15 },
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
   end
 
   # GET /note_entries/new

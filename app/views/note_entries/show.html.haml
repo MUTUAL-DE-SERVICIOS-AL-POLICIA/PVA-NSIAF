@@ -1,59 +1,81 @@
-.page-header
-  .pull-right
-    = link_to '#', class: 'btn btn-info' do
-      %span.glyphicon.glyphicon-print
-      Imprimir PDF
-    = link_to note_entries_path, class: 'btn btn-default' do
-      %span.glyphicon.glyphicon-list
-      = t("note_entry.title.title")
+- unless is_pdf?
+  .page-header
+    .pull-right
+      = link_to note_entry_path(@note_entry, format: :pdf), class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-print
+        Imprimir PDF
+      = link_to note_entries_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        = t("note_entry.title.title")
 
-  %h2 Nota de Ingreso
+    %h2 Nota de Ingreso
 
-%dl.dl-horizontal
-  %dt Nº
-  %dd= @note_entry.id
-  %dt= NoteEntry.human_attribute_name('supplier_id')
-  %dd= @note_entry.supplier_name
-  %dt= NoteEntry.human_attribute_name('delivery_note_number')
-  %dd
-    %span.col-xs-12.col-sm-3.col-md-3.padding-note= "##{@note_entry.delivery_note_number}"
-    %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
-    = l @note_entry.delivery_note_date
-  %dt= NoteEntry.human_attribute_name('invoice_number')
-  %dd
-    %span.col-xs-12.col-sm.col-md-3.padding-note= "##{@note_entry.invoice_number}"
-    %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
-    = l @note_entry.invoice_date
-  %dt= NoteEntry.human_attribute_name('user_id')
-  %dd= @note_entry.user_name
+  %dl.dl-horizontal
+    %dt Nº
+    %dd= @note_entry.id
+    %dt= NoteEntry.human_attribute_name('supplier_id')
+    %dd= @note_entry.supplier_name
+    %dt= NoteEntry.human_attribute_name('delivery_note_number')
+    %dd
+      %span.col-xs-12.col-sm-3.col-md-3.padding-note= @note_entry.note_number(@note_entry.delivery_note_number)
+      %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
+      = @note_entry.note_date(@note_entry.delivery_note_date)
+    %dt= NoteEntry.human_attribute_name('invoice_number')
+    %dd
+      %span.col-xs-12.col-sm.col-md-3.padding-note= @note_entry.note_number(@note_entry.invoice_number)
+      %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
+      = @note_entry.note_date(@note_entry.invoice_date)
+    %dt= NoteEntry.human_attribute_name('user_id')
+    %dd= @note_entry.user_name
 
-%br
-%br
+  %br
+  %br
 
-%table.table.table-bordered
-  %thead
-    %tr
-      %th{rowspan: "2"} CANTIDAD
-      %th{rowspan: "2"} UNIDAD
-      %th{rowspan: "2"} CODIGO
-      %th{rowspan: "2"} DETALLE
-      %th{colspan: "2"} IMPORTE
-    %tr
-      %th UNITARIO
-      %th TOTAL
-  %tbody
-    - @note_entry.entry_subarticles.each do |entry|
+%div{ class: "#{'separator' if is_pdf?}" }
+  - if is_pdf?
+    .pull-right Nº #{@note_entry.id}
+    %h3.text-center.proceeding-title NOTA DE INGRESO ALMACEN
+
+  %table.table.table-bordered
+    %thead
       %tr
-        %td= entry.amount
-        %td= entry.subarticle_unit
-        %td= entry.subarticle_code
-        %td= entry.subarticle_name
-        %td= entry.unit_cost
-        %td= entry.total_cost
-    %tr
-      %td
-      %td
-      %td
-      %th TOTAL
-      %th
-      %th= @note_entry.total
+        %th{rowspan: "2"} CANTIDAD
+        %th{rowspan: "2"} UNIDAD
+        %th{rowspan: "2"} CODIGO
+        %th{rowspan: "2"} DETALLE
+        %th{colspan: "2"} IMPORTE
+      %tr
+        %th UNITARIO
+        %th TOTAL
+    %tbody
+      - @note_entry.entry_subarticles.each do |entry|
+        %tr
+          %td= entry.amount
+          %td= entry.subarticle_unit
+          %td= entry.subarticle_code
+          %td= entry.subarticle_name
+          %td= entry.unit_cost
+          %td= entry.total_cost
+      %tr
+        %td
+        %td
+        %td
+        %th TOTAL
+        %th
+        %th= @note_entry.total
+      %tr
+        %td{colspan: 6}
+          - subarticle = @note_entry.entry_subarticles.count == 1 ? "Compra de#{@note_entry.entry_subarticles.first.subarticle_name}, " : ''
+          - supplier = "De #{@note_entry.supplier_name}, "
+          - delivery_note = "#{@note_entry.note_number(@note_entry.delivery_note_number)} del #{@note_entry.note_date(@note_entry.delivery_note_date)}, "
+          - invoice = "#{@note_entry.note_number(@note_entry.invoice_number)} del #{@note_entry.note_date(@note_entry.invoice_date)}"
+          %b Glosa:
+          #{subarticle} #{supplier} Según Nota de Entrega #{delivery_note} Factura #{invoice}
+
+  - if is_pdf?
+    %br
+    %br
+    %p
+      Recibido por #{@note_entry.user_name} ..................................................................... Firma .......................................................
+    %p.proceeding-date
+      La Paz, #{ I18n.l(Time.now.to_date, format: :long) }

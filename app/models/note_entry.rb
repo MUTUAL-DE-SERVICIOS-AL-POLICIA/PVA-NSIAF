@@ -11,4 +11,12 @@ class NoteEntry < ActiveRecord::Base
   def user_name
     user.present? ? user.name : ''
   end
+
+  def note_number(number)
+    number.present? ? "##{number}" : ''
+  end
+
+  def note_date(date)
+    date.present? ? I18n.l(date) : ''
+  end
 end
