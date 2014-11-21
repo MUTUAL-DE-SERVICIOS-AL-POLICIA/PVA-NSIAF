@@ -4,9 +4,10 @@
       = link_to @subarticle, class: 'btn btn-default' do
         %span.glyphicon.glyphicon-arrow-left
         Atrás
-      = link_to subarticle_kardexes_path(@subarticle, format: :pdf), class: 'btn btn-info' do
-        %span.glyphicon.glyphicon-print
-        Imprimir
+      - if @kardexes.length > 0
+        = link_to subarticle_kardexes_path(@subarticle, format: :pdf), class: 'btn btn-info' do
+          %span.glyphicon.glyphicon-print
+          Imprimir
       = link_to subarticles_path, class: 'btn btn-default' do
         %span.glyphicon.glyphicon-list
         Subartículos
@@ -70,6 +71,18 @@
       = render @initial_kardex, initial: true
       = render @kardexes - [@initial_kardex]
       = render @kardexes.last, final: true
+
+  - if is_pdf?
+    .separator
+    %table{ style: 'width: 100%' }
+      %tr
+        %td.text-center
+          %p _______________________
+          %p ELABORADO POR
+        %td.text-center
+          %p _______________________
+          %p Vº Bº
+
 - else
   .col-sm-9.column.col-sm-offset-1
     %h2
