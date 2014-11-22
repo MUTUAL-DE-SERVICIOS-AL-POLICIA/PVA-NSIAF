@@ -39,7 +39,12 @@ class Subarticle < ActiveRecord::Base
   end
 
   def stock
-    entry_subarticles.sum(:stock)
+    entry_subarticles_exist.sum(:stock)
+  end
+
+  # Only entries with stock > 0
+  def entry_subarticles_exist
+    entry_subarticles.where('stock > 0').order(:created_at)
   end
 
   def self.set_columns
@@ -79,13 +84,15 @@ class Subarticle < ActiveRecord::Base
     where(barcode: barcode)
   end
 
-  def self.exists_amount?
-    where("amount > 0").present? ? true : false
+  def exists_amount?
+    entry_subarticles_exist.present?
   end
 
   def decrease_amount
-    decrease = amount - 1
-    update_attribute('amount', decrease)
+    if entry_subarticles_exist.length > 0
+      entry_subarticle = entry_subarticles_exist.first # FIFO - PEPS
+      entry_subarticle.decrease_amount
+    end
   end
 
   def self.search_subarticle(q)

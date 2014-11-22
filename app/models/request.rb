@@ -55,17 +55,18 @@ class Request < ActiveRecord::Base
   end
 
   def delivery_verification(barcode)
-    subarticles = Subarticle.get_barcode(barcode)
+    subarticle = Subarticle.get_barcode(barcode).take
     s_request = nil
-    if subarticles.present?
-      if subarticles.exists_amount?
-        subarticle = subarticles.first
+    if subarticle.present?
+      if subarticle.exists_amount?
         s_request = subarticle_requests.get_subarticle(subarticle.id)
         if s_request.present?
           if s_request.total_delivered < s_request.amount_delivered
-            subarticle.decrease_amount
-            s_request.increase_total_delivered
-            request_deliver unless subarticle_requests.is_delivered?
+            transaction do
+              subarticle.decrease_amount
+              s_request.increase_total_delivered
+              request_deliver unless subarticle_requests.is_delivered?
+            end
           end
         end
       else

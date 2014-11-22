@@ -19,6 +19,15 @@ class EntrySubarticle < ActiveRecord::Base
     subarticle.present? ? subarticle.unit : ''
   end
 
+  def decrease_amount
+    if self.stock > 0
+      self.stock = self.stock - 1
+      self.save
+    else
+      Rails.logger.info "No se pudo decrementar porque no es mayor a cero"
+    end
+  end
+
   private
 
   def set_stock_value
