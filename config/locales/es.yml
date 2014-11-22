@@ -140,9 +140,9 @@ es:
     message_html: '<ul><li><b>%{inserted}</b> registros insertados</li><li><b>%{no_inserted}</b> registros no insertados</li></ul>'
     title:
       title: "Migración"
-  note_entry:
+  note_entries:
     title:
-      title: "Nota de Ingreso de Almacén"
+      title: "Notas de Ingreso de Almacén"
       new: "Nueva Nota de Ingreso"
   proceedings:
     title:
@@ -316,7 +316,6 @@ es:
       entity: "Institución"
       material: "Material"
       subarticle: "Sub Artículo"
-      supplier: "Empresa"
       proceeding: "Acta"
       user: "Funcionario"
 
@@ -376,8 +375,13 @@ es:
         description: "Descripción"
         status: "Estado"
       note_entry:
+        id: "Nº"
         delivery_note_number: "Nota de Entrega"
+        delivery_note_date: "Nota de Entrega"
         invoice_number: "Factura"
+        suppliers: "Proveedora"
+        total: "Costo total"
+        users: "Encargado(a)"
       proceeding:
         user_id: "Funcionario"
         admin_id: "Administrador"

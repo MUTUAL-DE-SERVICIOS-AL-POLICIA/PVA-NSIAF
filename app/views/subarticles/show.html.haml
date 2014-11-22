@@ -3,15 +3,9 @@
     = link_to edit_subarticle_path(@subarticle), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-<<<<<<< HEAD
-=======
-    = link_to [:entry, @subarticle], class: 'btn btn-info' do
-      %span.glyphicon.glyphicon-plus-sign
-      Ingreso
-    = link_to [:kardex, @subarticle], class: 'btn btn-default' do
+    = link_to [:kardex, @subarticle], class: 'btn btn-info' do
       %span.glyphicon.glyphicon-list-alt
       Kardex
->>>>>>> 5f85df21c7d7e8d34fdb31a47a1a3ebea3fb8b52
     = link_to subarticles_path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("subarticles.title.title")
@@ -48,10 +42,10 @@
       %th.text-center= EntrySubarticle.human_attribute_name('date')
   %tbody
     - @subarticle.entry_subarticles.order("id DESC").each_with_index do |entry, index|
-      %tr{ class: new_entry_subarticle(index) }
+      %tr
         %td= index + 1
         %td.number= number_with_precision(entry.amount || 0, precision: 0, separator: ',', delimiter: '.')
         %td.number= number_with_precision(entry.unit_cost || 0, precision: 2, separator: ',', delimiter: '.')
         %td.number= number_with_precision(entry.total_cost || 0, precision: 2, separator: ',', delimiter: '.')
         %td.text-center= entry.invoice
-        %td.text-center= l entry.date
+        %td.text-center= entry.note_entry.note_date(entry.note_entry.delivery_note_date) if entry.note_entry.present?

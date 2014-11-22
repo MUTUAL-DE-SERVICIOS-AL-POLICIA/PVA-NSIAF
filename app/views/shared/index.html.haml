@@ -10,6 +10,7 @@
 - when 'articles' then new_url = new_article_path
 - when 'subarticles' then new_url = new_subarticle_path
 - when 'requests' then new_url = new_request_path
+- when 'note_entries' then new_url = new_note_entry_path
 
 - control = controller_name == 'derecognised' ? 'assets' : controller_name
 
@@ -50,7 +51,7 @@
 %table.table.table-striped.table-hover.datatable
   %thead
     %tr
-      - unless %w(versions declines proceedings requests).include?(control)
+      - unless %w(versions declines proceedings requests note_entries).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
           %th= User.human_attribute_name('code')
         %th= %w(assets materials articles subarticles).include?(control) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')

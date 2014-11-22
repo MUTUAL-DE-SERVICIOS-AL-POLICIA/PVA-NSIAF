@@ -12,6 +12,8 @@ class Request extends BarcodeReader
     @$article = $('#article')
     @$subarticle = $('#subarticle')
     @$inputSubarticle = $('input#subarticle')
+    @$inputSupplier = $('input#supplier')
+    @$inputNoteEntrySupplier = $('input#note_entry_supplier_id')
     @$subarticles = $('#subarticles')
     @$selectionSubarticles = $('#selection_subarticles')
     @$selected_subarticles = $('#selected_subarticles')
@@ -43,6 +45,7 @@ class Request extends BarcodeReader
     @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
     @verify_amount_subarticle_url = decodeURIComponent @$request_urls.data('subarticles-verify-amount')
     @user_url = decodeURIComponent(@$request_urls.data('users-id'))
+    @suppliers_json_url = decodeURIComponent @$request_urls.data('get-suppliers')
 
     @alert = new Notices({ele: 'div.main'})
 
@@ -64,6 +67,8 @@ class Request extends BarcodeReader
       @$subarticle.remoteChained(@$article.selector, @$request_urls.data('subarticles-array'))
     if @$inputSubarticle?
       @get_subarticles()
+    if @$inputSupplier?
+      @get_suppliers()
 
   show_request: ->
     sw = 0
@@ -166,7 +171,7 @@ class Request extends BarcodeReader
     if @$subarticles.find("tr##{data.id}").length
       @open_modal("El Sub Artículo '#{data.description}' ya se encuentra en lista")
     else
-      @$subarticles.append @$templateNewRequest.render(data)
+      @$subarticles.prepend @$templateNewRequest.render(data)
 
   subarticle_request_plus: ($this) ->
     amount = @get_amount($this)
@@ -223,3 +228,19 @@ class Request extends BarcodeReader
       $user = @$templateUserInfo.render(data)
       $table = @$selected_subarticles.find("table")
       $($user).insertBefore($table)
+
+  get_suppliers: ->
+    bestPictures = new Bloodhound(
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("description")
+      queryTokenizer: Bloodhound.tokenizers.whitespace
+      limit: 100
+      remote: @suppliers_json_url
+    )
+    bestPictures.initialize()
+    @$inputSupplier.typeahead null,
+      displayKey: "name"
+      source: bestPictures.ttAdapter()
+    .on 'typeahead:selected', (evt, data) => @get_supplier_id(evt, data)
+
+  get_supplier_id: (evt, data) ->
+    @$inputNoteEntrySupplier.val(data.id)

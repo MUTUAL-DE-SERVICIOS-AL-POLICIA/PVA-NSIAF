@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141120191600) do
+ActiveRecord::Schema.define(version: 20141121192208) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -144,7 +144,7 @@ ActiveRecord::Schema.define(version: 20141120191600) do
     t.integer  "subarticle_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "stock",                                  default: 0, null: false
+    t.integer  "stock",                                  default: 0
     t.integer  "note_entry_id"
   end
 
@@ -166,6 +166,8 @@ ActiveRecord::Schema.define(version: 20141120191600) do
     t.integer  "supplier_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "total",                precision: 10, scale: 2
+    t.integer  "user_id"
   end
 
   add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree

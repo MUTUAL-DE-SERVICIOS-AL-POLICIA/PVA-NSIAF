@@ -84,7 +84,7 @@ class Subarticle < ActiveRecord::Base
   end
 
   def self.search_subarticle(q)
-    where("description LIKE ? AND status = ? AND amount > ?", "%#{q}%", 1, 0).map { |s| { id: s.id, description: s.description, unit: s.unit } }
+    where("description LIKE ? AND status = ? AND amount > ?", "%#{q}%", 1, 0).map { |s| { id: s.id, description: s.description, unit: s.unit, code: s.code } }
   end
 
   def verify_amount(amount)

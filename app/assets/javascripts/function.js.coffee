@@ -1,7 +1,13 @@
-total_cost = ->
-  amount = parseFloat($("input#entry_subarticle_amount").val() || 0)
-  unit_cost = parseFloat($("input#entry_subarticle_unit_cost").val() || 0)
-  $("input#entry_subarticle_total_cost").val(amount * unit_cost)
+total_cost = ($this) ->
+  id = $this.parent().parent().attr('id')
+  amount = parseFloat($("input#amount_#{id}").val() || 0)
+  unit_cost = parseFloat($("input#unit_cost_#{id}").val() || 0)
+  $("input#total_cost_#{id}").val(amount * unit_cost)
+  total = 0
+  $("input.total_cost").map ->
+    total += parseFloat($(this).val() || 0)
+    $("#totalNoteEntry").text(total)
+    $("input#note_entry_total").val(total)
 
 style_date = (id)->
   $("<div class='input-group #{id}'></div>").insertBefore("input##{id}")
@@ -219,8 +225,16 @@ jQuery ->
     format: "dd/mm/yyyy"
     language: "es"
 
-  $("input#entry_subarticle_amount").keyup ->
-    total_cost()
+  $(document).on 'keyup', 'input.amount', ->
+    total_cost($(this))
 
-  $("input#entry_subarticle_unit_cost").keyup ->
-    total_cost()
+  $(document).on 'keyup', 'input.unit_cost', ->
+    total_cost($(this))
+
+  $(document).on 'click', 'span.glyphicon-remove.pointer', ->
+    $(this).parent().parent().remove()
+
+  # Clean input text autocomplete
+  $(document).on 'click', '#clean_text', ->
+    $("#subarticle").val('')
+    $('#subarticle').focus()

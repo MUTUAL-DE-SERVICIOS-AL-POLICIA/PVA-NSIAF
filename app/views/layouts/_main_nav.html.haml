@@ -29,8 +29,6 @@
             = link_to 'Recodificar Activos', recode_assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Asignación/Devolución', assignation_assets_path, role: 'menuitem'
-          /%li{ role: 'presentation' }
-          /  = link_to 'Devolución', devolution_assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Actas', proceedings_path, role: 'menuitem'
           %li{ role: 'presentation' }
@@ -65,7 +63,7 @@
           %li
             = link_to 'Recodificar Sub Artículos', recode_subarticles_path
           %li
-            = link_to t('note_entry.title.title'), note_entries_path
+            = link_to t('note_entries.title.title'), note_entries_path
           %li
             = link_to t("requests.title.title"), requests_path(status: 'initiation')
     - unless current_user.is_super_admin?

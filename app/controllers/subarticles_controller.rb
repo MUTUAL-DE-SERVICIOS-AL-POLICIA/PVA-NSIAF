@@ -87,22 +87,6 @@ class SubarticlesController < ApplicationController
     end
   end
 
-  def entry
-    @entry_subarticle = EntrySubarticle.new
-  end
-
-  def entry_create
-    @entry_subarticle = EntrySubarticle.new(entry_subarticle_params)
-
-    if @entry_subarticle.save
-      amount = @subarticle.amount.to_i + @entry_subarticle.amount
-      @subarticle.update_attribute(:amount,amount)
-      redirect_to @subarticle, notice: t('general.created', model: EntrySubarticle.model_name.human)
-    else
-      render action: 'entry'
-    end
-  end
-
   def kardex
   end
 

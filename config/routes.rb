@@ -1,5 +1,7 @@
 Nsiaf::Application.routes.draw do
-  resources :note_entries, only: [:index, :show, :new, :create]
+  resources :note_entries, only: [:index, :show, :new, :create] do
+    get :get_suppliers, on: :collection
+  end
 
   resources :derecognised, only: :index
 
@@ -20,8 +22,6 @@ Nsiaf::Application.routes.draw do
     member do
       post :change_status
       get :verify_amount
-      get :entry
-      post :entry_create
       get :kardex
     end
     collection do
