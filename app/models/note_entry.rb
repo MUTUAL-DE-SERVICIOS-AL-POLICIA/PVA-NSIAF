@@ -36,19 +36,20 @@ class NoteEntry < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'id'), h.get_column(self, 'suppliers'), h.get_column(self, 'users'), h.get_column(self, 'total')]
+    [h.get_column(self, 'id'), h.get_column(self, 'suppliers'), h.get_column(self, 'users'), h.get_column(self, 'total'), h.get_column(self, 'delivery_note_date')]
   end
 
   def self.to_csv
-    columns = %w(id suppliers users total)
+    columns = %w(id suppliers users total delivery_note_date)
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }
       all.each do |note_entry|
         a = note_entry.attributes.values_at(*columns)
-        a.pop(3)
+        a.pop(4)
         a.push(note_entry.supplier_name)
         a.push(note_entry.user_name)
         a.push(note_entry.total)
+        a.push(note_entry.note_date(note_entry.delivery_note_date))
         csv << a
       end
     end

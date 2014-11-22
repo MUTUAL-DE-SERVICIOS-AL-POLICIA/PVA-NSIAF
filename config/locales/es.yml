@@ -377,6 +377,7 @@ es:
       note_entry:
         id: "Nº"
         delivery_note_number: "Nota de Entrega"
+        delivery_note_date: "Nota de Entrega"
         invoice_number: "Factura"
         suppliers: "Proveedora"
         total: "Costo total"

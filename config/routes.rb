@@ -22,8 +22,6 @@ Nsiaf::Application.routes.draw do
     member do
       post :change_status
       get :verify_amount
-      get :entry
-      post :entry_create
       get :kardex
     end
     collection do

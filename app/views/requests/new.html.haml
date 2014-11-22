@@ -10,21 +10,27 @@
       %label.col-xs-12.col-sm-1.col-md-1.control-label Funcionario:
       .col-xs-12.col-sm-4.col-md-4
         = select_tag "people", options_from_collection_for_select(@users, "id", "name"), class: "form-control"
-  .col-xs-12.col-sm-4.col-md-4
-    = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Sub Artículo'
-  .col-xs-12.col-sm-8.col-md-8{ style: 'margin-bottom: 30px;' }
-    %table.table.table-striped
-      %thead
-        %tr
-          %th= Subarticle.human_attribute_name('description')
-          %th= Subarticle.human_attribute_name('unit')
-          %th Cantidad
-          %th.actions-request
-      %tbody#subarticles
-  .text-center
-    %button#btn-show-new-request.btn.btn-primary
-      %span.glyphicon.glyphicon-shopping-cart
-      Ver Solicitud
+  .row
+    .col-xs-12.col-sm-5.col-md-5
+      .row
+        .col-xs-12.col-sm-10.col-md-10
+          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Sub Artículo'
+        .col-xs-12.col-sm-2.col-md-2
+          %button.btn.btn-default{type: "button", title: "Limpiar texto", id: "clean_text"}
+            %span.glyphicon.glyphicon-refresh
+    .col-xs-12.col-sm-7.col-md-7{ style: 'margin-bottom: 30px;' }
+      %table.table.table-striped
+        %thead
+          %tr
+            %th= Subarticle.human_attribute_name('description')
+            %th= Subarticle.human_attribute_name('unit')
+            %th Cantidad
+            %th.actions-request
+        %tbody#subarticles
+    .text-center
+      %button#btn-show-new-request.btn.btn-primary
+        %span.glyphicon.glyphicon-shopping-cart
+        Ver Solicitud
 #selected_subarticles
 
 = render 'material'

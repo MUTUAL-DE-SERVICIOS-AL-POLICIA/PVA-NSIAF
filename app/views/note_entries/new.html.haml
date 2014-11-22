@@ -9,19 +9,19 @@
   .row
     .col-sm-12.col-md-8.col-lg-8
       .form-group
-        %label.col-sm-3.col-md-3.col-lg-3.control-label= NoteEntry.human_attribute_name('supplier_id')
+        %label.col-sm-3.col-md-3.col-lg-3.control-label= NoteEntry.human_attribute_name('suppliers')
         .col-xs-9.col-sm-9.col-md-9
           = text_field_tag :supplier, '', class: 'form-control'
   .row
     .col-sm-12.col-md-8.col-lg-8
       = f.input :delivery_note_number
     .col-sm-12.col-md-4.col-lg-4
-      = f.input :delivery_note_date, as: :string, input_html: { value: I18n.l(Time.now.to_date), class: 'note_entry_date date' }, label: false
+      = f.input :delivery_note_date, as: :string, input_html: { class: 'note_entry_date date' }, label: false
   .row
     .col-sm-12.col-md-8.col-lg-8
       = f.input :invoice_number
     .col-sm-12.col-md-4.col-lg-4
-      = f.input :invoice_date, as: :string, input_html: { value: I18n.l(Time.now.to_date), class: 'note_entry_date date' }, label: false
+      = f.input :invoice_date, as: :string, input_html: { class: 'note_entry_date date' }, label: false
   .row
     .col-sm-12.col-md-8.col-lg-8
       .form-group

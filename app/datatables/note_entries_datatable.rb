@@ -23,6 +23,7 @@ private
         r.supplier_name,
         r.user_name,
         r.total,
+        r.note_date(r.delivery_note_date),
         link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-eye-open'), r, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show'))
       ]
     end
@@ -45,7 +46,7 @@ private
   end
 
   def sort_column
-    columns = %w[note_entries.id suppliers.name users.name note_entries.total]
+    columns = %w[note_entries.id suppliers.name users.name note_entries.total, note_entries.delivery_note_date]
     columns[params[:iSortCol_0].to_i]
   end
 
