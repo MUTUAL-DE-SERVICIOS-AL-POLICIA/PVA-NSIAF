@@ -178,4 +178,21 @@ module ApplicationHelper
   def search_asset_subarticle(model, q)
     model.where("code LIKE ? OR description LIKE ?", "%#{q}%", "%#{q}%").limit 5
   end
+
+  # Unit for Bolivia
+  def number_to_money number
+    number_to_currency number,
+      precision: 2,
+      unit: 'Bs',
+      separator: '.',
+      delimiter: ',',
+      format: '%u%n'
+  end
+
+  def number_with_delimiter number
+    number_with_precision number,
+      precision: 2,
+      separator: '.',
+      delimiter: ','
+  end
 end

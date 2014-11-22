@@ -44,8 +44,8 @@
     - @subarticle.entry_subarticles.order("id DESC").each_with_index do |entry, index|
       %tr
         %td= index + 1
-        %td.number= number_with_precision(entry.amount || 0, precision: 0, separator: ',', delimiter: '.')
-        %td.number= number_with_precision(entry.unit_cost || 0, precision: 2, separator: ',', delimiter: '.')
-        %td.number= number_with_precision(entry.total_cost || 0, precision: 2, separator: ',', delimiter: '.')
+        %td.number= number_with_delimiter entry.amount || 0
+        %td.number= number_with_delimiter entry.unit_cost || 0
+        %td.number= number_with_delimiter entry.total_cost || 0
         %td.text-center= entry.invoice
         %td.text-center= entry.note_entry.note_date(entry.note_entry.delivery_note_date) if entry.note_entry.present?

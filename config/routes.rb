@@ -3,6 +3,10 @@ Nsiaf::Application.routes.draw do
     get :get_suppliers, on: :collection
   end
 
+  resources :kardex_prices
+
+  resources :kardexes
+
   resources :derecognised, only: :index
 
   resources :requests, except: [:edit, :destroy] do
@@ -19,6 +23,7 @@ Nsiaf::Application.routes.draw do
   end
 
   resources :subarticles, except: [:destroy] do
+    resources :kardexes
     member do
       post :change_status
       get :verify_amount

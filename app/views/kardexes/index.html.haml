@@ -1,0 +1,116 @@
+- unless is_pdf?
+  .page-header
+    .pull-right
+      = link_to @subarticle, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-arrow-left
+        Atrás
+      - if @kardexes.length > 0
+        = link_to subarticle_kardexes_path(@subarticle, format: :pdf), class: 'btn btn-info' do
+          %span.glyphicon.glyphicon-print
+          Imprimir
+      = link_to subarticles_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        Subartículos
+
+    %h3.kardex-inventory
+      .title KARDEX DE INVENTARIOS
+      .title GESTION 2014
+
+    #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'subarticles-verify-amount' => verify_amount_subarticle_path('{id}'), 'users-id' => user_path('{id}', format: :json)}}
+- else
+  .row{ class: "#{'separator' if is_pdf?}" }
+    .col-sm-12
+      %table.kardex-table
+        %tbody
+          %tr
+            %td
+            %td
+              %h3.title KARDEX DE INVENTARIOS
+          %tr
+            %td
+            %td
+              %h3.title GESTION 2014
+          %tr
+            %td &nbsp;
+            %td &nbsp;
+          %tr
+            %td.text-right
+              %strong DESCRIPCION:
+            %td= @subarticle.description.upcase
+          %tr
+            %td.text-right
+              %strong Nº CODIGO:
+            %td= @subarticle.code
+
+- unless is_pdf?
+  %dl.dl-horizontal
+    %dt DESCRIPCION:
+    %dd= @subarticle.description.upcase
+    %dt Nº CODIGO:
+    %dd= @subarticle.code
+
+- unless @initial_kardex.new_record?
+  %table.table.table-bordered.table-condensed
+    %thead
+      %tr.vertical-align.info
+        %th.text-center{rowspan: 2} FECHA
+        %th.text-center{rowspan: 2} Nº DE FACTURA
+        %th.text-center{rowspan: 2} Nº DE PEDIDO MAT
+        %th.text-center{rowspan: 2} DETALLE
+        %th.text-center{colspan: 3} CANTIDADES
+        %th.text-center{rowspan: 2} COSTO UNITARIO
+        %th.text-center{colspan: 3} IMPORTES EN BOLIVIANOS
+      %tr.info
+        %th ENTRADAS
+        %th SALIDAS
+        %th SALDOS
+        %th ENTRADAS
+        %th SALIDAS
+        %th SALDOS
+    %tbody
+      = render @initial_kardex, initial: true
+      = render @kardexes - [@initial_kardex]
+      = render @kardexes.last, final: true
+
+  - if is_pdf?
+    .separator
+    %table{ style: 'width: 100%' }
+      %tr
+        %td.text-center
+          %p _______________________
+          %p ELABORADO POR
+        %td.text-center
+          %p _______________________
+          %p Vº Bº
+
+- else
+  .col-sm-9.column.col-sm-offset-1
+    %h2
+      Saldo Inicial
+      %small Saldo inicial del año actual
+    %br/
+    = simple_nested_form_for @initial_kardex, html: { class: 'form-horizontal' } do |f|
+      = f.input :subarticle_id, as: :hidden, input_html: {value: @subarticle.id}
+      = f.input :kardex_date, as: :string, input_html: {value: I18n.l(Time.now.to_date), class: 'date'}
+      = f.input :invoice_number
+      = f.input :order_number, input_html: {value: 0}
+      = f.input :detail, input_html: {value: 'SALDO INICIAL'}
+      = f.simple_fields_for :kardex_prices do |fkp|
+        = field_set_tag "Cantidades" do
+          .pull-right{style: 'margin-top: -35px;'}
+            = fkp.link_to_remove do
+              %span.glyphicon.glyphicon-remove
+              Eliminar
+          = fkp.input :input_quantities, input_html: {value: 0}
+          = fkp.input :output_quantities, input_html: {value: 0}
+          = fkp.input :balance_quantities, input_html: {value: 0}
+        = fkp.input :unit_cost, input_html: {value: '0.00'}
+        = field_set_tag "Importe en Bolivianos" do
+          = fkp.input :input_amount, input_html: {value: '0.00'}
+          = fkp.input :output_amount, input_html: {value: '0.00'}
+          = fkp.input :balance_amount, input_html: {value: '0.00'}
+      = f.link_to_add :kardex_prices, style: '' do
+        %span.glyphicon.glyphicon-plus
+        Precio Kardex
+
+      = render 'shared/form_buttons'
