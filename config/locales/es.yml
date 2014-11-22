@@ -414,6 +414,7 @@ es:
         article: "Artículo"
         status: "Estado"
         amount: "Stock"
+        stock: "Stock"
         minimum: "Stock mínimo"
         barcode: "Código de Barra"
       user:

@@ -38,6 +38,10 @@ class Subarticle < ActiveRecord::Base
     false
   end
 
+  def stock
+    entry_subarticles.sum(:stock)
+  end
+
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'barcode'), h.get_column(self, 'article')]

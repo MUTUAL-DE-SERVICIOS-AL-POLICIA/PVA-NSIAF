@@ -189,9 +189,9 @@ module ApplicationHelper
       format: '%u%n'
   end
 
-  def number_with_delimiter number
+  def number_with_delimiter number, precision=2
     number_with_precision number,
-      precision: 2,
+      precision: precision,
       separator: '.',
       delimiter: ','
   end
