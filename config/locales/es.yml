@@ -394,7 +394,7 @@ es:
         delivery_note_number: "Nota de Entrega"
         delivery_note_date: "Nota de Entrega"
         invoice_number: "Factura"
-        suppliers: "Proveedora"
+        suppliers: "Proveedor"
         total: "Costo total"
         users: "Encargado(a)"
       proceeding:

@@ -39,7 +39,7 @@ class NoteEntriesController < ApplicationController
     @note_entry.user_id = current_user.id
 
     if @note_entry.save
-      redirect_to @note_entry, notice: 'Note entry was successfully created.'
+      redirect_to @note_entry, notice: t('general.created', model: NoteEntry.model_name.human)
     else
       render :new
     end
