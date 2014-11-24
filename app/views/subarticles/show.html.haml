@@ -3,7 +3,7 @@
     = link_to edit_subarticle_path(@subarticle), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    = link_to [:kardex, @subarticle], class: 'btn btn-info' do
+    = link_to subarticle_kardexes_path(@subarticle), class: 'btn btn-info' do
       %span.glyphicon.glyphicon-list-alt
       Kardex
     = link_to subarticles_path, class: 'btn btn-default' do
@@ -44,7 +44,7 @@
     - @subarticle.entry_subarticles.order("id DESC").each_with_index do |entry, index|
       %tr
         %td= index + 1
-        %td.number= number_with_delimiter entry.amount || 0, 0
+        %td.number{title: "Stock: #{entry.stock}"}= number_with_delimiter entry.amount || 0, 0
         %td.number= number_with_delimiter entry.unit_cost || 0
         %td.number= number_with_delimiter entry.total_cost || 0
         %td.text-center= entry.invoice

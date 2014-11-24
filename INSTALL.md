@@ -114,7 +114,7 @@ nvm alias default 0.10
 Instalación de `MySQL`
 
 ```console
-sudo apt-get install mysql-server
+sudo apt-get install mysql-server libmysqlclient-dev
 ```
 
 Creación de la base de datos
