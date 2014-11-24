@@ -1,4 +1,4 @@
-#request-urls{data: {'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'get-suppliers' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
+#request-urls{data: {'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY', note: true), 'get-suppliers' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
 
 .page-header{data: {action: 'request'}}
   %h2= t("note_entries.title.new")

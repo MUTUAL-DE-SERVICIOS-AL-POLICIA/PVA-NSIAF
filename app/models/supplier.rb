@@ -1,7 +1,7 @@
 class Supplier < ActiveRecord::Base
   has_many :note_entries
 
-  def self.search_subarticle(q)
+  def self.search_supplier(q)
     where("name LIKE ?", "%#{q}%").map { |s| { id: s.id, name: s.name } }
   end
 

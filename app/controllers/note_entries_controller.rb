@@ -32,7 +32,7 @@ class NoteEntriesController < ApplicationController
   # POST /note_entries
   def create
     @note_entry = NoteEntry.new(note_entry_params)
-    if params[:note_entry][:supplier_id].blank?
+    if params[:note_entry][:supplier_id].blank? && params[:supplier].present?
       supplier_id = Supplier.new_object(params[:supplier])
       @note_entry.supplier_id = supplier_id
     end
@@ -46,7 +46,7 @@ class NoteEntriesController < ApplicationController
   end
 
   def get_suppliers
-    render json: Supplier.search_subarticle(params[:q])
+    render json: Supplier.search_supplier(params[:q])
   end
 
   private
