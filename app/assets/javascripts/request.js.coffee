@@ -12,8 +12,6 @@ class Request extends BarcodeReader
     @$article = $('#article')
     @$subarticle = $('#subarticle')
     @$inputSubarticle = $('input#subarticle')
-    @$inputSupplier = $('input#supplier')
-    @$inputNoteEntrySupplier = $('input#note_entry_supplier_id')
     @$subarticles = $('#subarticles')
     @$selectionSubarticles = $('#selection_subarticles')
     @$selected_subarticles = $('#selected_subarticles')
@@ -43,9 +41,7 @@ class Request extends BarcodeReader
 
     @request_save_url = decodeURIComponent @$request_urls.data('request-id')
     @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
-    @verify_amount_subarticle_url = decodeURIComponent @$request_urls.data('subarticles-verify-amount')
     @user_url = decodeURIComponent(@$request_urls.data('users-id'))
-    @suppliers_json_url = decodeURIComponent @$request_urls.data('get-suppliers')
 
     @alert = new Notices({ele: 'div.main'})
 
@@ -67,8 +63,6 @@ class Request extends BarcodeReader
       @$subarticle.remoteChained(@$article.selector, @$request_urls.data('subarticles-array'))
     if @$inputSubarticle?
       @get_subarticles()
-    if @$inputSupplier?
-      @get_suppliers()
 
   show_request: ->
     sw = 0
@@ -171,29 +165,31 @@ class Request extends BarcodeReader
     if @$subarticles.find("tr##{data.id}").length
       @open_modal("El Sub Artículo '#{data.description}' ya se encuentra en lista")
     else
-      @$subarticles.prepend @$templateNewRequest.render(data)
+      if @$selectionSubarticles.find('#people').length > 0
+        if data.stock == 0
+          @open_modal("El stock del producto #{data.description} es 0")
+        else
+          @$subarticles.prepend @$templateNewRequest.render(data)
+      else
+        @$subarticles.prepend @$templateNewRequest.render(data)
 
   subarticle_request_plus: ($this) ->
-    amount = @get_amount($this)
-    url = @verify_amount_subarticle_url.replace(/{id}/, amount.parent().attr('id'))
-    $.getJSON url, { amount: parseInt(amount.text()) + 1 }, (data) => @verify_amount(data)
-
-  verify_amount: (data, amount) ->
-    if data.there_amount
-      amount = @$subarticles.find("tr##{data.id} .amount")
-      amount.text(parseInt(amount.text()) + 1)
+    $tr = @get_amount($this)
+    $amount = $tr.find('.amount')
+    if $amount.text() < $tr.find('.amount').data('stock')
+      $amount.text(parseInt($amount.text()) + 1)
     else
-      @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo '#{data.description}'")
+      @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo '#{$tr.find('td:first').text()}'")
 
   subarticle_request_minus: ($this) ->
-    amount = @get_amount($this)
-    amount.text(parseInt(amount.text()) - 1) unless amount.text() is '1'
+    $amount = @get_amount($this).find('.amount')
+    $amount.text(parseInt($amount.text()) - 1) unless $amount.text() is '1'
 
   subarticle_request_remove: ($this) ->
-    @get_amount($this).parent().remove()
+    @get_amount($this).remove()
 
   get_amount: ($this) ->
-    $($this.currentTarget).parent().prev()
+    $($this.currentTarget).parent().parent()
 
   show_new_request: ->
     if @$subarticles.find('tr').length
@@ -228,19 +224,3 @@ class Request extends BarcodeReader
       $user = @$templateUserInfo.render(data)
       $table = @$selected_subarticles.find("table")
       $($user).insertBefore($table)
-
-  get_suppliers: ->
-    bestPictures = new Bloodhound(
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("description")
-      queryTokenizer: Bloodhound.tokenizers.whitespace
-      limit: 100
-      remote: @suppliers_json_url
-    )
-    bestPictures.initialize()
-    @$inputSupplier.typeahead null,
-      displayKey: "name"
-      source: bestPictures.ttAdapter()
-    .on 'typeahead:selected', (evt, data) => @get_supplier_id(evt, data)
-
-  get_supplier_id: (evt, data) ->
-    @$inputNoteEntrySupplier.val(data.id)

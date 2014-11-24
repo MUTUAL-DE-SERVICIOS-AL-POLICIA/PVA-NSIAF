@@ -26,7 +26,6 @@ Nsiaf::Application.routes.draw do
     resources :kardexes
     member do
       post :change_status
-      get :verify_amount
       get :kardex
     end
     collection do

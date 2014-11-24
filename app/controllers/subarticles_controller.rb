@@ -69,11 +69,7 @@ class SubarticlesController < ApplicationController
   end
 
   def get_subarticles
-    render json: Subarticle.search_subarticle(params[:q], params[:note])
-  end
-
-  def verify_amount
-    render json: @subarticle.verify_amount(params[:amount])
+    render json: Subarticle.search_subarticle(params[:q])
   end
 
   def recode

@@ -16,7 +16,7 @@
       .title KARDEX DE INVENTARIOS
       .title GESTION 2014
 
-    #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'subarticles-verify-amount' => verify_amount_subarticle_path('{id}'), 'users-id' => user_path('{id}', format: :json)}}
+    #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
 - else
   .row{ class: "#{'separator' if is_pdf?}" }
     .col-sm-12
