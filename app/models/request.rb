@@ -14,6 +14,10 @@ class Request < ActiveRecord::Base
     user.present? ? user.title : ''
   end
 
+  def user_name_title
+    "#{user_name}-#{user_title}".strip
+  end
+
   def admin_name
     admin.present? ? admin.name : ''
   end
@@ -77,33 +81,6 @@ class Request < ActiveRecord::Base
   end
 
   def request_deliver
-    update_attributes(status: 'delivered', delivery_date: Time.now )
-    # Insert into kardex the transaction
-    subarticle_requests.each do |s_request|
-      kardex = {
-        kardex_date: self.delivery_date,
-        invoice_number: 0,
-        order_number: self.id,
-        detail: "#{self.user_name}-#{self.user_title}",
-        subarticle_id: s_request.subarticle_id,
-        kardex_prices_attributes: [
-          {
-            input_quantities: 0,
-            output_quantities: s_request.total_delivered,
-            balance_quantities: 0, # relacionar con los entry subarticles
-            unit_cost: 0, # relacionar con entry subarticles
-            input_amount: 0,
-            output_amount: 0, # relacinar con los entry subarticles
-            balance_amount: 0, # relacionar con los entry subarticles
-          }
-        ]
-      }
-      k = Kardex.new(kardex)
-      if k.save
-        # todo bien
-      else
-        # mal
-      end
-    end
+    update_attributes(status: 'delivered', delivery_date: Time.now)
   end
 end

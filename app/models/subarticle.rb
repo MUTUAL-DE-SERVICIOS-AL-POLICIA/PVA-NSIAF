@@ -109,6 +109,10 @@ class Subarticle < ActiveRecord::Base
     end
   end
 
+  def last_kardex
+    kardexes.order(:created_at).last
+  end
+
   def self.search_by(article_id)
     subarticles = []
     subarticles = where(article_id: article_id, status: 1) if article_id.present?
