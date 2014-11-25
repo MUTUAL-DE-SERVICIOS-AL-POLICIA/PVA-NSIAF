@@ -12,12 +12,31 @@ class NoteEntry < ActiveRecord::Base
     user.present? ? user.name : ''
   end
 
+  def user_title
+    user.present? ? user.title : ''
+  end
+
   def note_number(number)
     number.present? ? "##{number}" : ''
   end
 
   def note_date(date)
     date.present? ? I18n.l(date) : ''
+  end
+
+  def get_invoice_number
+    invoice = ''
+    if delivery_note_number.present?
+      invoice += "NE: #{delivery_note_number}"
+    elsif delivery_note_date.present?
+      invoice += "NE: #{I18n.l delivery_note_date, format: :default}"
+    end
+    if invoice_number.present?
+      invoice += " FACT: #{invoice_number}"
+    elsif invoice_date.present?
+      invoice += " FACT: #{I18n.l invoice_date, format: :default}"
+    end
+    invoice.strip
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
