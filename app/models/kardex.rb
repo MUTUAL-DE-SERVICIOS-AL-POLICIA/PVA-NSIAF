@@ -16,6 +16,16 @@ class Kardex < ActiveRecord::Base
     kardex
   end
 
+  def first_kardex_price(unit_cost)
+    kardex_price = nil
+    kardex_prices.reverse.each do |kp|
+      if kp.unit_cost == unit_cost
+        kardex_price = kp
+      end
+    end
+    kardex_price
+  end
+
   def last_kardex_price(unit_cost)
     kardex_price = nil
     kardex_prices.each do |kp|
@@ -24,6 +34,18 @@ class Kardex < ActiveRecord::Base
       end
     end
     kardex_price
+  end
+
+  def remove_zero_balance
+    if kardex_prices.length > 0
+      k_prices = []
+      kardex_prices.each do |kardex_price|
+        if kardex_price.balance_quantities.zero?
+          k_prices << kardex_price
+        end
+      end
+      kardex_prices.delete(k_prices)
+    end
   end
 
   def replicate
