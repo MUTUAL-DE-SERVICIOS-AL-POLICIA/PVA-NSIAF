@@ -37,12 +37,7 @@ class NoteEntriesController < ApplicationController
       @note_entry.supplier_id = supplier_id
     end
     @note_entry.user_id = current_user.id
-
-    if @note_entry.save
-      redirect_to @note_entry, notice: t('general.created', model: NoteEntry.model_name.human)
-    else
-      render :new
-    end
+    @note_entry.save
   end
 
   def get_suppliers

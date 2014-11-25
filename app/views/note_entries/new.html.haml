@@ -10,7 +10,9 @@
   .row{data: {action: 'note_entry'}}
     .col-sm-12.col-md-8.col-lg-8
       .form-group
-        %label.col-sm-3.col-md-3.col-lg-3.control-label= NoteEntry.human_attribute_name('suppliers')
+        %label.col-sm-3.col-md-3.col-lg-3.control-label
+          %abbr{ title: 'required' } *
+          = NoteEntry.human_attribute_name('suppliers')
         .col-xs-9.col-sm-9.col-md-9
           = text_field_tag :supplier, '', class: 'form-control'
   .row
@@ -35,37 +37,19 @@
           %button.btn.btn-default{type: "button", title: "Limpiar texto", id: "clean_text"}
             %span.glyphicon.glyphicon-refresh
 
-  %table.table.table-bordered
-    %thead
-      %tr
-        %th{rowspan: "2"} CANTIDAD
-        %th{rowspan: "2"} UNIDAD
-        %th{rowspan: "2"} CODIGO
-        %th{rowspan: "2"} DETALLE
-        %th{colspan: "2"} IMPORTE
-        %th{rowspan: "2"}
-      %tr
-        %th UNITARIO
-        %th TOTAL
-    %tbody#subarticles
-      %tr
-        %td
-        %td
-        %td
-        %th TOTAL
-        %th
-        %th#totalNoteEntry
+  = render 'entry_subarticles'
 
+#save_note_entry
   = render 'shared/form_buttons'
 
 %script{ type: 'text/html', id: 'new_request' }
-  %tr{ id: '{{id}}' }
+  %tr.subarticle{ id: '{{id}}' }
     %td.col-sm-1.col-md-1.note= text_field_tag "note_entry[entry_subarticles_attributes][{{id}}][amount]", nil, {id:"amount_{{id}}", class: 'form-control amount', placeholder: 'cantidad'}
     %td {{unit}}
     %td {{code}}
-    %td {{description}}
+    %td.description {{description}}
     %td.col-sm-2.col-md-2.note= text_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, {id:"unit_cost_{{id}}", class: 'form-control unit_cost', placeholder: 'precio unitario'}
     %td.col-sm-2.col-md-2.note= text_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, {id:"total_cost_{{id}}", class: 'form-control total_cost'}
     %td{style: "display: none;"}= hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
-    %td
+    %td.text-center
       %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }

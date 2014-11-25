@@ -1,0 +1,40 @@
+%table.table.table-bordered
+  %thead
+    %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
+      %th.text-center{rowspan: "2"} CANTIDAD
+      %th.text-center{rowspan: "2"} UNIDAD
+      %th.text-center{rowspan: "2"} CODIGO
+      %th.text-center{rowspan: "2"} DETALLE
+      %th.text-center{colspan: "2"} IMPORTE
+      - if params[:action] == 'new'
+        %th{rowspan: "2"}
+    %tr
+      %th.text-center{ class: "#{ 'info' unless is_pdf? }" } UNITARIO
+      %th.text-center{ class: "#{ 'info' unless is_pdf? }" } TOTAL
+  %tbody#subarticles
+    - unless params[:action] == 'new'
+      - @note_entry.entry_subarticles.each do |entry|
+        %tr
+          %td= entry.amount
+          %td= entry.subarticle_unit
+          %td= entry.subarticle_code
+          %td= entry.subarticle_name
+          %td= entry.unit_cost
+          %td= entry.total_cost
+    %tr
+      %td
+      %td
+      %td
+      %th TOTAL
+      %th
+      %th#totalNoteEntry= @note_entry.total
+      - if params[:action] == 'new'
+        %td
+    %tr
+      %td{colspan: 6}
+        - subarticle = @note_entry.entry_subarticles.count == 1 ? "Compra de#{@note_entry.entry_subarticles.first.subarticle_name}, " : ''
+        - supplier = "De #{@note_entry.supplier_name}, "
+        - delivery_note = "#{@note_entry.note_number(@note_entry.delivery_note_number)} del #{@note_entry.note_date(@note_entry.delivery_note_date)}, "
+        - invoice = "#{@note_entry.note_number(@note_entry.invoice_number)} del #{@note_entry.note_date(@note_entry.invoice_date)}"
+        %b Glosa:
+        #{subarticle} #{supplier} Según Nota de Entrega #{delivery_note} Factura #{invoice}
