@@ -28,7 +28,7 @@ module ApplicationHelper
 
   def proceeding_to_json(proceeding)
     assets = proceeding.assets.each_with_index.map do |a, index|
-      { index: index + 1, id: a.id, description: a.description, code: a.code }
+      { index: index + 1, id: a.id, description: a.description, code: a.code, state: a.get_state, auxiliary: a.auxiliary_name }
     end
     {
       #admin_name: proceeding.admin_name.titleize,
@@ -36,7 +36,11 @@ module ApplicationHelper
       proceeding_date: I18n.l(proceeding.created_at.to_date, format: :long),
       devolution: proceeding.is_devolution?,
       user_name: proceeding.user_name.titleize,
-      user_title: proceeding.user_title.titleize
+      user_ci: proceeding.user_ci,
+      user_title: proceeding.user_title.titleize,
+      user_department: proceeding.user_department.titleize,
+      count: assets.count,
+      entity: "#{Entity.first.code} - #{Entity.first.name}"
     }
   end
 

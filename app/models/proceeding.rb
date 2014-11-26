@@ -62,8 +62,16 @@ class Proceeding < ActiveRecord::Base
     user ? user.name : ''
   end
 
+  def user_ci
+    user ? user.ci : ''
+  end
+
   def user_title
     user ? user.title : ''
+  end
+
+  def user_department
+    user ? user.department_name : ''
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')

@@ -2,75 +2,95 @@
 %script{ id: 'tpl-proceeding-delivery', type: 'text/html' }
   .row{ class: "#{'separator' if is_pdf?}" }
     .col-md-offset-1.col-md-10
-      %h3.proceeding-title.text-center
-        ACTA DE
-        {{^devolution}}
-        ENTREGA
-        {{/devolution}}
-        {{#devolution}}
-        DEVOLUCIÓN
-        {{/devolution}}
-        DE ACTIVOS FIJOS
+      .proceeding-title.text-center
+        %h3
+          {{^devolution}}
+          ASIGNACION INDIVIDUAL
+          {{/devolution}}
+          {{#devolution}}
+          ACTA DE DEVOLUCION
+          {{/devolution}}
+          DE BIENES
+        {{proceedingDate}}
+      %h6.text-right
+        Fecha de impresión: #{l Time.now.to_date}
       %p.proceeding-description.text-justify
-        {{^devolution}}
-        La Unidad Administrativa Financiera de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia – ADSIB hace entrega de Activos Fijos al funcionario(a) {{userName}} – {{userTitle}} de ADSIB, conforme al siguiente detalle:
-        {{/devolution}}
-        {{#devolution}}
-        El funcionario(a) {{userName}} – {{userTitle}} de la Agencia para el Desarrollo de la Sociedad de la Información en Bolivia - ADSIB hace la devolución de los Activos Fijos a ADSIB, conforme al siguiente detalle:
-        {{/devolution}}
+        %h4
+          %span.text-muted Entidad:
+          {{entity}}
+        %h4.row
+          .col-xs-8.col-sm-8.col-md-8
+            %span.text-muted Responsable:
+            {{userName}}
+          .col-xs-4.col-sm-4.col-md-4
+            %span.text-muted C.I.:
+            {{userCi}}
+        %h4
+          %span.text-muted Cargo:
+          {{userTitle}}
+        %h4
+          %span.text-muted Oficina:
+          {{userDepartment}}
+
       %table.table.table-striped.table-condensed.proceeding-assets
         %thead
           %tr
-            %th.col-sm-10 Descripción
             %th.col-sm-2 Código
+            %th.col-sm-3 Auxiliar
+            %th.col-sm-6 Descripción del Activo
+            %th.col-sm-1 Estado
         %tbody
           {{#assets}}
           %tr
-            %td {{description}}
             %td {{code}}
+            %td {{auxiliary}}
+            %td {{description}}
+            %td {{state}}
           {{/assets}}
       .acta
         %p.proceeding-date.text-justify
-          {{^devolution}}
-          %strong NOTA: LOS EQUIPOS Y MUEBLES DETALLADOS ANTERIORMENTE SON DE RESPONSABILIDAD DEL FUNCIONARIO, EL CUAL ESTA PROHIBIDO DE:
-          .prohibiciones
-            %p A).- USAR LOS BIENES PARA BENEFICIO PARTICULAR O PRIVADO
-            %p B).- PERMITIR EL USO PARA BENEFICIO PARTICULAR O PRIVADO
-            %p C).- PRESTAR O TRANSFERIR EL BIEN A OTRO FUNCIONARIO O SERVIDOR PUBLICO
-            %p D).- ENAJENAR EL BIEN POR CUENTA PROPIA
-            %p E).- DAÑAR O ALTERAR SUS CARACTERISTICAS FISICAS O TECNICAS
-            %p F).- PONER EN RIESGO EL BIEN
-            %p G).- INGRESAR BIENES PARTICULAES SIN AUTORIZACION DE LA UNIDAD O RESPONSABLE DE 	ACTIVOS FIJOS
-            %p H).- SACAR BIENES DE LA INSTITUCION SIN AUTORIZACION DE LA UNIDAD O RESPONSABLE DE ACTIVOS FIJOS (D.S. 181 ART. 157, NB SABS)
-            %p LA NO OBSERVACION A ESTAS PROHIBICIONES GENERARA RESPONSABILIDADES ESTABLECIDAS EN LA LEY N°1178 Y SUS REGLAMENTOS
-          {{/devolution}}
-          {{#devolution}}
-          %strong
-            NOTA: EN CUMPLIMIENTO A LAS NORMAS BÁSICAS DE ADMINISTRACION DE BIENES Y SERVICIOS EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIO CON EL ACTO DE DEVOLUCION DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
-          {{/devolution}}
+          %b Cantidad:
+          {{count}}
+          %br
+          %br
+          %i
+            {{^devolution}}
+            EN CUMPLIMIENTO AL ARTICULO 146 (ASIGNACION DE ACTIVOS FIJOS MUEBLES ) DE LAS NORMAS BASICAS DE ADMINISTRACION DE BIENES Y SERVICIOS D.S. 181, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIO CON EL ACTO DE ASIGNACION INDIVIDUAL Y ENTREGA DE BIENES ,DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
+            %br
+            %br
+            LA NO OBSERVANCIA A LAS PROHIBICIONES SEÑALADAS EN EL ARTICULO 157, GENERARÁ RESPONSABILIDADES ESTABLECIDAS EN LA LEY N°1178 Y SUS REGLAMENTOS.
+            %br
+            %br
+            EN SEÑAL DE CONFORMIDAD Y ACEPTACION SE FIRMA EL PRESENTE ACTA.
+            {{/devolution}}
+            {{#devolution}}
+            EN CUMPLIMIENTO AL ARTICULO N° 148 ( LIBERACION DE LA RESPONSABILIDAD ) DE LAS NORMAS BASICAS DE ADMINISTRACION DE BIENES Y SERVICIOS , EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIO CON EL ACTO DE DEVOLUCION DE BIENES,DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
+            {{/devolution}}
 
-      %p.proceeding-date.text-center
-        La Paz, {{proceedingDate}}
+
+
 
       .proceeding-signature{ style: "#{'margin-bottom: 50px;' unless is_pdf?}" }
         %table{ style: 'width: 100%' }
           %tr
-            {{^devolution}}
             %td.text-center
-              %p ENTREGUÉ CONFORME
+              __________________________
+              %p
+                Autorización de
+                {{^devolution}}
+                Asignación
+                {{/devolution}}
+                {{#devolution}}
+                Devolución
+                {{/devolution}}
             %td.text-center
-              %p VoBo
+              __________________________
+              %p Responsable de Activos Fijos
             %td.text-center
-              %p RECIBÍ CONFORME
-            {{/devolution}}
-            {{#devolution}}
-            %td.text-center
-              %p RECIBÍ CONFORME
-            %td.text-center
-              %p VoBo
-            %td.text-center
-              %p ENTREGUÉ CONFORME
-            {{/devolution}}
+              __________________________
+              %p Funcionario
+
+
 
   - if display_buttons
     %p.proceeding-pdf.text-center
