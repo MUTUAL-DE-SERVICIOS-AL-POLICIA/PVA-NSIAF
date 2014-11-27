@@ -35,7 +35,6 @@ class NoteEntry extends BarcodeReader
     @$inputNoteEntrySupplier.val(data.id)
 
   get_note_entry: ->
-
     if @$inputSupplier.val() == ''
       @$inputSupplier.parents('.form-group').addClass('has-error')
       @$inputSupplier.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
@@ -45,10 +44,7 @@ class NoteEntry extends BarcodeReader
       @$inputSupplier.next().remove()
       @valid = true
 
-    if @subarticles.find('tr').length <= 2
-      @open_modal 'Debe añadir al menos un material'
-      @valid = false
-    else
+    if @subarticles.find('tr.subarticle').length
       @subarticles.find('tr.subarticle').each (i) ->
         if $.isNumeric($(this).find('.amount').val()) && $.isNumeric($(this).find('.unit_cost').val())
           $(this).removeClass('danger')
@@ -59,7 +55,9 @@ class NoteEntry extends BarcodeReader
           $(this).find('input').css('background-color', '#f2dede')
           new Notices({ele: 'div.main'}).danger "Verifique los campos a llenar del material '#{$(this).find('.description').text()}'"
           @valid = false
-      @valid = @valid
+    else
+      @open_modal 'Debe añadir al menos un material'
+      @valid = false
 
     if @valid
       $.post @formNoteEntry.attr('action'), @formNoteEntry.serialize(), null, 'script'

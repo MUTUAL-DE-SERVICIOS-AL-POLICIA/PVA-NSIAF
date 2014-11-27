@@ -2,7 +2,9 @@ total_cost = ($this) ->
   id = $this.parent().parent().attr('id')
   amount = parseFloat($("input#amount_#{id}").val() || 0)
   unit_cost = parseFloat($("input#unit_cost_#{id}").val() || 0)
-  $("input#total_cost_#{id}").val(amount * unit_cost)
+  cost_total = amount * unit_cost
+  $("input#total_cost_#{id}").val(cost_total).parent().prev().text(cost_total)
+
   total = 0
   $("input.total_cost").map ->
     total += parseFloat($(this).val() || 0)
