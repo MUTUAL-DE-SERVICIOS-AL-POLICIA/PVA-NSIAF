@@ -7,6 +7,7 @@ class KardexesController < ApplicationController
       @subarticle = Subarticle.includes(kardexes: :kardex_prices).find(params[:subarticle_id])
       @kardexes = @subarticle.kardexes
       @initial_kardex = @kardexes.initial_kardex
+      @final_kardex = @kardexes.final_kardex
     else
       @kardexes = Kardex.all
     end

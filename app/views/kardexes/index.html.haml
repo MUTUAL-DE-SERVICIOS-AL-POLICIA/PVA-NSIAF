@@ -70,7 +70,7 @@
     %tbody
       = render @initial_kardex, initial: true
       = render @kardexes - [@initial_kardex]
-      = render @kardexes.last, final: true
+      = render @final_kardex, final: true
 
   - if is_pdf?
     .separator
