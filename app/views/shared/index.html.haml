@@ -48,7 +48,7 @@
 
 #datatable-spanish{ 'data-url' => spanish_datatables_path() }
 
-%table.table.table-striped.table-hover.datatable
+%table.table.table-striped.table-hover.datatable{ data: {action: 'note_entry'} }
   %thead
     %tr
       - unless %w(versions declines proceedings requests note_entries).include?(control)

@@ -6,7 +6,7 @@ class EntrySubarticle < ActiveRecord::Base
   #validates :unit_cost, :total_cost, presence: true, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: { greater_than: 0, less_than: 10000000 }
 
   before_create :set_stock_value
-  after_create :create_kardex_price
+  #after_create :create_kardex_price
 
   def subarticle_name
     subarticle.present? ? subarticle.description : ''

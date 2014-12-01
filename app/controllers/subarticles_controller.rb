@@ -86,6 +86,14 @@ class SubarticlesController < ApplicationController
   def kardex
   end
 
+  def first_entry
+    entry = EntrySubarticle.new(entry_subarticle_params)
+    entry.save
+    respond_to do |format|
+      format.json { head :no_content }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subarticle

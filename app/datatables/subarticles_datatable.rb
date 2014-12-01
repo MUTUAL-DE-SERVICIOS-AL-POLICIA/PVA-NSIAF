@@ -18,15 +18,16 @@ private
 
   def data
     array.map do |subarticle|
-      [
-        subarticle.code,
-        subarticle.description,
-        subarticle.unit,
-        subarticle.barcode,
-        link_to_if(subarticle.article, subarticle.article_name, subarticle.article, title: subarticle.article_code),
-        type_status(subarticle.status),
-        links_actions(subarticle)
-      ]
+      as = []
+      as << subarticle.code
+      as << subarticle.description
+      as << subarticle.unit
+      as << subarticle.barcode
+      as << link_to_if(subarticle.article, subarticle.article_name, subarticle.article, title: subarticle.article_code)
+      as << type_status(subarticle.status)
+      entry = subarticle.entry_subarticles.present? ? '' : 'subarticle'
+      as << links_actions(subarticle, entry)
+      as
     end
   end
 

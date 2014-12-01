@@ -4,7 +4,7 @@
       .modal-content
         .modal-header
           %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
-          %h4.modal-title {{title}}
+          %h4.modal-title {{{title}}}
         .modal-body
           .title_message {{{confirmMessage}}}
           - if controller_name == 'assets'
@@ -17,8 +17,19 @@
                 %label.col-sm-2.control-label= Decline.human_attribute_name('motivo')
                 .col-sm-10
                   = text_area_tag :reason, '', class: 'form-control'
+          {{#entry}}
+          = simple_form_for EntrySubarticle.new, url: first_entry_subarticles_path, html: { class: 'form-horizontal' } do |f|
+            = f.input :subarticle_id, as: :hidden, input_html: { value: "{{id}}" }
+            = f.input :amount, input_html: { value: 0, class: 'amount' }
+            = f.input :unit_cost, input_html: { value: 0, class: 'unit_cost' }
+            = f.input :total_cost
+            = f.input :date, as: :string, input_html: { value: I18n.l(Time.now.to_date), class: 'date' }
+          {{/entry}}
         .modal-footer
           %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('general.btn.cancel')
+          {{#entry}}
+          = button_tag t('general.btn.save'), class: 'btn btn-primary', id: 'new_entry'
+          {{/entry}}
           {{#unassigned}}
           - if controller_name == 'assets'
             = button_tag t('general.btn.save'), class: 'btn btn-primary deregister'

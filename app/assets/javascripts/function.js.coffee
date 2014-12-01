@@ -16,6 +16,11 @@ style_date = (id)->
   $("input##{id}").appendTo(".input-group.#{id}")
   $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
 
+date_picker = ->
+  $(".date").datepicker
+    format: "dd/mm/yyyy"
+    language: "es"
+
 jQuery ->
   TableTools.BUTTONS.download =
     sAction: "text"
@@ -85,12 +90,14 @@ jQuery ->
   $('.dropdown-toggle').dropdown()
 
   # Change button status
-  $(document).on 'click', '.datatable .btn-warning', (evt) ->
+  $(document).on 'click', '.datatable .btn-warning, .datatable .btn-success', (evt) ->
     tpl = $('#destroy-modal').html()
     data = $(@).data()
     html = Hogan.compile(tpl).render(data)
     $('#confirm-modal').html(html)
     $("#modal-#{ $(@).data('dom-id') }").modal('toggle')
+    style_date("entry_subarticle_date")
+    date_picker()
     evt.preventDefault()
 
   $(document).on 'click', '.modal .change_status', ->
@@ -223,9 +230,7 @@ jQuery ->
   style_date("note_entry_delivery_note_date")
   style_date("note_entry_invoice_date")
 
-  $(".date").datepicker
-    format: "dd/mm/yyyy"
-    language: "es"
+  date_picker()
 
   $(document).on 'keyup', 'input.amount', ->
     total_cost($(this))

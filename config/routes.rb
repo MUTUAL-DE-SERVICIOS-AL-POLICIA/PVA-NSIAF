@@ -34,6 +34,7 @@ Nsiaf::Application.routes.draw do
       get :recode
       get :autocomplete
       get :subarticles_array
+      post :first_entry
     end
   end
 
