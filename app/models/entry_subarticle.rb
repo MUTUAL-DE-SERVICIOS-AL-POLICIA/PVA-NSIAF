@@ -6,7 +6,7 @@ class EntrySubarticle < ActiveRecord::Base
   #validates :unit_cost, :total_cost, presence: true, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: { greater_than: 0, less_than: 10000000 }
 
   before_create :set_stock_value
-  #after_create :create_kardex_price
+  after_create :create_kardex_price
 
   def subarticle_name
     subarticle.present? ? subarticle.description : ''
@@ -51,10 +51,12 @@ class EntrySubarticle < ActiveRecord::Base
     balance = amount
     balance += kardex_price.balance_quantities
 
-    kardex.kardex_date = note_entry.created_at.to_date
-    kardex.invoice_number = note_entry.get_invoice_number
+    if note_entry.present?
+      kardex.kardex_date = note_entry.created_at.to_date
+      kardex.invoice_number = note_entry.get_invoice_number
+      kardex.detail = note_entry.supplier_name
+    end
     kardex.order_number = nil
-    kardex.detail = note_entry.supplier_name
     kardex_price.input_quantities = amount
     kardex_price.output_quantities = 0
     kardex_price.balance_quantities = balance

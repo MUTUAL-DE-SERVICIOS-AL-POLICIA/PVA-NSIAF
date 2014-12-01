@@ -52,6 +52,7 @@
     %td.col-sm-2.col-md-2
     %td{style: "display: none;"}
       = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
-      = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, {id:"total_cost_{{id}}", class: 'form-control total_cost'}
+      %div
+        = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, {id:"total_cost_{{id}}", class: 'form-control total_cost'}
     %td.text-center
       %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }

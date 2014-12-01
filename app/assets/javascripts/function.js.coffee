@@ -1,15 +1,24 @@
 total_cost = ($this) ->
   id = $this.parent().parent().attr('id')
-  amount = parseFloat($("input#amount_#{id}").val() || 0)
-  unit_cost = parseFloat($("input#unit_cost_#{id}").val() || 0)
+  if id
+    f_amount = "#amount_#{id}"
+    f_unit_cost = "#unit_cost_#{id}"
+    f_total_cost = $("input#total_cost_#{id}")
+  else
+    f_amount = ".amount"
+    f_unit_cost = ".unit_cost"
+    f_total_cost = $(".total_cost")
+  amount = parseFloat($("input#{f_amount}").val() || 0)
+  unit_cost = parseFloat($("input#{f_unit_cost}").val() || 0)
   cost_total = amount * unit_cost
-  $("input#total_cost_#{id}").val(cost_total).parent().prev().text(cost_total)
+  f_total_cost.val(cost_total).parent().parent().prev().text(cost_total)
 
-  total = 0
-  $("input.total_cost").map ->
-    total += parseFloat($(this).val() || 0)
-    $("#totalNoteEntry").text(total)
-    $("input#note_entry_total").val(total)
+  if id
+    total = 0
+    $("input.total_cost").map ->
+      total += parseFloat($(this).val() || 0)
+      $("#totalNoteEntry").text(total)
+      $("input#note_entry_total").val(total)
 
 style_date = (id)->
   $("<div class='input-group #{id}'></div>").insertBefore("input##{id}")
