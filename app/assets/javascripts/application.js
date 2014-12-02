@@ -42,3 +42,5 @@
 //= require bootstrap-datepicker.es
 //= require jquery_nested_form
 //= require note_entry
+//= require highcharts/highcharts
+//= require highcharts/highcharts-more

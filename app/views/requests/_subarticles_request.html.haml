@@ -1,6 +1,14 @@
-- @requests.each_with_index do |request_subarticle, index|
-  %tr
-    %td= index + 1
-    %td= request_subarticle.description
-    %td= request_subarticle.total_amount
-    %td= l request_subarticle.created_at.to_date
+%table.table.table-hover
+  %thead
+    %tr
+      %th #
+      %th= t('subarticles.title.title')
+      %th Cantidad
+      %th Ultima fecha
+  %tbody
+    - @requests.each_with_index do |request_subarticle, index|
+      %tr
+        %td= index + 1
+        %td= request_subarticle.description
+        %td= request_subarticle.total_amount
+        %td= l request_subarticle.created_at.to_date

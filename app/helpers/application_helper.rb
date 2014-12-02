@@ -210,4 +210,43 @@ module ApplicationHelper
       separator: '.',
       delimiter: ','
   end
+
+  def graphic_statistics(array, graphic)
+    LazyHighCharts::HighChart.new(graphic) do |f|
+      f.chart({ defaultSeriesType: graphic })
+      if graphic == 'pie'
+        f.series(
+          data: get_array_graphic(array),
+          dataLabels: {
+            style: { fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif", fontSize: "12px" },
+            format: "<b>{point.code}</b>: {point.percentage:.1f} %"
+          },
+        )
+      else
+        f.xAxis(
+          categories: array.map { |f| f.description },
+          labels: { style: { fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif", fontSize: "12px" } }
+        )
+        f.yAxis( min: 0, title: { text: 'Cantidad' } )
+        f.legend( enabled: false )
+        f.series(
+          data: get_array_graphic(array),
+          dataLabels: {
+            enabled: true,
+            rotation: -90,
+            color: '#FFFFFF',
+            align: 'right',
+            x: 4,
+            y: 10,
+            style: { fontSize: '12px', fontFamily: 'OpenSans-Light' }
+          }
+        )
+      end
+      f.tooltip( pointFormat: "<b>{point.date}</b>" )
+    end
+  end
+
+  def get_array_graphic(array)
+    array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount})", y: f.total_amount, date: (l f.created_at.to_date)}}
+  end
 end
