@@ -2,7 +2,7 @@
 #request-urls{data: {'subarticles-articles' => articles_subarticles_path(format: :json), 'subarticles-array' => subarticles_array_subarticles_path(format: :json)}}
 
 .page-header{ data: {action: 'assignation'} }
-  %h2 Búsqueda avanzada de requerimientos
+  %h2 Búsqueda de requerimientos
 
 .row{ data: {action: 'request'} }
   .col-lg-12.col-md-12.col-sm-12
@@ -22,8 +22,16 @@
           = f.select :subarticle_article_id_eq, options_for_select([]), {prompt: "--#{t('articles.title.title')}--"}, {class: 'form-control', id: 'article', disabled: true}
         .col-xs-12.col-sm-4.col-md-4
           = f.select :subarticle_id_eq, options_for_select([]), {prompt: "--#{t('subarticles.title.title')}--"}, {class: 'form-control', id: 'subarticle', disabled: true}
-      .row.form-group
-        .col-md-2.col-md-offset-10
+      .row.form-group.form-horizontal
+        .col-xs-12.col-sm-2.col-md-2
+          %label.control-label  Fecha de solicitud:
+        .col-xs-12.col-sm-3.col-md-2
+          = f.text_field :request_created_at_gteq, class: 'form-control date'
+        .col-xs-12.col-sm-1.col-md-1
+          .control-label{ style: 'text-align: center;' } al
+        .col-xs-12.col-sm-3.col-md-2
+          = f.text_field :request_created_at_lteq, class: 'form-control date'
+        .col-xs-12.col-sm-2.col-md-2.col-md-offset-3.col-sm-offset-1
           = f.button class: "btn btn-primary" do
             %span.glyphicon.glyphicon-search
             BUSCAR

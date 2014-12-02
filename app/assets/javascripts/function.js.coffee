@@ -238,6 +238,8 @@ jQuery ->
   # Entry Subarticle
   style_date("note_entry_delivery_note_date")
   style_date("note_entry_invoice_date")
+  style_date("q_request_created_at_gteq")
+  style_date("q_request_created_at_lteq")
 
   date_picker()
 
