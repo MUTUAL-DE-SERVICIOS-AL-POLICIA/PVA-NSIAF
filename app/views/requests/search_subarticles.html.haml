@@ -32,9 +32,9 @@
         .col-xs-12.col-sm-3.col-md-2
           = f.text_field :request_created_at_lteq, class: 'form-control date'
         .col-xs-12.col-sm-2.col-md-2.col-md-offset-3.col-sm-offset-1
-          = f.button class: "btn btn-primary" do
+          = f.button class: "btn btn-primary btn-lg" do
             %span.glyphicon.glyphicon-search
-            BUSCAR
+            Buscar
 
     %ul.nav.nav-tabs.selected-assets
       %li.active
@@ -49,6 +49,7 @@
         = link_to "#column_r", {"data-toggle" => "tab"} do
           %span.glyphicon.glyphicon-stats
           Gráfico en Columna
+
     .tab-content
       #list_r.tab-pane.active
         = render 'subarticles_request'
