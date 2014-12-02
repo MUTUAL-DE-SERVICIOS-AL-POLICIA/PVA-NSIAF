@@ -35,12 +35,22 @@
           = f.button class: "btn btn-primary" do
             %span.glyphicon.glyphicon-search
             BUSCAR
-    %table.table.table-hover
-      %thead
-        %tr
-          %th #
-          %th Sub Artículo
-          %th Cantidad
-          %th Ultima fecha
-      %tbody#subarticles_request
+
+    %ul.nav.nav-tabs.selected-assets
+      %li.active
+        = link_to "#list_r", {"data-toggle" => "tab"} do
+          %span.glyphicon.glyphicon-list
+          Lista
+      %li
+        = link_to "#pie_r", {"data-toggle" => "tab"} do
+          %span.glyphicon.glyphicon-adjust
+          Gráfico en Torta
+      %li
+        = link_to "#column_r", {"data-toggle" => "tab"} do
+          %span.glyphicon.glyphicon-stats
+          Gráfico en Columna
+    .tab-content
+      #list_r.tab-pane.active
         = render 'subarticles_request'
+      #pie_r.tab-pane b
+      #column_r.tab-pane c
