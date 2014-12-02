@@ -34,7 +34,7 @@ class SubarticleRequest < ActiveRecord::Base
   end
 
   def self.user_requests
-    joins(subarticle: [article: :material], request: [user: :department]).group("subarticle_id").select("subarticles.description, sum(subarticle_requests.amount) as total_amount, requests.created_at")
+    joins(subarticle: [article: :material], request: [user: :department]).group("subarticle_id").select("subarticles.code, subarticles.description, sum(subarticle_requests.amount) as total_amount, requests.created_at")
   end
 
   private

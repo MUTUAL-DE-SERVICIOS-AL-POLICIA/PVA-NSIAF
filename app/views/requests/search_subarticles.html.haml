@@ -52,5 +52,7 @@
     .tab-content
       #list_r.tab-pane.active
         = render 'subarticles_request'
-      #pie_r.tab-pane b
-      #column_r.tab-pane c
+      #pie_r.tab-pane
+        = render 'graphic', type: 'pie'
+      #column_r.tab-pane
+        = render 'graphic', type: 'column'

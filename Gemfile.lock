@@ -103,6 +103,7 @@ GEM
       activesupport (>= 4.0.1)
       haml (>= 3.1, < 5.0)
       railties (>= 4.0.1)
+    hash-deep-merge (0.1.1)
     hike (1.2.3)
     i18n (0.6.11)
     jquery-datatables-rails (1.12.2)
@@ -111,6 +112,9 @@ GEM
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.8.1)
+    lazy_high_charts (1.5.0)
+      bundler (>= 1.0)
+      hash-deep-merge
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     mime-types (2.4.3)
@@ -235,6 +239,7 @@ DEPENDENCIES
   haml-rails
   jquery-datatables-rails (~> 1.12.2)
   jquery-rails
+  lazy_high_charts
   mysql2
   nested_form
   non-stupid-digest-assets
