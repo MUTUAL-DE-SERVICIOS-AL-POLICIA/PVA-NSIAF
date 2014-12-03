@@ -247,6 +247,6 @@ module ApplicationHelper
   end
 
   def get_array_graphic(array)
-    array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount})", y: f.total_amount, date: (l f.created_at.to_date)}}
+    array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount})", y: f.total_amount, date: (l f.created_at.to_date) } }
   end
 end
