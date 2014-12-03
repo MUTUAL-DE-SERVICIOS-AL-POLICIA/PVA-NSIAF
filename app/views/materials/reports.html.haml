@@ -20,6 +20,7 @@
       %th.text-center SALIDAS EXIST. ALMAC
       %th.text-center SALDOS EXIST. ALMAC
   %tbody
+    - total = 0
     - for material in @materials
       %tr
         %th.text-center= material.code
@@ -36,18 +37,32 @@
             %td{colspan: 8}
           - for subarticle in @subarticles
             - if subarticle.article == article
+              - f_kardex = subarticle.final_kardex
+              - kp = f_kardex.kardex_prices.length
               %tr
-                %td.text-center= subarticle.code
-                %td= subarticle.description
-                %td= subarticle.unit
-                %td.number= 1
-                %td.number= 1
-                %td.number= 1
-                %td.number= 1
-                %td.number= 1
-                %td.number= 1
-                %td.number= 1
+                %td.text-center{rowspan: kp}= subarticle.code
+                %td{rowspan: kp}= subarticle.description
+                %td{rowspan: kp}= subarticle.unit
+                - f_kardex.kardex_prices.each_with_index do |price, index|
+                  - total += price.balance_amount
+                  - if index > 0
+                    %tr
+                      %td.number= 1
+                      %td.number= price.input_quantities
+                      %td.number= number_with_delimiter price.unit_cost
+                      %td.number= price.output_quantities
+                      %td.number= price.balance_quantities
+                      %td.number= number_with_delimiter price.unit_cost
+                      %td.number= number_with_delimiter price.balance_amount
+                  - else
+                    %td.number= 1
+                    %td.number= price.input_quantities
+                    %td.number= number_with_delimiter price.unit_cost
+                    %td.number= price.output_quantities
+                    %td.number= price.balance_quantities
+                    %td.number= number_with_delimiter price.unit_cost
+                    %td.number= number_with_delimiter price.balance_amount
     %tr
       %th{colspan: 2} TOTALES
       %th{colspan: 7}
-      %th.number 92,929.98
+      %th.number= number_with_delimiter total
