@@ -37,17 +37,18 @@
             %td{colspan: 8}
           - for subarticle in @subarticles
             - if subarticle.article == article
+              - i_kardex = subarticle.initial_kardex
               - f_kardex = subarticle.final_kardex
               - kp = f_kardex.kardex_prices.length
               %tr
                 %td.text-center{rowspan: kp}= subarticle.code
                 %td{rowspan: kp}= subarticle.description
                 %td{rowspan: kp}= subarticle.unit
+                %td.number{rowspan: kp}= i_kardex.sum_balance_quantities
                 - f_kardex.kardex_prices.each_with_index do |price, index|
                   - total += price.balance_amount
                   - if index > 0
                     %tr
-                      %td.number= 1
                       %td.number= price.input_quantities
                       %td.number= number_with_delimiter price.unit_cost
                       %td.number= price.output_quantities
@@ -55,7 +56,6 @@
                       %td.number= number_with_delimiter price.unit_cost
                       %td.number= number_with_delimiter price.balance_amount
                   - else
-                    %td.number= 1
                     %td.number= price.input_quantities
                     %td.number= number_with_delimiter price.unit_cost
                     %td.number= price.output_quantities
