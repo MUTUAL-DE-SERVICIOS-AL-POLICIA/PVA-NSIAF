@@ -1,56 +1,53 @@
 #report_subarticle.page-header
-  %h2 Reportes
+  %h3.text-center
+    %div INVENTARIO FISICO VALORADO DE ADSIB
+    %small LA PAZ, AL 31 DE DICIEMBRE DE 2014
 
-%table.table.table-bordered.table-hover
+%table.table.table-bordered.table-hover.table-condensed
   %thead
     %tr.vertical-align.info
-      %th.text-center{rowspan: "2"} Código
-      %th.text-center{rowspan: "2"} Descipción de Material
-      %th.text-center{rowspan: "2"} Unidad
-      %th.text-center{colspan: "3"} Saldos al 13/12/2012
-      %th.text-center{colspan: "3"} Entradas
-      %th.text-center{colspan: "2"} Salidas Exist Almacén
-      %th.text-center{rowspan: "2"} Costo Unit Bs.
-      %th.text-center{rowspan: "2"} Saldo Bs. al 31/12/2013
-      %th.text-center{rowspan: "2"} Recuento físico al 31/12/2013
+      %th.text-center{rowspan: "2"} CODIGO
+      %th.text-center{rowspan: "2"} DESCRIPCION DE MATERIAL
+      %th.text-center{rowspan: "2"} UNIDAD
+      %th.text-center{rowspan: "2"} SALDOS AL 31/12/2013
+      %th.text-center{colspan: "2"} ENTRADAS
+      %th.text-center{colspan: "2"} CANTIDADES
+      %th.text-center{rowspan: "2"} COSTO UNITARIO Bs.
+      %th.text-center{rowspan: "2"} SALDO Bs. AL 31/12/2014
     %tr.vertical-align.info
-      %th.text-center Control Físico
-      %th.text-center Costo Unitario
-      %th.text-center Costo Total
-      %th.text-center Exist Almacacén
-      %th.text-center Costo Unit.
-      %th.text-center Costo Total
-      %th.text-center Salidas Exist Almacén
-      %th.text-center Saldos Exist Almacén
+      %th.text-center EXIST. ALMAC
+      %th.text-center COSTO UNIT.
+      %th.text-center SALIDAS EXIST. ALMAC
+      %th.text-center SALDOS EXIST. ALMAC
   %tbody
     - for material in @materials
       %tr
-        %th= material.code
+        %th.text-center= material.code
         %th= material.description.upcase
-        %td{colspan: 12}
+        %td{colspan: 8}
       - for article in @articles
         - if article.material == material
           %tr
-            %th= article.code
+            %th.text-center= article.code
             %th
               - description = article.description.downcase
               - description[0] = description[0].capitalize
               = description
-            %td{colspan: 12}
+            %td{colspan: 8}
           - for subarticle in @subarticles
             - if subarticle.article == article
               %tr
-                %td= subarticle.code
+                %td.text-center= subarticle.code
                 %td= subarticle.description
-                %td.text-center= subarticle.unit
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
+                %td= subarticle.unit
+                %td.number= 1
+                %td.number= 1
+                %td.number= 1
+                %td.number= 1
+                %td.number= 1
+                %td.number= 1
+                %td.number= 1
+    %tr
+      %th{colspan: 2} TOTALES
+      %th{colspan: 7}
+      %th.number 92,929.98

@@ -58,9 +58,9 @@ class MaterialsController < ApplicationController
   end
 
   def reports
-    @materials = Material.order("description ASC")
-    @articles = Article.order("description ASC")
-    @subarticles = Subarticle.order("description ASC")
+    @materials = Material.order("code ASC, description ASC")
+    @articles = Article.order("code ASC, description ASC")
+    @subarticles = Subarticle.order("code ASC, description ASC")
   end
 
   private
