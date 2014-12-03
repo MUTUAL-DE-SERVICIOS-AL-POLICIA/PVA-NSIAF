@@ -1,7 +1,10 @@
+.separator
 #report_subarticle.page-header
   %h3.text-center
     %div INVENTARIO FISICO VALORADO DE ADSIB
-    %small LA PAZ, AL 31 DE DICIEMBRE DE 2014
+    %small
+      LA PAZ, AL
+      = l(Date.today, format: :long).upcase
 
 %table.table.table-bordered.table-hover.table-condensed
   %thead
@@ -9,11 +12,11 @@
       %th.text-center{rowspan: "2"} CODIGO
       %th.text-center{rowspan: "2"} DESCRIPCION DE MATERIAL
       %th.text-center{rowspan: "2"} UNIDAD
-      %th.text-center{rowspan: "2"} SALDOS AL 31/12/2013
+      %th.text-center{rowspan: "2"} SALDOS AL #{l(Date.today.beginning_of_year - 1, format: :default)}
       %th.text-center{colspan: "2"} ENTRADAS
       %th.text-center{colspan: "2"} CANTIDADES
       %th.text-center{rowspan: "2"} COSTO UNITARIO Bs.
-      %th.text-center{rowspan: "2"} SALDO Bs. AL 31/12/2014
+      %th.text-center{rowspan: "2"} SALDO Bs. AL #{l(Date.today, format: :default)}
     %tr.vertical-align.info
       %th.text-center EXIST. ALMAC
       %th.text-center COSTO UNIT.
@@ -66,3 +69,12 @@
       %th{colspan: 2} TOTALES
       %th{colspan: 7}
       %th.number= number_with_delimiter total
+
+- if is_pdf?
+  .text-center La Paz, #{l(Date.today, format: :long)}
+- else
+  .text-center= link_to 'Descargar PDF', reports_materials_path(format: :pdf), class: 'btn btn-lg btn-primary'
+  %br/
+  %br/
+  %br/
+  %br/
