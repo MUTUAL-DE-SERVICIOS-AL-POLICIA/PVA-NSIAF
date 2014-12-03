@@ -1,10 +1,10 @@
 class Version < PaperTrail::Version
   def item_code
-    item.present? ? (item.code || item.try(:username)) : ''
+    item.present? && item_type != 'NoteEntry' ? (item.code || item.try(:username)) : ''
   end
 
   def item_name
-    item.present? ? (%w(Material Article Subarticle).include?(item_type) ? item.description : item.name) : ''
+    item.present? && item_type != 'NoteEntry' ? (%w(Material Article Subarticle).include?(item_type) ? item.description : item.name) : ''
   end
 
   def whodunnit_code

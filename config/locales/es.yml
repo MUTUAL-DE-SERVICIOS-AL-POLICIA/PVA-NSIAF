@@ -317,6 +317,7 @@ es:
       kardex: "Kardex"
       kardex_price: "Kardex Precios"
       material: "Material"
+      note_entry: "Nota de Ingreso Almacén"
       subarticle: "Sub Artículo"
       proceeding: "Acta"
       user: "Funcionario"

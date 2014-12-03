@@ -4,6 +4,8 @@ class NoteEntry < ActiveRecord::Base
   accepts_nested_attributes_for :entry_subarticles
   belongs_to :user
 
+  has_paper_trail
+
   def supplier_name
     supplier.present? ? supplier.name : ''
   end
