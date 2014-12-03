@@ -217,6 +217,8 @@ module ApplicationHelper
       if graphic == 'pie'
         f.series(
           data: get_array_graphic(array),
+          allowPointSelect: true,
+          cursor: 'pointer',
           dataLabels: {
             style: { fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif", fontSize: "12px" },
             format: "<b>{point.code}</b>: {point.percentage:.1f} %"

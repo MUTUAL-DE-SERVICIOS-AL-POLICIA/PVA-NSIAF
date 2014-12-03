@@ -256,3 +256,7 @@ jQuery ->
   $(document).on 'click', '#clean_text', ->
     $("#subarticle").val('')
     $('#subarticle').focus()
+
+  #resize tab
+  $('a[data-toggle="tab"]').on 'shown.bs.tab', (e) ->
+    $(window).resize()
