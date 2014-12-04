@@ -55,13 +55,20 @@ class EntrySubarticle < ActiveRecord::Base
       kardex.kardex_date = note_entry.created_at.to_date
       kardex.invoice_number = note_entry.get_invoice_number
       kardex.detail = note_entry.supplier_name
+      kardex.order_number = nil
+      kardex_price.input_quantities = amount
+      kardex_price.input_amount = amount * unit_cost
+    else
+      kardex.kardex_date = self.date
+      kardex.invoice_number = 0
+      kardex.detail = 'SALDO INICIAL'
+      kardex.order_number = 0
+      kardex_price.input_quantities = 0
+      kardex_price.input_amount = 0
     end
-    kardex.order_number = nil
-    kardex_price.input_quantities = amount
     kardex_price.output_quantities = 0
     kardex_price.balance_quantities = balance
     kardex_price.unit_cost = unit_cost
-    kardex_price.input_amount = amount * unit_cost
     kardex_price.output_amount = 0
     kardex_price.balance_amount = balance * unit_cost
     kardex.save!

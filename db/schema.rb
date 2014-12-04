@@ -144,7 +144,7 @@ ActiveRecord::Schema.define(version: 20141121192208) do
     t.integer  "subarticle_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "stock",                                  default: 0
+    t.integer  "stock",                                  default: 0, null: false
     t.integer  "note_entry_id"
   end
 

@@ -172,7 +172,7 @@ es:
       confirm-deactivate: "¿Está seguro de Desactivar el sub artículo <strong>%{name}</strong>?"
       confirm-cannot_disable: "No se puede desactivar el sub artículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>Funcionario</strong>"
     entry:
-      btn: "Establecer Saldo Incial"
+      btn: "Establecer Saldo Inicial"
       first: "Establecer Saldo Inicial del Sub Artículo <strong>%{description}</strong>"
   users:
     roles:

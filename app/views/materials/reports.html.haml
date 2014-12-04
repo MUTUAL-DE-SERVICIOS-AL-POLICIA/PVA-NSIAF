@@ -1,56 +1,80 @@
+.separator
 #report_subarticle.page-header
-  %h2 Reportes
+  %h3.text-center
+    %div INVENTARIO FISICO VALORADO DE ADSIB
+    %small
+      LA PAZ, AL
+      = l(Date.today, format: :long).upcase
 
-%table.table.table-bordered.table-hover
+%table.table.table-bordered.table-hover.table-condensed
   %thead
     %tr.vertical-align.info
-      %th.text-center{rowspan: "2"} Código
-      %th.text-center{rowspan: "2"} Descipción de Material
-      %th.text-center{rowspan: "2"} Unidad
-      %th.text-center{colspan: "3"} Saldos al 13/12/2012
-      %th.text-center{colspan: "3"} Entradas
-      %th.text-center{colspan: "2"} Salidas Exist Almacén
-      %th.text-center{rowspan: "2"} Costo Unit Bs.
-      %th.text-center{rowspan: "2"} Saldo Bs. al 31/12/2013
-      %th.text-center{rowspan: "2"} Recuento físico al 31/12/2013
+      %th.text-center{rowspan: "2"} CODIGO
+      %th.text-center{rowspan: "2"} DESCRIPCION DE MATERIAL
+      %th.text-center{rowspan: "2"} UNIDAD
+      %th.text-center{rowspan: "2"} SALDOS AL #{l(Date.today.beginning_of_year - 1, format: :default)}
+      %th.text-center{colspan: "2"} ENTRADAS
+      %th.text-center{colspan: "2"} CANTIDADES
+      %th.text-center{rowspan: "2"} COSTO UNITARIO Bs.
+      %th.text-center{rowspan: "2"} SALDO Bs. AL #{l(Date.today, format: :default)}
     %tr.vertical-align.info
-      %th.text-center Control Físico
-      %th.text-center Costo Unitario
-      %th.text-center Costo Total
-      %th.text-center Exist Almacacén
-      %th.text-center Costo Unit.
-      %th.text-center Costo Total
-      %th.text-center Salidas Exist Almacén
-      %th.text-center Saldos Exist Almacén
+      %th.text-center EXIST. ALMAC
+      %th.text-center COSTO UNIT.
+      %th.text-center SALIDAS EXIST. ALMAC
+      %th.text-center SALDOS EXIST. ALMAC
   %tbody
+    - total = 0
     - for material in @materials
       %tr
-        %th= material.code
+        %th.text-center= material.code
         %th= material.description.upcase
-        %td{colspan: 12}
+        %td{colspan: 8}
       - for article in @articles
         - if article.material == material
           %tr
-            %th= article.code
+            %th.text-center= article.code
             %th
               - description = article.description.downcase
               - description[0] = description[0].capitalize
               = description
-            %td{colspan: 12}
+            %td{colspan: 8}
           - for subarticle in @subarticles
             - if subarticle.article == article
+              - i_kardex = subarticle.initial_kardex
+              - f_kardex = subarticle.final_kardex
+              - kp = f_kardex.kardex_prices.length
               %tr
-                %td= subarticle.code
-                %td= subarticle.description
-                %td.text-center= subarticle.unit
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
-                %td.text-center= 1
+                %td.text-center{rowspan: kp}= subarticle.code
+                %td{rowspan: kp}= subarticle.description
+                %td{rowspan: kp}= subarticle.unit
+                %td.number{rowspan: kp}= i_kardex.sum_balance_quantities
+                - f_kardex.kardex_prices.each_with_index do |price, index|
+                  - total += price.balance_amount
+                  - if index > 0
+                    %tr
+                      %td.number= price.input_quantities
+                      %td.number= number_with_delimiter price.unit_cost
+                      %td.number= price.output_quantities
+                      %td.number= price.balance_quantities
+                      %td.number= number_with_delimiter price.unit_cost
+                      %td.number= number_with_delimiter price.balance_amount
+                  - else
+                    %td.number= price.input_quantities
+                    %td.number= number_with_delimiter price.unit_cost
+                    %td.number= price.output_quantities
+                    %td.number= price.balance_quantities
+                    %td.number= number_with_delimiter price.unit_cost
+                    %td.number= number_with_delimiter price.balance_amount
+    %tr
+      %th{colspan: 2} TOTALES
+      %th{colspan: 7}
+      %th.number= number_with_delimiter total
+
+- if is_pdf?
+  .text-center La Paz, #{l(Date.today, format: :long)}
+- else
+  .text-center= link_to 'Descargar PDF', reports_materials_path(format: :pdf), class: 'btn btn-lg btn-primary'
+  %br/
+  %br/
+  %br/
+  %br/

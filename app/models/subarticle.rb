@@ -95,6 +95,14 @@ class Subarticle < ActiveRecord::Base
     end
   end
 
+  def final_kardex
+    self.kardexes.final_kardex
+  end
+
+  def initial_kardex
+    self.kardexes.initial_kardex
+  end
+
   def self.search_subarticle(q)
     where("description LIKE ? AND status = ?", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock } : nil }.compact
   end
