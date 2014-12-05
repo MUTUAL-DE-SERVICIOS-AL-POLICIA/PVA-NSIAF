@@ -60,9 +60,10 @@ class AssetsController < ApplicationController
   end
 
   def change_status
+    @asset.derecognised = Time.now
+    @asset.decline_user_id = current_user.id
+    @asset.update(asset_params)
     @asset.change_status
-    @asset.derecognised_date
-    Decline.deregister(@asset, params[:description], params[:reason], current_user.id)
     render nothing: true
   end
 
@@ -131,7 +132,7 @@ class AssetsController < ApplicationController
         params[:asset][:user_id] = current_user.id
         params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id, :barcode, :state)
       else
-        params.require(:asset).permit(:code, :description, :barcode, :state)
+        params.require(:asset).permit(:code, :description, :barcode, :state, :derecognised, :description_decline, :reason_decline, :decline_user_id)
       end
     end
 end

@@ -10,13 +10,13 @@
           - if controller_name == 'assets'
             = form_tag "{{url}}", class: 'form-horizontal' do
               .form-group
-                %label.col-sm-2.control-label= Decline.human_attribute_name('description')
+                %label.col-sm-2.control-label= Asset.human_attribute_name('description_decline')
                 .col-sm-10
-                  = text_area_tag :description, '', class: 'form-control'
+                  = text_area_tag "asset[description_decline]", '', class: 'form-control'
               .form-group
-                %label.col-sm-2.control-label= Decline.human_attribute_name('motivo')
+                %label.col-sm-2.control-label= Asset.human_attribute_name('reason_decline')
                 .col-sm-10
-                  = text_area_tag :reason, '', class: 'form-control'
+                  = text_area_tag "asset[reason_decline]", '', class: 'form-control'
           {{#entry}}
           = simple_form_for EntrySubarticle.new, url: first_entry_subarticles_path, html: { class: 'form-horizontal' } do |f|
             = f.input :subarticle_id, as: :hidden, input_html: { value: "{{id}}" }

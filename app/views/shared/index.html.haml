@@ -51,12 +51,12 @@
 %table.table.table-striped.table-hover.datatable{ data: {action: 'note_entry'} }
   %thead
     %tr
-      - unless %w(versions declines proceedings requests note_entries).include?(control)
+      - unless %w(versions proceedings requests note_entries).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
           %th= User.human_attribute_name('code')
         %th= %w(assets materials articles subarticles).include?(control) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
       = render "#{control}/#{control}" unless control == 'accounts'
-      - unless %w(versions declines).include?(control)
+      - unless %w(versions).include?(control)
         %th= t('general.actions')
   %tbody
 

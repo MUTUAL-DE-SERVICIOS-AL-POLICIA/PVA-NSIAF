@@ -30,6 +30,18 @@ date_picker = ->
     format: "dd/mm/yyyy"
     language: "es"
 
+validation_decline = ($form, id) ->
+  input = $("##{id}")
+  if input.val() == ''
+    input.parents('.form-group').addClass('has-error')
+    input.after('<span class="help-block">es obligatorio</span>') unless input.next().length
+    false
+  else
+    input.parents('.form-group').removeClass('has-error')
+    input.next().remove()
+    true
+
+
 jQuery ->
   TableTools.BUTTONS.download =
     sAction: "text"
@@ -143,17 +155,14 @@ jQuery ->
   # Form decline
   $(document).on 'click', '.deregister', ->
     $form = $(this).parents('.modal-dialog').find('form')
-    if $form.find('#description').val() != '' && $form.find('#reason').val() != ''
+    validation_decline($form, 'asset_reason_decline')
+    if validation_decline($form, 'asset_description_decline') && validation_decline($form, 'asset_reason_decline')
       $.ajax
         url: $form.attr('action')
         type: "post"
         data: $form.serialize()
         complete: (data, xhr) ->
           window.location = window.location
-    else
-      $div = $(this).parent().prev().find('.form-group')
-      $div.addClass('has-error')
-      $div.find('textarea').after('<span class="help-block">es obligatorio</span>')
 
   $(document).on 'click', '.download-assets', (e) ->
     e.preventDefault()

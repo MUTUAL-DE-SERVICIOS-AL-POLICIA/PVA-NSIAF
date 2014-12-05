@@ -29,11 +29,11 @@
   - if @asset.status == '0'
     %h3 Dado de baja
     %dt Fecha de baja
-    %dd= l(@asset.derecognised, format: :version)
-    %dt= Decline.human_attribute_name('description')
-    %dd= @asset.get_decline('description')
-    %dt= Decline.human_attribute_name('motivo')
-    %dd= @asset.get_decline('reason')
+    %dd= l(@asset.derecognised, format: :version) if @asset.derecognised.present?
+    %dt= Asset.human_attribute_name('description_decline')
+    %dd= @asset.description_decline
+    %dt= Asset.human_attribute_name('reason_decline')
+    %dd= @asset.reason_decline
 
 .row
   .col-sm-12.historical-reviews
