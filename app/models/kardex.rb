@@ -111,4 +111,12 @@ class Kardex < ActiveRecord::Base
       kp.output_amount = 0
     end
   end
+
+  def sum_balance_quantities
+    balance = 0
+    kardex_prices.each do |kp|
+      balance += kp.balance_quantities
+    end
+    balance
+  end
 end
