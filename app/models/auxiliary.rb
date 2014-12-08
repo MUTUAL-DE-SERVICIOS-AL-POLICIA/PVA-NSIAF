@@ -1,5 +1,5 @@
 class Auxiliary < ActiveRecord::Base
-  include ImportDbf, VersionLog, ManageStatus
+  include ImportDbf, Migrated, VersionLog, ManageStatus
 
   CORRELATIONS = {
     'CODAUX' => 'code',
@@ -9,8 +9,15 @@ class Auxiliary < ActiveRecord::Base
   belongs_to :account
   has_many :assets
 
-  validates :code, presence: true, uniqueness: { scope: :account_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :name, :account_id, presence: true
+  with_options if: :is_not_migrate? do |m|
+    m.validates :code, presence: true, uniqueness: { scope: :account_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    m.validates :name, :account_id, presence: true
+  end
+
+  with_options if: :is_migrate? do |m|
+    m.validates :code, presence: true, uniqueness: { scope: :account_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    m.validates :account_id, presence: true
+  end
 
   has_paper_trail ignore: [:status, :updated_at]
 
@@ -59,7 +66,7 @@ class Auxiliary < ActiveRecord::Base
   ##
   # Guarda en la base de datos de acuerdo a la correspondencia de campos.
   def self.save_correlations(record)
-    aux = Hash.new
+    aux = { is_migrate: true }
     CORRELATIONS.each do |origin, destination|
       aux.merge!({ destination => record[origin] })
     end
