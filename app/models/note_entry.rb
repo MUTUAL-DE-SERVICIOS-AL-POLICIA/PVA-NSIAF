@@ -26,6 +26,15 @@ class NoteEntry < ActiveRecord::Base
     date.present? ? I18n.l(date) : ''
   end
 
+  def get_delivery_note_number
+    invoice = ''
+    if delivery_note_number.present?
+      invoice += "#{delivery_note_number}"
+    elsif delivery_note_date.present?
+      invoice += "#{I18n.l delivery_note_date, format: :default}"
+    end
+  end
+
   def get_first_date
     first_date = created_at
     if delivery_note_date && invoice_date
@@ -43,15 +52,10 @@ class NoteEntry < ActiveRecord::Base
 
   def get_invoice_number
     invoice = ''
-    if delivery_note_number.present?
-      invoice += "NE: #{delivery_note_number}"
-    elsif delivery_note_date.present?
-      invoice += "NE: #{I18n.l delivery_note_date, format: :default}"
-    end
     if invoice_number.present?
-      invoice += " FACT: #{invoice_number}"
+      invoice += "#{invoice_number}"
     elsif invoice_date.present?
-      invoice += " FACT: #{I18n.l invoice_date, format: :default}"
+      invoice += "#{I18n.l invoice_date, format: :default}"
     end
     invoice.strip
   end

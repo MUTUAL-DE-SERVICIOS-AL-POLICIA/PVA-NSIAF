@@ -6,6 +6,7 @@
     %td.text-center{rowspan: kp}
       = l kardex.kardex_date.to_date, format: :default
     %td.text-center{rowspan: kp}= kardex.invoice_number
+    %td.text-center{rowspan: kp}= kardex.delivery_note_number
     %td.text-center{rowspan: kp}= kardex.order_number
     %td{rowspan: kp}= kardex.detail
     - kardex.kardex_prices.each_with_index do |price, index|
@@ -18,6 +19,7 @@
     %td.text-center{rowspan: kp}
       = l kardex.kardex_date.to_date, format: :default
     %td.text-center{rowspan: kp}= kardex.invoice_number
+    %td.text-center{rowspan: kp}= kardex.delivery_note_number
     %td.text-center{rowspan: kp}= kardex.order_number
     %td{rowspan: kp}= kardex.detail
     - kardex.kardex_prices.each_with_index do |price, index|

@@ -1,5 +1,5 @@
 class Kardex < ActiveRecord::Base
-  default_scope -> {order(:kardex_date, :created_at)}
+  default_scope -> {order(:created_at)}
 
   belongs_to :subarticle
 
@@ -60,7 +60,7 @@ class Kardex < ActiveRecord::Base
   end
 
   def remove_zero_balance
-    if kardex_prices.length > 0
+    if kardex_prices.length > 1
       k_prices = []
       kardex_prices.each do |kardex_price|
         if kardex_price.balance_quantities.zero?
