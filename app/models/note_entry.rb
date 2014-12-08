@@ -26,6 +26,21 @@ class NoteEntry < ActiveRecord::Base
     date.present? ? I18n.l(date) : ''
   end
 
+  def get_first_date
+    first_date = created_at
+    if delivery_note_date && invoice_date
+      first_date = invoice_date
+      if delivery_note_date < invoice_date
+        first_date = delivery_note_date
+      end
+    elsif delivery_note_date
+      first_date = delivery_note_date
+    elsif invoice_date
+      first_date = invoice_date
+    end
+    first_date.to_date
+  end
+
   def get_invoice_number
     invoice = ''
     if delivery_note_number.present?

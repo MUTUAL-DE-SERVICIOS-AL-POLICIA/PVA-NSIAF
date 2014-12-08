@@ -52,7 +52,7 @@ class EntrySubarticle < ActiveRecord::Base
     balance += kardex_price.balance_quantities
 
     if note_entry.present?
-      kardex.kardex_date = note_entry.created_at.to_date
+      kardex.kardex_date = note_entry.get_first_date
       kardex.invoice_number = note_entry.get_invoice_number
       kardex.detail = note_entry.supplier_name
       kardex.order_number = nil
