@@ -251,4 +251,12 @@ module ApplicationHelper
   def get_array_graphic(array)
     array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount})", y: f.total_amount, date: (l f.created_at.to_date) } }
   end
+
+  def title_system
+    case current_user.role
+    when 'super_admin' then 'Sistema de Activos Fijos y Almacenes'
+    when 'admin' then 'Sistema de Activos Fijos'
+    when 'admin_store' then 'Sistema de Almacenes'
+    end
+  end
 end

@@ -5,7 +5,7 @@
     %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}/
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}/
 
-    %title VSIAF - #{ yield_or_default(:title, 'Sistema de Activos Fijos y Almacenes') }
+    %title VSIAF - #{ yield_or_default(:title, title_system) }
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body
@@ -17,7 +17,7 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          = link_to "Sistema de Activos Fijos", root_path, class: 'navbar-brand'
+          = link_to title_system, root_path, class: 'navbar-brand'
         = render 'layouts/main_nav'
     .col-sm-12.col-md-12.main
       - if notice.present?
