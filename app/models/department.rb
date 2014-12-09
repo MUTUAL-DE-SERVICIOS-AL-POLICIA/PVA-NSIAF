@@ -26,6 +26,10 @@ class Department < ActiveRecord::Base
     building.present? ? building.name : ''
   end
 
+  def entity_acronym
+    building.present? ? building.entity_acronym : ''
+  end
+
   def self.search_by(building_id)
     departments = []
     departments = where(building_id: building_id) if building_id.present?

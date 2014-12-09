@@ -62,6 +62,10 @@ class User < ActiveRecord::Base
     I18n.t('unauthorized.manage.user_inactive')
   end
 
+  def department_entity_acronym
+    department.present? ? department.entity_acronym : ''
+  end
+
   def department_code
     department.present? ? department.code : ''
   end
@@ -80,6 +84,10 @@ class User < ActiveRecord::Base
 
   def email_required?
     false
+  end
+
+  def has_roles?
+    self.role.present?
   end
 
   def hide_announcement

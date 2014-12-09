@@ -111,6 +111,8 @@ Nsiaf::Application.routes.draw do
     delete '/logout' => 'sessions#destroy', as: :destroy_user_session
   end
 
+  resources :welcome, only: [:index]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
