@@ -259,4 +259,13 @@ module ApplicationHelper
     when 'admin_store' then 'Sistema de Almacenes'
     end
   end
+
+  def color_menu
+    case current_user.role
+    when 'super_admin' then 'navbar-sa'
+    when 'admin_store' then 'navbar-stores'
+    else
+      ''
+    end
+  end
 end
