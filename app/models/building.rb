@@ -15,6 +15,10 @@ class Building < ActiveRecord::Base
 
   has_paper_trail ignore: [:status, :updated_at]
 
+  def entity_acronym
+    entity.present? ? entity.acronym : ''
+  end
+
   def entity_code
     entity.present? ? entity.code : ''
   end

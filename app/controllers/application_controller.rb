@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
+    if current_user && !current_user.has_roles?
+      redirect_to welcome_index_url
+    else
+      redirect_to root_url, :alert => exception.message
+    end
   end
 
   # Prevent CSRF attacks by raising an exception.

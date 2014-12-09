@@ -8,6 +8,7 @@ class Ability
       can :manage, User
       cannot [:show, :update], User, id: user.id
       can [:index, :import], :dbf
+      can :manage, Version
     elsif user.is_admin?
       can :manage, Building
       can :manage, Department
@@ -20,6 +21,7 @@ class Ability
       can :manage, Asset
       can :manage, Proceeding
       can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
+      can :manage, Version
     elsif user.is_admin_store?
       can [:welcome, :show, :update], User, id: user.id
       can [:departments, :users], Asset
@@ -35,7 +37,10 @@ class Ability
       cannot [:show, :update], User do |user|
         %w(super_admin admin).include?(user.role)
       end
+      can :manage, Version
+    else
+      can [:show, :update], User, id: user.id
+      can :index, :welcome
     end
-    can :manage, Version
   end
 end
