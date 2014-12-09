@@ -15,9 +15,16 @@ table.kardex-table {
 }
 
 table {
-  tr.vertical-align {
-    th {
-      vertical-align: middle;
+  tr {
+    &.vertical-align {
+      th {
+        vertical-align: middle;
+      }
+    }
+    &.double-thick {
+      th, td {
+        border: 2px solid #dddddd;
+      }
     }
   }
 }
