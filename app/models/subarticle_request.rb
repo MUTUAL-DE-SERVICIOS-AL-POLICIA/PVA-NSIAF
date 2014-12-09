@@ -48,8 +48,9 @@ class SubarticleRequest < ActiveRecord::Base
         kardex.reset_kardex_prices
         kardex.remove_zero_balance
 
-        kardex.kardex_date = request.created_at.to_date
+        kardex.kardex_date = request.delivery_date.to_date
         kardex.invoice_number = 0
+        kardex.delivery_note_number = 0
         kardex.order_number = request.id
         kardex.detail = request.user_name_title
 
