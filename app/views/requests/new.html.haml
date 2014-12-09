@@ -13,11 +13,8 @@
   .row
     .col-xs-12.col-sm-5.col-md-5
       .row
-        .col-xs-12.col-sm-10.col-md-10
-          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Sub Artículo'
-        .col-xs-12.col-sm-2.col-md-2
-          %button.btn.btn-default{type: "button", title: "Limpiar texto", id: "clean_text"}
-            %span.glyphicon.glyphicon-refresh
+        .col-xs-12.col-sm-12.col-md-12
+          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Código o Descripción del Producto'
     .col-xs-12.col-sm-7.col-md-7{ style: 'margin-bottom: 30px;' }
       %table.table.table-striped
         %thead
