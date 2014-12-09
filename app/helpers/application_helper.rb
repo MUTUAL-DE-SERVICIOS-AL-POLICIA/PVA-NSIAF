@@ -268,4 +268,31 @@ module ApplicationHelper
       ''
     end
   end
+
+  def acronym_entity
+    user = current_user.department
+    if user.present?
+      user = user.building
+      if user.present?
+        user = user.entity
+        if user.present?
+          "de #{user.acronym}" || ''
+        else
+          ""
+        end
+      else
+        ""
+      end
+    else
+      ""
+    end
+  end
+
+  def dashboard_text
+    case current_user.role
+    when 'super_admin' then 'la administración'
+    when 'admin' then 'los activos de su institución'
+    when 'admin_store' then 'los materiales de su institución'
+    end
+  end
 end
