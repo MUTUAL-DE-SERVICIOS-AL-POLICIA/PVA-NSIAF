@@ -1,9 +1,9 @@
 .container
   .jumbotron.j_bottom
     %p.lead
-      Bienvenidos al sistema de Activos Fijos de ADSIB
+      Bienvenidos al #{title_system} #{acronym_entity}
       %br
-      donde podrá gestionar los activos de su institución.
+      donde podrá gestionar #{dashboard_text}.
 
   - if minimum_stock.present? && current_user.is_admin_store?
     .page-header

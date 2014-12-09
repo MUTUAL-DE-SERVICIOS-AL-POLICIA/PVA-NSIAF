@@ -251,4 +251,48 @@ module ApplicationHelper
   def get_array_graphic(array)
     array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount})", y: f.total_amount, date: (l f.created_at.to_date) } }
   end
+
+  def title_system
+    case current_user.role
+    when 'super_admin' then 'Sistema de Activos Fijos y Almacenes'
+    when 'admin' then 'Sistema de Activos Fijos'
+    when 'admin_store' then 'Sistema de Almacenes'
+    end
+  end
+
+  def color_menu
+    case current_user.role
+    when 'super_admin' then 'navbar-sa'
+    when 'admin_store' then 'navbar-stores'
+    else
+      ''
+    end
+  end
+
+  def acronym_entity
+    user = current_user.department
+    if user.present?
+      user = user.building
+      if user.present?
+        user = user.entity
+        if user.present?
+          "de #{user.acronym}" || ''
+        else
+          ""
+        end
+      else
+        ""
+      end
+    else
+      ""
+    end
+  end
+
+  def dashboard_text
+    case current_user.role
+    when 'super_admin' then 'la administración'
+    when 'admin' then 'los activos de su institución'
+    when 'admin_store' then 'los materiales de su institución'
+    end
+  end
 end

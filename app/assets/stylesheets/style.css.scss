@@ -107,3 +107,15 @@ table {
 .datepicker {
   z-index: 1151 !important;
 }
+
+.navbar-sa {
+  background-color: #3B4C59;
+  background-image: none;
+  .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus { background-color: #2c3b47 !important; }
+}
+
+.navbar-stores {
+  background-color: #2C472C;
+  background-image: none;
+  .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus { background-color: #192D19 !important; }
+}
