@@ -43,10 +43,11 @@ class Recoding
     @$codeName.typeahead
       hint: false
     ,
-      displayKey: 'code'
+      #displayKey: 'code'
       source: @assetList.ttAdapter()
       templates: @typeaheadTemplates()
     .on 'typeahead:selected', (evt, data) => @displaySelectedElement(data)
+
     # events
     $(document).on 'change', @$barcode.selector, (e) => @setBarcodeValue(e)
     $(document).on 'keydown', @$barcode.selector, (e) => @handleEscKey(e)

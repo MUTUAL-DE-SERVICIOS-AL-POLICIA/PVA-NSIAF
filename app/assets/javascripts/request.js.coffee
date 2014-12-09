@@ -157,8 +157,8 @@ class Request extends BarcodeReader
     )
     bestPictures.initialize()
     @$inputSubarticle.typeahead null,
-      displayKey: "description"
       source: bestPictures.ttAdapter()
+      templates: @typeaheadTemplates()
     .on 'typeahead:selected', (evt, data) => @add_subarticle(evt, data)
 
   add_subarticle: (evt, data) ->
@@ -224,3 +224,12 @@ class Request extends BarcodeReader
       $user = @$templateUserInfo.render(data)
       $table = @$selected_subarticles.find("table")
       $($user).insertBefore($table)
+
+  typeaheadTemplates: ->
+    empty: [
+      '<p class="empty-message">',
+      'No se encontró ningún elemento',
+      '</p>'
+    ].join('\n')
+    suggestion: (data) ->
+      Hogan.compile('<p><strong>{{code}}</strong> - <em>{{description}}</em></p>').render(data)

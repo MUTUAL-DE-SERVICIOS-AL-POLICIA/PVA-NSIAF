@@ -30,12 +30,7 @@
       .form-group
         %label.col-sm-3.col-md-3.col-lg-3.control-label= t('activerecord.models.subarticle')
         .col-xs-9.col-sm-9.col-md-9
-          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control'
-    .col-xs-1.col-sm-4.col-md-4
-      .form-group
-        .col-sm-4.col-md-4.col-lg-4
-          %button.btn.btn-default{type: "button", title: "Limpiar texto", id: "clean_text"}
-            %span.glyphicon.glyphicon-refresh
+          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control', placeholder: 'Código o Descripción del Producto'
 
   = render 'entry_subarticles'
 
