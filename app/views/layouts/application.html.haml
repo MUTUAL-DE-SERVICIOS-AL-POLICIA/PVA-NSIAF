@@ -5,11 +5,13 @@
     %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}/
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}/
 
+    = favicon_link_tag 'favicon.ico'
+
     %title VSIAF - #{ yield_or_default(:title, title_system) }
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body
-    .navbar.navbar-inverse{role: "navigation", class: color_menu}
+    .navbar.navbar-default{role: "navigation", class: color_menu}
       .container-fluid
         .navbar-header
           %button.navbar-toggle.collapsed{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", type: "button"}

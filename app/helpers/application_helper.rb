@@ -264,6 +264,7 @@ module ApplicationHelper
     case current_user.role
     when 'super_admin' then 'navbar-sa'
     when 'admin_store' then 'navbar-stores'
+    when 'admin' then 'navbar-assets'
     else
       ''
     end
