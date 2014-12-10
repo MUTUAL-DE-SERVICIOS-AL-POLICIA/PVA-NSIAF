@@ -1,7 +1,7 @@
 .page-header{data: {action: 'request'}}
   %h2= t("requests.title.new")
 
-#request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
+#request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'get-users' => autocomplete_users_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
 
 #selection_subarticles
   %p.bg-info En la caja de texto busque el Sub Artículo a desear, el cual sera añadido en la tabla una vez seleccionado
@@ -9,7 +9,7 @@
     .col-xs-12.col-sm-12.col-md-12.form-horizontal
       %label.col-xs-12.col-sm-1.col-md-1.control-label Funcionario:
       .col-xs-12.col-sm-4.col-md-4
-        = select_tag "people", options_from_collection_for_select(@users, "id", "name"), class: "form-control"
+        = text_field_tag "people", '', class: "form-control"
   .row
     .col-xs-12.col-sm-5.col-md-5
       .row

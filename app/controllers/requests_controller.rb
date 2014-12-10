@@ -27,7 +27,6 @@ class RequestsController < ApplicationController
 
   # GET /requests/new
   def new
-    @users = view_context.status_active(User).where("id != 1")
   end
 
   # POST /requests

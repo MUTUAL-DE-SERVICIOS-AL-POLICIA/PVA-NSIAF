@@ -4,7 +4,7 @@ class Request extends BarcodeReader
   cacheElements: ->
     @$request_urls = $('#request-urls')
 
-    @$user = $('#people')
+    @$user = $('input#people')
     @$request = $('#request')
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
@@ -42,6 +42,7 @@ class Request extends BarcodeReader
     @request_save_url = decodeURIComponent @$request_urls.data('request-id')
     @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
     @user_url = decodeURIComponent(@$request_urls.data('users-id'))
+    @users_json_url = decodeURIComponent @$request_urls.data('get-users')
 
     @alert = new Notices({ele: 'div.main'})
 
@@ -63,6 +64,8 @@ class Request extends BarcodeReader
       @$subarticle.remoteChained(@$article.selector, @$request_urls.data('subarticles-array'))
     if @$inputSubarticle?
       @get_subarticles()
+    if @$user?
+      @get_users()
 
   show_request: ->
     sw = 0
@@ -193,16 +196,19 @@ class Request extends BarcodeReader
 
   show_new_request: ->
     if @$subarticles.find('tr').length
-      @btnShowNewRequest.hide()
-      @$selectionSubarticles.hide()
-      table = @$subarticles.parent().clone()
-      table.find('.actions-request').remove()
-      table.find('thead tr').prepend '<th>#</th>'
-      table.find('#subarticles tr').each (i) ->
-        $(this).prepend "<td>#{ i+1 }</td>"
-      @$selected_subarticles.append table
-      @$selected_subarticles.append @$templateBtnsNewRequest.render()
-      @showUserInfo @$user.val()
+      if @$user.val()
+        @btnShowNewRequest.hide()
+        @$selectionSubarticles.hide()
+        table = @$subarticles.parent().clone()
+        table.find('.actions-request').remove()
+        table.find('thead tr').prepend '<th>#</th>'
+        table.find('#subarticles tr').each (i) ->
+          $(this).prepend "<td>#{ i+1 }</td>"
+        @$selected_subarticles.append table
+        @$selected_subarticles.append @$templateBtnsNewRequest.render()
+        @showUserInfo @$user.data('user-id')
+      else
+        @open_modal("Debe añadir un Funcionario")
     else
       @open_modal("Debe seleccionar al menos un Sub Artículo")
 
@@ -216,7 +222,7 @@ class Request extends BarcodeReader
       subarticle_id: val.id
       amount: $(val).find('td.amount').text()
     )
-    json_data = { status: 'initiation', user_id: @$user.val(), subarticle_requests_attributes: subarticles }
+    json_data = { status: 'initiation', user_id: @$user.data('user-id'), subarticle_requests_attributes: subarticles }
     $.post @request_save_url.replace(/{id}/, ''), { request: json_data }, null, 'script'
 
   showUserInfo: (user_id) ->
@@ -225,11 +231,18 @@ class Request extends BarcodeReader
       $table = @$selected_subarticles.find("table")
       $($user).insertBefore($table)
 
-  typeaheadTemplates: ->
-    empty: [
-      '<p class="empty-message">',
-      'No se encontró ningún elemento',
-      '</p>'
-    ].join('\n')
-    suggestion: (data) ->
-      Hogan.compile('<p><strong>{{code}}</strong> - <em>{{description}}</em></p>').render(data)
+  get_users: ->
+    bestPictures = new Bloodhound(
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
+      queryTokenizer: Bloodhound.tokenizers.whitespace
+      limit: 100
+      remote: @users_json_url
+    )
+    bestPictures.initialize()
+    @$user.typeahead null,
+      displayKey: 'name'
+      source: bestPictures.ttAdapter()
+    .on 'typeahead:selected', (evt, data) => @add_user_id(evt, data)
+
+  add_user_id: (evt, data) ->
+    @$user.attr('data-user-id', data.id)

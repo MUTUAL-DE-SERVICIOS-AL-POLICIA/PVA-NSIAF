@@ -176,7 +176,8 @@ class User < ActiveRecord::Base
   end
 
   def self.search_user(q)
-    where("name LIKE ? AND username != ?", "%#{q}%", 'admin')
+    h = ApplicationController.helpers
+    h.status_active(self).where("name LIKE ? AND username != ?", "%#{q}%", 'admin').map{ |s| { id: s.id, name: s.name } }
   end
 
   private
