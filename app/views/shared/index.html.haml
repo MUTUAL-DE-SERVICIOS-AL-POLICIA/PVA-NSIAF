@@ -23,16 +23,7 @@
     - else
       #{t("#{control}.title.title")} #{' dados de Baja' if controller_name == 'derecognised'}
       - if control == 'requests'
-        .dropdown{style: 'float: right;'}
-          %button#dropdownMenu.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button"}
-            Solicitudes:
-            %span= title_request(params[:status])
-            %span.caret
-          %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu"}
-            %li= link_request('initiation')
-            %li= link_request('pending')
-            %li= link_request('delivered')
-            %li= link_request('all')
+        = render 'dropdown', status: params[:status]
 
 .col-xs-2.button_new
   %span.controller_name= controller_name
