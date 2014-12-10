@@ -1,7 +1,7 @@
-.separator
-#report_subarticle.page-header
+%div{class: "#{'separator' if is_pdf?}"}
+#report_subarticle
   %h3.text-center
-    %div INVENTARIO FISICO VALORADO DE ADSIB
+    %div INVENTARIO FÍSICO VALORADO DE ADSIB
     %small
       LA PAZ, AL
       = l(Date.today, format: :long).upcase
@@ -9,8 +9,8 @@
 %table.table.table-bordered.table-hover.table-condensed
   %thead
     %tr.vertical-align.info
-      %th.text-center{rowspan: "2"} CODIGO
-      %th.text-center{rowspan: "2"} DESCRIPCION DE MATERIAL
+      %th.text-center{rowspan: "2"} CÓDIGO
+      %th.text-center{rowspan: "2"} DESCRIPCIÓN DE MATERIAL
       %th.text-center{rowspan: "2"} UNIDAD
       %th.text-center{rowspan: "2"} SALDOS AL #{l(Date.today.beginning_of_year - 1, format: :default)}
       %th.text-center{colspan: "2"} ENTRADAS
@@ -25,19 +25,17 @@
   %tbody
     - total = 0
     - for material in @materials
-      %tr
+      %tr.double-thick
         %th.text-center= material.code
-        %th= material.description.upcase
-        %td{colspan: 8}
+        %th{colspan: 9}= material.description.to_s.upcase
       - for article in @articles
         - if article.material == material
-          %tr
+          %tr.double-thick
             %th.text-center= article.code
-            %th
+            %th{colspan: 9}
               - description = article.description.downcase
               - description[0] = description[0].capitalize
               = description
-            %td{colspan: 8}
           - for subarticle in @subarticles
             - if subarticle.article == article
               - i_kardex = subarticle.initial_kardex
@@ -46,7 +44,7 @@
               %tr
                 %td.text-center{rowspan: kp}= subarticle.code
                 %td{rowspan: kp}= subarticle.description
-                %td{rowspan: kp}= subarticle.unit
+                %td{rowspan: kp}= subarticle.unit.to_s.upcase
                 %td.number{rowspan: kp}= i_kardex.sum_balance_quantities
                 - f_kardex.kardex_prices.each_with_index do |price, index|
                   - total += price.balance_amount
@@ -73,8 +71,7 @@
 - if is_pdf?
   .text-center La Paz, #{l(Date.today, format: :long)}
 - else
-  .text-center= link_to 'Descargar PDF', reports_materials_path(format: :pdf), class: 'btn btn-lg btn-primary'
-  %br/
-  %br/
-  %br/
-  %br/
+  .text-center.action-buttons
+    = link_to reports_materials_path(format: :pdf), class: 'btn btn-lg btn-primary' do
+      %span.glyphicon.glyphicon-print
+      Imprimir

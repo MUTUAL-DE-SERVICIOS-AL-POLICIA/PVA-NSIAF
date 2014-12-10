@@ -20,6 +20,7 @@ class Kardex < ActiveRecord::Base
         kardex.remove_zero_balance
         kardex.kardex_date = Date.today
         kardex.invoice_number = 0
+        kardex.delivery_note_number = 0
         kardex.order_number = 0
         kardex.detail = 'SALDO FINAL'
         kardex.sum_inputs
@@ -82,6 +83,7 @@ class Kardex < ActiveRecord::Base
   def reset_kardex_prices
     kardex_date = nil
     invoice_number = nil
+    delivery_note_number = nil
     order_number = nil
     detail = nil
     kardex_prices.each do |kardex_price|
