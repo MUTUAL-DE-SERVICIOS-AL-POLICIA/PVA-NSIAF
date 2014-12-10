@@ -291,7 +291,7 @@ module ApplicationHelper
 
   def dashboard_text
     case current_user.role
-    when 'super_admin' then 'la administración'
+    when 'super_admin' then 'la administración del sistema'
     when 'admin' then 'los activos de su institución'
     when 'admin_store' then 'los materiales de su institución'
     end

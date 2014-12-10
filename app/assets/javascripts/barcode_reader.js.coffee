@@ -27,4 +27,13 @@ class BarcodeReader
       @$code.focus() if @checkCodeExists()
     setInterval(setFocus, 5000)
 
+  typeaheadTemplates: ->
+    empty: [
+      '<p class="empty-message">',
+      'No se encontró ningún elemento',
+      '</p>'
+    ].join('\n')
+    suggestion: (data) ->
+      Hogan.compile('<p><strong>{{code}}</strong> - <em>{{description}}</em></p>').render(data)
+
 root.BarcodeReader = BarcodeReader
