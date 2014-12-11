@@ -109,10 +109,7 @@ class UsersController < ApplicationController
   end
 
   def autocomplete
-    @users = User.search_user(params[:q])
-    respond_to do |format|
-      format.json { render json: @users.map { |s| { id: s.id, name: s.name, username: s.username, role: s.role } } }
-    end
+    render json: User.search_user(params[:q])
   end
 
   private

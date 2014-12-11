@@ -1,6 +1,6 @@
 $ -> new Recoding() if $('[data-action=recoding]').length > 0
 
-class Recoding
+class Recoding extends BarcodeReader
   _asset_id = null
   _barcode = ''
 
@@ -115,12 +115,3 @@ class Recoding
 
   setFocusBarcode: ->
     @$containerElementFound.find('input[type=text]').select()
-
-  typeaheadTemplates: ->
-    empty: [
-      '<p class="empty-message">',
-      'No se encontró ningún elemento',
-      '</p>'
-    ].join('\n')
-    suggestion: (data) ->
-      Hogan.compile('<p><strong>{{code}}</strong> - <em>{{description}}</em></p>').render(data)

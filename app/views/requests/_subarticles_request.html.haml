@@ -5,7 +5,8 @@
       %th Código
       %th= t('subarticles.title.title')
       %th Cantidad
-      %th Ultima fecha
+      %th Ultima fecha de solicitud
+      %th Ultimo precio de ingreso
   %tbody
     - @requests.each_with_index do |request_subarticle, index|
       %tr
@@ -14,3 +15,4 @@
         %td= request_subarticle.description
         %td= request_subarticle.total_amount
         %td= l request_subarticle.created_at.to_date
+        %td= request_subarticle.max_cost

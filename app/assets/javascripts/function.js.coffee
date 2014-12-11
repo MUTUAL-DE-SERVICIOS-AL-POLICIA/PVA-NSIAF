@@ -168,35 +168,6 @@ jQuery ->
     e.preventDefault()
     window.location = $(@).data('url')
 
-  #USER AUTOCOMPLETE
-  $("#admin-new-user .typeahead").keyup (e) ->
-    unless e.which == 13
-      $form = $('#admin-new-user')
-      if $form.find('input:hidden[value="patch"]').length > 0
-        $form.find('input:hidden:first').next().remove()
-        $form.attr('action', $form.data('url-users'))
-        $form.find('#user_username').val('')
-        $form.find('#user_role').val('super_admin')
-
-  bestPictures = new Bloodhound(
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
-    queryTokenizer: Bloodhound.tokenizers.whitespace
-    limit: 100
-    remote: decodeURIComponent($("#admin-new-user .typeahead").data('url'))
-  )
-  bestPictures.initialize()
-  $("#admin-new-user input.typeahead").typeahead null,
-    displayKey: "name"
-    source: bestPictures.ttAdapter()
-  .on 'typeahead:selected', (evt, data) ->
-    $form = $('#admin-new-user')
-    url = decodeURIComponent($form.data('url-user'))
-    if $form.find('input:hidden[value="patch"]').length == 0
-      $('<input type="hidden" value="patch" name="_method" autocomplete="off">').insertAfter( $form.find('input:hidden:first') )
-      $form.attr('action', url.replace(/{id}/, data.id))
-      $form.find('#user_username').val(data.username)
-      $form.find('#user_role').val(data.role)
-
   #Version select
   $(document).on 'click', 'table.table input:checkbox', ->
     disabled = if $("table.table input:checked").length == 0 then true else false

@@ -5,19 +5,21 @@
         = button_tag class: 'btn btn-primary buttonRequest', id: "btn_edit_request" do
           %span.glyphicon.glyphicon-edit
           Editar cantidad
-      - unless @request.status == 'pending'
-        = link_to request_path(@request, format: :pdf), class: 'btn btn-info' do
+      = link_to request_path(status: 'initiation', format: :pdf), class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-print
+        Imprimir Solicitud
+      - if @request.status == 'delivered'
+        = link_to request_path(status: 'delivered', format: :pdf), class: 'btn btn-success' do
           %span.glyphicon.glyphicon-print
-          Imprimir PDF
+          Imprimir Entrega
       - if @request.status == 'pending'
         = button_tag class: 'btn btn-success buttonRequest', id: 'btn_deliver_request' do
           %span.glyphicon.glyphicon-shopping-cart
           Entregar producto
-      = link_to get_url_request(@request.status), class: 'btn btn-default' do
-        %span.glyphicon.glyphicon-list
-        Solicitudes
+      = render 'dropdown', status: @request.status
+
     %h2
-      Requerimiento Nro.
+      Solicitud de Material Nro.
       %span#request_id #{@request.id}
 
     #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
@@ -29,10 +31,10 @@
         %span.text-muted Estado:
         = t("requests.title.status.#{@request.status}")
     %h4
-      %span.text-muted Administrador:
+      %span.text-muted Entregado por:
       = @request.admin_name
     %h4
-      %span.text-muted Solicitante:
+      %span.text-muted Solicitado por:
       = @request.user_name
     %h4
       %span.text-muted Cargo:
@@ -40,7 +42,8 @@
     %h4
       %span.text-muted Fecha de solicitud:
       = I18n.l(@request.created_at, format: :version)
-    - if @request.status == 'delivered'
+    - @status_pdf = @request.status unless is_pdf?
+    - if @status_pdf == 'delivered'
       %h4
         %span.text-muted Fecha de entrega:
         = I18n.l(@request.delivery_date, format: :version)
@@ -51,7 +54,7 @@
       #table_request
         - if is_pdf?
           - title = 'SOLICITUD DE MATERIALES'
-          - if @request.status == 'delivered'
+          - if @status_pdf == 'delivered'
             - title = 'ENTREGA DE MATERIALES'
           %h3.text-center.proceeding-title= title
         %table.table.table-striped.table-condensed
@@ -60,18 +63,16 @@
               %th Código
               %th Unidad
               %th Descripción
-              %th Código de barra
               - if is_pdf?
                 %th Cantidad
               - else
                 %th Cantidad solicitada
                 - if @request.status == 'pending'
                   %th Cantidad a entregar
-                - unless is_pdf?
-                  - if %w(pending delivered).include?(@request.status)
-                    %th.amount_delivered Cantidad entregada
-                  - if @request.status == 'pending'
-                    %th.delivered
+                - if %w(pending delivered).include?(@request.status)
+                  %th.amount_delivered Cantidad entregada
+                - if @request.status == 'pending'
+                  %th.delivered
           %tbody
             - @request.subarticle_requests.each do |s_request|
               - if s_request.amount_delivered != 0
@@ -79,19 +80,17 @@
                   %td= s_request.subarticle_code
                   %td= s_request.subarticle_unit
                   %td= s_request.subarticle_description
-                  %td= s_request.subarticle_barcode
                   - if is_pdf?
-                    %td= @request.status == 'initiation' ? s_request.amount : s_request.total_delivered
+                    %td= @status_pdf == 'initiation' ? s_request.amount : s_request.total_delivered
                   - else
                     %td= s_request.amount
                     - if @request.status == 'pending'
                       %td.col-md-2= s_request.amount_delivered
-                    - unless is_pdf?
-                      - if %w(pending delivered).include?(@request.status)
-                        %td.amount_delivered= s_request.total_delivered
-                      - if @request.status == 'pending'
-                        %td.delivered
-                          %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
+                    - if %w(pending delivered).include?(@request.status)
+                      %td.amount_delivered= s_request.total_delivered
+                    - if @request.status == 'pending'
+                      %td.delivered
+                        %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
         .text-center
 
     - if is_pdf?
@@ -102,12 +101,13 @@
           %tr
             %td.text-center
               %p _______________________
-              %p Entregué Conforme
-            %td.text-center
-              %p _______________________
-              %p Vo. Bo.
-            %td.text-center
-              %p _______________________
-              %p Recibí Conforme
+              %p= @status_pdf == 'initiation' ? 'Solicitante' : 'Entregué Conforme'
+            - if @status_pdf == 'delivered'
+              %td.text-center
+                %p _______________________
+                %p Vo. Bo.
+              %td.text-center
+                %p _______________________
+                %p Recibí Conforme
 
 = render 'material'

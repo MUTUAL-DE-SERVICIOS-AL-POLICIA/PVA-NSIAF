@@ -9,6 +9,7 @@ class RequestsController < ApplicationController
 
   # GET /requests/1
   def show
+    @status_pdf = params[:status]
     respond_to do |format|
       format.html
       format.json { render json: @request.delivery_verification(params[:barcode]) }
@@ -27,7 +28,6 @@ class RequestsController < ApplicationController
 
   # GET /requests/new
   def new
-    @users = view_context.status_active(User).where("id != 1")
   end
 
   # POST /requests

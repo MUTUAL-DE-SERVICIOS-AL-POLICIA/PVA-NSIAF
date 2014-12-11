@@ -34,7 +34,7 @@ class SubarticleRequest < ActiveRecord::Base
   end
 
   def self.user_requests
-    joins(subarticle: [article: :material], request: [user: :department]).group("subarticle_id").select("subarticles.code, subarticles.description, sum(subarticle_requests.amount) as total_amount, requests.created_at")
+    joins(subarticle: [{article: :material}, :entry_subarticles], request: [user: :department]).group("subarticle_requests.subarticle_id").select("subarticles.code, subarticles.description, sum(subarticle_requests.amount) as total_amount, requests.created_at, max(entry_subarticles.unit_cost) as max_cost").where('entry_subarticles.unit_cost = (SELECT MAX(entry_subarticles.unit_cost) FROM entry_subarticles WHERE entry_subarticles.subarticle_id = subarticles.id)').order('max(entry_subarticles.unit_cost) DESC').first(10)
   end
 
   private
