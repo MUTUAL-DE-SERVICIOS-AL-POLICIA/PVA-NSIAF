@@ -5,9 +5,14 @@ class Supplier < ActiveRecord::Base
     where("name LIKE ?", "%#{q}%").map { |s| { id: s.id, name: s.name } }
   end
 
-  def self.new_object(name)
-    supplier = Supplier.new(name: name)
-    supplier.save
-    return supplier.id
+  def self.get_id(name)
+    supplier = where(name: name)
+    if supplier.present?
+      supplier.first.id
+    else
+      supplier = Supplier.new(name: name)
+      supplier.save
+      supplier.id
+    end
   end
 end
