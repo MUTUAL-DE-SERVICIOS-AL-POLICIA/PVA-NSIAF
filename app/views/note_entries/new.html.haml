@@ -5,16 +5,10 @@
   %h2= t("note_entries.title.new")
 
 = simple_form_for @note_entry, html: { class: 'form-horizontal' } do |f|
-  = f.input :supplier_id, as: :hidden
   = f.input :total, as: :hidden
   .row{data: {action: 'note_entry'}}
     .col-sm-12.col-md-8.col-lg-8
-      .form-group
-        %label.col-sm-3.col-md-3.col-lg-3.control-label
-          %abbr{ title: 'required' } *
-          = NoteEntry.human_attribute_name('suppliers')
-        .col-xs-9.col-sm-9.col-md-9
-          = text_field_tag :supplier, '', class: 'form-control'
+      = f.input :supplier_id, as: :string, required: true
   .row
     .col-sm-12.col-md-8.col-lg-8
       = f.input :delivery_note_number
@@ -32,22 +26,39 @@
         .col-xs-9.col-sm-9.col-md-9
           = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control', placeholder: 'Código o Descripción del Sub Artículo'
 
-  = render 'entry_subarticles'
+  %table.table.table-bordered
+    %thead
+      %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
+        %th.text-center CANTIDAD
+        %th.text-center PRECIO UNITARIO
+        %th.text-center UNIDAD
+        %th.text-center CÓDIGO
+        %th.text-center DETALLE
+        %th.text-center PRECIO TOTAL
+        %th
+    %tbody#subarticles
+      %tr
+        %td
+        %td
+        %td
+        %th TOTAL
+        %th
+        %th#totalNoteEntry
 
 #save_note_entry
   = render 'shared/form_buttons'
 
 %script{ type: 'text/html', id: 'new_request' }
   %tr.subarticle{ id: '{{id}}' }
-    %td.col-sm-1.col-md-1.note= text_field_tag "note_entry[entry_subarticles_attributes][{{id}}][amount]", nil, {id:"amount_{{id}}", class: 'form-control amount', placeholder: 'cantidad'}
+    %td.col-sm-1.col-md-1.note= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][amount]", nil, { id:"amount_{{id}}", class: 'form-control amount' }
+    %td.col-sm-2.col-md-2.note= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, { id:"unit_cost_{{id}}", class: 'form-control unit_cost', step: 0.1 }
     %td {{unit}}
     %td {{code}}
     %td.description {{description}}
-    %td.col-sm-2.col-md-2.note= text_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, {id:"unit_cost_{{id}}", class: 'form-control unit_cost', placeholder: 'precio unitario'}
     %td.col-sm-2.col-md-2
     %td{style: "display: none;"}
       = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
       %div
-        = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, {id:"total_cost_{{id}}", class: 'form-control total_cost'}
+        = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, { id:"total_cost_{{id}}", class: 'form-control total_cost' }
     %td.text-center
       %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }
