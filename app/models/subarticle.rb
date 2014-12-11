@@ -84,6 +84,18 @@ class Subarticle < ActiveRecord::Base
     where(barcode: barcode)
   end
 
+  def self.is_closed_year?(year = Date.today.year)
+    with_stock(year).count == 0
+  end
+
+  def self.with_stock(year = Date.today.year)
+    date = Date.strptime(year.to_s, '%Y')
+    Subarticle.search(
+      entry_subarticles_stock_gt: 0,
+      kardexes_kardex_date_gteq: date,
+      kardexes_kardex_date_lteq: date.end_of_year).result(distinct: true)
+  end
+
   def exists_amount?
     entry_subarticles_exist.present?
   end
@@ -118,7 +130,7 @@ class Subarticle < ActiveRecord::Base
   end
 
   def last_kardex
-    kardexes.order(:created_at).last
+    kardexes.last
   end
 
   def self.search_by(article_id)

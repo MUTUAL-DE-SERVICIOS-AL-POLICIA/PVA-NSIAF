@@ -1,0 +1,11 @@
+%table.table.table-condensed.table-bordered
+  %tbody
+    %tr
+      %td Gestión actual
+      %td.number= Date.today.year
+    - unless is_closed_previous_year?
+      %tr
+        %td Falta cerrar gestión anterior
+        %td.number
+          %span.text-danger
+            = Date.today.year - 1

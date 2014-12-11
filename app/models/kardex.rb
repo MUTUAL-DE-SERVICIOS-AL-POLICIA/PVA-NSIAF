@@ -1,6 +1,8 @@
 class Kardex < ActiveRecord::Base
   default_scope -> {order(:created_at)}
 
+  belongs_to :note_entry
+  belongs_to :request
   belongs_to :subarticle
 
   has_many :kardex_prices
@@ -81,12 +83,15 @@ class Kardex < ActiveRecord::Base
   end
 
   def reset_kardex_prices
-    kardex_date = nil
-    invoice_number = nil
-    delivery_note_number = nil
-    order_number = nil
-    detail = nil
-    kardex_prices.each do |kardex_price|
+    self.kardex_date = nil
+    self.invoice_number = nil
+    self.delivery_note_number = nil
+    self.order_number = nil
+    self.detail = nil
+    self.delivery_note_number = nil
+    self.request_id = nil
+    self.note_entry_id = nil
+    self.kardex_prices.each do |kardex_price|
       kardex_price.input_quantities = 0
       kardex_price.output_quantities = 0
       kardex_price.input_amount = 0

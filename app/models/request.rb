@@ -2,6 +2,7 @@ class Request < ActiveRecord::Base
   belongs_to :user
   belongs_to :admin, class_name: 'User'
 
+  has_many :kardexes
   has_many :subarticle_requests
   has_many :subarticles, through: :subarticle_requests
   accepts_nested_attributes_for :subarticle_requests
@@ -82,5 +83,6 @@ class Request < ActiveRecord::Base
 
   def request_deliver
     update_attributes(status: 'delivered', delivery_date: Time.now)
+    kardexes.update_all(kardex_date: delivery_date.to_date)
   end
 end
