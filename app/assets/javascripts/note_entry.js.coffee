@@ -32,7 +32,6 @@ class NoteEntry extends BarcodeReader
       source: bestPictures.ttAdapter()
 
   get_note_entry: ->
-
     if @$inputSupplier.val()
       @$inputSupplier.parents('.form-group').removeClass('has-error')
       @$inputSupplier.next().remove()
@@ -53,6 +52,7 @@ class NoteEntry extends BarcodeReader
           $(this).find('input').css('background-color', '#f2dede')
           new Notices({ele: 'div.main'}).danger "Verifique los campos a llenar del material '#{$(this).find('.description').text()}'"
           @valid = false
+      @valid
     else
       @open_modal 'Debe añadir al menos un material'
       @valid = false

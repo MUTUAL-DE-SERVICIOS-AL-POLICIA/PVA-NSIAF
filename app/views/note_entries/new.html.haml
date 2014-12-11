@@ -50,8 +50,8 @@
 
 %script{ type: 'text/html', id: 'new_request' }
   %tr.subarticle{ id: '{{id}}' }
-    %td.col-sm-1.col-md-1.note= text_field_tag "note_entry[entry_subarticles_attributes][{{id}}][amount]", nil, {id:"amount_{{id}}", class: 'form-control amount', placeholder: 'cantidad'}
-    %td.col-sm-2.col-md-2.note= text_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, {id:"unit_cost_{{id}}", class: 'form-control unit_cost', placeholder: 'precio unitario'}
+    %td.col-sm-1.col-md-1.note= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][amount]", nil, { id:"amount_{{id}}", class: 'form-control amount' }
+    %td.col-sm-2.col-md-2.note= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, { id:"unit_cost_{{id}}", class: 'form-control unit_cost', step: 0.1 }
     %td {{unit}}
     %td {{code}}
     %td.description {{description}}
@@ -59,6 +59,6 @@
     %td{style: "display: none;"}
       = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
       %div
-        = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, {id:"total_cost_{{id}}", class: 'form-control total_cost'}
+        = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, { id:"total_cost_{{id}}", class: 'form-control total_cost' }
     %td.text-center
       %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }
