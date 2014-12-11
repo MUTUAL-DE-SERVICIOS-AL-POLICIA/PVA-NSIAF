@@ -103,8 +103,13 @@ table {
 }
 
 .note{
-  padding: 1px 0 0 !important;
-  input{ border: 0; }
+  padding: 3px !important;
+
+  input{
+    background: #ededed !important;
+    border: 0;
+    height: 27px;
+  }
 }
 
 .padding-note { padding-left: 0; }

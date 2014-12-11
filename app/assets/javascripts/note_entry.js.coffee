@@ -32,14 +32,15 @@ class NoteEntry extends BarcodeReader
       source: bestPictures.ttAdapter()
 
   get_note_entry: ->
-    if @$inputSupplier.val() == ''
-      @$inputSupplier.parents('.form-group').addClass('has-error')
-      @$inputSupplier.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
-      @valid = false
-    else
+
+    if @$inputSupplier.val()
       @$inputSupplier.parents('.form-group').removeClass('has-error')
       @$inputSupplier.next().remove()
       @valid = true
+    else
+      @$inputSupplier.parents('.form-group').addClass('has-error')
+      @$inputSupplier.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
+      @valid = false
 
     if @subarticles.find('tr.subarticle').length
       @subarticles.find('tr.subarticle').each (i) ->
