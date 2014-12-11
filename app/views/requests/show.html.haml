@@ -7,7 +7,7 @@
           Editar cantidad
       = link_to request_path(status: 'initiation', format: :pdf), class: 'btn btn-info' do
         %span.glyphicon.glyphicon-print
-        Imprimir Requerimiento
+        Imprimir Solicitud
       - if @request.status == 'delivered'
         = link_to request_path(status: 'delivered', format: :pdf), class: 'btn btn-success' do
           %span.glyphicon.glyphicon-print
@@ -19,7 +19,7 @@
       = render 'dropdown', status: @request.status
 
     %h2
-      Requerimiento Nro.
+      Solicitud de Material Nro.
       %span#request_id #{@request.id}
 
     #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
