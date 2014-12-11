@@ -226,7 +226,7 @@ module ApplicationHelper
         )
       else
         f.xAxis(
-          categories: array.map { |f| f.description },
+          categories: array.map { |f| f.code },
           labels: { style: { fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif", fontSize: "12px" } }
         )
         f.yAxis( min: 0, title: { text: 'Bs' } )
@@ -249,7 +249,7 @@ module ApplicationHelper
   end
 
   def get_array_graphic(array)
-    array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount})", y: f.max_cost.to_f, date: (l f.created_at.to_date) } }
+    array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount}) - #{f.max_cost.to_f} Bs.", y: f.max_cost.to_f, date: (l f.created_at.to_date) } }
   end
 
   def title_system
