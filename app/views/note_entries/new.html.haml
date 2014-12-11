@@ -9,12 +9,7 @@
   = f.input :total, as: :hidden
   .row{data: {action: 'note_entry'}}
     .col-sm-12.col-md-8.col-lg-8
-      .form-group
-        %label.col-sm-3.col-md-3.col-lg-3.control-label
-          %abbr{ title: 'required' } *
-          = NoteEntry.human_attribute_name('suppliers')
-        .col-xs-9.col-sm-9.col-md-9
-          = text_field_tag :supplier, '', class: 'form-control'
+      = f.input :supplier_id, as: :string, required: true
   .row
     .col-sm-12.col-md-8.col-lg-8
       = f.input :delivery_note_number

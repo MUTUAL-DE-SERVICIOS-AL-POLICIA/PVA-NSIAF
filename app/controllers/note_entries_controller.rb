@@ -32,10 +32,7 @@ class NoteEntriesController < ApplicationController
   # POST /note_entries
   def create
     @note_entry = NoteEntry.new(note_entry_params)
-    if params[:note_entry][:supplier_id].blank? && params[:supplier].present?
-      supplier_id = Supplier.new_object(params[:supplier])
-      @note_entry.supplier_id = supplier_id
-    end
+    @note_entry.supplier_id = Supplier.get_id(params[:note_entry][:supplier_id])
     @note_entry.user_id = current_user.id
     @note_entry.save
   end

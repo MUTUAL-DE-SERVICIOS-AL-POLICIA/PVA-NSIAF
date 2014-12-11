@@ -4,8 +4,7 @@ class NoteEntry extends BarcodeReader
   cacheElements: ->
     @$note_entry_urls = $('#note_entry-urls')
 
-    @$inputSupplier = $('input#supplier')
-    @$inputNoteEntrySupplier = $('input#note_entry_supplier_id')
+    @$inputSupplier = $('input#note_entry_supplier_id')
     @formNoteEntry = $('#new_note_entry')
     @btnSaveNoteEntry = $('#save_note_entry .btn-primary')
     @subarticles = $('#subarticles')
@@ -31,10 +30,6 @@ class NoteEntry extends BarcodeReader
     @$inputSupplier.typeahead null,
       displayKey: "name"
       source: bestPictures.ttAdapter()
-    .on 'typeahead:selected', (evt, data) => @get_supplier_id(evt, data)
-
-  get_supplier_id: (evt, data) ->
-    @$inputNoteEntrySupplier.val(data.id)
 
   get_note_entry: ->
     if @$inputSupplier.val() == ''
