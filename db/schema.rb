@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141208200222) do
+ActiveRecord::Schema.define(version: 20141211144015) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -162,8 +162,12 @@ ActiveRecord::Schema.define(version: 20141208200222) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "delivery_note_number"
+    t.integer  "request_id"
+    t.integer  "note_entry_id"
   end
 
+  add_index "kardexes", ["note_entry_id"], name: "index_kardexes_on_note_entry_id", using: :btree
+  add_index "kardexes", ["request_id"], name: "index_kardexes_on_request_id", using: :btree
   add_index "kardexes", ["subarticle_id"], name: "index_kardexes_on_subarticle_id", using: :btree
 
   create_table "materials", force: true do |t|

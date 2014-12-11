@@ -118,7 +118,7 @@ class Subarticle < ActiveRecord::Base
   end
 
   def last_kardex
-    kardexes.order(:created_at).last
+    kardexes.last
   end
 
   def self.search_by(article_id)
