@@ -1,5 +1,5 @@
 class KardexPrice < ActiveRecord::Base
-  default_scope -> {order(:created_at)}
+  default_scope -> {order(:id)}
 
   belongs_to :kardex
 
