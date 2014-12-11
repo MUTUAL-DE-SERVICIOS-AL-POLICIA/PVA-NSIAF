@@ -229,7 +229,7 @@ module ApplicationHelper
           categories: array.map { |f| f.description },
           labels: { style: { fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif", fontSize: "12px" } }
         )
-        f.yAxis( min: 0, title: { text: 'Cantidad' } )
+        f.yAxis( min: 0, title: { text: 'Bs' } )
         f.legend( enabled: false )
         f.series(
           data: get_array_graphic(array),
@@ -240,7 +240,7 @@ module ApplicationHelper
             align: 'right',
             x: 4,
             y: 10,
-            style: { fontSize: '12px', fontFamily: 'OpenSans-Light' }
+            style: { fontSize: '12px', fontFamily: 'Helvetica Neue,Helvetica,Arial,sans-serif' }
           }
         )
       end
@@ -249,7 +249,7 @@ module ApplicationHelper
   end
 
   def get_array_graphic(array)
-    array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount})", y: f.total_amount, date: (l f.created_at.to_date) } }
+    array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount})", y: f.max_cost.to_f, date: (l f.created_at.to_date) } }
   end
 
   def title_system
