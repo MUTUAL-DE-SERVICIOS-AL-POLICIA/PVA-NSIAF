@@ -1,4 +1,6 @@
 class EntrySubarticle < ActiveRecord::Base
+  default_scope -> {order(:created_at)}
+
   belongs_to :subarticle
   belongs_to :note_entry
 
