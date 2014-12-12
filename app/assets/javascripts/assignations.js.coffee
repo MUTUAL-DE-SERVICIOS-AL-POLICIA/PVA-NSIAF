@@ -127,7 +127,7 @@ class Assignations extends BarcodeReader
       assignation =
         assets: _assets
         devolution: false
-        proceedingDate: moment().format('LL')
+        proceedingDate: CurrentDateSpanish.inWords()
         userName: _user.name
         userTitle: _user.title
       @$containerTplProceedingDelivery.html @$templateProceedingDelivery.render(assignation)
