@@ -66,7 +66,7 @@ curl -L get.rvm.io | bash -s stable
 Recargar el comando `rvm`
 
 ```console
-source /home/uactivos/.rvm/scripts/rvm
+source ~/.rvm/scripts/rvm
 ```
 
 Instalando [Ruby](https://www.ruby-lang.org/)
@@ -91,22 +91,6 @@ Instalar `RubyGems`
 
 ```console
 rvm rubygems current
-```
-
-## Node.js
-
-Instalando [Node Version Manager - NVM](https://github.com/creationix/nvm)
-
-```console
-curl https://raw.githubusercontent.com/creationix/nvm/v0.16.0/install.sh | bash
-source ~/.nvm/nvm.sh
-```
-
-Instalar y establecer por defecto la versión `0.10` de `Node.js`
-
-```console
-nvm install 0.10
-nvm alias default 0.10
 ```
 
 ## Base de Datos

@@ -108,43 +108,6 @@ Instalar `Rails`
 gem install rails
 ```
 
-## Node.js
-
-Instalando [Node Version Manager - NVM](https://github.com/creationix/nvm)
-
-```console
-curl https://raw.github.com/creationix/nvm/master/install.sh | sh
-```
-
-Reabrir la terminal y escribir
-
-```console
-nvm install 0.10
-nvm alias default 0.10
-```
-
-Para el entorno `production` se está utilizando la gema `capistrano`, el cual requiere que el comando `nvm` sea accesible por cualquier usuario. En entorno `development` no es necesario ejecutar el comando siguiente.
-
-Configuramos `nvm` para que sea accesible por todos los usuarios del Sistema
-
-```console
-cd ~
-n=$(which node);n=${n%/bin/node}; chmod -R 755 $n/bin/*; sudo cp -r $n/{bin,lib,share} /usr/local
-```
-
-Verificamos la configuración
-
-```console
-sudo su
-which node
-```
-
-Se debe poder ver
-
-```console
-/usr/local/bin/node
-```
-
 ## Base de Datos
 
 Instalación de `MySQL`
@@ -211,7 +174,24 @@ Agregar al contenido generado con el comando `bundle exec rake secret`
 
 ```yaml
 production:
+  convert_api_url: 'http://localhost/conversion-formatos'
+  rails_relative_url_root: ''           # Deploy en la raíz del dominio (/)
+  # rails_relative_url_root: '/activos' # Deploy en subdirectorio activos (/activos)
   secret_key_base: 4a15a7504234fac45f1e921201fac377954cae6f2a19db0090429be9354447f36beb88aed403c83576e49a8e76671d7f0e9084b406945023921de2526d1aecd8
+```
+
+donde:
+
+* `convert_api_url` es la URL donde se encuentra instalado el API de [Conversión de Formatos](https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos)
+* `rails_relative_url_root` es la ubicación del subdirectorio de deploy tal como: `www.dominio.com/nsiaf`
+* `secret_key_base` se genera desde la línea de comandos con `rake secret`
+
+Para configurar el servidor remoto, el repositorio, el entorno de despliegue se debe modificar los siguientes archivos:
+
+```
+config/deploy.rb
+config/deploy/production.rb
+config/deploy/staging.rb
 ```
 
 ## Deploy
@@ -286,10 +266,10 @@ sudo a2enmod rewrite
 Configuración de Apache para el sistema de activos
 
 ```console
-sudo nano /etc/apache2/sites-available/activos.adsib.gob.bo
+sudo nano /etc/apache2/sites-available/activos.dominio.com
 ```
 
-Adicionar el siguiente contenido
+Adicionar el siguiente contenido si se va instalar la aplicación en la raiz del dominio
 
 ```apache
 <VirtualHost *:80>
@@ -303,10 +283,43 @@ Adicionar el siguiente contenido
 </VirtualHost>
 ```
 
+Contenido para deploy de la aplicación en un subdirectorio llamado `/activos`
+
+```apache
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteRule ^/activos$ /activos/ [R]
+</IfModule>
+
+Alias /activos /var/www/nsiaf/current/public
+RailsBaseURI /activos
+<Directory /var/www/nsiaf/current/public>
+    RailsEnv production
+    PassengerAppRoot /var/www/nsiaf/current
+    PassengerUser uactivos
+
+    Options FollowSymLinks -MultiViews
+    AllowOverride All
+    Order deny,allow
+    allow from all
+</Directory>
+```
+
 Habilitar el nuevo sitio y reiniciar Apache
 
 ```console
-sudo a2dissite default
-sudo a2ensite activos.adsib.gob.bo
+sudo a2ensite activos.dominio.com
 sudo /etc/init.d/apache2 restart
 ```
+
+Visitamos el sitio http://activos.dominio.com o http://dominio.com/activos depende de la configuración que se haya elegido para el deploy.
+
+## Actualización
+
+Para actualizar a una versión reciente del sistema realizar los siguientes pasos desde la máquina local:
+
+```console
+bundle exec cap production deploy
+```
+
+Éste comando descargará el código fuente desde el repositorio, instalar gemas, ejecutar migraciones, precompilar los JS y CSS, y reiniciar el servidor.
