@@ -26,6 +26,16 @@ class Subarticle < ActiveRecord::Base
 
   has_paper_trail
 
+  def self.active
+    where(status: '1')
+  end
+
+  def self.minimum_stock(weight = 1.25)
+    with_stock.select do |subarticle|
+      subarticle.stock <= subarticle.minimum.to_i * weight
+    end
+  end
+
   def article_code
     article.present? ? article.code : ''
   end
@@ -95,7 +105,7 @@ class Subarticle < ActiveRecord::Base
   def self.with_stock(year = Date.today.year)
     s_date = Date.strptime(year.to_s, '%Y').beginning_of_day
     e_date = s_date.end_of_year.end_of_day
-    Subarticle.search(
+    search(
       entry_subarticles_stock_gt: 0,
       kardexes_kardex_date_gteq: s_date,
       kardexes_kardex_date_lteq: e_date).result(distinct: true)
