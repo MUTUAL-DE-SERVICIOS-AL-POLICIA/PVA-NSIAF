@@ -55,7 +55,7 @@ class EntrySubarticle < ActiveRecord::Base
 
     if note_entry.present?
       kardex.note_entry = note_entry
-      kardex.kardex_date = note_entry.get_first_date
+      kardex.kardex_date = note_entry.note_entry_date
       kardex.invoice_number = note_entry.get_invoice_number
       kardex.delivery_note_number = note_entry.get_delivery_note_number
       kardex.detail = note_entry.supplier_name
