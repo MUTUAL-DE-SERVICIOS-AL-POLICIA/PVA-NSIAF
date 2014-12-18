@@ -26,6 +26,16 @@ class Subarticle < ActiveRecord::Base
 
   has_paper_trail
 
+  def self.active
+    where(status: '1')
+  end
+
+  def self.minimum_stock(weight = 1.25)
+    with_stock.select do |subarticle|
+      subarticle.stock <= subarticle.minimum.to_i * weight
+    end
+  end
+
   def article_code
     article.present? ? article.code : ''
   end
@@ -43,8 +53,12 @@ class Subarticle < ActiveRecord::Base
   end
 
   # Only entries with stock > 0
-  def entry_subarticles_exist
-    entry_subarticles.where('stock > 0').order(:created_at)
+  def entry_subarticles_exist(year = Date.today.year)
+    s_date = Date.strptime(year.to_s, '%Y').beginning_of_day
+    e_date = s_date.end_of_year.end_of_day
+    entry_subarticles.search(stock_gt: 0,
+                             note_entry_note_entry_date_gteq: s_date,
+                             note_entry_note_entry_date_lteq: e_date).result(distinct: true)
   end
 
   def self.set_columns
@@ -89,11 +103,12 @@ class Subarticle < ActiveRecord::Base
   end
 
   def self.with_stock(year = Date.today.year)
-    date = Date.strptime(year.to_s, '%Y')
-    Subarticle.search(
+    s_date = Date.strptime(year.to_s, '%Y').beginning_of_day
+    e_date = s_date.end_of_year.end_of_day
+    search(
       entry_subarticles_stock_gt: 0,
-      kardexes_kardex_date_gteq: date,
-      kardexes_kardex_date_lteq: date.end_of_year).result(distinct: true)
+      kardexes_kardex_date_gteq: s_date,
+      kardexes_kardex_date_lteq: e_date).result(distinct: true)
   end
 
   def exists_amount?
@@ -139,5 +154,10 @@ class Subarticle < ActiveRecord::Base
     subarticles = []
     subarticles = where(article_id: article_id, status: 1) if article_id.present?
     [['', '--']] + subarticles.map { |d| [d.id, d.description] }
+  end
+
+  # Update stock=0 for all entry_subarticles
+  def close_stock!(year = Date.today.year)
+    entry_subarticles_exist(year).update_all(stock: 0, updated_at: Time.now)
   end
 end

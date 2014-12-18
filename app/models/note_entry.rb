@@ -1,10 +1,14 @@
 class NoteEntry < ActiveRecord::Base
   belongs_to :supplier
-  has_many :entry_subarticles
-  accepts_nested_attributes_for :entry_subarticles
   belongs_to :user
 
+  has_many :entry_subarticles
+  accepts_nested_attributes_for :entry_subarticles
+  has_many :kardexes
+
   has_paper_trail
+
+  before_create :set_note_entry_date
 
   def supplier_name
     supplier.present? ? supplier.name : ''
@@ -33,21 +37,6 @@ class NoteEntry < ActiveRecord::Base
     elsif delivery_note_date.present?
       invoice += "#{I18n.l delivery_note_date, format: :default}"
     end
-  end
-
-  def get_first_date
-    first_date = created_at
-    if delivery_note_date && invoice_date
-      first_date = invoice_date
-      if delivery_note_date < invoice_date
-        first_date = delivery_note_date
-      end
-    elsif delivery_note_date
-      first_date = delivery_note_date
-    elsif invoice_date
-      first_date = invoice_date
-    end
-    first_date.to_date
   end
 
   def get_invoice_number
@@ -93,5 +82,28 @@ class NoteEntry < ActiveRecord::Base
         csv << a
       end
     end
+  end
+
+  private
+
+  def set_note_entry_date
+    if note_entry_date.nil?
+      self.note_entry_date = get_first_date
+    end
+  end
+
+  def get_first_date
+    first_date = created_at
+    if delivery_note_date && invoice_date
+      first_date = invoice_date
+      if delivery_note_date < invoice_date
+        first_date = delivery_note_date
+      end
+    elsif delivery_note_date
+      first_date = delivery_note_date
+    elsif invoice_date
+      first_date = invoice_date
+    end
+    first_date.to_date
   end
 end
