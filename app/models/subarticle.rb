@@ -116,7 +116,9 @@ class Subarticle < ActiveRecord::Base
   end
 
   def self.search_subarticle(q)
-    where("(code LIKE ? OR description LIKE ?) AND status = ?", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock } : nil }.compact
+    a = q.sub! "'", "-"
+    q = a.present? ? a : q
+    where("(code LIKE ? OR description LIKE ? OR barcode LIKE ? ) AND status = ?", "%#{q}%", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock } : nil }.compact
   end
 
   def check_barcode

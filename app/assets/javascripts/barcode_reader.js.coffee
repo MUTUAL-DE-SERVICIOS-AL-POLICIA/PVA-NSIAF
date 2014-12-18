@@ -36,4 +36,9 @@ class BarcodeReader
     suggestion: (data) ->
       Hogan.compile('<p><strong>{{code}}</strong> - <em>{{description}}</em></p>').render(data)
 
+  changeBarcode: (input) ->
+    if input.val().indexOf("'") > -1
+      value = input.val().replace("'", '-')
+      input.val(value)
+
 root.BarcodeReader = BarcodeReader
