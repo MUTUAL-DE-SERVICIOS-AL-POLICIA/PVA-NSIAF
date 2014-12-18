@@ -296,4 +296,10 @@ module ApplicationHelper
     when 'admin_store' then 'los materiales de su institución'
     end
   end
+
+  def changeBarcode(q)
+    a = q.sub! "'", "-"
+    q = a.present? ? a : q
+    return q
+  end
 end

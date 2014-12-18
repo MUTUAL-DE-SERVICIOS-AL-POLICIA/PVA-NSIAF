@@ -70,6 +70,8 @@ class Subarticle < ActiveRecord::Base
     array = includes(:article).order("#{sort_column} #{sort_direction}").references(:article)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
+      h = ApplicationController.helpers
+      sSearch = h.changeBarcode(sSearch)
       if search_column.present?
         type_search = search_column == 'article' ? 'articles.description' : "subarticles.#{search_column}"
         array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
@@ -131,8 +133,8 @@ class Subarticle < ActiveRecord::Base
   end
 
   def self.search_subarticle(q)
-    a = q.sub! "'", "-"
-    q = a.present? ? a : q
+    h = ApplicationController.helpers
+    q = h.changeBarcode(q)
     where("(code LIKE ? OR description LIKE ? OR barcode LIKE ? ) AND status = ?", "%#{q}%", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock } : nil }.compact
   end
 
