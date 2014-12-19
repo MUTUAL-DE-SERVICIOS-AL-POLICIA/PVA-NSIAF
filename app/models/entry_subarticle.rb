@@ -10,6 +10,12 @@ class EntrySubarticle < ActiveRecord::Base
   before_create :set_stock_value
   after_create :create_kardex_price
 
+  def self.years_not_closed
+    years = select(:date).where('stock > ?', 0)
+    years = years.map { |e| e.date.present? ? e.date.year : nil }
+    years.compact.uniq
+  end
+
   def subarticle_name
     subarticle.present? ? subarticle.description : ''
   end
