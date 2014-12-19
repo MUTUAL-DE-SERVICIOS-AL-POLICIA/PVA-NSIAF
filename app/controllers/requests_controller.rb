@@ -46,8 +46,14 @@ class RequestsController < ApplicationController
   end
 
   def search_subarticles
+    if params[:q].present?
+      search_date
+      date = false
+    else
+      date = true
+    end
     @q = SubarticleRequest.search(params[:q])
-    @requests = @q.result.user_requests
+    @requests = @q.result.user_requests(date)
     respond_to do |format|
       format.html
       format.js
@@ -64,4 +70,22 @@ class RequestsController < ApplicationController
     def request_params
       params.require(:request).permit(:user_id, :status, :delivery_date, { subarticle_requests_attributes: [ :id, :subarticle_id, :amount, :amount_delivered ] } )
     end
+
+  def search_date
+    case params[:rank]
+    when "today"
+      params[:q]["request_created_at_gteq"] = Time.now.beginning_of_day
+      params[:q]["request_created_at_lteq"] = Time.now.end_of_day
+    when "week"
+      params[:q]["request_created_at_gteq"] = Time.now.beginning_of_week
+      params[:q]["request_created_at_lteq"] = Time.now.end_of_week
+    when "month"
+      params[:q]["request_created_at_gteq"] = Time.now.beginning_of_month
+      params[:q]["request_created_at_lteq"] = Time.now.end_of_month
+    when "year"
+      params[:q]["request_created_at_gteq"] = Time.now.beginning_of_year
+      params[:q]["request_created_at_lteq"] = Time.now.end_of_year
+    else
+    end
+  end
 end

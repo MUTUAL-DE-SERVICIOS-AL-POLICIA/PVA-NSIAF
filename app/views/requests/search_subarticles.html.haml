@@ -4,7 +4,7 @@
 .page-header{ data: {action: 'assignation'} }
   %h2 Búsqueda de requerimientos
 
-.row{ data: {action: 'request'} }
+.row.form-horizontal{ data: {action: 'request'} }
   .col-lg-12.col-md-12.col-sm-12
     = search_form_for @q, url: search_subarticles_requests_path, remote: true do |f|
       .row.form-group
@@ -22,16 +22,29 @@
           = f.select :subarticle_article_id_eq, options_for_select([]), {prompt: "--#{t('articles.title.title')}--"}, {class: 'form-control', id: 'article', disabled: true}
         .col-xs-12.col-sm-4.col-md-4
           = f.select :subarticle_id_eq, options_for_select([]), {prompt: "--#{t('subarticles.title.title')}--"}, {class: 'form-control', id: 'subarticle', disabled: true}
-      .row.form-group.form-horizontal
-        .col-xs-12.col-sm-2.col-md-2
-          %label.control-label  Fecha de solicitud:
+      .row.form-group
+        .col-xs-12.col-sm-3.col-md-3
+          %label.control-label Hoy
+          = radio_button_tag :rank, :today, true
+        .col-xs-12.col-sm-3.col-md-3
+          %label.control-label Semana Actual
+          = radio_button_tag :rank, :week
+        .col-xs-12.col-sm-3.col-md-3
+          %label.control-label Mes Actual
+          = radio_button_tag :rank, :month
+        .col-xs-12.col-sm-3.col-md-3
+          %label.control-label Año Actual
+          = radio_button_tag :rank, :year
+      .row.form-group
+        .col-xs-12.col-sm-1.col-md-1
+          %label.control-label Periodo
         .col-xs-12.col-sm-3.col-md-2
           = f.text_field :request_created_at_gteq, class: 'form-control date'
         .col-xs-12.col-sm-1.col-md-1
           .control-label{ style: 'text-align: center;' } al
         .col-xs-12.col-sm-3.col-md-2
           = f.text_field :request_created_at_lteq, class: 'form-control date'
-        .col-xs-12.col-sm-2.col-md-2.col-md-offset-3.col-sm-offset-1
+        .col-xs-12.col-sm-2.col-md-2.col-md-offset-4.col-sm-offset-2
           = f.button class: "btn btn-primary btn-lg" do
             %span.glyphicon.glyphicon-search
             Buscar
