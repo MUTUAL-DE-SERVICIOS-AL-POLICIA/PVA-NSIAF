@@ -94,6 +94,17 @@ class SubarticlesController < ApplicationController
     end
   end
 
+  def close
+    @subarticles = Subarticle.with_stock(params[:year])
+  end
+
+  def close_subarticles
+    @subarticle_ids = Subarticle.close_subarticles(params)
+    respond_to do |format|
+      format.json { render json: @subarticle_ids }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subarticle
