@@ -39,11 +39,11 @@
         .col-xs-12.col-sm-1.col-md-1
           %label.control-label Periodo
         .col-xs-12.col-sm-3.col-md-2
-          = f.text_field :request_created_at_gteq, class: 'form-control date'
+          = f.text_field :request_created_at_gteq, class: 'form-control'
         .col-xs-12.col-sm-1.col-md-1
           .control-label{ style: 'text-align: center;' } al
         .col-xs-12.col-sm-3.col-md-2
-          = f.text_field :request_created_at_lteq, class: 'form-control date'
+          = f.text_field :request_created_at_lteq, class: 'form-control'
         .col-xs-12.col-sm-2.col-md-2.col-md-offset-4.col-sm-offset-2
           = f.button class: "btn btn-primary btn-lg" do
             %span.glyphicon.glyphicon-search

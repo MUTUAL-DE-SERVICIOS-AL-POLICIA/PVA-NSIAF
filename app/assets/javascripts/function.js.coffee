@@ -21,7 +21,7 @@ total_cost = ($this) ->
       $("input#note_entry_total").val(total)
 
 style_date = (id)->
-  $("<div class='input-group #{id}'></div>").insertBefore("input##{id}")
+  $("<div class='input-group #{id} date'></div>").insertBefore("input##{id}")
   $("input##{id}").appendTo(".input-group.#{id}")
   $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
 

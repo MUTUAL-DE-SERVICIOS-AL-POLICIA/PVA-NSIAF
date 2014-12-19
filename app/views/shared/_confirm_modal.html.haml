@@ -27,7 +27,7 @@
               .col-sm-9.col-md-9.col-lg-9
                 %p.form-control-static 0
               = f.input :total_cost, as: :hidden, input_html: { value: 0, class: 'total_cost' }
-            = f.input :date, as: :string, input_html: { value: I18n.l(Time.now.to_date), class: 'date' }
+            = f.input :date, as: :string, input_html: { value: I18n.l(Time.now.to_date) }
           {{/entry}}
         .modal-footer
           %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('general.btn.cancel')
