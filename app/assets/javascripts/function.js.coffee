@@ -29,6 +29,7 @@ date_picker = ->
   $(".date").datepicker
     format: "dd/mm/yyyy"
     language: "es"
+    endDate: '+0d'
 
 validation_decline = ($form, id) ->
   input = $("##{id}")
