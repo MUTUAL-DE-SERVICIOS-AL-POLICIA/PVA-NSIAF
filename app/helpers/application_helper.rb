@@ -226,7 +226,7 @@ module ApplicationHelper
         )
       else
         f.xAxis(
-          categories: array.map { |f| f.code },
+          categories: array.map.with_index { |f, index| index == 1 ? 'Otros' : f.code },
           labels: { style: { fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif", fontSize: "12px" } }
         )
         f.yAxis( min: 0, title: { text: 'Bs' } )
@@ -249,7 +249,16 @@ module ApplicationHelper
   end
 
   def get_array_graphic(array)
-    array.map { |f| { code: f.code, name: "#{f.description}(#{f.total_amount}) - #{f.max_cost.to_f} Bs.", y: f.max_cost.to_f, date: (l f.created_at.to_date) } }
+    array.map.with_index { |f, index| index < 11 ? ( array_search(f, index, array) ) : nil }.compact
+  end
+
+  def array_search(f, index, array)
+    index == 10 ? { code: 'Otros', name: "Otros(#{sum_array_others(array)})", y: 1 } : { code: f.code, name: "#{f.description}(#{f.total_amount}) - #{f.max_cost.to_f} Bs.", y: f.max_cost.to_f, date: (l f.created_at.to_date) }
+  end
+
+  def sum_array_others(array)
+    count = array.map.count
+    array.last(count - 10).inject(0) { |sum, (f, index)| sum + f.total_amount }
   end
 
   def title_system
@@ -295,5 +304,11 @@ module ApplicationHelper
     when 'admin' then 'los activos de su institución'
     when 'admin_store' then 'los materiales de su institución'
     end
+  end
+
+  def changeBarcode(q)
+    a = q.sub! "'", "-"
+    q = a.present? ? a : q
+    return q
   end
 end

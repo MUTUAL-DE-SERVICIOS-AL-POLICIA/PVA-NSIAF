@@ -11,7 +11,6 @@ class Request extends BarcodeReader
     @$material = $('#material')
     @$article = $('#article')
     @$subarticle = $('#subarticle')
-    @$inputSubarticle = $('input#subarticle')
     @$subarticles = $('#subarticles')
     @$selectionSubarticles = $('#selection_subarticles')
     @$selected_subarticles = $('#selected_subarticles')
@@ -59,10 +58,12 @@ class Request extends BarcodeReader
     $(document).on 'click', @btnShowNewRequest.selector, => @show_new_request()
     $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
     $(document).on 'click', @$btnSaveNewRequest.selector, => @save_new_request()
+    $(document).on 'keyup', @$subarticle.selector, => @changeBarcode(@$subarticle)
+
     if @$material?
       @$article.remoteChained(@$material.selector, @$request_urls.data('subarticles-articles'))
       @$subarticle.remoteChained(@$article.selector, @$request_urls.data('subarticles-array'))
-    if @$inputSubarticle?
+    if @$subarticle?
       @get_subarticles()
     if @$user?
       @get_users()
@@ -159,7 +160,7 @@ class Request extends BarcodeReader
       remote: @subarticles_json_url
     )
     bestPictures.initialize()
-    @$inputSubarticle.typeahead null,
+    @$subarticle.typeahead null,
       source: bestPictures.ttAdapter()
       templates: @typeaheadTemplates()
     .on 'typeahead:selected', (evt, data) => @add_subarticle(evt, data)

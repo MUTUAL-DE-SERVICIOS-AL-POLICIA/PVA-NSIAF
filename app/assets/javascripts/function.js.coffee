@@ -21,7 +21,7 @@ total_cost = ($this) ->
       $("input#note_entry_total").val(total)
 
 style_date = (id)->
-  $("<div class='input-group #{id}'></div>").insertBefore("input##{id}")
+  $("<div class='input-group #{id} date'></div>").insertBefore("input##{id}")
   $("input##{id}").appendTo(".input-group.#{id}")
   $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
 
@@ -29,6 +29,7 @@ date_picker = ->
   $(".date").datepicker
     format: "dd/mm/yyyy"
     language: "es"
+    endDate: '+0d'
 
 validation_decline = ($form, id) ->
   input = $("##{id}")
@@ -90,11 +91,16 @@ jQuery ->
         name: "search_column"
         value: $('#select_column').val()
     fnInitComplete: ->
-      $('.dataTables_filter input').attr('placeholder', 'Buscar...').addClass('form-control')
+      $('.dataTables_filter input').attr('placeholder', 'Buscar...').addClass('form-control').attr('id', 'subarticle')
       $('.DTTT_container').css('margin-left', 0) unless $('.DTTT_container').parents('.main').find('.button_new .btn').length
       table = $.fn.dataTable.fnTables(true)
       if table.length > 0
         $(table).dataTable().fnAdjustColumnSizing()
+      $input = $("#subarticle")
+      $input.keyup ->
+        if $input.val().indexOf("'") > -1
+          value = $input.val().replace("'", '-')
+          $input.val(value)
     oTableTools:
       aButtons: [
         { sExtends: "download", sButtonText: "CSV", sUrl: "#{ $('.button_new span.controller_name').text() }.csv" }
