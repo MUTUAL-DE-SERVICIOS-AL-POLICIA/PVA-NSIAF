@@ -57,8 +57,8 @@ class Subarticle < ActiveRecord::Base
     s_date = Date.strptime(year.to_s, '%Y').beginning_of_day
     e_date = s_date.end_of_year.end_of_day
     entry_subarticles.search(stock_gt: 0,
-                             note_entry_note_entry_date_gteq: s_date,
-                             note_entry_note_entry_date_lteq: e_date).result(distinct: true)
+                             date_gteq: s_date,
+                             date_lteq: e_date).result(distinct: true)
   end
 
   def self.set_columns
@@ -109,8 +109,8 @@ class Subarticle < ActiveRecord::Base
     e_date = s_date.end_of_year.end_of_day
     search(
       entry_subarticles_stock_gt: 0,
-      kardexes_kardex_date_gteq: s_date,
-      kardexes_kardex_date_lteq: e_date).result(distinct: true)
+      date_gteq: s_date,
+      date_lteq: e_date).result(distinct: true)
   end
 
   def exists_amount?
