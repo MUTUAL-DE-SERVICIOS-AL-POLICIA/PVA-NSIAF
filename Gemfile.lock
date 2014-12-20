@@ -123,7 +123,6 @@ GEM
     minitest (5.4.3)
     multi_json (1.10.1)
     mysql2 (0.3.16)
-    nested_form (0.3.2)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.8.0)
@@ -246,7 +245,6 @@ DEPENDENCIES
   jquery-rails
   lazy_high_charts
   mysql2
-  nested_form
   non-stupid-digest-assets
   paper_trail (~> 3.0.0)
   rails (= 4.1.8)

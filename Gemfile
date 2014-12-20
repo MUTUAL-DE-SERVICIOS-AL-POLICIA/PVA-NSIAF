@@ -69,5 +69,3 @@ end
 
 # Read Excel files
 gem 'roo'
-
-gem 'nested_form'
