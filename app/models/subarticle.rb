@@ -163,12 +163,12 @@ class Subarticle < ActiveRecord::Base
     end
   end
 
-  def final_kardex
-    self.kardexes.final_kardex
+  def final_kardex(year = Date.today.year)
+    self.kardexes_from_year(year).final_kardex
   end
 
-  def initial_kardex
-    self.kardexes.initial_kardex
+  def initial_kardex(year = Date.today.year)
+    self.kardexes_from_year(year).initial_kardex
   end
 
   def self.search_subarticle(q)
