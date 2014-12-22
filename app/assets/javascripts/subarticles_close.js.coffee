@@ -11,6 +11,7 @@ class SubarticlesClose
 
   cacheElements: ->
     _year = $('[data-year]').data('year')
+    @select_date = '#select_date'
     # buttons
     @$btn_close_subarticles = $('#btn-close-subarticles')
     @$subarticles_close = $('button.sa-close')
@@ -20,9 +21,10 @@ class SubarticlesClose
     # inputs
     @$checkbox_close = $('input.checkbox-close')
     @$checkbox_close_all = $('input.checkbox-close-all')
-    @$select_date = $('#select_date')
     # templates
     @$select_date_tpl = Hogan.compile $('#select-date-tpl').html() || ''
+    # Growl Notices
+    @alert = new Notices({ele: 'div.main'})
 
   bindEvents: ->
     $(document).on 'click', @$btn_close_subarticles.selector, (e) => @saveSubarticles(e)
@@ -43,8 +45,7 @@ class SubarticlesClose
 
   closeSubarticle: ->
     data =
-      title: 'Establecer fecha para los saldos iniciales'
-      confirmMessage: 'Establecer la fecha para los saldos iniciales de los Subartículos seleccionados.'
+      title: 'Establecer fecha para los saldos iniciales de la siguiente gestión'
       domId: 'subarticle-close'
     @$confirm_modal.html @$select_date_tpl.render(data)
     @$confirm_modal.find(@modal_id).modal('show')
@@ -65,13 +66,13 @@ class SubarticlesClose
     data =
       subarticle_ids: _subarticle_ids
       year: _year
-      date: @$select_date.val()
+      date: $(@select_date).val()
 
     $.ajax
       dataType: 'json'
       type: 'POST'
       data: data
-    .done (d) => @clearCheckboxes()
+    .done (d) => @successfullySave()
     .fail (d) => @$confirm_modal.find(@modal_id).modal('hide')
 
   selectAllSubarticles: (e) ->
@@ -92,3 +93,8 @@ class SubarticlesClose
 
     @displayCloseButton()
     @checkAllSelected()
+
+  successfullySave: ->
+    @$confirm_modal.find(@modal_id).modal('hide')
+    @alert.info "Se actualizó correctamente los #{_subarticle_ids.length} subartículos."
+    @clearCheckboxes()
