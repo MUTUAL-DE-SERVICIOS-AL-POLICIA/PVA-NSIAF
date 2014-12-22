@@ -133,8 +133,8 @@ class Subarticle < ActiveRecord::Base
     e_date = s_date.end_of_year.end_of_day
     search(
       entry_subarticles_stock_gt: 0,
-      date_gteq: s_date,
-      date_lteq: e_date).result(distinct: true)
+      entry_subarticles_date_gteq: s_date,
+      entry_subarticles_date_lteq: e_date).result(distinct: true)
   end
 
   def exists_amount?

@@ -5,7 +5,9 @@
       %td.number= Date.today.year
     - unless is_closed_previous_year?
       %tr
-        %td Falta cerrar gestión anterior
+        %td
+          Falta cerrar gestión anterior
+          (#{link_to 'cerrar', close_subarticles_path(year: Date.today.year - 1)})
         %td.number
           %span.text-danger
             = Date.today.year - 1
