@@ -10,9 +10,7 @@ class Kardex < ActiveRecord::Base
   accepts_nested_attributes_for :kardex_prices
 
   def self.final_kardex
-    sd = Date.today.beginning_of_year
-    ed = Date.today.end_of_year
-    kardex = Kardex.where(kardex_date: sd..ed).last
+    kardex = all.last
     if kardex.nil?
       kardex = Kardex.new
       kardex.kardex_prices.build
@@ -32,9 +30,7 @@ class Kardex < ActiveRecord::Base
   end
 
   def self.initial_kardex
-    sd = Date.today.beginning_of_year
-    ed = Date.today.end_of_year
-    kardex = Kardex.where(kardex_date: sd..ed).first
+    kardex = all.first
     if kardex.nil?
       kardex = Kardex.new
       kardex.kardex_prices.build

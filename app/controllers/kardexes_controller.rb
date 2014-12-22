@@ -4,8 +4,8 @@ class KardexesController < ApplicationController
   # GET /kardexes
   def index
     if params[:subarticle_id].present?
-      @subarticle = Subarticle.includes(kardexes: :kardex_prices).find(params[:subarticle_id])
-      @kardexes = @subarticle.kardexes
+      @subarticle = Subarticle.find(params[:subarticle_id])
+      @kardexes = @subarticle.kardexes_from_year
       @initial_kardex = @kardexes.initial_kardex
       @final_kardex = @kardexes.final_kardex
     else

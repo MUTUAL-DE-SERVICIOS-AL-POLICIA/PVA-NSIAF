@@ -94,6 +94,12 @@ class Subarticle < ActiveRecord::Base
                              date_lteq: e_date).result(distinct: true)
   end
 
+  def kardexes_from_year(year = Date.today.year)
+    s_date = Date.strptime(year.to_s, '%Y').beginning_of_year
+    e_date = s_date.end_of_year
+    kardexes.where(kardex_date: s_date..e_date)
+  end
+
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'barcode'), h.get_column(self, 'article')]
