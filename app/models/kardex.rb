@@ -99,6 +99,19 @@ class Kardex < ActiveRecord::Base
     end
   end
 
+  def set_multi_prices(entry_subarticles)
+    entry_subarticles.each do |entry_subarticle|
+      kardex_price = self.kardex_prices.build
+      kardex_price.input_quantities = 0
+      kardex_price.output_quantities = 0
+      kardex_price.balance_quantities = entry_subarticle.amount
+      kardex_price.unit_cost = entry_subarticle.unit_cost
+      kardex_price.input_amount = 0
+      kardex_price.output_amount = 0
+      kardex_price.balance_amount = entry_subarticle.total_cost
+    end
+  end
+
   def sum_inputs
     kardex_price = kardex_prices.first
     kardex_price.sum_inputs(subarticle) if kardex_price

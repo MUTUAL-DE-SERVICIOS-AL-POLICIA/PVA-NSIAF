@@ -35,21 +35,30 @@ class Subarticle < ActiveRecord::Base
     subarticles = with_stock(params[:year]).where(id: params[:subarticle_ids])
     subarticle_ids = []
     subarticles.each do |subarticle|
-
-
-
-      e_subarticles = entry_subarticles_exist(params[:year]).replicate
-      # Guardar un kardex de golpe, sin que intervenga el callback del entry_subarticle
-      entry_subarticles.create!({
-        amount: 0,
-        unit_cost: 0,
-        total_cost: 0,
-        date: date})
+      e_subarticles = subarticle.entry_subarticles_exist(params[:year]).replicate
       subarticle.close_stock!(params[:year])
+      EntrySubarticle.skip_callback(:create, :after, :create_kardex_price)
+
+      # Save entry subarticles
+      e_subarticles.each do |es|
+        es.amount = es.stock
+        es.total_cost = es.amount * es.unit_cost
+        es.note_entry = nil
+        es.date = date
+        es.save!
+      end
+      # Save kardex with multiple prices
+      kardex = subarticle.kardexes.new
+      kardex.kardex_date = date
+      kardex.invoice_number = 0
+      kardex.delivery_note_number = 0
+      kardex.detail = 'SALDO INICIAL'
+      kardex.order_number = 0
+      kardex.set_multi_prices(e_subarticles)
+      kardex.save!
+
+      EntrySubarticle.set_callback(:create, :after, :create_kardex_price)
       subarticle_ids << subarticle.id
-
-
-
     end
     subarticle_ids
   end

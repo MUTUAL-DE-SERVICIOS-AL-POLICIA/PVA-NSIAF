@@ -11,6 +11,10 @@ class EntrySubarticle < ActiveRecord::Base
   before_create :set_date_value
   after_create :create_kardex_price
 
+  def self.replicate
+    all.map { |e| e.dup }
+  end
+
   def self.years_not_closed
     years = select(:date).where('stock > ?', 0)
     years = years.map { |e| e.date.present? ? e.date.year : nil }
