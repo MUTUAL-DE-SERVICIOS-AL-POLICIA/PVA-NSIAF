@@ -85,7 +85,6 @@ class RequestsController < ApplicationController
     when "year"
       params[:q]["request_created_at_gteq"] = Time.now.beginning_of_year
       params[:q]["request_created_at_lteq"] = Time.now.end_of_year
-    else
     end
   end
 end
