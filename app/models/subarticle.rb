@@ -30,6 +30,30 @@ class Subarticle < ActiveRecord::Base
     where(status: '1')
   end
 
+  def self.close_subarticles(params)
+    date = Date.strptime(params[:date], '%d/%m/%Y')
+    subarticles = with_stock(params[:year]).where(id: params[:subarticle_ids])
+    subarticle_ids = []
+    subarticles.each do |subarticle|
+
+
+
+      e_subarticles = entry_subarticles_exist(params[:year]).replicate
+      # Guardar un kardex de golpe, sin que intervenga el callback del entry_subarticle
+      entry_subarticles.create!({
+        amount: 0,
+        unit_cost: 0,
+        total_cost: 0,
+        date: date})
+      subarticle.close_stock!(params[:year])
+      subarticle_ids << subarticle.id
+
+
+
+    end
+    subarticle_ids
+  end
+
   def self.minimum_stock(weight = 1.25)
     with_stock.select do |subarticle|
       subarticle.stock <= subarticle.minimum.to_i * weight

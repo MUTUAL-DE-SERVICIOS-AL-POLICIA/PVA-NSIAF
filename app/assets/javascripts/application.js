@@ -41,5 +41,6 @@
 //= require bootstrap-datepicker
 //= require bootstrap-datepicker.es
 //= require note_entry
+//= require subarticles_close
 //= require highcharts/highcharts
 //= require highcharts/highcharts-more
