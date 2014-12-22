@@ -30,6 +30,30 @@ class Subarticle < ActiveRecord::Base
     where(status: '1')
   end
 
+  def self.close_subarticles(params)
+    date = Date.strptime(params[:date], '%d/%m/%Y')
+    subarticles = with_stock(params[:year]).where(id: params[:subarticle_ids])
+    subarticle_ids = []
+    subarticles.each do |subarticle|
+
+
+
+      e_subarticles = entry_subarticles_exist(params[:year]).replicate
+      # Guardar un kardex de golpe, sin que intervenga el callback del entry_subarticle
+      entry_subarticles.create!({
+        amount: 0,
+        unit_cost: 0,
+        total_cost: 0,
+        date: date})
+      subarticle.close_stock!(params[:year])
+      subarticle_ids << subarticle.id
+
+
+
+    end
+    subarticle_ids
+  end
+
   def self.minimum_stock(weight = 1.25)
     with_stock.select do |subarticle|
       subarticle.stock <= subarticle.minimum.to_i * weight
@@ -57,8 +81,8 @@ class Subarticle < ActiveRecord::Base
     s_date = Date.strptime(year.to_s, '%Y').beginning_of_day
     e_date = s_date.end_of_year.end_of_day
     entry_subarticles.search(stock_gt: 0,
-                             note_entry_note_entry_date_gteq: s_date,
-                             note_entry_note_entry_date_lteq: e_date).result(distinct: true)
+                             date_gteq: s_date,
+                             date_lteq: e_date).result(distinct: true)
   end
 
   def self.set_columns
@@ -109,8 +133,8 @@ class Subarticle < ActiveRecord::Base
     e_date = s_date.end_of_year.end_of_day
     search(
       entry_subarticles_stock_gt: 0,
-      kardexes_kardex_date_gteq: s_date,
-      kardexes_kardex_date_lteq: e_date).result(distinct: true)
+      entry_subarticles_date_gteq: s_date,
+      entry_subarticles_date_lteq: e_date).result(distinct: true)
   end
 
   def exists_amount?

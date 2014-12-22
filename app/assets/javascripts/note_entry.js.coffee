@@ -68,7 +68,7 @@ class NoteEntry extends BarcodeReader
     $new_entry = $('form#new_entry_subarticle')
     $amount = $new_entry.find('.amount')
     $unit_cost = $new_entry.find('.unit_cost')
-    $date = $new_entry.find('.date')
+    $date = $new_entry.find('.date input')
     @valid_entry($.isNumeric($unit_cost.val()), $unit_cost)
     @valid_entry($date.val()!='', $date, true)
     if @valid_entry($.isNumeric($amount.val()), $amount) && @valid_entry($.isNumeric($unit_cost.val()), $unit_cost) && @valid_entry($date.val()!='', $date, true)

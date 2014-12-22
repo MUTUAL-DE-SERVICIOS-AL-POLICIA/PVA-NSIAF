@@ -79,7 +79,8 @@
                 %tr{ id: s_request.id }
                   %td= s_request.subarticle_code
                   %td= s_request.subarticle_unit
-                  %td= s_request.subarticle_description
+                  %td{title: s_request.subarticle_barcode}
+                    = s_request.subarticle_description
                   - if is_pdf?
                     %td= @status_pdf == 'initiation' ? s_request.amount : s_request.total_delivered
                   - else

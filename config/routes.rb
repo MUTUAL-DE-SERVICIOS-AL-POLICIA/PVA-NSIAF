@@ -1,3 +1,5 @@
+require 'year_constraint'
+
 Nsiaf::Application.routes.draw do
   resources :note_entries, only: [:index, :show, :new, :create] do
     get :get_suppliers, on: :collection
@@ -20,6 +22,11 @@ Nsiaf::Application.routes.draw do
 
   resources :articles, except: [:destroy] do
     post :change_status, on: :member
+  end
+
+  constraints YearConstraint do
+    get '/subarticles/close/:year' => 'subarticles#close', as: 'close_subarticles'
+    post '/subarticles/close/:year' => 'subarticles#close_subarticles'
   end
 
   resources :subarticles, except: [:destroy] do

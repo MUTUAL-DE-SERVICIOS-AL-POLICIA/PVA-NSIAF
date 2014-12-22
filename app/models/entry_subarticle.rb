@@ -8,7 +8,14 @@ class EntrySubarticle < ActiveRecord::Base
   #validates :unit_cost, :total_cost, presence: true, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: { greater_than: 0, less_than: 10000000 }
 
   before_create :set_stock_value
+  before_create :set_date_value
   after_create :create_kardex_price
+
+  def self.years_not_closed
+    years = select(:date).where('stock > ?', 0)
+    years = years.map { |e| e.date.present? ? e.date.year : nil }
+    years.compact.uniq
+  end
 
   def subarticle_name
     subarticle.present? ? subarticle.description : ''
@@ -35,6 +42,12 @@ class EntrySubarticle < ActiveRecord::Base
 
   def set_stock_value
     self.stock = amount
+  end
+
+  def set_date_value
+    if note_entry.present?
+      self.date = note_entry.note_entry_date
+    end
   end
 
   # Register in kardex when purchase subarticles (note entries)

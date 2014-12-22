@@ -40,7 +40,7 @@
 //= require holder
 //= require bootstrap-datepicker
 //= require bootstrap-datepicker.es
-//= require jquery_nested_form
 //= require note_entry
+//= require subarticles_close
 //= require highcharts/highcharts
 //= require highcharts/highcharts-more
