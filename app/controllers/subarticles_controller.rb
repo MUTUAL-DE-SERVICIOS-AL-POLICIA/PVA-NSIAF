@@ -87,8 +87,8 @@ class SubarticlesController < ApplicationController
   end
 
   def first_entry
-    entry = EntrySubarticle.new(entry_subarticle_params)
-    entry.save
+    debugger
+    params[:entry_subarticle].each{ |i,f| EntrySubarticle.create(f)}
     respond_to do |format|
       format.json { head :no_content }
     end

@@ -65,7 +65,7 @@ class NoteEntry extends BarcodeReader
     @alert.danger content
 
   new_entry: ->
-    $new_entry = $('form#new_entry_subarticle')
+    $new_entry = $('form.form_entry')
     $amount = $new_entry.find('.amount')
     $unit_cost = $new_entry.find('.unit_cost')
     $date = $new_entry.find('.date input')

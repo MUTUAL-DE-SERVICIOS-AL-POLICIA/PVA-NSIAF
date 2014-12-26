@@ -1,24 +1,14 @@
 total_cost = ($this) ->
-  id = $this.parent().parent().attr('id')
-  if id
-    f_amount = "#amount_#{id}"
-    f_unit_cost = "#unit_cost_#{id}"
-    f_total_cost = $("input#total_cost_#{id}")
-  else
-    f_amount = ".amount"
-    f_unit_cost = ".unit_cost"
-    f_total_cost = $(".total_cost")
-  amount = parseFloat($("input#{f_amount}").val() || 0)
-  unit_cost = parseFloat($("input#{f_unit_cost}").val() || 0)
+  id = $this.parent().parent().parent().attr('id')
+  amount = parseFloat($("input#amount_#{id}").val() || 0)
+  unit_cost = parseFloat($("input#unit_cost_#{id}").val() || 0)
   cost_total = amount * unit_cost
-  f_total_cost.val(cost_total).parent().parent().prev().text(cost_total)
-
-  if id
-    total = 0
-    $("input.total_cost").map ->
-      total += parseFloat($(this).val() || 0)
-      $("#totalNoteEntry").text(total)
-      $("input#note_entry_total").val(total)
+  $("input#total_cost_#{id}").val(cost_total).parent().prev().text(cost_total)
+  total = 0
+  $("input.total_cost").map ->
+    total += parseFloat($(this).val() || 0)
+    $("#totalNoteEntry").text(total)
+    $("input#note_entry_total").val(total)
 
 style_date = (id)->
   $("<div class='input-group #{id} date'></div>").insertBefore("input##{id}")
@@ -123,7 +113,7 @@ jQuery ->
     html = Hogan.compile(tpl).render(data)
     $('#confirm-modal').html(html)
     $("#modal-#{ $(@).data('dom-id') }").modal('toggle')
-    style_date("entry_subarticle_date")
+    style_date("date_0")
     date_picker()
     evt.preventDefault()
 
@@ -241,3 +231,13 @@ jQuery ->
   #resize tab
   $('a[data-toggle="tab"]').on 'shown.bs.tab', (e) ->
     $(window).resize()
+
+  #new entry_subarticle
+  $(document).on 'click', 'form .new_entry', (e) ->
+    e.preventDefault()
+    subarticle_id = $(this).parents('form').attr('id').substr(11)
+    id = parseInt($(this).prev().attr('id')) + 1
+    template = Hogan.compile $('#entry_subarticle').html()
+    $(this).before template.render(subarticle_id: subarticle_id, id: id)
+    style_date("date_#{id}")
+    date_picker()
