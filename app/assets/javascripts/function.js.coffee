@@ -241,3 +241,7 @@ jQuery ->
     $(this).before template.render(subarticle_id: subarticle_id, id: id)
     style_date("date_#{id}")
     date_picker()
+
+  $(document).on 'click', '.remove_entry', ->
+    $(this).parent().prev().remove()
+    $(this).parent().remove()

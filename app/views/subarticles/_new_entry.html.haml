@@ -1,7 +1,10 @@
 - id = id.present? ? id : "{{id}}"
 - subarticle_id = subarticle_id.present? ? subarticle_id : "{{subarticle_id}}"
+- is_first = is_first ? is_first : false
 
 %div{ id: id }
+  - unless is_first
+    %span.glyphicon.glyphicon-remove.remove_entry{ title: "Eliminar entrada" }
   = hidden_field_tag "entry_subarticle[#{id}][subarticle_id]", subarticle_id
   .form-group
     %label.col-sm-3.col-md-3.col-lg-3.control-label Cantidad

@@ -19,7 +19,7 @@
                   = text_area_tag "asset[reason_decline]", '', class: 'form-control'
           {{#entry}}
           = simple_form_for EntrySubarticle.new, url: first_entry_subarticles_path, html: { class: 'form-horizontal form_entry', id: "form_entry_{{id}}" } do |f|
-            = render 'subarticles/new_entry', id: 0, subarticle_id: "{{id}}"
+            = render 'subarticles/new_entry', id: 0, subarticle_id: "{{id}}", is_first: true
             = link_to '#', class: "new_entry" do
               %span.glyphicon.glyphicon-plus
               Agregar Saldo
@@ -37,5 +37,5 @@
           {{/unassigned}}
 
 %script{ id: 'entry_subarticle', type: 'text/html' }
-  .modal-header{ style: 'margin-bottom: 20px;' }
+  .modal-header{ style: 'margin-bottom: 5px;' }
   = render 'subarticles/new_entry'
