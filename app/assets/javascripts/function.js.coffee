@@ -32,6 +32,17 @@ validation_decline = ($form, id) ->
     input.next().remove()
     true
 
+valid_entry = (condition, $input, date = false) ->
+  input = if date then $input.parent() else $input
+  if condition
+    input.parent().parent().removeClass('has-error')
+    input.next().remove() if input.next().lengt
+    true
+  else
+    input.parent().parent().addClass('has-error')
+    input.after('<span class="help-block">valor erróneo</span>') unless input.next().length
+    false
+
 
 jQuery ->
   TableTools.BUTTONS.download =
@@ -245,3 +256,19 @@ jQuery ->
   $(document).on 'click', '.remove_entry', ->
     $(this).parent().prev().remove()
     $(this).parent().remove()
+
+  $(document).on 'click', '#new_entry', ->
+    valid = true
+    $(".entry_subarticle").each (index) ->
+      $amount = $(this).find('.amount')
+      $unit_cost = $(this).find('.unit_cost')
+      $date = $(this).find('.date input')
+      valid_entry($.isNumeric($unit_cost.val()), $unit_cost)
+      valid_entry($date.val()!='', $date, true)
+      valid = valid_entry($.isNumeric($amount.val()), $amount) && valid_entry($.isNumeric($unit_cost.val()), $unit_cost) && valid_entry($date.val()!='', $date, true)
+    if valid
+      $new_entry = $('form.form_entry')
+      $.post($new_entry.attr('action'), $new_entry.serialize()).done (params) ->
+        id = $new_entry.attr('id').substr(11)
+        $("a.btn-success[data-id='#{id}']").remove()
+        $new_entry.parents('.modal').modal('hide')
