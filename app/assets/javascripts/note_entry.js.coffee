@@ -8,7 +8,6 @@ class NoteEntry extends BarcodeReader
     @formNoteEntry = $('#new_note_entry')
     @btnSaveNoteEntry = $('#save_note_entry .btn-primary')
     @subarticles = $('#subarticles')
-    @btnNewEntry = $('#new_entry')
 
     @alert = new Notices({ele: 'div.main'})
 
@@ -16,7 +15,6 @@ class NoteEntry extends BarcodeReader
     if @$inputSupplier?
       @get_suppliers()
     $(document).on 'click', @btnSaveNoteEntry.selector, => @get_note_entry()
-    $(document).on 'click', @btnNewEntry.selector, => @new_entry()
 
 
   get_suppliers: ->
@@ -63,27 +61,3 @@ class NoteEntry extends BarcodeReader
 
   open_modal: (content) ->
     @alert.danger content
-
-  new_entry: ->
-    $new_entry = $('form#new_entry_subarticle')
-    $amount = $new_entry.find('.amount')
-    $unit_cost = $new_entry.find('.unit_cost')
-    $date = $new_entry.find('.date input')
-    @valid_entry($.isNumeric($unit_cost.val()), $unit_cost)
-    @valid_entry($date.val()!='', $date, true)
-    if @valid_entry($.isNumeric($amount.val()), $amount) && @valid_entry($.isNumeric($unit_cost.val()), $unit_cost) && @valid_entry($date.val()!='', $date, true)
-      $.post($new_entry.attr('action'), $new_entry.serialize()).done (params) ->
-        id = $new_entry.find('input#entry_subarticle_subarticle_id').val()
-        $("a.btn-success[data-id='#{id}']").remove()
-        $new_entry.parents('.modal').modal('hide')
-
-  valid_entry: (condition, $input, date = false) ->
-    input = if date then $input.parent() else $input
-    if condition
-      input.parent().parent().removeClass('has-error')
-      input.next().remove()
-      true
-    else
-      input.parent().parent().addClass('has-error')
-      input.after('<span class="help-block">valor erróneo</span>') unless input.next().length
-      false

@@ -18,16 +18,11 @@
                 .col-sm-10
                   = text_area_tag "asset[reason_decline]", '', class: 'form-control'
           {{#entry}}
-          = simple_form_for EntrySubarticle.new, url: first_entry_subarticles_path, html: { class: 'form-horizontal' } do |f|
-            = f.input :subarticle_id, as: :hidden, input_html: { value: "{{id}}" }
-            = f.input :amount, input_html: { value: 0, class: 'amount' }
-            = f.input :unit_cost, input_html: { value: 0, class: 'unit_cost' }
-            .form-group
-              %label.col-sm-3.col-md-3.col-lg-3.control-label Costo Total
-              .col-sm-9.col-md-9.col-lg-9
-                %p.form-control-static 0
-              = f.input :total_cost, as: :hidden, input_html: { value: 0, class: 'total_cost' }
-            = f.input :date, as: :string, input_html: { value: I18n.l(Time.now.to_date) }
+          = simple_form_for EntrySubarticle.new, url: first_entry_subarticles_path, html: { class: 'form-horizontal form_entry', id: "form_entry_{{id}}" } do |f|
+            = render 'subarticles/new_entry', id: 0, subarticle_id: "{{id}}", is_first: true
+            = link_to '#', class: "new_entry" do
+              %span.glyphicon.glyphicon-plus
+              Agregar Saldo
           {{/entry}}
         .modal-footer
           %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('general.btn.cancel')
@@ -40,3 +35,7 @@
           - else
             = link_to t('general.btn.save'), "{{url}}", class: 'btn btn-primary change_status', method: :post, remote: true
           {{/unassigned}}
+
+%script{ id: 'entry_subarticle', type: 'text/html' }
+  .modal-header{ style: 'margin-bottom: 5px;' }
+  = render 'subarticles/new_entry'
