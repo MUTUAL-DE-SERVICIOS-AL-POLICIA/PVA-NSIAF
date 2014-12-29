@@ -1,5 +1,5 @@
 class NoteEntriesDatatable
-  delegate :params, :link_to, :content_tag, to: :@view
+  delegate :params, :links_actions, :content_tag, to: :@view
 
   def initialize(view)
     @view = view
@@ -24,7 +24,7 @@ private
         r.user_name,
         r.total,
         r.note_date(r.delivery_note_date),
-        link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-eye-open'), r, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show'))
+        links_actions(r, 'asset')
       ]
     end
   end

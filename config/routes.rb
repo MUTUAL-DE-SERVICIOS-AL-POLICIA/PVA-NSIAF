@@ -1,7 +1,7 @@
 require 'year_constraint'
 
 Nsiaf::Application.routes.draw do
-  resources :note_entries, only: [:index, :show, :new, :create] do
+  resources :note_entries, except: [:destroy] do
     get :get_suppliers, on: :collection
   end
 

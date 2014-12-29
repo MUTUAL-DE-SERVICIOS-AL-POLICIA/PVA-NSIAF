@@ -29,12 +29,27 @@ class NoteEntriesController < ApplicationController
     @note_entry = NoteEntry.new
   end
 
+  # GET /note_entries/1/edit
+  def edit
+    render 'new'
+  end
   # POST /note_entries
   def create
     @note_entry = NoteEntry.new(note_entry_params)
     @note_entry.supplier_id = Supplier.get_id(params[:note_entry][:supplier_id])
     @note_entry.user_id = current_user.id
     @note_entry.save
+  end
+
+  # PATCH/PUT /note_entries/1
+  def update
+    respond_to do |format|
+      if @note_entry.update(note_entry_params)
+        format.html { redirect_to @note_entry, notice: t('general.updated', model: NoteEntry.model_name.human) }
+      else
+        format.html { render action: 'new' }
+      end
+    end
   end
 
   def get_suppliers

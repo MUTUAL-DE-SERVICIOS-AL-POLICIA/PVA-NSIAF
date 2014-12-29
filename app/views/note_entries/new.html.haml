@@ -1,3 +1,5 @@
+- disabled = params[:action] == 'new' ? false : true
+
 #request-urls{data: {'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY')}}
 #note_entry-urls{data: {'get-suppliers' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
 
@@ -8,7 +10,8 @@
   = f.input :total, as: :hidden
   .row{data: {action: 'note_entry'}}
     .col-sm-12.col-md-8.col-lg-8
-      = f.input :supplier_id, as: :string, required: true
+      - supplier = params[:action] == 'new' ? f.object.supplier_id : @note_entry.supplier_name
+      = f.input :supplier_id, as: :string, required: true, disabled: disabled, input_html: { value: supplier }
   .row
     .col-sm-12.col-md-8.col-lg-8
       = f.input :delivery_note_number
@@ -24,7 +27,7 @@
       .form-group
         %label.col-sm-3.col-md-3.col-lg-3.control-label= t('activerecord.models.subarticle')
         .col-xs-9.col-sm-9.col-md-9
-          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control', placeholder: 'Código o Descripción del Sub Artículo'
+          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control', placeholder: 'Código o Descripción del Sub Artículo', disabled: disabled
 
   %table.table.table-bordered
     %thead
@@ -35,8 +38,18 @@
         %th.text-center CÓDIGO
         %th.text-center DETALLE
         %th.text-center PRECIO TOTAL
-        %th
+        - if params[:action] == 'new'
+          %th
     %tbody#subarticles
+      - if params[:action] == 'edit'
+        - @note_entry.entry_subarticles.each do |entry|
+          %tr
+            %td= entry.amount
+            %td= entry.unit_cost
+            %td= entry.subarticle_unit
+            %td= entry.subarticle_code
+            %td= entry.subarticle_name
+            %td= entry.total_cost
       %tr
         %td
         %td
@@ -44,9 +57,15 @@
         %th
         %th TOTAL
         %th#totalNoteEntry
+          - if params[:action] == 'edit'
+            = @note_entry.total
 
-#save_note_entry
-  = render 'shared/form_buttons'
+  - if params[:action] == 'edit'
+    = render 'shared/form_buttons'
+
+- if params[:action] == 'new'
+  #save_note_entry
+    = render 'shared/form_buttons'
 
 %script{ type: 'text/html', id: 'new_request' }
   %tr.subarticle{ id: '{{id}}' }
