@@ -15,11 +15,13 @@ style_date = (id)->
   $("input##{id}").appendTo(".input-group.#{id}")
   $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
 
-date_picker = ->
+date_picker = (year = false) ->
+  year = if year then (new Date).getFullYear() else ""
   $(".date").datepicker
     format: "dd/mm/yyyy"
     language: "es"
-    endDate: '+0d'
+    startDate: new Date(year, 0, 1)
+    endDate: "+0d"
 
 validation_decline = ($form, id) ->
   input = $("##{id}")
@@ -36,7 +38,7 @@ valid_entry = (condition, $input, date = false) ->
   input = if date then $input.parent() else $input
   if condition
     input.parent().parent().removeClass('has-error')
-    input.next().remove() if input.next().lengt
+    input.next().remove() if input.next().length
     true
   else
     input.parent().parent().addClass('has-error')
@@ -125,7 +127,7 @@ jQuery ->
     $('#confirm-modal').html(html)
     $("#modal-#{ $(@).data('dom-id') }").modal('toggle')
     style_date("date_0")
-    date_picker()
+    date_picker(true)
     evt.preventDefault()
 
   $(document).on 'click', '.modal .change_status', ->
@@ -251,7 +253,7 @@ jQuery ->
     template = Hogan.compile $('#entry_subarticle').html()
     $(this).before template.render(subarticle_id: subarticle_id, id: id)
     style_date("date_#{id}")
-    date_picker()
+    date_picker(true)
 
   $(document).on 'click', '.remove_entry', ->
     $(this).parent().prev().remove()
