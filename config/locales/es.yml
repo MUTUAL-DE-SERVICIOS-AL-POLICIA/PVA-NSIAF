@@ -141,6 +141,7 @@ es:
     title:
       title: "Notas de Ingreso de Almacén"
       new: "Nueva Nota de Ingreso"
+      edit: "Editar Nota de Ingreso"
   proceedings:
     title:
       title: "Actas"

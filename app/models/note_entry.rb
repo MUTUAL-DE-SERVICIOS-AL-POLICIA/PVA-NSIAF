@@ -8,7 +8,7 @@ class NoteEntry < ActiveRecord::Base
 
   has_paper_trail
 
-  before_create :set_note_entry_date
+  before_save :set_note_entry_date
 
   def supplier_name
     supplier.present? ? supplier.name : ''
@@ -84,16 +84,30 @@ class NoteEntry < ActiveRecord::Base
     end
   end
 
-  private
-
-  def set_note_entry_date
-    if note_entry_date.nil?
-      self.note_entry_date = get_first_date
+  def change_date_entries
+    entry_subarticles.each do |entry|
+      entry.set_date_value
+      entry.save
     end
   end
 
+  def change_kardexes
+    kardexes.each do |kardex|
+      kardex.kardex_date = note_entry_date
+      kardex.invoice_number = get_invoice_number
+      kardex.delivery_note_number = get_delivery_note_number
+      kardex.save
+    end
+  end
+
+  private
+
+  def set_note_entry_date
+    self.note_entry_date = get_first_date
+  end
+
   def get_first_date
-    first_date = created_at
+    first_date = Time.now.to_date if note_entry_date.nil?
     if delivery_note_date && invoice_date
       first_date = invoice_date
       if delivery_note_date < invoice_date

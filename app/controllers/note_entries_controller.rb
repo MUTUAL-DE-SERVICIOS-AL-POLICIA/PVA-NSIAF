@@ -33,6 +33,7 @@ class NoteEntriesController < ApplicationController
   def edit
     render 'new'
   end
+
   # POST /note_entries
   def create
     @note_entry = NoteEntry.new(note_entry_params)
@@ -45,6 +46,8 @@ class NoteEntriesController < ApplicationController
   def update
     respond_to do |format|
       if @note_entry.update(note_entry_params)
+        @note_entry.change_date_entries
+        @note_entry.change_kardexes
         format.html { redirect_to @note_entry, notice: t('general.updated', model: NoteEntry.model_name.human) }
       else
         format.html { render action: 'new' }

@@ -42,17 +42,18 @@ class EntrySubarticle < ActiveRecord::Base
     end
   end
 
+  def set_date_value
+    if note_entry.present?
+      self.date = note_entry.note_entry_date
+    end
+  end
+
   private
 
   def set_stock_value
     self.stock = amount
   end
 
-  def set_date_value
-    if note_entry.present?
-      self.date = note_entry.note_entry_date
-    end
-  end
 
   # Register in kardex when purchase subarticles (note entries)
   def create_kardex_price

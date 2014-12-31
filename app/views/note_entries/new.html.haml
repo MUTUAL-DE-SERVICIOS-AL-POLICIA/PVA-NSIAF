@@ -4,7 +4,7 @@
 #note_entry-urls{data: {'get-suppliers' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
 
 .page-header{data: {action: 'request'}}
-  %h2= t("note_entries.title.new")
+  %h2= t("note_entries.title.#{params[:action]}")
 
 = simple_form_for @note_entry, html: { class: 'form-horizontal' } do |f|
   = f.input :total, as: :hidden
