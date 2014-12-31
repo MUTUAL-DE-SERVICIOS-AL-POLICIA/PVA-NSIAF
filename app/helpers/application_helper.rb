@@ -311,4 +311,8 @@ module ApplicationHelper
     q = a.present? ? a : q
     return q
   end
+
+  def format_date(date)
+    date.present? ? (I18n.l date) : ''
+  end
 end
