@@ -174,7 +174,17 @@ class Subarticle < ActiveRecord::Base
   def self.search_subarticle(q)
     h = ApplicationController.helpers
     q = h.changeBarcode(q)
-    where("(code LIKE ? OR description LIKE ? OR barcode LIKE ? ) AND status = ?", "%#{q}%", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock } : nil }.compact
+    where("(code LIKE ? OR description LIKE ? OR barcode LIKE ? ) AND status = ?", "%#{q}%", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock, days: s.get_days } : nil }.compact
+  end
+
+  def get_days
+    date = ""
+    if entry_subarticles.last.date.present?
+      date = Time.now.to_date - entry_subarticles.last.date
+      date = date - 1
+      date = date.to_i
+    end
+    date
   end
 
   def check_barcode

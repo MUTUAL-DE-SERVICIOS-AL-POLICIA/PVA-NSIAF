@@ -6,7 +6,7 @@
 .page-header{data: {action: 'request'}}
   %h2= t("note_entries.title.#{params[:action]}")
 
-= simple_form_for @note_entry, html: { class: 'form-horizontal' } do |f|
+= simple_form_for @note_entry, html: { class: "form-horizontal" } do |f|
   = f.input :total, as: :hidden
   .row{data: {action: 'note_entry'}}
     .col-sm-12.col-md-8.col-lg-8
@@ -16,12 +16,12 @@
     .col-sm-12.col-md-8.col-lg-8
       = f.input :delivery_note_number
     .col-sm-12.col-md-4.col-lg-4
-      = f.input :delivery_note_date, as: :string, input_html: { class: 'note_entry_date', value: format_date(f.object.delivery_note_date) }, label: false
+      = f.input :delivery_note_date, as: :string, input_html: { value: format_date(f.object.delivery_note_date) }, label: false
   .row
     .col-sm-12.col-md-8.col-lg-8
       = f.input :invoice_number
     .col-sm-12.col-md-4.col-lg-4
-      = f.input :invoice_date, as: :string, input_html: { class: 'note_entry_date', value: format_date(f.object.invoice_date) }, label: false
+      = f.input :invoice_date, as: :string, input_html: { value: format_date(f.object.invoice_date) }, label: false
   .row
     .col-sm-12.col-md-8.col-lg-8
       .form-group
@@ -80,5 +80,6 @@
     %td{style: "display: none;"}
       = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
       = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, { id:"total_cost_{{id}}", class: 'form-control total_cost' }
+      .date_entry {{days}}
     %td.text-center
       %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }

@@ -14,6 +14,8 @@ class Request extends BarcodeReader
     @$subarticles = $('#subarticles')
     @$selectionSubarticles = $('#selection_subarticles')
     @$selected_subarticles = $('#selected_subarticles')
+    @delivery_date = $(".input-group.note_entry_delivery_note_date")
+    @invoice_date = $(".input-group.note_entry_invoice_date")
 
     @$idRequest = $('#request_id').text()
 
@@ -176,6 +178,7 @@ class Request extends BarcodeReader
           @$subarticles.prepend @$templateNewRequest.render(data)
       else
         @$subarticles.prepend @$templateNewRequest.render(data)
+        @refresh_date()
 
   subarticle_request_plus: ($this) ->
     $tr = @get_amount($this)
@@ -247,3 +250,25 @@ class Request extends BarcodeReader
 
   add_user_id: (evt, data) ->
     @$user.attr('data-user-id', data.id)
+
+  refresh_date: ->
+    @delivery_date.empty().append('<input id="note_entry_delivery_note_date" class="form-control" type="text" name="note_entry[delivery_note_date]"><span class="input-group-addon glyphicon glyphicon-calendar"></span>')
+    delivery_id = @delivery_date.find('input').attr('id')
+    @date_picker(@get_day(), delivery_id)
+    @invoice_date.empty().append('<input id="note_entry_invoice_date" class="form-control" type="text" name="note_entry[invoice_date]"><span class="input-group-addon glyphicon glyphicon-calendar"></span>')
+    invoice_date = @invoice_date.find('input').attr('id')
+    @date_picker(@get_day(), invoice_date)
+
+  get_day: ->
+    day = 9999
+    @$subarticles.find('tr .date_entry').each ->
+      val = parseInt($(this).text())
+      day = val if val < day
+    day
+
+  date_picker : (days, id) ->
+    $("##{id}").datepicker
+      format: "dd/mm/yyyy"
+      language: "es"
+      startDate: "-#{days}d"
+      endDate: "+0d"
