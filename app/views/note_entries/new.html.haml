@@ -6,7 +6,7 @@
 .page-header{data: {action: 'request'}}
   %h2= t("note_entries.title.#{params[:action]}")
 
-= simple_form_for @note_entry, html: { class: "form-horizontal" } do |f|
+= simple_form_for @note_entry, html: { class: "form-horizontal #{params[:action]}_note_entry" } do |f|
   = f.input :total, as: :hidden
   .row{data: {action: 'note_entry'}}
     .col-sm-12.col-md-8.col-lg-8
@@ -61,6 +61,7 @@
             = @note_entry.total
 
   - if params[:action] == 'edit'
+    #get_date{ data: { date: @note_entry.get_date } }
     = render 'shared/form_buttons'
 
 - if params[:action] == 'new'

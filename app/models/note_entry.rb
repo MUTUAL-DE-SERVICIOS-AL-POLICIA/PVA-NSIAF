@@ -100,6 +100,13 @@ class NoteEntry < ActiveRecord::Base
     end
   end
 
+  def get_date
+    entries = entry_subarticles.map(&:subarticle_id)
+    count = entries.count + 1
+    entry = EntrySubarticle.where(subarticle_id: entries)[0..-count].last.date
+    entry.present? ? (Time.now.to_date - entry - 1).to_i : ""
+  end
+
   private
 
   def set_note_entry_date
