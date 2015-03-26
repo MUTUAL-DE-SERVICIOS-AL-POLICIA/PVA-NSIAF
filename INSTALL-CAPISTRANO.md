@@ -27,12 +27,6 @@ La instalación de paquetes en el servidor remoto
 sudo apt-get install apache2 curl git build-essential zlibc zlib1g-dev zlib1g libcurl4-openssl-dev apache2-threaded-dev libssl-dev libopenssl-ruby apache2-prefork-dev libapr1-dev libaprutil1-dev libreadline6 libreadline6-dev
 ```
 
-Instalar [Redis](http://redis.io/)
-
-```console
-sudo apt-get install redis-server
-```
-
 Instalar [Git](http://git-scm.com/)
 
 ```console

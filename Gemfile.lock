@@ -9,12 +9,6 @@ GIT
       i18n
       polyamorous (~> 1.1)
 
-GIT
-  remote: git://github.com/galetahub/simple-captcha.git
-  revision: 2602bf19a63df25929960b5a7721a9d265281ec1
-  specs:
-    simple_captcha (0.1.6)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -162,9 +156,6 @@ GEM
     rake (10.4.2)
     rdoc (4.1.1)
       json (~> 1.4)
-    redis (3.0.7)
-    redis-namespace (1.4.1)
-      redis (~> 3.0.4)
     ref (1.0.5)
     rest_client (1.7.3)
       netrc (~> 0.7.7)
@@ -250,13 +241,10 @@ DEPENDENCIES
   rails (= 4.1.8)
   rails-erd
   ransack!
-  redis
-  redis-namespace
   rest_client
   roo
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
-  simple_captcha!
   simple_form
   spring
   therubyracer

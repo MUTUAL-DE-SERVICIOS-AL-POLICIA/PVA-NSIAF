@@ -50,11 +50,6 @@ gem 'ransack', github: 'activerecord-hackery/ransack'
 gem 'lazy_high_charts'
 gem 'paper_trail', '~> 3.0.0'
 
-# Simple captcha with redis
-gem 'simple_captcha', :git => 'git://github.com/galetahub/simple-captcha.git'
-gem 'redis'
-gem 'redis-namespace'
-
 gem 'autocomplete-off'
 gem 'wicked_pdf'
 
