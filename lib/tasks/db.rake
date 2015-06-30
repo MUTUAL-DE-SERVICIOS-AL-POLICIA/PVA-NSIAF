@@ -5,9 +5,15 @@ namespace :db do
   # que está descrito a continuación.
   # TODO: Lo ideal es tener una interfaz web que permita cargar estos datos a
   # partir de una hoja de cálculo
+  # uso: rake db:materiales["/directorio/del/archivo.ods"]
   desc "Cargado de los clasificadores públicos para almacenes"
-  task materiales: :environment do
-    file_path = 'lib/tasks/files/ITEMS CON CODIGOS.ods'
+  task :materiales, [:documento] => [:environment] do |t, args|
+    unless args[:documento].present?
+      puts "Es necesario especificar un parámetro con la ubicación del archivo .ODS"
+      next # http://stackoverflow.com/a/2316518/1174245
+    end
+
+    file_path = args[:documento]
     s = Roo::OpenOffice.new(file_path)
 
     first_row = s.first_row
