@@ -63,6 +63,10 @@ class Subarticle < ActiveRecord::Base
     subarticle_ids
   end
 
+  def self.estado_activo
+    where('status = ?', '1')
+  end
+
   def self.minimum_stock(weight = 1.25)
     with_stock.select do |subarticle|
       subarticle.stock <= subarticle.minimum.to_i * weight
