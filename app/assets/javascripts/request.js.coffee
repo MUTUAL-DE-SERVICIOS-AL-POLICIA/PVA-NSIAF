@@ -4,6 +4,7 @@ class Request extends BarcodeReader
   cacheElements: ->
     @$request_urls = $('#request-urls')
 
+    @$date = $('input#date')
     @$user = $('input#people')
     @$request = $('#request')
     @$barcode = $('#barcode')
@@ -201,16 +202,19 @@ class Request extends BarcodeReader
   show_new_request: ->
     if @$subarticles.find('tr').length
       if @$user.val()
-        @btnShowNewRequest.hide()
-        @$selectionSubarticles.hide()
-        table = @$subarticles.parent().clone()
-        table.find('.actions-request').remove()
-        table.find('thead tr').prepend '<th>#</th>'
-        table.find('#subarticles tr').each (i) ->
-          $(this).prepend "<td>#{ i+1 }</td>"
-        @$selected_subarticles.append table
-        @$selected_subarticles.append @$templateBtnsNewRequest.render()
-        @showUserInfo @$user.data('user-id')
+        if @$date.val()
+          @btnShowNewRequest.hide()
+          @$selectionSubarticles.hide()
+          table = @$subarticles.parent().clone()
+          table.find('.actions-request').remove()
+          table.find('thead tr').prepend '<th>#</th>'
+          table.find('#subarticles tr').each (i) ->
+            $(this).prepend "<td>#{ i+1 }</td>"
+          @$selected_subarticles.append table
+          @$selected_subarticles.append @$templateBtnsNewRequest.render()
+          @showUserInfo @$user.data('user-id')
+        else
+          @open_modal("Se debe especificar una fecha")
       else
         @open_modal("Debe añadir un Funcionario")
     else
@@ -221,17 +225,29 @@ class Request extends BarcodeReader
     @$selectionSubarticles.show()
     @$selected_subarticles.empty()
 
+  parse_date_time: (str_date)->
+    dateParts = str_date.split("/");
+    now = new Date()
+    date = [dateParts[2], dateParts[1], dateParts[0]]
+    time = [now.getHours(), now.getMinutes(), now.getSeconds()]
+    "#{date.join('/')} #{time.join(':')}"
+
   save_new_request: ->
     subarticles = $.map(@$subarticles.find('tr'), (val, i) ->
       subarticle_id: val.id
       amount: $(val).find('td.amount').text()
     )
-    json_data = { status: 'initiation', user_id: @$user.data('user-id'), subarticle_requests_attributes: subarticles }
+    json_data =
+      status: 'initiation'
+      user_id: @$user.data('user-id')
+      subarticle_requests_attributes: subarticles
+      created_at: @parse_date_time(@$date.val()) # yyyy/mm/dd HH:MM:SS
     $.post @request_save_url.replace(/{id}/, ''), { request: json_data }, null, 'script'
 
   showUserInfo: (user_id) ->
     $.getJSON @user_url.replace(/{id}/g, user_id), (data) =>
-      $user = @$templateUserInfo.render(data)
+      result = $.extend(data, {date: @$date.val()})
+      $user = @$templateUserInfo.render(result)
       $table = @$selected_subarticles.find("table")
       $($user).insertBefore($table)
 

@@ -234,6 +234,9 @@ jQuery ->
   style_date("q_request_created_at_gteq")
   style_date("q_request_created_at_lteq")
 
+  # Formato de fecha en la creación de nueva solicitud
+  style_date("date")
+
   date_picker()
 
   $(document).on 'keyup', 'input.amount', ->

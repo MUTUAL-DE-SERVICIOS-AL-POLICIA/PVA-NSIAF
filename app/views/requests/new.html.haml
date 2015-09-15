@@ -5,6 +5,11 @@
 
 #selection_subarticles
   %p.bg-info En la caja de texto busque el Sub Artículo a desear, el cual sera añadido en la tabla una vez seleccionado
+  .row
+    .col-xs-12.col-sm-12.col-md-12.form-horizontal
+      %label.col-xs-12.col-sm-1.col-md-1.control-label Fecha:
+      .col-xs-12.col-sm-4.col-md-4
+        = text_field_tag 'date', format_date(Date.today), class: 'form-control'
   .row{style: "margin-bottom: 15px"}
     .col-xs-12.col-sm-12.col-md-12.form-horizontal
       %label.col-xs-12.col-sm-1.col-md-1.control-label Funcionario:
