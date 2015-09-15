@@ -82,7 +82,8 @@ class Request < ActiveRecord::Base
   end
 
   def request_deliver
-    update_attributes(status: 'delivered', delivery_date: Time.now)
+    #update_attributes(status: 'delivered', delivery_date: Time.now)
+    update_attributes(status: 'delivered', delivery_date: created_at)
     kardexes.update_all(kardex_date: delivery_date.to_date)
   end
 end
