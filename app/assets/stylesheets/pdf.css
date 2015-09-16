@@ -2,4 +2,5 @@
  *= require bootstrap_and_overrides_pdf
  *= require proceeding
  *= require kardexes
+ *= require materials
  */

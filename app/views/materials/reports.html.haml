@@ -1,4 +1,3 @@
-%div{class: "#{'separator' if is_pdf?}"}
 #report_subarticle
   %h3.text-center
     %div INVENTARIO FÍSICO VALORADO DE ADSIB
@@ -6,7 +5,7 @@
       LA PAZ, AL
       = l(Date.today, format: :long).upcase
 
-%table.table.table-bordered.table-hover.table-condensed
+%table.table.table-bordered.table-hover.table-condensed.valorado
   %thead
     %tr.vertical-align.info
       %th.text-center{rowspan: "2"} CÓDIGO
@@ -45,7 +44,10 @@
                 %td.text-center{rowspan: kp}= subarticle.code
                 %td{rowspan: kp}= subarticle.description
                 %td{rowspan: kp}= subarticle.unit.to_s.upcase
-                %td.number{rowspan: kp}= i_kardex.sum_balance_quantities
+                %td.number.contenedor{rowspan: kp}
+                  %ul
+                    - i_kardex.kardex_prices.each_with_index do |p, i|
+                      %li= p.balance_quantities
                 - f_kardex.kardex_prices.each_with_index do |price, index|
                   - total += price.balance_amount
                   - if index > 0
