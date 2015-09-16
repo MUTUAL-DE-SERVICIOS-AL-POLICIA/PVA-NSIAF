@@ -24,7 +24,7 @@
 
     #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
 
-#request.row{ class: "#{'separator' if is_pdf?}" }
+#request.row
   .col-md-12
     - unless is_pdf?
       %h4
@@ -55,22 +55,22 @@
         - if is_pdf?
           - title = 'SOLICITUD DE MATERIALES'
           - if @status_pdf == 'delivered'
-            - title = 'ENTREGA DE MATERIALES'
+            - title = 'PEDIDO DE MATERIAL'
           %h3.text-center.proceeding-title= title
-        %table.table.table-striped.table-condensed
+        %table.table.table-condensed{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
           %thead
             %tr
               %th Código
               %th Unidad
               %th Descripción
               - if is_pdf?
-                %th Cantidad
+                %th.text-center Cantidad
               - else
-                %th Cantidad solicitada
+                %th.text-center Cantidad solicitada
                 - if @request.status == 'pending'
                   %th Cantidad a entregar
                 - if %w(pending delivered).include?(@request.status)
-                  %th.amount_delivered Cantidad entregada
+                  %th.amount_delivered.text-center Cantidad entregada
                 - if @request.status == 'pending'
                   %th.delivered
           %tbody
@@ -82,27 +82,26 @@
                   %td{title: s_request.subarticle_barcode}
                     = s_request.subarticle_description
                   - if is_pdf?
-                    %td= @status_pdf == 'initiation' ? s_request.amount : s_request.total_delivered
+                    %td.text-center
+                      = @status_pdf == 'initiation' ? s_request.amount : s_request.total_delivered
                   - else
-                    %td= s_request.amount
+                    %td.text-center= s_request.amount
                     - if @request.status == 'pending'
-                      %td.col-md-2= s_request.amount_delivered
+                      %td.col-md-2.text-center= s_request.amount_delivered
                     - if %w(pending delivered).include?(@request.status)
-                      %td.amount_delivered= s_request.total_delivered
+                      %td.amount_delivered.text-center= s_request.total_delivered
                     - if @request.status == 'pending'
                       %td.delivered
                         %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
         .text-center
 
     - if is_pdf?
-      %p.proceeding-date.text-right
-        La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
       .proceeding-signature
         %table{ style: 'width: 100%' }
           %tr
             %td.text-center
               %p _______________________
-              %p= @status_pdf == 'initiation' ? 'Solicitante' : 'Entregué Conforme'
+              %p= @status_pdf == 'initiation' ? 'Solicitante' : 'Entregado por'
             - if @status_pdf == 'delivered'
               %td.text-center
                 %p _______________________

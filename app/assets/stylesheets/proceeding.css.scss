@@ -36,8 +36,10 @@
 }
 
 #header{
-  border-bottom: 1px solid;
-  float: left;
+  padding-bottom: 15px;
+  .image {
+    width: 685px;
+  }
 }
 
 .title_pdf{
@@ -60,10 +62,12 @@
 .line{ border-bottom: 1px solid #DDDDDD !important; }
 
 #footer{
-  float: left;
-  margin-top: 10px;
-
-  .page_Numbering{ margin-top: -14px; }
+  .image {
+    width: 685px;
+  }
+  .page_Numbering{
+    text-align: center;
+  }
 }
 
 .acta{
@@ -83,3 +87,12 @@
 }
 
 .selected-assets{ margin: 45px 0 30px !important; }
+
+// Para partir las tablas largas en el PDF
+table, tr, td, th, tbody, thead, tfoot {
+    page-break-inside: avoid !important;
+}
+
+table.margen {
+  border: 1px solid #777;
+}

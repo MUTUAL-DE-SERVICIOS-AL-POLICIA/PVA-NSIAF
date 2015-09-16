@@ -181,8 +181,7 @@ module ApplicationHelper
         img = ""
       end
     end
-    height = type == 'header' ? "77" : '33'
-    pdf_image_tag(img, width: "685", height: height)
+    pdf_image_tag(img, class: "image")
   end
 
   def pdf_image_tag(image, options = {})
