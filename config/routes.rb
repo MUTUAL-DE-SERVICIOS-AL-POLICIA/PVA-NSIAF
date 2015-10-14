@@ -18,6 +18,9 @@ Rails.application.routes.draw do
         get :obt_historico_actas, on: :member
         get :obt_activos, on: :member
       end
+      resources :reportes, only: [:activos] do
+        get :activos, on: :collection
+      end
     end
   end
 

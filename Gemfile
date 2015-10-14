@@ -54,12 +54,23 @@ gem 'rest_client'
 group :development, :test do
   gem 'rails-erd'
   gem 'spring'
-  gem 'web-console', '~> 2.0'
   gem 'byebug'
   gem 'rspec-rails', '~> 3.5'
-  gem 'capybara', '~> 2.5'
-  gem 'factory_girl_rails', '~> 4.5.0'
+  gem 'factory_girl_rails'
 end
+
+group :test do
+  gem "faker", "~> 1.1.2"
+  gem 'capybara'
+  gem "database_cleaner"
+  gem "launchy", "~> 2.3.0"
+  gem "selenium-webdriver", "~> 2.39.0"
+  gem "guard-rspec"
+  gem "spork"
+  #gem "spork-rails", :github => 'sporkrb/spork-rails'
+  gem "guard-spork"
+end
+
 
 # Read Excel files
 gem 'roo'
