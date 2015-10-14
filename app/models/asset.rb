@@ -24,6 +24,7 @@ class Asset < ActiveRecord::Base
   has_many :proceedings, through: :asset_proceedings
   has_many :cierre_gestiones
   has_many :gestiones, through: :cierre_gestiones
+  has_and_belongs_to_many :seguros
 
   scope :assigned, -> { where.not(user_id: nil) }
   scope :unassigned, -> { where(user_id: nil) }

@@ -1,0 +1,33 @@
+%p#notice= notice
+
+%p
+  %b Supplier:
+  = @seguro.supplier
+%p
+  %b User:
+  = @seguro.user
+%p
+  %b Numero contrato:
+  = @seguro.numero_contrato
+%p
+  %b Factura numero:
+  = @seguro.factura_numero
+%p
+  %b Factura autorizacion:
+  = @seguro.factura_autorizacion
+%p
+  %b Factura fecha:
+  = @seguro.factura_fecha
+%p
+  %b Fecha inicio validez:
+  = @seguro.fecha_inicio_validez
+%p
+  %b Fecha fin validez:
+  = @seguro.fecha_fin_validez
+%p
+  %b Baja logica:
+  = @seguro.baja_logica
+
+= link_to 'Edit', edit_seguro_path(@seguro)
+\|
+= link_to 'Back', seguros_path
