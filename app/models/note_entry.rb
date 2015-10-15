@@ -1,4 +1,6 @@
 class NoteEntry < ActiveRecord::Base
+  default_scope {where(invalidate: false)}
+
   belongs_to :supplier
   belongs_to :user
 
@@ -105,6 +107,10 @@ class NoteEntry < ActiveRecord::Base
     count = entries.count + 1
     entry = EntrySubarticle.where(subarticle_id: entries)[0..-count].last.date
     entry.present? ? (Time.now.to_date - entry - 1).to_i : ""
+  end
+
+  def invalidate_note(message="")
+    update(invalidate: true, message: message)
   end
 
   private

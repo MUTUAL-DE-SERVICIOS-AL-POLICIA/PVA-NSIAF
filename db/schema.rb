@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141215231216) do
+ActiveRecord::Schema.define(version: 20151013205922) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -189,6 +189,8 @@ ActiveRecord::Schema.define(version: 20141215231216) do
     t.decimal  "total",                precision: 10, scale: 2
     t.integer  "user_id"
     t.date     "note_entry_date"
+    t.boolean  "invalidate",                                    default: false
+    t.string   "message"
   end
 
   add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree
