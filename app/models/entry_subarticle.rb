@@ -1,5 +1,5 @@
 class EntrySubarticle < ActiveRecord::Base
-  default_scope -> {order(:created_at)}
+  default_scope {where(invalidate: false).order(:created_at)}
 
   belongs_to :subarticle
   belongs_to :note_entry
@@ -10,6 +10,11 @@ class EntrySubarticle < ActiveRecord::Base
   before_create :set_stock_value
   before_create :set_date_value
   after_create :create_kardex_price
+
+  # Anula las entradas de subartículos, estableciendo el campo invalidate a true
+  def self.invalidate_entries
+    update_all(invalidate: true)
+  end
 
   def self.replicate
     all.map { |e| e.dup }

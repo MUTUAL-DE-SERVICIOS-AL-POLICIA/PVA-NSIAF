@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151013205922) do
+ActiveRecord::Schema.define(version: 20151015221615) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -132,8 +132,9 @@ ActiveRecord::Schema.define(version: 20151013205922) do
     t.integer  "subarticle_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "stock",                                  default: 0, null: false
+    t.integer  "stock",                                  default: 0,     null: false
     t.integer  "note_entry_id"
+    t.boolean  "invalidate",                             default: false
   end
 
   add_index "entry_subarticles", ["subarticle_id"], name: "index_entry_subarticles_on_subarticle_id", using: :btree

@@ -109,8 +109,13 @@ class NoteEntry < ActiveRecord::Base
     entry.present? ? (Time.now.to_date - entry - 1).to_i : ""
   end
 
+  # Anula una Nota de Entrada, y también los subartículos asociados al mismo.
+  # Es necesario especificar el motivo de la anulación
   def invalidate_note(message="")
-    update(invalidate: true, message: message)
+    transaction do
+      update(invalidate: true, message: message)
+      entry_subarticles.invalidate_entries
+    end
   end
 
   private
