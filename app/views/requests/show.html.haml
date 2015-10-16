@@ -93,7 +93,7 @@
                     - if @request.status == 'pending'
                       %td.delivered
                         %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
-        .text-center
+        .buttons-actions.text-center
 
     - if is_pdf?
       .proceeding-signature

@@ -130,7 +130,7 @@ class Request extends BarcodeReader
 
   show_buttons: ->
     @$request.prev().find(".buttonRequest").remove()
-    @$table_request.find('.text-center').html @$templateRequestAccept.render()
+    @$table_request.find('.buttons-actions.text-center').html @$templateRequestAccept.render()
 
   request_delivered: (data) ->
     if data
