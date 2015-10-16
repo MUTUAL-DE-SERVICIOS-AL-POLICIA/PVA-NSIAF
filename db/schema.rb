@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151015221615) do
+ActiveRecord::Schema.define(version: 20151016224030) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -182,7 +182,7 @@ ActiveRecord::Schema.define(version: 20151015221615) do
   create_table "note_entries", force: true do |t|
     t.integer  "delivery_note_number"
     t.date     "delivery_note_date"
-    t.integer  "invoice_number"
+    t.string   "invoice_number",                                default: ""
     t.date     "invoice_date"
     t.integer  "supplier_id"
     t.datetime "created_at"
