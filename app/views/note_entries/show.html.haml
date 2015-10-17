@@ -53,19 +53,19 @@
     %tbody
       - @note_entry.entry_subarticles.each do |entry|
         %tr
-          %td= entry.amount
+          %td.text-center= entry.amount
           %td= entry.subarticle_unit
           %td= entry.subarticle_code
           %td= entry.subarticle_name
-          %td= entry.unit_cost
-          %td= entry.total_cost
+          %td.number= number_with_delimiter entry.unit_cost
+          %td.number= number_with_delimiter entry.total_cost
       %tr
         %td
         %td
         %td
         %th TOTAL
         %th
-        %th= @note_entry.total
+        %th.number= number_with_delimiter @note_entry.total
       %tr
         %td{colspan: 6}
           - subarticles = @note_entry.entry_subarticles.count == 1
