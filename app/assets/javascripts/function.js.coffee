@@ -3,11 +3,11 @@ total_cost = ($this) ->
   amount = parseFloat($("input#amount_#{id}").val() || 0)
   unit_cost = parseFloat($("input#unit_cost_#{id}").val() || 0)
   cost_total = amount * unit_cost
-  $("input#total_cost_#{id}").val(cost_total).parent().prev().text(cost_total)
+  $("input#total_cost_#{id}").val(cost_total).parent().prev().text(cost_total.formatNumber(2, '.', ','))
   total = 0
   $("input.total_cost").map ->
     total += parseFloat($(this).val() || 0)
-    $("#totalNoteEntry").text(total)
+    $("#totalNoteEntry").text(total.formatNumber(2, '.', ','))
     $("input#note_entry_total").val(total)
 
 style_date = (id)->

@@ -44,19 +44,19 @@
       - if params[:action] == 'edit'
         - @note_entry.entry_subarticles.each do |entry|
           %tr
-            %td= entry.amount
-            %td= entry.unit_cost
+            %td.text-center= entry.amount
+            %td.number= number_with_delimiter entry.unit_cost
             %td= entry.subarticle_unit
             %td= entry.subarticle_code
             %td= entry.subarticle_name
-            %td= entry.total_cost
-      %tr
+            %td.number= number_with_delimiter entry.total_cost || 0
+      %tr.total-sum
         %td
         %td
         %td
         %th
         %th TOTAL
-        %th#totalNoteEntry
+        %th#totalNoteEntry.number
           - if params[:action] == 'edit'
             = @note_entry.total
 
@@ -77,7 +77,7 @@
     %td {{unit}}
     %td {{code}}
     %td.description {{description}}
-    %td.col-sm-2.col-md-2
+    %td.col-sm-2.col-md-2.number
     %td{style: "display: none;"}
       = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
       = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, { id:"total_cost_{{id}}", class: 'form-control total_cost' }
