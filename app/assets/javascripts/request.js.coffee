@@ -179,7 +179,7 @@ class Request extends BarcodeReader
           @$subarticles.prepend @$templateNewRequest.render(data)
       else
         @$subarticles.prepend @$templateNewRequest.render(data)
-        @refresh_date()
+        #@refresh_date()
 
   subarticle_request_plus: ($this) ->
     $tr = @get_amount($this)
