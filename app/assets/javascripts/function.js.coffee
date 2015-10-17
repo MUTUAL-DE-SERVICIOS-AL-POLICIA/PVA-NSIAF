@@ -16,12 +16,11 @@ style_date = (id)->
   $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
 
 date_picker = (year = false) ->
-  # if $(".edit_note_entry").length
-  #   days = $("#get_date").data('date')
-  #   date = "-#{days}d"
-  # else
-  #   date = if year then (new Date((new Date).getFullYear(), 0, 1)) else ""
-  date = if year then (new Date((new Date).getFullYear(), 0, 1)) else ""
+  if $(".edit_note_entry").length
+    days = $("#get_date").data('date')
+    date = "-#{days}d"
+  else
+    date = if year then (new Date((new Date).getFullYear(), 0, 1)) else ""
   $(".date").datepicker
     format: "dd/mm/yyyy"
     language: "es"
