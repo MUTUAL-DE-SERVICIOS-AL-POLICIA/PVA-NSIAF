@@ -13,6 +13,7 @@ class Request extends BarcodeReader
     @$article = $('#article')
     @$subarticle = $('#subarticle')
     @$subarticles = $('#subarticles')
+    @$total_sum = $('#subarticles .total-sum')
     @$selectionSubarticles = $('#selection_subarticles')
     @$selected_subarticles = $('#selected_subarticles')
     @delivery_date = $(".input-group.note_entry_delivery_note_date")
@@ -178,7 +179,7 @@ class Request extends BarcodeReader
         else
           @$subarticles.prepend @$templateNewRequest.render(data)
       else
-        @$subarticles.prepend @$templateNewRequest.render(data)
+        $(@$templateNewRequest.render(data)).insertBefore(@$total_sum)
         #@refresh_date()
 
   subarticle_request_plus: ($this) ->
