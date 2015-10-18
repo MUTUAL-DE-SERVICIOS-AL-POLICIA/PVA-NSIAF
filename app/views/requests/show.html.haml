@@ -60,6 +60,8 @@
         %table.table.table-condensed{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
           %thead
             %tr
+              - unless is_pdf?
+                %th Código Barras
               %th Código
               %th Unidad
               %th Descripción
@@ -77,6 +79,8 @@
             - @request.subarticle_requests.each do |s_request|
               - if s_request.amount_delivered != 0
                 %tr{ id: s_request.id }
+                  - unless is_pdf?
+                    %td= s_request.subarticle_barcode
                   %td= s_request.subarticle_code
                   %td= s_request.subarticle_unit
                   %td{title: s_request.subarticle_barcode}
