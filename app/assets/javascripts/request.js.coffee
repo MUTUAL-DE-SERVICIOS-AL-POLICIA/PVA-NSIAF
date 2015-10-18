@@ -177,7 +177,7 @@ class Request extends BarcodeReader
         if data.stock == 0
           @open_modal("El stock del producto #{data.description} es 0")
         else
-          @$subarticles.prepend @$templateNewRequest.render(data)
+          @$subarticles.append @$templateNewRequest.render(data)
       else
         $(@$templateNewRequest.render(data)).insertBefore(@$total_sum)
         #@refresh_date()
