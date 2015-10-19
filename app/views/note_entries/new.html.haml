@@ -58,7 +58,7 @@
         %th TOTAL
         %th#totalNoteEntry.number
           - if params[:action] == 'edit'
-            = @note_entry.total
+            = number_with_delimiter @note_entry.total || 0
 
   - if params[:action] == 'edit'
     #get_date{ data: { date: @note_entry.get_date } }
