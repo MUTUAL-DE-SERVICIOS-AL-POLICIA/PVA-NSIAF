@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20151020210508) do
 
   create_table "documentos", force: true do |t|
     t.string   "titulo"
-    t.text     "documento"
+    t.text     "contenido"
     t.string   "formato"
     t.string   "etiquetas"
     t.datetime "created_at"
