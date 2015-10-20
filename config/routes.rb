@@ -1,6 +1,14 @@
 require 'year_constraint'
+require 'api_constraints'
 
 Nsiaf::Application.routes.draw do
+
+  namespace :api, defaults: {format: :json}, except: [:new, :edit] do
+    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
+      resources :documentos, only: [:show, :create]
+    end
+  end
+
   resources :note_entries, except: [:destroy] do
     get :get_suppliers, on: :collection
   end
