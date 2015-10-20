@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151016225947) do
+ActiveRecord::Schema.define(version: 20151020210508) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -112,6 +112,15 @@ ActiveRecord::Schema.define(version: 20151016225947) do
   end
 
   add_index "departments", ["building_id"], name: "index_departments_on_building_id", using: :btree
+
+  create_table "documentos", force: true do |t|
+    t.string   "titulo"
+    t.text     "documento"
+    t.string   "formato"
+    t.string   "etiquetas"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "entities", force: true do |t|
     t.string   "code",       limit: 50
