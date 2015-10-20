@@ -19,11 +19,10 @@ Parámetros de entrada y salida:
 | Tipo    | Parámetro   | Descripción                                                 |
 |---------|-------------|-------------------------------------------------------------|
 | Entrada | `titulo     | Nombre del documento                                        |
-| Entrada | `documento` | Es el documento serializado en determinado formato.         |
+| Entrada | `contenido` | Es el documento serializado en determinado formato.         |
 | Entrada | `formato`   | Es el formato del documento serializado: `JSON`, `XML`, etc |
 | Entrada | `etiquetas` | Etiquetas del documento están separados por comas.          |
-| Entrada | `mensaje`   | Mensaje que describe el estado de la respuesta.             |
-| Entrada | `id`        | identificador del documento                                 |
+| Salida  | `mensaje`   | Mensaje que describe el estado de la respuesta.             |
 
 Ejemplo con `curl`:
 
@@ -31,15 +30,17 @@ Crear un documento serializado con los siguientes parámetros:
 
 ```bash
 {
-  titulo: "Nombre de una persona",
-  documento: "{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}",
-  formato: "JSON",
-  etiquetas: "nombre completo,acta"
+  documento: {
+    titulo: "Nombre de una persona",
+    documento: "{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}",
+    formato: "JSON",
+    etiquetas: "nombre completo,acta"
+  }
 }
 ```
 
 ```bash
-curl -H "Content-Type: application/json" -X POST http://intranet.adsib.gob.bo/activos/api/documentos -d '{"titulo":"Nombre de una persona","documento":"{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}","formato":"JSON","etiquetas":"nombre completo,acta"}'
+curl -H "Content-Type: application/json" -X POST http://intranet.adsib.gob.bo/activos/api/documentos -d '{"documento":{"titulo":"Nombre de una persona","documento":"{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}","formato":"JSON","etiquetas":"nombre completo,acta"}}'
 ```
 
 Respuesta con la petición creada, retorna el `id` del documento creado:
