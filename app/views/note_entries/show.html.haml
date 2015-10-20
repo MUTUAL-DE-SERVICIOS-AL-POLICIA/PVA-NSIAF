@@ -14,8 +14,6 @@
     %h2 Nota de Ingreso
 
   %dl.dl-horizontal
-    %dt Nº
-    %dd= @note_entry.id
     %dt= NoteEntry.human_attribute_name('suppliers')
     %dd= @note_entry.supplier_name
     %dt= NoteEntry.human_attribute_name('delivery_note_number')
@@ -36,10 +34,9 @@
 
 %div{ class: "#{'separator' if is_pdf?}" }
   - if is_pdf?
-    .pull-right Nº #{@note_entry.id}
     %h3.text-center.proceeding-title NOTA DE INGRESO ALMACEN
 
-  %table.table.table-bordered
+  %table.table.table-condensed.table-bordered{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
     %thead
       %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
         %th.text-center{rowspan: "2"} CANTIDAD
