@@ -57,7 +57,7 @@
           - if @status_pdf == 'delivered'
             - title = 'PEDIDO DE MATERIAL'
           %h3.text-center.proceeding-title= title
-        %table.table.table-condensed{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+        %table.table.table-bordered.table-condensed{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
           %thead
             %tr
               - unless is_pdf?
