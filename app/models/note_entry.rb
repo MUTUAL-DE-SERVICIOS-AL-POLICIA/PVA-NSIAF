@@ -115,6 +115,7 @@ class NoteEntry < ActiveRecord::Base
     transaction do
       update(invalidate: true, message: message)
       entry_subarticles.invalidate_entries
+      kardexes.invalidate_kardexes
     end
   end
 

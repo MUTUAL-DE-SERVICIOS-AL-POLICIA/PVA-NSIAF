@@ -1,5 +1,5 @@
 class Kardex < ActiveRecord::Base
-  default_scope -> {order(:created_at)}
+  default_scope {where(invalidate: false).order(:created_at)}
 
   belongs_to :note_entry
   belongs_to :request
@@ -36,6 +36,11 @@ class Kardex < ActiveRecord::Base
       kardex.kardex_prices.build
     end
     kardex
+  end
+
+  # Anula los kardex asociados a la Nota de Entrada
+  def self.invalidate_kardexes
+    update_all(invalidate: true)
   end
 
   def first_kardex_price(unit_cost)

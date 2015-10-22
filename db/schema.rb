@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151020210508) do
+ActiveRecord::Schema.define(version: 20151022152510) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 20151020210508) do
     t.string   "delivery_note_number"
     t.integer  "request_id"
     t.integer  "note_entry_id"
+    t.boolean  "invalidate",           default: false
   end
 
   add_index "kardexes", ["note_entry_id"], name: "index_kardexes_on_note_entry_id", using: :btree
