@@ -34,5 +34,7 @@ module Nsiaf
     config.to_prepare do
       Devise::PasswordsController.layout "login"
     end
+
+    config.assets.paths << Rails.root.join("vendor","assets","bower_components")
   end
 end

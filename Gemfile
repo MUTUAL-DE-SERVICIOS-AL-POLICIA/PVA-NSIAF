@@ -64,3 +64,6 @@ end
 
 # Read Excel files
 gem 'roo'
+
+# Bower para rails
+gem 'bower-rails'
