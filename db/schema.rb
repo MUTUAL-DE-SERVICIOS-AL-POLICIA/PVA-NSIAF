@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151022152510) do
+ActiveRecord::Schema.define(version: 20151022184846) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -149,16 +149,17 @@ ActiveRecord::Schema.define(version: 20151022152510) do
   add_index "entry_subarticles", ["subarticle_id"], name: "index_entry_subarticles_on_subarticle_id", using: :btree
 
   create_table "kardex_prices", force: true do |t|
-    t.integer  "input_quantities",                            default: 0,   null: false
-    t.integer  "output_quantities",                           default: 0,   null: false
-    t.integer  "balance_quantities",                          default: 0,   null: false
-    t.decimal  "unit_cost",          precision: 10, scale: 2, default: 0.0, null: false
-    t.decimal  "input_amount",       precision: 10, scale: 2, default: 0.0, null: false
-    t.decimal  "output_amount",      precision: 10, scale: 2, default: 0.0, null: false
-    t.decimal  "balance_amount",     precision: 10, scale: 2, default: 0.0, null: false
+    t.integer  "input_quantities",                            default: 0,     null: false
+    t.integer  "output_quantities",                           default: 0,     null: false
+    t.integer  "balance_quantities",                          default: 0,     null: false
+    t.decimal  "unit_cost",          precision: 10, scale: 2, default: 0.0,   null: false
+    t.decimal  "input_amount",       precision: 10, scale: 2, default: 0.0,   null: false
+    t.decimal  "output_amount",      precision: 10, scale: 2, default: 0.0,   null: false
+    t.decimal  "balance_amount",     precision: 10, scale: 2, default: 0.0,   null: false
     t.integer  "kardex_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "invalidate",                                  default: false
   end
 
   add_index "kardex_prices", ["kardex_id"], name: "index_kardex_prices_on_kardex_id", using: :btree

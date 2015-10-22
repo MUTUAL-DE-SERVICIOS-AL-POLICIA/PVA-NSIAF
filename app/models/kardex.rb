@@ -40,6 +40,9 @@ class Kardex < ActiveRecord::Base
 
   # Anula los kardex asociados a la Nota de Entrada
   def self.invalidate_kardexes
+    all.each do |kardex|
+      kardex.kardex_prices.invalidate_kardex_prices
+    end
     update_all(invalidate: true)
   end
 

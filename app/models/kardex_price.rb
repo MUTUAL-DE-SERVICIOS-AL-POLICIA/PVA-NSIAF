@@ -1,7 +1,12 @@
 class KardexPrice < ActiveRecord::Base
-  default_scope -> {order(:id)}
+  default_scope {where(invalidate: false).order(:id)}
 
   belongs_to :kardex
+
+  # Anula las entradas de los kardex
+  def self.invalidate_kardex_prices
+    update_all(invalidate: true)
+  end
 
   def decrease_amount(amount)
     self.input_quantities = 0
