@@ -32,7 +32,7 @@ Crear un documento serializado con los siguientes parámetros:
 {
   documento: {
     titulo: "Nombre de una persona",
-    documento: "{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}",
+    contenido: "{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}",
     formato: "JSON",
     etiquetas: "nombre completo,acta"
   }
@@ -40,7 +40,7 @@ Crear un documento serializado con los siguientes parámetros:
 ```
 
 ```bash
-curl -H "Content-Type: application/json" -X POST http://intranet.adsib.gob.bo/activos/api/documentos -d '{"documento":{"titulo":"Nombre de una persona","documento":"{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}","formato":"JSON","etiquetas":"nombre completo,acta"}}'
+curl -H "Content-Type: application/json" -X POST http://intranet.adsib.gob.bo/activos/api/documentos -d '{"documento":{"titulo":"Nombre de una persona","contenido":"{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}","formato":"JSON","etiquetas":"nombre completo,acta"}}'
 ```
 
 Respuesta con la petición creada, retorna el `id` del documento creado:
@@ -58,7 +58,7 @@ Respuesta en el caso que el formato los parámetros sea incorrecto:
 ```bash
 HTTP/1.1 400 Bad Request
 {
-  "mensaje": "Error en el formato del documento enviado"
+  "mensaje": "Error al guardar el documento"
 }
 ```
 
@@ -82,7 +82,7 @@ Parámetros de entrada y salida:
 |-----------------|-------------|-------------------------------------------------------------|
 | Entrada/Salida  | `id`        | Es el identificador del documento generado                  |
 | Salida          | `titulo`    | Nombre del documento                                        |
-| Salida          | `documento` | Es el documento serializado en determinado formato.         |
+| Salida          | `contenido` | Es el documento serializado en determinado formato.         |
 | Salida          | `formato`   | Es el formato del documento serializado: `JSON`, `XML`, etc |
 | Salida          | `etiquetas` | Etiquetas del documento están separados por comas.          |
 | Salida          | `creado_el` | Fecha de creación del documento, en formato ISO8601         |
@@ -103,7 +103,7 @@ HTTP/1.1 200 OK
 {
   id: 1,
   titulo: "Nombre de una persona",
-  documento: "{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}",
+  contenido: "{\"usuario\":{\"nombre\":\"Pepito\",\"apellido\":\"de los Palotes\"}}",
   formato: "JSON",
   etiquetas: "nombre completo,acta",
   creado_el: "2015-07-18T20:26:43.511Z"
@@ -113,7 +113,7 @@ HTTP/1.1 200 OK
 Respuesta en el caso que el documento solicitado no exista:
 
 ```bash
-HTTP/1.1 400 Bad Request
+HTTP/1.1 404 Not Found
 {
   "mensaje": "El documento solicitado no existe"
 }
