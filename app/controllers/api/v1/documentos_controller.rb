@@ -6,18 +6,35 @@ module Api
       respond_to :json
 
       def show
-        respond_with(@documento)
+        if @documento.present?
+          render json: @documento.as_json(only: [:id, :titulo, :contenido, :formato, :etiquetas], methods: :creado_el),
+                 status: 200
+        else
+          render json: {mensaje: 'El documento solicitado no existe'},
+                 status: 404
+        end
       end
 
       def create
         @documento = Documento.new(documento_params)
-        @documento.save
-        respond_with(@documento, location: nil)
+        if @documento.save
+          render json: {
+            id: @documento.id,
+            mensaje: 'Se creó el documento correctamente'
+          }, status: 201 # Created
+        else
+          render json: {mensaje: 'Error al guardar el documento'},
+                 status: 400
+        end
       end
 
       private
         def set_documento
-          @documento = Documento.find(params[:id])
+          begin
+            @documento = Documento.find(params[:id])
+          rescue ActiveRecord::RecordNotFound => e
+            @documento = nil
+          end
         end
 
         def documento_params
