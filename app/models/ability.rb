@@ -9,6 +9,7 @@ class Ability
       cannot [:show, :update], User, id: user.id
       can [:index, :import], :dbf
       can :manage, Version
+      can :indice, :almacenes
     elsif user.is_admin?
       can :manage, Building
       can :manage, Department

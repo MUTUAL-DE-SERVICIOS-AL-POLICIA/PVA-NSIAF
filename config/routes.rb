@@ -9,6 +9,8 @@ Nsiaf::Application.routes.draw do
     end
   end
 
+  resources :almacenes, only: [:index]
+
   resources :note_entries, except: [:destroy] do
     get :get_suppliers, on: :collection
   end
