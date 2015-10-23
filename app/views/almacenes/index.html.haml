@@ -1,4 +1,4 @@
-%section{ 'ng-app' => 'almacenes' }
+%section{ 'ng-app' => 'almacenes', 'ng-controller' => 'EntradasCtrl' }
   %ul.nav.nav-tabs
     %li.active{ role: "presentation"}
       = link_to 'Entradas', '#'
@@ -19,67 +19,16 @@
         %th Creado el
         %th Acciones
     %tbody
-      %tr
-        %td 2
-        %td 0001
-        %td Empresa SRL
-        %td Roxana Gomez
-        %td 14/10/2015
-        %td.number 200.33
-        %td.text-center 200
-        %td.text-center 00123412
-        %td 14/10/2015 15:40
-        %td
-          %a(class="btn btn-default btn-xs" href="#" title="Ver")
-            %span(class="glyphicon glyphicon-eye-open")
-          %a(class="btn btn-primary btn-xs" href="#" title="Editar")
-            %span(class="glyphicon glyphicon-edit")
-          %a(class="btn btn-warning btn-xs" href="#" title="Anular")
-            %span(class="glyphicon glyphicon-remove")
-      %tr
-        %td 1
-        %td 0001
-        %td Empresa SRL
-        %td Roxana Gomez
-        %td 14/10/2015
-        %td.number 200.33
-        %td.text-center 200
-        %td.text-center 00123412
-        %td 14/10/2015 15:40
-        %td
-          %a(class="btn btn-default btn-xs" href="#" title="Ver")
-            %span(class="glyphicon glyphicon-eye-open")
-          %a(class="btn btn-primary btn-xs" href="#" title="Editar")
-            %span(class="glyphicon glyphicon-edit")
-          %a(class="btn btn-warning btn-xs" href="#" title="Anular")
-            %span(class="glyphicon glyphicon-remove")
-      %tr
-        %td 3
-        %td 0001
-        %td Empresa SRL
-        %td Roxana Gomez
-        %td 14/10/2015
-        %td.number 200.33
-        %td.text-center 200
-        %td.text-center 00123412
-        %td 14/10/2015 15:40
-        %td
-          %a(class="btn btn-default btn-xs" href="#" title="Ver")
-            %span(class="glyphicon glyphicon-eye-open")
-          %a(class="btn btn-primary btn-xs" href="#" title="Editar")
-            %span(class="glyphicon glyphicon-edit")
-          %a(class="btn btn-warning btn-xs" href="#" title="Anular")
-            %span(class="glyphicon glyphicon-remove")
-      %tr
-        %td 4
-        %td 0001
-        %td Empresa SRL
-        %td Roxana Gomez
-        %td 14/10/2015
-        %td.number 200.33
-        %td.text-center 200
-        %td.text-center 00123412
-        %td 14/10/2015 15:40
+      %tr{'ng-repeat' => 'entrada in notas_entrada'}
+        %td {{entrada.id}}
+        %td {{entrada.nro}}
+        %td {{entrada.empresa}}
+        %td {{entrada.encargado}}
+        %td {{entrada.fecha | date: 'dd/MM/yyyy'}}
+        %td.number {{entrada.total}}
+        %td.text-center {{entrada.nota_entrega_nro}}
+        %td.text-center {{entrada.factura_nro}}
+        %td {{entrada.creado_el | date: 'dd/MM/yyyy HH:mm'}}
         %td
           %a(class="btn btn-default btn-xs" href="#" title="Ver")
             %span(class="glyphicon glyphicon-eye-open")
