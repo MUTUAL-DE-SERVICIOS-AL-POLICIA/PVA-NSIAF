@@ -8,7 +8,7 @@
     = favicon_link_tag 'favicon.ico'
 
     %title VSIAF - #{ yield_or_default(:title, title_system) }
-    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
+    = stylesheet_link_tag "application", media: "all"
     = csrf_meta_tags
   %body
     .navbar{role: "navigation", class: color_menu}

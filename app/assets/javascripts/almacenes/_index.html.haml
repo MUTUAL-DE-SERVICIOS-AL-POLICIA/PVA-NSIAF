@@ -34,5 +34,5 @@
             %span(class="glyphicon glyphicon-eye-open")
           %a(class="btn btn-primary btn-xs" href="#" title="Editar")
             %span(class="glyphicon glyphicon-edit")
-          %a(class="btn btn-warning btn-xs" href="#" title="Anular" ng-hide='{{entrada.anulado}}')
+          %button(class="btn btn-warning btn-xs" title="Anular" ng-hide='{{entrada.anulado}}' ng-click="anularNotaEntrada(entrada)")
             %span(class="glyphicon glyphicon-remove")
