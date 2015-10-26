@@ -67,3 +67,8 @@ gem 'roo'
 
 # Bower para rails
 gem 'bower-rails'
+
+# Angular templates into the Asset Pipeline
+gem 'angular-rails-templates'
+
+gem 'active_model_serializers'

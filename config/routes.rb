@@ -6,6 +6,7 @@ Nsiaf::Application.routes.draw do
   namespace :api, defaults: {format: :json}, except: [:new, :edit] do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       resources :documentos, only: [:show, :create]
+      resources :nota_entradas, only: [:index]
     end
   end
 

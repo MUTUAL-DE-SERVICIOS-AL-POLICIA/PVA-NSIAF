@@ -25,6 +25,8 @@ GEM
       activesupport (= 4.1.13)
       builder (~> 3.1)
       erubis (~> 2.7.0)
+    active_model_serializers (0.9.3)
+      activemodel (>= 3.2)
     activemodel (4.1.13)
       activesupport (= 4.1.13)
       builder (~> 3.1)
@@ -38,6 +40,10 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    angular-rails-templates (0.2.0)
+      railties (>= 3.1)
+      sprockets (~> 2)
+      tilt
     arel (5.0.1.20140414130214)
     autocomplete-off (0.2.0)
       actionpack (>= 3.0.0)
@@ -220,6 +226,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_model_serializers
+  angular-rails-templates
   autocomplete-off
   bcrypt (~> 3.1.7)
   bootstrap-sass (~> 3.1.1.0)
