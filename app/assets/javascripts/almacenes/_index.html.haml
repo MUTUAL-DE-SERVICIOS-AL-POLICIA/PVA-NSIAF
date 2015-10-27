@@ -30,9 +30,9 @@
         %td.text-center {{entrada.factura_nro}}
         %td {{entrada.creado_el | date: 'dd/MM/yyyy HH:mm'}}
         %td
-          %a(class="btn btn-default btn-xs" href="#" title="Ver")
+          %a(class="btn btn-default btn-xs" href="#" title="Ver" ng-hide='{{true}}')
             %span(class="glyphicon glyphicon-eye-open")
-          %a(class="btn btn-primary btn-xs" href="#" title="Editar")
+          %a(class="btn btn-primary btn-xs" href="#" title="Editar" ng-hide='{{true}}')
             %span(class="glyphicon glyphicon-edit")
           %button(class="btn btn-warning btn-xs" title="Anular" ng-hide='entrada.anulado' ng-click="anularNotaEntrada(entrada)")
             %span(class="glyphicon glyphicon-remove")

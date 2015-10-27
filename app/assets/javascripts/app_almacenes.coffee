@@ -14,7 +14,7 @@ almacenes.config (["$routeProvider", ($routeProvider) ->
 # Controladores
 almacenes.controller('EntradasController', ['$scope', '$http', ($scope, $http) ->
   $scope.entradas = []
-  host = "http://127.0.0.1:3000"
+  host = "." # "http://127.0.0.1:3000"
 
   $http.get("#{host}/api/nota_entradas").success((data) ->
     $scope.entradas = data.nota_entradas
@@ -31,6 +31,4 @@ almacenes.controller('EntradasController', ['$scope', '$http', ($scope, $http) -
         nota_entrada.anulado = true
       ).error (data, status) ->
         console.log status, data
-    else
-      console.log 'No se hizo nada'
 ])
