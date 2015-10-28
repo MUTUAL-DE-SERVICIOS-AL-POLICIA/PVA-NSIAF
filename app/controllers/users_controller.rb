@@ -109,7 +109,7 @@ class UsersController < ApplicationController
   end
 
   def autocomplete
-    render json: User.search_user(params[:q])
+    render json: User.search_user(params[:q]), root: false
   end
 
   private

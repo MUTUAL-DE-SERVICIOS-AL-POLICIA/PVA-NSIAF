@@ -69,7 +69,7 @@ class SubarticlesController < ApplicationController
   end
 
   def get_subarticles
-    render json: Subarticle.search_subarticle(params[:q])
+    render json: Subarticle.search_subarticle(params[:q]), root: false
   end
 
   def recode

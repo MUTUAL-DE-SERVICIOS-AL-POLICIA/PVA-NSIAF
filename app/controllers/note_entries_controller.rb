@@ -56,7 +56,7 @@ class NoteEntriesController < ApplicationController
   end
 
   def get_suppliers
-    render json: Supplier.search_supplier(params[:q])
+    render json: Supplier.search_supplier(params[:q]), root: false
   end
 
   private
