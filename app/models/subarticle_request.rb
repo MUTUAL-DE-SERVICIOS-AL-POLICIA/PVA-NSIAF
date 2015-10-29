@@ -1,8 +1,14 @@
 class SubarticleRequest < ActiveRecord::Base
+  default_scope {where(invalidate: false)}
+  
   belongs_to :subarticle
   belongs_to :request
 
   after_update :create_kardex_price
+
+  def self.invalidate_subarticles
+    update_all(invalidate: true)
+  end
 
   def subarticle_unit
     subarticle.present? ? subarticle.unit : ''

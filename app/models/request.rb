@@ -1,4 +1,6 @@
 class Request < ActiveRecord::Base
+  default_scope {where(invalidate: false)}
+
   belongs_to :user
   belongs_to :admin, class_name: 'User'
 
@@ -85,5 +87,15 @@ class Request < ActiveRecord::Base
     #update_attributes(status: 'delivered', delivery_date: Time.now)
     update_attributes(status: 'delivered', delivery_date: created_at)
     kardexes.update_all(kardex_date: delivery_date.to_date)
+  end
+
+  # Anula una Solicitud de Material, y también de los subartículos seleccionados
+  # y es necesario especificar el motivo de la anulación.
+  def invalidate_request(message="")
+    transaction do
+      update(invalidate: true, message: message)
+      subarticle_requests.invalidate_subarticles
+      kardexes.invalidate_kardexes
+    end
   end
 end

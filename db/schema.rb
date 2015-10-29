@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151022184846) do
+ActiveRecord::Schema.define(version: 20151029154153) do
 
   create_table "accounts", force: true do |t|
     t.integer  "code"
@@ -225,6 +225,9 @@ ActiveRecord::Schema.define(version: 20151022184846) do
     t.datetime "updated_at"
     t.string   "status",        default: "0"
     t.datetime "delivery_date"
+    t.integer  "documento_id"
+    t.boolean  "invalidate",    default: false
+    t.string   "message"
   end
 
   create_table "subarticle_requests", force: true do |t|
@@ -233,6 +236,7 @@ ActiveRecord::Schema.define(version: 20151022184846) do
     t.integer "amount"
     t.integer "amount_delivered"
     t.integer "total_delivered",  default: 0
+    t.boolean "invalidate",       default: false
   end
 
   add_index "subarticle_requests", ["request_id"], name: "index_subarticle_requests_on_request_id", using: :btree
