@@ -6,33 +6,43 @@
 #selection_subarticles
   %p.bg-info En la caja de texto busque el Sub Artículo a desear, el cual sera añadido en la tabla una vez seleccionado
   .row
-    .col-xs-12.col-sm-12.col-md-12.form-horizontal
-      %label.col-xs-12.col-sm-1.col-md-1.control-label Fecha:
-      .col-xs-12.col-sm-4.col-md-4
-        = text_field_tag 'date', format_date(Date.today), class: 'form-control'
-  .row{style: "margin-bottom: 15px"}
-    .col-xs-12.col-sm-12.col-md-12.form-horizontal
-      %label.col-xs-12.col-sm-1.col-md-1.control-label Funcionario:
-      .col-xs-12.col-sm-4.col-md-4
-        = text_field_tag "people", '', class: "form-control"
-  .row
-    .col-xs-12.col-sm-5.col-md-5
-      .row
-        .col-xs-12.col-sm-12.col-md-12
-          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Código o Descripción del Sub Artículo'
-    .col-xs-12.col-sm-7.col-md-7{ style: 'margin-bottom: 30px;' }
-      %table.table.table-striped
+    .col-md-4
+      %form.form-horizontal
+        .form-group
+          %label.col-sm-2.control-label Fecha
+          .col-sm-10
+            = text_field_tag 'date', format_date(Date.today), class: 'form-control'
+        .form-group
+          %label.col-sm-2.control-label Funcionario
+          .col-sm-10
+            = text_field_tag 'people', '', class: 'form-control'
+        .form-group
+          .col-sm-12
+            = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Código o Descripción del Sub Artículo'
+    .col-md-8
+      %section#selected-user.lead
+        %dl.dl-horizontal.funcionario-seleccionado
+          %dt.text-muted Funcionario
+          %dd.nombre-completo
+            %em.text-muted No seleccionado
+          %dt.text-muted Cargo
+          %dd.cargo
+            %em.text-muted No Seleccionado
+
+      %table.table.table-striped.table-bordered
         %thead
           %tr
-            %th= Subarticle.human_attribute_name('description')
-            %th= Subarticle.human_attribute_name('unit')
-            %th Cantidad
+            %th.text-center= Subarticle.human_attribute_name('code')
+            %th.col-md-7= Subarticle.human_attribute_name('description')
+            %th.text-center Unidad
+            %th.text-center Cantidad
             %th.actions-request
         %tbody#subarticles
-    .text-center
-      %button#btn-show-new-request.btn.btn-primary
-        %span.glyphicon.glyphicon-shopping-cart
-        Ver Solicitud
+
+      .text-center
+        %button#btn-show-new-request.btn.btn-primary
+          %span.glyphicon.glyphicon-shopping-cart
+          Ver Solicitud
 #selected_subarticles
 
 = render 'material'

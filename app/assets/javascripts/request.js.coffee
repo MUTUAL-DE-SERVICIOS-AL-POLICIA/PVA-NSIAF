@@ -2,6 +2,7 @@ $ -> new Request() if $('[data-action=request]').length > 0
 
 class Request extends BarcodeReader
   cacheElements: ->
+    @selected_user = null
     @$request_urls = $('#request-urls')
 
     @$date = $('input#date')
@@ -13,6 +14,7 @@ class Request extends BarcodeReader
     @$article = $('#article')
     @$subarticle = $('#subarticle')
     @$subarticles = $('#subarticles')
+    @$selected_user = $('#selected-user')
     @$total_sum = $('#subarticles .total-sum')
     @$selectionSubarticles = $('#selection_subarticles')
     @$selected_subarticles = $('#selected_subarticles')
@@ -41,6 +43,7 @@ class Request extends BarcodeReader
     @$templateNewRequest = Hogan.compile $('#new_request').html() || ''
     @$templateBtnsNewRequest = Hogan.compile $('#cancel_new_request').html() || ''
     @$templateUserInfo = Hogan.compile $('#show_user_info').html() || ''
+    @$templateSelectedUser = Hogan.compile $('#selected-user-tpl').html() || ''
 
     @request_save_url = decodeURIComponent @$request_urls.data('request-id')
     @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
@@ -198,7 +201,7 @@ class Request extends BarcodeReader
     @get_amount($this).remove()
 
   get_amount: ($this) ->
-    $($this.currentTarget).parent().parent()
+    $($this.currentTarget).parent().parent().parent()
 
   show_new_request: ->
     if @$subarticles.find('tr').length
@@ -217,9 +220,9 @@ class Request extends BarcodeReader
         else
           @open_modal("Se debe especificar una fecha")
       else
-        @open_modal("Debe añadir un Funcionario")
+        @open_modal("Falta seleccionar funcionario")
     else
-      @open_modal("Debe seleccionar al menos un Sub Artículo")
+      @open_modal("Debe seleccionar al menos un subartículo")
 
   cancel_new_request: ->
     @btnShowNewRequest.show()
@@ -262,11 +265,25 @@ class Request extends BarcodeReader
     bestPictures.initialize()
     @$user.typeahead null,
       displayKey: 'name'
-      source: bestPictures.ttAdapter()
+      source: bestPictures.ttAdapter(),
+      templates:
+        empty: [
+          '<p class="empty-message">',
+          'No se encontró ningún elemento',
+          '</p>'
+        ].join('\n')
+        suggestion: (data) ->
+          Hogan.compile('<p><b>{{name}}</b><p class="text-muted">{{title}}</p></p>').render(data)
     .on 'typeahead:selected', (evt, data) => @add_user_id(evt, data)
 
   add_user_id: (evt, data) ->
+    @selected_user = data
+    @display_selected_user()
     @$user.attr('data-user-id', data.id)
+
+  display_selected_user: ->
+    selected_user = @$templateSelectedUser.render(@selected_user)
+    @$selected_user.html(selected_user)
 
   refresh_date: ->
     @delivery_date.empty().append('<input id="note_entry_delivery_note_date" class="form-control" type="text" name="note_entry[delivery_note_date]"><span class="input-group-addon glyphicon glyphicon-calendar"></span>')
