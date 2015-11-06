@@ -205,7 +205,7 @@ class Request extends BarcodeReader
 
   show_new_request: ->
     if @$subarticles.find('tr').length
-      if @$user.val()
+      if @selected_user
         if @$date.val()
           @btnShowNewRequest.hide()
           @$selectionSubarticles.hide()
@@ -216,7 +216,7 @@ class Request extends BarcodeReader
             $(this).prepend "<td>#{ i+1 }</td>"
           @$selected_subarticles.append table
           @$selected_subarticles.append @$templateBtnsNewRequest.render()
-          @showUserInfo @$user.data('user-id')
+          @showUserInfo()
         else
           @open_modal("Se debe especificar una fecha")
       else
@@ -243,17 +243,16 @@ class Request extends BarcodeReader
     )
     json_data =
       status: 'initiation'
-      user_id: @$user.data('user-id')
+      user_id: @selected_user.id
       subarticle_requests_attributes: subarticles
       created_at: @parse_date_time(@$date.val()) # yyyy/mm/dd HH:MM:SS
     $.post @request_save_url.replace(/{id}/, ''), { request: json_data }, null, 'script'
 
-  showUserInfo: (user_id) ->
-    $.getJSON @user_url.replace(/{id}/g, user_id), (data) =>
-      result = $.extend(data, {date: @$date.val()})
-      $user = @$templateUserInfo.render(result)
-      $table = @$selected_subarticles.find("table")
-      $($user).insertBefore($table)
+  showUserInfo: ->
+    result = $.extend(@selected_user, {date: @$date.val()})
+    $user = @$templateUserInfo.render(result)
+    $table = @$selected_subarticles.find("table")
+    $($user).insertBefore($table)
 
   get_users: ->
     bestPictures = new Bloodhound(
@@ -279,7 +278,6 @@ class Request extends BarcodeReader
   add_user_id: (evt, data) ->
     @selected_user = data
     @display_selected_user()
-    @$user.attr('data-user-id', data.id)
 
   display_selected_user: ->
     selected_user = @$templateSelectedUser.render(@selected_user)
