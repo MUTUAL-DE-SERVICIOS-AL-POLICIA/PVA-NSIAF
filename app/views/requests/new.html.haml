@@ -9,18 +9,18 @@
     .col-md-4
       %form.form-horizontal
         .form-group
-          %label.col-sm-2.control-label Fecha
-          .col-sm-10
+          %label.col-sm-4.control-label Fecha
+          .col-sm-8
             = text_field_tag 'date', format_date(Date.today), class: 'form-control'
         .form-group
-          %label.col-sm-2.control-label Funcionario
-          .col-sm-10
+          %label.col-sm-4.control-label Funcionario
+          .col-sm-8
             = text_field_tag 'people', '', class: 'form-control'
         .form-group
           .col-sm-12
             = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Código o Descripción del Sub Artículo'
     .col-md-8
-      %section#selected-user.lead
+      %section#selected-user
         %dl.dl-horizontal.funcionario-seleccionado
           %dt.text-muted Funcionario
           %dd.nombre-completo
@@ -33,7 +33,7 @@
         %thead
           %tr
             %th.text-center= Subarticle.human_attribute_name('code')
-            %th.col-md-7= Subarticle.human_attribute_name('description')
+            %th.col-md-6= Subarticle.human_attribute_name('description')
             %th.text-center Unidad
             %th.text-center Cantidad
             %th.actions-request
