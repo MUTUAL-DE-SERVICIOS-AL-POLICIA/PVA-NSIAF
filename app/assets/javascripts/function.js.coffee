@@ -1,8 +1,12 @@
+# Extractado de http://www.jacklmoore.com/notes/rounding-in-javascript/
+round = (value, decimals) ->
+  Number(Math.round(value+'e'+decimals)+'e-'+decimals)
+
 total_cost = ($this) ->
   id = $this.parent().parent().parent().attr('id')
   amount = parseFloat($("input#amount_#{id}").val() || 0)
   unit_cost = parseFloat($("input#unit_cost_#{id}").val() || 0)
-  cost_total = amount * unit_cost
+  cost_total = round(amount * unit_cost, 2)
   $("input#total_cost_#{id}").val(cost_total).parent().prev().text(cost_total.formatNumber(2, '.', ','))
   total = 0
   $("input.total_cost").map ->
