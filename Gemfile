@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.13'
+gem 'rails', '4.2.5'
 
 # Use mysql as the database for Active Record
 gem 'mysql2'
@@ -60,6 +60,7 @@ gem 'rest_client'
 group :development do
   gem 'coffee-rails-source-maps'
   gem 'rails-erd'
+  gem 'web-console', '~> 2.0'
 end
 
 # Read Excel files

@@ -1,7 +1,7 @@
 require 'year_constraint'
 require 'api_constraints'
 
-Nsiaf::Application.routes.draw do
+Rails.application.routes.draw do
 
   namespace :api, defaults: {format: :json}, except: [:new, :edit] do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
