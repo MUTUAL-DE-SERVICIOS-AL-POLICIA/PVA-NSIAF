@@ -31,7 +31,7 @@ class BarcodesController < ApplicationController
                layout: 'pdf.html',
                page_size: 'Letter',
                margin: {
-                 top: 13,
+                 top: 14,
                  bottom: 0,
                  left: 5,
                  right: 3
