@@ -130,7 +130,7 @@ class AssetsController < ApplicationController
     def asset_params
       if action_name == 'create'
         params[:asset][:user_id] = current_user.id
-        params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id, :barcode, :state)
+        params.require(:asset).permit(:code, :description, :proceso, :observaciones, :auxiliary_id, :user_id, :barcode, :state)
       else
         params.require(:asset).permit(:code, :description, :barcode, :state, :derecognised, :description_decline, :reason_decline, :decline_user_id)
       end

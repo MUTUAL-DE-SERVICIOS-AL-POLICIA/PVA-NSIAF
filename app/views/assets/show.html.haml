@@ -20,6 +20,10 @@
   %dd= @asset.barcode || "<em>No asignado</em>".html_safe
   %dt= Asset.human_attribute_name('description')
   %dd= @asset.description
+  %dt= Asset.human_attribute_name('proceso')
+  %dd= @asset.proceso
+  %dt= Asset.human_attribute_name('observaciones')
+  %dd= @asset.observaciones
   %dt= Asset.human_attribute_name('state')
   %dd= @asset.get_state
   %dt= Asset.human_attribute_name('user')
@@ -34,6 +38,8 @@
     %dd= @asset.description_decline
     %dt= Asset.human_attribute_name('reason_decline')
     %dd= @asset.reason_decline
+  %dt= Asset.human_attribute_name('created_at')
+  %dd= l @asset.created_at, format: :long
 
 .row
   .col-sm-12.historical-reviews

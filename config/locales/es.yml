@@ -339,6 +339,7 @@ es:
         state: "Estado"
         description_decline: "Descripción"
         reason_decline: "Motivo"
+        created_at: "Creado el"
       auxiliary:
         code: "Código"
         name: "Nombre"
