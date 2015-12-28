@@ -32,6 +32,7 @@ module Api
                      status: 400
             end
           }
+        end
       end
 
       private
