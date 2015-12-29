@@ -20,10 +20,12 @@
   %dd= @asset.barcode || "<em>No asignado</em>".html_safe
   %dt= Asset.human_attribute_name('description')
   %dd= @asset.description
+  %dt= Asset.human_attribute_name('precio')
+  %dd= number_with_delimiter @asset.precio
   %dt= Asset.human_attribute_name('proceso')
   %dd= @asset.proceso
   %dt= Asset.human_attribute_name('observaciones')
-  %dd= @asset.observaciones
+  %dd= simple_format @asset.observaciones
   %dt= Asset.human_attribute_name('state')
   %dd= @asset.get_state
   %dt= Asset.human_attribute_name('user')
