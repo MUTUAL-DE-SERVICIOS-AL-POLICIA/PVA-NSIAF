@@ -54,4 +54,43 @@ namespace :db do
       end
     end
   end
+
+  desc "Cargado los activos desde un ODS"
+  task :activos, [:documento] => [:environment] do |t, args|
+    unless args[:documento].present?
+      puts "Es necesario especificar un parámetro con la ubicación del archivo .ODS"
+      next # http://stackoverflow.com/a/2316518/1174245
+    end
+
+    file_path = args[:documento]
+    s = Roo::OpenOffice.new(file_path)
+
+    first_row = s.first_row
+    last_row = s.last_row
+
+    m = a = b = nil
+
+    (first_row..last_row).each_with_index do |r, i|
+      if i > 0
+        row = s.row(r)
+        elemento = {
+          code: row[1].to_i,
+          description: "#{row[4]} #{row[5]} #{row[6]} #{row[7]} #{row[8]} #{row[9]} SN/#{row[10]}".squish,
+          proceso: row[1].to_i,
+          observaciones: "Factura: #{row[11]}\r\nTotal factura: #{row[12]}\r\nProveedor: #{row[13]}\r\nTeléfono: #{row[14]}\r\nCelular: #{row[15]}",
+          auxiliary_id: 1,
+          # barcode: 'AGETIC-30',
+          status: "1",
+          state: 1,
+          user_id: 2,
+          precio: row[3].to_f,
+          created_at: DateTime.strptime(row[2], "%d/%m/%Y")
+        }
+
+        activo = Asset.new(elemento)
+        activo.save(validate: false)
+        puts "#{i}. #{activo.attributes.to_json}"
+      end
+    end
+  end
 end
