@@ -87,7 +87,7 @@ class SubarticlesController < ApplicationController
   end
 
   def first_entry
-    params[:entry_subarticle].each{ |i,f| EntrySubarticle.create(f)}
+    entry_subarticle_params.each{ |i,f| EntrySubarticle.create(f)}
     respond_to do |format|
       format.json { head :no_content }
     end
@@ -116,6 +116,6 @@ class SubarticlesController < ApplicationController
     end
 
     def entry_subarticle_params
-      params.require(:entry_subarticle).permit(:amount, :unit_cost, :total_cost, :invoice, :date, :subarticle_id)
+      params.require(:entry_subarticle).permit!
     end
 end

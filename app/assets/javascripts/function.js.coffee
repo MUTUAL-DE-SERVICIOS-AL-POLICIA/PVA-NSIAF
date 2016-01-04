@@ -24,7 +24,9 @@ date_picker = (year = false) ->
     days = $("#get_date").data('date')
     date = "-#{days}d"
   else
-    date = if year then (new Date((new Date).getFullYear(), 0, 1)) else ""
+    # TODO verificar el rango del último cierre para restringir rango de fechas
+    # date = if year then (new Date((new Date).getFullYear(), 0, 1)) else ""
+    date = ""
   $(".date").datepicker
     format: "dd/mm/yyyy"
     language: "es"
