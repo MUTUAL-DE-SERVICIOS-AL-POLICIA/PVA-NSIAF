@@ -12,9 +12,11 @@ class Subarticle < ActiveRecord::Base
     m.validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     m.validates :description, :unit, :article_id, presence: true
     #m.validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-    m.validate do |subarticle|
-      BarcodeStatusValidator.new(subarticle).validate
-    end
+    #
+    # TODO validación de los códigos de barras desactivado.
+    # m.validate do |subarticle|
+    #   BarcodeStatusValidator.new(subarticle).validate
+    # end
   end
 
   with_options if: :is_migrate? do |m|
