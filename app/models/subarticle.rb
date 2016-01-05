@@ -93,9 +93,14 @@ class Subarticle < ActiveRecord::Base
   def entry_subarticles_exist(year = Date.today.year)
     s_date = Date.strptime(year.to_s, '%Y').beginning_of_day
     e_date = s_date.end_of_year.end_of_day
-    entry_subarticles.search(stock_gt: 0,
-                             date_gteq: s_date,
-                             date_lteq: e_date).result(distinct: true)
+    # TODO la validación tiene que verificar si la gestión ha sido cerrada
+    # caso contrario no se aplica ninguna verificación.
+    #
+    # entry_subarticles.search(stock_gt: 0,
+    #                          date_gteq: s_date,
+    #                          date_lteq: e_date).result(distinct: true)
+
+    entry_subarticles.search(stock_gt: 0).result(distinct: true)
   end
 
   def kardexes_from_year(year = Date.today.year)
