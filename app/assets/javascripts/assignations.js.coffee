@@ -10,10 +10,11 @@ class Assignations extends BarcodeReader
     @bindEvents()
 
   cacheElements: ->
+    @$assignation_urls = $('#assignation-urls')
     # URLs
-    @admin_assets_search_url = '/assets/admin_assets'
-    @proceedings_url = '/proceedings'
-    @user_url = '/users/{id}.json'
+    @admin_assets_search_url = @$assignation_urls.data('admin-assets')
+    @proceedings_url = @$assignation_urls.data('proceedings')
+    @user_url = decodeURIComponent(@$assignation_urls.data('users-id'))
     # Containers
     @$containerTplSelectedAssets = $('#container-tpl-selected-assets')
     @$containerTplSelectedUser = $('#container-tpl-selected-user')
@@ -48,8 +49,8 @@ class Assignations extends BarcodeReader
   bindEvents: ->
     @setFocusToCode()
     if @$building?
-      @$department.remoteChained(@$building.selector, '/assets/departments.json')
-      @$user.remoteChained(@$department.selector, '/assets/users.json')
+      @$department.remoteChained(@$building.selector, @$assignation_urls.data('assets-departments'))
+      @$user.remoteChained(@$department.selector, @$assignation_urls.data('assets-users'))
     $(document).on 'click', @$btnAssignation.selector, (e) => @displayContainer(e)
     $(document).on 'click', @$btnBack.selector, (e) => @backToSelectUser(e)
     $(document).on 'click', @$btnCancel.selector, (e) => @backToSelectAssets(e)
@@ -101,13 +102,15 @@ class Assignations extends BarcodeReader
       @showUserInfo @$user.val()
       @displayAssetRows()
     else
-      @alert.info 'Seleccione <b>Edificio</b>, <b>Departamento</b>, y <b>Usuario</b>'
+      @alert.info 'Seleccione <b>Entidad</b>, <b>Unidad</b>, y <b>Funcionario</b>'
 
   displaySearchAsset: (code, data) =>
-    if data
-      @displaySelectedAssets(data)
+    if data[1] == 1
+      @displaySelectedAssets(data[0])
+    else if data[1] == 2
+      @alert.danger "El Código de Activo <b>#{code}</b> ya está asignado al funcionario <b>#{data[0].user.name}</b>"
     else
-      @alert.danger "El Código de Activo <b>#{code}</b> ya está asignado o no existe"
+      @alert.danger "El Código de Activo <b>#{code}</b> no existe"
 
   displaySelectedAssets: (asset) ->
     index = @searchInLocalAssets(asset)
@@ -124,7 +127,7 @@ class Assignations extends BarcodeReader
       assignation =
         assets: _assets
         devolution: false
-        proceedingDate: moment().format('LL')
+        proceedingDate: CurrentDateSpanish.inWords()
         userName: _user.name
         userTitle: _user.title
       @$containerTplProceedingDelivery.html @$templateProceedingDelivery.render(assignation)

@@ -4,24 +4,38 @@
       .modal-content
         .modal-header
           %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
-          %h4.modal-title {{title}}
+          %h4.modal-title {{{title}}}
         .modal-body
           .title_message {{{confirmMessage}}}
           - if controller_name == 'assets'
             = form_tag "{{url}}", class: 'form-horizontal' do
               .form-group
-                %label.col-sm-2.control-label= Decline.human_attribute_name('description')
+                %label.col-sm-2.control-label= Asset.human_attribute_name('description_decline')
                 .col-sm-10
-                  = text_area_tag :description, '', class: 'form-control'
+                  = text_area_tag "asset[description_decline]", '', class: 'form-control'
               .form-group
-                %label.col-sm-2.control-label= Decline.human_attribute_name('motivo')
+                %label.col-sm-2.control-label= Asset.human_attribute_name('reason_decline')
                 .col-sm-10
-                  = text_area_tag :reason, '', class: 'form-control'
+                  = text_area_tag "asset[reason_decline]", '', class: 'form-control'
+          {{#entry}}
+          = simple_form_for EntrySubarticle.new, url: first_entry_subarticles_path, html: { class: 'form-horizontal form_entry', id: "form_entry_{{id}}" } do |f|
+            = render 'subarticles/new_entry', id: 0, subarticle_id: "{{id}}", is_first: true
+            = link_to '#', class: "new_entry" do
+              %span.glyphicon.glyphicon-plus
+              Agregar Saldo
+          {{/entry}}
         .modal-footer
           %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('general.btn.cancel')
+          {{#entry}}
+          = button_tag t('general.btn.save'), class: 'btn btn-primary', id: 'new_entry'
+          {{/entry}}
           {{#unassigned}}
           - if controller_name == 'assets'
             = button_tag t('general.btn.save'), class: 'btn btn-primary deregister'
           - else
             = link_to t('general.btn.save'), "{{url}}", class: 'btn btn-primary change_status', method: :post, remote: true
           {{/unassigned}}
+
+%script{ id: 'entry_subarticle', type: 'text/html' }
+  .modal-header{ style: 'margin-bottom: 5px;' }
+  = render 'subarticles/new_entry'

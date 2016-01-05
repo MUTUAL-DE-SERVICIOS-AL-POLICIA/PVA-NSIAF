@@ -1,0 +1,98 @@
+- year = Date.today.year
+- unless is_pdf?
+  .page-header
+    .pull-right
+      = link_to @subarticle, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-arrow-left
+        Atrás
+      - if @kardexes.length > 0
+        = link_to subarticle_kardexes_path(@subarticle, format: :pdf), class: 'btn btn-info' do
+          %span.glyphicon.glyphicon-print
+          Imprimir
+      = link_to subarticles_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        Subartículos
+
+    %h3.kardex-inventory
+      .title KARDEX DE INVENTARIOS
+      .title GESTION #{year}
+
+    #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
+- else
+  .row{ class: "#{'separator' if is_pdf?}" }
+    .col-sm-12
+      %table.kardex-table
+        %tbody
+          %tr
+            %td
+            %td
+              %h3.title KARDEX DE INVENTARIOS
+          %tr
+            %td
+            %td
+              %h3.title GESTIÓN #{year}
+          %tr
+            %td &nbsp;
+            %td &nbsp;
+          %tr
+            %td.text-right
+              %strong DESCRIPCIÓN:
+            %td= @subarticle.description.upcase
+          %tr
+            %td.text-right
+              %strong Nº CÓDIGO:
+            %td= @subarticle.code
+
+- unless is_pdf?
+  %dl.dl-horizontal
+    %dt DESCRIPCIÓN:
+    %dd= @subarticle.description.upcase
+    %dt Nº CÓDIGO:
+    %dd= @subarticle.code
+
+- unless @initial_kardex.new_record?
+  %table.table.table-bordered.table-condensed
+    %thead
+      %tr.vertical-align.info
+        %th.text-center{rowspan: 2} FECHA
+        %th.text-center{rowspan: 2} Nº DE FACTURA
+        %th.text-center{rowspan: 2} Nº NOTA DE ENTREGA
+        %th.text-center{rowspan: 2} Nº DE PEDIDO MAT
+        %th.text-center.col-sm-3{rowspan: 2} DETALLE
+        %th.text-center{colspan: 3} CANTIDADES
+        %th.text-center{rowspan: 2} COSTO UNITARIO
+        %th.text-center{colspan: 3} IMPORTES EN BOLIVIANOS
+      %tr.info
+        %th ENTRADAS
+        %th SALIDAS
+        %th SALDOS
+        %th ENTRADAS
+        %th SALIDAS
+        %th SALDOS
+    %tbody
+      = render @initial_kardex, initial: true
+      = render @kardexes - [@initial_kardex]
+      = render @final_kardex, final: true
+
+  - if is_pdf?
+    .separator
+    %table{ style: 'width: 100%' }
+      %tr
+        %td.text-center
+          %p _______________________
+          %p ELABORADO POR
+        %td.text-center
+          %p _______________________
+          %p Vº Bº
+
+- else
+  .col-sm-12.column
+    .alert.alert-info.alert-dismissible{role: 'alert'}
+      %button.close{type: 'button', data: {dismiss: 'alert'}}
+        %span{'aria-hidden' => true} &times;
+        %span.sr-only Close
+      %span.glyphicon.glyphicon-warning-sign
+      &nbsp;
+      Falta establecer el Saldo Inicial, diríjase al listado de subartículos y presione en el botón
+      %strong Establecer Saldo Inicial
+      correspondiente a éste subartículo.

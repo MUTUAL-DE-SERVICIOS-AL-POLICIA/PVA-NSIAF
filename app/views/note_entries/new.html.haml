@@ -1,0 +1,86 @@
+- disabled = params[:action] == 'new' ? false : true
+
+#request-urls{data: {'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY')}}
+#note_entry-urls{data: {'get-suppliers' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
+
+.page-header{data: {action: 'request'}}
+  %h2= t("note_entries.title.#{params[:action]}")
+
+= simple_form_for @note_entry, html: { class: "form-horizontal #{params[:action]}_note_entry" } do |f|
+  = f.input :total, as: :hidden
+  .row{data: {action: 'note_entry'}}
+    .col-sm-12.col-md-8.col-lg-8
+      - supplier = params[:action] == 'new' ? f.object.supplier_id : @note_entry.supplier_name
+      = f.input :supplier_id, as: :string, required: true, disabled: disabled, input_html: { value: supplier }
+  .row
+    .col-sm-12.col-md-8.col-lg-8
+      = f.input :delivery_note_number
+    .col-sm-12.col-md-4.col-lg-4
+      = f.input :delivery_note_date, as: :string, input_html: { value: format_date(f.object.delivery_note_date) }, label: false
+  .row
+    .col-sm-12.col-md-8.col-lg-8
+      = f.input :invoice_number
+    .col-sm-12.col-md-4.col-lg-4
+      = f.input :invoice_date, as: :string, input_html: { value: format_date(f.object.invoice_date) }, label: false
+  .row
+    .col-sm-12.col-md-8.col-lg-8
+      .form-group
+        %label.col-sm-3.col-md-3.col-lg-3.control-label= t('activerecord.models.subarticle')
+        .col-xs-9.col-sm-9.col-md-9
+          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control', placeholder: 'Código o Descripción del Sub Artículo', disabled: disabled
+
+  %table.table.table-bordered
+    %thead
+      %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
+        %th.text-center CANTIDAD
+        %th.text-center PRECIO UNITARIO
+        %th.text-center UNIDAD
+        %th.text-center CÓDIGO
+        %th.text-center DETALLE
+        %th.text-center PRECIO TOTAL
+        - if params[:action] == 'new'
+          %th
+    %tbody#subarticles
+      - if params[:action] == 'edit'
+        - @note_entry.entry_subarticles.each do |entry|
+          %tr
+            %td.text-center= entry.amount
+            %td.number= number_with_delimiter entry.unit_cost
+            %td= entry.subarticle_unit
+            %td= entry.subarticle_code
+            %td= entry.subarticle_name
+            %td.number= number_with_delimiter entry.total_cost || 0
+      %tr.total-sum
+        %td
+        %td
+        %td
+        %th
+        %th TOTAL
+        %th#totalNoteEntry.number
+          - if params[:action] == 'edit'
+            = number_with_delimiter @note_entry.total || 0
+
+  - if params[:action] == 'edit'
+    #get_date{ data: { date: @note_entry.get_date } }
+    = render 'shared/form_buttons'
+
+- if params[:action] == 'new'
+  #save_note_entry
+    = render 'shared/form_buttons'
+
+%script{ type: 'text/html', id: 'new_request' }
+  %tr.subarticle{ id: '{{id}}' }
+    %td.col-sm-1.col-md-1.note
+      %div= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][amount]", nil, { id:"amount_{{id}}", class: 'form-control amount' }
+    %td.col-sm-2.col-md-2.note
+      %div= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, { id:"unit_cost_{{id}}", class: 'form-control unit_cost', step: 0.1 }
+    %td {{unit}}
+    %td {{code}}
+    %td.description {{description}}
+    %td.col-sm-2.col-md-2.number
+    %td{style: "display: none;"}
+      = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
+      = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, { id:"total_cost_{{id}}", class: 'form-control total_cost' }
+      .date_entry {{days}}
+    %td.text-center
+      %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }

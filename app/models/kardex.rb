@@ -1,0 +1,146 @@
+class Kardex < ActiveRecord::Base
+  default_scope {where(invalidate: false).order(:created_at)}
+
+  belongs_to :note_entry
+  belongs_to :request
+  belongs_to :subarticle
+
+  has_many :kardex_prices
+
+  accepts_nested_attributes_for :kardex_prices
+
+  def self.final_kardex
+    kardex = all.last
+    if kardex.nil?
+      kardex = Kardex.new
+      kardex.kardex_prices.build
+    else
+        kardex = kardex.replicate
+        kardex.reset_kardex_prices
+        kardex.remove_zero_balance
+        kardex.kardex_date = Date.today
+        kardex.invoice_number = 0
+        kardex.delivery_note_number = 0
+        kardex.order_number = 0
+        kardex.detail = 'SALDO FINAL'
+        kardex.sum_inputs
+        kardex.sum_outputs
+    end
+    kardex
+  end
+
+  def self.initial_kardex
+    kardex = all.first
+    if kardex.nil?
+      kardex = Kardex.new
+      kardex.kardex_prices.build
+    end
+    kardex
+  end
+
+  # Anula los kardex asociados a la Nota de Entrada
+  def self.invalidate_kardexes
+    all.each do |kardex|
+      kardex.kardex_prices.invalidate_kardex_prices
+    end
+    update_all(invalidate: true)
+  end
+
+  def first_kardex_price(unit_cost)
+    kardex_price = nil
+    kardex_prices.reverse.each do |kp|
+      if kp.unit_cost == unit_cost
+        kardex_price = kp
+      end
+    end
+    kardex_price
+  end
+
+  def last_kardex_price(unit_cost)
+    kardex_price = nil
+    kardex_prices.each do |kp|
+      if kp.unit_cost == unit_cost
+        kardex_price = kp
+      end
+    end
+    kardex_price
+  end
+
+  def remove_zero_balance
+    if kardex_prices.length > 1
+      k_prices = []
+      kardex_prices.each do |kardex_price|
+        if kardex_price.balance_quantities.zero?
+          k_prices << kardex_price
+        end
+      end
+      kardex_prices.delete(k_prices)
+    end
+  end
+
+  def replicate
+    replica = dup
+    kardex_prices.each do |kardex_price|
+      replica.kardex_prices << kardex_price.dup
+    end
+    replica
+  end
+
+  def reset_kardex_prices
+    self.kardex_date = nil
+    self.invoice_number = nil
+    self.delivery_note_number = nil
+    self.order_number = nil
+    self.detail = nil
+    self.delivery_note_number = nil
+    self.request_id = nil
+    self.note_entry_id = nil
+    self.kardex_prices.each do |kardex_price|
+      kardex_price.input_quantities = 0
+      kardex_price.output_quantities = 0
+      kardex_price.input_amount = 0
+      kardex_price.output_amount = 0
+    end
+  end
+
+  def set_multi_prices(entry_subarticles)
+    entry_subarticles.each do |entry_subarticle|
+      kardex_price = self.kardex_prices.build
+      kardex_price.input_quantities = 0
+      kardex_price.output_quantities = 0
+      kardex_price.balance_quantities = entry_subarticle.amount
+      kardex_price.unit_cost = entry_subarticle.unit_cost
+      kardex_price.input_amount = 0
+      kardex_price.output_amount = 0
+      kardex_price.balance_amount = entry_subarticle.total_cost
+    end
+  end
+
+  def sum_inputs
+    kardex_price = kardex_prices.first
+    kardex_price.sum_inputs(subarticle) if kardex_price
+    (kardex_prices - [kardex_price]).each do |kp|
+      kp.input_quantities = kp.balance_quantities ####
+      kp.input_amount = kp.balance_amount
+      kardex_price.input_quantities -= kp.input_quantities
+    end
+
+  end
+
+  def sum_outputs
+    kardex_price = kardex_prices.first
+    kardex_price.sum_outputs(subarticle) if kardex_price
+    (kardex_prices - [kardex_price]).each do |kp|
+      kp.output_quantities = 0
+      kp.output_amount = 0
+    end
+  end
+
+  def sum_balance_quantities
+    balance = 0
+    kardex_prices.each do |kp|
+      balance += kp.balance_quantities
+    end
+    balance
+  end
+end

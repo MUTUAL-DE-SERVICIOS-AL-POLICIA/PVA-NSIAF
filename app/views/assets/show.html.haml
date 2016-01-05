@@ -20,15 +20,28 @@
   %dd= @asset.barcode || "<em>No asignado</em>".html_safe
   %dt= Asset.human_attribute_name('description')
   %dd= @asset.description
+  %dt= Asset.human_attribute_name('precio')
+  %dd= number_with_delimiter @asset.precio
+  %dt= Asset.human_attribute_name('proceso')
+  %dd= @asset.proceso
+  %dt= Asset.human_attribute_name('observaciones')
+  %dd= simple_format @asset.observaciones
+  %dt= Asset.human_attribute_name('state')
+  %dd= @asset.get_state
   %dt= Asset.human_attribute_name('user')
   %dd= link_to_if @asset.user, @asset.user_name, @asset.user, title: @asset.user_code
   %dt= Asset.human_attribute_name('auxiliary')
   %dd= link_to_if @asset.auxiliary, @asset.auxiliary_name, @asset.auxiliary, title: @asset.auxiliary_code
   - if @asset.status == '0'
-    %dt= Decline.human_attribute_name('description')
-    %dd= @asset.get_decline.description
-    %dt= Decline.human_attribute_name('motivo')
-    %dd= @asset.get_decline.reason
+    %h3 Dado de baja
+    %dt Fecha de baja
+    %dd= l(@asset.derecognised, format: :version) if @asset.derecognised.present?
+    %dt= Asset.human_attribute_name('description_decline')
+    %dd= @asset.description_decline
+    %dt= Asset.human_attribute_name('reason_decline')
+    %dd= @asset.reason_decline
+  %dt= Asset.human_attribute_name('created_at')
+  %dd= l @asset.created_at, format: :long
 
 .row
   .col-sm-12.historical-reviews
@@ -44,13 +57,13 @@
     %h3
       Histórico
       %small.text-muted
-        usuarios a los cuales estuvo asignado el Activo
+        funcionarios a los cuales estuvo asignado el Activo
   {{^error}}
   %table.table.table-striped
     %thead
       %tr
         %th
-        %th Nombre Usuario
+        %th Funcionario
         %th Fecha
         %th Tipo
     %tbody

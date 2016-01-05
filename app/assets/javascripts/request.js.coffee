@@ -1,17 +1,25 @@
-jQuery ->
-  app = new Request()
+$ -> new Request() if $('[data-action=request]').length > 0
 
 class Request extends BarcodeReader
   cacheElements: ->
+    @selected_user = null
+    @$request_urls = $('#request-urls')
+
+    @$date = $('input#date')
+    @$user = $('input#people')
     @$request = $('#request')
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
     @$material = $('#material')
-    @$article = $('#subarticle_article_id')
-    @$inputSubarticle = $('input#subarticle')
+    @$article = $('#article')
+    @$subarticle = $('#subarticle')
     @$subarticles = $('#subarticles')
+    @$selected_user = $('#selected-user')
+    @$total_sum = $('#subarticles .total-sum')
     @$selectionSubarticles = $('#selection_subarticles')
     @$selected_subarticles = $('#selected_subarticles')
+    @delivery_date = $(".input-group.note_entry_delivery_note_date")
+    @invoice_date = $(".input-group.note_entry_invoice_date")
 
     @$idRequest = $('#request_id').text()
 
@@ -34,10 +42,13 @@ class Request extends BarcodeReader
     @$templateRequestBarcode = Hogan.compile $('#request_barcode').html() || ''
     @$templateNewRequest = Hogan.compile $('#new_request').html() || ''
     @$templateBtnsNewRequest = Hogan.compile $('#cancel_new_request').html() || ''
+    @$templateUserInfo = Hogan.compile $('#show_user_info').html() || ''
+    @$templateSelectedUser = Hogan.compile $('#selected-user-tpl').html() || ''
 
-    @request_save_url = '/requests/'
-    @articles_json_url = '/subarticles/articles.json'
-    @subarticles_json_url = '/subarticles/get_subarticles.json?q=%QUERY'
+    @request_save_url = decodeURIComponent @$request_urls.data('request-id')
+    @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
+    @user_url = decodeURIComponent(@$request_urls.data('users-id'))
+    @users_json_url = decodeURIComponent @$request_urls.data('get-users')
 
     @alert = new Notices({ele: 'div.main'})
 
@@ -54,10 +65,15 @@ class Request extends BarcodeReader
     $(document).on 'click', @btnShowNewRequest.selector, => @show_new_request()
     $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
     $(document).on 'click', @$btnSaveNewRequest.selector, => @save_new_request()
+    $(document).on 'keyup', @$subarticle.selector, => @changeBarcode(@$subarticle)
+
     if @$material?
-      @$article.remoteChained(@$material.selector, @articles_json_url)
-    if @$inputSubarticle?
+      @$article.remoteChained(@$material.selector, @$request_urls.data('subarticles-articles'))
+      @$subarticle.remoteChained(@$article.selector, @$request_urls.data('subarticles-array'))
+    if @$subarticle?
       @get_subarticles()
+    if @$user?
+      @get_users()
 
   show_request: ->
     sw = 0
@@ -90,7 +106,7 @@ class Request extends BarcodeReader
     data = { status: 'pending', subarticle_requests_attributes: materials }
     $.ajax
       type: "PUT"
-      url: @request_save_url + @$idRequest
+      url: @request_save_url.replace(/{id}/, @$idRequest)
       data: { request: data }
       complete: (data, xhr) ->
         window.location = window.location
@@ -111,13 +127,14 @@ class Request extends BarcodeReader
     @$code = $('#code')
     if @$code.val()
       @changeToHyphens()
-      $.getJSON "/requests/#{@$idRequest}", { barcode: @$code.val().trim(), user_id: @$functionary }, (data) => @request_delivered(data)
+      url = @request_save_url.replace(/{id}/, @$idRequest)
+      $.getJSON url, { barcode: @$code.val().trim(), user_id: @$functionary }, (data) => @request_delivered(data)
     else
       @open_modal('Debe ingresar un Código de Barras')
 
   show_buttons: ->
     @$request.prev().find(".buttonRequest").remove()
-    @$table_request.find('.text-center').html @$templateRequestAccept.render()
+    @$table_request.find('.buttons-actions.text-center').html @$templateRequestAccept.render()
 
   request_delivered: (data) ->
     if data
@@ -150,61 +167,140 @@ class Request extends BarcodeReader
       remote: @subarticles_json_url
     )
     bestPictures.initialize()
-    @$inputSubarticle.typeahead null,
-      displayKey: "description"
+    @$subarticle.typeahead null,
       source: bestPictures.ttAdapter()
+      templates: @typeaheadTemplates()
     .on 'typeahead:selected', (evt, data) => @add_subarticle(evt, data)
 
   add_subarticle: (evt, data) ->
     if @$subarticles.find("tr##{data.id}").length
       @open_modal("El Sub Artículo '#{data.description}' ya se encuentra en lista")
     else
-      @$subarticles.append @$templateNewRequest.render(data)
+      if @$selectionSubarticles.find('#people').length > 0
+        if data.stock == 0
+          @open_modal("El stock del producto #{data.description} es 0")
+        else
+          @$subarticles.append @$templateNewRequest.render(data)
+      else
+        $(@$templateNewRequest.render(data)).insertBefore(@$total_sum)
+        #@refresh_date()
 
   subarticle_request_plus: ($this) ->
-    amount = @get_amount($this)
-    $.getJSON "/subarticles/#{ amount.parent().attr('id') }/verify_amount", { amount: parseInt(amount.text()) + 1 }, (data) => @verify_amount(data)
-
-  verify_amount: (data, amount) ->
-    if data.there_amount
-      amount = @$subarticles.find("tr##{data.id} .amount")
-      amount.text(parseInt(amount.text()) + 1)
+    $tr = @get_amount($this)
+    $amount = $tr.find('.amount')
+    if $amount.text() < $tr.find('.amount').data('stock')
+      $amount.text(parseInt($amount.text()) + 1)
     else
-      @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo '#{data.description}'")
+      @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo '#{$tr.find('td:first').text()}'")
 
   subarticle_request_minus: ($this) ->
-    amount = @get_amount($this)
-    amount.text(parseInt(amount.text()) - 1) unless amount.text() is '1'
+    $amount = @get_amount($this).find('.amount')
+    $amount.text(parseInt($amount.text()) - 1) unless $amount.text() is '1'
 
   subarticle_request_remove: ($this) ->
-    @get_amount($this).parent().remove()
+    @get_amount($this).remove()
 
   get_amount: ($this) ->
-    $($this.currentTarget).parent().prev()
+    $($this.currentTarget).parent().parent().parent()
 
   show_new_request: ->
     if @$subarticles.find('tr').length
-      @btnShowNewRequest.hide()
-      @$selectionSubarticles.hide()
-      table = @$subarticles.parent().clone()
-      table.find('.actions-request').remove()
-      table.find('thead tr').prepend '<th>#</th>'
-      table.find('#subarticles tr').each (i) ->
-        $(this).prepend "<td>#{ i+1 }</td>"
-      @$selected_subarticles.html table
-      @$selected_subarticles.append @$templateBtnsNewRequest.render()
+      if @selected_user
+        if @$date.val()
+          @btnShowNewRequest.hide()
+          @$selectionSubarticles.hide()
+          table = @$subarticles.parent().clone()
+          table.find('.actions-request').remove()
+          table.find('thead tr').prepend '<th>#</th>'
+          table.find('#subarticles tr').each (i) ->
+            $(this).prepend "<td>#{ i+1 }</td>"
+          @$selected_subarticles.append table
+          @$selected_subarticles.append @$templateBtnsNewRequest.render()
+          @showUserInfo()
+        else
+          @open_modal("Se debe especificar una fecha")
+      else
+        @open_modal("Falta seleccionar funcionario")
     else
-      @open_modal("Debe seleccionar al menos un Sub Artículo")
+      @open_modal("Debe seleccionar al menos un subartículo")
 
   cancel_new_request: ->
     @btnShowNewRequest.show()
     @$selectionSubarticles.show()
     @$selected_subarticles.empty()
 
+  parse_date_time: (str_date)->
+    dateParts = str_date.split("/");
+    now = new Date()
+    date = [dateParts[2], dateParts[1], dateParts[0]]
+    time = [now.getHours(), now.getMinutes(), now.getSeconds()]
+    "#{date.join('/')} #{time.join(':')}"
+
   save_new_request: ->
     subarticles = $.map(@$subarticles.find('tr'), (val, i) ->
       subarticle_id: val.id
       amount: $(val).find('td.amount').text()
     )
-    json_data = { status: 'initiation', subarticle_requests_attributes: subarticles }
-    $.post @request_save_url, { request: json_data }, null, 'script'
+    json_data =
+      status: 'initiation'
+      user_id: @selected_user.id
+      subarticle_requests_attributes: subarticles
+      created_at: @parse_date_time(@$date.val()) # yyyy/mm/dd HH:MM:SS
+    $.post @request_save_url.replace(/{id}/, ''), { request: json_data }, null, 'script'
+
+  showUserInfo: ->
+    result = $.extend(@selected_user, {date: @$date.val()})
+    $user = @$templateUserInfo.render(result)
+    $table = @$selected_subarticles.find("table")
+    $($user).insertBefore($table)
+
+  get_users: ->
+    bestPictures = new Bloodhound(
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
+      queryTokenizer: Bloodhound.tokenizers.whitespace
+      limit: 100
+      remote: @users_json_url
+    )
+    bestPictures.initialize()
+    @$user.typeahead null,
+      displayKey: 'name'
+      source: bestPictures.ttAdapter(),
+      templates:
+        empty: [
+          '<p class="empty-message">',
+          'No se encontró ningún elemento',
+          '</p>'
+        ].join('\n')
+        suggestion: (data) ->
+          Hogan.compile('<p><b>{{name}}</b><p class="text-muted">{{title}}</p></p>').render(data)
+    .on 'typeahead:selected', (evt, data) => @add_user_id(evt, data)
+
+  add_user_id: (evt, data) ->
+    @selected_user = data
+    @display_selected_user()
+
+  display_selected_user: ->
+    selected_user = @$templateSelectedUser.render(@selected_user)
+    @$selected_user.html(selected_user)
+
+  refresh_date: ->
+    @delivery_date.empty().append('<input id="note_entry_delivery_note_date" class="form-control" type="text" name="note_entry[delivery_note_date]"><span class="input-group-addon glyphicon glyphicon-calendar"></span>')
+    delivery_id = @delivery_date.find('input').attr('id')
+    @date_picker(@get_day(), delivery_id)
+    @invoice_date.empty().append('<input id="note_entry_invoice_date" class="form-control" type="text" name="note_entry[invoice_date]"><span class="input-group-addon glyphicon glyphicon-calendar"></span>')
+    invoice_date = @invoice_date.find('input').attr('id')
+    @date_picker(@get_day(), invoice_date)
+
+  get_day: ->
+    day = 9999
+    @$subarticles.find('tr .date_entry').each ->
+      val = parseInt($(this).text())
+      day = val if val < day
+    day
+
+  date_picker : (days, id) ->
+    $("##{id}").datepicker
+      format: "dd/mm/yyyy"
+      language: "es"
+      startDate: "-#{days}d"
+      endDate: "+0d"

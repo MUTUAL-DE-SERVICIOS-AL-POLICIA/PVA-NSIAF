@@ -15,6 +15,10 @@ class Building < ActiveRecord::Base
 
   has_paper_trail ignore: [:status, :updated_at]
 
+  def entity_acronym
+    entity.present? ? entity.acronym : ''
+  end
+
   def entity_code
     entity.present? ? entity.code : ''
   end
@@ -34,12 +38,12 @@ class Building < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = joins(:entity).order("#{sort_column} #{sort_direction}")
+    array = includes(:entity).order("#{sort_column} #{sort_direction}").references(:entity)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
         type_search = search_column == 'entity' ? 'entities.name' : "buildings.#{search_column}"
-        array = array.where("#{type_search} like :search", search: "%#{sSearch}%").references(:entity)
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
       else
         array = array.where("buildings.code LIKE ? OR buildings.name LIKE ? OR entities.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end

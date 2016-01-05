@@ -11,6 +11,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @assets = @user.assets
     respond_to do |format|
       format.html
       format.json { render json: @user, only: [:id, :name, :title] }
@@ -57,7 +58,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to users_url, notice: t('general.updated', model: User.model_name.human) }
+        list_url = @user.id == current_user.id ? @user : users_url
+        format.html { redirect_to list_url, notice: t('general.updated', model: User.model_name.human) }
         format.json { head :no_content }
       else
         format.html { render action: 'form' }
@@ -78,11 +80,12 @@ class UsersController < ApplicationController
   end
 
   def download
+    @assets = @user.assets
     filename = @user.name.parameterize || 'activos'
     respond_to do |format|
       format.html { render nothing: true }
       format.csv do
-        send_data @user.assets.to_csv,
+        send_data @assets.to_csv,
           filename: "#{filename}.csv",
           type: 'text/csv'
       end
@@ -106,10 +109,7 @@ class UsersController < ApplicationController
   end
 
   def autocomplete
-    @users = User.search_user(params[:q])
-    respond_to do |format|
-      format.json { render json: @users.map { |s| { id: s.id, name: s.name, username: s.username, role: s.role } } }
-    end
+    render json: User.search_user(params[:q]), root: false
   end
 
   private
@@ -121,7 +121,7 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       if current_user.is_super_admin?
-        params.require(:user).permit(:name, :username, :role)
+        params.require(:user).permit(:name, :username, :role, :password, :password_confirmation)
       else
         params.require(:user).permit(:code, :name, :title, :ci, :username, :email, :password, :password_confirmation, :phone, :mobile, :department_id)
       end

@@ -1,14 +1,15 @@
-.page-header
+#request-urls{data: {'subarticles-articles' => articles_subarticles_path(format: :json)}}
+
+.page-header{ data: {action: 'request'} }
   %h2= t("subarticles.title.#{params[:action]}")
 
 .col-sm-9.column.col-sm-offset-1
   = simple_form_for @subarticle, html: { class: 'form-horizontal' } do |f|
-    = f.input :code
-    = f.input :description
-    = f.input :unit, collection: Article::UNITS, include_blank: false
-    = f.input :amount
+    = f.input :code, required: true
+    = f.input :description, required: true
+    = f.input :unit
     = f.input :minimum
-    = f.input :barcode, input_html: { class: 'single-quotes-to-hyphen' }
+    = f.input :barcode, required: true, input_html: { class: 'single-quotes-to-hyphen' }
     .form-group
       %label.col-sm-3.col-md-3.col-lg-3.control-label
         Material
@@ -16,8 +17,8 @@
         - selected = %w(edit update).include?(action_name) ? Article.getMaterial(@subarticle.article_id) : ''
         = select_tag :material, options_for_select(get_materials, selected), class: 'form-control', prompt: '--'
     - if %w(edit update).include?(action_name)
-      = f.association :article, collection: Article.articlesMaterial(@subarticle.article_id)
+      = f.association :article, required: true, collection: Article.articlesMaterial(@subarticle.article_id), input_html:{id: "article"}
     - else
-      = f.association :article, collection:[], prompt: '--', disabled: true
+      = f.association :article, required: true, collection:[], prompt: '--', disabled: true, input_html:{id: "article"}
 
     = render 'shared/form_buttons'

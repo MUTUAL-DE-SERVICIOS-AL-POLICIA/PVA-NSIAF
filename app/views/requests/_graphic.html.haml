@@ -1,0 +1,5 @@
+- if @requests.present?
+  - graphic = graphic_statistics(@requests, type)
+  = high_chart("graphic_#{type}", graphic)
+- else
+  %p Sin resultados

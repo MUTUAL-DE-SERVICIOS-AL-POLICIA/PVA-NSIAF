@@ -20,7 +20,7 @@ private
     array.map do |user|
       [
         user.name,
-        I18n.t(user.role, scope: 'users.roles'),
+        user.role.present? ? I18n.t(user.role, scope: 'users.roles') : '',
         type_status(user.status),
         (links_actions(user) unless user.role == 'super_admin')
       ]
@@ -29,16 +29,17 @@ private
 
   def data
     array.map do |user|
-      [
-        user.code,
-        user.name,
-        user.title,
-        link_to_if(user.department, user.department_name, user.department, title: user.department_code),
-        user.assets_count,
-        type_status(user.status),
-        links_actions(user)
-      ]
+      as = []
+      as << user.code
+      as << user.name
+      as << user.title
+      as << link_to_if(user.department, user.department_name, user.department, title: user.department_code)
+      as << user.assets_count if current_user.is_admin?
+      as << type_status(user.status)
+      as << links_actions(user)
+      as
     end
+
   end
 
   def array

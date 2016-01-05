@@ -1,5 +1,5 @@
 - case controller_name
-- when 'users' then list_url = users_path
+- when 'users' then list_url = user.id == current_user.id ? user : users_path
 - when 'departments' then list_url = departments_path
 - when 'buildings' then list_url = buildings_path
 - when 'entities' then list_url = entities_path
@@ -9,6 +9,7 @@
 - when 'materials' then list_url = materials_path
 - when 'articles' then list_url = articles_path
 - when 'subarticles' then list_url = subarticles_path
+- when 'note_entries' then list_url = note_entries_path
 
 .form-group
   .col-sm-offset-5.col-sm-9

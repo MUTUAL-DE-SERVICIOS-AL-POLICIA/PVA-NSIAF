@@ -11,9 +11,10 @@ class Devolutions extends BarcodeReader
 
   cacheElements: ->
     $form = $('form')
+    @$devolution_urls = $('#devolution-urls')
     # URLs
-    @assets_search_url = '/assets/search'
-    @proceedings_url = '/proceedings'
+    @assets_search_url = @$devolution_urls.data('assets-search')
+    @proceedings_url = @$devolution_urls.data('proceedings')
     # Containers
     @$containerBarcode = $('div[data-action=devolution]')
     @$containerTplProceedingDelivery = $('#proceeding-delivery')
@@ -77,7 +78,7 @@ class Devolutions extends BarcodeReader
       if @displaySelectedUser(data.user)
         @displaySelectedAssets(data)
       else
-        @alert.danger "El Activo con código <b>#{code}</b> pertenece a otro usuario: <br/><b>#{data.user.name}</b> (<em>#{data.user.title}</em>)"
+        @alert.danger "El Activo con código <b>#{code}</b> pertenece a otro funcionario: <br/><b>#{data.user.name}</b> (<em>#{data.user.title}</em>)"
     else
       @alert.danger "El Código de Activo <b>#{code}</b> no está asignado o no existe"
 
@@ -110,7 +111,7 @@ class Devolutions extends BarcodeReader
       assignation =
         assets: _assets
         devolution: true
-        proceedingDate: moment().format('LL')
+        proceedingDate: CurrentDateSpanish.inWords()
         userName: _user.name
         userTitle: _user.title
       @$containerTplProceedingDelivery.html @$templateProceedingDelivery.render(assignation)

@@ -1,19 +1,77 @@
 class Subarticle < ActiveRecord::Base
-  include ManageStatus
+  include Migrated, ManageStatus, VersionLog
 
   belongs_to :article
   has_many :subarticle_requests
   has_many :requests, through: :subarticle_requests
+  has_many :entry_subarticles
+  has_many :kardexes
 
-  validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :barcode, presence: true, uniqueness: true
-  validates :description, :unit, :article_id, presence: true
-  validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validate do |subarticle|
-    BarcodeStatusValidator.new(subarticle).validate
+  with_options if: :is_not_migrate? do |m|
+    m.validates :barcode, presence: true, uniqueness: true
+    m.validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    m.validates :description, :unit, :article_id, presence: true
+    #m.validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    m.validate do |subarticle|
+      BarcodeStatusValidator.new(subarticle).validate
+    end
   end
 
+  with_options if: :is_migrate? do |m|
+    m.validates :code, presence: true, uniqueness: true
+    m.validates :description, :unit, presence: true
+  end
+
+  before_save :check_barcode
+
   has_paper_trail
+
+  def self.active
+    where(status: '1')
+  end
+
+  def self.close_subarticles(params)
+    date = Date.strptime(params[:date], '%d/%m/%Y')
+    subarticles = with_stock(params[:year]).where(id: params[:subarticle_ids])
+    subarticle_ids = []
+    subarticles.each do |subarticle|
+      e_subarticles = subarticle.entry_subarticles_exist(params[:year]).replicate
+      subarticle.close_stock!(params[:year])
+      EntrySubarticle.skip_callback(:create, :after, :create_kardex_price)
+
+      # Save entry subarticles
+      e_subarticles.each do |es|
+        es.amount = es.stock
+        es.total_cost = es.amount * es.unit_cost
+        es.note_entry = nil
+        es.date = date
+        es.save!
+      end
+      # Save kardex with multiple prices
+      kardex = subarticle.kardexes.new
+      kardex.kardex_date = date
+      kardex.invoice_number = 0
+      kardex.delivery_note_number = 0
+      kardex.detail = 'SALDO INICIAL'
+      kardex.order_number = 0
+      kardex.set_multi_prices(e_subarticles)
+      kardex.save!
+
+      EntrySubarticle.set_callback(:create, :after, :create_kardex_price)
+      subarticle_ids << subarticle.id
+    end
+    subarticle_ids
+  end
+
+  def self.estado_activo
+    where('status = ?', '1')
+  end
+
+  def self.minimum_stock(weight = 1.25)
+    with_stock.select do |subarticle|
+      subarticle.stock <= subarticle.minimum.to_i * weight
+    end
+  end
 
   def article_code
     article.present? ? article.code : ''
@@ -27,15 +85,43 @@ class Subarticle < ActiveRecord::Base
     false
   end
 
+  def stock
+    entry_subarticles_exist.sum(:stock)
+  end
+
+  # Only entries with stock > 0
+  def entry_subarticles_exist(year = Date.today.year)
+    s_date = Date.strptime(year.to_s, '%Y').beginning_of_day
+    e_date = s_date.end_of_year.end_of_day
+    # TODO la validación tiene que verificar si la gestión ha sido cerrada
+    # caso contrario no se aplica ninguna verificación.
+    #
+    # entry_subarticles.search(stock_gt: 0,
+    #                          date_gteq: s_date,
+    #                          date_lteq: e_date).result(distinct: true)
+
+    entry_subarticles.search(stock_gt: 0).result(distinct: true)
+  end
+
+  def kardexes_from_year(year = Date.today.year)
+    s_date = Date.strptime(year.to_s, '%Y').beginning_of_year
+    e_date = s_date.end_of_year
+    # TODO arreglar para "cerrar" una gestión, puede ser un rango de fechas
+    # kardexes.where(kardex_date: s_date..e_date)
+    kardexes
+  end
+
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'barcode'), h.get_column(self, 'article')]
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = joins(:article).order("#{sort_column} #{sort_direction}")
+    array = includes(:article).order("#{sort_column} #{sort_direction}").references(:article)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
+      h = ApplicationController.helpers
+      sSearch = h.changeBarcode(sSearch)
       if search_column.present?
         type_search = search_column == 'article' ? 'articles.description' : "subarticles.#{search_column}"
         array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
@@ -64,21 +150,76 @@ class Subarticle < ActiveRecord::Base
     where(barcode: barcode)
   end
 
-  def self.exists_amount?
-    where("amount > 0").present? ? true : false
+  def self.is_closed_year?(year = Date.today.year)
+    with_stock(year).count == 0
+  end
+
+  def self.with_stock(year = Date.today.year)
+    s_date = Date.strptime(year.to_s, '%Y').beginning_of_day
+    e_date = s_date.end_of_year.end_of_day
+    search(
+      entry_subarticles_stock_gt: 0,
+      entry_subarticles_date_gteq: s_date,
+      entry_subarticles_date_lteq: e_date).result(distinct: true)
+  end
+
+  def exists_amount?
+    entry_subarticles_exist.present?
   end
 
   def decrease_amount
-    decrease = amount - 1
-    update_attribute('amount', decrease)
+    if entry_subarticles_exist.length > 0
+      entry_subarticle = entry_subarticles_exist.first # FIFO - PEPS
+      entry_subarticle.decrease_amount
+    end
+  end
+
+  def final_kardex(year = Date.today.year)
+    self.kardexes_from_year(year).final_kardex
+  end
+
+  def initial_kardex(year = Date.today.year)
+    self.kardexes_from_year(year).initial_kardex
   end
 
   def self.search_subarticle(q)
-    where("description LIKE ? AND status = ? AND amount > ?", "%#{q}%", 1, 0).map { |s| { id: s.id, description: s.description, unit: s.unit } }
+    h = ApplicationController.helpers
+    q = h.changeBarcode(q)
+    where("(code LIKE ? OR description LIKE ? OR barcode LIKE ? ) AND status = ?", "%#{q}%", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock, days: s.get_days } : nil }.compact
   end
 
-  def verify_amount(amount)
-    check = amount.to_i <= self.amount ? true : false
-    { id: self.id, description: self.description,  there_amount: check }
+  def get_days
+    date = ""
+    if entry_subarticles.last.date.present?
+      date = Time.now.to_date - entry_subarticles.last.date
+      date = date - 1
+      date = date.to_i
+    end
+    date
+  end
+
+  def check_barcode
+    if is_not_migrate?
+      bcode = Barcode.find_by_code barcode
+      if bcode.present?
+        self.barcode = bcode.code
+        bcode.change_to_used
+      end
+    end
+  end
+
+  def last_kardex
+    kardexes.last
+  end
+
+  def self.search_by(article_id)
+    subarticles = []
+    subarticles = where(article_id: article_id, status: 1) if article_id.present?
+    [['', '--']] + subarticles.map { |d| [d.id, d.description] }
+  end
+
+  # Update stock=0 for all entry_subarticles
+  def close_stock!(year = Date.today.year)
+    entry_subarticles_exist(year).update_all(stock: 0, updated_at: Time.now)
   end
 end

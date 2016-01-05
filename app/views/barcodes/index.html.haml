@@ -1,4 +1,6 @@
 .row{data: {action: 'print-barcode'}}
   #preview-barcodes.col-sm-12
 
+#barcodes-urls{data: {'barcodes-load-data' => load_data_barcodes_path, 'barcodes-pdf' => pdf_barcodes_path(format: :pdf)}}
+
 = render 'pdf_barcode_tpl'

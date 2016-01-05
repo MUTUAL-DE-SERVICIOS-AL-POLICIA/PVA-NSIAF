@@ -57,6 +57,26 @@ class MaterialsController < ApplicationController
     end
   end
 
+  def reports
+    @materials = Material.order("code ASC, description ASC")
+    @articles = Article.order("code ASC, description ASC")
+    @subarticles = Subarticle.order("code ASC, description ASC").estado_activo
+    filename = 'inventario-fisico-valorado'
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               template: 'materials/reports.html.haml',
+               page_size: 'Letter',
+               margin: { top: 15, bottom: 20, left: 15, right: 15 },
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_material

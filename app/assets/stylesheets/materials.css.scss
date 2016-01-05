@@ -1,0 +1,38 @@
+table.valorado {
+  border: 1px solid #777;
+  font-size: 0.9rem;
+  tbody {
+    tr {
+      th {
+        padding-bottom: 0;
+        padding-left: 1px;
+        padding-right: 1px;
+        padding-top: 0;
+      }
+      td {
+        padding-bottom: 0;
+        padding-left: 1px;
+        padding-right: 1px;
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+.contenedor {
+  margin-top: 0;
+  ul {
+    list-style: none;
+    margin-bottom: 0;
+    li {
+      margin-bottom: 1px;
+      padding-top: 0px;
+      &:first-child {
+        padding-top: 0px;
+      }
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}

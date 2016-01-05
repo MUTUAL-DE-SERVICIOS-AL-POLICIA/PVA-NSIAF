@@ -3,7 +3,15 @@ class Asset < ActiveRecord::Base
 
   CORRELATIONS = {
     'CODIGO' => 'code',
-    'DESCRIP' => 'description'
+    'DESCRIP' => 'description',
+    'CODESTADO' => 'state',
+    'OBSERV' => 'observation'
+  }
+
+  STATE = {
+    'Bueno' => '1',
+    'Regular' => '2',
+    'Malo' => '3'
   }
 
   belongs_to :account
@@ -34,12 +42,12 @@ class Asset < ActiveRecord::Base
 
   has_paper_trail
 
-  def self.historical_assets(user)
-    includes(:user).joins(:asset_proceedings).where(asset_proceedings: {proceeding_id: user.proceeding_ids})
+  def self.derecognised
+    where(status: 0)
   end
 
-  def self.search_asset(q)
-    where("code LIKE ? OR description LIKE ?", "%#{q}%", "%#{q}%")
+  def self.historical_assets(user)
+    includes(:user).joins(:asset_proceedings).where(asset_proceedings: {proceeding_id: user.proceeding_ids})
   end
 
   def auxiliary_code
@@ -60,7 +68,10 @@ class Asset < ActiveRecord::Base
   def check_barcode
     if is_not_migrate?
       bcode = Barcode.find_by_code barcode
-      bcode.change_to_used if bcode.present?
+      if bcode.present?
+        self.barcode = bcode.code
+        bcode.change_to_used
+      end
       change_barcode_to_deleted
     end
   end
@@ -79,7 +90,15 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(self, 'barcode'), h.get_column(User, 'department')]
+  end
+
+  def self.without_barcode
+    where("barcode IS NULL OR barcode = ''")
+  end
+
+  def self.without_user
+    where(user_id: nil)
   end
 
   def verify_assignment
@@ -87,14 +106,18 @@ class Asset < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
-    array = joins(:user).order("#{sort_column} #{sort_direction}").where(status: status)
+    array = includes(user: :department).order("#{sort_column} #{sort_direction}").where(status: status).references(user: :department)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
-        type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
-        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+        if search_column == 'department'
+          array = array.where("departments.name like ?", "%#{sSearch}%")
+        else
+          type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
+          array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
+        end
       else
-        array = array.where("assets.code LIKE ? OR assets.description LIKE ? OR users.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+         array = array.where("assets.code LIKE ? OR assets.barcode LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR departments.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array
@@ -119,8 +142,12 @@ class Asset < ActiveRecord::Base
     update_attribute(:derecognised, Time.now)
   end
 
-  def get_decline
-    Decline.where(asset_code: code).first
+  def get_state
+    case state
+    when 1 then 'Bueno'
+    when 2 then 'Regular'
+    when 3 then 'Malo'
+    end
   end
 
   private

@@ -3,11 +3,15 @@
     = link_to edit_subarticle_path(@subarticle), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
+    = link_to subarticle_kardexes_path(@subarticle), class: 'btn btn-info' do
+      %span.glyphicon.glyphicon-list-alt
+      Kardex
     = link_to subarticles_path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("subarticles.title.title")
 
   %h2 Sub Artículo
+
 %dl.dl-horizontal
   %dt= Subarticle.human_attribute_name('code')
   %dd= @subarticle.code
@@ -17,11 +21,31 @@
   %dd= @subarticle.unit
   %dt= Subarticle.human_attribute_name('article')
   %dd= link_to_if @subarticle.article, @subarticle.article_name, @subarticle.article, title: @subarticle.article_code
-  %dt= Subarticle.human_attribute_name('amount')
-  %dd= @subarticle.amount
+  %dt= Subarticle.human_attribute_name('stock')
+  %dd= number_with_delimiter @subarticle.stock, 0
   %dt= Subarticle.human_attribute_name('minimum')
   %dd= @subarticle.minimum
   %dt= Subarticle.human_attribute_name('barcode')
   %dd= @subarticle.barcode
   %dt= t('general.status')
   %dd= type_status(@subarticle.status)
+
+%h3 Ingresos
+%table.table.table-hover
+  %thead
+    %tr
+      %th #
+      %th.number= EntrySubarticle.human_attribute_name('amount')
+      %th.number= EntrySubarticle.human_attribute_name('unit_cost')
+      %th.number= EntrySubarticle.human_attribute_name('total_cost')
+      %th.text-center= EntrySubarticle.human_attribute_name('invoice')
+      %th.text-center= EntrySubarticle.human_attribute_name('date')
+  %tbody
+    - @subarticle.entry_subarticles.order("id DESC").each_with_index do |entry, index|
+      %tr
+        %td= index + 1
+        %td.number{title: "Stock: #{entry.stock}"}= number_with_delimiter entry.amount || 0, 0
+        %td.number= number_with_delimiter entry.unit_cost || 0
+        %td.number= number_with_delimiter entry.total_cost || 0
+        %td.text-center= entry.invoice
+        %td.text-center= entry.note_entry.note_date(entry.note_entry.delivery_note_date) if entry.note_entry.present?

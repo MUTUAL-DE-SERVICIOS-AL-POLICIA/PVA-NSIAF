@@ -1,19 +1,61 @@
-Nsiaf::Application.routes.draw do
-  resources :requests, except: [:edit, :destroy]
+require 'year_constraint'
+require 'api_constraints'
+
+Rails.application.routes.draw do
+
+  namespace :api, defaults: {format: :json}, except: [:new, :edit] do
+    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
+      resources :documentos, only: [:show, :create]
+      resources :nota_entradas, only: [:index] do
+        put :anular, on: :member
+      end
+    end
+  end
+
+  resources :almacenes, only: [:index]
+
+  resources :note_entries, except: [:destroy] do
+    get :get_suppliers, on: :collection
+  end
+
+  resources :kardex_prices
+
+  resources :kardexes
+
+  resources :derecognised, only: :index
+
+  resources :requests, except: [:edit, :destroy] do
+    get :search_subarticles, on: :collection
+  end
 
   resources :materials, except: [:destroy] do
     post :change_status, on: :member
+    get :reports, on: :collection
   end
 
   resources :articles, except: [:destroy] do
     post :change_status, on: :member
   end
 
+  constraints YearConstraint do
+    get '/subarticles/close/:year' => 'subarticles#close', as: 'close_subarticles'
+    post '/subarticles/close/:year' => 'subarticles#close_subarticles'
+  end
+
   resources :subarticles, except: [:destroy] do
-    post :change_status, on: :member
-    get :articles, on: :collection
-    get :get_subarticles, on: :collection
-    get :verify_amount, on: :member
+    resources :kardexes
+    member do
+      post :change_status
+      get :kardex
+    end
+    collection do
+      get :articles
+      get :get_subarticles
+      get :recode
+      get :autocomplete
+      get :subarticles_array
+      post :first_entry
+    end
   end
 
   resources :barcodes, only: [:index] do
@@ -44,7 +86,6 @@ Nsiaf::Application.routes.draw do
       get :devolution
       get :users
       get :departments
-      get :derecognised
       get :recode
     end
   end
@@ -57,6 +98,7 @@ Nsiaf::Application.routes.draw do
 
   resources :departments, except: [:destroy] do
     post :change_status, on: :member
+    get :download, on: :member
   end
 
   resources :buildings, except: [:destroy] do
@@ -73,13 +115,14 @@ Nsiaf::Application.routes.draw do
     get :historical, on: :member
   end
 
+  get '/datatables-spanish', to: redirect("#{ Rails.application.config.action_controller.relative_url_root }/locales/dataTables.spanish.txt"), as: :spanish_datatables
   get '/dashboard', to: 'dashboard#index', as: :dashboard
   patch '/dashboard/update_password', to: 'dashboard#update_password', as: :update_password_dashboard
   post '/dashboard/announcements/hide', to: 'dashboard#hide', as: :hide_announcement
 
   post '/dbf/:model/import', to: 'dbf#import', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'import_dbf'
   get '/dbf/:model', to: 'dbf#index', constraints: { model: /(buildings|departments|users|accounts|auxiliaries|assets)/ }, as: 'dbf'
-  get '/dbf', to: redirect('/dbf/buildings'), as: 'migration'
+  get '/dbf', to: redirect("#{ Rails.application.config.action_controller.relative_url_root }/dbf/buildings"), as: 'migration'
 
   devise_for :users, controllers: { sessions: "sessions" }, skip: [ :sessions ]
   as :user do
@@ -87,6 +130,8 @@ Nsiaf::Application.routes.draw do
     post '/login' => 'sessions#create', as: :user_session
     delete '/logout' => 'sessions#destroy', as: :destroy_user_session
   end
+
+  resources :welcome, only: [:index]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

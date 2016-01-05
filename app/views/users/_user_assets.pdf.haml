@@ -3,14 +3,28 @@
     %tr
       %th{ class: "#{ 'separator line' if is_pdf?}" }
       %th= Asset.human_attribute_name('description')
+      - if controller_name == 'departments'
+        %th= Asset.human_attribute_name('user')
       %th= Asset.human_attribute_name('code')
   %tbody
-    - @user.assets.each_with_index do |asset, index|
+    - @assets.each_with_index do |asset, index|
       %tr
         %td= index + 1
         %td= asset.description
+        - if controller_name == 'departments'
+          %td= asset.user_name
         %td.nowrap
           - if current_user.is_super_admin? || params[:format] == 'pdf'
             = asset.code
           - else
             = link_to asset.code, asset
+
+- if is_pdf?
+  %p.proceeding-date.text-right
+    La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
+  .proceeding-signature{ style: 'margin-top: 50px;' }
+    %table{ style: 'width: 100%' }
+      %tr
+        %td.text-center
+          %p _______________________
+          %p Funcionario

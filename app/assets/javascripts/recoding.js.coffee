@@ -1,6 +1,6 @@
 $ -> new Recoding() if $('[data-action=recoding]').length > 0
 
-class Recoding
+class Recoding extends BarcodeReader
   _asset_id = null
   _barcode = ''
 
@@ -10,8 +10,14 @@ class Recoding
 
   cacheElements: ->
     $form = $('form.recoding')
+    @$recoding_urls = $('#recoding-urls')
+    @is_assets = /\/assets\//.test(window.location.pathname)
     # urls
-    @update_asset_url = '/assets/{id}'
+    @update_recode_url = decodeURIComponent @$recoding_urls.data('recode-id')
+    @recode_autocomplete_url = decodeURIComponent @$recoding_urls.data('recode-autocomplete')
+    unless @is_assets
+      @update_recode_url = @update_recode_url.replace(/assets/, 'subarticles')
+      @recode_autocomplete_url = @recode_autocomplete_url.replace(/assets/, 'subarticles')
     # containers
     @$containerElementFound = $('#element-found')
     # inputs
@@ -31,16 +37,17 @@ class Recoding
     @assetList = new Bloodhound(
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace 'code'
       queryTokenizer: Bloodhound.tokenizers.whitespace
-      remote: '/assets/autocomplete.json?q=%QUERY'
+      remote: @recode_autocomplete_url
     )
     @assetList.initialize()
     @$codeName.typeahead
       hint: false
     ,
-      displayKey: 'code'
+      #displayKey: 'code'
       source: @assetList.ttAdapter()
       templates: @typeaheadTemplates()
     .on 'typeahead:selected', (evt, data) => @displaySelectedElement(data)
+
     # events
     $(document).on 'change', @$barcode.selector, (e) => @setBarcodeValue(e)
     $(document).on 'keydown', @$barcode.selector, (e) => @handleEscKey(e)
@@ -77,9 +84,14 @@ class Recoding
     @$codeName.select()
 
   saveNewBarcode: (e) ->
-    url = @update_asset_url.replace(/{id}/g, _asset_id)
-    data = {asset: {barcode: @getBarcode()}}
-    if data.asset.barcode
+    url = @update_recode_url.replace(/{id}/g, _asset_id)
+    if @is_assets
+      data = {asset: {barcode: @getBarcode()}}
+      barcode = data.asset.barcode
+    else
+      data = {subarticle: {barcode: @getBarcode()}}
+      barcode = data.subarticle.barcode
+    if barcode
       @$buttonSave.prop('disabled', true)
       $.ajax {url: url, data: data, type: 'PUT', dataType: 'JSON'}
       .done (data) =>
@@ -103,12 +115,3 @@ class Recoding
 
   setFocusBarcode: ->
     @$containerElementFound.find('input[type=text]').select()
-
-  typeaheadTemplates: ->
-    empty: [
-      '<p class="empty-message">',
-      'No se encontró ningún elemento',
-      '</p>'
-    ].join('\n')
-    suggestion: (data) ->
-      Hogan.compile('<p><strong>{{code}}</strong> - <em>{{description}}</em></p>').render(data)

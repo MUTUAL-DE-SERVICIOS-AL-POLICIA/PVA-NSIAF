@@ -52,8 +52,6 @@ p#content_modal {
   margin: 15px 0;
 }
 
-.alert { margin-bottom: 0px; }
-
 .bg-info{
   font-size: 14px;
   margin-bottom: 20px;
@@ -61,10 +59,8 @@ p#content_modal {
 }
 
 .message {
-  float: left;
-  margin: 0 10px 20px 0;
-  padding: 2px 10px 10px 10px;
-  width: 23%;
+  margin-bottom: 20px;
+  padding: 10px;
 }
 
 #images_pdf{
@@ -87,4 +83,71 @@ form .thumbnail{ height: 190px; }
   h4 {
     margin-top: 0;
   }
+}
+.number {
+  text-align: right;
+}
+table {
+  tr {
+    &.vertical-align {
+      th {
+        vertical-align: middle;
+      }
+    }
+    &.double-thick {
+      th, td {
+        border: 2px solid #dddddd;
+      }
+    }
+  }
+}
+
+.note{
+  padding: 3px !important;
+
+  input{
+    background: #ededed !important;
+    border: 0;
+    height: 27px;
+  }
+}
+
+.padding-note { padding-left: 0; }
+
+.pointer { cursor: pointer; }
+
+.datepicker {
+  z-index: 1151 !important;
+}
+
+.entry_cost{
+  font-weight: normal;
+  text-align: left !important;
+}
+
+.remove_entry{
+  color: #d9534f;
+  cursor: pointer;
+}
+
+.contenedor {
+  margin-top: 0;
+  ul {
+    list-style: none;
+    margin-bottom: 0;
+    li {
+      margin-bottom: 6px;
+      padding-top: 7px;
+      &:first-child {
+        padding-top: 0px;
+      }
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}
+
+#selected-user {
+  font-size: 1.1em;
 }

@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
     'API_ESTADO' => 'status'
   }
 
-  ROLES = %w[super_admin admin]
+  ROLES = %w[admin admin_store]
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -62,6 +62,10 @@ class User < ActiveRecord::Base
     I18n.t('unauthorized.manage.user_inactive')
   end
 
+  def department_entity_acronym
+    department.present? ? department.entity_acronym : ''
+  end
+
   def department_code
     department.present? ? department.code : ''
   end
@@ -82,12 +86,20 @@ class User < ActiveRecord::Base
     false
   end
 
+  def has_roles?
+    self.role.present?
+  end
+
   def hide_announcement
     update_column(:password_change, true)
   end
 
   def is_admin?
     self.role == 'admin'
+  end
+
+  def is_admin_store?
+    self.role == 'admin_store'
   end
 
   def is_admin_or_super?
@@ -109,13 +121,7 @@ class User < ActiveRecord::Base
   end
 
   def users
-    if is_super_admin?
-      User.where.not(role: nil)
-    elsif is_admin?
-      User.where('role IS NULL OR role = ?', 'admin')
-    else
-      User.none
-    end
+    User.where('role IS NULL OR role != ?', 'super_admin')
   end
 
   def self.search_by(department_id)
@@ -138,7 +144,7 @@ class User < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user)
-    array = current_user.users.joins(:department).order("#{sort_column} #{sort_direction}")
+    array = current_user.users.includes(:department).order("#{sort_column} #{sort_direction}").references(:department)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
@@ -170,7 +176,8 @@ class User < ActiveRecord::Base
   end
 
   def self.search_user(q)
-    where("name LIKE ? AND username != ?", "%#{q}%", 'admin')
+    h = ApplicationController.helpers
+    h.status_active(self).where("name LIKE ? AND username != ?", "%#{q}%", 'admin').map{ |s| { id: s.id, name: s.name, title: s.title } }
   end
 
   private
@@ -187,7 +194,7 @@ class User < ActiveRecord::Base
   end
 
   def set_defaults
-    if new_record? && password.nil? && !username.nil?
+    if username_was.blank? && password.nil? && !username.nil?
       self.password ||= self.username
     end
   end

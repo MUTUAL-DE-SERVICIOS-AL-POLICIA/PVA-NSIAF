@@ -1,6 +1,14 @@
 class SubarticleRequest < ActiveRecord::Base
+  default_scope {where(invalidate: false)}
+  
   belongs_to :subarticle
   belongs_to :request
+
+  after_update :create_kardex_price
+
+  def self.invalidate_subarticles
+    update_all(invalidate: true)
+  end
 
   def subarticle_unit
     subarticle.present? ? subarticle.unit : ''
@@ -29,5 +37,41 @@ class SubarticleRequest < ActiveRecord::Base
 
   def self.is_delivered?
     where('total_delivered < amount_delivered').present?
+  end
+
+  def self.user_requests(date)
+    request = joins(subarticle: [{article: :material}, :entry_subarticles], request: [user: :department]).group("subarticle_requests.subarticle_id").select("subarticles.code, subarticles.description, sum(subarticle_requests.amount) as total_amount, requests.created_at, max(entry_subarticles.unit_cost) as max_cost").where('entry_subarticles.unit_cost = (SELECT MAX(entry_subarticles.unit_cost) FROM entry_subarticles WHERE entry_subarticles.subarticle_id = subarticles.id)').order('max(entry_subarticles.unit_cost) DESC')
+    request = request.where("requests.created_at >= ? AND requests.created_at <= ?", Time.now.beginning_of_day, Time.now.end_of_day) if date
+    return request
+  end
+
+  private
+
+  # Register in kardex when delivery subarticles
+  def create_kardex_price
+    if total_delivered == amount_delivered && total_delivered-1 == total_delivered_was
+      kardex = subarticle.last_kardex
+      if kardex.present?
+        kardex = kardex.replicate
+        kardex.reset_kardex_prices
+        kardex.remove_zero_balance
+
+        kardex.kardex_date = nil
+        kardex.invoice_number = 0
+        kardex.delivery_note_number = 0
+        kardex.order_number = request.id
+        kardex.detail = request.user_name_title
+        kardex.request = request
+
+        total = total_delivered.to_i
+        kardex.kardex_prices.each do |kardex_price|
+          if total > 0
+            total = kardex_price.decrease_amount(total)
+          end
+        end
+
+        kardex.save!
+      end
+    end
   end
 end

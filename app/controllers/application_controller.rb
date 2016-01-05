@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
+    if current_user && !current_user.has_roles?
+      redirect_to welcome_index_url
+    else
+      redirect_to root_url, :alert => exception.message
+    end
   end
 
   # Prevent CSRF attacks by raising an exception.
@@ -19,14 +23,15 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.html { render '/shared/index' }
       format.json { render json: datatable.new(view_context) }
-      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests).include?(name_model) ? 'id' : "#{name_model}.code"
+      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries).include?(name_model) ? 'id' : "#{name_model}.code"
       case controller_name
-      when 'assets' then current = action_name == 'derecognised' ? '0' : '1'
+      when 'derecognised' then current = '0'
+      when 'assets' then current = '1'
       when 'requests' then current = params[:status]
       else current = current_user
       end
       @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)
-      array_csv = action_name == 'derecognised' ? @array.to_csv(true) : @array.to_csv
+      array_csv = controller_name == 'derecognised' ? @array.to_csv(true) : @array.to_csv
       filename = "VSIAF-#{t("#{name_model}.title.title")}".parameterize
       format.csv { send_data array_csv, filename: "#{filename}.csv" }
       format.pdf do
@@ -39,6 +44,12 @@ class ApplicationController < ActionController::Base
                header: { html: { template: 'shared/header.pdf.haml' } },
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
+    end
+  end
+
+  def info_for_paper_trail
+    unless %w(dbf sessions proceedings requests).include?(request[:controller]) || %w(change_status update_password change_status).include?(request[:action])
+      { item_spanish: I18n.t(controller_name.to_s.downcase.singularize, scope: 'activerecord.models'), event: I18n.t(action_name, scope: 'versions') }
     end
   end
 end

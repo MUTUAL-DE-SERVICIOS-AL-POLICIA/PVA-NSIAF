@@ -16,6 +16,14 @@ class Proceeding < ActiveRecord::Base
 
   has_paper_trail on: [:destroy]
 
+  def self.assignation
+    where(proceeding_type: 'E')
+  end
+
+  def self.devolution
+    where(proceeding_type: 'D')
+  end
+
   def self.set_columns
    h = ApplicationController.helpers
    c_names = column_names - %w(id created_at updated_at proceeding_type)
@@ -54,8 +62,16 @@ class Proceeding < ActiveRecord::Base
     user ? user.name : ''
   end
 
+  def user_ci
+    user ? user.ci : ''
+  end
+
   def user_title
     user ? user.title : ''
+  end
+
+  def user_department
+    user ? user.department_name : ''
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')

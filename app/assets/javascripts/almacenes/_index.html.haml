@@ -1,0 +1,38 @@
+%section{ 'ng-controller' => 'EntradasController' }
+  %ul.nav.nav-tabs
+    %li.active{ role: "presentation"}
+      %a(href="") Entradas
+    %li{ role: "presentation"}
+      %a(href="") Salidas
+
+  %table.table.table-striped.table-hover.table-bordered
+    %thead
+      %tr
+        %th Id
+        %th Nº
+        %th.col-sm-3 Empresa
+        %th Encargado(a)
+        %th{title: 'Fecha de nota de entrada'} Fecha
+        %th.number Costo total
+        %th.text-center{title: 'Número de nota de entrega'} Nota de entrega
+        %th.text-center.col-sm-1{title: 'Número de factura'} Factura
+        %th{title: 'Fecha de creación'} Creado el
+        %th Acciones
+    %tbody
+      %tr{'ng-repeat' => 'entrada in entradas', 'ng-class' => "{'anulado warning': entrada.anulado}", title: '{{anulado.mensaje}}'}
+        %td {{entrada.id}}
+        %td {{entrada.nro}}
+        %td {{entrada.empresa}}
+        %td {{entrada.encargado}}
+        %td {{entrada.fecha | date: 'dd/MM/yyyy'}}
+        %td.number {{entrada.total | number:2}}
+        %td.text-center {{entrada.nota_entrega_nro}}
+        %td.text-center {{entrada.factura_nro}}
+        %td {{entrada.creado_el | date: 'dd/MM/yyyy HH:mm'}}
+        %td
+          %a(class="btn btn-default btn-xs" href="#" title="Ver" ng-hide='{{true}}')
+            %span(class="glyphicon glyphicon-eye-open")
+          %a(class="btn btn-primary btn-xs" href="#" title="Editar" ng-hide='{{true}}')
+            %span(class="glyphicon glyphicon-edit")
+          %button(class="btn btn-warning btn-xs" title="Anular" ng-hide='entrada.anulado' ng-click="anularNotaEntrada(entrada)")
+            %span(class="glyphicon glyphicon-remove")

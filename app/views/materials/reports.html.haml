@@ -1,0 +1,79 @@
+#report_subarticle
+  %h3.text-center
+    %div INVENTARIO FÍSICO VALORADO DE ADSIB
+    %small
+      LA PAZ, AL
+      = l(Date.today, format: :long).upcase
+
+%table.table.table-bordered.table-hover.table-condensed.valorado
+  %thead
+    %tr.vertical-align.info
+      %th.text-center{rowspan: "2"} CÓDIGO
+      %th.text-center{rowspan: "2"} DESCRIPCIÓN DE MATERIAL
+      %th.text-center{rowspan: "2"} UNIDAD
+      %th.text-center{rowspan: "2"} SALDOS AL #{l(Date.today.beginning_of_year - 1, format: :default)}
+      %th.text-center{colspan: "2"} ENTRADAS
+      %th.text-center{colspan: "2"} CANTIDADES
+      %th.text-center{rowspan: "2"} COSTO UNITARIO Bs.
+      %th.text-center{rowspan: "2"} SALDO Bs. AL #{l(Date.today, format: :default)}
+    %tr.vertical-align.info
+      %th.text-center EXIST. ALMAC
+      %th.text-center COSTO UNIT.
+      %th.text-center SALIDAS EXIST. ALMAC
+      %th.text-center SALDOS EXIST. ALMAC
+  %tbody
+    - total = 0
+    - for material in @materials
+      %tr.double-thick
+        %th.text-center= material.code
+        %th{colspan: 9}= material.description.to_s.upcase
+      - for article in @articles
+        - if article.material == material
+          %tr.double-thick
+            %th.text-center= article.code
+            %th{colspan: 9}
+              - description = article.description.downcase
+              - description[0] = description[0].capitalize
+              = description
+          - for subarticle in @subarticles
+            - if subarticle.article == article
+              - i_kardex = subarticle.initial_kardex
+              - f_kardex = subarticle.final_kardex
+              - kp = f_kardex.kardex_prices.length
+              %tr
+                %td.text-center{rowspan: kp}= subarticle.code
+                %td{rowspan: kp}= subarticle.description
+                %td{rowspan: kp}= subarticle.unit.to_s.upcase
+                %td.number.contenedor{rowspan: kp}
+                  %ul
+                    - i_kardex.kardex_prices.each_with_index do |p, i|
+                      %li= p.balance_quantities
+                - f_kardex.kardex_prices.each_with_index do |price, index|
+                  - total += price.balance_amount
+                  - if index > 0
+                    %tr
+                      %td.number= price.input_quantities
+                      %td.number= number_with_delimiter price.unit_cost
+                      %td.number= price.output_quantities
+                      %td.number= price.balance_quantities
+                      %td.number= number_with_delimiter price.unit_cost
+                      %td.number= number_with_delimiter price.balance_amount
+                  - else
+                    %td.number= price.input_quantities
+                    %td.number= number_with_delimiter price.unit_cost
+                    %td.number= price.output_quantities
+                    %td.number= price.balance_quantities
+                    %td.number= number_with_delimiter price.unit_cost
+                    %td.number= number_with_delimiter price.balance_amount
+    %tr
+      %th{colspan: 2} TOTALES
+      %th{colspan: 7}
+      %th.number= number_with_delimiter total
+
+- if is_pdf?
+  .text-center La Paz, #{l(Date.today, format: :long)}
+- else
+  .text-center.action-buttons
+    = link_to reports_materials_path(format: :pdf), class: 'btn btn-lg btn-primary' do
+      %span.glyphicon.glyphicon-print
+      Imprimir

@@ -47,7 +47,7 @@ class AssetsController < ApplicationController
   # PATCH/PUT /assets/1
   # PATCH/PUT /assets/1.json
   def update
-    url = @asset.status == '0' ? derecognised_assets_path : assets_url
+    url = @asset.status == '0' ? derecognised_index_path : assets_url
     respond_to do |format|
       if @asset.update(asset_params)
         format.html { redirect_to url, notice: t('general.updated', model: Asset.model_name.human) }
@@ -60,26 +60,25 @@ class AssetsController < ApplicationController
   end
 
   def change_status
+    @asset.derecognised = Time.now
+    @asset.decline_user_id = current_user.id
+    @asset.update(asset_params)
     @asset.change_status
-    @asset.derecognised_date
-    Decline.deregister(@asset, params[:description], params[:reason], current_user.id)
     render nothing: true
   end
 
   def users
+    department = params[:department].present? ? params[:department] : (params[:q].present? ? params[:q][:request_user_department_id_eq] : '')
     respond_to do |format|
-      format.json { render json: User.actives.search_by(params[:department]) }
+      format.json { render json: User.actives.search_by(department), root: false }
     end
   end
 
   def departments
+    building = params[:building].present? ? params[:building] : params[:q][:request_user_department_building_id_eq]
     respond_to do |format|
-      format.json { render json: Department.actives.search_by(params[:building]) }
+      format.json { render json: Department.actives.search_by(building), root: false }
     end
-  end
-
-  def derecognised
-    format_to('assets', AssetsDatatable)
   end
 
   def search
@@ -93,8 +92,13 @@ class AssetsController < ApplicationController
 
   def admin_assets
     asset = current_user.not_assigned_assets.find_by_barcode params[:code]
+    assign = 1
+    if asset.blank?
+      asset = Asset.find_by_barcode params[:code]
+      assign = asset.present? ? 2 : 0
+    end
     respond_to do |format|
-      format.json { render json: asset, only: [:id, :description, :code] }
+      format.json { render json: [asset, assign], only: [:id, :description, :code], include: {user: {only: [:name]}}, root: false }
     end
   end
 
@@ -110,7 +114,7 @@ class AssetsController < ApplicationController
 
   # search by code and description
   def autocomplete
-    assets = Asset.search_asset(params[:q]).limit 5
+    assets = view_context.search_asset_subarticle(Asset, params[:q])
     respond_to do |format|
       format.json { render json: view_context.assets_json(assets) }
     end
@@ -126,9 +130,9 @@ class AssetsController < ApplicationController
     def asset_params
       if action_name == 'create'
         params[:asset][:user_id] = current_user.id
-        params.require(:asset).permit(:code, :description, :auxiliary_id, :user_id, :barcode)
+        params.require(:asset).permit(:code, :description, :precio, :proceso, :observaciones, :auxiliary_id, :user_id, :barcode, :state)
       else
-        params.require(:asset).permit(:code, :description, :barcode)
+        params.require(:asset).permit(:code, :description, :precio, :proceso, :observaciones, :barcode, :state, :derecognised, :description_decline, :reason_decline, :decline_user_id)
       end
     end
 end

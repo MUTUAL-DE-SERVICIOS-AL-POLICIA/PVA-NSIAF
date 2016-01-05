@@ -1,22 +1,26 @@
 .navbar-collapse.collapse
   %ul.nav.navbar-nav.navbar-right.right_menu
-    %li.dropdown
-      = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_admin' do
-        Administración
-        %b.caret
-      %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_admin' }
-        - if can? :read, Entity
-          %li{ role: 'presentation' }
-            = link_to t('entities.title.title'), entities_path, role: 'menuitem'
-        - if can? :read, Building
-          %li{ role: 'presentation' }
-            = link_to t('buildings.title.title'), buildings_path, role: 'menuitem'
-        - if can? :read, Department
-          %li{ role: 'presentation' }
-            = link_to t('departments.title.title'), departments_path, role: 'menuitem'
-        - if can? :read, User
-          %li{ role: 'presentation' }
-            = link_to t('users.title.title'), users_path, role: 'menuitem'
+    - if current_user.has_roles?
+      %li.dropdown
+        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_admin' do
+          Administración
+          %b.caret
+        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_admin' }
+          - if can? :read, Entity
+            %li{ role: 'presentation' }
+              = link_to t('entities.title.title'), entities_path, role: 'menuitem'
+          - if can? :read, Building
+            %li{ role: 'presentation' }
+              = link_to t('buildings.title.title'), buildings_path, role: 'menuitem'
+          - if can? :read, Department
+            %li{ role: 'presentation' }
+              = link_to t('departments.title.title'), departments_path, role: 'menuitem'
+          - if can? :read, User
+            %li{ role: 'presentation' }
+              = link_to t('users.title.title'), users_path, role: 'menuitem'
+    - if current_user.is_super_admin?
+      %li
+        = link_to 'Almacenes', almacenes_path
     - if current_user.is_admin?
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets' do
@@ -29,12 +33,10 @@
             = link_to 'Recodificar Activos', recode_assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Asignación/Devolución', assignation_assets_path, role: 'menuitem'
-          /%li{ role: 'presentation' }
-          /  = link_to 'Devolución', devolution_assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to 'Actas', proceedings_path, role: 'menuitem'
           %li{ role: 'presentation' }
-            = link_to 'Bajas', derecognised_assets_path, role: 'menuitem'
+            = link_to 'Bajas', derecognised_index_path, role: 'menuitem'
     - if current_user.is_super_admin?
       %li.dropdown
         = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do
@@ -45,23 +47,43 @@
             %li= link_to t("#{model}.title.title"), dbf_path(model)
             - if index == 2
               %li.divider
-    - if current_user.is_admin?
+    - if current_user.is_admin_store?
       %li.dropdown
-        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets_assig' do
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Materiales
+          %b.caret
+        %ul.dropdown-menu
+          %li
+            = link_to t('materials.title.title'), materials_path, role: 'menuitem'
+          %li
+            = link_to t('articles.title.title'), articles_path
+          %li
+            = link_to t('subarticles.title.title'), subarticles_path
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
           Almacenes
+          %b.caret
+        %ul.dropdown-menu
+          %li
+            = link_to 'Recodificar Sub Artículos', recode_subarticles_path
+          %li
+            = link_to t('note_entries.title.title'), note_entries_path
+          %li
+            = link_to t("requests.title.title"), requests_path(status: 'initiation')
+    - if !current_user.is_super_admin? && current_user.has_roles?
+      %li
+        = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
+    - if current_user.is_admin_store?
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Reportes
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
           %li
-            = link_to t("requests.title.title"), requests_path(status: 'initiation')
-          %li{ role: 'presentation' }
-            = link_to 'Materiales', materials_path, role: 'menuitem'
-          %li{ role: 'presentation' }
-            = link_to 'Artículos', articles_path
-          %li{ role: 'presentation' }
-            = link_to 'Sub Artículos', subarticles_path
-      %li
-        = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
-    - if can? :read, Version
+            = link_to 'Búsqueda de requerimientos', search_subarticles_requests_path
+          %li
+            = link_to 'Inventario Físico Valorado', reports_materials_path
+    - if current_user.has_roles?
       %li
         = link_to 'Histórico', versions_path
     %li.dropdown

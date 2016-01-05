@@ -1,7 +1,10 @@
 class Request < ActiveRecord::Base
+  default_scope {where(invalidate: false)}
+
   belongs_to :user
   belongs_to :admin, class_name: 'User'
 
+  has_many :kardexes
   has_many :subarticle_requests
   has_many :subarticles, through: :subarticle_requests
   accepts_nested_attributes_for :subarticle_requests
@@ -12,6 +15,14 @@ class Request < ActiveRecord::Base
 
   def user_title
     user.present? ? user.title : ''
+  end
+
+  def user_name_title
+    "#{user_name}-#{user_title}".strip
+  end
+
+  def admin_name
+    admin.present? ? admin.name : ''
   end
 
   def self.set_columns
@@ -27,7 +38,7 @@ class Request < ActiveRecord::Base
     if sSearch.present?
       if search_column.present?
         type_search = %w(name title).include?(search_column) ? "users.#{search_column}" : "requests.#{search_column}"
-        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")#.references(:user)
+        array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
       else
         array = array.where("requests.id LIKE ? OR requests.created_at LIKE ? OR users.name LIKE ? OR users.title LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
@@ -51,16 +62,18 @@ class Request < ActiveRecord::Base
   end
 
   def delivery_verification(barcode)
-    subarticles = Subarticle.get_barcode(barcode)
-    if subarticles.present?
-      if subarticles.exists_amount?
-        subarticle = subarticles.first
+    subarticle = Subarticle.get_barcode(barcode).take
+    s_request = nil
+    if subarticle.present?
+      if subarticle.exists_amount?
         s_request = subarticle_requests.get_subarticle(subarticle.id)
         if s_request.present?
           if s_request.total_delivered < s_request.amount_delivered
-            subarticle.decrease_amount
-            s_request.increase_total_delivered
-            request_deliver unless subarticle_requests.is_delivered?
+            transaction do
+              subarticle.decrease_amount
+              s_request.increase_total_delivered
+              request_deliver unless subarticle_requests.is_delivered?
+            end
           end
         end
       else
@@ -71,6 +84,18 @@ class Request < ActiveRecord::Base
   end
 
   def request_deliver
-    update_attributes(status: 'delivered', delivery_date: Time.now )
+    #update_attributes(status: 'delivered', delivery_date: Time.now)
+    update_attributes(status: 'delivered', delivery_date: created_at)
+    kardexes.update_all(kardex_date: delivery_date.to_date)
+  end
+
+  # Anula una Solicitud de Material, y también de los subartículos seleccionados
+  # y es necesario especificar el motivo de la anulación.
+  def invalidate_request(message="")
+    transaction do
+      update(invalidate: true, message: message)
+      subarticle_requests.invalidate_subarticles
+      kardexes.invalidate_kardexes
+    end
   end
 end

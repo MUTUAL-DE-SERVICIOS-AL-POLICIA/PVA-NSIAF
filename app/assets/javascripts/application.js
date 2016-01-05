@@ -23,7 +23,14 @@
 //= require jquery-barcode
 //= require jquery.fileDownload
 //= require bootstrap-growl
-//= require moment-with-langs
+//= require angular/angular
+//= require angular-rails-templates
+//= require angular-resource/angular-resource
+//= require angular-route/angular-route
+//= require_tree ./almacenes
+//= require app_almacenes
+//= require format_number
+//= require current_date_spanish
 //= require function
 //= require utils
 //= require barcode_reader
@@ -38,3 +45,9 @@
 //= require notices
 //= require recoding
 //= require holder
+//= require bootstrap-datepicker
+//= require bootstrap-datepicker.es
+//= require note_entry
+//= require subarticles_close
+//= require highcharts/highcharts
+//= require highcharts/highcharts-more

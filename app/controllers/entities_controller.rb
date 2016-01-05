@@ -13,9 +13,13 @@ class EntitiesController < ApplicationController
 
   # GET /entities/new
   def new
-    @entity = Entity.new
-    respond_to do |format|
-      format.html { render 'form' }
+    if Entity.all.blank?
+      @entity = Entity.new
+      respond_to do |format|
+        format.html { render 'form' }
+      end
+    else
+      redirect_to root_url
     end
   end
 
@@ -29,17 +33,21 @@ class EntitiesController < ApplicationController
   # POST /entities
   # POST /entities.json
   def create
-    @entity = Entity.new(entity_params)
-
-    respond_to do |format|
-      if @entity.save
-        format.html { redirect_to entities_url, notice: t('general.created', model: Entity.model_name.human) }
-        format.json { render action: 'show', status: :created, location: @entity }
-      else
-        format.html { render action: 'form' }
-        format.json { render json: @entity.errors, status: :unprocessable_entity }
+    if Entity.all.blank?
+      @entity = Entity.new(entity_params)
+      respond_to do |format|
+        if @entity.save
+          format.html { redirect_to entities_url, notice: t('general.created', model: Entity.model_name.human) }
+          format.json { render action: 'show', status: :created, location: @entity }
+        else
+          format.html { render action: 'form' }
+          format.json { render json: @entity.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_to root_url
     end
+
   end
 
   # PATCH/PUT /entities/1

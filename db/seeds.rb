@@ -20,5 +20,5 @@ if BarcodeStatus.count() == 0
     {status: 2, description: 'Eliminado'}
   ]
   BarcodeStatus.create!(status)
-  puts "3 estados adicionados"
+  puts "#{BarcodeStatus.count()} estados adicionados"
 end
