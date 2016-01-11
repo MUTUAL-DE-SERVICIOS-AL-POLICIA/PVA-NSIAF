@@ -26,6 +26,7 @@ class Ability
     elsif user.is_admin_store?
       can [:welcome, :show, :update], User, id: user.id
       can [:departments, :users], Asset
+      can :manage, Supplier
       can :manage, Article
       can :manage, Material
       can :manage, Request
