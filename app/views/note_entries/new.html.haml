@@ -19,7 +19,7 @@
     .col-sm-12.col-md-8.col-lg-8
       = f.input :delivery_note_number, placeholder: 'Número de nota de entrega'
     .col-sm-12.col-md-4.col-lg-4
-      = f.input :delivery_note_date, as: :string, input_html: { value: format_date(f.object.delivery_note_date) }, label: false, placeholder: 'Fecha Nota Entrega'
+      = f.input :delivery_note_date, as: :string, input_html: { value: format_date(f.object.delivery_note_date) }, label: false, placeholder: 'Fecha nota entrega'
   .row
     .col-sm-12.col-md-8.col-lg-8
       .form-group.string.optional.note_entry_invoice_number
