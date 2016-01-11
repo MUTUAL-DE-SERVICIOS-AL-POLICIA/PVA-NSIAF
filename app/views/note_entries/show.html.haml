@@ -16,16 +16,20 @@
   %dl.dl-horizontal
     %dt= NoteEntry.human_attribute_name('suppliers')
     %dd= @note_entry.supplier_name
+    %dt= NoteEntry.human_attribute_name('c31')
+    %dd= @note_entry.c31
     %dt= NoteEntry.human_attribute_name('delivery_note_number')
     %dd
-      %span.col-xs-12.col-sm-3.col-md-3.padding-note= @note_entry.note_number(@note_entry.delivery_note_number)
-      %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
-      = @note_entry.note_date(@note_entry.delivery_note_date)
+      %span.col-xs-12.col-sm-6.col-md-6.padding-note= @note_entry.delivery_note_number
+      %b.col-xs-12.col-sm-1.col-md-1.padding-note Fecha
+      %span.col-xs-12.col-sm-2.padding-note= @note_entry.note_date(@note_entry.delivery_note_date)
     %dt= NoteEntry.human_attribute_name('invoice_number')
     %dd
-      %span.col-xs-12.col-sm.col-md-3.padding-note= @note_entry.note_number(@note_entry.invoice_number)
+      %span.col-xs-12.col-sm-2.col-md-2.padding-note= @note_entry.invoice_number
+      %b.col-xs-12.col-sm-2.col-md-2.padding-note Autorización
+      %span.col-xs-12.col-sm-2.padding-note= @note_entry.invoice_autorizacion
       %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
-      = @note_entry.note_date(@note_entry.invoice_date)
+      %span.col-xs-12.col-sm-2.padding-note= @note_entry.note_date(@note_entry.invoice_date)
     %dt= NoteEntry.human_attribute_name('users')
     %dd= @note_entry.user_name
 
