@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :entry_subarticles, only: [:edit, :update]
+
   resources :almacenes, only: [:index]
 
   resources :note_entries, except: [:destroy] do

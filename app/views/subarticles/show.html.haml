@@ -40,6 +40,7 @@
       %th.number= EntrySubarticle.human_attribute_name('total_cost')
       %th.text-center= EntrySubarticle.human_attribute_name('invoice')
       %th.text-center= EntrySubarticle.human_attribute_name('date')
+      %th
   %tbody
     - @subarticle.entry_subarticles.order("id DESC").each_with_index do |entry, index|
       %tr
@@ -49,3 +50,6 @@
         %td.number= number_with_delimiter entry.total_cost || 0
         %td.text-center= entry.invoice
         %td.text-center= entry.note_entry.note_date(entry.note_entry.delivery_note_date) if entry.note_entry.present?
+        %td
+          = link_to edit_entry_subarticle_path(entry), class: 'btn btn-primary btn-xs', title: 'Editar' do
+            %span.glyphicon.glyphicon-edit

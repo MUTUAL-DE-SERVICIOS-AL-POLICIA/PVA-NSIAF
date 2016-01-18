@@ -32,6 +32,7 @@ class Ability
       can :manage, Request
       can :manage, Subarticle
       can :manage, NoteEntry
+      can :manage, EntrySubarticle
       can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
       can :manage, Building
       can :manage, Department
