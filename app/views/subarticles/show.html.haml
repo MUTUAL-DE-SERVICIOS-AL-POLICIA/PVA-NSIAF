@@ -30,26 +30,31 @@
   %dt= t('general.status')
   %dd= type_status(@subarticle.status)
 
-%h3 Ingresos
-%table.table.table-hover
+%h3 Transacciones
+%table.table.table-hover.table-striped
   %thead
     %tr
       %th #
-      %th.number= EntrySubarticle.human_attribute_name('amount')
-      %th.number= EntrySubarticle.human_attribute_name('unit_cost')
-      %th.number= EntrySubarticle.human_attribute_name('total_cost')
-      %th.text-center= EntrySubarticle.human_attribute_name('invoice')
-      %th.text-center= EntrySubarticle.human_attribute_name('date')
+      %th Fecha
+      %th.number Cantidad
+      %th.number Entrada/Salida
+      %th.text-center Creado el
       %th
   %tbody
-    - @subarticle.entry_subarticles.order("id DESC").each_with_index do |entry, index|
+    - @subarticle.transacciones.each_with_index do |transaccion, index|
       %tr
-        %td= index + 1
-        %td.number{title: "Stock: #{entry.stock}"}= number_with_delimiter entry.amount || 0, 0
-        %td.number= number_with_delimiter entry.unit_cost || 0
-        %td.number= number_with_delimiter entry.total_cost || 0
-        %td.text-center= entry.invoice
-        %td.text-center= entry.note_entry.note_date(entry.note_entry.delivery_note_date) if entry.note_entry.present?
+        %td{title: transaccion.id}= index + 1
+        %td= transaccion.fecha
+        %td.number= transaccion.cantidad
+        %td.number
+          - if !transaccion.modelo_id.present?
+            %em Saldo Inicial
+          - elsif transaccion.tipo == 'entrada'
+            = link_to transaccion.tipo.capitalize, note_entry_path(transaccion.modelo_id)
+          - else
+            = link_to transaccion.tipo.capitalize, request_path(transaccion.modelo_id)
+        %td.text-center= l transaccion.created_at, format: :version
         %td
-          = link_to edit_entry_subarticle_path(entry), class: 'btn btn-primary btn-xs', title: 'Editar' do
-            %span.glyphicon.glyphicon-edit
+          - if transaccion.tipo == 'entrada'
+            = link_to edit_entry_subarticle_path(transaccion.id), class: 'btn btn-primary btn-xs', title: 'Editar' do
+              %span.glyphicon.glyphicon-edit

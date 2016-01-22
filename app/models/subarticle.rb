@@ -6,6 +6,7 @@ class Subarticle < ActiveRecord::Base
   has_many :requests, through: :subarticle_requests
   has_many :entry_subarticles
   has_many :kardexes
+  has_many :transacciones, :class_name => "Transaccion", :foreign_key => "subarticle_id"
 
   with_options if: :is_not_migrate? do |m|
     m.validates :barcode, presence: true, uniqueness: true

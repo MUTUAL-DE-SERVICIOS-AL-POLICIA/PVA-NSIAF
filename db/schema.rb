@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111212746) do
+ActiveRecord::Schema.define(version: 20160122172818) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -133,6 +133,16 @@ ActiveRecord::Schema.define(version: 20160111212746) do
     t.datetime "updated_at"
     t.string   "header",     limit: 255
     t.string   "footer",     limit: 255
+  end
+
+  create_table "entradas_salidas", id: false, force: :cascade do |t|
+    t.integer  "id",            limit: 4, default: 0,  null: false
+    t.integer  "subarticle_id", limit: 4
+    t.date     "fecha"
+    t.integer  "cantidad",      limit: 8
+    t.integer  "modelo_id",     limit: 4
+    t.string   "tipo",          limit: 7, default: "", null: false
+    t.datetime "created_at"
   end
 
   create_table "entry_subarticles", force: :cascade do |t|
