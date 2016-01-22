@@ -120,6 +120,9 @@ es:
       create: "Nueva Institución"
       edit: "Editar Institución"
       update: "Editar Institución"
+  entry_subarticles:
+    title:
+      edit: "Editar Entrada"
   materials:
     title:
       title: "Materiales"
