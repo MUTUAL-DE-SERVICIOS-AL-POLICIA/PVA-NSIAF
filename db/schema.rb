@@ -136,12 +136,18 @@ ActiveRecord::Schema.define(version: 20160122172818) do
   end
 
   create_table "entradas_salidas", id: false, force: :cascade do |t|
-    t.integer  "id",            limit: 4, default: 0,  null: false
-    t.integer  "subarticle_id", limit: 4
+    t.integer  "id",             limit: 4,                            default: 0,  null: false
+    t.integer  "subarticle_id",  limit: 4
     t.date     "fecha"
-    t.integer  "cantidad",      limit: 8
-    t.integer  "modelo_id",     limit: 4
-    t.string   "tipo",          limit: 7, default: "", null: false
+    t.string   "factura",        limit: 255
+    t.date     "nota_entrega"
+    t.string   "nro_pedido",     limit: 11,                           default: "", null: false
+    t.string   "detalle",        limit: 255
+    t.integer  "cantidad",       limit: 8
+    t.decimal  "costo_unitario",             precision: 10, scale: 2
+    t.decimal  "costo_saldo",                precision: 20, scale: 2
+    t.integer  "modelo_id",      limit: 4
+    t.string   "tipo",           limit: 7,                            default: "", null: false
     t.datetime "created_at"
   end
 
@@ -216,6 +222,8 @@ ActiveRecord::Schema.define(version: 20160122172818) do
     t.date     "note_entry_date"
     t.boolean  "invalidate",                                                default: false
     t.string   "message",              limit: 255
+    t.string   "invoice_autorizacion", limit: 255
+    t.string   "c31",                  limit: 255
   end
 
   add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree
@@ -273,6 +281,9 @@ ActiveRecord::Schema.define(version: 20160122172818) do
     t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "nit",        limit: 255
+    t.string   "telefono",   limit: 255
+    t.string   "contacto",   limit: 255
   end
 
   create_table "users", force: :cascade do |t|

@@ -63,14 +63,14 @@
   %tbody
     - @transacciones.each_with_index do |transaccion, index|
       %tr
-        %td{title: transaccion.id}= index unless index.zero?
+        %td{title: transaccion.id}= index
         %td.text-center= l transaccion.fecha, format: :default if transaccion.fecha
         %td.text-center= transaccion.factura
         %td.text-center= l transaccion.nota_entrega, format: :default if transaccion.nota_entrega.present?
         %td.text-center= transaccion.nro_pedido
         %td= transaccion.detalle
         %td.number
-          - unless transaccion.saldo_inicial?
+          - if !transaccion.saldo_inicial? || index > 0
             = transaccion.cantidad
         %td.number= saldo + transaccion.cantidad
         %td.number= transaccion.costo_unitario
@@ -90,11 +90,11 @@
       - saldo += transaccion.cantidad
   %tfoot
     %tr
-      %th.number{colspan: 6} Totales
+      %th.number{colspan: 6} Total
       %th.number= saldo
       %th.number
       %th
-      %th.number 200.00
+      %th.number
       %th
       %th
       %th
