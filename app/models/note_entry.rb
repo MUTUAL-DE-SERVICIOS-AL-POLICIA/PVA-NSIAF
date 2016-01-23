@@ -1,5 +1,5 @@
 class NoteEntry < ActiveRecord::Base
-  default_scope {where(invalidate: false)}
+  default_scope {where(invalidate: false).order(:delivery_note_date)}
 
   belongs_to :supplier
   belongs_to :user
