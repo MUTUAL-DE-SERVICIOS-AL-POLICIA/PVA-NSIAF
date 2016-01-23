@@ -9,6 +9,16 @@ class SubarticlesController < ApplicationController
 
   # GET /subarticles/1
   def show
+    params[:desde] ||= Date.today.beginning_of_year.strftime('%d-%m-%Y')
+    params[:hasta] ||= Date.today.strftime('%d-%m-%Y')
+    desde = Date.strptime(params[:desde], '%d-%m-%Y')
+    hasta = Date.strptime(params[:hasta], '%d-%m-%Y')
+
+    @transacciones = @subarticle.transacciones.where(fecha: (desde..hasta))
+    if @transacciones.first && @transacciones.first.modelo_id.present?
+      saldo_inicial = @subarticle.transacciones.saldo_inicial(@transacciones.first.fecha)
+      @transacciones.unshift(saldo_inicial)
+    end
   end
 
   # GET /subarticles/new

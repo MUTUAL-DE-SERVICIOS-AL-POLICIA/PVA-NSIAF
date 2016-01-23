@@ -87,7 +87,17 @@ class Subarticle < ActiveRecord::Base
   end
 
   def stock
-    entry_subarticles_exist.sum(:stock)
+    # entry_subarticles_exist.sum(:stock)
+    transacciones.sum(:cantidad)
+  end
+
+  def saldo(fecha = Date.today)
+    lista = transacciones.where('fecha < ?', fecha)
+    if lista.count.zero?
+      transacciones.first.present? ? transacciones.first.cantidad : 0
+    else
+      lista.sum(:cantidad)
+    end
   end
 
   # Only entries with stock > 0
