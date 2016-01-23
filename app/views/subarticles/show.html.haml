@@ -10,13 +10,17 @@
       %span.glyphicon.glyphicon-list
       = t("subarticles.title.title")
 
-  %h2 Sub Artículo
+  %h2
+    %span.text-muted= @subarticle.code
+    = @subarticle.description
+    %small
+      - if @subarticle.esta_activo?
+        .label.label-success= type_status(@subarticle.status)
+      - else
+        .label.label-warning= type_status(@subarticle.status)
+
 
 %dl.dl-horizontal
-  %dt= Subarticle.human_attribute_name('code')
-  %dd= @subarticle.code
-  %dt= Subarticle.human_attribute_name('description')
-  %dd= @subarticle.description
   %dt= Subarticle.human_attribute_name('unit')
   %dd= @subarticle.unit
   %dt= Subarticle.human_attribute_name('article')
@@ -27,11 +31,13 @@
   %dd= @subarticle.minimum
   %dt= Subarticle.human_attribute_name('barcode')
   %dd= @subarticle.barcode
-  %dt= t('general.status')
-  %dd= type_status(@subarticle.status)
 
 %h3
   Kardex
+  %span.text-muted desde
+  %strong #{params[:desde]}
+  %span.text-muted hasta
+  %strong #{params[:hasta]}
   .pull-right
     %form.form-inline
       .form-group
@@ -52,15 +58,20 @@
       %th.text-center Factura
       %th.text-center Nota Entrega
       %th.text-center Nro Pedido
-      %th Detalle
+      %th.col-md-4 Detalle
       %th.number Cantidad
       %th.number Saldo
       %th.number Costo unitario
       %th.number Saldo Bs
       %th.text-center Tipo
-      %th.text-center Creado el
+      %th.text-center.col-md-1 Creado el
       %th
   %tbody
+    - if @transacciones.empty?
+      %tr
+        %td.text-center{colspan: 13}
+          .text-primary No hay ningún registro para mostrar. 
+          .text-info Intente seleccionando otro rango de fechas.
     - @transacciones.each_with_index do |transaccion, index|
       %tr
         %td{title: transaccion.id}= index

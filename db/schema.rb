@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(version: 20160122172818) do
     t.string   "factura",        limit: 255
     t.date     "nota_entrega"
     t.string   "nro_pedido",     limit: 11,                           default: "", null: false
-    t.string   "detalle",        limit: 255
+    t.string   "detalle",        limit: 463
     t.integer  "cantidad",       limit: 8
     t.decimal  "costo_unitario",             precision: 10, scale: 2
     t.decimal  "costo_saldo",                precision: 20, scale: 2
