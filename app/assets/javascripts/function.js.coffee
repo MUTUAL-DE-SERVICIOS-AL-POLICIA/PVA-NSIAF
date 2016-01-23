@@ -57,6 +57,10 @@ valid_entry = (condition, $input, date = false) ->
 
 
 jQuery ->
+  $(".fecha-buscador").datepicker
+    format: "dd-mm-yyyy"
+    language: "es"
+  
   TableTools.BUTTONS.download =
     sAction: "text"
     sTag: "default"

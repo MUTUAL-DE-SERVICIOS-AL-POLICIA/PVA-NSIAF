@@ -30,31 +30,71 @@
   %dt= t('general.status')
   %dd= type_status(@subarticle.status)
 
-%h3 Transacciones
-%table.table.table-hover.table-striped
+%h3
+  Kardex
+  .pull-right
+    %form.form-inline
+      .form-group
+        %label.sr-only{for: 'fecha-desde'} Desde
+        = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+      .form-group
+        %label.sr-only{for: 'fecha-hasta'} Hasta
+        = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+      %button{type: 'submit', class: 'btn btn-primary'}
+        %span.glyphicon.glyphicon-search
+
+- saldo = 0
+%table.table.table-hover.table-striped.table-condensed.table-bordered
   %thead
     %tr
       %th #
-      %th Fecha
+      %th.text-center Fecha
+      %th.text-center Factura
+      %th.text-center Nota Entrega
+      %th.text-center Nro Pedido
+      %th Detalle
       %th.number Cantidad
-      %th.number Entrada/Salida
+      %th.number Saldo
+      %th.number Costo unitario
+      %th.number Saldo Bs
+      %th.text-center Tipo
       %th.text-center Creado el
       %th
   %tbody
-    - @subarticle.transacciones.each_with_index do |transaccion, index|
+    - @transacciones.each_with_index do |transaccion, index|
       %tr
-        %td{title: transaccion.id}= index + 1
-        %td= transaccion.fecha
-        %td.number= transaccion.cantidad
+        %td{title: transaccion.id}= index
+        %td.text-center= l transaccion.fecha, format: :default if transaccion.fecha
+        %td.text-center= transaccion.factura
+        %td.text-center= l transaccion.nota_entrega, format: :default if transaccion.nota_entrega.present?
+        %td.text-center= transaccion.nro_pedido
+        %td= transaccion.detalle
         %td.number
-          - if !transaccion.modelo_id.present?
-            %em Saldo Inicial
+          - if !transaccion.saldo_inicial? || index > 0
+            = transaccion.cantidad
+        %td.number= saldo + transaccion.cantidad
+        %td.number= transaccion.costo_unitario
+        %td.number= transaccion.costo_saldo
+        %td.text-center
+          - if transaccion.saldo_inicial?
+            %em -
           - elsif transaccion.tipo == 'entrada'
             = link_to transaccion.tipo.capitalize, note_entry_path(transaccion.modelo_id)
           - else
             = link_to transaccion.tipo.capitalize, request_path(transaccion.modelo_id)
-        %td.text-center= l transaccion.created_at, format: :version
+        %td.text-center= l transaccion.created_at, format: :version if transaccion.created_at
         %td
           - if transaccion.tipo == 'entrada'
             = link_to edit_entry_subarticle_path(transaccion.id), class: 'btn btn-primary btn-xs', title: 'Editar' do
               %span.glyphicon.glyphicon-edit
+      - saldo += transaccion.cantidad
+  %tfoot
+    %tr
+      %th.number{colspan: 6} Total
+      %th.number= saldo
+      %th.number
+      %th
+      %th.number
+      %th
+      %th
+      %th
