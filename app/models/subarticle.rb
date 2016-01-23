@@ -219,6 +219,10 @@ class Subarticle < ActiveRecord::Base
     end
   end
 
+  def esta_activo?
+    status == '1'
+  end
+
   def last_kardex
     kardexes.last
   end
