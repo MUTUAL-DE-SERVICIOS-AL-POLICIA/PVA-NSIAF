@@ -9,8 +9,8 @@ class SubarticlesController < ApplicationController
 
   # GET /subarticles/1
   def show
-    params[:desde] ||= Date.today.beginning_of_year.strftime('%d-%m-%Y')
-    params[:hasta] ||= Date.today.strftime('%d-%m-%Y')
+    params[:desde] = params[:desde].present? ? params[:desde] : Date.today.beginning_of_year.strftime('%d-%m-%Y')
+    params[:hasta] = params[:hasta].present? ? params[:hasta] : Date.today.strftime('%d-%m-%Y')
     desde = Date.strptime(params[:desde], '%d-%m-%Y')
     hasta = Date.strptime(params[:hasta], '%d-%m-%Y')
 
