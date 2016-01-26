@@ -4,12 +4,13 @@ class Ability
   def initialize(user)
     user ||= User.new # guest user (not logged in)
     if user.is_super_admin?
-      can :manage, Entity
-      can :manage, User
-      cannot [:show, :update], User, id: user.id
-      can [:index, :import], :dbf
-      can :manage, Version
-      can :indice, :almacenes
+      can :manage, :all
+      # can :manage, Entity
+      # can :manage, User
+      # cannot [:show, :update], User, id: user.id
+      # can [:index, :import], :dbf
+      # can :manage, Version
+      # can :indice, :almacenes
     elsif user.is_admin?
       can :manage, Building
       can :manage, Department
