@@ -15,7 +15,7 @@ class CreacionVistaEntradasSalidas < ActiveRecord::Migration
         -es.total_delivered as cantidad,
         -- 0 as saldo,
         0 as costo_unitario,
-        0 as costo_saldo,
+        -- 0 as costo_saldo,
         es.request_id as modelo_id,
         'salida' as tipo,
         r.created_at
@@ -35,7 +35,7 @@ class CreacionVistaEntradasSalidas < ActiveRecord::Migration
         es.amount as cantidad,
         -- 0 as saldo,
         es.unit_cost as costo_unitario,
-        es.unit_cost*es.amount as costo_saldo,
+        -- es.unit_cost*es.amount as costo_saldo,
         es.note_entry_id as modelo_id,
         'entrada' as tipo,
         es.created_at

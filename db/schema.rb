@@ -145,7 +145,6 @@ ActiveRecord::Schema.define(version: 20160122172818) do
     t.string   "detalle",        limit: 463
     t.integer  "cantidad",       limit: 8
     t.decimal  "costo_unitario",             precision: 10, scale: 2
-    t.decimal  "costo_saldo",                precision: 20, scale: 2
     t.integer  "modelo_id",      limit: 4
     t.string   "tipo",           limit: 7,                            default: "", null: false
     t.datetime "created_at"

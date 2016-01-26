@@ -50,6 +50,7 @@
         %span.glyphicon.glyphicon-search
 
 - saldo = 0
+- saldo_bs = 0
 %table.table.table-hover.table-striped.table-condensed.table-bordered
   %thead
     %tr
@@ -70,7 +71,7 @@
     - if @transacciones.empty?
       %tr
         %td.text-center{colspan: 13}
-          .text-primary No hay ningún registro para mostrar. 
+          .text-primary No hay ningún registro para mostrar.
           .text-info Intente seleccionando otro rango de fechas.
     - @transacciones.each_with_index do |transaccion, index|
       %tr
@@ -83,9 +84,13 @@
         %td.number
           - if !transaccion.saldo_inicial? || index > 0
             = transaccion.cantidad
-        %td.number= saldo + transaccion.cantidad
-        %td.number= transaccion.costo_unitario
-        %td.number= transaccion.costo_saldo
+        %td.number
+          = saldo + transaccion.cantidad
+          - saldo += transaccion.cantidad
+        %td.number= number_with_delimiter(transaccion.costo_unitario)
+        %td.number
+          = number_with_delimiter(transaccion.costo_unitario * saldo)
+          - saldo_bs += transaccion.costo_unitario * saldo
         %td.text-center
           - if transaccion.saldo_inicial?
             %em -
@@ -98,14 +103,10 @@
           - if transaccion.tipo == 'entrada'
             = link_to edit_entry_subarticle_path(transaccion.id), class: 'btn btn-primary btn-xs', title: 'Editar' do
               %span.glyphicon.glyphicon-edit
-      - saldo += transaccion.cantidad
   %tfoot
     %tr
-      %th.number{colspan: 6} Total
-      %th.number= saldo
-      %th.number
       %th
-      %th.number
-      %th
-      %th
-      %th
+      %th.number{colspan: 5} TOTAL
+      %th.number{colspan: 2}= saldo
+      %th.number{colspan: 2}= number_with_delimiter(saldo_bs)
+      %th{colspan: 3}

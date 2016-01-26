@@ -9,6 +9,9 @@ Rails.application.routes.draw do
       resources :nota_entradas, only: [:index] do
         put :anular, on: :member
       end
+      resources :solicitudes, only: [:index] do
+        put :anular, on: :member
+      end
     end
   end
 
