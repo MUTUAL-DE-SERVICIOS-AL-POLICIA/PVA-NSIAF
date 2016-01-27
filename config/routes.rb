@@ -23,6 +23,9 @@ Rails.application.routes.draw do
     get :get_suppliers, on: :collection
   end
 
+  # proveedores
+  resources :suppliers
+
   resources :kardex_prices
 
   resources :kardexes

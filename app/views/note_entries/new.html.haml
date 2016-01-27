@@ -14,14 +14,22 @@
       = f.input :supplier_id, as: :string, required: true, disabled: disabled, input_html: { value: supplier }
   .row
     .col-sm-12.col-md-8.col-lg-8
-      = f.input :delivery_note_number
-    .col-sm-12.col-md-4.col-lg-4
-      = f.input :delivery_note_date, as: :string, input_html: { value: format_date(f.object.delivery_note_date) }, label: false
+      = f.input :c31, placeholder: 'Número C31'
   .row
     .col-sm-12.col-md-8.col-lg-8
-      = f.input :invoice_number
+      = f.input :delivery_note_number, placeholder: 'Número de nota de entrega'
     .col-sm-12.col-md-4.col-lg-4
-      = f.input :invoice_date, as: :string, input_html: { value: format_date(f.object.invoice_date) }, label: false
+      = f.input :delivery_note_date, as: :string, input_html: { value: format_date(f.object.delivery_note_date) }, label: false, placeholder: 'Fecha nota entrega'
+  .row
+    .col-sm-12.col-md-8.col-lg-8
+      .form-group.string.optional.note_entry_invoice_number
+        %label.string.optional.col-sm-3.col-md-3.col-lg-3.control-label(for="note_entry_invoice_number") Factura
+        .controls.col-sm-4.col-md-4.col-lg-4
+          = f.text_field :invoice_number, class: 'form-control', placeholder: 'Número de factura'
+        .controls.col-sm-5.col-md-5.col-lg-5
+          = f.text_field :invoice_autorizacion, class: 'form-control', placeholder: 'Número de autorización'
+    .col-sm-12.col-md-4.col-lg-4
+      = f.input :invoice_date, as: :string, input_html: { value: format_date(f.object.invoice_date) }, label: false, placeholder: 'Fecha factura'
   .row
     .col-sm-12.col-md-8.col-lg-8
       .form-group

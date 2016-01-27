@@ -20,6 +20,24 @@
   %dd= @asset.barcode || "<em>No asignado</em>".html_safe
   %dt= Asset.human_attribute_name('description')
   %dd= @asset.description
+  - if @asset.medidas.present?
+    %dt= Asset.human_attribute_name('medidas')
+    %dd= @asset.medidas
+  - if @asset.material.present?
+    %dt= Asset.human_attribute_name('material')
+    %dd= @asset.material
+  - if @asset.color.present?
+    %dt= Asset.human_attribute_name('color')
+    %dd= @asset.color
+  - if @asset.marca.present?
+    %dt= Asset.human_attribute_name('marca')
+    %dd= @asset.marca
+  - if @asset.modelo.present?
+    %dt= Asset.human_attribute_name('modelo')
+    %dd= @asset.modelo
+  - if @asset.serie.present?
+    %dt= Asset.human_attribute_name('serie')
+    %dd= @asset.serie
   %dt= Asset.human_attribute_name('precio')
   %dd= number_with_delimiter @asset.precio
   %dt= Asset.human_attribute_name('proceso')

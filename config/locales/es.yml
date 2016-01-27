@@ -36,7 +36,7 @@ es:
     migrate: 'Migrar'
     btn:
       cancel: "Cancelar"
-      save: "Aceptar"
+      save: "Guardar"
       edit: "Editar"
       show: "Ver"
       destroy: "Eliminar"
@@ -175,6 +175,14 @@ es:
     entry:
       btn: "Establecer Saldo Inicial"
       first: "Establecer Saldo Inicial del Sub Artículo <strong>%{description}</strong>"
+  suppliers:
+    title:
+      title: "Proveedores"
+      new: "Nuevo Proveedor"
+      create: "Nuevo Proveedor"
+      edit: "Editar Proveedor"
+      update: "Editar Proveedor"
+      modal: "Activación/Desactivación de Proveedor"
   users:
     roles:
       super_admin: "Super Administrador"
@@ -320,6 +328,7 @@ es:
       material: "Material"
       note_entry: "Nota de Ingreso Almacén"
       subarticle: "Sub Artículo"
+      supplier: "Proveedor"
       proceeding: "Acta"
       user: "Funcionario"
 
@@ -414,6 +423,12 @@ es:
         stock: "Stock"
         minimum: "Stock mínimo"
         barcode: "Código de Barra"
+      supplier:
+        name: "Nombre"
+        nit: "NIT"
+        telefono: "Teléfono"
+        contacto: "Contacto"
+        created_at: "Creado el"
       user:
         assets_count: "Nro. Activos"
         code: "Código"
