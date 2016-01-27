@@ -31,11 +31,6 @@ gem 'spring',        group: :development
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-# Use Capistrano for deployment
-gem 'capistrano', '~> 3.1.0'
-gem 'capistrano-rails'
-gem 'capistrano-rvm'
-
 # Use debugger
 gem 'byebug', group: [:development, :test]
 
