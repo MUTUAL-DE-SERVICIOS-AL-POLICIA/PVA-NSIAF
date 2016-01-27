@@ -75,16 +75,23 @@ namespace :db do
         row = s.row(r)
         elemento = {
           code: row[1].to_i,
-          description: "#{row[4]} #{row[5]} #{row[6]} #{row[7]} #{row[8]} #{row[9]} SN/#{row[10]}".squish,
+          # description: "#{row[4]} #{row[5]} #{row[6]} #{row[7]} #{row[8]} #{row[9]} SN/#{row[10]}".squish,
+          detalle: "#{row[4]}".squish,
+          medidas: "#{row[5]}".squish,
+          material: "#{row[6]}".squish,
+          color: "#{row[7]}".squish,
+          marca: "#{row[8]}".squish,
+          modelo: "#{row[9]}".squish,
+          serie: "#{row[10]}".squish,
           proceso: row[1].to_i,
           observaciones: "Factura: #{row[11]}\r\nTotal factura: #{row[12]}\r\nProveedor: #{row[13]}\r\nTeléfono: #{row[14]}\r\nCelular: #{row[15]}",
           auxiliary_id: 1,
-          # barcode: 'AGETIC-30',
+          barcode: row[1].to_i,
           status: "1",
           state: 1,
           user_id: 2,
           precio: row[3].to_f,
-          created_at: DateTime.strptime(row[2], "%d/%m/%Y")
+          created_at: row[2]
         }
 
         activo = Asset.new(elemento)
