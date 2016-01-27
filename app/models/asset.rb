@@ -27,7 +27,7 @@ class Asset < ActiveRecord::Base
   with_options if: :is_not_migrate? do |m|
     m.validates :barcode, presence: true, uniqueness: true
     m.validates :code, presence: true, uniqueness: true
-    m.validates :description, :auxiliary_id, :user_id, presence: true
+    m.validates :detalle, :auxiliary_id, :user_id, :precio, presence: true
     m.validate do |asset|
       BarcodeStatusValidator.new(asset).validate
     end
@@ -39,6 +39,7 @@ class Asset < ActiveRecord::Base
   end
 
   before_save :check_barcode
+  before_save :generar_descripcion
 
   has_paper_trail
 
@@ -163,5 +164,17 @@ class Asset < ActiveRecord::Base
     ax = Auxiliary.joins(:account).where(code: record['CODAUX'], accounts: { code: record['CODCONT'] }).take
     u = User.joins(:department).where(code: record['CODRESP'], departments: { code: record['CODOFIC'] }).take
     asset.present? && new(asset.merge!({ account: ac, auxiliary: ax, user: u })).save
+  end
+
+  def generar_descripcion
+    descripcion = []
+    descripcion << detalle
+    descripcion << medidas
+    descripcion << material
+    descripcion << color
+    descripcion << marca
+    descripcion << modelo
+    descripcion << serie
+    self.description = descripcion.join(' ').squish
   end
 end
