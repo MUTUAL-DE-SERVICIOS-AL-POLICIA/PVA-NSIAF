@@ -177,7 +177,8 @@ class Subarticle < ActiveRecord::Base
   end
 
   def exists_amount?
-    entry_subarticles_exist.present?
+    # entry_subarticles_exist.present?
+    transacciones.sum(:cantidad) > 0
   end
 
   def decrease_amount
