@@ -1,16 +1,30 @@
 %script{ type: 'text/html', id: 'tpl-barcode' }
   %h2.text-center Código de Barras
 
+  .text-center
+    %form.form-inline
+      .form-group
+        %label.sr-only{for: 'barcode-desde'} Desde
+        = text_field_tag :desde, "{{desde}}", class: 'form-control barcode-buscador', id: 'barcode-desde', placeholder: 'Desde ID'
+      .form-group
+        %label.sr-only{for: 'barcode-hasta'} Hasta
+        = text_field_tag :hasta, "{{hasta}}", class: 'form-control barcode-buscador', id: 'barcode-hasta', placeholder: 'Hasta ID'
+      %button{type: 'submit', class: 'cargar-barcodes btn btn-primary'}
+        %span.glyphicon.glyphicon-search
+        Cargar
+
   .row
     {{#assets}}
     .col-xs-6.col-sm-4.col-md-4.col-lg-4
       .thumbnail
-        .barcode{ style: 'margin: 5px auto 0;', data: { code: '{{code}}' } }
-          {{code}}
+        .text-center
+          {{detalle}}
+        .barcode{ style: 'margin: 5px auto 0;', data: { barcode: '{{barcode}}' } }
+          {{barcode}}
     {{/assets}}
 
   .row
     .action-buttons.col-md-12.col-sm-12.text-center
-      = button_tag class: 'btn btn-lg btn-primary' do
+      = button_tag class: 'imprimir btn btn-lg btn-primary' do
         %span.glyphicon.glyphicon-print
         Imprimir

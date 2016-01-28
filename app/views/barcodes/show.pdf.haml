@@ -10,8 +10,8 @@
             .contenedor
               .text-center
                 = asset.detalle
-              .barcode{data: { code: "#{asset.code}" } }
-                = asset.code
+              .barcode{data: { code: "#{asset.barcode}" } }
+                = asset.barcode
 
 :coffeescript
   $('#pdf-assets-print tr td .barcode').each (i, e) ->
