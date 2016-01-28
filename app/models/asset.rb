@@ -139,6 +139,10 @@ class Asset < ActiveRecord::Base
     end
   end
 
+  def self.total_historico
+    all.sum(:precio)
+  end
+
   def derecognised_date
     update_attribute(:derecognised, Time.now)
   end
