@@ -69,7 +69,7 @@ Rails.application.routes.draw do
   resources :barcodes, only: [:index] do
     collection do
       get :load_data
-      post :pdf
+      get :pdf
     end
   end
 

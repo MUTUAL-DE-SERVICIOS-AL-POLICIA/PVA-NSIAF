@@ -18,8 +18,8 @@ class BarcodesController < ApplicationController
 
   def pdf
     authorize! :pdf, :barcode
-    @assets = generate_array_with_codes(params[:quantity].to_i)
-    Barcode.register_assets(@assets) if @assets.length > 0
+    @assets = generate_array_with_codes(params[:desde].to_i, params[:hasta].to_i)
+    # Barcode.register_assets(@assets) if @assets.length > 0
     respond_to do |format|
       format.pdf do
         filename = 'código de barras'
@@ -42,11 +42,12 @@ class BarcodesController < ApplicationController
 
   private
 
-  def generate_array_with_codes(quantity)
+  def generate_array_with_codes(desde, hasta)
     last_value = get_last_value()
     acronym = last_value.split('-').first
     offset = last_value.split('-').last.to_i
-    (1..quantity).to_a.map {|i| {code: "#{acronym}-#{offset + i}"}}
+    # (1..quantity).to_a.map {|i| {code: "#{acronym}-#{offset + i}"}}
+    Asset.where(id: desde..hasta).order(:id)
   end
 
   def get_last_value()

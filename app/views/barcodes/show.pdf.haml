@@ -8,10 +8,10 @@
         - @assets[limit, cols].each do |asset|
           %td
             .contenedor
-              -# .text-center
-              -#   IMPRESORA LASER JET PRO 401MDN
-              .barcode{data: { code: asset[:code].to_s } }
-                = asset[:code]
+              .text-center
+                = asset.detalle
+              .barcode{data: { code: "#{asset.code}" } }
+                = asset.code
 
 :coffeescript
   $('#pdf-assets-print tr td .barcode').each (i, e) ->
