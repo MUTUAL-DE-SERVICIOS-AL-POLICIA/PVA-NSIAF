@@ -87,10 +87,10 @@
         %td.number
           = saldo + transaccion.cantidad
           - saldo += transaccion.cantidad
-        %td.number= number_with_delimiter(transaccion.costo_unitario)
+        %td.number= number_with_delimiter(transaccion.costo_unitario.to_f)
         %td.number
-          = number_with_delimiter(transaccion.costo_unitario * saldo)
-          - saldo_bs += transaccion.costo_unitario * saldo
+          = number_with_delimiter(transaccion.costo_unitario.to_f * saldo)
+          - saldo_bs += transaccion.costo_unitario.to_f * saldo
         %td.text-center
           - if transaccion.saldo_inicial?
             %em -
