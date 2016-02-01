@@ -28,9 +28,10 @@ class Asset < ActiveRecord::Base
     m.validates :barcode, presence: true, uniqueness: true
     m.validates :code, presence: true, uniqueness: true
     m.validates :detalle, :auxiliary_id, :user_id, :precio, presence: true
-    m.validate do |asset|
-      BarcodeStatusValidator.new(asset).validate
-    end
+    # TODO validación de los códigos de barras desactivado.
+    # m.validate do |asset|
+    #   BarcodeStatusValidator.new(asset).validate
+    # end
   end
 
   with_options if: :is_migrate? do |m|
