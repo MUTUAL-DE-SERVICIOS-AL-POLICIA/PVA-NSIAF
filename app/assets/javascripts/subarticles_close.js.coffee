@@ -53,6 +53,7 @@ class SubarticlesClose
 
   datepicker: ->
     $(".date").datepicker
+      autoclose: true
       format: "dd/mm/yyyy"
       language: "es"
 
