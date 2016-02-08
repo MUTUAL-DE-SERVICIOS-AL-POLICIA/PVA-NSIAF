@@ -1,6 +1,8 @@
 class KardexesController < ApplicationController
   before_action :set_kardex, only: [:show, :edit, :update, :destroy]
 
+  include Fechas
+
   # GET /kardexes
   def index
     if params[:subarticle_id].present?
@@ -8,6 +10,9 @@ class KardexesController < ApplicationController
       @kardexes = @subarticle.kardexes_from_year
       @initial_kardex = @kardexes.initial_kardex
       @final_kardex = @kardexes.final_kardex
+
+      desde, hasta = get_fechas(params)
+      @transacciones = @subarticle.kardexs(desde, hasta)
     else
       @kardexes = Kardex.all
     end

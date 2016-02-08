@@ -81,6 +81,54 @@ class Subarticle < ActiveRecord::Base
     _transacciones
   end
 
+  def kardexs(desde, hasta)
+    _transacciones = transacciones.where(fecha: ((desde+1)..hasta))
+
+    fechas = _transacciones.map { |t| t.fecha }.uniq
+
+    lista = []
+    fechas.each do |fecha|
+      elegidos = _transacciones.where(fecha: fecha)
+      saldos = transacciones.saldo_al(fecha - 1)
+      elegidos.each do |transaccion|
+        # transaccion.detalle += "- #{saldos.map(&:cantidad_saldo)}"
+        saldos = transaccion.crear_items(saldos)
+        # transaccion.detalle += "- #{saldos.map(&:cantidad_saldo)},  #{transaccion.cantidad}"
+        lista << transaccion
+      end
+    end
+
+    unless fechas.include?(desde)
+      transaccion_inicio = Transaccion.new(
+        fecha: desde,
+        cantidad: 0,
+        detalle: 'SALDO INICIAL'
+      )
+      transaccion_inicio.crear_items(transacciones.saldo_al(desde))
+      lista = [transaccion_inicio] + lista
+    end
+
+    unless fechas.include?(hasta)
+      transaccion_final = Transaccion.new(
+        fecha: hasta,
+        cantidad: 0,
+        detalle: 'SALDO FINAL'
+      )
+      transaccion_final.crear_items(transacciones.saldo_al(hasta))
+      lista = lista + [transaccion_final]
+    end
+
+    #_transacciones.map do |t|
+      #t.crear_items()
+      # saldos = transacciones.saldo_al(t.fecha-1)
+      #t.detalle += saldos.map(&:cantidad).to_s
+      #t
+    #end
+    # inicio + lista + final
+
+    lista
+  end
+
   def self.minimum_stock(weight = 1.25)
     with_stock.select do |subarticle|
       subarticle.stock <= subarticle.minimum.to_i * weight

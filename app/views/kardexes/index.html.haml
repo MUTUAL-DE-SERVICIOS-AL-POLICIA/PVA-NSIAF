@@ -1,3 +1,24 @@
+%table.table.table-bordered.table-condensed
+  %thead
+    %tr.vertical-align.info
+      %th.text-center{rowspan: 2} FECHA
+      %th.text-center{rowspan: 2} Nº DE FACTURA
+      %th.text-center{rowspan: 2} Nº NOTA DE ENTREGA
+      %th.text-center{rowspan: 2} Nº DE PEDIDO MAT
+      %th.text-center.col-sm-3{rowspan: 2} DETALLE
+      %th.text-center{colspan: 3} CANTIDADES
+      %th.text-center{rowspan: 2} COSTO UNITARIO
+      %th.text-center{colspan: 3} IMPORTES EN BOLIVIANOS
+    %tr.info
+      %th ENTRADAS
+      %th SALIDAS
+      %th SALDOS
+      %th ENTRADAS
+      %th SALIDAS
+      %th SALDOS
+  %tbody
+    = render @transacciones
+
 - year = Date.today.year
 - unless is_pdf?
   .page-header

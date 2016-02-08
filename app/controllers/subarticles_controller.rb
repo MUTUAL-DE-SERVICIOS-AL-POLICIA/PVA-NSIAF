@@ -2,6 +2,8 @@ class SubarticlesController < ApplicationController
   load_and_authorize_resource
   before_action :set_subarticle, only: [:show, :edit, :update, :destroy, :change_status, :kardex]
 
+  include Fechas
+
   # GET /subarticles
   def index
     format_to('subarticles', SubarticlesDatatable)
@@ -9,11 +11,7 @@ class SubarticlesController < ApplicationController
 
   # GET /subarticles/1
   def show
-    params[:desde] = params[:desde].present? ? params[:desde] : Date.today.beginning_of_year.strftime('%d-%m-%Y')
-    params[:hasta] = params[:hasta].present? ? params[:hasta] : Date.today.strftime('%d-%m-%Y')
-    desde = Date.strptime(params[:desde], '%d-%m-%Y')
-    hasta = Date.strptime(params[:hasta], '%d-%m-%Y')
-
+    desde, hasta = get_fechas(params)
     @transacciones = @subarticle.reporte(desde, hasta)
   end
 
