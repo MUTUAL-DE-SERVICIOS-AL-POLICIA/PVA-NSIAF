@@ -18,6 +18,26 @@ class Transaccion < ActiveRecord::Base
     all.sum(:cantidad)
   end
 
+  def self.saldo_final(fecha = Date.today)
+    saldo_final = Transaccion.new(
+      fecha: fecha,
+      cantidad: 0,
+      detalle: 'SALDO FINAL'
+    )
+    saldo_final.crear_items(all.saldo_al(fecha))
+    saldo_final
+  end
+
+  def self.saldo_inicial(fecha = Date.today)
+    saldo_inicial = Transaccion.new(
+      fecha: fecha,
+      cantidad: 0,
+      detalle: 'SALDO INICIAL'
+    )
+    saldo_inicial.crear_items(all.saldo_al(fecha))
+    saldo_inicial
+  end
+
   def self.salidas
     where(tipo: 'salida')
   end
@@ -46,13 +66,16 @@ class Transaccion < ActiveRecord::Base
     return nil
   end
 
-  #def cantidad_entrada
-  #  cantidad >= 0 ? cantidad : 0
-  #end
-
-  #def cantidad_salida
-#    cantidad <= 0 ? (-1) * cantidad : 0
-#  end
+  def self.sumar_saldo_final(transacciones)
+    entradas = salidas = 0
+    transacciones.each do |transaccion|
+      entradas += transaccion.items.sum(&:cantidad_entrada)
+      salidas += transaccion.items.sum(&:cantidad_salida)
+    end
+    saldo_final = transacciones.last
+    saldo_final.items.first.cantidad_salida = salidas
+    saldo_final.items.last.cantidad_entrada = entradas
+  end
 
   def crear_items(saldos)
     # Limpiar campos

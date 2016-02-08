@@ -98,33 +98,16 @@ class Subarticle < ActiveRecord::Base
       end
     end
 
-    unless fechas.include?(desde)
-      transaccion_inicio = Transaccion.new(
-        fecha: desde,
-        cantidad: 0,
-        detalle: 'SALDO INICIAL'
-      )
-      transaccion_inicio.crear_items(transacciones.saldo_al(desde))
-      lista = [transaccion_inicio] + lista
-    end
+    # Saldo Inicial
+    saldo_inicial = transacciones.saldo_inicial(desde)
 
-    unless fechas.include?(hasta)
-      transaccion_final = Transaccion.new(
-        fecha: hasta,
-        cantidad: 0,
-        detalle: 'SALDO FINAL'
-      )
-      transaccion_final.crear_items(transacciones.saldo_al(hasta))
-      lista = lista + [transaccion_final]
-    end
+    # Saldo Final
+    saldo_final = transacciones.saldo_final(hasta)
 
-    #_transacciones.map do |t|
-      #t.crear_items()
-      # saldos = transacciones.saldo_al(t.fecha-1)
-      #t.detalle += saldos.map(&:cantidad).to_s
-      #t
-    #end
-    # inicio + lista + final
+    lista = [saldo_inicial] + lista + [saldo_final]
+
+    # Sumar saldo final
+    Transaccion.sumar_saldo_final(lista)
 
     lista
   end
