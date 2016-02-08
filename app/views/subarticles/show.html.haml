@@ -3,9 +3,6 @@
     = link_to edit_subarticle_path(@subarticle), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    = link_to subarticle_kardexes_path(@subarticle), class: 'btn btn-info' do
-      %span.glyphicon.glyphicon-list-alt
-      Kardex
     = link_to subarticles_path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("subarticles.title.title")
@@ -33,11 +30,14 @@
   %dd= @subarticle.barcode
 
 %h3
-  Kardex
+  Histórico
   %span.text-muted desde
   %strong #{params[:desde]}
   %span.text-muted hasta
   %strong #{params[:hasta]}
+  = link_to subarticle_kardexes_path(@subarticle, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-info' do
+    %span.glyphicon.glyphicon-list-alt
+    Kardex
   .pull-right
     %form.form-inline
       .form-group
