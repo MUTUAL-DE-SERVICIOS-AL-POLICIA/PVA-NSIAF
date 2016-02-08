@@ -8,5 +8,6 @@
     = f.input :total_cost
     = f.input :date, as: :string, input_html: { value: format_date(f.object.date), class: 'date' }
     = f.input :stock
+    = f.input :created_at, as: :string
 
     = render 'shared/form_buttons'
