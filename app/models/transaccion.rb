@@ -8,6 +8,8 @@ class Transaccion < ActiveRecord::Base
   attr_accessor :cantidad_saldo
   attr_accessor :items
 
+  after_initialize :inicializar
+
   def self.entradas
     where(tipo: 'entrada')
   end
@@ -63,7 +65,7 @@ class Transaccion < ActiveRecord::Base
       end
       return entradas
     end
-    return nil
+    return []
   end
 
   def self.sumar_saldo_final(transacciones)
@@ -105,20 +107,21 @@ class Transaccion < ActiveRecord::Base
         end
       end
     end
-    self.items = saldos
+
+    self.items = saldos.length > 0 ? saldos : [Transaccion.new]
     saldos.map { |s| s.dup }
   end
 
   def importe_entrada
-    cantidad_entrada.to_f * costo_unitario
+    cantidad_entrada.to_f * costo_unitario.to_f
   end
 
   def importe_salida
-    cantidad_salida.to_f * costo_unitario
+    cantidad_salida.to_f * costo_unitario.to_f
   end
 
   def importe_saldo
-    cantidad_saldo.to_f * costo_unitario
+    cantidad_saldo.to_f * costo_unitario.to_f
   end
 
   def saldo
@@ -128,4 +131,14 @@ class Transaccion < ActiveRecord::Base
   def saldo_inicial?
     !modelo_id.present?
   end
+
+  private
+
+    def inicializar
+      self.cantidad ||= 0
+      self.cantidad_entrada ||= 0
+      self.cantidad_salida ||= 0
+      self.cantidad_saldo ||= 0
+      self.costo_unitario ||= 0
+    end
 end

@@ -7,9 +7,6 @@ class KardexesController < ApplicationController
   def index
     if params[:subarticle_id].present?
       @subarticle = Subarticle.find(params[:subarticle_id])
-      @kardexes = @subarticle.kardexes_from_year
-      @initial_kardex = @kardexes.initial_kardex
-      @final_kardex = @kardexes.final_kardex
 
       desde, hasta = get_fechas(params)
       @transacciones = @subarticle.kardexs(desde, hasta)
