@@ -70,6 +70,17 @@ class Subarticle < ActiveRecord::Base
     where('status = ?', '1')
   end
 
+  ##
+  # Obtiene un reporte en un rango de fechas dado. Adiciona el saldo a la fecha
+  # seleccionada
+  def reporte(desde, hasta)
+    _transacciones = transacciones.saldo_al(desde)
+    transacciones.where(fecha: ((desde+1)..hasta)).each do |t|
+      _transacciones.push(t)
+    end
+    _transacciones
+  end
+
   def self.minimum_stock(weight = 1.25)
     with_stock.select do |subarticle|
       subarticle.stock <= subarticle.minimum.to_i * weight

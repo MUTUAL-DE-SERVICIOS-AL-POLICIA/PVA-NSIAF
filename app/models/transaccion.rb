@@ -3,16 +3,39 @@ class Transaccion < ActiveRecord::Base
 
   belongs_to :subarticle
 
+  def self.entradas
+    where(tipo: 'entrada')
+  end
+
   # Despliega el saldo total de la lista
   # No funciona cuando hay un objeto adicionado dinámicamente
   def self.saldo
     all.sum(:cantidad)
   end
 
-  # Instanciar un objecto transacción
-  def self.saldo_inicial(fecha = Date.today)
-    cantidad = all.where('fecha < ?', fecha).sum(:cantidad)
-    Transaccion.new(cantidad: cantidad)
+  def self.salidas
+    where(tipo: 'salida')
+  end
+
+  # Permite obtener el saldo a una determinada fecha en un objeto transaccion
+  def self.saldo_al(fecha = Date.today)
+    transacciones = all.where('fecha <= ?', fecha)
+    unless transacciones.count.zero?
+      saldo = transacciones.sum(:cantidad) # total que hay
+      entradas = []
+      transacciones.entradas.reverse.each do |entrada|
+        entradas.prepend(entrada)
+        entrada.fecha = fecha
+        if (saldo - entrada.cantidad) > 0
+          saldo -= entrada.cantidad
+        else
+          entrada.cantidad = saldo
+          break
+        end
+      end
+      return entradas
+    end
+    return nil
   end
 
   def saldo

@@ -14,11 +14,7 @@ class SubarticlesController < ApplicationController
     desde = Date.strptime(params[:desde], '%d-%m-%Y')
     hasta = Date.strptime(params[:hasta], '%d-%m-%Y')
 
-    @transacciones = @subarticle.transacciones.where(fecha: (desde..hasta))
-    if @transacciones.first && @transacciones.first.modelo_id.present?
-      saldo_inicial = @subarticle.transacciones.saldo_inicial(@transacciones.first.fecha)
-      @transacciones.unshift(saldo_inicial)
-    end
+    @transacciones = @subarticle.reporte(desde, hasta)
   end
 
   # GET /subarticles/new
