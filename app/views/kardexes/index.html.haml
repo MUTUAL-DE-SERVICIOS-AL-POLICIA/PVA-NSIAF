@@ -1,25 +1,4 @@
-%table.table.table-bordered.table-condensed
-  %thead
-    %tr.vertical-align.info
-      %th.text-center{rowspan: 2} FECHA
-      %th.text-center{rowspan: 2} Nº DE FACTURA
-      %th.text-center{rowspan: 2} Nº NOTA DE ENTREGA
-      %th.text-center{rowspan: 2} Nº DE PEDIDO MAT
-      %th.text-center.col-sm-3{rowspan: 2} DETALLE
-      %th.text-center{colspan: 3} CANTIDADES
-      %th.text-center{rowspan: 2} COSTO UNITARIO
-      %th.text-center{colspan: 3} IMPORTES EN BOLIVIANOS
-    %tr.info
-      %th ENTRADAS
-      %th SALIDAS
-      %th SALDOS
-      %th ENTRADAS
-      %th SALIDAS
-      %th SALDOS
-  %tbody
-    = render @transacciones
-
-- year = Date.today.year
+- year = @year
 - unless is_pdf?
   .page-header
     .pull-right
@@ -27,7 +6,7 @@
         %span.glyphicon.glyphicon-arrow-left
         Atrás
       - if @kardexes.length > 0
-        = link_to subarticle_kardexes_path(@subarticle, format: :pdf), class: 'btn btn-info' do
+        = link_to subarticle_kardexes_path(@subarticle, format: :pdf, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-info' do
           %span.glyphicon.glyphicon-print
           Imprimir
       = link_to subarticles_path, class: 'btn btn-default' do
@@ -40,7 +19,7 @@
 
     #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
 - else
-  .row{ class: "#{'separator' if is_pdf?}" }
+  .row
     .col-sm-12
       %table.kardex-table
         %tbody
@@ -91,9 +70,7 @@
         %th SALIDAS
         %th SALDOS
     %tbody
-      = render @initial_kardex, initial: true
-      = render @kardexes - [@initial_kardex]
-      = render @final_kardex, final: true
+      = render @transacciones
 
   - if is_pdf?
     .separator

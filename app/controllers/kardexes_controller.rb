@@ -13,6 +13,7 @@ class KardexesController < ApplicationController
 
       desde, hasta = get_fechas(params)
       @transacciones = @subarticle.kardexs(desde, hasta)
+      @year = desde.year
     else
       @kardexes = Kardex.all
     end
@@ -23,6 +24,7 @@ class KardexesController < ApplicationController
         render pdf: filename,
                disposition: 'attachment',
                layout: 'pdf.html',
+               # show_as_html: params.key?('debug'),
                template: 'kardexes/index.html.haml',
                orientation: 'Landscape',
                page_size: 'Letter',
