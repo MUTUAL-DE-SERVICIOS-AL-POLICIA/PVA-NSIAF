@@ -75,21 +75,33 @@
       %tr
         %td{title: transaccion.id}= index
         %td.text-center= l transaccion.fecha, format: :default if transaccion.fecha
-        %td.text-center= transaccion.factura
-        %td.text-center= l transaccion.nota_entrega, format: :default if transaccion.nota_entrega.present?
-        %td.text-center= transaccion.nro_pedido
-        %td= transaccion.detalle
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = transaccion.factura
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = l transaccion.nota_entrega, format: :default if transaccion.nota_entrega.present?
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = transaccion.nro_pedido
+        %td
+          - if transaccion.cantidad.zero?
+            SALDO INICIAL
+          - else
+            = transaccion.detalle
         %td.number
           = transaccion.cantidad
-          - if transaccion.saldo_inicial?
-            - saldo += transaccion.cantidad_saldo
         %td.number
-          = saldo + transaccion.cantidad
-          - saldo += transaccion.cantidad
+          - if transaccion.cantidad.zero?
+            = transaccion.cantidad_saldo
+            - saldo += transaccion.cantidad_saldo
+          - else
+            = saldo + transaccion.cantidad
+            - saldo += transaccion.cantidad
         %td.number= number_with_delimiter(transaccion.costo_unitario.to_f)
         %td.text-center
           - if transaccion.saldo_inicial?
-            %em Saldo Inicial
+            %em -
           - elsif transaccion.tipo == 'entrada'
             = link_to transaccion.tipo.capitalize, note_entry_path(transaccion.modelo_id)
           - else
