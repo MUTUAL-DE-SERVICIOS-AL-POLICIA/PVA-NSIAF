@@ -54,9 +54,7 @@ class BarcodesController < ApplicationController
     if last_value.present?
       last_value = last_value.code
     else
-      acronym = 'ADSIB'
-      entity = Entity.first
-      acronym = entity.acronym if entity.present?
+      acronym = view_context.entidad_sigla
       last_value = "#{acronym}-0"
     end
     last_value

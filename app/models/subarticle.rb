@@ -126,6 +126,14 @@ class Subarticle < ActiveRecord::Base
     article.present? ? article.description : ''
   end
 
+  def saldo_inicial(fecha = Date.today)
+    transacciones.saldo_inicial(fecha)
+  end
+
+  def saldo_final(fecha = Date.today)
+    transacciones.saldo_final(fecha)
+  end
+
   def verify_assignment
     false
   end

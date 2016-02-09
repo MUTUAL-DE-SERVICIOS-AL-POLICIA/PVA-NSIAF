@@ -68,6 +68,25 @@ class Transaccion < ActiveRecord::Base
     return []
   end
 
+  # Utilizado en las vistas del valorado
+  def self.suma_entradas(items, desde, hasta)
+    item = items.last
+    suma = +Transaccion.where(fecha: (desde..hasta),
+                      subarticle_id: item.subarticle_id,
+                      tipo: 'entrada')
+               .where.not(modelo_id: nil).sum(:cantidad)
+    item.cantidad_entrada = suma
+  end
+
+  # Utilizado en las vistas del valorado
+  def self.suma_salidas(items, desde, hasta)
+    item = items.first
+    suma = -Transaccion.where(fecha: (desde..hasta),
+                      subarticle_id: item.subarticle_id,
+                      tipo: 'salida').sum(:cantidad)
+    item.cantidad_salida = suma
+  end
+
   def self.sumar_saldo_final(transacciones)
     entradas = salidas = 0
     transacciones.each do |transaccion|

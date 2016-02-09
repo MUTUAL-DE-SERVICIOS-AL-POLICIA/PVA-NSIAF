@@ -2,6 +2,8 @@ class MaterialsController < ApplicationController
   load_and_authorize_resource
   before_action :set_material, only: [:show, :edit, :update, :change_status]
 
+  include Fechas
+
   # GET /materials
   def index
     format_to('materials', MaterialsDatatable)
@@ -58,6 +60,7 @@ class MaterialsController < ApplicationController
   end
 
   def reports
+    @desde, @hasta = get_fechas(params)
     @materials = Material.order("code ASC, description ASC")
     @articles = Article.order("code ASC, description ASC")
     @subarticles = Subarticle.order("code ASC, description ASC").estado_activo
