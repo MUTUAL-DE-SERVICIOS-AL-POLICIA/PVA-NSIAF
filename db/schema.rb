@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160209200136) do
+ActiveRecord::Schema.define(version: 20160209215614) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -148,7 +148,7 @@ ActiveRecord::Schema.define(version: 20160209200136) do
     t.date     "fecha"
     t.string   "factura",        limit: 255
     t.date     "nota_entrega"
-    t.string   "nro_pedido",     limit: 11,                           default: "", null: false
+    t.string   "nro_pedido",     limit: 11
     t.string   "detalle",        limit: 463
     t.integer  "cantidad",       limit: 8
     t.decimal  "costo_unitario",             precision: 10, scale: 2
