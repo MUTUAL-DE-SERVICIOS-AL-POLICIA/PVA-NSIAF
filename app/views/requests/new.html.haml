@@ -9,6 +9,10 @@
     .col-md-4
       %form.form-horizontal
         .form-group
+          %label.col-sm-4.control-label Nro Solicitud
+          .col-sm-8
+            = text_field_tag 'nro_solicitud', '', class: 'form-control', autofocus: true
+        .form-group
           %label.col-sm-4.control-label Fecha
           .col-sm-8
             = text_field_tag 'date', format_date(Date.today), class: 'form-control'
