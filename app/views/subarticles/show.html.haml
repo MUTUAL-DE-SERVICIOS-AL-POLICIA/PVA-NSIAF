@@ -3,7 +3,7 @@
     = link_to edit_subarticle_path(@subarticle), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    = link_to subarticle_kardexes_path(@subarticle), class: 'btn btn-info' do
+    = link_to subarticle_kardexes_path(@subarticle, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-info' do
       %span.glyphicon.glyphicon-list-alt
       Kardex
     = link_to subarticles_path, class: 'btn btn-default' do
@@ -33,7 +33,7 @@
   %dd= @subarticle.barcode
 
 %h3
-  Kardex
+  Histórico
   %span.text-muted desde
   %strong #{params[:desde]}
   %span.text-muted hasta
@@ -50,7 +50,6 @@
         %span.glyphicon.glyphicon-search
 
 - saldo = 0
-- saldo_bs = 0
 %table.table.table-hover.table-striped.table-condensed.table-bordered
   %thead
     %tr
@@ -63,7 +62,6 @@
       %th.number Cantidad
       %th.number Saldo
       %th.number Costo unitario
-      %th.number Saldo Bs
       %th.text-center Tipo
       %th.text-center.col-md-1 Creado el
       %th
@@ -77,20 +75,30 @@
       %tr
         %td{title: transaccion.id}= index
         %td.text-center= l transaccion.fecha, format: :default if transaccion.fecha
-        %td.text-center= transaccion.factura
-        %td.text-center= l transaccion.nota_entrega, format: :default if transaccion.nota_entrega.present?
-        %td.text-center= transaccion.nro_pedido
-        %td= transaccion.detalle
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = transaccion.factura
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = l transaccion.nota_entrega, format: :default if transaccion.nota_entrega.present?
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = transaccion.nro_pedido
+        %td
+          - if transaccion.cantidad.zero?
+            SALDO INICIAL
+          - else
+            = transaccion.detalle
         %td.number
-          - if !transaccion.saldo_inicial? || index > 0
-            = transaccion.cantidad
+          = transaccion.cantidad
         %td.number
-          = saldo + transaccion.cantidad
-          - saldo += transaccion.cantidad
+          - if transaccion.cantidad.zero?
+            = transaccion.cantidad_saldo
+            - saldo += transaccion.cantidad_saldo
+          - else
+            = saldo + transaccion.cantidad
+            - saldo += transaccion.cantidad
         %td.number= number_with_delimiter(transaccion.costo_unitario.to_f)
-        %td.number
-          = number_with_delimiter(transaccion.costo_unitario.to_f * saldo)
-          - saldo_bs += transaccion.costo_unitario.to_f * saldo
         %td.text-center
           - if transaccion.saldo_inicial?
             %em -
@@ -106,7 +114,6 @@
   %tfoot
     %tr
       %th
-      %th.number{colspan: 5} TOTAL
+      %th.number{colspan: 5} STOCK
       %th.number{colspan: 2}= saldo
-      %th.number{colspan: 2}= number_with_delimiter(saldo_bs)
-      %th{colspan: 3}
+      %th{colspan: 5}

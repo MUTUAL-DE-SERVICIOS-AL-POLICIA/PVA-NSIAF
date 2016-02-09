@@ -28,6 +28,6 @@ class EntrySubarticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def entry_subarticle_params
-      params.require(:entry_subarticle).permit(:amount, :unit_cost, :total_cost, :date, :stock)
+      params.require(:entry_subarticle).permit(:amount, :unit_cost, :total_cost, :date, :stock, :created_at)
     end
 end

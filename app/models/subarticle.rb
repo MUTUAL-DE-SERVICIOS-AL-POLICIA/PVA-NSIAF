@@ -70,6 +70,48 @@ class Subarticle < ActiveRecord::Base
     where('status = ?', '1')
   end
 
+  ##
+  # Obtiene un reporte en un rango de fechas dado. Adiciona el saldo a la fecha
+  # seleccionada
+  def reporte(desde, hasta)
+    _transacciones = transacciones.saldo_al(desde)
+    transacciones.where(fecha: ((desde+1)..hasta)).each do |t|
+      _transacciones.push(t)
+    end
+    _transacciones
+  end
+
+  def kardexs(desde, hasta)
+    _transacciones = transacciones.where(fecha: ((desde+1)..hasta))
+
+    fechas = _transacciones.map { |t| t.fecha }.uniq
+
+    lista = []
+    fechas.each do |fecha|
+      elegidos = _transacciones.where(fecha: fecha)
+      saldos = transacciones.saldo_al(fecha - 1)
+      elegidos.each do |transaccion|
+        # transaccion.detalle += "- #{saldos.map(&:cantidad_saldo)}"
+        saldos = transaccion.crear_items(saldos)
+        # transaccion.detalle += "- #{saldos.map(&:cantidad_saldo)},  #{transaccion.cantidad}"
+        lista << transaccion
+      end
+    end
+
+    # Saldo Inicial
+    saldo_inicial = transacciones.saldo_inicial(desde)
+
+    # Saldo Final
+    saldo_final = transacciones.saldo_final(hasta)
+
+    lista = [saldo_inicial] + lista + [saldo_final]
+
+    # Sumar saldo final
+    Transaccion.sumar_saldo_final(lista)
+
+    lista
+  end
+
   def self.minimum_stock(weight = 1.25)
     with_stock.select do |subarticle|
       subarticle.stock <= subarticle.minimum.to_i * weight
@@ -82,6 +124,14 @@ class Subarticle < ActiveRecord::Base
 
   def article_name
     article.present? ? article.description : ''
+  end
+
+  def saldo_inicial(fecha = Date.today)
+    transacciones.saldo_inicial(fecha)
+  end
+
+  def saldo_final(fecha = Date.today)
+    transacciones.saldo_final(fecha)
   end
 
   def verify_assignment

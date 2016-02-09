@@ -28,6 +28,7 @@ date_picker = (year = false) ->
     # date = if year then (new Date((new Date).getFullYear(), 0, 1)) else ""
     date = ""
   $(".date").datepicker
+    autoclose: true
     format: "dd/mm/yyyy"
     language: "es"
     startDate: date
@@ -58,9 +59,10 @@ valid_entry = (condition, $input, date = false) ->
 
 jQuery ->
   $(".fecha-buscador").datepicker
+    autoclose: true
     format: "dd-mm-yyyy"
     language: "es"
-  
+
   TableTools.BUTTONS.download =
     sAction: "text"
     sTag: "default"

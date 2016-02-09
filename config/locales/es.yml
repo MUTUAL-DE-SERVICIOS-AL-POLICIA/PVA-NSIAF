@@ -377,6 +377,7 @@ es:
         total_cost: "Costo Total"
         invoice: "Factura"
         date: "Fecha"
+        created_at: "Creado el"
       kardex:
         kardex_date: "Fecha"
         invoice_number: "Nº de Factura"

@@ -300,6 +300,7 @@ class Request extends BarcodeReader
 
   date_picker : (days, id) ->
     $("##{id}").datepicker
+      autoclose: true
       format: "dd/mm/yyyy"
       language: "es"
       startDate: "-#{days}d"
