@@ -50,7 +50,7 @@
     %dt Nº CÓDIGO:
     %dd= @subarticle.code
 
-%table.table.table-bordered.table-condensed
+%table.table.table-bordered.table-condensed.valorado
   %thead
     %tr.vertical-align.info
       %th.text-center{rowspan: 2} FECHA
@@ -72,7 +72,10 @@
     = render @transacciones
 
 - if is_pdf?
-  .separator
+  %br/
+  %br/
+  %br/
+  %br/
   %table{ style: 'width: 100%' }
     %tr
       %td.text-center
