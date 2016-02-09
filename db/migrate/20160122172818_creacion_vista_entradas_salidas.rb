@@ -9,7 +9,7 @@ class CreacionVistaEntradasSalidas < ActiveRecord::Migration
         r.delivery_date as fecha,
         '' as factura,
         CAST(null as DATE) as nota_entrega,
-        r.id as nro_pedido,
+        r.nro_solicitud as nro_pedido,
         concat(u.name, ' - ', u.title) as detalle,
         -- u.name as detalle,
         -es.total_delivered as cantidad,

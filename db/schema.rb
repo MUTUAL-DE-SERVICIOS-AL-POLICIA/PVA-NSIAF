@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160127141532) do
+ActiveRecord::Schema.define(version: 20160209200136) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -254,6 +254,7 @@ ActiveRecord::Schema.define(version: 20160127141532) do
     t.datetime "delivery_date"
     t.boolean  "invalidate",                default: false
     t.string   "message",       limit: 255
+    t.integer  "nro_solicitud", limit: 4,   default: 0
   end
 
   create_table "subarticle_requests", force: :cascade do |t|

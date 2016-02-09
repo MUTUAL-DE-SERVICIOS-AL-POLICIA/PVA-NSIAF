@@ -7,6 +7,7 @@ class Request extends BarcodeReader
 
     @$date = $('input#date')
     @$user = $('input#people')
+    @$nro_solicitud = $('input#nro_solicitud')
     @$request = $('#request')
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
@@ -206,17 +207,20 @@ class Request extends BarcodeReader
   show_new_request: ->
     if @$subarticles.find('tr').length
       if @selected_user
-        if @$date.val()
-          @btnShowNewRequest.hide()
-          @$selectionSubarticles.hide()
-          table = @$subarticles.parent().clone()
-          table.find('.actions-request').remove()
-          table.find('thead tr').prepend '<th>#</th>'
-          table.find('#subarticles tr').each (i) ->
-            $(this).prepend "<td>#{ i+1 }</td>"
-          @$selected_subarticles.append table
-          @$selected_subarticles.append @$templateBtnsNewRequest.render()
-          @showUserInfo()
+        if @$date.val().trim()
+          if @$nro_solicitud.val().trim()
+            @btnShowNewRequest.hide()
+            @$selectionSubarticles.hide()
+            table = @$subarticles.parent().clone()
+            table.find('.actions-request').remove()
+            table.find('thead tr').prepend '<th>#</th>'
+            table.find('#subarticles tr').each (i) ->
+              $(this).prepend "<td>#{ i+1 }</td>"
+            @$selected_subarticles.append table
+            @$selected_subarticles.append @$templateBtnsNewRequest.render()
+            @showUserInfo()
+          else
+            @open_modal("Se debe especificar el número de solicitud")
         else
           @open_modal("Se debe especificar una fecha")
       else
@@ -244,12 +248,16 @@ class Request extends BarcodeReader
     json_data =
       status: 'initiation'
       user_id: @selected_user.id
+      nro_solicitud: @$nro_solicitud.val()
       subarticle_requests_attributes: subarticles
       created_at: @parse_date_time(@$date.val()) # yyyy/mm/dd HH:MM:SS
     $.post @request_save_url.replace(/{id}/, ''), { request: json_data }, null, 'script'
 
   showUserInfo: ->
-    result = $.extend(@selected_user, {date: @$date.val()})
+    result = $.extend(@selected_user, {
+      date: @$date.val(),
+      nro_solicitud: @$nro_solicitud.val()
+    })
     $user = @$templateUserInfo.render(result)
     $table = @$selected_subarticles.find("table")
     $($user).insertBefore($table)

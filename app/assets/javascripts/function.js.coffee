@@ -274,6 +274,30 @@ jQuery ->
     style_date("date_#{id}")
     date_picker(true)
 
+  $(document).on 'click', '.editar-solicitud', (e) ->
+    e.preventDefault()
+    data = $(this).data('solicitud')
+    template = Hogan.compile $('#editar-solicitud-tpl').html() || ''
+    $('#confirm-modal').html(template.render(data))
+    $('#modal-editar-solicitud').modal('show')
+    $('#modal-editar-solicitud').on 'shown.bs.modal', (e) ->
+      $('#request_nro_solicitud').select()
+
+  $(document).on 'click', $('#modal-editar-solicitud').find('button[type=submit]').selector, (e) ->
+    e.preventDefault()
+    $nro_solicitud = $('#request_nro_solicitud').val()
+    $('#modal-editar-solicitud').modal('hide')
+    $form = $(e.target).closest('form')
+    $.ajax
+      url: $form.prop('action')
+      data: $form.serialize()
+      dataType: 'json'
+      type: 'POST'
+      complete: (data, xhr) ->
+        $tr = $("#request_#{$form.data('id')}").closest('tr')
+        $tr.find('td:first-child').text($nro_solicitud)
+        $tr.addClass('warning')
+
   $(document).on 'click', '.remove_entry', ->
     $(this).parent().prev().remove()
     $(this).parent().remove()
