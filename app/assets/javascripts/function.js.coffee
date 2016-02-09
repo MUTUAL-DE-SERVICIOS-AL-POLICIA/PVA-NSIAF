@@ -274,6 +274,13 @@ jQuery ->
     style_date("date_#{id}")
     date_picker(true)
 
+  $(document).on 'click', '.editar-solicitud', (e) ->
+    e.preventDefault()
+    data = $(this).data('solicitud')
+    template = Hogan.compile $('#editar-solicitud-tpl').html() || ''
+    $('#confirm-modal').html(template.render(data))
+    $('#modal-editar-solicitud').modal('show')
+
   $(document).on 'click', '.remove_entry', ->
     $(this).parent().prev().remove()
     $(this).parent().remove()

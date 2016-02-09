@@ -42,7 +42,10 @@ class RequestsController < ApplicationController
   def update
     @request.admin_id = current_user.id
     @request.update(request_params)
-    render nothing: true
+    respond_to do |format|
+      format.html { redirect_to requests_url, notice: "Actualizado correctamente" }
+      format.json { render nothing: true }
+    end
   end
 
   def search_subarticles
@@ -68,7 +71,7 @@ class RequestsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def request_params
-      params.require(:request).permit(:user_id, :status, :delivery_date, :created_at, { subarticle_requests_attributes: [ :id, :subarticle_id, :amount, :amount_delivered ] } )
+      params.require(:request).permit(:user_id, :status, :delivery_date, :created_at, :nro_solicitud, { subarticle_requests_attributes: [ :id, :subarticle_id, :amount, :amount_delivered ] } )
     end
 
   def search_date

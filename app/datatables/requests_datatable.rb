@@ -19,11 +19,12 @@ private
   def data
     array.map do |r|
       [
-        r.id,
+        r.nro_solicitud,
         I18n.l(r.created_at, format: :version),
         r.user_name,
         r.user_title,
-        link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-eye-open'), r, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show'))
+        link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-eye-open'), r, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) + ' ' +
+        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), '#editar', class: 'btn btn-primary btn-xs editar-solicitud', title: I18n.t('general.btn.edit'), data: {solicitud: r.as_json})
       ]
     end
   end
