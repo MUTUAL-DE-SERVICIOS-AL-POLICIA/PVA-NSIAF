@@ -1,7 +1,7 @@
 .modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1", id: "modal-editar-solicitud"}
   .modal-dialog
     .modal-content
-      = form_for :request, url: requests_path + '/{{id}}', class: 'form-horizontal' do |f|
+      = form_for :request, url: requests_path + '/{{id}}', class: 'form-horizontal', data: {id: "{{id}}"} do |f|
         .modal-header
           %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} &times;
           %h4.modal-title Editar solicitud
