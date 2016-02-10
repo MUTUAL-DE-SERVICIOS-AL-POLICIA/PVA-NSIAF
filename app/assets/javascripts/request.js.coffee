@@ -22,7 +22,7 @@ class Request extends BarcodeReader
     @delivery_date = $(".input-group.note_entry_delivery_note_date")
     @invoice_date = $(".input-group.note_entry_invoice_date")
 
-    @$idRequest = $('#request_id').text()
+    @$idRequest = $('#request_id').data('id')
 
     @$btnEditRequest = $('#btn_edit_request')
     @$btnShowRequest = $('#btn-show-request')
