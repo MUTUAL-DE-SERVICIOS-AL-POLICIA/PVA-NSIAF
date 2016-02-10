@@ -83,7 +83,7 @@
             = l transaccion.nota_entrega, format: :default if transaccion.nota_entrega.present?
         %td.text-center
           - unless transaccion.cantidad.zero?
-            = transaccion.nro_pedido
+            = transaccion.nro_solicitud
         %td
           - if transaccion.cantidad.zero?
             SALDO INICIAL

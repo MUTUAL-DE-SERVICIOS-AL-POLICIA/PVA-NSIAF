@@ -19,8 +19,10 @@
       = render 'dropdown', status: @request.status
 
     %h2
-      Solicitud de Material Nro.
-      %span#request_id{data: {id: @request.id}} #{@request.nro_solicitud}
+      Solicitud de Material
+      %span#request_id{data: {id: @request.id}}
+        - if @request.nro_solicitud != 0 && @request.nro_solicitud.present?
+          Nro. #{@request.nro_solicitud}
 
     #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
 

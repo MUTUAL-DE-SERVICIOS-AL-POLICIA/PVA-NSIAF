@@ -143,6 +143,14 @@ class Transaccion < ActiveRecord::Base
     cantidad_saldo.to_f * costo_unitario.to_f
   end
 
+  def nro_solicitud
+    retorno = ''
+    if self.nro_pedido.to_i != 0 && self.nro_pedido.present?
+      retorno = self.nro_pedido
+    end
+    retorno
+  end
+
   def saldo
     cantidad
   end
