@@ -19,6 +19,7 @@ private
   def data
     array.map do |r|
       [
+        I18n.l(r.note_entry_date),
         r.id,
         r.supplier_name,
         r.user_name,
@@ -46,7 +47,7 @@ private
   end
 
   def sort_column
-    columns = %w[note_entries.id suppliers.name users.name note_entries.total, note_entries.delivery_note_date]
+    columns = %w[note_entries.note_entry_date note_entries.id suppliers.name users.name note_entries.total note_entries.delivery_note_date]
     columns[params[:iSortCol_0].to_i]
   end
 

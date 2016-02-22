@@ -400,6 +400,7 @@ es:
         delivery_note_number: "Nota de Entrega"
         delivery_note_date: "Nota de Entrega"
         invoice_number: "Factura"
+        note_entry_date: "Fecha"
         supplier_id: "Proveedor"
         suppliers: "Proveedor"
         total: "Costo total"

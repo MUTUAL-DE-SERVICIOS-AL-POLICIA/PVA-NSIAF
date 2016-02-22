@@ -295,7 +295,7 @@ jQuery ->
       type: 'POST'
       complete: (data, xhr) ->
         $tr = $("#request_#{$form.data('id')}").closest('tr')
-        $tr.find('td:first-child').text($nro_solicitud)
+        $tr.children('td').eq(1).text($nro_solicitud)
         $tr.addClass('warning')
 
   $(document).on 'click', '.remove_entry', ->

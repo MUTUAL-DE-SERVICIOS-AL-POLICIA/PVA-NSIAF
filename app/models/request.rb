@@ -27,7 +27,7 @@ class Request < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'id'), h.get_column(self, 'created_at'), h.get_column(self, 'name'), h.get_column(self, 'title')]
+    [h.get_column(self, 'created_at'), h.get_column(self, 'nro_solicitud'), h.get_column(self, 'name'), h.get_column(self, 'title')]
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
@@ -47,7 +47,7 @@ class Request < ActiveRecord::Base
   end
 
   def self.to_csv
-    columns = %w(id created_at name title)
+    columns = %w(created_at nro_solicitud name title)
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }
       all.each do |request|
