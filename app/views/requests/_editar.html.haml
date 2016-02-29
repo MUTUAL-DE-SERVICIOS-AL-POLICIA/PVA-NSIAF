@@ -12,6 +12,10 @@
             .col-sm-8
               = f.text_field "nro_solicitud", value: "{{nro_solicitud}}", class: 'form-control', autofocus: true
           .form-group
+            %label.col-sm-4.control-label Funcionario
+            .col-sm-8
+              = f.text_field "user_id", value: "{{user_id}}", class: 'form-control'
+          .form-group
             %label.col-sm-4.control-label Fecha
             .col-sm-8
               = f.text_field "created_at", value: "{{created_at}}", class: 'form-control'
