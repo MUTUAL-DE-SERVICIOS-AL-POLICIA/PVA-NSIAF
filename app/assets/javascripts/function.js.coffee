@@ -274,6 +274,29 @@ jQuery ->
     style_date("date_#{id}")
     date_picker(true)
 
+  # BEGIN Editar notas de entrada
+  $(document).on 'click', '.editar-nota-entrada', (e) ->
+    e.preventDefault()
+    data = $(this).data('nota-entrada')
+    template = Hogan.compile $('#editar-nota-entrada-tpl').html() || ''
+    $('#confirm-modal').html(template.render(data))
+    $('#modal-editar-nota-entrada').modal('show')
+    $('#modal-editar-nota-entrada').on 'shown.bs.modal', (e) ->
+      $('#note_entry_nro_nota_ingreso').select()
+
+  $(document).on 'click', $('#modal-editar-nota-entrada').find('button[type=submit]').selector, (e) ->
+    e.preventDefault()
+    $nro_solicitud = $('#note_entry_nro_nota_ingreso').val()
+    $('#modal-editar-nota-entrada').modal('hide')
+    $form = $(e.target).closest('form')
+    $.ajax
+      url: $form.prop('action')
+      data: $form.serialize()
+      dataType: 'script'
+      type: 'POST'
+  # END Editar notas de entrada
+
+  # BEGIN Editar solicitudes de material
   cargarUsuarios = ($elemento) ->
     listaUsuarios = new Bloodhound(
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
@@ -316,6 +339,7 @@ jQuery ->
       data: $form.serialize()
       dataType: 'script'
       type: 'POST'
+  # END Editar solicitudes de material
 
   $(document).on 'click', '.remove_entry', ->
     $(this).parent().prev().remove()
