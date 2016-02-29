@@ -274,6 +274,28 @@ jQuery ->
     style_date("date_#{id}")
     date_picker(true)
 
+  cargarUsuarios = ($elemento) ->
+    listaUsuarios = new Bloodhound(
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
+      queryTokenizer: Bloodhound.tokenizers.whitespace
+      limit: 10
+      remote: decodeURIComponent $elemento.data('url')
+    )
+    listaUsuarios.initialize()
+    $elemento.typeahead null,
+      displayKey: 'name'
+      source: listaUsuarios.ttAdapter(),
+      templates:
+        empty: [
+          '<p class="empty-message">',
+          'No se encontró ningún elemento',
+          '</p>'
+        ].join('\n')
+        suggestion: (data) ->
+          Hogan.compile('<p><b>{{name}}</b><p class="text-muted">{{title}}</p></p>').render(data)
+    .on 'typeahead:selected', (evt, data) ->
+      $('#request_user_id').prop('value', data.id)
+
   $(document).on 'click', '.editar-solicitud', (e) ->
     e.preventDefault()
     data = $(this).data('solicitud')
@@ -282,6 +304,7 @@ jQuery ->
     $('#modal-editar-solicitud').modal('show')
     $('#modal-editar-solicitud').on 'shown.bs.modal', (e) ->
       $('#request_nro_solicitud').select()
+      cargarUsuarios($('#usuario'))
 
   $(document).on 'click', $('#modal-editar-solicitud').find('button[type=submit]').selector, (e) ->
     e.preventDefault()
@@ -291,12 +314,8 @@ jQuery ->
     $.ajax
       url: $form.prop('action')
       data: $form.serialize()
-      dataType: 'json'
+      dataType: 'script'
       type: 'POST'
-      complete: (data, xhr) ->
-        $tr = $("#request_#{$form.data('id')}").closest('tr')
-        $tr.children('td').eq(1).text($nro_solicitud)
-        $tr.addClass('warning')
 
   $(document).on 'click', '.remove_entry', ->
     $(this).parent().prev().remove()
