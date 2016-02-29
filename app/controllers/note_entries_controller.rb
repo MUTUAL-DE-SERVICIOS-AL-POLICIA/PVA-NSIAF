@@ -49,6 +49,7 @@ class NoteEntriesController < ApplicationController
         @note_entry.change_date_entries
         @note_entry.change_kardexes
         format.html { redirect_to @note_entry, notice: t('general.updated', model: NoteEntry.model_name.human) }
+        format.js
       else
         format.html { render action: 'new' }
       end
@@ -67,6 +68,6 @@ class NoteEntriesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def note_entry_params
-      params.require(:note_entry).permit(:delivery_note_number, :delivery_note_date, :invoice_number, :invoice_autorizacion, :c31, :invoice_date, :supplier_id, :total, {entry_subarticles_attributes: [ :id, :subarticle_id, :amount, :unit_cost, :total_cost]})
+      params.require(:note_entry).permit(:delivery_note_number, :nro_nota_ingreso, :delivery_note_date, :invoice_number, :invoice_autorizacion, :c31, :invoice_date, :supplier_id, :total, {entry_subarticles_attributes: [ :id, :subarticle_id, :amount, :unit_cost, :total_cost]})
     end
 end

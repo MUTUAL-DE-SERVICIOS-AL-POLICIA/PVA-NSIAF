@@ -1,5 +1,5 @@
 class NoteEntriesDatatable
-  delegate :params, :links_actions, :content_tag, to: :@view
+  delegate :params, :dom_id, :link_to, :links_actions, :content_tag, to: :@view
 
   def initialize(view)
     @view = view
@@ -19,12 +19,13 @@ private
   def data
     array.map do |r|
       [
-        r.id,
+        I18n.l(r.note_entry_date),
+        r.nro_nota_ingreso,
         r.supplier_name,
         r.user_name,
         r.total,
         r.note_date(r.delivery_note_date),
-        links_actions(r, 'asset')
+        [links_actions(r, 'asset'), link_to(content_tag(:span, "", class: 'glyphicon glyphicon-sort-by-order'), '#editar', class: 'btn btn-info btn-xs editar-nota-entrada', title: 'Establecer número de nota de entrada', data: {"nota-entrada" => r.as_json}, id: dom_id(r))].join(' ')
       ]
     end
   end
@@ -46,7 +47,7 @@ private
   end
 
   def sort_column
-    columns = %w[note_entries.id suppliers.name users.name note_entries.total, note_entries.delivery_note_date]
+    columns = %w[note_entries.note_entry_date note_entries.nro_nota_ingreso suppliers.name users.name note_entries.total note_entries.delivery_note_date]
     columns[params[:iSortCol_0].to_i]
   end
 

@@ -45,6 +45,7 @@ class RequestsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to requests_url, notice: "Actualizado correctamente" }
       format.json { render nothing: true }
+      format.js
     end
   end
 
