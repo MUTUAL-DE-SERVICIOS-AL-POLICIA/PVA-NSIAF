@@ -68,10 +68,11 @@
       %tr
         %td{colspan: 4}
         %th.text-right DESCUENTO
-        %th.col-xs-1.number.note
-          - if f.object.new_record?
+        - if f.object.new_record?
+          %th.col-xs-1.number.note
             = f.text_field :descuento, class: 'form-control text-right descuento', placeholder: 'Descuento'
-          - else
+        - else
+          %th.col-xs-1.number
             = number_with_delimiter @note_entry.descuento || 0
       %tr
         %td{colspan: 4}
