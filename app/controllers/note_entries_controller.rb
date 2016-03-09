@@ -12,12 +12,12 @@ class NoteEntriesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "VSIAF-Nota de Ingreso Nº #{@note_entry.id}",
+        render pdf: "VSIAF-Nota de Ingreso #{@note_entry.note_entry_date}".parameterize,
                disposition: 'attachment',
                template: 'note_entries/show.html.haml',
                layout: 'pdf.html',
                page_size: 'Letter',
-               margin: { top: 15, bottom: 20, left: 20, right: 15 },
+               margin: { top: 25, bottom: 20, left: 20, right: 15 },
                header: { html: { template: 'shared/header.pdf.haml' } },
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end

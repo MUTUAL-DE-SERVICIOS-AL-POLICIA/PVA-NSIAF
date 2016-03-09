@@ -188,7 +188,7 @@ module ApplicationHelper
         img = ""
       end
     end
-    pdf_image_tag(img, class: "image")
+    img.present? ? pdf_image_tag(img, class: "image") : ''
   end
 
   def pdf_image_tag(image, options = {})
