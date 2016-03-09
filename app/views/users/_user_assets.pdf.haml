@@ -1,7 +1,7 @@
-%table.table.table-striped.table-condensed
+%table.table.table-striped.table-condensed.table-bordered
   %thead
     %tr
-      %th{ class: "#{ 'separator line' if is_pdf?}" }
+      %th
       %th= Asset.human_attribute_name('description')
       - if controller_name == 'departments'
         %th= Asset.human_attribute_name('user')

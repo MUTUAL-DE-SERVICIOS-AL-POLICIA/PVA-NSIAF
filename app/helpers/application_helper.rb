@@ -321,4 +321,9 @@ module ApplicationHelper
   def format_date(date)
     date.present? ? (I18n.l date) : ''
   end
+
+  # Para los documentos en tamaño carta con el logo de AGETIC
+  def margin_pdf
+    { top: 25, bottom: 20, left: 20, right: 15 }
+  end
 end

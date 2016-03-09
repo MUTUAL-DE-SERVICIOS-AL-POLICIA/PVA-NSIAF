@@ -20,12 +20,7 @@ class ProceedingsController < ApplicationController
                orientation: 'Portrait',
                layout: 'pdf.html',
                page_size: 'Letter',
-               margin: {
-                 top: 10,
-                 bottom: 15,
-                 left: 20,
-                 right: 15
-               },
+               margin: view_context.margin_pdf,
                header: { html: { template: 'shared/header.pdf.haml' } },
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
