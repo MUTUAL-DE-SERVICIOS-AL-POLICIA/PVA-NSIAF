@@ -2,18 +2,6 @@
 round = (value, decimals) ->
   Number(Math.round(value+'e'+decimals)+'e-'+decimals)
 
-total_cost = ($this) ->
-  id = $this.parent().parent().parent().attr('id')
-  amount = parseFloat($("input#amount_#{id}").val() || 0)
-  unit_cost = parseFloat($("input#unit_cost_#{id}").val() || 0)
-  cost_total = round(amount * unit_cost, 2)
-  $("input#total_cost_#{id}").val(cost_total).parent().prev().text(cost_total.formatNumber(2, '.', ','))
-  total = 0
-  $("input.total_cost").map ->
-    total += parseFloat($(this).val() || 0)
-    $("#totalNoteEntry").text(total.formatNumber(2, '.', ','))
-    # $("input#note_entry_total").val(total)
-
 style_date = (id)->
   $("<div class='input-group #{id} date'></div>").insertBefore("input##{id}")
   $("input##{id}").appendTo(".input-group.#{id}")
@@ -250,12 +238,6 @@ jQuery ->
   style_date("date")
 
   date_picker()
-
-  $(document).on 'keyup', 'input.amount', ->
-    total_cost($(this))
-
-  $(document).on 'keyup', 'input.unit_cost', ->
-    total_cost($(this))
 
   $(document).on 'click', 'span.glyphicon-remove.pointer', ->
     $(this).parent().parent().remove()

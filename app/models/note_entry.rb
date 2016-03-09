@@ -136,6 +136,8 @@ class NoteEntry < ActiveRecord::Base
       first_date = delivery_note_date
     elsif invoice_date
       first_date = invoice_date
+    elsif note_entry_date
+      first_date = note_entry_date
     end
     first_date.to_date
   end

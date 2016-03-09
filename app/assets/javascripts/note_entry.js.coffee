@@ -20,9 +20,10 @@ class NoteEntry extends BarcodeReader
     if @$inputSupplier?
       @get_suppliers()
     $(document).on 'click', @btnSaveNoteEntry.selector, => @get_note_entry()
-    $(document).on 'keyup', '.amount, .unit_cost, .descuento', => @actualizarTotales()
+    $(document).on 'keyup', '.amount, .unit_cost, .descuento', (e) => @actualizarTotales(e)
 
-  actualizarTotales: ->
+  actualizarTotales: (e) ->
+    @mostrarTotalParcial($(e.target))
     @mostrarSubtotal()
     @mostrarTotal()
 
@@ -80,6 +81,12 @@ class NoteEntry extends BarcodeReader
     @$totalSuma.text sumaTotal.formatNumber(2, '.', ',')
     @$inputTotal.val(sumaTotal) # establecer el total
 
+  mostrarTotalParcial: ($elem) ->
+    $fila = $elem.closest('tr')
+    totalParcial = @totalParcial($fila)
+    $fila.find('.total-parcial').text totalParcial.formatNumber(2, '.', ',')
+    $fila.find('input.total-cost').val totalParcial # establecer total parcial
+
   descuento: ->
     if $.isNumeric(@$descuento.val())
       parseFloat @$descuento.val()
@@ -87,11 +94,14 @@ class NoteEntry extends BarcodeReader
       0
 
   sumarSubtotal: ->
-    @$subarticles.find('tr.subarticle').toArray().reduce (suma, fila) ->
-      amount = parseInt($(fila).find('input.amount').val()) || 0
-      unit_cost = parseFloat($(fila).find('input.unit_cost').val()) || 0
-      suma + (amount * unit_cost)
+    @$subarticles.find('tr.subarticle').toArray().reduce (suma, fila) =>
+      suma + @totalParcial($(fila))
     , 0
 
   sumarTotal: ->
     @sumarSubtotal() - @descuento()
+
+  totalParcial: ($fila) ->
+    amount = parseInt($fila.find('input.amount').val()) || 0
+    unit_cost = parseFloat($fila.find('input.unit_cost').val()) || 0
+    amount * unit_cost
