@@ -8,6 +8,7 @@
 
 = simple_form_for @note_entry, html: { class: "form-horizontal #{params[:action]}_note_entry" } do |f|
   = f.input :total, as: :hidden
+  = f.input :subtotal, as: :hidden
   .row{data: {action: 'note_entry'}}
     .col-sm-12.col-md-8.col-lg-8
       - supplier = params[:action] == 'new' ? f.object.supplier_id : @note_entry.supplier_name
@@ -40,33 +41,46 @@
   %table.table.table-bordered
     %thead
       %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
+        %th.text-center CÓDIGO
+        %th.text-center UNIDAD
+        %th.text-center.description DETALLE
         %th.text-center CANTIDAD
         %th.text-center PRECIO UNITARIO
-        %th.text-center UNIDAD
-        %th.text-center CÓDIGO
-        %th.text-center DETALLE
         %th.text-center PRECIO TOTAL
         - if params[:action] == 'new'
           %th
     %tbody#subarticles
       - if params[:action] == 'edit'
         - @note_entry.entry_subarticles.each do |entry|
-          %tr
-            %td.text-center= entry.amount
-            %td.number= number_with_delimiter entry.unit_cost
-            %td= entry.subarticle_unit
-            %td= entry.subarticle_code
+          = hidden_field_tag "note_entry[entry_subarticles_attributes][#{entry.id}][id]", entry.id
+          %tr.subarticle
+            %td.text-center= entry.subarticle_code
+            %td.text-center= entry.subarticle_unit
             %td= entry.subarticle_name
-            %td.number= number_with_delimiter entry.total_cost || 0
-      %tr.total-sum
-        %td
-        %td
-        %td
-        %th
-        %th TOTAL
-        %th#totalNoteEntry.number
-          - if params[:action] == 'edit'
-            = number_with_delimiter @note_entry.total || 0
+            %td.col-sm-1.col-md-1.note
+              = number_field_tag "note_entry[entry_subarticles_attributes][#{entry.id}][amount]", entry.amount, { class: 'form-control amount text-right', step: 1 }
+            %td.col-sm-1.col-md-1.note
+              = number_field_tag "note_entry[entry_subarticles_attributes][#{entry.id}][unit_cost]", entry.unit_cost, { class: 'form-control unit_cost text-right', step: 0.1 }
+            %td.col-sm-1.col-md-1.number
+              %span.total-parcial= number_with_delimiter entry.total_cost || 0
+              = hidden_field_tag "note_entry[entry_subarticles_attributes][#{entry.id}][total_cost]", entry.total_cost, class: 'total-cost'
+      %tr.subtotal-sum
+        %td{colspan: 4}
+        %th.text-right SUBTOTAL
+        %th.subtotal-suma.number
+          - numero = params[:action] == 'edit' ? @note_entry.subtotal || 0 : 0
+          = number_with_delimiter numero
+      %tr
+        %td{colspan: 4}
+        %th.text-right DESCUENTO
+        %th.col-xs-1.number.note
+          = f.text_field :descuento, class: 'form-control text-right descuento', placeholder: 'Descuento'
+      %tr
+        %td{colspan: 4}
+        %th.text-right TOTAL
+        %th.total-suma.number
+          - numero = params[:action] == 'edit' ? @note_entry.total || 0 : 0
+          = number_with_delimiter numero
 
   - if params[:action] == 'edit'
     #get_date{ data: { date: @note_entry.get_date } }
@@ -78,17 +92,16 @@
 
 %script{ type: 'text/html', id: 'new_request' }
   %tr.subarticle{ id: '{{id}}' }
-    %td.col-sm-1.col-md-1.note
-      %div= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][amount]", nil, { id:"amount_{{id}}", class: 'form-control amount' }
-    %td.col-sm-2.col-md-2.note
-      %div= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, { id:"unit_cost_{{id}}", class: 'form-control unit_cost', step: 0.1 }
-    %td {{unit}}
     %td {{code}}
+    %td {{unit}}
     %td.description {{description}}
-    %td.col-sm-2.col-md-2.number
-    %td{style: "display: none;"}
+    %td.col-sm-1.col-md-1.note
+      %div= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][amount]", nil, { id:"amount_{{id}}", class: 'form-control amount text-right', step: 1 }
+    %td.col-sm-1.col-md-1.note
+      %div= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, { id:"unit_cost_{{id}}", class: 'form-control unit_cost text-right', step: 0.1 }
+    %td.col-sm-1.col-md-1.number
+      %span.total-parcial= number_with_delimiter 0
+      = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, class: 'total-cost'
       = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
-      = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, { id:"total_cost_{{id}}", class: 'form-control total_cost' }
-      .date_entry {{days}}
     %td.text-center
       %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }
