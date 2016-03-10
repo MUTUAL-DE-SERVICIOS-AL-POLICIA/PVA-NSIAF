@@ -34,7 +34,7 @@ module ApplicationHelper
   end
 
   def proceeding_to_json(proceeding)
-    assets = proceeding.assets.each_with_index.map do |a, index|
+    assets = proceeding.assets.order(:code).each_with_index.map do |a, index|
       { index: index + 1, id: a.id, description: a.description, code: a.code, state: a.get_state, auxiliary: a.auxiliary_name }
     end
     {
