@@ -147,7 +147,7 @@ module ApplicationHelper
   end
 
   def status_active(model)
-    model.where(status: '1')
+    model.where(status: '1').order(:name)
   end
 
   def yield_or_default(section, default = "")
@@ -188,7 +188,7 @@ module ApplicationHelper
         img = ""
       end
     end
-    pdf_image_tag(img, class: "image")
+    img.present? ? pdf_image_tag(img, class: "image") : ''
   end
 
   def pdf_image_tag(image, options = {})
@@ -320,5 +320,10 @@ module ApplicationHelper
 
   def format_date(date)
     date.present? ? (I18n.l date) : ''
+  end
+
+  # Para los documentos en tamaño carta con el logo de AGETIC
+  def margin_pdf
+    { top: 25, bottom: 20, left: 20, right: 15 }
   end
 end

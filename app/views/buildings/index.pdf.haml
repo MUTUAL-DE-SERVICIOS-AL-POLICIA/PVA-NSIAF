@@ -1,10 +1,10 @@
 .title_pdf
   %h3= t("#{controller_name}.title.title")
 
-%table.table.table-condensed
+%table.table.table-condensed.table-bordered
   %thead
     %tr
-      %th.separator.line= Building.human_attribute_name('code')
+      %th= Building.human_attribute_name('code')
       %th= Building.human_attribute_name('name')
       %th= Building.human_attribute_name('entity')
       %th= Building.human_attribute_name('status')

@@ -1,6 +1,6 @@
 - display_buttons ||= false
 %script{ id: 'tpl-proceeding-delivery', type: 'text/html' }
-  .row{ class: "#{'separator' if is_pdf?}" }
+  .row
     .col-md-offset-1.col-md-10
       .proceeding-title.text-center
         %h3
@@ -32,7 +32,7 @@
           %span.text-muted Oficina:
           {{userDepartment}}
 
-      %table.table.table-striped.table-condensed.proceeding-assets
+      %table.table.table-striped.table-condensed.proceeding-assets.table-bordered
         %thead
           %tr
             %th.col-sm-2 Código
@@ -53,22 +53,19 @@
           {{count}}
           %br
           %br
-          %i
+          %small
             {{^devolution}}
-            EN CUMPLIMIENTO AL ARTICULO 146 (ASIGNACION DE ACTIVOS FIJOS MUEBLES ) DE LAS NORMAS BASICAS DE ADMINISTRACION DE BIENES Y SERVICIOS D.S. 181, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIO CON EL ACTO DE ASIGNACION INDIVIDUAL Y ENTREGA DE BIENES ,DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
-            %br
-            %br
-            LA NO OBSERVANCIA A LAS PROHIBICIONES SEÑALADAS EN EL ARTICULO 157, GENERARÁ RESPONSABILIDADES ESTABLECIDAS EN LA LEY N°1178 Y SUS REGLAMENTOS.
-            %br
-            %br
-            EN SEÑAL DE CONFORMIDAD Y ACEPTACION SE FIRMA EL PRESENTE ACTA.
+            %p
+              EN CUMPLIMIENTO AL ARTÍCULO 146 (ASIGNACIÓN DE ACTIVOS FIJOS MUEBLES) DE LAS NORMAS BÁSICAS DE ADMINISTRACIÓN DE BIENES Y SERVICIOS D.S. 181, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIÓ CON EL ACTO DE ASIGNACIÓN INDIVIDUAL Y ENTREGA DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
+            %p
+              LA NO OBSERVANCIA A LAS PROHIBICIONES SEÑALADAS EN EL ARTÍCULO 157, GENERARÁ RESPONSABILIDADES ESTABLECIDAS EN LA LEY N° 1178 Y SUS REGLAMENTOS.
+            %p
+              EN SEÑAL DE CONFORMIDAD Y ACEPTACIÓN SE FIRMA EL PRESENTE ACTA.
             {{/devolution}}
             {{#devolution}}
-            EN CUMPLIMIENTO AL ARTICULO N° 148 ( LIBERACION DE LA RESPONSABILIDAD ) DE LAS NORMAS BASICAS DE ADMINISTRACION DE BIENES Y SERVICIOS , EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIO CON EL ACTO DE DEVOLUCION DE BIENES,DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
+            %p
+              EN CUMPLIMIENTO AL ARTÍCULO N° 148 (LIBERACIÓN DE LA RESPONSABILIDAD) DE LAS NORMAS BÁSICAS DE ADMINISTRACIÓN DE BIENES Y SERVICIOS, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIÓ CON EL ACTO DE DEVOLUCIÓN DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
             {{/devolution}}
-
-
-
 
       .proceeding-signature{ style: "#{'margin-bottom: 50px;' unless is_pdf?}" }
         %table{ style: 'width: 100%' }
@@ -89,8 +86,6 @@
             %td.text-center
               __________________________
               %p Funcionario
-
-
 
   - if display_buttons
     %p.proceeding-pdf.text-center

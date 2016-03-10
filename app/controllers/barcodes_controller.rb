@@ -11,15 +11,18 @@ class BarcodesController < ApplicationController
 
   def load_data
     authorize! :load_data, :barcode
+    params[:desde] = 1 unless params[:desde].present?
+    params[:hasta] = 30 unless params[:hasta].present?
+    @assets = generate_array_with_codes(params[:desde].to_i, params[:hasta].to_i)
     respond_to do |format|
-      format.json { render json: {last_value: get_last_value()} }
+      format.json { render json: @assets.select([:id, :barcode, :detalle]), root: false }
     end
   end
 
   def pdf
     authorize! :pdf, :barcode
-    @assets = generate_array_with_codes(params[:quantity].to_i)
-    Barcode.register_assets(@assets) if @assets.length > 0
+    @assets = generate_array_with_codes(params[:desde].to_i, params[:hasta].to_i)
+    # Barcode.register_assets(@assets) if @assets.length > 0
     respond_to do |format|
       format.pdf do
         filename = 'código de barras'
@@ -42,21 +45,7 @@ class BarcodesController < ApplicationController
 
   private
 
-  def generate_array_with_codes(quantity)
-    last_value = get_last_value()
-    acronym = last_value.split('-').first
-    offset = last_value.split('-').last.to_i
-    (1..quantity).to_a.map {|i| {code: "#{acronym}-#{offset + i}"}}
-  end
-
-  def get_last_value()
-    last_value = Barcode.last
-    if last_value.present?
-      last_value = last_value.code
-    else
-      acronym = view_context.entidad_sigla
-      last_value = "#{acronym}-0"
+    def generate_array_with_codes(desde, hasta)
+      Asset.where(id: desde..hasta).order(:id)
     end
-    last_value
-  end
 end

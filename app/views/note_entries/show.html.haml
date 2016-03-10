@@ -91,9 +91,5 @@
         #{subarticle}#{supplier}#{delivery}#{invoice}
 
 - if is_pdf?
-  %br
-  %br
-  %p
-    Recibido por #{@note_entry.user_name} ..................................................................... Firma .......................................................
   %p.proceeding-date
     La Paz, #{ I18n.l(@note_entry.note_entry_date.to_date, format: :long) }

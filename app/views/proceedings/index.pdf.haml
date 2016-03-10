@@ -1,10 +1,10 @@
 .title_pdf
   %h3= t("#{controller_name}.title.title")
 
-%table.table.table-condensed
+%table.table.table-condensed.table-bordered
   %thead
     %tr
-      %th.separator.line= Proceeding.human_attribute_name('user_id')
+      %th= Proceeding.human_attribute_name('user_id')
       %th= Proceeding.human_attribute_name('admin_id')
       %th= Proceeding.human_attribute_name('proceeding_type')
       %th= Proceeding.human_attribute_name('created_at')

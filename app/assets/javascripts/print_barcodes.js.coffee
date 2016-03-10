@@ -1,8 +1,7 @@
 $ -> new PrintBarcodes() if $('[data-action=print-barcode]').length > 0
 
 class PrintBarcodes
-  _last_value = null
-  _quantity = 30
+  _activos = []
 
   constructor: ->
     @cacheElements()
@@ -17,7 +16,9 @@ class PrintBarcodes
     # containers
     @$containerPreviewBarcodes = $('#preview-barcodes')
     # buttons
-    @$btnPrint = @$containerPreviewBarcodes.find('button[type=submit]')
+    @$btnPrint = @$containerPreviewBarcodes.find('button.imprimir')
+    @$btnCargar = @$containerPreviewBarcodes.find('button.cargar-barcodes')
+
     # Growl Notices
     @alert = new Notices({ele: 'div.main'})
     # templates
@@ -25,25 +26,28 @@ class PrintBarcodes
 
   bindEvents: ->
     $(document).on 'click', @$btnPrint.selector, (e) => @printPdf(e)
+    $(document).on 'click', @$btnCargar.selector, (e) => @cargarBarcodes(e)
+
+  cargarBarcodes: (e)->
+    e.preventDefault()
+    @loadDataAndDisplay @cargarParametros()
+
+  cargarParametros: ->
+    desde: $('#barcode-desde').val() || 1
+    hasta: $('#barcode-hasta').val() || 30
 
   displayBarcodes: ->
     @$containerPreviewBarcodes.find('.row .thumbnail .barcode').each (i, e) ->
-      $(e).barcode $(e).data('code').toString(), 'code128', { barWidth: 1, barHeight: 50 }
+      $(e).barcode $(e).data('barcode').toString(), 'code128', { barWidth: 1, barHeight: 50 }
 
   generateCodes: ->
-    codes = []
-    acronym = _last_value.split('-')[0]
-    inc = parseInt(_last_value.split('-')[1]) || 0
-    if _quantity > 0
-      for q in [1.._quantity]
-        codes.push {code: "#{acronym}-#{q + inc}"}
-      {assets: codes}
-    else
-      {}
+    assets: _activos
+    desde: @cargarParametros().desde
+    hasta: @cargarParametros().hasta
 
-  loadDataAndDisplay: ->
-    $.getJSON @load_data_path, (data) =>
-      _last_value = data.last_value
+  loadDataAndDisplay: (parametros = {})->
+    $.getJSON @load_data_path, parametros, (data) =>
+      _activos = data
       @previewBarcodes()
     .fail =>
       @alert.danger "Error al conectarse con el servidor, vuelva a intentarlo en unos minutos"
@@ -55,6 +59,7 @@ class PrintBarcodes
   printPdf: (e)->
     e.preventDefault()
     data =
-      quantity: _quantity
       authenticity_token: $('meta[name="csrf-token"]').attr('content')
+      desde: @cargarParametros().desde
+      hasta: @cargarParametros().hasta
     $.fileDownload @pdf_barcodes_path, { data: data, httpMethod: 'POST' }

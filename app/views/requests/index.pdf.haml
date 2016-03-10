@@ -1,10 +1,10 @@
 .title_pdf
   %h3 #{t("#{controller_name}.title.title")}
 
-%table.table.table-condensed
+%table.table.table-condensed.table-bordered
   %thead
     %tr
-      %th.separator.line= Request.human_attribute_name('id')
+      %th= Request.human_attribute_name('id')
       %th= Request.human_attribute_name('created_at')
       %th= Request.human_attribute_name('name')
       %th= Request.human_attribute_name('title')

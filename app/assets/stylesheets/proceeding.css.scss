@@ -3,10 +3,7 @@
 .action-buttons { margin: 30px 0 60px; }
 
 #proceeding-delivery, #request {
-  font-size: 14px;
-
   .proceeding-assets {
-    font-size: 13px;
     margin: 20px 0 0;
     td:last-child { white-space: nowrap; }
   }
@@ -14,8 +11,6 @@
   .proceeding-date { margin-top: 30px; }
 
   .proceeding-signature { margin-top: 100px; }
-
-  .proceeding-title { margin: 0 0 30px 0; }
 }
 
 table#pdf-assets-print {
@@ -52,30 +47,10 @@ table#pdf-assets-print {
 }
 
 #header{
-  padding-bottom: 15px;
   .image {
     width: 685px;
   }
 }
-
-.title_pdf{
-  float: left;
-  margin: 90px 0 -100px;
-}
-
-.separator{
-  float: left;
-  margin-top: 100px;
-  width: 100%;
-}
-
-.separator-assets{
-  float: left;
-  margin: 75px 0 -85px;
-  width: 100%;
-}
-
-.line{ border-bottom: 1px solid #DDDDDD !important; }
 
 #footer{
   .image {
@@ -85,24 +60,6 @@ table#pdf-assets-print {
     text-align: center;
   }
 }
-
-.acta{
-  font-size: 12px;
-  .prohibiciones {
-    font-size: 9px;
-  }
-}
-
-/*requests*/
-.request_title{ float: right; }
-
-.nro_request{
-  float: right;
-  font-size: 17px;
-  font-weight: bold;
-}
-
-.selected-assets{ margin: 45px 0 30px !important; }
 
 // Para partir las tablas largas en el PDF
 table, tr, td, th, tbody, thead, tfoot {

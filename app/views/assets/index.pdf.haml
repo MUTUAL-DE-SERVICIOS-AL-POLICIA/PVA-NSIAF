@@ -1,10 +1,10 @@
 .title_pdf
   %h3 #{t("assets.title.title")} #{' dados de Baja' if controller_name == 'derecognised'}
 
-%table.table.table-condensed
+%table.table.table-condensed.table-bordered
   %thead
     %tr
-      %th.separator.line= Asset.human_attribute_name('code')
+      %th= Asset.human_attribute_name('code')
       %th= Asset.human_attribute_name('description')
       %th= Asset.human_attribute_name('user')
       - if controller_name == 'derecognised'

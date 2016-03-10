@@ -25,7 +25,7 @@ class KardexesController < ApplicationController
                template: 'kardexes/index.html.haml',
                orientation: 'Landscape',
                page_size: 'Letter',
-               margin: { top: 15, bottom: 20, left: 15, right: 15 },
+               margin: view_context.margin_pdf,
                header: { html: { template: 'shared/header.pdf.haml' } },
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
