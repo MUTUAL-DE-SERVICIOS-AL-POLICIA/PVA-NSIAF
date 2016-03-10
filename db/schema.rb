@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303221209) do
+ActiveRecord::Schema.define(version: 20160310170230) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20160303221209) do
   add_index "asset_proceedings", ["proceeding_id"], name: "index_asset_proceedings_on_proceeding_id", using: :btree
 
   create_table "assets", force: :cascade do |t|
-    t.string   "code",                limit: 50
+    t.integer  "code",                limit: 4
     t.text     "description",         limit: 65535
     t.integer  "auxiliary_id",        limit: 4
     t.integer  "user_id",             limit: 4
