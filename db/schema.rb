@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229153322) do
+ActiveRecord::Schema.define(version: 20160303221209) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -231,6 +231,8 @@ ActiveRecord::Schema.define(version: 20160229153322) do
     t.string   "invoice_autorizacion", limit: 255
     t.string   "c31",                  limit: 255
     t.integer  "nro_nota_ingreso",     limit: 4,                            default: 0
+    t.decimal  "subtotal",                         precision: 10, scale: 2, default: 0.0
+    t.decimal  "descuento",                        precision: 10, scale: 2, default: 0.0
   end
 
   add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree
