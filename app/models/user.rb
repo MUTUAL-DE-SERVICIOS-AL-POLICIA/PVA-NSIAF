@@ -86,6 +86,10 @@ class User < ActiveRecord::Base
     false
   end
 
+  def entity_name
+    department.present? ? department.entity_name : ''
+  end
+
   def has_roles?
     self.role.present?
   end

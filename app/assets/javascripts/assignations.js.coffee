@@ -125,11 +125,15 @@ class Assignations extends BarcodeReader
     e.preventDefault()
     if _assets.length > 0
       assignation =
+        entity: _user.entity_name
         assets: _assets
+        count: _assets.length
         devolution: false
         proceedingDate: CurrentDateSpanish.inWords()
+        userCi: _user.ci
         userName: _user.name
         userTitle: _user.title
+        userDepartment: _user.department_name
       @$containerTplProceedingDelivery.html @$templateProceedingDelivery.render(assignation)
       @$containerTplProceedingDelivery.show()
       @$containerTplSelectedAssets.hide()

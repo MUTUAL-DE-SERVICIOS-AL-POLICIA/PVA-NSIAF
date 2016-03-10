@@ -70,14 +70,14 @@ class AssetsController < ApplicationController
   def users
     department = params[:department].present? ? params[:department] : (params[:q].present? ? params[:q][:request_user_department_id_eq] : '')
     respond_to do |format|
-      format.json { render json: User.actives.search_by(department), root: false }
+      format.json { render json: User.actives.order(:name).search_by(department), root: false }
     end
   end
 
   def departments
     building = params[:building].present? ? params[:building] : params[:q][:request_user_department_building_id_eq]
     respond_to do |format|
-      format.json { render json: Department.actives.search_by(building), root: false }
+      format.json { render json: Department.actives.order(:name).search_by(building), root: false }
     end
   end
 
@@ -98,7 +98,7 @@ class AssetsController < ApplicationController
       assign = asset.present? ? 2 : 0
     end
     respond_to do |format|
-      format.json { render json: [asset, assign], only: [:id, :description, :code], include: {user: {only: [:name]}}, root: false }
+      format.json { render json: [AdminAssetSerializer.new(asset), assign], root: false }
     end
   end
 

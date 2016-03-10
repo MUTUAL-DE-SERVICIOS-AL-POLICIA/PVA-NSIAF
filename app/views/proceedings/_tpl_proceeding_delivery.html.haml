@@ -12,8 +12,9 @@
           {{/devolution}}
           DE BIENES
         {{proceedingDate}}
-      %h6.text-right
-        Fecha de impresión: #{l Time.now.to_date}
+      - if is_pdf?
+        %h6.text-right
+          Fecha de impresión: #{l Time.now.to_date}
       %p.proceeding-description.text-justify
         %h4
           %span.text-muted Entidad:
