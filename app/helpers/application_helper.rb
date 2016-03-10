@@ -147,7 +147,7 @@ module ApplicationHelper
   end
 
   def status_active(model)
-    model.where(status: '1')
+    model.where(status: '1').order(:name)
   end
 
   def yield_or_default(section, default = "")

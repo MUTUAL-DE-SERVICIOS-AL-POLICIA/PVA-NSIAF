@@ -31,7 +31,12 @@
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets' }
           %li{ role: 'presentation' }
+            = link_to 'Cuentas', accounts_path, role: 'menuitem'
+          %li{ role: 'presentation' }
+            = link_to 'Auxiliares', auxiliaries_path, role: 'menuitem'
+          %li{ role: 'presentation' }
             = link_to t('assets.title.title'), assets_path, role: 'menuitem'
+          %li.divider
           %li{ role: 'presentation' }
             = link_to 'Recodificar Activos', recode_assets_path, role: 'menuitem'
           %li{ role: 'presentation' }
