@@ -147,7 +147,11 @@ module ApplicationHelper
   end
 
   def status_active(model)
-    model.where(status: '1').order(:name)
+    orden = :name
+    if model == Material
+      orden = :description
+    end
+    model.where(status: '1').order(orden)
   end
 
   def yield_or_default(section, default = "")
