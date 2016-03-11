@@ -53,7 +53,6 @@ gem "non-stupid-digest-assets"
 gem 'rest_client'
 
 group :development do
-  gem 'coffee-rails-source-maps'
   gem 'rails-erd'
   gem 'web-console', '~> 2.0'
 end

@@ -14,7 +14,7 @@ class UsersController < ApplicationController
     @assets = @user.assets
     respond_to do |format|
       format.html
-      format.json { render json: @user, only: [:id, :name, :title] }
+      format.json { render json: @user, root: false } # UserSerializer
     end
   end
 
