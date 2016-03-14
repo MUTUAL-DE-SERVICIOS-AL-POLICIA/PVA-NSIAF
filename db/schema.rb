@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310170230) do
+ActiveRecord::Schema.define(version: 20160314141650) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -313,7 +313,7 @@ ActiveRecord::Schema.define(version: 20160310170230) do
     t.integer  "code",                   limit: 4
     t.string   "name",                   limit: 230
     t.string   "title",                  limit: 230
-    t.integer  "ci",                     limit: 4
+    t.string   "ci",                     limit: 255
     t.string   "phone",                  limit: 230
     t.string   "mobile",                 limit: 230
     t.string   "status",                 limit: 2
