@@ -12,9 +12,6 @@
           {{/devolution}}
           DE BIENES
         {{proceedingDate}}
-      - if is_pdf?
-        %h6.text-right
-          Fecha de impresión: #{l Time.now.to_date}
       %p.proceeding-description.text-justify
         %h4
           %span.text-muted Entidad:
@@ -36,51 +33,57 @@
       %table.table.table-striped.table-condensed.proceeding-assets.table-bordered
         %thead
           %tr
-            %th.col-sm-2 Código
+            %th.col-sm-1 Nro
+            %th.col-sm-1 Código
             %th.col-sm-3 Auxiliar
             %th.col-sm-6 Descripción del Activo
             %th.col-sm-1 Estado
         %tbody
           {{#assets}}
           %tr
+            %td {{index}}
             %td {{code}}
             %td {{auxiliary}}
             %td {{description}}
             %td {{state}}
           {{/assets}}
       .acta
-        %p.proceeding-date.text-justify
-          %b Cantidad:
-          {{count}}
+        %br/
+        %p.text-justify
+          %b OBLIGACIONES SOBRE EL USO DE LOS ACTIVOS ASIGNADOS
           %br
-          %br
-          %small
-            {{^devolution}}
-            %p
-              EN CUMPLIMIENTO AL ARTÍCULO 146 (ASIGNACIÓN DE ACTIVOS FIJOS MUEBLES) DE LAS NORMAS BÁSICAS DE ADMINISTRACIÓN DE BIENES Y SERVICIOS D.S. 181, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIÓ CON EL ACTO DE ASIGNACIÓN INDIVIDUAL Y ENTREGA DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
-            %p
-              LA NO OBSERVANCIA A LAS PROHIBICIONES SEÑALADAS EN EL ARTÍCULO 157, GENERARÁ RESPONSABILIDADES ESTABLECIDAS EN LA LEY N° 1178 Y SUS REGLAMENTOS.
-            %p
-              EN SEÑAL DE CONFORMIDAD Y ACEPTACIÓN SE FIRMA EL PRESENTE ACTA.
-            {{/devolution}}
-            {{#devolution}}
-            %p
-              EN CUMPLIMIENTO AL ARTÍCULO N° 148 (LIBERACIÓN DE LA RESPONSABILIDAD) DE LAS NORMAS BÁSICAS DE ADMINISTRACIÓN DE BIENES Y SERVICIOS, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIÓ CON EL ACTO DE DEVOLUCIÓN DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
-            {{/devolution}}
+          {{^devolution}}
+          %p
+            El funcionario que suscribe como Responsable de Activo, declara conocer las siguientes disposiciones institucionales, con lo que se compromete a respetarlas y aplicarlas durante todo su desempeño, dentro o fuera de las dependencias de {{sigla}}.
+          %ol
+            %li Será responsable por el debido uso y custodia de todos los bienes a su cargo
+            %li Queda prohibido de usar los bienes para beneficio particular o probado
+            %li Queda prohibido prestar o transferir el bien a otro empleado público
+            %li Se probíbe enajenar el bien por cuenta propia
+            %li Queda prohibido dañar o alterar sus características físicas o técnicas
+            %li Se prohíbe sacar los bienes de la entidad sin autorización de la Unidad Administrativa Financiera o Activos Fijos
+            %li La no observancia a éstas prohibiciones generará responsabilidades establecidas en la Ley N° 1178 y sus reglamentos
+          %p
+            En señal de conformidad y aceptación se firma el presente acta.
+          {{/devolution}}
+          {{#devolution}}
+          %p
+            EN CUMPLIMIENTO AL ARTÍCULO N° 148 (LIBERACIÓN DE LA RESPONSABILIDAD) DE LAS NORMAS BÁSICAS DE ADMINISTRACIÓN DE BIENES Y SERVICIOS, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIÓ CON EL ACTO DE DEVOLUCIÓN DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
+          {{/devolution}}
 
-      .proceeding-signature{ style: "#{'margin-bottom: 50px;' unless is_pdf?}" }
+      .proceeding-signature
         %table{ style: 'width: 100%' }
           %tr
-            %td.text-center
-              __________________________
-              %p
-                Autorización de
-                {{^devolution}}
-                Asignación
-                {{/devolution}}
-                {{#devolution}}
-                Devolución
-                {{/devolution}}
+            -# %td.text-center
+            -#   __________________________
+            -#   %p
+            -#     Autorización de
+            -#     {{^devolution}}
+            -#     Asignación
+            -#     {{/devolution}}
+            -#     {{#devolution}}
+            -#     Devolución
+            -#     {{/devolution}}
             %td.text-center
               __________________________
               %p Responsable de Activos Fijos

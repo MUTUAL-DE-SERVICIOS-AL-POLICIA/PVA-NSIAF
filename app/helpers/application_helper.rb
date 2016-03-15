@@ -47,7 +47,8 @@ module ApplicationHelper
       user_title: proceeding.user_title.titleize,
       user_department: proceeding.user_department.titleize,
       count: assets.count,
-      entity: "#{Entity.first.code} - #{Entity.first.name}"
+      entity: "#{Entity.first.code} - #{Entity.first.name}",
+      sigla: Entity.first.acronym
     }
   end
 
