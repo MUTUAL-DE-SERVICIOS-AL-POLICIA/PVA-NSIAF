@@ -12,12 +12,13 @@
 - when 'suppliers' then new_url = new_supplier_path
 - when 'requests' then new_url = new_request_path
 - when 'note_entries' then new_url = new_note_entry_path
+- when 'proceedings' then accion = 'actas'
 
 - control = controller_name == 'derecognised' ? 'assets' : controller_name
 
 = title t("#{control}.title.title")
 
-.page-header
+.page-header{data: {action: "#{accion if accion.present?}"}}
   %h2
     - if action_name == 'delivered'
       = t("delivered.title")

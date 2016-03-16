@@ -1,6 +1,6 @@
 class ProceedingsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_proceeding, only: [:show]
+  before_action :set_proceeding, only: [:show, :update]
 
   # GET /proceedings
   def index
@@ -40,6 +40,14 @@ class ProceedingsController < ApplicationController
     end
   end
 
+  # PATCH/PUT /proceedings/1
+  def update
+    @proceeding.update(proceeding_params)
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_proceeding
@@ -48,6 +56,6 @@ class ProceedingsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def proceeding_params
-      params.require(:proceeding).permit(:user_id, { asset_ids: [] }, :proceeding_type)
+      params.require(:proceeding).permit(:user_id, { asset_ids: [] }, :proceeding_type, :fecha)
     end
 end

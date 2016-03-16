@@ -73,7 +73,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :proceedings, only: [:index, :show, :create]
+  resources :proceedings, only: [:index, :show, :create, :update]
 
   resources :declines, only: [:index]
 

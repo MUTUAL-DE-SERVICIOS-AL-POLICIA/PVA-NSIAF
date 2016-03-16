@@ -1,5 +1,5 @@
 class ProceedingsDatatable
-  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :links_actions, :data_link, :type_status, :img_status, :title_status, to: :@view
+  delegate :current_user, :params, :link_to, :link_to_if, :content_tag, :links_actions, :data_link, :type_status, :img_status, :title_status, :dom_id, to: :@view
 
   def initialize(view)
     @view = view
@@ -19,11 +19,12 @@ private
   def data
     array.map do |proceeding|
       [
+        proceeding.fecha.present? ? I18n.l(proceeding.fecha, format: :default) : '',
         proceeding.user_name,
         proceeding.admin_name,
         I18n.t(proceeding.get_type, scope: 'proceedings.type'),
         I18n.l(proceeding.created_at, format: :version),
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), proceeding, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show'))
+        [link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), proceeding, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')), link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), '#editar', class: 'btn btn-primary btn-xs editar-acta', title: 'Establecer fecha de asignación/devolución', data: {acta: proceeding.as_json}, id: dom_id(proceeding))].join(' ')
       ]
     end
   end
@@ -45,7 +46,7 @@ private
   end
 
   def sort_column
-    columns = %w[users.name admins_proceedings.name proceeding_type created_at]
+    columns = %w[fecha users.name admins_proceedings.name proceeding_type created_at]
     columns[params[:iSortCol_0].to_i]
   end
 

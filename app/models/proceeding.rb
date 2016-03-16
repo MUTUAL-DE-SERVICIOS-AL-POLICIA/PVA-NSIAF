@@ -12,6 +12,7 @@ class Proceeding < ActiveRecord::Base
   has_many :asset_proceedings
   has_many :assets, through: :asset_proceedings
 
+  before_create :actualizar_fecha
   after_create :update_assignations
 
   has_paper_trail on: [:destroy]
@@ -93,6 +94,10 @@ class Proceeding < ActiveRecord::Base
   end
 
   private
+
+  def actualizar_fecha
+    self.fecha ||= self.created_at
+  end
 
   def update_assignations
     user_id = self.admin_id
