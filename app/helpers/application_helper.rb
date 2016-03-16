@@ -40,7 +40,7 @@ module ApplicationHelper
     {
       #admin_name: proceeding.admin_name.titleize,
       assets: assets.to_json,
-      proceeding_date: I18n.l(proceeding.created_at.to_date, format: :long),
+      proceeding_date: I18n.l(proceeding.fecha.to_date, format: :long),
       devolution: proceeding.is_devolution?,
       user_name: proceeding.user_name.titleize,
       user_ci: proceeding.user_ci,

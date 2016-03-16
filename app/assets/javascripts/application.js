@@ -51,3 +51,4 @@
 //= require subarticles_close
 //= require highcharts/highcharts
 //= require highcharts/highcharts-more
+//= require actas
