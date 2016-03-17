@@ -346,6 +346,7 @@ es:
         code: "Código"
         description: "Descripción"
         auxiliary: "Auxiliar"
+        account: "Cuenta"
         user: "Funcionario"
         derecognised: "Baja"
         state: "Estado"
