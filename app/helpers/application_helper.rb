@@ -35,7 +35,7 @@ module ApplicationHelper
 
   def proceeding_to_json(proceeding)
     assets = proceeding.assets.order(:code).each_with_index.map do |a, index|
-      { index: index + 1, id: a.id, description: a.description, code: a.code, state: a.get_state, auxiliary: a.auxiliary_name }
+      { index: index + 1, id: a.id, description: a.description, code: a.code, state: a.get_state, auxiliary: a.auxiliary_name, cuenta: a.account_name }
     end
     {
       #admin_name: proceeding.admin_name.titleize,
