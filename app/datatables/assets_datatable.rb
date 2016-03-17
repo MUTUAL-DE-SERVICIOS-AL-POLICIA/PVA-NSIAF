@@ -21,6 +21,7 @@ private
       as = []
       as << asset.code
       as << asset.description
+      as << link_to_if(asset.account, asset.account_name, asset.account)
       as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
       as << asset.barcode
       if asset.status == '0'

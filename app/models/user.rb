@@ -23,9 +23,8 @@ class User < ActiveRecord::Base
 
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
-    m.validates :code, presence: true, uniqueness: { scope: :department_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    m.validates :code, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     m.validates :name, :title, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
-    m.validates :ci, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_blank: true
     m.validates :username, presence: true, length: {minimum: 4, maximum: 128}, uniqueness: true, format: { with: /\A[a-z]+\z/ }
     m.validates :phone, :mobile, numericality: { only_integer: true }, allow_blank: true
     m.validates :department_id, presence: true

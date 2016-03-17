@@ -346,6 +346,7 @@ es:
         code: "Código"
         description: "Descripción"
         auxiliary: "Auxiliar"
+        account: "Cuenta"
         user: "Funcionario"
         derecognised: "Baja"
         state: "Estado"
@@ -408,7 +409,7 @@ es:
       proceeding:
         user_id: "Funcionario"
         admin_id: "Administrador"
-        created_at: "Fecha"
+        created_at: "Creado el"
         proceeding_type: "Tipo"
       request:
         id: "Número"
