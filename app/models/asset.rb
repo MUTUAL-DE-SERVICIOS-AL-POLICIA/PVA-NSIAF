@@ -14,7 +14,6 @@ class Asset < ActiveRecord::Base
     'Malo' => '3'
   }
 
-  belongs_to :account
   belongs_to :auxiliary
   belongs_to :user, counter_cache: true
 
@@ -60,6 +59,10 @@ class Asset < ActiveRecord::Base
     auxiliary.present? ? auxiliary.name : ''
   end
 
+  def account
+    auxiliary.present? ? auxiliary.account : nil
+  end
+
   def account_name
     auxiliary.present? ? auxiliary.account_name : ''
   end
@@ -96,7 +99,7 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'user'), h.get_column(self, 'barcode'), h.get_column(User, 'department')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'account'), h.get_column(self, 'user'), h.get_column(self, 'barcode')]
   end
 
   def self.without_barcode
@@ -112,18 +115,20 @@ class Asset < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
-    array = includes(user: :department).order("#{sort_column} #{sort_direction}").where(status: status).references(user: :department)
+    array = includes(:user, auxiliary: :account).order("#{sort_column} #{sort_direction}").where(status: status).references(auxiliary: :account)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
-        if search_column == 'department'
+        if search_column == 'account'
+          array = array.where('accounts.name LIKE ?', "%#{sSearch}%")
+        elsif search_column == 'department'
           array = array.where("departments.name like ?", "%#{sSearch}%")
         else
           type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
           array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
         end
       else
-         array = array.where("assets.code LIKE ? OR assets.barcode LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR departments.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+         array = array.where("assets.code LIKE ? OR assets.barcode LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array
