@@ -48,6 +48,8 @@
   %dd= @asset.get_state
   %dt= Asset.human_attribute_name('user')
   %dd= link_to_if @asset.user, @asset.user_name, @asset.user, title: @asset.user_code
+  %dt= Asset.human_attribute_name('account')
+  %dd= link_to_if @asset.account, @asset.account_name, @asset.account, title: @asset.account_code
   %dt= Asset.human_attribute_name('auxiliary')
   %dd= link_to_if @asset.auxiliary, @asset.auxiliary_name, @asset.auxiliary, title: @asset.auxiliary_code
   - if @asset.status == '0'

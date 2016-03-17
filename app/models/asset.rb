@@ -63,6 +63,10 @@ class Asset < ActiveRecord::Base
     auxiliary.present? ? auxiliary.account : nil
   end
 
+  def account_code
+    auxiliary.present? ? auxiliary.account_code : ''
+  end
+
   def account_name
     auxiliary.present? ? auxiliary.account_name : ''
   end
