@@ -60,6 +60,10 @@ class Asset < ActiveRecord::Base
     auxiliary.present? ? auxiliary.name : ''
   end
 
+  def account_name
+    auxiliary.present? ? auxiliary.account_name : ''
+  end
+
   def change_barcode_to_deleted
     if self.barcode_was.present? && self.barcode_was != self.barcode
       bc = Barcode.find_by_code barcode_was
