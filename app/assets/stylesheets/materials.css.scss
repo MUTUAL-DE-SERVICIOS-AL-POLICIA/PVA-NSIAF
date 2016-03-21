@@ -19,6 +19,16 @@ table.valorado {
   }
 }
 
+table.alineacion-media {
+  tbody {
+    tr {
+      td {
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
 .contenedor {
   margin-top: 0;
   ul {

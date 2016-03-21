@@ -30,7 +30,7 @@
           %span.text-muted Oficina:
           {{userDepartment}}
 
-      %table.table.table-striped.table-condensed.proceeding-assets.table-bordered.valorado
+      %table.table.table-striped.table-condensed.proceeding-assets.table-bordered.valorado.alineacion-media
         %thead
           %tr
             %th Nro
@@ -41,11 +41,11 @@
         %tbody
           {{#assets}}
           %tr
-            %td {{index}}
-            %td {{code}}
+            %td.text-center {{index}}
+            %td.text-center {{code}}
             %td {{cuenta}}
             %td {{description}}
-            %td {{state}}
+            %td.text-center {{state}}
           {{/assets}}
       %small.acta
         %br/
