@@ -90,6 +90,5 @@
         %b Glosa:
         #{subarticle}#{supplier}#{delivery}#{invoice}
 
-- if is_pdf?
-  %p.proceeding-date
-    La Paz, #{ I18n.l(@note_entry.note_entry_date.to_date, format: :long) }
+%p.proceeding-date
+  La Paz, #{ I18n.l(@note_entry.note_entry_date.to_date, format: :long) }

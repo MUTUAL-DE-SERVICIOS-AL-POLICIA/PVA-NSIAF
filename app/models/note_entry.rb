@@ -126,18 +126,12 @@ class NoteEntry < ActiveRecord::Base
   end
 
   def get_first_date
-    first_date = Time.now.to_date if note_entry_date.nil?
-    if delivery_note_date && invoice_date
+    if invoice_date
       first_date = invoice_date
-      if delivery_note_date < invoice_date
-        first_date = delivery_note_date
-      end
     elsif delivery_note_date
       first_date = delivery_note_date
-    elsif invoice_date
-      first_date = invoice_date
-    elsif note_entry_date
-      first_date = note_entry_date
+    else
+      first_date = Time.now.to_date
     end
     first_date.to_date
   end
