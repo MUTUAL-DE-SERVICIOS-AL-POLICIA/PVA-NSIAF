@@ -84,25 +84,24 @@
             EN CUMPLIMIENTO AL ARTÍCULO N° 148 (LIBERACIÓN DE LA RESPONSABILIDAD) DE LAS NORMAS BÁSICAS DE ADMINISTRACIÓN DE BIENES Y SERVICIOS, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIÓ CON EL ACTO DE DEVOLUCIÓN DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
           {{/devolution}}
 
-      .proceeding-signature
-        %table{ style: 'width: 100%' }
-          %tr
-            -# %td.text-center
-            -#   __________________________
-            -#   %p
-            -#     Autorización de
-            -#     {{^devolution}}
-            -#     Asignación
-            -#     {{/devolution}}
-            -#     {{#devolution}}
-            -#     Devolución
-            -#     {{/devolution}}
-            %td.text-center
-              __________________________
-              %p Responsable de Activos Fijos
-            %td.text-center
-              __________________________
-              %p Funcionario
+      %table{ style: 'width: 100%' }
+        %tr
+          -# %td.text-center
+          -#   __________________________
+          -#   %p
+          -#     Autorización de
+          -#     {{^devolution}}
+          -#     Asignación
+          -#     {{/devolution}}
+          -#     {{#devolution}}
+          -#     Devolución
+          -#     {{/devolution}}
+          %td.text-center.firma-funcionario
+            __________________________
+            %p Responsable de Activos Fijos
+          %td.text-center.firma-funcionario
+            __________________________
+            %p Funcionario
 
   - if display_buttons
     %p.proceeding-pdf.text-center
