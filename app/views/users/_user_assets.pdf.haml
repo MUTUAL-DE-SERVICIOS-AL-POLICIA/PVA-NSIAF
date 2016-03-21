@@ -1,4 +1,4 @@
-%table.table.table-striped.table-condensed.table-bordered
+%table.table.table-striped.table-condensed.table-bordered.alineacion-media
   %thead
     %tr
       %th
@@ -13,7 +13,7 @@
         %td= asset.description
         - if controller_name == 'departments'
           %td= asset.user_name
-        %td.nowrap
+        %td.nowrap.text-center
           - if current_user.is_super_admin? || params[:format] == 'pdf'
             = asset.code
           - else
@@ -22,9 +22,8 @@
 - if is_pdf?
   %p.proceeding-date.text-right
     La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
-  .proceeding-signature{ style: 'margin-top: 50px;' }
-    %table{ style: 'width: 100%' }
-      %tr
-        %td.text-center
-          %p _______________________
-          %p Funcionario
+  %table{ style: 'width: 100%' }
+    %tr
+      %td.text-center.firma-funcionario
+        _______________________
+        %p Funcionario
