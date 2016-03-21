@@ -1,5 +1,6 @@
 table.valorado {
   border: 1px solid #777;
+  border-style: double;
   font-size: 0.9rem;
   tbody {
     tr {
@@ -45,4 +46,8 @@ table.alineacion-media {
       }
     }
   }
+}
+
+.no-dividir {
+  white-space: nowrap;
 }
