@@ -30,14 +30,14 @@
           %span.text-muted Oficina:
           {{userDepartment}}
 
-      %table.table.table-striped.table-condensed.proceeding-assets.table-bordered
+      %table.table.table-striped.table-condensed.proceeding-assets.table-bordered.valorado
         %thead
           %tr
-            %th.col-sm-1 Nro
-            %th.col-sm-1 Código
-            %th.col-sm-3 Cuenta
-            %th.col-sm-6 Descripción del Activo
-            %th.col-sm-1 Estado
+            %th Nro
+            %th Código
+            %th Cuenta
+            %th Descripción del Activo
+            %th Estado
         %tbody
           {{#assets}}
           %tr
@@ -47,24 +47,35 @@
             %td {{description}}
             %td {{state}}
           {{/assets}}
-      .acta
+      %small.acta
         %br/
         %p.text-justify
           %b OBLIGACIONES SOBRE EL USO DE LOS ACTIVOS ASIGNADOS
           %br
           {{^devolution}}
+          %p.text-justify
+            El funcionario que se suscribe como Responsable de los Activos señalados, declara conocer las siguientes disposiciones establecidas en el artículo 157 (prohibición para los servidores públicos sobre el uso de activos fijos muebles), con lo que se compromete a respetar, y aplicarlas durante todo su desempeño, dentro o fuera de las dependencias de la {{institucion}} ({{sigla}}).
           %p
-            El funcionario que suscribe como Responsable de Activo, declara conocer las siguientes disposiciones institucionales, con lo que se compromete a respetarlas y aplicarlas durante todo su desempeño, dentro o fuera de las dependencias de {{sigla}}.
+            %strong Prohibiciones:
           %ol
-            %li Será responsable por el debido uso y custodia de todos los bienes a su cargo
-            %li Queda prohibido de usar los bienes para beneficio particular o probado
-            %li Queda prohibido prestar o transferir el bien a otro empleado público
-            %li Se probíbe enajenar el bien por cuenta propia
-            %li Queda prohibido dañar o alterar sus características físicas o técnicas
-            %li Se prohíbe sacar los bienes de la entidad sin autorización de la Unidad Administrativa Financiera o Activos Fijos
-            %li La no observancia a éstas prohibiciones generará responsabilidades establecidas en la Ley N° 1178 y sus reglamentos
+            %li Usar los bienes para beneficio particular o privado;
+            %li Permitir el uso para beneficio particular o privado;
+            %li Prestar o transferir el bien a otro empleado público;
+            %li Enajenar el bien por cuenta propia;
+            %li Dañar o alterar sus características físicas o técnicas;
+            %li Poner en riesgo el bien;
+            %li Ingresar bienes particulares sin autorización de la Unidad Administrativa Financiera;
+            %li Sacar bienes de la entidad sin autorización de la Unidad Administrativa Financiera;
+            %li Sacar bienes de la entidad sin autorización de la Unidad Administrativa Financiera;
           %p
-            En señal de conformidad y aceptación se firma el presente acta.
+            %strong Obligaciones:
+          %ol
+            %li Comunicar a la Unidad Administrativa Financiera cualquier desperfecto o falla en el bien que requiera mantenimiento;
+            %li Solicitar el respectivo formulario para la salida de activos fuera de la institución;
+            %li Comunicar de manera inmediata cualquier pérdica, robo o urto a la Unidad Administrativa Financiera;
+
+          %p La no observancia a éstas prohibiciones y obligaciones generará responsabilidades establecidas en la Ley N° 1178 y sus reglamentos.
+          %p En señal de conformidad y aceptación se firma el presente acta de asignación.
           {{/devolution}}
           {{#devolution}}
           %p
