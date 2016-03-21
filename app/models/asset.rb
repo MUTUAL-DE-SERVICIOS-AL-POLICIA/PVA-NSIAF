@@ -186,13 +186,13 @@ class Asset < ActiveRecord::Base
 
   def generar_descripcion
     descripcion = []
-    descripcion << detalle
-    descripcion << medidas
-    descripcion << material
-    descripcion << color
-    descripcion << marca
-    descripcion << modelo
-    descripcion << serie
+    descripcion << detalle if detalle.strip.present?
+    descripcion << "MEDIDAS #{medidas}" if medidas.strip.present?
+    descripcion << "MATERIAL #{material}" if material.strip.present?
+    descripcion << "COLOR #{color}" if color.strip.present?
+    descripcion << "MARCA #{marca}" if marca.strip.present?
+    descripcion << "MODELO #{modelo}" if modelo.strip.present?
+    descripcion << "SERIE #{serie}" if serie.strip.present?
     self.description = descripcion.join(' ').squish
   end
 end

@@ -30,7 +30,7 @@
           %span.text-muted Oficina:
           {{userDepartment}}
 
-      %table.table.table-striped.table-condensed.proceeding-assets.table-bordered.valorado
+      %table.table.table-striped.table-condensed.proceeding-assets.table-bordered.valorado.alineacion-media
         %thead
           %tr
             %th Nro
@@ -41,20 +41,22 @@
         %tbody
           {{#assets}}
           %tr
-            %td {{index}}
-            %td {{code}}
-            %td {{cuenta}}
+            %td.text-center {{index}}
+            %td.text-center {{code}}
+            %td.no-dividir {{cuenta}}
             %td {{description}}
-            %td {{state}}
+            %td.text-center {{state}}
           {{/assets}}
-      %small.acta
+      .acta
         %br/
         %p.text-justify
           %b OBLIGACIONES SOBRE EL USO DE LOS ACTIVOS ASIGNADOS
           %br
           {{^devolution}}
           %p.text-justify
-            El funcionario que se suscribe como Responsable de los Activos señalados, declara conocer las siguientes disposiciones establecidas en el artículo 157 (prohibición para los servidores públicos sobre el uso de activos fijos muebles), con lo que se compromete a respetar, y aplicarlas durante todo su desempeño, dentro o fuera de las dependencias de la {{institucion}} ({{sigla}}).
+            El funcionario que se suscribe como Responsable de los Activos señalados, declara conocer las siguientes disposiciones establecidas en el D.S. 0181 en el artículo No 157
+            %strong (Prohibición para los servidores públicos sobre el uso de activos fijos muebles),
+            con lo que se compromete a respetar, y aplicarlas durante todo su desempeño, dentro o fuera de las dependencias de la {{institucion}} ({{sigla}}).
           %p
             %strong Prohibiciones:
           %ol
@@ -82,25 +84,24 @@
             EN CUMPLIMIENTO AL ARTÍCULO N° 148 (LIBERACIÓN DE LA RESPONSABILIDAD) DE LAS NORMAS BÁSICAS DE ADMINISTRACIÓN DE BIENES Y SERVICIOS, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIÓ CON EL ACTO DE DEVOLUCIÓN DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
           {{/devolution}}
 
-      .proceeding-signature
-        %table{ style: 'width: 100%' }
-          %tr
-            -# %td.text-center
-            -#   __________________________
-            -#   %p
-            -#     Autorización de
-            -#     {{^devolution}}
-            -#     Asignación
-            -#     {{/devolution}}
-            -#     {{#devolution}}
-            -#     Devolución
-            -#     {{/devolution}}
-            %td.text-center
-              __________________________
-              %p Responsable de Activos Fijos
-            %td.text-center
-              __________________________
-              %p Funcionario
+      %table{ style: 'width: 100%' }
+        %tr
+          -# %td.text-center
+          -#   __________________________
+          -#   %p
+          -#     Autorización de
+          -#     {{^devolution}}
+          -#     Asignación
+          -#     {{/devolution}}
+          -#     {{#devolution}}
+          -#     Devolución
+          -#     {{/devolution}}
+          %td.text-center.firma-funcionario
+            __________________________
+            %p Responsable de Activos Fijos
+          %td.text-center.firma-funcionario
+            __________________________
+            %p Funcionario
 
   - if display_buttons
     %p.proceeding-pdf.text-center
