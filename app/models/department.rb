@@ -13,7 +13,7 @@ class Department < ActiveRecord::Base
   scope :actives, -> { where(status: '1') }
 
   validates :code, presence: true, uniqueness: { scope: :building_id }, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z|\"|\.|-/u }, allow_blank: true
+  validates :name, presence: true, allow_blank: true
   validates :building_id, presence: true
 
   has_paper_trail ignore: [:status, :updated_at]
