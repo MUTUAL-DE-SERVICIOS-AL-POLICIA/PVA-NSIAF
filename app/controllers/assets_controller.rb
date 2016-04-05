@@ -15,7 +15,11 @@ class AssetsController < ApplicationController
 
   # GET /assets/new
   def new
-    @asset = Asset.new
+    if params[:activo_id].present?
+      @asset = Asset.find(params[:activo_id]).dup rescue Asset.new
+    else
+      @asset = Asset.new
+    end
     respond_to do |format|
       format.html { render 'form' }
     end
