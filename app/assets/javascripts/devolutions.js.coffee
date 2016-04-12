@@ -109,11 +109,15 @@ class Devolutions extends BarcodeReader
     e.preventDefault()
     if _assets.length > 0
       assignation =
+        entity: _user.entity_name
         assets: _assets
+        count: _assets.length
         devolution: true
         proceedingDate: CurrentDateSpanish.inWords()
         userName: _user.name
         userTitle: _user.title
+        userCi: _user.ci
+        userDepartment: _user.department_name
       @$containerTplProceedingDelivery.html @$templateProceedingDelivery.render(assignation)
       @$containerTplProceedingDelivery.show()
       @$containerTplSelectedAssets.hide()

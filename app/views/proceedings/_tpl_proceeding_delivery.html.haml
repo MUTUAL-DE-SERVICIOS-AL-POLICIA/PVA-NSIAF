@@ -50,9 +50,9 @@
       .acta
         %br/
         %p.text-justify
+          {{^devolution}}
           %b OBLIGACIONES SOBRE EL USO DE LOS ACTIVOS ASIGNADOS
           %br
-          {{^devolution}}
           %p.text-justify
             El funcionario que se suscribe como Responsable de los Activos señalados, declara conocer las siguientes disposiciones establecidas en el D.S. 0181 en el artículo No 157
             %strong (Prohibición para los servidores públicos sobre el uso de activos fijos muebles),
@@ -79,8 +79,10 @@
           %p En señal de conformidad y aceptación se firma el presente acta de asignación.
           {{/devolution}}
           {{#devolution}}
-          %p
-            EN CUMPLIMIENTO AL ARTÍCULO N° 148 (LIBERACIÓN DE LA RESPONSABILIDAD) DE LAS NORMAS BÁSICAS DE ADMINISTRACIÓN DE BIENES Y SERVICIOS, EN EL MARCO DE LA LEY 1178, EN LA FECHA SE PROCEDIÓ CON EL ACTO DE DEVOLUCIÓN DE BIENES, DE ACUERDO AL DETALLE DESCRITO EN EL PRESENTE DOCUMENTO.
+          %b DEVOLUCIÓN DE ACTIVOS
+          %br
+          %p.text-justify
+            En cumplimiento al Artículo N° 148 (Liberación de la Responsabilidad) del D.S. 0181 de fecha 28/06/2009, se procedió con la devolución de los bienes, según detalle descrito en el presente documento.
           {{/devolution}}
 
       %table{ style: 'width: 100%' }

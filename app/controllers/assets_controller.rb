@@ -88,9 +88,7 @@ class AssetsController < ApplicationController
   def search
     asset = Asset.assigned.find_by_barcode params[:code]
     respond_to do |format|
-      format.json { render json: asset,
-                           include: {user: {only: [:id, :name, :title]}},
-                           only: [:id, :description, :code] }
+      format.json { render json: AdminAssetSerializer.new(asset) }
     end
   end
 
