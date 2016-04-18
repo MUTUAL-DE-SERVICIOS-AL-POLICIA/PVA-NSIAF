@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :ingresos
+
   resources :entry_subarticles, only: [:edit, :update]
 
   resources :almacenes, only: [:index]

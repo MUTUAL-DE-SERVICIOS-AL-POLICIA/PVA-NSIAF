@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315202926) do
+ActiveRecord::Schema.define(version: 20160418231153) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -172,6 +172,22 @@ ActiveRecord::Schema.define(version: 20160315202926) do
   end
 
   add_index "entry_subarticles", ["subarticle_id"], name: "index_entry_subarticles_on_subarticle_id", using: :btree
+
+  create_table "ingresos", force: :cascade do |t|
+    t.integer  "numero",               limit: 4
+    t.date     "fecha"
+    t.integer  "factura_numero",       limit: 4
+    t.integer  "factura_autorizacion", limit: 4
+    t.date     "factura_fecha"
+    t.integer  "supplier_id",          limit: 4
+    t.string   "c31",                  limit: 255
+    t.boolean  "baja_logica"
+    t.decimal  "total",                            precision: 10, scale: 2
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+  end
+
+  add_index "ingresos", ["supplier_id"], name: "index_ingresos_on_supplier_id", using: :btree
 
   create_table "kardex_prices", force: :cascade do |t|
     t.integer  "input_quantities",   limit: 4,                          default: 0,     null: false
@@ -341,4 +357,5 @@ ActiveRecord::Schema.define(version: 20160315202926) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "ingresos", "suppliers"
 end
