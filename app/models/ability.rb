@@ -21,6 +21,7 @@ class Ability
       can :manage, Account
       can :manage, Auxiliary
       can :manage, Asset
+      can :manage, Ingreso
       can :manage, Proceeding
       can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
       can :manage, Version
