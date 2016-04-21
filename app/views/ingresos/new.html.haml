@@ -1,0 +1,80 @@
+#devolution-urls{data: {'assets-search' => search_assets_path, 'proceedings' => proceedings_path}}
+
+.row{data: {action: 'devolution'}}
+  .col-md-12
+    %h3.text-center Ingreso de Activos Fijos
+
+.row{data: {action: 'devolution'}}
+  .col-md-12.col-sm-12
+    %form.asset-code{role: 'form'}
+      .row
+        .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
+          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activo', autofocus: true
+        .col-md-3.col-sm-3.col-xs-3
+          = button_tag class: 'btn btn-success col-md-12 btn-lg' do
+            %span.glyphicon.glyphicon-ok
+            Enviar
+
+%br/
+
+%table.table.table-bordered.table-striped.table-hover.table-condensed
+  %thead
+    %tr
+      %th.col-sm-1
+        %span.badge{title: 'Total'} {{total}}
+      %th.col-sm-2 Código
+      %th.col-sm-2 Medidas
+      %th.col-sm-2 Material
+      %th.col-sm-2 Descripción
+      %th.col-sm-2 Color
+      %th.col-sm-2 P. Unit.
+  %tbody
+    - (1..10).each do
+      %tr
+        %td 1
+        %td 582
+        %td 4x4
+        %td Aluminio
+        %td Escalera plegable 16 peldaños
+        %td Plomo
+        %td 870.00
+  %tfoot
+    %tr
+      %th{ colspan: 5 }
+      %th TOTAL
+      %th 1.740,00
+
+%table.table.table-bordered.table-striped.table-hover.table-condensed
+  %thead
+    %tr
+      %th Datos del proveedor
+      %th Firma Activos Fijos
+  %tbody
+    %tr
+      %td.col-sm-6
+        %dl.dl-horizontal
+          %dt Proveedor
+          %dd COMERCIAL R&R
+          %dt NIT
+          %dd 6752844010
+          %dt Factura No
+          %dd 0015
+          %dt Autorización
+          %dd 27410160001693
+          %dt Factura fecha
+          %dd 26/02/2016
+          %dt C-31
+          %dd 132
+          %dt C-31 fecha
+          %dd 27/04/2016
+      %td.col-sm-6
+
+.row
+  .col-md-12.col-sm-12.text-center
+    = button_tag class: 'btn btn-danger', data: {type: 'reset'} do
+      %span.glyphicon.glyphicon-ban-circle
+      Cancelar
+
+    = button_tag class: 'btn btn-primary', data: {type: 'next'} do
+      %span.glyphicon.glyphicon-arrow-right
+      Siguiente
