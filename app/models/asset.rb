@@ -43,6 +43,15 @@ class Asset < ActiveRecord::Base
 
   has_paper_trail
 
+  def self.buscar_por_barcode(barcode)
+    barcodes = barcode.split(',').map(&:strip)
+    barcodes.map! do |rango|
+      guiones = rango.split('-').map(&:strip)
+      guiones.length > 1 ? Array(guiones[0].to_i..guiones[1].to_i).map(&:to_s) : guiones
+    end
+    where(barcode: barcodes.flatten.uniq)
+  end
+
   def self.derecognised
     where(status: 0)
   end
