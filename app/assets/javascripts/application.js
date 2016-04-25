@@ -52,3 +52,4 @@
 //= require highcharts/highcharts
 //= require highcharts/highcharts-more
 //= require actas
+//= require ingresos
