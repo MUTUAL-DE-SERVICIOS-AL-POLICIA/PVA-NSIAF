@@ -4,10 +4,13 @@ class IngresosController < ApplicationController
 
   # GET /ingresos
   def index
-    barcode = params[:barcode]
-    activos = Asset.buscar_por_barcode(barcode)
-    render json: activos, root: false
-    # format_to('ingresos', IngresosDatatable)
+    if params[:barcode].present?
+      barcode = params[:barcode]
+      activos = Asset.buscar_por_barcode(barcode)
+      render json: activos, root: false
+    else
+      # format_to('ingresos', IngresosDatatable)
+    end
   end
 
   # GET /ingresos/1

@@ -1,4 +1,4 @@
-#ingresos-urls{data: {'assets-search' => search_assets_path, 'proceedings' => proceedings_path}}
+#ingresos-urls{data: {'activos' => ingresos_path}}
 
 .row{data: {action: 'ingresos'}}
   .col-md-12
@@ -6,43 +6,17 @@
 
 .row
   .col-md-12.col-sm-12
-    %form{role: 'form'}
+    %form#ingresos-form{role: 'form'}
       .row
         .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
-          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activo', autofocus: true
+          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos', autofocus: true
         .col-md-3.col-sm-3.col-xs-3
           = button_tag class: 'btn btn-success col-md-12 btn-lg' do
             %span.glyphicon.glyphicon-ok
-            Enviar
-
+            Buscar
 %br/
 
-%table.table.table-bordered.table-striped.table-hover.table-condensed
-  %thead
-    %tr
-      %th.col-sm-1
-        %span.badge{title: 'Total'} {{total}}
-      %th.col-sm-2 Código
-      %th.col-sm-2 Medidas
-      %th.col-sm-2 Material
-      %th.col-sm-2 Descripción
-      %th.col-sm-2 Color
-      %th.col-sm-2 P. Unit.
-  %tbody
-    - (1..10).each do
-      %tr
-        %td 1
-        %td 582
-        %td 4x4
-        %td Aluminio
-        %td Escalera plegable 16 peldaños
-        %td Plomo
-        %td 870.00
-  %tfoot
-    %tr
-      %th{ colspan: 5 }
-      %th TOTAL
-      %th 1.740,00
+%table#ingresos-tbl.table.table-bordered.table-striped.table-hover.table-condensed
 
 %table.table.table-bordered.table-striped.table-hover.table-condensed
   %thead
@@ -80,3 +54,28 @@
     = button_tag class: 'btn btn-primary', data: {type: 'next'} do
       %span.glyphicon.glyphicon-arrow-right
       Siguiente
+
+%script{type: 'text/html', id: 'tpl-activo-seleccionado'}
+  %thead
+    %tr
+      %th Código
+      %th Medidas
+      %th Material
+      %th Descripción
+      %th Color
+      %th.number P. Unit.
+  %tbody
+    {{#activos}}
+    %tr
+      %td {{barcode}}
+      %td {{medidas}}
+      %td {{material}}
+      %td {{detalle}}
+      %td {{color}}
+      %td.number {{precio_formato}}
+    {{/activos}}
+  %tfoot
+    %tr
+      %th{ colspan: 4 }
+      %th.number TOTAL
+      %th.number {{total}}

@@ -1,102 +1,70 @@
 $ -> new Ingresos() if $('[data-action=ingresos]').length > 0
 
 class Ingresos
-  _subarticle_ids = []
-  _deactivate_all = true
-  _year = null
+  # lista de activos seleccionados
+  _activos = []
 
   constructor: ->
     @cacheElements()
     @bindEvents()
 
   cacheElements: ->
-    _url = '/ingresos?barcode=1'
-    _year = $('[data-year]').data('year')
-    @select_date = '#select_date'
-    # buttons
-    @$btn_close_subarticles = $('#btn-close-subarticles')
-    @$subarticles_close = $('button.sa-close')
-    # containers
-    @$confirm_modal = $('#confirm-modal')
-    @modal_id = '#modal-subarticle-close'
-    # inputs
-    @$checkbox_close = $('input.checkbox-close')
-    @$checkbox_close_all = $('input.checkbox-close-all')
-    # templates
-    @$select_date_tpl = Hogan.compile $('#select-date-tpl').html() || ''
+    # Contenedor de URLs
+    @$ingresosUrls = $('#ingresos-urls')
+    # Variables
+    @ingresosPath = @$ingresosUrls.data('activos')
+    # Elementos
+    @$barcode = $('#code')
+    @$ingresosForm = $('#ingresos-form')
+    @$ingresosTbl = $('#ingresos-tbl')
+    @$buscarBtn = @$ingresosForm.find('button[type=submit]')
+    # Plantillas
+    @$activosTpl = Hogan.compile $('#tpl-activo-seleccionado').html() || ''
     # Growl Notices
     @alert = new Notices({ele: 'div.main'})
 
   bindEvents: ->
-    $(document).on 'click', @$btn_close_subarticles.selector, (e) => @saveSubarticles(e)
-    $(document).on 'click', @$subarticles_close.selector, (e) => @closeSubarticle(e)
-    $(document).on 'change', @$checkbox_close.selector, (e) => @selectSubarticle(e)
-    $(document).on 'change', @$checkbox_close_all.selector, (e) => @selectAllSubarticles(e)
+    $(document).on 'click', @$buscarBtn.selector, @buscarActivos
 
-  checkAllSelected: ->
-    if _deactivate_all is true
-      checked = @$checkbox_close.length is _subarticle_ids.length
-      @$checkbox_close_all.prop 'checked', checked
+  adicionarEnLaLista: (data, callback) ->
+    _cantidad = 0
+    data.forEach (e) =>
+      unless @estaEnLaLista(e)
+        _cantidad += 1
+        _activos.push(e)
+    callback(_cantidad > 0)
 
-  clearCheckboxes: ->
-    @$checkbox_close_all.prop('checked', false)
-    $.each @$checkbox_close, (i, e) ->
-      $(e).prop('checked', false)
-      $(e).trigger('change')
+  buscarActivos: (e) =>
+    e.preventDefault()
+    _barcode = { barcode: @$barcode.val() }
+    $.getJSON @ingresosPath, _barcode, @mostrarActivos
+    @$barcode.select()
 
-  closeSubarticle: ->
-    data =
-      title: 'Establecer fecha para los saldos iniciales de la siguiente gestión'
-      domId: 'subarticle-close'
-    @$confirm_modal.html @$select_date_tpl.render(data)
-    @$confirm_modal.find(@modal_id).modal('show')
-    @datepicker()
+  conversionNumeros: ->
+    _activos.map (e) ->
+      e.precio_formato = e.precio.formatNumber(2, '.', ',')
+      e
 
-  datepicker: ->
-    $(".date").datepicker
-      autoclose: true
-      format: "dd/mm/yyyy"
-      language: "es"
+  estaEnLaLista: (elemento) ->
+    _activos.filter((e) ->
+      e.barcode is elemento.barcode
+    ).length > 0
 
-  displayCloseButton: ->
-    if _subarticle_ids.length > 0
-      @$subarticles_close.show()
+  mostrarActivos: (data) =>
+    if data.length > 0
+      @adicionarEnLaLista data, (sw) =>
+        if sw is true
+          @mostrarTabla()
     else
-      @$subarticles_close.hide()
+      @alert.danger 'No hay resultado para mostrar'
 
-  saveSubarticles: (e) ->
-    data =
-      subarticle_ids: _subarticle_ids
-      year: _year
-      date: $(@select_date).val()
+  mostrarTabla: ->
+    json =
+      activos: @conversionNumeros(_activos)
+      total: @sumaTotal().formatNumber(2, '.', ',')
+    @$ingresosTbl.html @$activosTpl.render(json)
 
-    $.ajax
-      dataType: 'json'
-      type: 'POST'
-      data: data
-    .done (d) => @successfullySave()
-    .fail (d) => @$confirm_modal.find(@modal_id).modal('hide')
-
-  selectAllSubarticles: (e) ->
-    _deactivate_all = false
-    $.each @$checkbox_close, (i, c) ->
-      $(c).prop('checked', $(e.target).is(':checked'))
-      $(c).trigger('change')
-    _deactivate_all = true
-
-  selectSubarticle: (e) ->
-    index = _subarticle_ids.indexOf $(e.target).val()
-    if $(e.target).is(':checked')
-      if index is -1
-        _subarticle_ids.push $(e.target).val()
-    else
-      if index > -1
-        _subarticle_ids.splice(index, 1)
-
-    @displayCloseButton()
-    @checkAllSelected()
-
-  successfullySave: ->
-    @$confirm_modal.find(@modal_id).modal('hide')
-    @alert.info "Se actualizó correctamente los #{_subarticle_ids.length} subartículos."
-    @clearCheckboxes()
+  sumaTotal: ->
+    _activos.reduce (total, elemento) ->
+      total + elemento.precio
+    , 0
