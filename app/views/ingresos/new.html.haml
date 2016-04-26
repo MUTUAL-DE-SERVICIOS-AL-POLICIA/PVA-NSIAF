@@ -1,49 +1,53 @@
-#ingresos-urls{data: {'activos' => ingresos_path}}
+#ingresos-urls{data: {'activos' => ingresos_path, 'proveedores' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
 
 .row{data: {action: 'ingresos'}}
   .col-md-12
     %h3.text-center Ingreso de Activos Fijos
+
+%form#factura-form.form-horizontal{role: 'form'}
+  .form-group
+    %label.col-sm-2.control-label Proveedor
+    .col-sm-3
+      = text_field_tag 'proveedor', '', class: 'form-control proveedor-auto', placeholder: 'Proveedor', autofocus: true
+    .col-sm-3
+      = text_field_tag 'nit', '', class: 'form-control', placeholder: 'NIT proveedor'
+    .col-sm-3
+      = text_field_tag 'telefono', '', class: 'form-control', placeholder: 'Teléfonos proveedor'
+  .form-group
+    %label.col-sm-2.control-label Factura
+    .col-sm-3
+      = text_field_tag 'factura_numero', '', class: 'form-control', placeholder: 'Número de factura'
+    .col-sm-3
+      = text_field_tag 'factura_autorizacion', '', class: 'form-control', placeholder: 'Número autorización'
+    .col-sm-3
+      = text_field_tag 'factura_fecha', '', class: 'form-control date', placeholder: 'Fecha factura'
+  .form-group
+    %label.col-sm-2.control-label Nota de entrega
+    .col-sm-3
+      = text_field_tag 'nota_entrega_fecha', '', class: 'form-control date', placeholder: 'Fecha de nota de entrega'
+  .form-group
+    %label.col-sm-2.control-label C-31
+    .col-sm-3
+      = text_field_tag 'c31_numero', '', class: 'form-control', placeholder: 'Número C31'
+    .col-sm-3
+      = text_field_tag 'c31_fecha', '', class: 'form-control date', placeholder: 'Fecha C31'
 
 .row
   .col-md-12.col-sm-12
     %form#ingresos-form{role: 'form'}
       .row
         .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
-          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos', autofocus: true
+          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos'
         .col-md-3.col-sm-3.col-xs-3
           = button_tag class: 'btn btn-success col-md-12 btn-lg' do
-            %span.glyphicon.glyphicon-ok
+            %span.glyphicon.glyphicon-search
             Buscar
+
 %br/
 
 %table#ingresos-tbl.table.table-bordered.table-striped.table-hover.table-condensed
 
-%table.table.table-bordered.table-striped.table-hover.table-condensed
-  %thead
-    %tr
-      %th Datos del proveedor
-      %th Firma Activos Fijos
-  %tbody
-    %tr
-      %td.col-sm-6
-        %dl.dl-horizontal
-          %dt Proveedor
-          %dd COMERCIAL R&R
-          %dt NIT
-          %dd 6752844010
-          %dt Factura No
-          %dd 0015
-          %dt Autorización
-          %dd 27410160001693
-          %dt Factura fecha
-          %dd 26/02/2016
-          %dt Fecha nota de entrega
-          %dd 26/02/2016
-          %dt C-31
-          %dd 132
-          %dt C-31 fecha
-          %dd 27/04/2016
-      %td.col-sm-6
+%table#proveedor-tbl.table.table-bordered.table-striped.table-hover.table-condensed
 
 .row
   .col-md-12.col-sm-12.text-center
@@ -63,7 +67,7 @@
       %th Material
       %th Descripción
       %th Color
-      %th.number P. Unit.
+      %th.number Precio Unit.
   %tbody
     {{#activos}}
     %tr
@@ -79,3 +83,42 @@
       %th{ colspan: 4 }
       %th.number TOTAL
       %th.number {{total}}
+
+%script{type: 'text/html', id: 'tpl-datos-proveedor'}
+  %thead
+    %tr
+      %th Datos del proveedor
+      %th Firma Activos Fijos
+  %tbody
+    %tr
+      %td.col-sm-6
+        %dl.dl-horizontal
+          %dt Proveedor
+          {{#proveedor}}
+          %dd
+            {{name}}
+            {{^id}}
+            %span.label.label-default Nuevo
+            {{/id}}
+          %dt NIT
+          %dd {{nit}}
+          {{/proveedor}}
+          {{#factura}}
+          %dt Factura No
+          %dd {{factura_numero}}
+          %dt Autorización
+          %dd {{factura_autorizacion}}
+          %dt Factura fecha
+          %dd {{factura_fecha}}
+          {{/factura}}
+          {{#nota_entrega}}
+          %dt Fecha nota de entrega
+          %dd {{nota_entrega_fecha}}
+          {{/nota_entrega}}
+          {{#c31}}
+          %dt C-31
+          %dd {{c31_numero}}
+          %dt C-31 fecha
+          %dd {{c31_fecha}}
+          {{/c31}}
+      %td.col-sm-6

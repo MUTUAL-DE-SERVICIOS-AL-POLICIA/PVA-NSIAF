@@ -4,7 +4,7 @@ class Supplier < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
 
   def self.search_supplier(q)
-    where("name LIKE ?", "%#{q}%").map { |s| { id: s.id, name: s.name } }
+    where("name LIKE ?", "%#{q}%")
   end
 
   def self.get_id(name)

@@ -25,6 +25,7 @@ class Ability
       can :manage, Proceeding
       can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
       can :manage, Version
+      can :manage, NoteEntry
     elsif user.is_admin_store?
       can [:welcome, :show, :update], User, id: user.id
       can [:departments, :users], Asset
