@@ -26,6 +26,7 @@ class Ingresos
     @$ingresosTbl = $('#ingresos-tbl')
     @$proveedorTbl = $('#proveedor-tbl')
     @$buscarBtn = @$ingresosForm.find('button[type=submit]')
+    @$guardarBtn = $('.guardar-btn')
     # Campos
     @$proveedorNombre = @$facturaForm.find('#proveedor')
     @$proveedorNit = @$facturaForm.find('#nit')
@@ -33,12 +34,12 @@ class Ingresos
     @$facturaNumero = @$facturaForm.find('#factura_numero')
     @$facturaAutorizacion = @$facturaForm.find('#factura_autorizacion')
     @$facturaFecha = @$facturaForm.find('#factura_fecha')
+    @$notaEntregaNumero = @$facturaForm.find('#nota_entrega_numero')
     @$notaEntregaFecha = @$facturaForm.find('#nota_entrega_fecha')
     @$c31Numero = @$facturaForm.find('#c31_numero')
     @$c31Fecha = @$facturaForm.find('#c31_fecha')
     # Plantillas
     @$activosTpl = Hogan.compile $('#tpl-activo-seleccionado').html() || ''
-    @$proveedorTpl = Hogan.compile $('#tpl-datos-proveedor').html() || ''
     # Growl Notices
     @alert = new Notices({ele: 'div.main'})
 
@@ -46,15 +47,17 @@ class Ingresos
     if @$proveedorAuto?
       @proveedorAutocomplete()
     $(document).on 'click', @$buscarBtn.selector, @buscarActivos
-    $(document).on 'keyup', @$proveedorNombre.selector, @capturarProveedor
-    $(document).on 'keyup', @$proveedorNit.selector, @capturarProveedor
-    $(document).on 'keyup', @$proveedorTelefono.selector, @capturarProveedor
-    $(document).on 'keyup', @$facturaNumero.selector, @capturarFactura
-    $(document).on 'keyup', @$facturaAutorizacion.selector, @capturarFactura
+    $(document).on 'change', @$proveedorNombre.selector, @capturarProveedor
+    $(document).on 'change', @$proveedorNit.selector, @capturarProveedor
+    $(document).on 'change', @$proveedorTelefono.selector, @capturarProveedor
+    $(document).on 'change', @$facturaNumero.selector, @capturarFactura
+    $(document).on 'change', @$facturaAutorizacion.selector, @capturarFactura
     $(document).on 'change', @$facturaFecha.selector, @capturarFactura
+    $(document).on 'change', @$notaEntregaNumero.selector, @capturarNotaEntrega
     $(document).on 'change', @$notaEntregaFecha.selector, @capturarNotaEntrega
-    $(document).on 'keyup', @$c31Numero.selector, @capturarC31
+    $(document).on 'change', @$c31Numero.selector, @capturarC31
     $(document).on 'change', @$c31Fecha.selector, @capturarC31
+    $(document).on 'click', @$guardarBtn.selector, @guardarIngresoActivosFijos
 
   adicionarEnLaLista: (data, callback) ->
     _cantidad = 0
@@ -73,23 +76,20 @@ class Ingresos
   capturarC31: =>
     _c31.c31_numero = @$c31Numero.val().trim()
     _c31.c31_fecha = @$c31Fecha.val().trim()
-    @mostrarDatosProveedor()
 
   capturarFactura: =>
     _factura.factura_numero = @$facturaNumero.val().trim()
     _factura.factura_autorizacion = @$facturaAutorizacion.val().trim()
     _factura.factura_fecha = @$facturaFecha.val()
-    @mostrarDatosProveedor()
 
   capturarNotaEntrega: =>
+    _nota_entrega.nota_entrega_numero = @$notaEntregaNumero.val().trim()
     _nota_entrega.nota_entrega_fecha = @$notaEntregaFecha.val().trim()
-    @mostrarDatosProveedor()
 
   capturarProveedor: =>
     _proveedor.name = @$proveedorNombre.val().trim()
     _proveedor.nit = @$proveedorNit.val().trim()
     _proveedor.telefono = @$proveedorTelefono.val().trim()
-    @mostrarDatosProveedor()
 
   cargarDatosProveedor: ->
     @$proveedorNit.val _proveedor.nit
@@ -105,6 +105,33 @@ class Ingresos
       e.barcode is elemento.barcode
     ).length > 0
 
+  guardarIngresoActivosFijos: (e) =>
+    if @sonValidosDatos()
+      $(e.target).addClass('disabled')
+      $.ajax
+        url: @ingresosPath
+        type: 'POST'
+        dataType: 'JSON'
+        data: { ingreso: @jsonIngreso() }
+      .done (ingreso) =>
+        @alert.success "Se guardó correctamente la Nota de Ingreso"
+        window.location = "#{@ingresosPath}/#{ingreso.id}"
+      .fail (xhr, status) =>
+        @alert.danger 'Error al guardar Nota de Ingreso'
+      .always (xhr, status) ->
+        $(e.target).removeClass('disabled')
+    else
+      @alert.danger "Complete todos los datos requeridos"
+
+  jsonIngreso: ->
+    ingreso =
+      asset_ids: _activos.map((e) -> e.id)
+      supplier_id: _proveedor.id
+      total: @sumaTotal()
+    ingreso = $.extend({}, ingreso, _factura)
+    ingreso = $.extend({}, ingreso, _nota_entrega)
+    $.extend({}, ingreso, _c31)
+
   mostrarActivos: (data) =>
     if data.length > 0
       @adicionarEnLaLista data, (sw) =>
@@ -112,14 +139,6 @@ class Ingresos
           @mostrarTabla()
     else
       @alert.danger 'No hay resultado para mostrar'
-
-  mostrarDatosProveedor: ->
-    json =
-      proveedor: _proveedor
-      factura: _factura
-      nota_entrega: _nota_entrega
-      c31: _c31
-    @$proveedorTbl.html @$proveedorTpl.render(json)
 
   mostrarTabla: ->
     json =
@@ -143,7 +162,9 @@ class Ingresos
   seleccionarProveedor: (evt, proveedor) =>
     _proveedor = proveedor
     @cargarDatosProveedor()
-    # @mostrarDatosProveedor()
+
+  sonValidosDatos: ->
+    _activos.length > 0
 
   sumaTotal: ->
     _activos.reduce (total, elemento) ->

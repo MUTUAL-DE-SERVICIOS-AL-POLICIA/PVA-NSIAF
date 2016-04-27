@@ -8,11 +8,11 @@
   .form-group
     %label.col-sm-2.control-label Proveedor
     .col-sm-3
-      = text_field_tag 'proveedor', '', class: 'form-control proveedor-auto', placeholder: 'Proveedor', autofocus: true
+      = text_field_tag 'proveedor', '', class: 'form-control proveedor-auto', placeholder: 'Proveedor'
     .col-sm-3
-      = text_field_tag 'nit', '', class: 'form-control', placeholder: 'NIT proveedor'
+      = text_field_tag 'nit', '', class: 'form-control', placeholder: 'NIT proveedor', disabled: true
     .col-sm-3
-      = text_field_tag 'telefono', '', class: 'form-control', placeholder: 'Teléfonos proveedor'
+      = text_field_tag 'telefono', '', class: 'form-control', placeholder: 'Teléfonos proveedor', disabled: true
   .form-group
     %label.col-sm-2.control-label Factura
     .col-sm-3
@@ -20,26 +20,37 @@
     .col-sm-3
       = text_field_tag 'factura_autorizacion', '', class: 'form-control', placeholder: 'Número autorización'
     .col-sm-3
-      = text_field_tag 'factura_fecha', '', class: 'form-control date', placeholder: 'Fecha factura'
+      .input-group
+        = text_field_tag 'factura_fecha', '', class: 'form-control date', placeholder: 'Fecha factura'
+        .input-group-addon
+          %span.glyphicon.glyphicon-calendar
   .form-group
     %label.col-sm-2.control-label Nota de entrega
     .col-sm-3
-      = text_field_tag 'nota_entrega_fecha', '', class: 'form-control date', placeholder: 'Fecha de nota de entrega'
+      = text_field_tag 'nota_entrega_numero', '', class: 'form-control', placeholder: 'Número de nota de entrega'
+    .col-sm-3
+      .input-group
+        = text_field_tag 'nota_entrega_fecha', '', class: 'form-control date', placeholder: 'Fecha nota de entrega'
+        .input-group-addon
+          %span.glyphicon.glyphicon-calendar
   .form-group
     %label.col-sm-2.control-label C-31
     .col-sm-3
       = text_field_tag 'c31_numero', '', class: 'form-control', placeholder: 'Número C31'
     .col-sm-3
-      = text_field_tag 'c31_fecha', '', class: 'form-control date', placeholder: 'Fecha C31'
+      .input-group
+        = text_field_tag 'c31_fecha', '', class: 'form-control date', placeholder: 'Fecha C31'
+        .input-group-addon
+          %span.glyphicon.glyphicon-calendar
 
 .row
   .col-md-12.col-sm-12
     %form#ingresos-form{role: 'form'}
-      .row
+      .row.has-success
         .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
-          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos'
+          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos (ej. 1-10, 12-15, 17, 20, ...)', autofocus: true
         .col-md-3.col-sm-3.col-xs-3
-          = button_tag class: 'btn btn-success col-md-12 btn-lg' do
+          = button_tag class: 'btn btn-success btn-lg' do
             %span.glyphicon.glyphicon-search
             Buscar
 
@@ -51,13 +62,13 @@
 
 .row
   .col-md-12.col-sm-12.text-center
-    = button_tag class: 'btn btn-danger', data: {type: 'reset'} do
+    = link_to ingresos_path, class: 'btn btn-danger cancelar-btn' do
       %span.glyphicon.glyphicon-ban-circle
       Cancelar
 
-    = button_tag class: 'btn btn-primary', data: {type: 'next'} do
-      %span.glyphicon.glyphicon-arrow-right
-      Siguiente
+    = button_tag class: 'btn btn-primary guardar-btn', data: {disable_with: 'Guardando...'} do
+      %span.glyphicon.glyphicon-floppy-save
+      Guardar
 
 %script{type: 'text/html', id: 'tpl-activo-seleccionado'}
   %thead
@@ -83,42 +94,3 @@
       %th{ colspan: 4 }
       %th.number TOTAL
       %th.number {{total}}
-
-%script{type: 'text/html', id: 'tpl-datos-proveedor'}
-  %thead
-    %tr
-      %th Datos del proveedor
-      %th Firma Activos Fijos
-  %tbody
-    %tr
-      %td.col-sm-6
-        %dl.dl-horizontal
-          %dt Proveedor
-          {{#proveedor}}
-          %dd
-            {{name}}
-            {{^id}}
-            %span.label.label-default Nuevo
-            {{/id}}
-          %dt NIT
-          %dd {{nit}}
-          {{/proveedor}}
-          {{#factura}}
-          %dt Factura No
-          %dd {{factura_numero}}
-          %dt Autorización
-          %dd {{factura_autorizacion}}
-          %dt Factura fecha
-          %dd {{factura_fecha}}
-          {{/factura}}
-          {{#nota_entrega}}
-          %dt Fecha nota de entrega
-          %dd {{nota_entrega_fecha}}
-          {{/nota_entrega}}
-          {{#c31}}
-          %dt C-31
-          %dd {{c31_numero}}
-          %dt C-31 fecha
-          %dd {{c31_fecha}}
-          {{/c31}}
-      %td.col-sm-6

@@ -1,0 +1,75 @@
+.row{data: {action: 'devolution'}}
+  .col-md-12
+    %h3.text-center Ingreso de Activos Fijos
+
+%table.table.table-bordered.table-striped.table-hover.table-condensed.valorado
+  %thead
+    %tr
+      %th Nro.
+      %th.text-center Código
+      %th Medidas
+      %th Material
+      %th Descripción
+      %th Color
+      %th.number.nowrap Precio Unit.
+  %tbody
+    - @ingreso.assets.each_with_index do |activo, index|
+      %tr
+        %td= index + 1
+        %td.text-center{title: activo.barcode}= activo.code
+        %td= activo.medidas
+        %td= activo.material
+        %td= activo.detalle
+        %td= activo.color
+        %td.number= number_with_delimiter activo.precio
+  %tfoot
+    %tr
+      %th{ colspan: 5 }
+      %th.number TOTAL
+      %th.number= number_with_delimiter @ingreso.total
+
+%table.table.table-bordered.table-condensed.valorado
+  %thead
+    %tr
+      %th.col-md-6.col-sm-7.col-xs-8 Datos proveedor
+      %th.col-md-6.col-sm-5.col-xs-4 Firma Activos Fijos
+  %tbody
+    %tr
+      %td
+        %table.table-condensed
+          %tbody
+            %tr
+              %th.text-right Proveedor
+              %td= @ingreso.supplier_name
+            %tr
+              %th.text-right NIT
+              %td= @ingreso.supplier_nit
+            %tr
+              %th.text-right Factura No
+              %td= @ingreso.factura_numero
+            %tr
+              %th.text-right Autorización
+              %td= @ingreso.factura_autorizacion
+            %tr
+              %th.text-right Nota entrega número
+              %td= @ingreso.nota_entrega_numero
+            %tr
+              %th.text-right Nota entrega fecha
+              %td= I18n.l @ingreso.nota_entrega_fecha
+            %tr
+              %th.text-right Factura fecha
+              %td= I18n.l @ingreso.factura_fecha
+            %tr
+              %th.text-right C-31
+              %td= @ingreso.c31_numero
+            %tr
+              %th.text-right C-31 fecha
+              %td= I18n.l @ingreso.c31_fecha
+      %td
+
+- unless is_pdf?
+  .row
+    .col-md-12.col-sm-12.text-center
+      = link_to ingreso_path(@ingreso, format: :pdf), class: 'btn btn-success btn-lg' do
+        %span.glyphicon.glyphicon-print
+        Imprimir

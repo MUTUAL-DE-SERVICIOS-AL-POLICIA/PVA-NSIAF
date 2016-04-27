@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160418231153) do
+ActiveRecord::Schema.define(version: 20160426204748) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -67,10 +67,12 @@ ActiveRecord::Schema.define(version: 20160418231153) do
     t.string   "marca",               limit: 255
     t.string   "modelo",              limit: 255
     t.string   "serie",               limit: 255
+    t.integer  "ingreso_id",          limit: 4
   end
 
   add_index "assets", ["account_id"], name: "index_assets_on_account_id", using: :btree
   add_index "assets", ["auxiliary_id"], name: "index_assets_on_auxiliary_id", using: :btree
+  add_index "assets", ["ingreso_id"], name: "index_assets_on_ingreso_id", using: :btree
   add_index "assets", ["user_id"], name: "index_assets_on_user_id", using: :btree
 
   create_table "auxiliaries", force: :cascade do |t|
@@ -175,19 +177,23 @@ ActiveRecord::Schema.define(version: 20160418231153) do
 
   create_table "ingresos", force: :cascade do |t|
     t.integer  "numero",               limit: 4
-    t.date     "fecha"
-    t.integer  "factura_numero",       limit: 4
-    t.integer  "factura_autorizacion", limit: 4
+    t.date     "nota_entrega_fecha"
+    t.string   "factura_numero",       limit: 255
+    t.string   "factura_autorizacion", limit: 255
     t.date     "factura_fecha"
     t.integer  "supplier_id",          limit: 4
-    t.string   "c31",                  limit: 255
+    t.string   "c31_numero",           limit: 255
     t.boolean  "baja_logica"
     t.decimal  "total",                            precision: 10, scale: 2
     t.datetime "created_at",                                                null: false
     t.datetime "updated_at",                                                null: false
+    t.integer  "nota_entrega_numero",  limit: 4
+    t.date     "c31_fecha"
+    t.integer  "user_id",              limit: 4
   end
 
   add_index "ingresos", ["supplier_id"], name: "index_ingresos_on_supplier_id", using: :btree
+  add_index "ingresos", ["user_id"], name: "index_ingresos_on_user_id", using: :btree
 
   create_table "kardex_prices", force: :cascade do |t|
     t.integer  "input_quantities",   limit: 4,                          default: 0,     null: false
@@ -357,5 +363,7 @@ ActiveRecord::Schema.define(version: 20160418231153) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "assets", "ingresos"
   add_foreign_key "ingresos", "suppliers"
+  add_foreign_key "ingresos", "users"
 end
