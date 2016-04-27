@@ -12,6 +12,7 @@ class Ability
       # can :manage, Version
       # can :indice, :almacenes
     elsif user.is_admin?
+      can :manage, Supplier
       can :manage, Building
       can :manage, Department
       can :manage, User
