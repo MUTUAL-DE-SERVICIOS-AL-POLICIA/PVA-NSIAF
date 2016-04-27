@@ -33,6 +33,17 @@ module ApplicationHelper
     params['format'] == 'pdf'
   end
 
+  # permite extraer la lista de campos
+  def listar_campos(activos)
+    campos = %w(detalle medidas material marca modelo serie color)
+    if activos.length > 0
+      activo = activos.first
+      campos.select { |a| activo[a].present? }
+    else
+      []
+    end
+  end
+
   def proceeding_to_json(proceeding)
     assets = proceeding.assets.order(:code).each_with_index.map do |a, index|
       { index: index + 1, id: a.id, description: a.description, code: a.code, state: a.get_state, auxiliary: a.auxiliary_name, cuenta: a.account_name }

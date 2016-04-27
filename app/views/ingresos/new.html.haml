@@ -74,23 +74,17 @@
   %thead
     %tr
       %th Código
-      %th Medidas
-      %th Material
       %th Descripción
-      %th Color
       %th.number Precio Unit.
   %tbody
     {{#activos}}
     %tr
       %td {{barcode}}
-      %td {{medidas}}
-      %td {{material}}
-      %td {{detalle}}
-      %td {{color}}
+      %td {{description}}
       %td.number {{precio_formato}}
     {{/activos}}
   %tfoot
     %tr
-      %th{ colspan: 4 }
+      %th
       %th.number TOTAL
       %th.number {{total}}

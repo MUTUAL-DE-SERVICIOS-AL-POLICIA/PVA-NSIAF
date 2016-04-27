@@ -1,3 +1,4 @@
+- lista_de_campos = listar_campos(@ingreso.assets)
 .row{data: {action: 'devolution'}}
   .col-md-12
     %h3.text-center Ingreso de Activos Fijos
@@ -5,26 +6,20 @@
 %table.table.table-bordered.table-striped.table-hover.table-condensed.valorado
   %thead
     %tr
-      %th Nro.
       %th.text-center Código
-      %th Medidas
-      %th Material
-      %th Descripción
-      %th Color
+      - lista_de_campos.each do |campo|
+        %th= campo
       %th.number.nowrap Precio Unit.
   %tbody
-    - @ingreso.assets.each_with_index do |activo, index|
+    - @ingreso.assets.each do |activo|
       %tr
-        %td= index + 1
         %td.text-center{title: activo.barcode}= activo.code
-        %td= activo.medidas
-        %td= activo.material
-        %td= activo.detalle
-        %td= activo.color
+        - lista_de_campos.each do |campo|
+          %td= activo[campo]
         %td.number= number_with_delimiter activo.precio
   %tfoot
     %tr
-      %th{ colspan: 5 }
+      %th{ colspan: lista_de_campos.length }
       %th.number TOTAL
       %th.number= number_with_delimiter @ingreso.total
 
@@ -38,33 +33,42 @@
       %td
         %table.table-condensed
           %tbody
-            %tr
-              %th.text-right Proveedor
-              %td= @ingreso.supplier_name
-            %tr
-              %th.text-right NIT
-              %td= @ingreso.supplier_nit
-            %tr
-              %th.text-right Factura No
-              %td= @ingreso.factura_numero
-            %tr
-              %th.text-right Autorización
-              %td= @ingreso.factura_autorizacion
-            %tr
-              %th.text-right Nota entrega número
-              %td= @ingreso.nota_entrega_numero
-            %tr
-              %th.text-right Nota entrega fecha
-              %td= I18n.l @ingreso.nota_entrega_fecha
-            %tr
-              %th.text-right Factura fecha
-              %td= I18n.l @ingreso.factura_fecha
-            %tr
-              %th.text-right C-31
-              %td= @ingreso.c31_numero
-            %tr
-              %th.text-right C-31 fecha
-              %td= I18n.l @ingreso.c31_fecha
+            - if @ingreso.supplier_name.present?
+              %tr
+                %th.text-right Proveedor
+                %td= @ingreso.supplier_name
+            - if @ingreso.supplier_nit.present?
+              %tr
+                %th.text-right NIT
+                %td= @ingreso.supplier_nit
+            - if @ingreso.factura_numero.present?
+              %tr
+                %th.text-right Factura No
+                %td= @ingreso.factura_numero
+            - if @ingreso.factura_autorizacion.present?
+              %tr
+                %th.text-right Autorización
+                %td= @ingreso.factura_autorizacion
+            - if @ingreso.factura_fecha.present?
+              %tr
+                %th.text-right Fecha de factura
+                %td= I18n.l @ingreso.factura_fecha
+            - if @ingreso.nota_entrega_numero.present?
+              %tr
+                %th.text-right Número nota de entrega
+                %td= @ingreso.nota_entrega_numero
+            - if @ingreso.nota_entrega_fecha.present?
+              %tr
+                %th.text-right Fecha nota de entrega
+                %td= I18n.l @ingreso.nota_entrega_fecha
+            - if @ingreso.c31_numero.present?
+              %tr
+                %th.text-right Número C-31
+                %td= @ingreso.c31_numero
+            - if @ingreso.c31_fecha.present?
+              %tr
+                %th.text-right Fecha C-31
+                %td= I18n.l @ingreso.c31_fecha
       %td
 
 - unless is_pdf?
