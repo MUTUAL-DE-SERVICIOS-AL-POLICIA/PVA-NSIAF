@@ -36,12 +36,9 @@ module ApplicationHelper
   # permite extraer la lista de campos
   def listar_campos(activos)
     campos = %w(detalle medidas material marca modelo serie color)
-    if activos.length > 0
-      activo = activos.first
-      campos.select { |a| activo[a].present? }
-    else
-      []
-    end
+    activos.inject([]) do |seleccionados, activo|
+      seleccionados + campos.select { |c| activo[c].present? }
+    end.uniq
   end
 
   def proceeding_to_json(proceeding)

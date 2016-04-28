@@ -15,6 +15,7 @@ class IngresosController < ApplicationController
 
   # GET /ingresos/1
   def show
+    @activos = @ingreso.assets.order(:barcode)
     respond_to do |format|
       format.html
       format.pdf do

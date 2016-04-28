@@ -96,7 +96,8 @@ class Ingresos
     @$proveedorTelefono.val _proveedor.telefono
 
   conversionNumeros: ->
-    _activos.map (e) ->
+    _activos.map (e, i) ->
+      e.indice = i + 1
       e.precio_formato = e.precio.formatNumber(2, '.', ',')
       e
 
@@ -143,6 +144,7 @@ class Ingresos
   mostrarTabla: ->
     json =
       activos: @conversionNumeros(_activos)
+      cantidad: _activos.length
       total: @sumaTotal().formatNumber(2, '.', ',')
     @$ingresosTbl.html @$activosTpl.render(json)
 

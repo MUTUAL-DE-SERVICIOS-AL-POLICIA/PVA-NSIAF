@@ -73,18 +73,21 @@
 %script{type: 'text/html', id: 'tpl-activo-seleccionado'}
   %thead
     %tr
-      %th Código
+      %th.text-center
+        %strong.badge{title: 'Total'} {{cantidad}}
+      %th.text-center Código
       %th Descripción
       %th.number Precio Unit.
   %tbody
     {{#activos}}
     %tr
-      %td {{barcode}}
+      %td.text-center {{indice}}
+      %td.text-center {{barcode}}
       %td {{description}}
       %td.number {{precio_formato}}
     {{/activos}}
   %tfoot
     %tr
-      %th
+      %th{colspan: 2}
       %th.number TOTAL
       %th.number {{total}}
