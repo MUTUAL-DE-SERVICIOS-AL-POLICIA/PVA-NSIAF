@@ -9,7 +9,7 @@ class IngresosController < ApplicationController
       activos = Asset.buscar_por_barcode(barcode)
       render json: activos, root: false
     else
-      # format_to('ingresos', IngresosDatatable)
+      format_to('ingresos', IngresosDatatable)
     end
   end
 

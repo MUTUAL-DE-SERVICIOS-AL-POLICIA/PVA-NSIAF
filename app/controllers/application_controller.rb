@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.html { render '/shared/index' }
       format.json { render json: datatable.new(view_context) }
-      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries suppliers).include?(name_model) ? 'id' : "#{name_model}.code"
+      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries suppliers ingresos).include?(name_model) ? 'id' : "#{name_model}.code"
       case controller_name
       when 'derecognised' then current = '0'
       when 'assets' then current = '1'

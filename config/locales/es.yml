@@ -123,6 +123,11 @@ es:
   entry_subarticles:
     title:
       edit: "Editar Entrada"
+  ingresos:
+    title:
+      title: "Notas de Ingreso de activos fijos"
+      new: "Nueva Nota de Ingreso"
+      edit: "Editar Nota de Ingreso"
   materials:
     title:
       title: "Materiales"
@@ -379,6 +384,9 @@ es:
         invoice: "Factura"
         date: "Fecha"
         created_at: "Creado el"
+      ingreso:
+        suppliers: "Proveedor"
+        users: "Encargado(a)"
       kardex:
         kardex_date: "Fecha"
         invoice_number: "Nº de Factura"

@@ -12,6 +12,7 @@
 - when 'suppliers' then new_url = new_supplier_path
 - when 'requests' then new_url = new_request_path
 - when 'note_entries' then new_url = new_note_entry_path
+- when 'ingresos' then new_url = new_ingreso_path
 - when 'proceedings' then accion = 'actas'
 
 - control = controller_name == 'derecognised' ? 'assets' : controller_name
@@ -44,7 +45,7 @@
 %table.table.table-striped.table-hover.datatable
   %thead
     %tr
-      - unless %w(versions proceedings requests note_entries suppliers).include?(control)
+      - unless %w(versions proceedings requests note_entries suppliers ingresos).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
           %th= User.human_attribute_name('code')
         %th= %w(assets materials articles subarticles).include?(control) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')

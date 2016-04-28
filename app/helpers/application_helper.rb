@@ -155,7 +155,7 @@ module ApplicationHelper
   def links_actions(user, type= '')
     link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), user, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) + ' ' +
     link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), [:edit, user], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit')) + ' ' +
-    (link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(user), title: title_status(user.status)) unless type == 'asset') + ' ' +
+    (link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(user), title: title_status(user.status)) unless %w(asset ingreso).include?(type)) + ' ' +
     (link_to(content_tag(:span, '', class: "glyphicon glyphicon-plus"), '#', class: 'btn btn-success btn-xs', data: data_entry_subarticle(user), title: I18n.t('subarticles.entry.btn')) if type == 'subarticle')
   end
 
