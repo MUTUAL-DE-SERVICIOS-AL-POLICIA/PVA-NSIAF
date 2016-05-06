@@ -12,7 +12,7 @@ class ReportesController < ApplicationController
         # Eliminar archivos PDF existentes
         Dir['tmp/*.pdf'].each { |a| File.delete(a) }
         # Generar los archivos PDF
-        Subarticle.where(id: (1..10)).each do |subarticle|
+        Subarticle.all.each do |subarticle|
           @subarticle = subarticle
 
           @transacciones = @subarticle.kardexs(desde, hasta)
