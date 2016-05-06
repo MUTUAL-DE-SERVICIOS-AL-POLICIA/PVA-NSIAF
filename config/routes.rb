@@ -17,6 +17,10 @@ Rails.application.routes.draw do
 
   resources :ingresos
 
+  resources :reportes do
+    get 'kardex', on: :collection
+  end
+
   resources :entry_subarticles, only: [:edit, :update]
 
   resources :almacenes, only: [:index]

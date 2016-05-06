@@ -67,3 +67,7 @@ gem 'bower-rails'
 gem 'angular-rails-templates'
 
 gem 'active_model_serializers'
+
+# Comprimir archivos
+gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
+gem 'zip-zip' # will load compatibility for old rubyzip API.

@@ -228,6 +228,8 @@ GEM
     wicked_pdf (0.9.10)
       rails
     will_paginate (3.0.5)
+    zip-zip (0.3)
+      rubyzip (>= 1.0.0)
 
 PLATFORMS
   ruby
@@ -256,6 +258,7 @@ DEPENDENCIES
   ransack!
   rest_client
   roo
+  rubyzip (>= 1.0.0)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   simple_form
@@ -265,6 +268,7 @@ DEPENDENCIES
   web-console (~> 2.0)
   wicked_pdf
   will_paginate
+  zip-zip
 
 BUNDLED WITH
    1.11.2
