@@ -41,6 +41,12 @@ module ApplicationHelper
     end.uniq
   end
 
+  # http://stackoverflow.com/a/18163626/1174245
+  # Si la cantidad no tiene decimales lo muestra como entero
+  def mostrar_entero_float(cantidad)
+    cantidad % 1 == 0 ? cantidad.to_i : cantidad
+  end
+
   def proceeding_to_json(proceeding)
     assets = proceeding.assets.order(:code).each_with_index.map do |a, index|
       { index: index + 1, id: a.id, description: a.description, code: a.code, state: a.get_state, auxiliary: a.auxiliary_name, cuenta: a.account_name }

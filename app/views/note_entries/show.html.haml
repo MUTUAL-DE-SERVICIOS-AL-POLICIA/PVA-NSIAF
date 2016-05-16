@@ -50,7 +50,7 @@
   %tbody
     - @note_entry.entry_subarticles.each do |entry|
       %tr
-        %td.text-center= entry.amount
+        %td.text-center= mostrar_entero_float(entry.amount)
         %td= entry.subarticle_unit
         %td= entry.subarticle_code
         %td= entry.subarticle_name
