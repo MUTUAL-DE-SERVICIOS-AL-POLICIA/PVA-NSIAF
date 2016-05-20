@@ -26,7 +26,7 @@ class BarcodesController < ApplicationController
     respond_to do |format|
       format.pdf do
         filename = 'código de barras'
-        render pdf: "VSIAF-#{filename}".parameterize,
+        render pdf: "#{filename}".parameterize,
                disposition: 'attachment',
                template: 'barcodes/show.pdf.haml',
                show_as_html: params[:debug].present?,

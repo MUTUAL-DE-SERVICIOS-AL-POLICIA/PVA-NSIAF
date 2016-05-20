@@ -12,7 +12,7 @@ class NoteEntriesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "VSIAF-Nota de Ingreso #{@note_entry.note_entry_date}".parameterize,
+        render pdf: "Nota de Ingreso #{@note_entry.note_entry_date}".parameterize,
                disposition: 'attachment',
                template: 'note_entries/show.html.haml',
                layout: 'pdf.html',

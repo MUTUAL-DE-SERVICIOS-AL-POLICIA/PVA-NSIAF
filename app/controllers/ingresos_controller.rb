@@ -19,7 +19,7 @@ class IngresosController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "VSIAF-Ingreso #{@ingreso.nota_entrega_fecha}".parameterize,
+        render pdf: "Ingreso #{@ingreso.nota_entrega_fecha}".parameterize,
                disposition: 'attachment',
                template: 'ingresos/show.html.haml',
                layout: 'pdf.html',

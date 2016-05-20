@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
       end
       @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)
       array_csv = controller_name == 'derecognised' ? @array.to_csv(true) : @array.to_csv
-      filename = "VSIAF-#{t("#{name_model}.title.title")}".parameterize
+      filename = "#{t("#{name_model}.title.title")}".parameterize
       format.csv { send_data array_csv, filename: "#{filename}.csv" }
       format.pdf do
         render pdf: filename,
