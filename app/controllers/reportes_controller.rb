@@ -3,20 +3,19 @@ class ReportesController < ApplicationController
   include Fechas
 
   def kardex
-    desde, hasta = get_fechas(params)
+    @desde, @hasta = get_fechas(params)
+    @subarticles = Subarticle.all
     respond_to do |format|
-      format.html do
-        render nothing: true, status: 200, content_type: 'text/html'
-      end
+      format.html
       format.pdf do
         # Eliminar archivos PDF existentes
         Dir['tmp/*.pdf'].each { |a| File.delete(a) }
         # Generar los archivos PDF
-        Subarticle.all.each do |subarticle|
+        @subarticles.each do |subarticle|
           @subarticle = subarticle
 
-          @transacciones = @subarticle.kardexs(desde, hasta)
-          @year = desde.year
+          @transacciones = @subarticle.kardexs(@desde, @hasta)
+          @year = @desde.year
 
           nombre_archivo = "#{subarticle.barcode}_#{view_context.dom_id(subarticle)}.pdf"
 
@@ -35,7 +34,7 @@ class ReportesController < ApplicationController
             file << pdf
           end
         end
-        archivo_zip = comprimir_a_zip(desde, hasta)
+        archivo_zip = comprimir_a_zip(@desde, @hasta)
         send_data(File.open(archivo_zip).read, type: 'application/zip', disposition: 'attachment')
         File.delete archivo_zip if File.exist?(archivo_zip)
       end

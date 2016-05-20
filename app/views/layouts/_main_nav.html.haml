@@ -92,6 +92,8 @@
             = link_to 'Búsqueda de requerimientos', search_subarticles_requests_path
           %li
             = link_to 'Inventario Físico Valorado', reports_materials_path
+          %li.divider
+          %li= link_to 'Reporte de kardexes', kardex_reportes_path
     - if current_user.has_roles?
       %li
         = link_to 'Histórico', versions_path
