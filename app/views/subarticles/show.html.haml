@@ -90,13 +90,13 @@
           - else
             = transaccion.detalle
         %td.number
-          = transaccion.cantidad
+          = mostrar_entero_float transaccion.cantidad
         %td.number
           - if transaccion.cantidad.zero?
-            = transaccion.cantidad_saldo
+            = mostrar_entero_float transaccion.cantidad_saldo
             - saldo += transaccion.cantidad_saldo
           - else
-            = saldo + transaccion.cantidad
+            = mostrar_entero_float(saldo + transaccion.cantidad)
             - saldo += transaccion.cantidad
         %td.number= number_with_delimiter(transaccion.costo_unitario.to_f)
         %td.text-center
@@ -115,5 +115,5 @@
     %tr
       %th
       %th.number{colspan: 5} STOCK
-      %th.number{colspan: 2}= saldo
+      %th.number{colspan: 2}= mostrar_entero_float saldo
       %th{colspan: 5}
