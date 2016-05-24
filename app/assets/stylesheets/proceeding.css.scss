@@ -2,6 +2,14 @@
 
 .action-buttons { margin: 30px 0 60px; }
 
+.firma-funcionario {
+  height: 100px;
+  vertical-align: bottom;
+  p {
+    margin: 0;
+  }
+}
+
 #proceeding-delivery, #request {
   .proceeding-assets {
     margin: 20px 0 0;
@@ -9,14 +17,6 @@
   }
 
   .proceeding-date { margin-top: 30px; }
-
-  .firma-funcionario {
-    height: 100px;
-    vertical-align: bottom;
-    p {
-      margin: 0;
-    }
-  }
 }
 
 table#pdf-assets-print {
@@ -68,9 +68,11 @@ table#pdf-assets-print {
 }
 
 // Para partir las tablas largas en el PDF
-table, tr, td, th, tbody, thead, tfoot {
-    page-break-inside: avoid !important;
-}
+// http://stackoverflow.com/a/1763683/1174245
+table { page-break-inside:auto;  }
+tr    { page-break-inside:avoid; page-break-after:auto }
+thead { display:table-header-group }
+tfoot { display:table-footer-group }
 
 table.margen {
   border: 1px solid #777;

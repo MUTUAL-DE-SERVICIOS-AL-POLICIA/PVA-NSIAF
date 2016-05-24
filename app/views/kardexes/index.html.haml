@@ -42,6 +42,10 @@
             %td.text-right
               %strong Nº CÓDIGO:
             %td= @subarticle.code
+          %tr
+            %td.text-right
+              %strong UNIDAD:
+            %td= @subarticle.unit.upcase
 
 - unless is_pdf?
   %dl.dl-horizontal
@@ -49,6 +53,8 @@
     %dd= @subarticle.description.upcase
     %dt Nº CÓDIGO:
     %dd= @subarticle.code
+    %dt UNIDAD:
+    %dd= @subarticle.unit.upcase
 
 %table.table.table-bordered.table-condensed.valorado
   %thead
@@ -72,15 +78,11 @@
     = render @transacciones
 
 - if is_pdf?
-  %br/
-  %br/
-  %br/
-  %br/
   %table{ style: 'width: 100%' }
     %tr
-      %td.text-center
+      %td.text-center.firma-funcionario
         %p _______________________
         %p ELABORADO POR
-      %td.text-center
+      %td.text-center.firma-funcionario
         %p _______________________
         %p Vº Bº

@@ -18,6 +18,7 @@ class RequestsController < ApplicationController
                disposition: 'attachment',
                template: 'requests/show.html.haml',
                layout: 'pdf.html',
+               # show_as_html: params.key?('debug'),
                page_size: 'Letter',
                margin: view_context.margin_pdf,
                header: { html: { template: 'shared/header.pdf.haml' } },
