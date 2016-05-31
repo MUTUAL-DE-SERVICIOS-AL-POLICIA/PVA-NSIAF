@@ -43,7 +43,10 @@ class ReportesController < ApplicationController
 
   # Reporte para activos fijos
   def activos
-    @activos = Asset.order(:code)
+    desde, hasta = get_fechas(params, false)
+    q = params[:q]
+    cuentas = params[:cuentas]
+    @activos = Asset.buscar(q, cuentas, desde, hasta).order(:code)
   end
 
   private

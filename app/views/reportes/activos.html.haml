@@ -1,34 +1,43 @@
 .page-header
-  %h2
-    Reporte de activos fijos
+  .pull-right{data: {action: 'reportes-activos'}}
+    = form_tag activos_reportes_path, method: :get, class: 'form-inline', id: 'buscador-form' do
+      .form-group
+        %label.sr-only{for: 'buscar'} Buscar
+        = text_field_tag :q, params[:q], class: 'form-control', id: 'buscar', placeholder: 'Buscar activos', autofocus: true
+      .form-group
+        %label.sr-only{for: 'cuentas'} Cuentas
+        = select_tag :cuentas, options_for_select(get_accounts, params[:cuentas]), class: 'form-control', prompt: 'Seleccionar cuentas'
+      .form-group
+        %label{for: 'fecha-desde'} Fechas
+        = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+      .form-group
+        %label.sr-only{for: 'fecha-hasta'} Hasta
+        = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+      %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los subartículos'}
+        %span.glyphicon.glyphicon-search
 
-    .pull-right
-      = form_tag kardex_reportes_path, method: :get, class: 'form-inline' do
-        .form-group
-          %label.sr-only{for: 'fecha-desde'} Desde
-          = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
-        .form-group
-          %label.sr-only{for: 'fecha-hasta'} Hasta
-          = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
-        %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los subartículos'}
-          %span.glyphicon.glyphicon-search
+  %h2 Reporte de activos fijos
 
-.row{data: {action: 'activos-reportes'}}
+.row
   %table.table.table-condensed.table-striped.table-bordered
     %thead
       %tr
-        %th.text-center{title: 'Numeración'} No
+        %th.text-right{title: 'Numeración'} No
         %th.text-center{title: 'Código'} Código
-        %th{title: 'Fecha de incorporación'} Fecha
+        %th.text-center{title: 'Fecha de incorporación'} Fecha
         %th{title: 'Descripción'} Descripción
         %th{title: 'Asiento contable'} Cuenta
         %th.number{title: 'Precio histórico'} Precio
     %tbody
       - @activos.each_with_index do |activo, index|
         %tr
-          %td.text-center= index + 1
+          %td.text-right= index + 1
           %td.text-center= activo.code
-          %td
+          %td.text-center= l activo.ingreso_fecha if activo.ingreso_fecha
           %td= activo.description
           %td= activo.account_name
           %td.number= number_with_delimiter activo.precio
+      - if @activos.empty?
+        %tr
+          %td.text-center{colspan: 6}
+            No hay activos para mostrar.

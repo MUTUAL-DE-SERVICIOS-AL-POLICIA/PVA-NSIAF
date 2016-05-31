@@ -14,7 +14,7 @@ module ApplicationHelper
 
   def get_accounts(assets = false)
     accounts = assets == true ? Account.with_assets : Account.all
-    accounts.map { |b| [b.name, b.id] }
+    accounts.order(:name).map { |b| [b.name, b.id] }
   end
 
   def get_buildings
