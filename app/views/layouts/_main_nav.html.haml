@@ -82,6 +82,13 @@
     - if !current_user.is_super_admin? && current_user.has_roles?
       %li
         = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
+    - if current_user.is_admin?
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Reportes
+          %b.caret
+        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
+          %li= link_to 'Reporte de activos fijos', activos_reportes_path
     - if current_user.is_admin_store?
       %li.dropdown
         = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do

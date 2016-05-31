@@ -1,0 +1,34 @@
+.page-header
+  %h2
+    Reporte de activos fijos
+
+    .pull-right
+      = form_tag kardex_reportes_path, method: :get, class: 'form-inline' do
+        .form-group
+          %label.sr-only{for: 'fecha-desde'} Desde
+          = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+        .form-group
+          %label.sr-only{for: 'fecha-hasta'} Hasta
+          = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+        %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los subartículos'}
+          %span.glyphicon.glyphicon-search
+
+.row{data: {action: 'activos-reportes'}}
+  %table.table.table-condensed.table-striped.table-bordered
+    %thead
+      %tr
+        %th.text-center{title: 'Numeración'} No
+        %th.text-center{title: 'Código'} Código
+        %th{title: 'Fecha de incorporación'} Fecha
+        %th{title: 'Descripción'} Descripción
+        %th{title: 'Asiento contable'} Cuenta
+        %th.number{title: 'Precio histórico'} Precio
+    %tbody
+      - @activos.each_with_index do |activo, index|
+        %tr
+          %td.text-center= index + 1
+          %td.text-center= activo.code
+          %td
+          %td= activo.description
+          %td= activo.account_name
+          %td.number= number_with_delimiter activo.precio

@@ -41,6 +41,11 @@ class ReportesController < ApplicationController
     end
   end
 
+  # Reporte para activos fijos
+  def activos
+    @activos = Asset.order(:code)
+  end
+
   private
 
     def comprimir_a_zip(desde, hasta)
