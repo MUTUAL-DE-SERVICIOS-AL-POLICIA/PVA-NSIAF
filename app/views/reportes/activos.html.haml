@@ -44,14 +44,17 @@
             %td= activo.description
             %td= activo.account_name
             %td.number= number_with_delimiter activo.precio
+        - if @activos.present?
+          %tr
+            %th{ colspan: 4 }
+            %th.number TOTAL
+            %th.number= number_with_delimiter @total
         - if @activos.empty?
           %tr
             %td.text-center{colspan: 6}
               No hay activos para mostrar.
   - if @activos.length > 0 && !is_pdf?
     .col-sm-12.text-center
-      = link_to activos_reportes_path(format: :pdf, q: params[:q], cuentas: params[:cuentas], desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-primary btn-lg' do
+      = link_to activos_reportes_path(format: :pdf, q: params[:q], cuentas: params[:cuentas], desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-success btn-lg' do
         %span.glyphicon.glyphicon-print
         Imprimir
-      %br/
-      %br/

@@ -47,6 +47,7 @@ class ReportesController < ApplicationController
     q = params[:q]
     cuentas = params[:cuentas]
     @activos = Asset.buscar(q, cuentas, desde, hasta).order(:code)
+    @total = @activos.inject(0.0) { |total, activo| total + activo.precio }
     respond_to do |format|
       format.html
       format.pdf do
