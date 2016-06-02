@@ -36,6 +36,10 @@
             %td &nbsp;
           %tr
             %td.text-right
+              %strong ARTÍCULO:
+            %td= @subarticle.article_name.upcase
+          %tr
+            %td.text-right
               %strong DESCRIPCIÓN:
             %td= @subarticle.description.upcase
           %tr
@@ -49,6 +53,8 @@
 
 - unless is_pdf?
   %dl.dl-horizontal
+    %dt ARTÍCULO:
+    %dd= @subarticle.article_name.upcase
     %dt DESCRIPCIÓN:
     %dd= @subarticle.description.upcase
     %dt Nº CÓDIGO:
