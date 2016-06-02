@@ -44,6 +44,25 @@ class Asset < ActiveRecord::Base
 
   has_paper_trail
 
+  # Permite filtrar los activos mediante un buscador, cuentas, y rango de fechas
+  def self.buscar(q, cuentas, desde, hasta)
+    if q.present? || cuentas.present? || (desde.present? && hasta.present?)
+      activos = includes(:ingreso, auxiliary: :account)
+      if q.present?
+        activos = activos.where("assets.description like :q OR assets.code like :code", q: "%#{q}%", code: "%#{q}%")
+      end
+      if cuentas.present?
+        activos = activos.where("accounts.id" => cuentas)
+      end
+      if desde.present? && hasta.present?
+        activos = activos.where("ingresos.factura_fecha" => desde..hasta)
+      end
+    else
+      activos = all
+    end
+    activos
+  end
+
   def self.buscar_por_barcode(barcode)
     barcodes = barcode.split(',').map(&:strip)
     barcodes.map! do |rango|
@@ -97,6 +116,11 @@ class Asset < ActiveRecord::Base
       end
       change_barcode_to_deleted
     end
+  end
+
+  # Fecha de ingreso del activo fijo
+  def ingreso_fecha
+    ingreso.present? ? ingreso.factura_fecha : nil
   end
 
   def name

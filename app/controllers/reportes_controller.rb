@@ -41,6 +41,31 @@ class ReportesController < ApplicationController
     end
   end
 
+  # Reporte para activos fijos
+  def activos
+    desde, hasta = get_fechas(params, false)
+    q = params[:q]
+    cuentas = params[:cuentas]
+    @activos = Asset.buscar(q, cuentas, desde, hasta).order(:code)
+    @total = @activos.inject(0.0) { |total, activo| total + activo.precio }
+    respond_to do |format|
+      format.html
+      format.pdf do
+        filename = 'reporte-de-activos'
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               # show_as_html: params.key?('debug'),
+               template: 'reportes/activos.html.haml',
+               orientation: 'Portrait',
+               page_size: 'Letter',
+               margin: view_context.margin_pdf,
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
+  end
+
   private
 
     def comprimir_a_zip(desde, hasta)
