@@ -290,4 +290,30 @@ class Subarticle < ActiveRecord::Base
   def close_stock!(year = Date.today.year)
     entry_subarticles_exist(year).update_all(stock: 0, updated_at: Time.now)
   end
+
+  def valorado_ingresos(desde, hasta)
+    _transacciones = reporte(desde, hasta)
+    _transacciones.inject(0) do |suma, transaccion|
+      if transaccion.tipo == 'entrada'
+        suma + (transaccion.cantidad * transaccion.costo_unitario)
+      else
+        suma
+      end
+    end
+  end
+
+  def valorado_salidas(desde, hasta)
+    _transacciones = reporte(desde, hasta)
+    _transacciones.inject(0) do |suma, transaccion|
+      if transaccion.tipo == 'salida'
+        suma + (-transaccion.cantidad * transaccion.precio_unitario)
+      else
+        suma
+      end
+    end
+  end
+
+  def valorado_saldo(desde, hasta)
+    valorado_ingresos(desde, hasta) - valorado_salidas(desde, hasta)
+  end
 end

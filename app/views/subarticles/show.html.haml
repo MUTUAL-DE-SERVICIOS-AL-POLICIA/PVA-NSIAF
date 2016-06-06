@@ -98,7 +98,11 @@
           - else
             = mostrar_entero_float(saldo + transaccion.cantidad)
             - saldo += transaccion.cantidad
-        %td.number= number_with_delimiter(transaccion.costo_unitario.to_f)
+        %td.number
+          - if transaccion.tipo == 'entrada'
+            = number_with_delimiter(transaccion.costo_unitario.to_f)
+          - else
+            = number_with_delimiter(transaccion.precio_unitario.to_f)
         %td.text-center
           - if transaccion.saldo_inicial?
             %em -

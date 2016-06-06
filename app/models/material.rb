@@ -8,6 +8,24 @@ class Material < ActiveRecord::Base
 
   has_paper_trail
 
+  def valorado_ingresos(desde, hasta)
+    articles.inject(0) do |total, article|
+      total + article.valorado_ingresos(desde, hasta)
+    end
+  end
+
+  def valorado_salidas(desde, hasta)
+    articles.inject(0) do |total, article|
+      total + article.valorado_salidas(desde, hasta)
+    end
+  end
+
+  def valorado_saldo(desde, hasta)
+    articles.inject(0) do |total, article|
+      total + article.valorado_saldo(desde, hasta)
+    end
+  end
+
   def verify_assignment
     articles.present?
   end

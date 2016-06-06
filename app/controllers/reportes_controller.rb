@@ -66,6 +66,12 @@ class ReportesController < ApplicationController
     end
   end
 
+  # Reporte de salidas de almacenes por cuenta contable
+  def cuenta_contable
+    @desde, @hasta = get_fechas(params)
+    @materials = Material.all
+  end
+
   private
 
     def comprimir_a_zip(desde, hasta)
