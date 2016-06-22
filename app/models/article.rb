@@ -19,8 +19,30 @@ class Article < ActiveRecord::Base
     material.present? ? material.description : ''
   end
 
+  def valorado_ingresos(desde, hasta)
+    subarticles.inject(0) do |total, subarticle|
+      total + subarticle.valorado_ingresos(desde, hasta)
+    end
+  end
+
+  def valorado_salidas(desde, hasta)
+    subarticles.inject(0) do |total, subarticle|
+      total + subarticle.valorado_salidas(desde, hasta)
+    end
+  end
+
+  def valorado_saldo(desde, hasta)
+    subarticles.inject(0) do |total, subarticle|
+      total + subarticle.valorado_saldo(desde, hasta)
+    end
+  end
+
   def verify_assignment
     subarticles.present?
+  end
+
+  def self.saldo_al(desde, hasta)
+    subarticles.saldo_al(desde, hasta)
   end
 
   def self.set_columns

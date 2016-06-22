@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :reportes do
     get 'kardex', on: :collection
     get 'activos', on: :collection
+    get 'cuenta_contable', on: :collection
   end
 
   resources :entry_subarticles, only: [:edit, :update]
