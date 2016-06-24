@@ -37,7 +37,7 @@
           {{/unassigned}}
 
 - if controller_name == 'subarticles'
-  %script{ id: 'entry_subarticle', type: 'text/html' }
+  %script{ id: 'entry_subarticle', type: 'text/html', data: {action: 'subarticulos'} }
     .modal-header{ style: 'margin-bottom: 5px;' }
     = render 'subarticles/new_entry'
 

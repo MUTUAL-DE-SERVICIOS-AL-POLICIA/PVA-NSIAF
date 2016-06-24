@@ -54,3 +54,4 @@
 //= require actas
 //= require ingresos
 //= require reportes
+//= require subarticulos
