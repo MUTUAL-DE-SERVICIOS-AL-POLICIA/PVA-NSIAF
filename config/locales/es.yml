@@ -347,7 +347,7 @@ es:
         description: "Descripción"
         status: "Estado"
       asset:
-        barcode: "Código de Barras"
+        barcode: "Código Barras"
         code: "Código"
         description: "Descripción"
         auxiliary: "Auxiliar"
@@ -359,6 +359,7 @@ es:
         reason_decline: "Motivo"
         created_at: "Creado el"
         incorporacion: "Incorporación"
+        supplier: "Proveedor"
       auxiliary:
         code: "Código"
         name: "Nombre"

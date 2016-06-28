@@ -123,6 +123,15 @@ class Asset < ActiveRecord::Base
     ingreso.present? ? ingreso.factura_fecha : nil
   end
 
+  def ingreso_proveedor
+    ingreso.present? ? ingreso.supplier : nil
+  end
+
+  # Fecha de ingreso del activo fijo
+  def ingreso_proveedor_nombre
+    ingreso.present? ? ingreso.supplier_name : nil
+  end
+
   def name
     description
   end
@@ -137,7 +146,7 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'account'), h.get_column(self, 'user'), h.get_column(self, 'barcode')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'supplier'), h.get_column(self, 'account'), h.get_column(self, 'user'), h.get_column(self, 'barcode')]
   end
 
   def self.without_barcode
@@ -153,7 +162,7 @@ class Asset < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
-    array = includes(:ingreso, :user, auxiliary: :account).order("#{sort_column} #{sort_direction}").where(status: status).references(auxiliary: :account)
+    array = includes(:ingreso, :user, ingreso: :supplier, auxiliary: :account).order("#{sort_column} #{sort_direction}").where(status: status).references(auxiliary: :account)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
@@ -161,12 +170,14 @@ class Asset < ActiveRecord::Base
           array = array.where('accounts.name LIKE ?', "%#{sSearch}%")
         elsif search_column == 'incorporacion' # modelo: Ingreso
           array = array.where('ingresos.factura_fecha LIKE ?', "%#{convertir_fecha(sSearch)}%")
+        elsif search_column == 'supplier' # modelo: Supplier / Proveedor
+          array = array.where('suppliers.name LIKE ?', "%#{sSearch}%")
         else
           type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
           array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
         end
       else
-         array = array.where("assets.code LIKE ? OR assets.barcode LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR ingresos.factura_fecha LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%")
+         array = array.where("assets.code LIKE ? OR assets.barcode LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR suppliers.name LIKE ? OR ingresos.factura_fecha LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%")
       end
     end
     array
