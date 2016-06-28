@@ -358,6 +358,7 @@ es:
         description_decline: "Descripción"
         reason_decline: "Motivo"
         created_at: "Creado el"
+        incorporacion: "Incorporación"
       auxiliary:
         code: "Código"
         name: "Nombre"

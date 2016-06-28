@@ -21,6 +21,7 @@ private
       as = []
       as << asset.code
       as << asset.description
+      as << (asset.ingreso_fecha.present? ? I18n.l(asset.ingreso_fecha) : nil)
       as << asset.precio
       as << link_to_if(asset.account, asset.account_name, asset.account)
       as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
@@ -52,7 +53,7 @@ private
   end
 
   def sort_column
-    columns = %w[assets.code description users.name assets.precio assets.barcode derecognised]
+    columns = %w[assets.code description ingresos.factura_fecha users.name assets.precio assets.barcode derecognised]
     columns[params[:iSortCol_0].to_i]
   end
 
