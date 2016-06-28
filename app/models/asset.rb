@@ -227,7 +227,7 @@ class Asset < ActiveRecord::Base
       return fecha.split('-').reverse.join('-') if fecha =~ /-/
       return fecha.strip unless fecha =~ /[^0-9]/
     end
-    return ''
+    return fecha
   end
 
   def generar_descripcion
