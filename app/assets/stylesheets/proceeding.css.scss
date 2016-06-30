@@ -42,6 +42,10 @@ table#pdf-assets-print {
         .contenedor {
           margin: 2px 10px;
           border: 1px dotted transparent !important;
+          .detalle {
+            line-height: 1;
+            margin-bottom: 5px;
+          }
           .barcode {
             margin: 0 auto;
             height: 55px;
