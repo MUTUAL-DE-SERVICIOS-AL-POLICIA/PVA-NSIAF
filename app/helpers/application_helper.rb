@@ -12,6 +12,15 @@ module ApplicationHelper
     acronym
   end
 
+  ##
+  # Muestra la fecha de impresión en el lugar especificado
+  # También soporta enviarle
+  def fecha_impresion(fecha_hora = DateTime.now)
+    content_tag(:p, class: 'text-right') do
+      content_tag :em, "Impreso el #{I18n.l fecha_hora, format: :long}"
+    end
+  end
+
   def get_accounts(assets = false)
     accounts = assets == true ? Account.with_assets : Account.all
     accounts.order(:name).map { |b| [b.name, b.id] }
