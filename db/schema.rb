@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160713210616) do
+ActiveRecord::Schema.define(version: 20160713213423) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -187,7 +187,7 @@ ActiveRecord::Schema.define(version: 20160713210616) do
     t.decimal  "total",                            precision: 10, scale: 2
     t.datetime "created_at",                                                null: false
     t.datetime "updated_at",                                                null: false
-    t.integer  "nota_entrega_numero",  limit: 4
+    t.string   "nota_entrega_numero",  limit: 255
     t.date     "c31_fecha"
     t.integer  "user_id",              limit: 4
   end
