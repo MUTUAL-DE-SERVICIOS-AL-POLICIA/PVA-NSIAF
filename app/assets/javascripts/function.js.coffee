@@ -8,19 +8,10 @@ style_date = (id)->
   $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
 
 date_picker = (year = false) ->
-  if $(".edit_note_entry").length
-    days = $("#get_date").data('date')
-    date = "-#{days}d"
-  else
-    # TODO verificar el rango del último cierre para restringir rango de fechas
-    # date = if year then (new Date((new Date).getFullYear(), 0, 1)) else ""
-    date = ""
   $(".date").datepicker
     autoclose: true
     format: "dd/mm/yyyy"
     language: "es"
-    startDate: date
-    endDate: "+0d"
 
 validation_decline = ($form, id) ->
   input = $("##{id}")
