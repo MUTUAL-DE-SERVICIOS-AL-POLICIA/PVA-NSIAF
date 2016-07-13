@@ -17,26 +17,6 @@
         - if @note_entry.nro_nota_ingreso != 0 && @note_entry.nro_nota_ingreso.present?
           Nro. #{@note_entry.nro_nota_ingreso}
 
-  %dl.dl-horizontal
-    %dt= NoteEntry.human_attribute_name('suppliers')
-    %dd= @note_entry.supplier_name
-    %dt= NoteEntry.human_attribute_name('c31')
-    %dd= @note_entry.c31
-    %dt= NoteEntry.human_attribute_name('delivery_note_number')
-    %dd
-      %span.col-xs-12.col-sm-6.col-md-6.padding-note= @note_entry.delivery_note_number
-      %b.col-xs-12.col-sm-1.col-md-1.padding-note Fecha
-      %span.col-xs-12.col-sm-2.padding-note= @note_entry.note_date(@note_entry.delivery_note_date)
-    %dt= NoteEntry.human_attribute_name('invoice_number')
-    %dd
-      %span.col-xs-12.col-sm-2.col-md-2.padding-note= @note_entry.invoice_number
-      %b.col-xs-12.col-sm-2.col-md-2.padding-note Autorización
-      %span.col-xs-12.col-sm-2.padding-note= @note_entry.invoice_autorizacion
-      %b.col-xs-12.col-sm-2.col-md-1.padding-note Fecha
-      %span.col-xs-12.col-sm-2.padding-note= @note_entry.note_date(@note_entry.invoice_date)
-    %dt= NoteEntry.human_attribute_name('users')
-    %dd= @note_entry.user_name
-
 - if is_pdf?
   %h3.text-center.proceeding-title Nota de Ingreso Almacén
 
@@ -77,7 +57,7 @@
   %thead
     %tr
       %th.col-md-6.col-sm-7.col-xs-8 Datos proveedor
-      %th.col-md-6.col-sm-5.col-xs-4 Firma Activos Fijos
+      %th.col-md-6.col-sm-5.col-xs-4 Firma encargado
   %tbody
     %tr
       %td
@@ -103,10 +83,10 @@
               %tr
                 %th.text-right Fecha de factura
                 %td= I18n.l @note_entry.invoice_date
-            - if @note_entry.nro_nota_ingreso.present?
+            - if @note_entry.delivery_note_number.present?
               %tr
                 %th.text-right Número nota de entrega
-                %td= @note_entry.nro_nota_ingreso
+                %td= @note_entry.delivery_note_number
             - if @note_entry.note_entry_date.present?
               %tr
                 %th.text-right Fecha nota de entrega
@@ -115,10 +95,10 @@
               %tr
                 %th.text-right Número C-31
                 %td= @note_entry.c31
-            -# - if @note_entry.c31_fecha.present?
-            -#   %tr
-            -#     %th.text-right Fecha C-31
-            -#     %td= I18n.l @note_entry.c31_fecha
+            - if @note_entry.c31_fecha.present?
+              %tr
+                %th.text-right Fecha C-31
+                %td= I18n.l @note_entry.c31_fecha
       %td
 
 = fecha_impresion if is_pdf?
