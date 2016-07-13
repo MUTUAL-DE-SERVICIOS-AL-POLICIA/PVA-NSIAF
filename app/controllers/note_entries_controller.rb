@@ -15,6 +15,7 @@ class NoteEntriesController < ApplicationController
         render pdf: "Nota de Ingreso #{@note_entry.note_entry_date}".parameterize,
                disposition: 'attachment',
                template: 'note_entries/show.html.haml',
+               # show_as_html: params[:debug].present?,
                layout: 'pdf.html',
                page_size: 'Letter',
                margin: view_context.margin_pdf,

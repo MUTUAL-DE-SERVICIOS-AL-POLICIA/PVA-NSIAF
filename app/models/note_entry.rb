@@ -16,6 +16,10 @@ class NoteEntry < ActiveRecord::Base
     supplier.present? ? supplier.name : ''
   end
 
+  def supplier_nit
+    supplier.present? ? supplier.nit : ''
+  end
+
   def user_name
     user.present? ? user.name : ''
   end

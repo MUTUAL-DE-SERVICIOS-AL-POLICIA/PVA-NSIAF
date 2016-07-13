@@ -11,7 +11,11 @@
         %span.glyphicon.glyphicon-list
         = t("note_entries.title.title")
 
-    %h2 Nota de Ingreso
+    %h2
+      Nota de Ingreso Almacén
+      %span
+        - if @note_entry.nro_nota_ingreso != 0 && @note_entry.nro_nota_ingreso.present?
+          Nro. #{@note_entry.nro_nota_ingreso}
 
   %dl.dl-horizontal
     %dt= NoteEntry.human_attribute_name('suppliers')
@@ -34,61 +38,87 @@
     %dd= @note_entry.user_name
 
 - if is_pdf?
-  %h3.text-center.proceeding-title NOTA DE INGRESO ALMACEN
+  %h3.text-center.proceeding-title Nota de Ingreso Almacén
 
-%table.table.table-condensed.table-bordered{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+%table.table.table-condensed.table-bordered.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
   %thead
     %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
-      %th.text-center{rowspan: "2"} CANTIDAD
-      %th.text-center{rowspan: "2"} UNIDAD
-      %th.text-center{rowspan: "2"} CÓDIGO
-      %th.text-center{rowspan: "2"} DETALLE
-      %th.text-center{colspan: "2"} IMPORTE
+      %th.text-center{rowspan: "2"} Nro
+      %th.text-center{rowspan: "2"} Código
+      %th.text-center{rowspan: "2"} Unidad
+      %th.text-center{rowspan: "2"} Detalle
+      %th.text-center{rowspan: "2"} Cantidad
+      %th.text-center{colspan: "2"} Importe
     %tr
-      %th.text-center{ class: "#{ 'info' unless is_pdf? }" } UNITARIO
-      %th.text-center{ class: "#{ 'info' unless is_pdf? }" } TOTAL
+      %th.text-center{ class: "#{ 'info' unless is_pdf? }" } Unitario
+      %th.text-center{ class: "#{ 'info' unless is_pdf? }" } Total
   %tbody
-    - @note_entry.entry_subarticles.each do |entry|
+    - @note_entry.entry_subarticles.each_with_index do |entry, index|
       %tr
-        %td.text-center= mostrar_entero_float(entry.amount)
-        %td= entry.subarticle_unit
-        %td= entry.subarticle_code
+        %td.text-center= index + 1
+        %td.text-center= entry.subarticle_code
+        %td.text-center= entry.subarticle_unit
         %td= entry.subarticle_name
+        %td.text-center= mostrar_entero_float(entry.amount)
         %td.number= number_with_delimiter entry.unit_cost
         %td.number= number_with_delimiter entry.total_cost
     - if @note_entry.descuento > 0
       %tr
-        %th{colspan: 3}
-        %th.text-right SUBTOTAL
-        %th
+        %th.text-right{colspan: 6} SUBTOTAL
         %th.number= number_with_delimiter @note_entry.subtotal
       %tr
-        %th{colspan: 3}
-        %th.text-right DESCUENTO
-        %th
+        %th.text-right{colspan: 6} DESCUENTO
         %th.number= number_with_delimiter @note_entry.descuento
     %tr
-      %th{colspan: 3}
-      %th.text-right TOTAL
-      %th
+      %th.text-right{colspan: 6} TOTAL
       %th.number= number_with_delimiter @note_entry.total
+
+%table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+  %thead
     %tr
-      %td{colspan: 6}
-        - subarticles = @note_entry.entry_subarticles.count == 1
-        - supplier = @note_entry.supplier_name
-        - delivery_n = @note_entry.note_number(@note_entry.delivery_note_number)
-        - delivery_d = @note_entry.note_date(@note_entry.delivery_note_date)
-        - invoice_n = @note_entry.note_number(@note_entry.invoice_number)
-        - invoice_d = @note_entry.note_date(@note_entry.invoice_date)
+      %th.col-md-6.col-sm-7.col-xs-8 Datos proveedor
+      %th.col-md-6.col-sm-5.col-xs-4 Firma Activos Fijos
+  %tbody
+    %tr
+      %td
+        %table.table-condensed
+          %tbody
+            - if @note_entry.supplier_name.present?
+              %tr
+                %th.text-right Proveedor
+                %td= @note_entry.supplier_name
+            - if @note_entry.supplier_nit.present?
+              %tr
+                %th.text-right NIT
+                %td= @note_entry.supplier_nit
+            - if @note_entry.invoice_number.present?
+              %tr
+                %th.text-right Factura No
+                %td= @note_entry.invoice_number
+            - if @note_entry.invoice_autorizacion.present?
+              %tr
+                %th.text-right Autorización
+                %td= @note_entry.invoice_autorizacion
+            - if @note_entry.invoice_date.present?
+              %tr
+                %th.text-right Fecha de factura
+                %td= I18n.l @note_entry.invoice_date
+            - if @note_entry.nro_nota_ingreso.present?
+              %tr
+                %th.text-right Número nota de entrega
+                %td= @note_entry.nro_nota_ingreso
+            - if @note_entry.note_entry_date.present?
+              %tr
+                %th.text-right Fecha nota de entrega
+                %td= I18n.l @note_entry.note_entry_date
+            - if @note_entry.c31.present?
+              %tr
+                %th.text-right Número C-31
+                %td= @note_entry.c31
+            -# - if @note_entry.c31_fecha.present?
+            -#   %tr
+            -#     %th.text-right Fecha C-31
+            -#     %td= I18n.l @note_entry.c31_fecha
+      %td
 
-        - subarticle = subarticles ? "Compra de #{@note_entry.entry_subarticles.first.subarticle_name}" : ''
-        - supplier = "#{',' if subarticles} De #{supplier}" if supplier.present?
-        - delivery_date = "del #{delivery_d}" if delivery_d.present?
-        - delivery = "#{',' if subarticles || supplier.present?} Según Nota de Entrega #{delivery_n} #{delivery_date}" if delivery_n.present? || delivery_d.present?
-        - invoice_date = "del #{invoice_d}" if invoice_d.present?
-        - invoice = "#{',' if subarticles || supplier.present? || delivery.present?} Factura #{invoice_n} #{invoice_date}" if invoice_n.present? || invoice_d.present?
-        %b Glosa:
-        #{subarticle}#{supplier}#{delivery}#{invoice}
-
-%p.proceeding-date
-  La Paz, #{ I18n.l(@note_entry.note_entry_date.to_date, format: :long) }
+= fecha_impresion if is_pdf?
