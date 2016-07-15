@@ -8,6 +8,12 @@ class Material < ActiveRecord::Base
 
   has_paper_trail
 
+  def subarticles
+    Subarticle.joins(article: :material)
+      .where('materials.id = ?', self.id)
+      .order('subarticles.id')
+  end
+
   def valorado_ingresos(desde, hasta)
     articles.inject(0) do |total, article|
       total + article.valorado_ingresos(desde, hasta)

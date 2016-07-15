@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160713213423) do
+ActiveRecord::Schema.define(version: 20160714153827) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -296,7 +296,7 @@ ActiveRecord::Schema.define(version: 20160713213423) do
   add_index "subarticle_requests", ["subarticle_id"], name: "index_subarticle_requests_on_subarticle_id", using: :btree
 
   create_table "subarticles", force: :cascade do |t|
-    t.string   "code",        limit: 255
+    t.integer  "code",        limit: 4
     t.string   "description", limit: 255
     t.string   "unit",        limit: 255
     t.string   "status",      limit: 255
@@ -306,6 +306,8 @@ ActiveRecord::Schema.define(version: 20160713213423) do
     t.integer  "amount",      limit: 4
     t.integer  "minimum",     limit: 4
     t.string   "barcode",     limit: 255
+    t.string   "code_old",    limit: 255
+    t.integer  "incremento",  limit: 4
   end
 
   add_index "subarticles", ["article_id"], name: "index_subarticles_on_article_id", using: :btree

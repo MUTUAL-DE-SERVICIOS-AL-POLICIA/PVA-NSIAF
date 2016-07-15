@@ -174,6 +174,12 @@ class Subarticle < ActiveRecord::Base
     kardexes
   end
 
+  ##
+  # Código del material al cual pertenece los subartículos
+  def material_code
+    article.present? ? article.material_code : ''
+  end
+
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'barcode'), h.get_column(self, 'article')]

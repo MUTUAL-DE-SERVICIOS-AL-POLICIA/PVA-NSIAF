@@ -100,4 +100,21 @@ namespace :db do
       end
     end
   end
+
+  ##
+  # Permite autoasignar a los subartículos un incremento por cada grupo de
+  # materiales. Esto con el fin de recodificar los códigos
+  desc "Recodificación de código por grupo de materiales"
+  task :recodificacion => :environment do
+    Subarticle.transaction do
+      Material.all.each do |m|
+        m.subarticles.each_with_index do |s, index|
+          s.incremento = index + 1
+          s.barcode = "#{s.material_code}#{s.incremento}"
+          s.code = s.barcode.to_i
+          s.save!
+        end
+      end
+    end
+  end
 end
