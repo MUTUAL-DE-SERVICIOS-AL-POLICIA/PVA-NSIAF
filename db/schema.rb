@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160714153827) do
+ActiveRecord::Schema.define(version: 20160715133659) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -308,9 +308,11 @@ ActiveRecord::Schema.define(version: 20160714153827) do
     t.string   "barcode",     limit: 255
     t.string   "code_old",    limit: 255
     t.integer  "incremento",  limit: 4
+    t.integer  "material_id", limit: 4
   end
 
   add_index "subarticles", ["article_id"], name: "index_subarticles_on_article_id", using: :btree
+  add_index "subarticles", ["material_id"], name: "index_subarticles_on_material_id", using: :btree
 
   create_table "suppliers", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -368,4 +370,5 @@ ActiveRecord::Schema.define(version: 20160714153827) do
   add_foreign_key "assets", "ingresos"
   add_foreign_key "ingresos", "suppliers"
   add_foreign_key "ingresos", "users"
+  add_foreign_key "subarticles", "materials"
 end

@@ -8,6 +8,10 @@ class Material < ActiveRecord::Base
 
   has_paper_trail
 
+  def detalle
+    "#{code} - #{description}"
+  end
+
   def subarticles
     Subarticle.joins(article: :material)
       .where('materials.id = ?', self.id)

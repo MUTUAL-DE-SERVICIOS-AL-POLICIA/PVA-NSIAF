@@ -117,4 +117,15 @@ namespace :db do
       end
     end
   end
+
+  ##
+  # Actualiza la información de los materiales en los subartículos
+  # Es un método que sólo se usa una vez:
+  desc "Actualiza id de materiales en los subartículos"
+  task :actualizar => :environment do
+    Subarticle.all.each do |s|
+      s.material_id = s.article.present? ? s.article.material_id : nil
+      s.save!
+    end
+  end
 end

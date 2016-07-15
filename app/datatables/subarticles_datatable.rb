@@ -22,8 +22,7 @@ private
       as << subarticle.code
       as << subarticle.description
       as << subarticle.unit
-      as << subarticle.barcode
-      as << link_to_if(subarticle.article, subarticle.article_name, subarticle.article, title: subarticle.article_code)
+      as << link_to_if(subarticle.material, subarticle.material_description, subarticle.material, title: subarticle.material_code)
       as << type_status(subarticle.status)
       entry = subarticle.entry_subarticles.present? ? '' : 'subarticle'
       as << links_actions(subarticle, entry)
@@ -48,7 +47,7 @@ private
   end
 
   def sort_column
-    columns = %w[subarticles.code subarticles.description subarticles.unit barcode articles.description subarticles.status]
+    columns = %w[subarticles.code subarticles.description subarticles.unit materials.description subarticles.status]
     columns[params[:iSortCol_0].to_i]
   end
 

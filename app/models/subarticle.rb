@@ -1,7 +1,10 @@
 class Subarticle < ActiveRecord::Base
   include Migrated, ManageStatus, VersionLog
+  include Autoincremento
+  include CodeNumber
 
   belongs_to :article
+  belongs_to :material
   has_many :subarticle_requests
   has_many :requests, through: :subarticle_requests
   has_many :entry_subarticles
@@ -9,9 +12,11 @@ class Subarticle < ActiveRecord::Base
   has_many :transacciones, :class_name => "Transaccion", :foreign_key => "subarticle_id"
 
   with_options if: :is_not_migrate? do |m|
+    m.validates :material_id, presence: true
     m.validates :barcode, presence: true, uniqueness: true
     m.validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-    m.validates :description, :unit, :article_id, presence: true
+    m.validates :description, :unit, presence: true
+    m.validates :incremento, presence: true, uniqueness: { scope: :material_id, message: "debe ser único por material" }
     #m.validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     #
     # TODO validación de los códigos de barras desactivado.
@@ -25,7 +30,7 @@ class Subarticle < ActiveRecord::Base
     m.validates :description, :unit, presence: true
   end
 
-  before_save :check_barcode
+  # before_save :check_barcode
 
   has_paper_trail
 
@@ -68,6 +73,13 @@ class Subarticle < ActiveRecord::Base
 
   def self.estado_activo
     where('status = ?', '1')
+  end
+
+  ##
+  # Utilizado para la migración de artículos a materiales, por tanto se queda
+  # en eliminar la categoría Artículos
+  def article_material_id
+    article.present? ? article.material : nil
   end
 
   ##
@@ -177,25 +189,37 @@ class Subarticle < ActiveRecord::Base
   ##
   # Código del material al cual pertenece los subartículos
   def material_code
-    article.present? ? article.material_code : ''
+    if material.present?
+      material.code
+    elsif article.present?
+      article.material_code
+    else
+      ''
+    end
+  end
+
+  ##
+  # Descripción de model material asociado al subartículo
+  def material_description
+    material.present? ? material.description : ''
   end
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'barcode'), h.get_column(self, 'article')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'material')]
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = includes(:article).order("#{sort_column} #{sort_direction}").references(:article)
+    array = includes(:material).order("#{sort_column} #{sort_direction}").references(:article)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       h = ApplicationController.helpers
       sSearch = h.changeBarcode(sSearch)
       if search_column.present?
-        type_search = search_column == 'article' ? 'articles.description' : "subarticles.#{search_column}"
+        type_search = search_column == 'material' ? 'materials.description' : "subarticles.#{search_column}"
         array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
       else
-        array = array.where("subarticles.code LIKE ? OR subarticles.description LIKE ? OR subarticles.unit LIKE ? OR articles.description LIKE ? OR subarticles.barcode LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+        array = array.where("subarticles.code LIKE ? OR subarticles.description LIKE ? OR subarticles.unit LIKE ? OR materials.description LIKE ? OR subarticles.barcode LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array

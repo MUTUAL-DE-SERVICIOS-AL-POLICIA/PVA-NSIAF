@@ -38,6 +38,7 @@ class SubarticlesController < ApplicationController
       if @subarticle.save
         format.html { redirect_to subarticles_url, notice: t('general.created', model: Subarticle.model_name.human) }
       else
+        Rails.logger.info "**********************#{@subarticle.errors.messages}, #{@subarticle.inspect}"
         format.html { render action: 'form' }
       end
     end
@@ -116,7 +117,7 @@ class SubarticlesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def subarticle_params
-      params.require(:subarticle).permit(:code, :description, :unit, :status, :article_id, :amount, :minimum, :barcode)
+      params.require(:subarticle).permit(:description, :unit, :status, :amount, :minimum, :material_id)
     end
 
     def entry_subarticle_params
