@@ -108,7 +108,7 @@ namespace :db do
   task :recodificacion => :environment do
     Subarticle.transaction do
       Material.all.each do |m|
-        m.subarticles.each_with_index do |s, index|
+        m.subarticulos.each_with_index do |s, index|
           s.incremento = index + 1
           s.barcode = "#{s.material_code}#{s.incremento}"
           s.code = s.barcode.to_i
@@ -124,8 +124,10 @@ namespace :db do
   desc "Actualiza id de materiales en los subartículos"
   task :actualizar => :environment do
     Subarticle.all.each do |s|
-      s.material_id = s.article.present? ? s.article.material_id : nil
-      s.save!
+      if s.article.present?
+        s.material_id = s.article.material_id
+        s.save!
+      end
     end
   end
 end

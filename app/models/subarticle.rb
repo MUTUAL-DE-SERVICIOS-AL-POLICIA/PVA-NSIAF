@@ -210,7 +210,7 @@ class Subarticle < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = includes(:material).order("#{sort_column} #{sort_direction}").references(:article)
+    array = includes(:material).order("#{sort_column} #{sort_direction}").references(:material)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       h = ApplicationController.helpers
@@ -226,14 +226,14 @@ class Subarticle < ActiveRecord::Base
   end
 
   def self.to_csv
-    columns = %w(code description unit barcode article status)
+    columns = %w(code description unit material status)
     h = ApplicationController.helpers
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }
       all.each do |subarticle|
         a = subarticle.attributes.values_at(*columns)
         a.pop(2)
-        a.push(subarticle.article_name, h.type_status(subarticle.status))
+        a.push(subarticle.material_description, h.type_status(subarticle.status))
         csv << a
       end
     end

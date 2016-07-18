@@ -1,15 +1,17 @@
 .title_pdf
   %h3= t("#{controller_name}.title.title")
 
-%table.table.table-condensed.table-bordered
+%table.table.table-condensed.table-bordered.valorado
   %thead
     %tr
-      %th= Material.human_attribute_name('code')
+      %th.text-center Nro
+      %th.text-center= Material.human_attribute_name('code')
       %th= Material.human_attribute_name('descripción')
-      %th= Auxiliary.human_attribute_name('status')
+      %th.text-center= Auxiliary.human_attribute_name('status')
   %tbody
-    - @array.each do |material|
+    - @array.each_with_index do |material, index|
       %tr
-        %td= material.code
+        %td.text-center= index + 1
+        %td.text-center= material.code
         %td= material.description
-        %td= type_status(material.status)
+        %td.text-center= type_status(material.status)

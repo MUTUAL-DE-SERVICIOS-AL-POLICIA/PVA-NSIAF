@@ -2,6 +2,7 @@ class Material < ActiveRecord::Base
   include ManageStatus
 
   has_many :articles
+  has_many :subarticles
 
   validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :description, presence: true
@@ -12,7 +13,7 @@ class Material < ActiveRecord::Base
     "#{code} - #{description}"
   end
 
-  def subarticles
+  def subarticulos
     Subarticle.joins(article: :material)
       .where('materials.id = ?', self.id)
       .order('subarticles.id')
