@@ -48,6 +48,8 @@
       - unless %w(versions proceedings requests note_entries suppliers ingresos).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
           %th= User.human_attribute_name('code')
+        - if %w(subarticles).include?(control)
+          %th= Subarticle.human_attribute_name('code_old')
         %th= %w(assets materials articles subarticles).include?(control) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
       = render "#{control}/#{control}" unless control == 'accounts'
       - unless %w(versions).include?(control)

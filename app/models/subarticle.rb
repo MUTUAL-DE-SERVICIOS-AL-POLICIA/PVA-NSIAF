@@ -206,7 +206,7 @@ class Subarticle < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'material')]
+    [h.get_column(self, 'code'), h.get_column(self, 'code_old'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'material')]
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
@@ -219,14 +219,14 @@ class Subarticle < ActiveRecord::Base
         type_search = search_column == 'material' ? 'materials.description' : "subarticles.#{search_column}"
         array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
       else
-        array = array.where("subarticles.code LIKE ? OR subarticles.description LIKE ? OR subarticles.unit LIKE ? OR materials.description LIKE ? OR subarticles.barcode LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+        array = array.where("subarticles.code LIKE ? OR subarticles.code_old LIKE ? OR subarticles.description LIKE ? OR subarticles.unit LIKE ? OR materials.description LIKE ? OR subarticles.barcode LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array
   end
 
   def self.to_csv
-    columns = %w(code description unit material status)
+    columns = %w(code codel_old description unit material status)
     h = ApplicationController.helpers
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }
@@ -279,7 +279,7 @@ class Subarticle < ActiveRecord::Base
   def self.search_subarticle(q)
     h = ApplicationController.helpers
     q = h.changeBarcode(q)
-    where("(code LIKE ? OR description LIKE ? OR barcode LIKE ? ) AND status = ?", "%#{q}%", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock, days: s.get_days } : nil }.compact
+    where("(code LIKE ? OR code_old LIKE ? OR description LIKE ? OR barcode LIKE ? ) AND status = ?", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock, days: s.get_days } : nil }.compact
   end
 
   def get_days

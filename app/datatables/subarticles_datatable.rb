@@ -20,6 +20,7 @@ private
     array.map do |subarticle|
       as = []
       as << subarticle.code
+      as << subarticle.code_old
       as << subarticle.description
       as << subarticle.unit
       as << link_to_if(subarticle.material, subarticle.material_description, subarticle.material, title: subarticle.material_code)
@@ -47,7 +48,7 @@ private
   end
 
   def sort_column
-    columns = %w[subarticles.code subarticles.description subarticles.unit materials.description subarticles.status]
+    columns = %w[subarticles.code subarticles.code_old subarticles.description subarticles.unit materials.description subarticles.status]
     columns[params[:iSortCol_0].to_i]
   end
 

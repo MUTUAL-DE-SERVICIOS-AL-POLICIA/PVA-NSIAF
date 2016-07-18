@@ -428,6 +428,7 @@ es:
         title: "Cargo"
       subarticle:
         code: "Código"
+        code_old: "Código anterior"
         description: "Descripción"
         unit: "Unidad de Medida"
         article: "Artículo"
