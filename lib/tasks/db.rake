@@ -112,21 +112,9 @@ namespace :db do
           s.incremento = index + 1
           s.barcode = "#{s.material_code}#{s.incremento}"
           s.code = s.barcode.to_i
+          s.material_id = s.article.material_id if s.article.present?
           s.save!
         end
-      end
-    end
-  end
-
-  ##
-  # Actualiza la información de los materiales en los subartículos
-  # Es un método que sólo se usa una vez:
-  desc "Actualiza id de materiales en los subartículos"
-  task :actualizar => :environment do
-    Subarticle.all.each do |s|
-      if s.article.present?
-        s.material_id = s.article.material_id
-        s.save!
       end
     end
   end
