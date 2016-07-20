@@ -13,82 +13,76 @@
         %span.glyphicon.glyphicon-list
         Subartículos
 
-    %h3.kardex-inventory
-      .title KARDEX DE INVENTARIOS
-      .title GESTION #{year}
+    %h3 KARDEX DE EXISTENCIAS
 
     #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
 - else
   .row
     .col-sm-12
+      %h3.text-center KARDEX DE EXISTENCIAS
+
       %table.kardex-table
         %tbody
           %tr
-            %td
-            %td
-              %h3.title KARDEX DE INVENTARIOS
+            %td.etiqueta= Subarticle.human_attribute_name('code')
+            %td.valor= @subarticle.code
+          - if @subarticle.code_old.present?
+            %tr
+              %td.etiqueta= Subarticle.human_attribute_name('code_old')
+              %td.valor= @subarticle.code_old
           %tr
-            %td
-            %td
-              %h3.title GESTIÓN #{year}
+            %td.etiqueta= Subarticle.human_attribute_name('description')
+            %td.valor= @subarticle.description
           %tr
-            %td &nbsp;
-            %td &nbsp;
+            %td.etiqueta= Subarticle.human_attribute_name('unit')
+            %td.valor= @subarticle.unit
           %tr
-            %td.text-right
-              %strong ARTÍCULO:
-            %td= @subarticle.article_name.upcase
-          %tr
-            %td.text-right
-              %strong DESCRIPCIÓN:
-            %td= @subarticle.description.upcase
-          %tr
-            %td.text-right
-              %strong Nº CÓDIGO:
-            %td= @subarticle.code
-          %tr
-            %td.text-right
-              %strong UNIDAD:
-            %td= @subarticle.unit.upcase
+            %td.etiqueta= Subarticle.human_attribute_name('material')
+            %td.valor= @subarticle.material_description
 
 - unless is_pdf?
   %dl.dl-horizontal
-    %dt ARTÍCULO:
-    %dd= @subarticle.article_name.upcase
-    %dt DESCRIPCIÓN:
-    %dd= @subarticle.description.upcase
-    %dt Nº CÓDIGO:
+    %dt= Subarticle.human_attribute_name('code')
     %dd= @subarticle.code
-    %dt UNIDAD:
-    %dd= @subarticle.unit.upcase
+    - if @subarticle.code_old.present?
+      %dt= Subarticle.human_attribute_name('code_old')
+      %dd= @subarticle.code_old
+    %dt= Subarticle.human_attribute_name('description')
+    %dd= @subarticle.description
+    %dt= Subarticle.human_attribute_name('unit')
+    %dd= @subarticle.unit
+    %dt= Subarticle.human_attribute_name('material')
+    %dd
+      = link_to_if(@subarticle.material, @subarticle.material_description, @subarticle.material, title: @subarticle.material_code)
 
-%table.table.table-bordered.table-condensed.valorado
+%table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
   %thead
-    %tr.vertical-align.info
-      %th.text-center{rowspan: 2} FECHA
-      %th.text-center{rowspan: 2} Nº DE FACTURA
-      %th.text-center{rowspan: 2} Nº NOTA DE ENTREGA
-      %th.text-center{rowspan: 2} Nº DE PEDIDO MAT
-      %th.text-center.col-sm-3{rowspan: 2} DETALLE
-      %th.text-center{colspan: 3} CANTIDADES
-      %th.text-center{rowspan: 2} COSTO UNITARIO
-      %th.text-center{colspan: 3} IMPORTES EN BOLIVIANOS
-    %tr.info
-      %th ENTRADAS
-      %th SALIDAS
-      %th SALDOS
-      %th ENTRADAS
-      %th SALIDAS
-      %th SALDOS
+    %tr.vertical-align
+      %th.text-center{rowspan: 2} Fecha
+      %th.text-center{rowspan: 2} Factura
+      %th.text-center{rowspan: 2} Nro pedido
+      %th.text-center.col-sm-3{rowspan: 2} Detalle
+      %th.text-center{colspan: 3} Cantidades
+      %th.text-center{rowspan: 2} Precio unitario
+      %th.text-center{colspan: 3} Importes
+    %tr
+      %th.text-center Entrada
+      %th.text-center Salida
+      %th.text-center Saldo
+      %th.text-right Entrada
+      %th.text-right Salida
+      %th.text-right Saldo
   %tbody
     = render @transacciones
+
+= fecha_impresion if is_pdf?
 
 - if is_pdf?
   %table{ style: 'width: 100%' }
     %tr
       %td.text-center.firma-funcionario
         %p _______________________
-        %p ELABORADO POR
+        %p Elaborado por
       %td.text-center.firma-funcionario
         %p _______________________
-        %p Vº Bº
+        %p V.° B.°

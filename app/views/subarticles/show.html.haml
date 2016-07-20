@@ -21,16 +21,19 @@
 
 
 %dl.dl-horizontal
+  - if @subarticle.code_old.present?
+    %dt= Subarticle.human_attribute_name('code_old')
+    %dd= @subarticle.code_old
   %dt= Subarticle.human_attribute_name('unit')
   %dd= @subarticle.unit
-  %dt= Subarticle.human_attribute_name('article')
-  %dd= link_to_if @subarticle.article, @subarticle.article_name, @subarticle.article, title: @subarticle.article_code
   %dt= Subarticle.human_attribute_name('stock')
   %dd= number_with_delimiter @subarticle.stock, 0
-  %dt= Subarticle.human_attribute_name('minimum')
-  %dd= @subarticle.minimum
-  %dt= Subarticle.human_attribute_name('barcode')
-  %dd= @subarticle.barcode
+  - if @subarticle.minimum.present?
+    %dt= Subarticle.human_attribute_name('minimum')
+    %dd= @subarticle.minimum
+  - if @subarticle.material.present?
+    %dt= Subarticle.human_attribute_name('material')
+    %dd= link_to_if @subarticle.material, @subarticle.material_description, @subarticle.material, title: @subarticle.material_code
 
 %h3
   Histórico

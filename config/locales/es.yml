@@ -437,6 +437,7 @@ es:
         stock: "Stock"
         minimum: "Stock mínimo"
         barcode: "Código de Barra"
+        material: "Grupo contable"
       supplier:
         name: "Nombre"
         nit: "NIT"
