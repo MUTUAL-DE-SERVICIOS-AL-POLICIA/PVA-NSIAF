@@ -11,16 +11,14 @@
         %span.glyphicon.glyphicon-list
         = t("note_entries.title.title")
 
-    %h2
-      Nota de Ingreso Almacén
-      %span
-        - if @note_entry.nro_nota_ingreso != 0 && @note_entry.nro_nota_ingreso.present?
-          Nro. #{@note_entry.nro_nota_ingreso}
+    %h2 Nota de Ingreso Almacén Nro. #{@note_entry.nro_nota_ingreso}
 
 - if is_pdf?
-  %h3.text-center.proceeding-title Nota de Ingreso Almacén
+  %h3
+    .text-left.proceeding-title Nro. #{@note_entry.nro_nota_ingreso}
+    .text-center.proceeding-title Nota de Ingreso Almacén
 
-%table.table.table-condensed.table-bordered.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+%table.table.table-condensed.table-bordered.valorado
   %thead
     %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
       %th.text-center{rowspan: "2"} Nro
@@ -87,10 +85,10 @@
               %tr
                 %th.text-right Número nota de entrega
                 %td= @note_entry.delivery_note_number
-            - if @note_entry.note_entry_date.present?
+            - if @note_entry.delivery_note_date.present?
               %tr
                 %th.text-right Fecha nota de entrega
-                %td= I18n.l @note_entry.note_entry_date
+                %td= I18n.l @note_entry.delivery_note_date
             - if @note_entry.c31.present?
               %tr
                 %th.text-right Número C-31
