@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160715133659) do
+ActiveRecord::Schema.define(version: 20160801132730) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -145,7 +145,7 @@ ActiveRecord::Schema.define(version: 20160715133659) do
   end
 
   create_table "entradas_salidas", id: false, force: :cascade do |t|
-    t.integer  "id",             limit: 4,                            default: 0,  null: false
+    t.integer  "id",             limit: 4,   default: 0,   null: false
     t.integer  "subarticle_id",  limit: 4
     t.date     "fecha"
     t.string   "factura",        limit: 255
@@ -153,15 +153,15 @@ ActiveRecord::Schema.define(version: 20160715133659) do
     t.string   "nro_pedido",     limit: 11
     t.string   "detalle",        limit: 463
     t.float    "cantidad",       limit: 53
-    t.decimal  "costo_unitario",             precision: 10, scale: 2
+    t.float    "costo_unitario", limit: 53,  default: 0.0, null: false
     t.integer  "modelo_id",      limit: 4
-    t.string   "tipo",           limit: 7,                            default: "", null: false
+    t.string   "tipo",           limit: 7,   default: "",  null: false
     t.datetime "created_at"
   end
 
   create_table "entry_subarticles", force: :cascade do |t|
     t.float    "amount",        limit: 24
-    t.decimal  "unit_cost",                 precision: 10, scale: 2
+    t.float    "unit_cost",     limit: 24,                           default: 0.0,   null: false
     t.decimal  "total_cost",                precision: 10, scale: 2
     t.string   "invoice",       limit: 255,                          default: ""
     t.date     "date"

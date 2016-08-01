@@ -38,7 +38,7 @@
         %td.text-center= entry.subarticle_unit
         %td= entry.subarticle_name
         %td.text-center= mostrar_entero_float(entry.amount)
-        %td.number= number_with_delimiter entry.unit_cost
+        %td.number= entry.unit_cost
         %td.number= number_with_delimiter entry.total_cost
     - if @note_entry.descuento > 0
       %tr
