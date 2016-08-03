@@ -34,7 +34,6 @@ class IngresosController < ApplicationController
 
   # GET /ingresos/new
   def new
-    # @note_entry = NoteEntry.new
   end
 
   # GET /ingresos/1/edit
@@ -58,16 +57,14 @@ class IngresosController < ApplicationController
 
   # PATCH/PUT /ingresos/1
   def update
-    # respond_to do |format|
-    #   if @note_entry.update(note_entry_params)
-    #     @note_entry.change_date_entries
-    #     @note_entry.change_kardexes
-    #     format.html { redirect_to @note_entry, notice: t('general.updated', model: NoteEntry.model_name.human) }
-    #     format.js
-    #   else
-    #     format.html { render action: 'new' }
-    #   end
-    # end
+    respond_to do |format|
+      if @ingreso.update(ingreso_params)
+        format.html { redirect_to @ingreso, notice: t('general.updated', model: Ingreso.model_name.human) }
+        format.js
+      else
+        format.html { render action: 'new' }
+      end
+    end
   end
 
   private
@@ -78,6 +75,6 @@ class IngresosController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def ingreso_params
-      params.require(:ingreso).permit(:supplier_id, :factura_numero, :factura_autorizacion, :factura_fecha, :nota_entrega_numero, :nota_entrega_fecha, :c31_numero, :c31_fecha, :total, asset_ids: [])
+      params.require(:ingreso).permit(:numero, :supplier_id, :factura_numero, :factura_autorizacion, :factura_fecha, :nota_entrega_numero, :nota_entrega_fecha, :c31_numero, :c31_fecha, :total, asset_ids: [])
     end
 end

@@ -1,7 +1,26 @@
+- unless is_pdf?
+  .page-header
+    .pull-right
+      = link_to edit_ingreso_path(@ingreso), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+      = link_to ingreso_path(@ingreso, format: :pdf), class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-print
+        Imprimir PDF
+      = link_to note_entries_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        = t("ingresos.title.title")
+
+    %h2 Ingreso de Activos Fijos Nro. #{@ingreso.numero}
+
 - lista_de_campos = listar_campos(@activos)
-.row{data: {action: 'devolution'}}
-  .col-md-12
-    %h3.text-center Ingreso de Activos Fijos
+
+- if is_pdf?
+  .row{data: {action: 'devolution'}}
+    .col-md-12
+      %h3
+        .text-left.proceeding-title Nro. #{@ingreso.numero}
+        .text-center Ingreso de Activos Fijos
 
 %table.table.table-bordered.table-striped.table-hover.table-condensed.valorado
   %thead
@@ -24,7 +43,7 @@
       %th.number TOTAL
       %th.number= number_with_delimiter @ingreso.total
 
-%table.table.table-bordered.table-condensed.valorado
+%table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
   %thead
     %tr
       %th.col-md-6.col-sm-7.col-xs-8 Datos proveedor
@@ -72,9 +91,4 @@
                 %td= I18n.l @ingreso.c31_fecha
       %td
 
-- unless is_pdf?
-  .row
-    .col-md-12.col-sm-12.text-center
-      = link_to ingreso_path(@ingreso, format: :pdf), class: 'btn btn-success btn-lg' do
-        %span.glyphicon.glyphicon-print
-        Imprimir
+= fecha_impresion if is_pdf?

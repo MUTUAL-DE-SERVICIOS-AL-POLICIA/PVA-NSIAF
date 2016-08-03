@@ -1,7 +1,7 @@
 .modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1", id: "modal-editar-nota-entrada"}
   .modal-dialog
     .modal-content
-      = form_for :note_entry, url: note_entries_path + '/{{id}}', class: 'form-horizontal', data: {id: "{{id}}"} do |f|
+      = form_for :ingreso, url: ingresos_path + '/{{id}}', class: 'form-horizontal', data: {id: "{{id}}"} do |f|
         .modal-header
           %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} &times;
           %h4.modal-title Editar nota de ingreso
@@ -10,16 +10,7 @@
           .form-group
             %label.col-sm-4.control-label Nro nota ingreso
             .col-sm-8
-              = f.text_field "nro_nota_ingreso", value: "{{nro_nota_ingreso}}", class: 'form-control nro-nota-ingreso-select', autofocus: true
-          -# .form-group
-          -#   %label.col-sm-4.control-label Funcionario
-          -#   .col-sm-8
-          -#     = f.hidden_field "user_id", value: "{{user_id}}", class: 'form-control'
-          -#     = text_field_tag "usuario", "", class: 'form-control', data: {url: autocomplete_users_path(format: :json, q: '%QUERY')}
-          -# .form-group
-          -#   %label.col-sm-4.control-label Fecha
-          -#   .col-sm-8
-          -#     = f.text_field "created_at", value: "{{created_at}}", class: 'form-control'
+              = f.text_field "numero", value: "{{numero}}", class: 'form-control nro-nota-ingreso-select', autofocus: true
         .modal-footer
           %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}
             %span.glyphicon.glyphicon-ban-circle
