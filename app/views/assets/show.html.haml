@@ -13,15 +13,15 @@
       %span.glyphicon.glyphicon-list
       = t("assets.title.title")
 
-  %h2 Activo
+  %h2= @asset.description
 
 %dl.dl-horizontal
   %dt= Asset.human_attribute_name('code')
   %dd= @asset.code
   %dt= Asset.human_attribute_name('barcode')
   %dd= @asset.barcode || "<em>No asignado</em>".html_safe
-  %dt= Asset.human_attribute_name('description')
-  %dd= @asset.description
+  %dt= Asset.human_attribute_name('detalle')
+  %dd= @asset.detalle
   - if @asset.medidas.present?
     %dt= Asset.human_attribute_name('medidas')
     %dd= @asset.medidas
@@ -46,6 +46,8 @@
   %dd= @asset.proceso
   %dt= Asset.human_attribute_name('observaciones')
   %dd= simple_format @asset.observaciones
+  %dt= Asset.human_attribute_name('seguro')
+  %dd= @asset.seguro ? 'SI' : 'NO'
   %dt= Asset.human_attribute_name('state')
   %dd= @asset.get_state
   %dt= Asset.human_attribute_name('user')

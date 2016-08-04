@@ -39,6 +39,7 @@ class Asset < ActiveRecord::Base
     m.validates :description, presence: true
   end
 
+  before_save :establecer_barcode
   before_save :check_barcode
   before_save :generar_descripcion
 
@@ -107,6 +108,10 @@ class Asset < ActiveRecord::Base
     end
   end
 
+  def establecer_barcode
+    self.barcode = self.code
+  end
+
   def check_barcode
     if is_not_migrate?
       bcode = Barcode.find_by_code barcode
@@ -146,7 +151,7 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'supplier'), h.get_column(self, 'account'), h.get_column(self, 'user'), h.get_column(self, 'barcode')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'supplier'), h.get_column(self, 'account'), h.get_column(self, 'user')]
   end
 
   def self.without_barcode
@@ -177,7 +182,7 @@ class Asset < ActiveRecord::Base
           array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
         end
       else
-         array = array.where("assets.code LIKE ? OR assets.barcode LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR suppliers.name LIKE ? OR ingresos.factura_fecha LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%")
+         array = array.where("assets.code LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR suppliers.name LIKE ? OR ingresos.factura_fecha LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%")
       end
     end
     array
