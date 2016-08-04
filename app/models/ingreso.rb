@@ -30,6 +30,10 @@ class Ingreso < ActiveRecord::Base
     supplier.present? ? supplier.nit : ''
   end
 
+  def supplier_telefono
+    supplier.present? ? supplier.telefono : ''
+  end
+
   def user_name
     user.present? ? user.name : ''
   end

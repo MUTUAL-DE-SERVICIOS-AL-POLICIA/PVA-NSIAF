@@ -34,11 +34,12 @@ class IngresosController < ApplicationController
 
   # GET /ingresos/new
   def new
+    @ingreso = Ingreso.new
   end
 
   # GET /ingresos/1/edit
   def edit
-    # render 'new'
+    render 'new'
   end
 
   # POST /ingresos
