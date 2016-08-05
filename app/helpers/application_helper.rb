@@ -38,6 +38,10 @@ module ApplicationHelper
     User::ROLES.map { |r| [t(r, scope: 'users.roles'), r] }
   end
 
+  def get_ubicaciones
+    Ubicacion.order(:abreviacion)
+  end
+
   def is_pdf?
     params['format'] == 'pdf'
   end

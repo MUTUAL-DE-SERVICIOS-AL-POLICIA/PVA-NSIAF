@@ -17,6 +17,7 @@ class Asset < ActiveRecord::Base
   belongs_to :auxiliary
   belongs_to :user, counter_cache: true
   belongs_to :ingreso
+  belongs_to :ubicacion
 
   has_many :asset_proceedings
   has_many :proceedings, through: :asset_proceedings
@@ -151,7 +152,7 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'supplier'), h.get_column(self, 'account'), h.get_column(self, 'user')]
+    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'supplier'), h.get_column(self, 'account'), h.get_column(self, 'user'), h.get_column(self, 'ubicacion')]
   end
 
   def self.without_barcode
@@ -167,7 +168,7 @@ class Asset < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
-    array = includes(:ingreso, :user, ingreso: :supplier, auxiliary: :account).order("#{sort_column} #{sort_direction}").where(status: status).references(auxiliary: :account)
+    array = includes(:ingreso, :user, :ubicacion, ingreso: :supplier, auxiliary: :account).order("#{sort_column} #{sort_direction}").where(status: status).references(auxiliary: :account)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
@@ -177,19 +178,21 @@ class Asset < ActiveRecord::Base
           array = array.where('ingresos.factura_fecha LIKE ?', "%#{convertir_fecha(sSearch)}%")
         elsif search_column == 'supplier' # modelo: Supplier / Proveedor
           array = array.where('suppliers.name LIKE ?', "%#{sSearch}%")
+        elsif search_column == 'ubicacion' # modelo: Ubicacion
+          array = array.where('ubicaciones.abreviacion LIKE ?', "%#{sSearch}%")
         else
           type_search = search_column == 'user' ? 'users.name' : "assets.#{search_column}"
           array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
         end
       else
-         array = array.where("assets.code LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR suppliers.name LIKE ? OR ingresos.factura_fecha LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%")
+         array = array.where("assets.code LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR suppliers.name LIKE ? OR ingresos.factura_fecha LIKE ? OR ubicaciones.abreviacion LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%", "%#{sSearch}%")
       end
     end
     array
   end
 
   def self.to_csv(is_low = false)
-    columns = %w(code description user)
+    columns = %w(code description user ubicacion)
     columns_title = columns
     columns_title += %w(derecognised) if is_low
     CSV.generate do |csv|
@@ -197,6 +200,7 @@ class Asset < ActiveRecord::Base
       all.each do |asset|
         a = asset.attributes.values_at(*columns).compact
         a.push(asset.user_name)
+        a.push(asset.ubicacion_detalle)
         a.push(I18n.l(asset.derecognised, format: :version)) if asset.derecognised.present?
         csv << a
       end
@@ -217,6 +221,18 @@ class Asset < ActiveRecord::Base
     when 2 then 'Regular'
     when 3 then 'Malo'
     end
+  end
+
+  def ubicacion_abreviacion
+    ubicacion.present? ? ubicacion.abreviacion : ''
+  end
+
+  def ubicacion_descripcion
+    ubicacion.present? ? ubicacion.descripcion : ''
+  end
+
+  def ubicacion_detalle
+    ubicacion.present? ? ubicacion.detalle : ''
   end
 
   private

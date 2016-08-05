@@ -34,4 +34,8 @@ class Ubicacion < ActiveRecord::Base
       end
     end
   end
+
+  def detalle
+    [abreviacion, descripcion].compact.join(' - ')
+  end
 end

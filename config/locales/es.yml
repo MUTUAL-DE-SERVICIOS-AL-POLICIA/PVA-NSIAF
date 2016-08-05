@@ -369,6 +369,7 @@ es:
         created_at: "Creado el"
         incorporacion: "Incorporación"
         supplier: "Proveedor"
+        ubicacion: "Ubicación"
       auxiliary:
         code: "Código"
         name: "Nombre"

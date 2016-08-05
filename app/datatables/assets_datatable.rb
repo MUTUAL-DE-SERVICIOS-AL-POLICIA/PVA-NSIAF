@@ -26,6 +26,7 @@ private
       as << link_to_if(asset.ingreso, asset.ingreso_proveedor_nombre, asset.ingreso_proveedor)
       as << link_to_if(asset.account, asset.account_name, asset.account)
       as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
+      as << link_to_if(asset.ubicacion, asset.ubicacion_abreviacion, asset.ubicacion, title: asset.ubicacion_detalle)
       as << (asset.seguro? ? 'SI' : 'NO')
       if asset.status == '0'
         as << (asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : '')
@@ -54,7 +55,7 @@ private
   end
 
   def sort_column
-    columns = %w[assets.code description ingresos.factura_fecha assets.precio suppliers.name accounts.name users.name assets.seguro]
+    columns = %w[assets.code description ingresos.factura_fecha assets.precio suppliers.name accounts.name users.name ubicaciones.abreviacion assets.seguro]
     columns[params[:iSortCol_0].to_i]
   end
 

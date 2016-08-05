@@ -48,6 +48,8 @@
   %dd= simple_format @asset.observaciones
   %dt= Asset.human_attribute_name('seguro')
   %dd= @asset.seguro ? 'SI' : 'NO'
+  %dt= Asset.human_attribute_name('ubicacion')
+  %dd= @asset.ubicacion_detalle
   %dt= Asset.human_attribute_name('state')
   %dd= @asset.get_state
   %dt= Asset.human_attribute_name('user')
