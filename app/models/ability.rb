@@ -28,6 +28,7 @@ class Ability
       can :manage, Version
       can :manage, NoteEntry
       can :manage, Ubicacion
+      can :manage, Ufv
     elsif user.is_admin_store? # Responsable de almacenes
       can [:welcome, :show, :update], User, id: user.id
       can [:departments, :users], Asset

@@ -196,6 +196,14 @@ es:
       create: "Nueva ubicación"
       edit: "Editar ubicación"
       update: "Editar ubicación"
+  ufvs:
+    title:
+      title: "UFVs"
+      list: "Listado de UFV"
+      new: "Nueva UFV"
+      create: "Nueva UFV"
+      edit: "Editar UFV"
+      update: "Editar UFV"
   users:
     roles:
       super_admin: "Super Administrador"
