@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160801132730) do
+ActiveRecord::Schema.define(version: 20160805131947) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -68,11 +68,14 @@ ActiveRecord::Schema.define(version: 20160801132730) do
     t.string   "modelo",              limit: 255
     t.string   "serie",               limit: 255
     t.integer  "ingreso_id",          limit: 4
+    t.boolean  "seguro",                            default: false, null: false
+    t.integer  "ubicacion_id",        limit: 4
   end
 
   add_index "assets", ["account_id"], name: "index_assets_on_account_id", using: :btree
   add_index "assets", ["auxiliary_id"], name: "index_assets_on_auxiliary_id", using: :btree
   add_index "assets", ["ingreso_id"], name: "index_assets_on_ingreso_id", using: :btree
+  add_index "assets", ["ubicacion_id"], name: "index_assets_on_ubicacion_id", using: :btree
   add_index "assets", ["user_id"], name: "index_assets_on_user_id", using: :btree
 
   create_table "auxiliaries", force: :cascade do |t|
@@ -323,6 +326,13 @@ ActiveRecord::Schema.define(version: 20160801132730) do
     t.string   "contacto",   limit: 255
   end
 
+  create_table "ubicaciones", force: :cascade do |t|
+    t.string   "abreviacion", limit: 255
+    t.string   "descripcion", limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "",    null: false
     t.string   "encrypted_password",     limit: 255, default: "",    null: false
@@ -368,6 +378,7 @@ ActiveRecord::Schema.define(version: 20160801132730) do
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   add_foreign_key "assets", "ingresos"
+  add_foreign_key "assets", "ubicaciones"
   add_foreign_key "ingresos", "suppliers"
   add_foreign_key "ingresos", "users"
   add_foreign_key "subarticles", "materials"
