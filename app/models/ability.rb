@@ -11,7 +11,7 @@ class Ability
       # can [:index, :import], :dbf
       # can :manage, Version
       # can :indice, :almacenes
-    elsif user.is_admin?
+    elsif user.is_admin? # Responsable Activos fijos
       can :manage, Supplier
       can :manage, Building
       can :manage, Department
@@ -27,7 +27,8 @@ class Ability
       can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
       can :manage, Version
       can :manage, NoteEntry
-    elsif user.is_admin_store?
+      can :manage, Ubicacion
+    elsif user.is_admin_store? # Responsable de almacenes
       can [:welcome, :show, :update], User, id: user.id
       can [:departments, :users], Asset
       can :manage, Supplier

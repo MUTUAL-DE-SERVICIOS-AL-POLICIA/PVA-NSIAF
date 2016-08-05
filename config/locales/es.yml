@@ -188,6 +188,14 @@ es:
       edit: "Editar Proveedor"
       update: "Editar Proveedor"
       modal: "Activación/Desactivación de Proveedor"
+  ubicaciones:
+    title:
+      title: "Ubicaciones"
+      list: "Listado de ubicaciones"
+      new: "Nueva ubicación"
+      create: "Nueva ubicación"
+      edit: "Editar ubicación"
+      update: "Editar ubicación"
   users:
     roles:
       super_admin: "Super Administrador"
@@ -335,6 +343,7 @@ es:
       subarticle: "Sub Artículo"
       supplier: "Proveedor"
       proceeding: "Acta"
+      ubicacion: "Ubicación"
       user: "Funcionario"
 
     attributes:
@@ -443,6 +452,10 @@ es:
         nit: "NIT"
         telefono: "Teléfono"
         contacto: "Contacto"
+        created_at: "Creado el"
+      ubicacion:
+        abreviacion: "Abreviación"
+        descripcion: "Descripción"
         created_at: "Creado el"
       user:
         assets_count: "Nro. Activos"
