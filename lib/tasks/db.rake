@@ -118,4 +118,9 @@ namespace :db do
       end
     end
   end
+
+  desc "Descargar e importar UFVs desde la página web del Banco Central de Bolivia"
+  task :ufv_importar => :environment do
+    Ufv.descargar_e_importar_si
+  end
 end

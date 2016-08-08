@@ -1,5 +1,7 @@
 class Ufv < ActiveRecord::Base
 
+  include UfvImportar
+
   validates :fecha, presence: true, uniqueness: true
   validates :valor, presence: true
 
