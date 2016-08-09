@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :ufvs, except: [:show, :destroy]
   resources :ubicaciones, except: [:show, :destroy]
   resources :ingresos
 

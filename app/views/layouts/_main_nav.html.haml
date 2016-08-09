@@ -24,6 +24,9 @@
           - if can? :read, Ubicacion
             %li{ role: 'presentation' }
               = link_to t('ubicaciones.title.title'), ubicaciones_path, role: 'menuitem'
+          - if can? :read, Ufv
+            %li{ role: 'presentation' }
+              = link_to t('ufvs.title.title'), ufvs_path, role: 'menuitem'
     - if current_user.is_super_admin?
       %li
         = link_to 'Almacenes', almacenes_path

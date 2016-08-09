@@ -1,6 +1,8 @@
 class Proceeding < ActiveRecord::Base
   include VersionLog
 
+  default_scope -> { where(baja_logica: false) }
+
   PROCEEDING_TYPE = {
     'E' => 'assignation',
     'D' => 'devolution'
