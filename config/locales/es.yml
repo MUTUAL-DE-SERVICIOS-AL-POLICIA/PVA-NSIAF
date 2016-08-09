@@ -359,6 +359,9 @@ es:
         auxiliaries: "Auxiliares"
         code: "Código"
         name: "Nombre"
+        vida_util: "Vida útil"
+        depreciar: "Depreciar"
+        actualizar: "Actualizar"
       article:
         code: "Código"
         description: "Descripción"

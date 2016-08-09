@@ -53,7 +53,7 @@
         - if %w(subarticles).include?(control)
           %th= Subarticle.human_attribute_name('code_old')
         %th= %w(assets materials articles subarticles).include?(control) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
-      = render "#{control}/#{control}" unless control == 'accounts'
+      = render "#{control}/#{control}"
       - unless %w(versions).include?(control)
         %th= t('general.actions')
   %tbody
