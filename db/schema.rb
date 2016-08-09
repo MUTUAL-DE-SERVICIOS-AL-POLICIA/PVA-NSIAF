@@ -11,13 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160805193007) do
+ActiveRecord::Schema.define(version: 20160809200836) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
     t.string   "name",       limit: 230
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "vida_util",  limit: 4,   default: 0,     null: false
+    t.boolean  "depreciar",              default: false, null: false
+    t.boolean  "actualizar",             default: false, null: false
   end
 
   create_table "articles", force: :cascade do |t|
