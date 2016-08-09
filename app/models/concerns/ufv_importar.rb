@@ -10,9 +10,10 @@ module UfvImportar
       desde = Ufv.order(:fecha).last.fecha rescue Rails.application.secrets.ufv_desde.to_date
       if desde < Date.today
         hasta = desde + 1.month
-        descargar_e_importar(desde, hasta)
+        cantidad = descargar_e_importar(desde, hasta)
+        log("Desde #{desde} - #{hasta} son #{cantidad} registros encontrados")
       else
-        puts "La fecha #{desde.to_s(:db)} tiene que ser menor a #{Date.today.to_s(:db)}"
+        log("La fecha #{desde} tiene que ser menor a #{Date.today}")
       end
     end
 
@@ -29,7 +30,8 @@ module UfvImportar
       ufvs_html = obtener_ufv_bcb(desde, hasta)
 
       # Parsing del contenido
-      ufvs_html.css('table tr.listas-fila1, table tr.listas-fila2').each do |fila|
+      filas = ufvs_html.css('table tr.listas-fila1, table tr.listas-fila2')
+      filas.each do |fila|
         fecha_str = convertir_fecha(fila.css('td:nth-child(2)').text.strip)
         ufv = {
           fecha: Date.strptime(fecha_str, '%d de %m %Y'),
@@ -37,6 +39,8 @@ module UfvImportar
         }
         Ufv.find_or_create_by!(fecha: ufv[:fecha], valor: ufv[:valor])
       end
+
+      return filas.length
     end
 
     private
@@ -49,6 +53,11 @@ module UfvImportar
         fecha.join(' ')
       end
 
+      # Mensajes de log con fecha y hora
+      def log(mensaje)
+        puts "#{DateTime.now} #{mensaje}"
+      end
+
       # Obtener la página HTML con los UFVs en un rango de fechas: desde - hasta
       def obtener_ufv_bcb(d, h)
         url_base = 'https://www.bcb.gob.bo/librerias/indicadores/ufv/gestion.php'
@@ -59,7 +68,6 @@ module UfvImportar
           "edd=#{h.day}&emm=#{h.month}&eaa=#{h.year}", # hasta
           "qlist=1"
         ].join('&')
-        puts [url_base, url_params].join('?')
         Nokogiri::HTML(open([url_base, url_params].join('?')))
       end
   end
