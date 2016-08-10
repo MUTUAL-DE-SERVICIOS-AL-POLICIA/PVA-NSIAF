@@ -26,7 +26,7 @@ private
       as << link_to_if(asset.ingreso, asset.ingreso_proveedor_nombre, asset.ingreso_proveedor)
       as << link_to_if(asset.account, asset.account_name, asset.account)
       as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
-      as << link_to_if(asset.ubicacion, asset.ubicacion_abreviacion, asset.ubicacion, title: asset.ubicacion_detalle)
+      as << content_tag(:span, asset.ubicacion_abreviacion, title: asset.ubicacion_detalle)
       as << (asset.seguro? ? 'SI' : 'NO')
       if asset.status == '0'
         as << (asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : '')
