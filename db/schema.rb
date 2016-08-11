@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160811205607) do
+ActiveRecord::Schema.define(version: 20160811223411) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20160811205607) do
     t.integer  "decline_user_id",     limit: 4
     t.string   "proceso",             limit: 255
     t.string   "observaciones",       limit: 255
-    t.float    "precio",              limit: 24
+    t.decimal  "precio",                            precision: 10, scale: 2, default: 0.0,   null: false
     t.string   "detalle",             limit: 255
     t.string   "medidas",             limit: 255
     t.string   "material",            limit: 255
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20160811205607) do
     t.string   "modelo",              limit: 255
     t.string   "serie",               limit: 255
     t.integer  "ingreso_id",          limit: 4
-    t.boolean  "seguro",                            default: false, null: false
+    t.boolean  "seguro",                                                     default: false, null: false
     t.integer  "ubicacion_id",        limit: 4
   end
 
