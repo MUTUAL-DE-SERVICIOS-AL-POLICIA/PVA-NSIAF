@@ -1,0 +1,19 @@
+.page-header
+  .pull-right
+    = link_to edit_gestion_path(@gestion), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+    = link_to gestiones_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("gestiones.title.title")
+
+  %h2 Gestión #{@gestion.anio}
+
+%dl.dl-horizontal
+  %dt= Gestion.human_attribute_name('id')
+  %dd= @gestion.id
+  %dt= Gestion.human_attribute_name('cerrado')
+  %dd= @gestion.cerrado ? 'SI' : 'NO'
+  - if @gestion.fecha_cierre.present?
+    %dt= Gestion.human_attribute_name('fecha_cierre')
+    %dd= l @gestion.fecha_cierre, format: :version

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160809200836) do
+ActiveRecord::Schema.define(version: 20160811205607) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 20160809200836) do
   end
 
   create_table "entradas_salidas", id: false, force: :cascade do |t|
-    t.integer  "id",             limit: 4,   default: 0,   null: false
+    t.integer  "id",             limit: 4,   default: 0,  null: false
     t.integer  "subarticle_id",  limit: 4
     t.date     "fecha"
     t.string   "factura",        limit: 255
@@ -159,15 +159,15 @@ ActiveRecord::Schema.define(version: 20160809200836) do
     t.string   "nro_pedido",     limit: 11
     t.string   "detalle",        limit: 463
     t.float    "cantidad",       limit: 53
-    t.float    "costo_unitario", limit: 53,  default: 0.0, null: false
+    t.float    "costo_unitario", limit: 53
     t.integer  "modelo_id",      limit: 4
-    t.string   "tipo",           limit: 7,   default: "",  null: false
+    t.string   "tipo",           limit: 7,   default: "", null: false
     t.datetime "created_at"
   end
 
   create_table "entry_subarticles", force: :cascade do |t|
     t.float    "amount",        limit: 24
-    t.float    "unit_cost",     limit: 24,                           default: 0.0,   null: false
+    t.float    "unit_cost",     limit: 24
     t.decimal  "total_cost",                precision: 10, scale: 2
     t.string   "invoice",       limit: 255,                          default: ""
     t.date     "date"
@@ -180,6 +180,14 @@ ActiveRecord::Schema.define(version: 20160809200836) do
   end
 
   add_index "entry_subarticles", ["subarticle_id"], name: "index_entry_subarticles_on_subarticle_id", using: :btree
+
+  create_table "gestiones", force: :cascade do |t|
+    t.string   "anio",         limit: 255, default: "",    null: false
+    t.boolean  "cerrado",                  default: false, null: false
+    t.datetime "fecha_cierre"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
 
   create_table "ingresos", force: :cascade do |t|
     t.integer  "numero",               limit: 4
@@ -288,6 +296,20 @@ ActiveRecord::Schema.define(version: 20160809200836) do
     t.boolean  "invalidate",                default: false
     t.string   "message",       limit: 255
     t.integer  "nro_solicitud", limit: 4,   default: 0
+  end
+
+  create_table "resumen", id: false, force: :cascade do |t|
+    t.integer "id",               limit: 4,  default: 0,     null: false
+    t.integer "subarticle_id",    limit: 4
+    t.integer "request_id",       limit: 4
+    t.integer "amount",           limit: 4
+    t.integer "amount_delivered", limit: 4
+    t.integer "total_delivered",  limit: 4,  default: 0
+    t.boolean "invalidate",                  default: false
+    t.integer "code",             limit: 4
+    t.float   "monto1",           limit: 24
+    t.integer "stock",            limit: 4,  default: 0,     null: false
+    t.integer "monto2",           limit: 4
   end
 
   create_table "subarticle_requests", force: :cascade do |t|

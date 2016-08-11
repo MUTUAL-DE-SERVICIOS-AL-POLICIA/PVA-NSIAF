@@ -6,6 +6,10 @@
           Administración
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_admin' }
+          - if can? :read, Gestion
+            %li{ role: 'presentation' }
+              = link_to t('gestiones.title.title'), gestiones_path, role: 'menuitem'
+            %li.divider
           - if can? :read, Entity
             %li{ role: 'presentation' }
               = link_to t('entities.title.title'), entities_path, role: 'menuitem'

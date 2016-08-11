@@ -15,6 +15,7 @@
 - when 'ingresos' then new_url = new_ingreso_path
 - when 'ubicaciones' then new_url = new_ubicacion_path
 - when 'ufvs' then new_url = new_ufv_path
+- when 'gestiones' then new_url = new_gestion_path
 - when 'proceedings' then accion = 'actas'
 
 - control = controller_name == 'derecognised' ? 'assets' : controller_name
@@ -47,7 +48,7 @@
 %table.table.table-striped.table-hover.datatable
   %thead
     %tr
-      - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs).include?(control)
+      - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
           %th= User.human_attribute_name('code')
         - if %w(subarticles).include?(control)
