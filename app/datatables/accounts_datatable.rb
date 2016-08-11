@@ -22,8 +22,6 @@ private
         account.code,
         account.name,
         account.vida_util,
-        account.depreciar,
-        account.actualizar,
         link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), account, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show'))
       ]
     end
@@ -46,7 +44,7 @@ private
   end
 
   def sort_column
-    columns = %w[code name vida_util depreciar actualizar]
+    columns = %w[code name vida_util]
     columns[params[:iSortCol_0].to_i]
   end
 
