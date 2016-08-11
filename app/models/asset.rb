@@ -223,6 +223,144 @@ class Asset < ActiveRecord::Base
     end
   end
 
+  ##
+  ## BEGIN Los campos de la tabla para el reporte de Depreciación de Activos Fijos
+
+  def revaluo_inicial
+    # TODO completar de acuerdo a lo requerido
+    'N'
+  end
+
+  # UFV inicial en base a la fecha de compra o ingreso
+  def indice_ufv
+    ingreso_fecha.present? ? Ufv.indice(ingreso_fecha) : 0
+  end
+
+  # Costo histórico con el que se compró el activo fijo
+  def costo_historico
+    # TODO cuando hay revalúos hay cambio, actualmente no está considerado
+    precio
+  end
+
+  # Costo actualizado inicial
+  def costo_actualizado_inicial
+    # TODO cuando hay cambio de gestión hace un cambio, varía con los años
+    precio
+  end
+
+  def depreciacion_acumulada_inicial
+    # TODO Tiene que ver con el cambio de gestiones, varía con los años
+    0
+  end
+
+  # Vida útil del activo fijo
+  def vida_util_residual_nominal
+    auxiliary.present? ? auxiliary.account_vida_util : 0
+  end
+
+  def factor_actualizacion(fecha = Date.today)
+    Ufv.indice(fecha)/indice_ufv
+  end
+
+  def actualizacion_gestion(fecha = Date.today)
+    costo_actualizado(fecha) - costo_historico
+  end
+
+  def costo_actualizado(fecha = Date.today)
+    costo_historico * factor_actualizacion(fecha)
+  end
+
+  def porcentaje_depreciacion_anual
+    100 / vida_util_residual_nominal
+  end
+
+  def dias_consumidos(fecha = Date.today)
+    (fecha - ingreso_fecha).to_i + 1 rescue 0
+  end
+
+  def depreciacion_gestion(fecha = Date.today)
+    costo_actualizado(fecha) / 365 * dias_consumidos(fecha) * porcentaje_depreciacion_anual / 100
+  end
+
+  def actualizacion_depreciacion_acumulada
+    # TODO tiene que ver con el cambio de gestión
+    0
+  end
+
+  def depreciacion_acumulada_total(fecha = Date.today)
+    # TODO tiene que ver con el cambio de años
+    depreciacion_gestion(fecha)
+  end
+
+  def valor_neto(fecha = Date.today)
+    # El método redondear es un requisito para igualar a los resultados emitidos
+    # por el sistema vSIAF del ministerio
+    redondear(costo_actualizado(fecha)) - redondear(depreciacion_acumulada_total(fecha))
+  end
+
+  def dar_revaluo_o_baja
+    # TODO cuando el activo está de baja o se haya revaluado
+    'NO'
+  end
+
+  # Permite filtrar los activos mediante un buscador, cuentas, y una fecha
+  def self.inventario(q, cuentas, hasta)
+    if q.present? || cuentas.present? || hasta.present?
+      activos = includes(:ingreso, auxiliary: :account)
+      if q.present?
+        activos = activos.where("assets.description like :q OR assets.code like :code", q: "%#{q}%", code: "%#{q}%")
+      end
+      if cuentas.present?
+        activos = activos.where("accounts.id" => cuentas)
+      end
+      if hasta.present?
+        activos = activos.where("ingresos.factura_fecha <= ?", hasta).references(:ingreso)
+      end
+    else
+      activos = all
+    end
+    activos
+  end
+
+  def self.costo_historico
+    all.inject(0) { |s, a| a.costo_historico + s }
+  end
+
+  def self.costo_actualizado_inicial
+    all.inject(0) { |s, a| a.costo_actualizado_inicial + s }
+  end
+
+  def self.depreciacion_acumulada_inicial
+    all.inject(0) { |s, a| a.depreciacion_acumulada_inicial + s }
+  end
+
+  def self.actualizacion_gestion
+    all.inject(0) { |s, a| a.actualizacion_gestion + s }
+  end
+
+  def self.costo_actualizado
+    all.inject(0) { |s, a| a.costo_actualizado + s }
+  end
+
+  def self.depreciacion_gestion
+    all.inject(0) { |s, a| a.depreciacion_gestion + s }
+  end
+
+  def self.actualizacion_depreciacion_acumulada
+    all.inject(0) { |s, a| a.actualizacion_depreciacion_acumulada + s }
+  end
+
+  def self.depreciacion_acumulada_total
+    all.inject(0) { |s, a| a.depreciacion_acumulada_total + s }
+  end
+
+  def self.valor_neto
+    all.inject(0) { |s, a| a.valor_neto + s }
+  end
+
+  ## END Los campos de la tabla para el reporte de Depreciación de Activos Fijos
+  ##
+
   def ubicacion_abreviacion
     ubicacion.present? ? ubicacion.abreviacion : ''
   end
@@ -236,6 +374,11 @@ class Asset < ActiveRecord::Base
   end
 
   private
+
+  # Redondear un número a dos (2) decimales
+  def redondear(numero)
+    (numero * 100).round / 100.0
+  end
 
   ##
   # Guarda en la base de datos de acuerdo a la correspondencia de campos.

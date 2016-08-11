@@ -361,4 +361,9 @@ module ApplicationHelper
   def margin_pdf
     { top: 25, bottom: 20, left: 20, right: 15 }
   end
+
+  # Para los documentos en tamaño carta con el logo de AGETIC
+  def margin_pdf_estrecho
+    { top: 15, bottom: 5, left: 5, right: 5 }
+  end
 end

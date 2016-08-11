@@ -37,4 +37,8 @@ class Ufv < ActiveRecord::Base
     end
   end
 
+  def self.indice(fecha = Date.today)
+    where(fecha: fecha).take.valor rescue 0
+  end
+
 end
