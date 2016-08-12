@@ -35,6 +35,7 @@ es:
     print: 'Imprimir'
     migrate: 'Migrar'
     btn:
+      aceptar: "Aceptar"
       cancel: "Cancelar"
       save: "Guardar"
       edit: "Editar"
@@ -123,6 +124,15 @@ es:
   entry_subarticles:
     title:
       edit: "Editar Entrada"
+  gestiones:
+    title:
+      title: "Gestiones"
+      list: "Listado de gestiones"
+      new: "Nueva Gestión"
+      cerrar: "Cerrar Gestión"
+      create: "Nueva Gestión"
+      edit: "Editar Gestión"
+      update: "Editar Gestión"
   ingresos:
     title:
       title: "Notas de Ingreso de activos fijos"
@@ -344,6 +354,7 @@ es:
       building: "Entidad"
       department: "Unidad"
       entity: "Institución"
+      gestion: "Gestión"
       kardex: "Kardex"
       kardex_price: "Kardex Precios"
       material: "Material"
@@ -407,6 +418,10 @@ es:
         invoice: "Factura"
         date: "Fecha"
         created_at: "Creado el"
+      gestion:
+        anio: "Año"
+        cerrado: "Cerrado"
+        fecha_cierre: "Fecha cierre"
       ingreso:
         suppliers: "Proveedor"
         users: "Encargado(a)"

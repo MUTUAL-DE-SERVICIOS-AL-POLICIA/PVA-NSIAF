@@ -63,6 +63,14 @@ table#pdf-assets-print {
   }
 }
 
+#header-horizontal{
+  padding-bottom: 2px;
+  text-align: right;
+  .image {
+    width: 685px;
+  }
+}
+
 #footer{
   .image {
     width: 685px;

@@ -21,6 +21,8 @@ class Asset < ActiveRecord::Base
 
   has_many :asset_proceedings
   has_many :proceedings, through: :asset_proceedings
+  has_many :cierre_gestiones
+  has_many :gestiones, through: :cierre_gestiones
 
   scope :assigned, -> { where.not(user_id: nil) }
   scope :unassigned, -> { where(user_id: nil) }
@@ -223,6 +225,177 @@ class Asset < ActiveRecord::Base
     end
   end
 
+  ##
+  ## BEGIN Los campos de la tabla para el reporte de Depreciación de Activos Fijos
+
+  def revaluo_inicial
+    # TODO completar de acuerdo a lo requerido
+    'N'
+  end
+
+  # UFV inicial en base a la fecha de compra o ingreso
+  def indice_ufv
+    ingreso_fecha.present? ? Ufv.indice(ingreso_fecha) : 0
+  end
+
+  # Costo histórico con el que se compró el activo fijo
+  def costo_historico
+    # TODO cuando hay revalúos hay cambio, actualmente no está considerado
+    precio
+  end
+
+  # Costo actualizado inicial
+  def costo_actualizado_inicial(fecha = Date.today)
+    ag = cierre_gestiones.where('fecha < ?', fecha).sum(:actualizacion_gestion)
+    costo_historico + ag
+  end
+
+  def depreciacion_acumulada_inicial(fecha = Date.today)
+    cierre_gestiones.where('fecha < ?', fecha).sum(:depreciacion_gestion)
+  end
+
+  # Vida útil del activo fijo
+  def vida_util_residual_nominal
+    auxiliary.present? ? auxiliary.account_vida_util : 0
+  end
+
+  def factor_actualizacion(fecha = Date.today)
+    cg = cierre_gestiones.where('fecha < ?', fecha).order(:fecha).last
+    ufv = cg.present? ? cg.indice_ufv : indice_ufv
+    Ufv.indice(fecha) / ufv
+  end
+
+  def actualizacion_gestion(fecha = Date.today)
+    costo_actualizado(fecha) - costo_actualizado_inicial(fecha)
+  end
+
+  def costo_actualizado(fecha = Date.today)
+    costo_actualizado_inicial(fecha) * factor_actualizacion(fecha)
+  end
+
+  def porcentaje_depreciacion_anual
+    100 / vida_util_residual_nominal
+  end
+
+  # Días desde la adquisición del activo fijo
+  def dias_consumidos(fecha = Date.today)
+    (fecha - ingreso_fecha).to_i + 1 rescue 0
+  end
+
+  # Días desde el último cierre de gestión
+  def dias_consumidos_ultimo(fecha = Date.today)
+    cg = cierre_gestiones.where('fecha < ?', fecha).order(:fecha).last
+    cg.present? ? (fecha - cg.fecha).to_i : dias_consumidos(fecha)
+  end
+
+  def depreciacion_gestion(fecha = Date.today)
+    costo_actualizado(fecha) / 365 * dias_consumidos_ultimo(fecha) * porcentaje_depreciacion_anual / 100
+  end
+
+  def actualizacion_depreciacion_acumulada(fecha = Date.today)
+    depreciacion_acumulada_inicial(fecha) * (factor_actualizacion(fecha) - 1)
+  end
+
+  def depreciacion_acumulada_total(fecha = Date.today)
+    costo_actualizado(fecha) / 365 * dias_consumidos(fecha) * porcentaje_depreciacion_anual / 100
+  end
+
+  def valor_neto(fecha = Date.today)
+    # El método redondear es un requisito para igualar a los resultados emitidos
+    # por el sistema vSIAF del ministerio
+    redondear(costo_actualizado(fecha)) - redondear(depreciacion_acumulada_total(fecha))
+  end
+
+  def dar_revaluo_o_baja
+    # TODO cuando el activo está de baja o se haya revaluado
+    'NO'
+  end
+
+  # Permite filtrar los activos mediante un buscador, cuentas, y una fecha
+  def self.inventario(q, cuentas, hasta)
+    if q.present? || cuentas.present? || hasta.present?
+      activos = includes(:ingreso, auxiliary: :account)
+      if q.present?
+        activos = activos.where("assets.description like :q OR assets.code like :code", q: "%#{q}%", code: "%#{q}%")
+      end
+      if cuentas.present?
+        activos = activos.where("accounts.id" => cuentas)
+      end
+      if hasta.present?
+        activos = activos.where("ingresos.factura_fecha <= ?", hasta).references(:ingreso)
+      end
+    else
+      activos = all
+    end
+    activos
+  end
+
+  def self.costo_historico
+    all.inject(0) { |s, a| redondear(a.costo_historico) + s }
+  end
+
+  def self.costo_actualizado_inicial(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.costo_actualizado_inicial(fecha)) + s }
+  end
+
+  def self.depreciacion_acumulada_inicial(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.depreciacion_acumulada_inicial(fecha)) + s }
+  end
+
+  def self.actualizacion_gestion(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.actualizacion_gestion(fecha)) + s }
+  end
+
+  def self.costo_actualizado(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.costo_actualizado(fecha)) + s }
+  end
+
+  def self.depreciacion_gestion(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.depreciacion_gestion(fecha)) + s }
+  end
+
+  def self.actualizacion_depreciacion_acumulada(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.actualizacion_depreciacion_acumulada(fecha)) + s }
+  end
+
+  def self.depreciacion_acumulada_total(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.depreciacion_acumulada_total(fecha)) + s }
+  end
+
+  def self.valor_neto(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.valor_neto(fecha)) + s }
+  end
+
+  ## END Los campos de la tabla para el reporte de Depreciación de Activos Fijos
+  ##
+
+  ##
+  # Cerrar gestión actual de los subartículos
+  def self.cerrar_gestion_actual(fecha = Date.today)
+    activos = includes(:ingreso)
+    activos = activos.where("ingresos.factura_fecha <= ?", fecha).references(:ingreso)
+    self.transaction do
+      activos.each do |activo|
+        activo.cerrar_gestion_actual(fecha)
+      end
+    end
+  end
+
+  # Inserta un nuevo registro en la tabla cierre_gestiones
+  def cerrar_gestion_actual(fecha = Date.today)
+    gestion = Gestion.find_by(anio: fecha.year)
+    activo = self
+    cierre_gestion = CierreGestion.find_by(asset: activo, gestion: gestion)
+    unless cierre_gestion.present?
+      cierre_gestion = CierreGestion.new(asset: activo, gestion: gestion)
+      cierre_gestion.actualizacion_gestion = activo.actualizacion_gestion(fecha)
+      cierre_gestion.depreciacion_gestion = activo.depreciacion_gestion(fecha)
+      cierre_gestion.indice_ufv = Ufv.indice(fecha)
+      cierre_gestion.fecha = fecha
+      cierre_gestion.save!
+    end
+  end
+
   def ubicacion_abreviacion
     ubicacion.present? ? ubicacion.abreviacion : ''
   end
@@ -233,6 +406,16 @@ class Asset < ActiveRecord::Base
 
   def ubicacion_detalle
     ubicacion.present? ? ubicacion.detalle : ''
+  end
+
+  # Redondear un número a dos (2) decimales
+  def redondear(numero, decimal = 2)
+    (numero * (10 ** decimal)).round / (10 ** decimal).to_f
+  end
+
+  # Redondear un número a dos (2) decimales
+  def self.redondear(numero, decimal = 2)
+    Asset.new.redondear(numero, decimal)
   end
 
   private

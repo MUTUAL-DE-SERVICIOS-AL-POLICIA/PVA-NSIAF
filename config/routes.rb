@@ -15,6 +15,9 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :gestiones, except: [:destroy] do
+    put 'cerrar', on: :member
+  end
   resources :ufvs, except: [:show, :destroy]
   resources :ubicaciones, except: [:show, :destroy]
   resources :ingresos
@@ -22,6 +25,7 @@ Rails.application.routes.draw do
   resources :reportes do
     get 'kardex', on: :collection
     get 'activos', on: :collection
+    get 'depreciacion', on: :collection
     get 'cuenta_contable', on: :collection
   end
 

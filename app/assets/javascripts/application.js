@@ -55,3 +55,4 @@
 //= require ingresos
 //= require reportes
 //= require subarticulos
+//= require gestiones

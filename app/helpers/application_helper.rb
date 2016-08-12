@@ -171,8 +171,8 @@ module ApplicationHelper
   def links_actions(user, type= '')
     [
       (link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), user, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) unless %w(ubicacion ufv).include?(type)),
-      link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), [:edit, user], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit')),
-      (link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(user), title: title_status(user.status)) unless %w(asset ingreso ubicacion ufv).include?(type)),
+      (link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), [:edit, user], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit')) if can?(:edit, user)),
+      (link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(user), title: title_status(user.status)) unless %w(asset ingreso ubicacion ufv gestion).include?(type)),
       (link_to(content_tag(:span, '', class: "glyphicon glyphicon-plus"), '#', class: 'btn btn-success btn-xs', data: data_entry_subarticle(user), title: I18n.t('subarticles.entry.btn')) if type == 'subarticle')
     ].compact.join(' ')
   end
@@ -360,5 +360,10 @@ module ApplicationHelper
   # Para los documentos en tamaño carta con el logo de AGETIC
   def margin_pdf
     { top: 25, bottom: 20, left: 20, right: 15 }
+  end
+
+  # Para los documentos en tamaño carta con el logo de AGETIC
+  def margin_pdf_horizontal_estrecho
+    { top: 20, bottom: 10, left: 5, right: 5 }
   end
 end

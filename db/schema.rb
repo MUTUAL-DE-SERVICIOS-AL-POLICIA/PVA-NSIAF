@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160809200836) do
+ActiveRecord::Schema.define(version: 20160812143959) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20160809200836) do
     t.integer  "decline_user_id",     limit: 4
     t.string   "proceso",             limit: 255
     t.string   "observaciones",       limit: 255
-    t.float    "precio",              limit: 24
+    t.decimal  "precio",                            precision: 10, scale: 2, default: 0.0,   null: false
     t.string   "detalle",             limit: 255
     t.string   "medidas",             limit: 255
     t.string   "material",            limit: 255
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20160809200836) do
     t.string   "modelo",              limit: 255
     t.string   "serie",               limit: 255
     t.integer  "ingreso_id",          limit: 4
-    t.boolean  "seguro",                            default: false, null: false
+    t.boolean  "seguro",                                                     default: false, null: false
     t.integer  "ubicacion_id",        limit: 4
   end
 
@@ -120,6 +120,20 @@ ActiveRecord::Schema.define(version: 20160809200836) do
   add_index "buildings", ["code"], name: "index_buildings_on_code", unique: true, using: :btree
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
 
+  create_table "cierre_gestiones", force: :cascade do |t|
+    t.decimal  "actualizacion_gestion",           precision: 10, scale: 2
+    t.decimal  "depreciacion_gestion",            precision: 10, scale: 2
+    t.decimal  "indice_ufv",                      precision: 6,  scale: 5
+    t.integer  "asset_id",              limit: 4
+    t.integer  "gestion_id",            limit: 4
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
+    t.date     "fecha"
+  end
+
+  add_index "cierre_gestiones", ["asset_id"], name: "index_cierre_gestiones_on_asset_id", using: :btree
+  add_index "cierre_gestiones", ["gestion_id"], name: "index_cierre_gestiones_on_gestion_id", using: :btree
+
   create_table "departments", force: :cascade do |t|
     t.integer  "code",        limit: 4
     t.string   "name",        limit: 230
@@ -151,7 +165,7 @@ ActiveRecord::Schema.define(version: 20160809200836) do
   end
 
   create_table "entradas_salidas", id: false, force: :cascade do |t|
-    t.integer  "id",             limit: 4,   default: 0,   null: false
+    t.integer  "id",             limit: 4,   default: 0,  null: false
     t.integer  "subarticle_id",  limit: 4
     t.date     "fecha"
     t.string   "factura",        limit: 255
@@ -159,15 +173,15 @@ ActiveRecord::Schema.define(version: 20160809200836) do
     t.string   "nro_pedido",     limit: 11
     t.string   "detalle",        limit: 463
     t.float    "cantidad",       limit: 53
-    t.float    "costo_unitario", limit: 53,  default: 0.0, null: false
+    t.float    "costo_unitario", limit: 53
     t.integer  "modelo_id",      limit: 4
-    t.string   "tipo",           limit: 7,   default: "",  null: false
+    t.string   "tipo",           limit: 7,   default: "", null: false
     t.datetime "created_at"
   end
 
   create_table "entry_subarticles", force: :cascade do |t|
     t.float    "amount",        limit: 24
-    t.float    "unit_cost",     limit: 24,                           default: 0.0,   null: false
+    t.float    "unit_cost",     limit: 24
     t.decimal  "total_cost",                precision: 10, scale: 2
     t.string   "invoice",       limit: 255,                          default: ""
     t.date     "date"
@@ -180,6 +194,14 @@ ActiveRecord::Schema.define(version: 20160809200836) do
   end
 
   add_index "entry_subarticles", ["subarticle_id"], name: "index_entry_subarticles_on_subarticle_id", using: :btree
+
+  create_table "gestiones", force: :cascade do |t|
+    t.string   "anio",         limit: 255, default: "",    null: false
+    t.boolean  "cerrado",                  default: false, null: false
+    t.datetime "fecha_cierre"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
 
   create_table "ingresos", force: :cascade do |t|
     t.integer  "numero",               limit: 4
@@ -290,6 +312,20 @@ ActiveRecord::Schema.define(version: 20160809200836) do
     t.integer  "nro_solicitud", limit: 4,   default: 0
   end
 
+  create_table "resumen", id: false, force: :cascade do |t|
+    t.integer "id",               limit: 4,  default: 0,     null: false
+    t.integer "subarticle_id",    limit: 4
+    t.integer "request_id",       limit: 4
+    t.integer "amount",           limit: 4
+    t.integer "amount_delivered", limit: 4
+    t.integer "total_delivered",  limit: 4,  default: 0
+    t.boolean "invalidate",                  default: false
+    t.integer "code",             limit: 4
+    t.float   "monto1",           limit: 24
+    t.integer "stock",            limit: 4,  default: 0,     null: false
+    t.integer "monto2",           limit: 4
+  end
+
   create_table "subarticle_requests", force: :cascade do |t|
     t.integer "subarticle_id",    limit: 4
     t.integer "request_id",       limit: 4
@@ -390,6 +426,8 @@ ActiveRecord::Schema.define(version: 20160809200836) do
 
   add_foreign_key "assets", "ingresos"
   add_foreign_key "assets", "ubicaciones"
+  add_foreign_key "cierre_gestiones", "assets"
+  add_foreign_key "cierre_gestiones", "gestiones"
   add_foreign_key "ingresos", "suppliers"
   add_foreign_key "ingresos", "users"
   add_foreign_key "subarticles", "materials"

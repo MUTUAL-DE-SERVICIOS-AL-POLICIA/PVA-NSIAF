@@ -29,14 +29,14 @@ class Account < ActiveRecord::Base
       if search_column.present?
         array = array.where("#{search_column} like :search", search: "%#{sSearch}%")
       else
-        array = array.where("code LIKE ? OR name LIKE ?", "%#{sSearch}%", "%#{sSearch}%")
+        array = array.where("code LIKE ? OR name LIKE ? OR vida_util LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array
   end
 
   def self.to_csv
-    columns = %w(code name)
+    columns = %w(code name vida_util)
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }
       all.each do |account|

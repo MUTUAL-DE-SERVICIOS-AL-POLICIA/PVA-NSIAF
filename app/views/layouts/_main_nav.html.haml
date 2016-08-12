@@ -6,6 +6,10 @@
           Administración
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_admin' }
+          - if can? :read, Gestion
+            %li{ role: 'presentation' }
+              = link_to t('gestiones.title.title'), gestiones_path, role: 'menuitem'
+            %li.divider
           - if can? :read, Entity
             %li{ role: 'presentation' }
               = link_to t('entities.title.title'), entities_path, role: 'menuitem'
@@ -93,6 +97,7 @@
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
           %li= link_to 'Reporte de activos fijos', activos_reportes_path
+          %li= link_to 'Depreciación de activos', depreciacion_reportes_path
     - if current_user.is_admin_store?
       %li.dropdown
         = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
