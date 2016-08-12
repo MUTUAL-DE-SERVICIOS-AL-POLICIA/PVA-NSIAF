@@ -1,14 +1,29 @@
 class Gestion < ActiveRecord::Base
 
+  validates :anio, presence: true,
+                   uniqueness: true
+
   # Gestión actual que es la última gestión que no está cerrada
   def self.actual
     last.anio rescue ''
+  end
+
+  def self.cerrar_gestion(fecha)
+    gestion = find_by(anio: fecha.year)
+    gestion.cerrado = true
+    gestion.fecha_cierre = DateTime.now
+    gestion.save!
   end
 
   def self.cerrar_gestion_actual
     if self.actual.present?
       # TODO calcular el 31 de diciembre de ese año
       # guardar los resultados en una tabla intermedia
+      fecha = Date.strptime(self.actual.to_s, '%Y')
+      self.transaction do
+        Asset.cerrar_gestion_actual(fecha.end_of_year)
+        Gestion.cerrar_gestion(fecha.end_of_year)
+      end
     else
       # TODO falta establecer la gestión actual
     end

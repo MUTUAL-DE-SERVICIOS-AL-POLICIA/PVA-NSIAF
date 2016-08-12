@@ -361,6 +361,34 @@ class Asset < ActiveRecord::Base
   ## END Los campos de la tabla para el reporte de Depreciación de Activos Fijos
   ##
 
+  ##
+  # Cerrar gestión actual de los subartículos
+  def self.cerrar_gestion_actual(fecha = Date.today)
+    activos = includes(:ingreso)
+    activos = activos.where("ingresos.factura_fecha <= ?", fecha).references(:ingreso)
+    self.transaction do
+      activos.each do |activo|
+        activo.cerrar_gestion_actual(fecha)
+      end
+    end
+  end
+
+  # Inserta un nuevo registro en la tabla cierre_gestiones
+  def cerrar_gestion_actual(fecha = Date.today)
+    gestion = Gestion.find_by(anio: fecha.year)
+    activo = self
+    cierre_gestion = CierreGestion.find_by(asset: activo, gestion: gestion)
+    unless cierre_gestion.present?
+      cierre_gestion = CierreGestion.new(asset: activo, gestion: gestion)
+      cierre_gestion.asset = activo
+      cierre_gestion.gestion = gestion
+      ####
+      # TODO completar los campos restantes para cada activo fijo
+      ####
+      cierre_gestion.save!
+    end
+  end
+
   def ubicacion_abreviacion
     ubicacion.present? ? ubicacion.abreviacion : ''
   end
