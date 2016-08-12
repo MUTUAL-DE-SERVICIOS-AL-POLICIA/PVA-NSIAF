@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160811223411) do
+ActiveRecord::Schema.define(version: 20160811225219) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -119,6 +119,19 @@ ActiveRecord::Schema.define(version: 20160811223411) do
 
   add_index "buildings", ["code"], name: "index_buildings_on_code", unique: true, using: :btree
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
+
+  create_table "cierre_gestiones", force: :cascade do |t|
+    t.decimal  "actualizacion_gestion",           precision: 10, scale: 2
+    t.decimal  "depreciacion_gestion",            precision: 10, scale: 2
+    t.decimal  "indice_ufv",                      precision: 6,  scale: 5
+    t.integer  "asset_id",              limit: 4
+    t.integer  "gestion_id",            limit: 4
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
+  end
+
+  add_index "cierre_gestiones", ["asset_id"], name: "index_cierre_gestiones_on_asset_id", using: :btree
+  add_index "cierre_gestiones", ["gestion_id"], name: "index_cierre_gestiones_on_gestion_id", using: :btree
 
   create_table "departments", force: :cascade do |t|
     t.integer  "code",        limit: 4
@@ -412,6 +425,8 @@ ActiveRecord::Schema.define(version: 20160811223411) do
 
   add_foreign_key "assets", "ingresos"
   add_foreign_key "assets", "ubicaciones"
+  add_foreign_key "cierre_gestiones", "assets"
+  add_foreign_key "cierre_gestiones", "gestiones"
   add_foreign_key "ingresos", "suppliers"
   add_foreign_key "ingresos", "users"
   add_foreign_key "subarticles", "materials"

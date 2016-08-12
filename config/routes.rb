@@ -15,7 +15,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :gestiones, except: [:destroy]
+  resources :gestiones, except: [:destroy] do
+    put 'cerrar', on: :member
+  end
   resources :ufvs, except: [:show, :destroy]
   resources :ubicaciones, except: [:show, :destroy]
   resources :ingresos

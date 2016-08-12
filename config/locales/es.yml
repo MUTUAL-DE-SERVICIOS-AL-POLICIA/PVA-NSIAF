@@ -35,6 +35,7 @@ es:
     print: 'Imprimir'
     migrate: 'Migrar'
     btn:
+      aceptar: "Aceptar"
       cancel: "Cancelar"
       save: "Guardar"
       edit: "Editar"

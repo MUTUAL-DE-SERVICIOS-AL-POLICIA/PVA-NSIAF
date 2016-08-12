@@ -1,5 +1,19 @@
 class Gestion < ActiveRecord::Base
 
+  # Gestión actual que es la última gestión que no está cerrada
+  def self.actual
+    last.anio rescue ''
+  end
+
+  def self.cerrar_gestion_actual
+    if self.actual.present?
+      # TODO calcular el 31 de diciembre de ese año
+      # guardar los resultados en una tabla intermedia
+    else
+      # TODO falta establecer la gestión actual
+    end
+  end
+
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'anio'), h.get_column(self, 'cerrado'), h.get_column(self, 'fecha_cierre')]
