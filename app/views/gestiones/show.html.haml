@@ -1,9 +1,10 @@
 .page-header{data: { action: 'gestiones' }}
   .pull-right
-    = link_to edit_gestion_path(@gestion), class: 'btn btn-primary' do
-      %span.glyphicon.glyphicon-edit
-      = t("general.btn.edit")
-    - unless @gestion.cerrado
+    - if can? :edit, @gestion
+      = link_to edit_gestion_path(@gestion), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+    - if !@gestion.cerrado? && @gestion.gestion_actual?
       = link_to '#cerrar-gestion', class: 'btn btn-danger', id: 'cerrar-gestion-link', data: {url: cerrar_gestion_path(@gestion)} do
         %span.glyphicon.glyphicon-save
         = t("gestiones.title.cerrar")
@@ -11,7 +12,18 @@
       %span.glyphicon.glyphicon-list
       = t("gestiones.title.title")
 
-  %h2 Gestión #{@gestion.anio}
+  %h2
+    %span.text-muted Gestión
+    = @gestion.anio
+    %small
+      - if @gestion.cerrado? || @gestion.gestion_actual?
+        - if @gestion.cerrado?
+          .label.label-danger{title: 'Gestión cerrada'} CERRADO
+        - if @gestion.gestion_actual?
+          .label.label-success{title: 'Gestión actual'} ACTUAL
+      - else
+        - unless @gestion.cerrado?
+          .label.label-info{title: 'Gestión próxima'} PRÓXIMA
 
 %dl.dl-horizontal
   %dt= Gestion.human_attribute_name('id')

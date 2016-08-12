@@ -3,9 +3,9 @@ class Gestion < ActiveRecord::Base
   validates :anio, presence: true,
                    uniqueness: true
 
-  # Gestión actual que es la última gestión que no está cerrada
+  # Retorna el año de la gestión actual que es la última gestión que no está cerrada
   def self.actual
-    last.anio rescue ''
+    gestion_actual.anio rescue ''
   end
 
   def self.cerrar_gestion(fecha)
@@ -27,6 +27,15 @@ class Gestion < ActiveRecord::Base
     else
       # TODO falta establecer la gestión actual
     end
+  end
+
+  def self.gestion_abierto
+    where(cerrado: false).order(:anio)
+  end
+
+  # Retorna el objeto gestión actual
+  def self.gestion_actual
+    gestion_abierto.first rescue nil
   end
 
   def self.set_columns
@@ -60,6 +69,11 @@ class Gestion < ActiveRecord::Base
         csv << a
       end
     end
+  end
+
+  # Verificar si una gestión es la gestión actual
+  def gestion_actual?
+    Gestion.gestion_actual == self
   end
 
 end

@@ -21,7 +21,7 @@ private
       [
         gestion.anio,
         (gestion.cerrado ? 'SI' : 'NO'),
-        format_date(gestion.fecha_cierre),
+        (gestion.fecha_cierre ? I18n.l(gestion.fecha_cierre, format: :long) : nil),
         links_actions(gestion, 'gestion')
       ]
     end

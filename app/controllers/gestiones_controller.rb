@@ -1,5 +1,6 @@
 class GestionesController < ApplicationController
-  before_action :set_gestion, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
+  before_action :set_gestion, only: [:show, :edit, :update, :destroy, :cerrar]
 
   # GET /gestiones
   # GET /gestiones.json
@@ -72,9 +73,14 @@ class GestionesController < ApplicationController
   end
 
   def cerrar
-    Gestion.cerrar_gestion_actual
     respond_to do |format|
-      format.json { head :no_content }
+      if @gestion.gestion_actual?
+        Gestion.cerrar_gestion_actual
+        format.json { head :no_content }
+      else
+        error = { mensaje: 'No es la gestión actual vigente' }
+        format.json { render json: error, status: :unprocessable_entity}
+      end
     end
   end
 

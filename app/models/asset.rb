@@ -380,11 +380,10 @@ class Asset < ActiveRecord::Base
     cierre_gestion = CierreGestion.find_by(asset: activo, gestion: gestion)
     unless cierre_gestion.present?
       cierre_gestion = CierreGestion.new(asset: activo, gestion: gestion)
-      cierre_gestion.asset = activo
-      cierre_gestion.gestion = gestion
-      ####
-      # TODO completar los campos restantes para cada activo fijo
-      ####
+      cierre_gestion.actualizacion_gestion = activo.actualizacion_gestion(fecha)
+      cierre_gestion.depreciacion_gestion = activo.depreciacion_gestion(fecha)
+      cierre_gestion.indice_ufv = Ufv.indice(fecha)
+      cierre_gestion.fecha = fecha
       cierre_gestion.save!
     end
   end
