@@ -21,6 +21,8 @@ class Asset < ActiveRecord::Base
 
   has_many :asset_proceedings
   has_many :proceedings, through: :asset_proceedings
+  has_many :cierre_gestiones
+  has_many :gestiones, through: :cierre_gestiones
 
   scope :assigned, -> { where.not(user_id: nil) }
   scope :unassigned, -> { where(user_id: nil) }
@@ -243,14 +245,13 @@ class Asset < ActiveRecord::Base
   end
 
   # Costo actualizado inicial
-  def costo_actualizado_inicial
-    # TODO cuando hay cambio de gestión hace un cambio, varía con los años
-    precio
+  def costo_actualizado_inicial(fecha = Date.today)
+    ag = cierre_gestiones.where('fecha < ?', fecha).sum(:actualizacion_gestion)
+    costo_historico + ag
   end
 
-  def depreciacion_acumulada_inicial
-    # TODO Tiene que ver con el cambio de gestiones, varía con los años
-    0
+  def depreciacion_acumulada_inicial(fecha = Date.today)
+    cierre_gestiones.where('fecha < ?', fecha).sum(:depreciacion_gestion)
   end
 
   # Vida útil del activo fijo
@@ -259,37 +260,44 @@ class Asset < ActiveRecord::Base
   end
 
   def factor_actualizacion(fecha = Date.today)
-    Ufv.indice(fecha)/indice_ufv
+    cg = cierre_gestiones.where('fecha < ?', fecha).order(:fecha).last
+    ufv = cg.present? ? cg.indice_ufv : indice_ufv
+    Ufv.indice(fecha) / ufv
   end
 
   def actualizacion_gestion(fecha = Date.today)
-    costo_actualizado(fecha) - costo_historico
+    costo_actualizado(fecha) - costo_actualizado_inicial(fecha)
   end
 
   def costo_actualizado(fecha = Date.today)
-    costo_historico * factor_actualizacion(fecha)
+    costo_actualizado_inicial(fecha) * factor_actualizacion(fecha)
   end
 
   def porcentaje_depreciacion_anual
     100 / vida_util_residual_nominal
   end
 
+  # Días desde la adquisición del activo fijo
   def dias_consumidos(fecha = Date.today)
     (fecha - ingreso_fecha).to_i + 1 rescue 0
   end
 
-  def depreciacion_gestion(fecha = Date.today)
-    costo_actualizado(fecha) / 365 * dias_consumidos(fecha) * porcentaje_depreciacion_anual / 100
+  # Días desde el último cierre de gestión
+  def dias_consumidos_ultimo(fecha = Date.today)
+    cg = cierre_gestiones.where('fecha < ?', fecha).order(:fecha).last
+    cg.present? ? (fecha - cg.fecha).to_i : dias_consumidos(fecha)
   end
 
-  def actualizacion_depreciacion_acumulada
-    # TODO tiene que ver con el cambio de gestión
-    0
+  def depreciacion_gestion(fecha = Date.today)
+    costo_actualizado(fecha) / 365 * dias_consumidos_ultimo(fecha) * porcentaje_depreciacion_anual / 100
+  end
+
+  def actualizacion_depreciacion_acumulada(fecha = Date.today)
+    depreciacion_acumulada_inicial(fecha) * (factor_actualizacion(fecha) - 1)
   end
 
   def depreciacion_acumulada_total(fecha = Date.today)
-    # TODO tiene que ver con el cambio de años
-    depreciacion_gestion(fecha)
+    costo_actualizado(fecha) / 365 * dias_consumidos(fecha) * porcentaje_depreciacion_anual / 100
   end
 
   def valor_neto(fecha = Date.today)
@@ -323,39 +331,39 @@ class Asset < ActiveRecord::Base
   end
 
   def self.costo_historico
-    all.inject(0) { |s, a| a.costo_historico + s }
+    all.inject(0) { |s, a| redondear(a.costo_historico) + s }
   end
 
-  def self.costo_actualizado_inicial
-    all.inject(0) { |s, a| a.costo_actualizado_inicial + s }
+  def self.costo_actualizado_inicial(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.costo_actualizado_inicial(fecha)) + s }
   end
 
-  def self.depreciacion_acumulada_inicial
-    all.inject(0) { |s, a| a.depreciacion_acumulada_inicial + s }
+  def self.depreciacion_acumulada_inicial(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.depreciacion_acumulada_inicial(fecha)) + s }
   end
 
-  def self.actualizacion_gestion
-    all.inject(0) { |s, a| a.actualizacion_gestion + s }
+  def self.actualizacion_gestion(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.actualizacion_gestion(fecha)) + s }
   end
 
-  def self.costo_actualizado
-    all.inject(0) { |s, a| a.costo_actualizado + s }
+  def self.costo_actualizado(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.costo_actualizado(fecha)) + s }
   end
 
-  def self.depreciacion_gestion
-    all.inject(0) { |s, a| a.depreciacion_gestion + s }
+  def self.depreciacion_gestion(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.depreciacion_gestion(fecha)) + s }
   end
 
-  def self.actualizacion_depreciacion_acumulada
-    all.inject(0) { |s, a| a.actualizacion_depreciacion_acumulada + s }
+  def self.actualizacion_depreciacion_acumulada(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.actualizacion_depreciacion_acumulada(fecha)) + s }
   end
 
-  def self.depreciacion_acumulada_total
-    all.inject(0) { |s, a| a.depreciacion_acumulada_total + s }
+  def self.depreciacion_acumulada_total(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.depreciacion_acumulada_total(fecha)) + s }
   end
 
-  def self.valor_neto
-    all.inject(0) { |s, a| a.valor_neto + s }
+  def self.valor_neto(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.valor_neto(fecha)) + s }
   end
 
   ## END Los campos de la tabla para el reporte de Depreciación de Activos Fijos
@@ -400,12 +408,17 @@ class Asset < ActiveRecord::Base
     ubicacion.present? ? ubicacion.detalle : ''
   end
 
-  private
+  # Redondear un número a dos (2) decimales
+  def redondear(numero, decimal = 2)
+    (numero * (10 ** decimal)).round / (10 ** decimal).to_f
+  end
 
   # Redondear un número a dos (2) decimales
-  def redondear(numero)
-    (numero * 100).round / 100.0
+  def self.redondear(numero, decimal = 2)
+    Asset.new.redondear(numero, decimal)
   end
+
+  private
 
   ##
   # Guarda en la base de datos de acuerdo a la correspondencia de campos.
