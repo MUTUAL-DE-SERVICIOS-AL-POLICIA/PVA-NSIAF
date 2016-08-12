@@ -22,6 +22,24 @@ class Ingreso < ActiveRecord::Base
     [h.get_column(self, 'factura_fecha'), h.get_column(self, 'numero'), h.get_column(self, 'suppliers'), h.get_column(self, 'users'), h.get_column(self, 'total'), h.get_column(self, 'nota_entrega_fecha')]
   end
 
+  def self.to_csv
+    columns = %w(factura_fecha numero suppliers users total nota_entrega_fecha)
+    h = ApplicationController.helpers
+    CSV.generate do |csv|
+      csv << columns.map { |c| Ingreso.human_attribute_name(c) }
+      all.each do |ingreso|
+        a = Array.new
+        a << ingreso.factura_fecha
+        a << ingreso.numero
+        a << ingreso.supplier_name
+        a << ingreso.user_name
+        a << ingreso.total
+        a << ingreso.nota_entrega_fecha
+        csv << a
+      end
+    end
+  end
+
   def supplier_name
     supplier.present? ? supplier.name : ''
   end
