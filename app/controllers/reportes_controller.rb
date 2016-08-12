@@ -89,9 +89,9 @@ class ReportesController < ApplicationController
                template: 'reportes/depreciacion.html.haml',
                orientation: 'Landscape',
                page_size: 'Letter',
-               margin: view_context.margin_pdf_estrecho#,
-              #  header: { html: { template: 'shared/header.pdf.haml' } },
-              #  footer: { html: { template: 'shared/footer.pdf.haml' } }
+               margin: view_context.margin_pdf_horizontal_estrecho,
+               header: { html: { template: 'shared/header_horizontal.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
     end
   end

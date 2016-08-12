@@ -18,11 +18,12 @@
 
     %h2= titulo
 - else
-  .row
+  .row.reporte.reporte-10
     .col-sm-12.text-center
       %h2= titulo
+      %h4.fecha-al Al #{I18n.l fecha, format: :long}
 
-.row
+.row.reporte.reporte-10
   .col-sm-12
     %table.table.table-condensed.table-bordered.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
       %thead
