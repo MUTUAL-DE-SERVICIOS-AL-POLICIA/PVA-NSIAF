@@ -72,7 +72,7 @@ class ReportesController < ApplicationController
     @materials = Material.all
   end
 
-  # Depreciación de activos fijos
+  # Depreciación de activos fijos - reporte 10 vSIAF
   def depreciacion
     @hasta = get_fecha(params, :hasta)
     q = params[:q]
@@ -94,6 +94,14 @@ class ReportesController < ApplicationController
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
     end
+  end
+
+  # Resumen activos fijos - reporte 6 vSIAF
+  def resumen
+    @hasta = get_fecha(params, :hasta)
+    # q = params[:q]
+    # cuentas = params[:cuentas]
+    @accounts = Account.order(:code)
   end
 
   private

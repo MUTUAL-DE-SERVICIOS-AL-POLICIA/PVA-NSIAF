@@ -49,4 +49,8 @@ class Account < ActiveRecord::Base
     conditions = { assets: { id: nil } }
     joins(:assets).where.not(conditions).uniq
   end
+
+  def auxiliares_activos
+    auxiliaries.activos
+  end
 end
