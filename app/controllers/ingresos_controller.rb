@@ -24,7 +24,7 @@ class IngresosController < ApplicationController
                template: 'ingresos/show.html.haml',
                layout: 'pdf.html',
                page_size: 'Letter',
-               show_as_html: params[:debug].present?,
+               # show_as_html: params[:debug].present?,
                margin: view_context.margin_pdf,
                header: { html: { template: 'shared/header.pdf.haml' } },
                footer: { html: { template: 'shared/footer.pdf.haml' } }

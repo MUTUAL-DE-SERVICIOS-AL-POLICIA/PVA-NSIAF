@@ -13,5 +13,13 @@
     table.valorado{
       font-size: 0.8rem;
     }
+    table.valorado-sin{
+      border: none;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      td {
+        border-top: none;
+      }
+    }
   }
 }

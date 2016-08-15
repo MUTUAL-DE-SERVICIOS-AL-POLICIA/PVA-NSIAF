@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     get 'kardex', on: :collection
     get 'activos', on: :collection
     get 'depreciacion', on: :collection
+    get 'resumen', on: :collection
     get 'cuenta_contable', on: :collection
   end
 
