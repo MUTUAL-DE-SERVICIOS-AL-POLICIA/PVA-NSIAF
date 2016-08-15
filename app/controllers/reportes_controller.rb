@@ -99,9 +99,23 @@ class ReportesController < ApplicationController
   # Resumen activos fijos - reporte 6 vSIAF
   def resumen
     @hasta = get_fecha(params, :hasta)
-    # q = params[:q]
-    # cuentas = params[:cuentas]
-    @accounts = Account.order(:code)
+    @accounts = Account.con_activos.order(:code)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        filename = 'resumen-de-activos-fijos'
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               # show_as_html: params.key?('debug'),
+               template: 'reportes/resumen.html.haml',
+               orientation: 'Landscape',
+               page_size: 'Letter',
+               margin: view_context.margin_pdf_horizontal_estrecho,
+               header: { html: { template: 'shared/header_horizontal.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
   end
 
   private

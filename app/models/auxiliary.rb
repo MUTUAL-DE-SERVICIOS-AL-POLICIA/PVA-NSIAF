@@ -65,10 +65,6 @@ class Auxiliary < ActiveRecord::Base
     end
   end
 
-  def self.activos
-    Asset.where(id: all.ids)
-  end
-
   private
 
   ##

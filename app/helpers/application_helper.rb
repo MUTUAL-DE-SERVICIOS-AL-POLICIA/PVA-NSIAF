@@ -12,6 +12,10 @@ module ApplicationHelper
     acronym
   end
 
+  def entidad_actual
+    Entity.first
+  end
+
   ##
   # Muestra la fecha de impresión en el lugar especificado
   # También soporta enviarle

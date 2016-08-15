@@ -3,13 +3,7 @@
 - unless is_pdf?
   .page-header
     .pull-right{data: {action: 'reportes-activos'}}
-      = form_tag depreciacion_reportes_path, method: :get, class: 'form-inline', id: 'buscador-form' do
-        .form-group
-          %label.sr-only{for: 'buscar'} Buscar
-          = text_field_tag :q, params[:q], class: 'form-control', id: 'buscar', placeholder: 'Buscar activos', autofocus: true
-        .form-group
-          %label.sr-only{for: 'cuentas'} Cuentas
-          = select_tag :cuentas, options_for_select(get_accounts, params[:cuentas]), class: 'form-control', prompt: 'Seleccionar cuentas'
+      = form_tag resumen_reportes_path, method: :get, class: 'form-inline', id: 'buscador-form' do
         .form-group
           %label{for: 'fecha-desde'} Fechas
           = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
@@ -22,6 +16,8 @@
     .col-sm-12.text-center
       %h2= titulo
       %h4.fecha-al Al #{I18n.l fecha, format: :long}
+    .col-sm-12
+      = render 'encabezado_tabla', fecha: fecha
 
 .row.reporte.reporte-10
   .col-sm-12
@@ -44,50 +40,46 @@
           %th.number{title: 'Valor Neto'} Valor Neto
       %tbody
         - @accounts.each_with_index do |cuenta, index|
-          - if cuenta.auxiliares_activos.length > 0
-            %tr
-              %td.text-right= index + 1
-              %td= cuenta.name
-              %td.text-center= cuenta.auxiliares_activos.length
-              %td.text-center= cuenta.vida_util
-              %td.number 0
-              %td.number 0
-              %td.number 0
-              %td.number 0
-              %td.number 0
-              %td.number 0
-              %td.number 0
-              %td.number 0
-              %td.number 0
-              %td.number 0
+          %tr
+            %td.number= index + 1
+            %td.nowrap= cuenta.name
+            %td.text-center= cuenta.cantidad_activos(fecha)
+            %td.text-center= cuenta.vida_util
+            %td.number= number_with_delimiter cuenta.costo_historico(fecha)
+            %td.number= number_with_delimiter cuenta.costo_actualizado_inicial(fecha)
+            %td.number= number_with_delimiter cuenta.depreciacion_acumulada_inicial(fecha)
+            %td.number= number_with_delimiter cuenta.valor_neto_inicial(fecha)
+            %td.number= number_with_delimiter cuenta.actualizacion_gestion(fecha)
+            %td.number= number_with_delimiter cuenta.costo_total_actualizado(fecha)
+            %td.number= number_with_delimiter cuenta.depreciacion_gestion(fecha)
+            %td.number= number_with_delimiter cuenta.actualizacion_depreciacion_acumulada(fecha)
+            %td.number= number_with_delimiter cuenta.depreciacion_acumulada_total(fecha)
+            %td.number= number_with_delimiter cuenta.valor_neto(fecha)
 
-          -# - if @accounts.present?
-          -#   %tr
-          -#     %th{colspan: 3} CANTIDAD DE ACTIVOS: #{@activos.length}
-          -#     %th{colspan: 3} TOTALES
-          -#     %th.number= number_with_delimiter @activos.costo_historico
-          -#     %th.number= number_with_delimiter @activos.costo_actualizado_inicial(fecha)
-          -#     %th.number= number_with_delimiter @activos.depreciacion_acumulada_inicial(fecha)
-          -#     %th
-          -#     %th
-          -#     %th.number= number_with_delimiter @activos.actualizacion_gestion(fecha)
-          -#     %th.number= number_with_delimiter @activos.costo_actualizado(fecha)
-          -#     %th
-          -#     %th
-          -#     %th.number= number_with_delimiter @activos.depreciacion_gestion(fecha)
-          -#     %th.number= number_with_delimiter @activos.actualizacion_depreciacion_acumulada(fecha)
-          -#     %th.number= number_with_delimiter @activos.depreciacion_acumulada_total(fecha)
-          -#     %th.number= number_with_delimiter @activos.valor_neto(fecha)
-          -#     %th
+        - if @accounts.present?
+          %tr
+            %th{colspan: 2} TOTALES
+            %th.text-center= @accounts.cantidad_activos(fecha)
+            %th
+            %th.number= number_with_delimiter @accounts.costo_historico(fecha)
+            %th.number= number_with_delimiter @accounts.costo_actualizado_inicial(fecha)
+            %th.number= number_with_delimiter @accounts.depreciacion_acumulada_inicial(fecha)
+            %th.number= number_with_delimiter @accounts.valor_neto_inicial(fecha)
+            %th.number= number_with_delimiter @accounts.actualizacion_gestion(fecha)
+            %th.number= number_with_delimiter @accounts.costo_total_actualizado(fecha)
+            %th.number= number_with_delimiter @accounts.depreciacion_gestion(fecha)
+            %th.number= number_with_delimiter @accounts.actualizacion_depreciacion_acumulada(fecha)
+            %th.number= number_with_delimiter @accounts.depreciacion_acumulada_total(fecha)
+            %th.number= number_with_delimiter @accounts.valor_neto(fecha)
         - if @accounts.empty?
           %tr
             %td.text-center{colspan: 14}
-              No hay activos para mostrar.
+              No hay cuentas para mostrar.
 
     = fecha_impresion if is_pdf?
 
   - if @accounts.length > 0 && !is_pdf?
     .col-sm-12.text-center
-      = link_to depreciacion_reportes_path(format: :pdf, q: params[:q], cuentas: params[:cuentas], hasta: params[:hasta]), class: 'btn btn-success btn-lg' do
+      = link_to resumen_reportes_path(format: :pdf, hasta: params[:hasta]), class: 'btn btn-success btn-lg' do
         %span.glyphicon.glyphicon-print
         Imprimir

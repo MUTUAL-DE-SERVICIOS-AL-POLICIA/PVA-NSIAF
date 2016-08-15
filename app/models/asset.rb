@@ -1,5 +1,6 @@
 class Asset < ActiveRecord::Base
   include ImportDbf, Migrated, VersionLog, ManageStatus
+  include Moneda
 
   CORRELATIONS = {
     'CODIGO' => 'code',
@@ -406,16 +407,6 @@ class Asset < ActiveRecord::Base
 
   def ubicacion_detalle
     ubicacion.present? ? ubicacion.detalle : ''
-  end
-
-  # Redondear un número a dos (2) decimales
-  def redondear(numero, decimal = 2)
-    (numero * (10 ** decimal)).round / (10 ** decimal).to_f
-  end
-
-  # Redondear un número a dos (2) decimales
-  def self.redondear(numero, decimal = 2)
-    Asset.new.redondear(numero, decimal)
   end
 
   private
