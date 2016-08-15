@@ -2,11 +2,40 @@ class Material < ActiveRecord::Base
   include ManageStatus
 
   has_many :articles
+  has_many :subarticles
 
   validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :description, presence: true
 
   has_paper_trail
+
+  def detalle
+    "#{code} - #{description}"
+  end
+
+  def subarticulos
+    Subarticle.joins(article: :material)
+      .where('materials.id = ?', self.id)
+      .order('subarticles.id')
+  end
+
+  def valorado_ingresos(desde, hasta)
+    articles.inject(0) do |total, article|
+      total + article.valorado_ingresos(desde, hasta)
+    end
+  end
+
+  def valorado_salidas(desde, hasta)
+    articles.inject(0) do |total, article|
+      total + article.valorado_salidas(desde, hasta)
+    end
+  end
+
+  def valorado_saldo(desde, hasta)
+    articles.inject(0) do |total, article|
+      total + article.valorado_saldo(desde, hasta)
+    end
+  end
 
   def verify_assignment
     articles.present?

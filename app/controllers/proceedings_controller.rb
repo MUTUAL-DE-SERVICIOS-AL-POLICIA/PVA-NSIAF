@@ -13,7 +13,7 @@ class ProceedingsController < ApplicationController
       format.html
       format.pdf do
         filename = @proceeding.user_name.parameterize || 'acta'
-        render pdf: "VSIAF-#{filename}",
+        render pdf: "#{filename}",
                disposition: 'attachment',
                template: 'proceedings/show.html.haml',
                show_as_html: params[:debug].present?,

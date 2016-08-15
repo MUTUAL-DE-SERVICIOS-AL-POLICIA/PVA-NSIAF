@@ -16,6 +16,10 @@ class NoteEntry < ActiveRecord::Base
     supplier.present? ? supplier.name : ''
   end
 
+  def supplier_nit
+    supplier.present? ? supplier.nit : ''
+  end
+
   def user_name
     user.present? ? user.name : ''
   end
@@ -86,6 +90,13 @@ class NoteEntry < ActiveRecord::Base
     end
   end
 
+  ##
+  # TODO definir éste campo a nivel de tabla para las notas de entrada
+  # Cuando se cree el campo eliminar éste método
+  def c31_fecha
+    ''
+  end
+
   def change_date_entries
     entry_subarticles.each do |entry|
       entry.set_date_value
@@ -100,13 +111,6 @@ class NoteEntry < ActiveRecord::Base
       kardex.delivery_note_number = get_delivery_note_number
       kardex.save
     end
-  end
-
-  def get_date
-    entries = entry_subarticles.map(&:subarticle_id)
-    count = entries.count + 1
-    entry = EntrySubarticle.where(subarticle_id: entries)[0..-count].last.date
-    entry.present? ? (Time.now.to_date - entry - 1).to_i : ""
   end
 
   # Anula una Nota de Entrada, y también los subartículos asociados al mismo.

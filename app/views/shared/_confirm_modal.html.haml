@@ -37,7 +37,7 @@
           {{/unassigned}}
 
 - if controller_name == 'subarticles'
-  %script{ id: 'entry_subarticle', type: 'text/html' }
+  %script{ id: 'entry_subarticle', type: 'text/html', data: {action: 'subarticulos'} }
     .modal-header{ style: 'margin-bottom: 5px;' }
     = render 'subarticles/new_entry'
 
@@ -50,6 +50,11 @@
   %script{ id: 'editar-nota-entrada-tpl', type: 'text/html' }
     .modal-header{ style: 'margin-bottom: 5px;' }
     = render 'note_entries/editar'
+
+- if controller_name == 'ingresos'
+  %script{ id: 'editar-nota-entrada-tpl', type: 'text/html' }
+    .modal-header{ style: 'margin-bottom: 5px;' }
+    = render 'ingresos/editar'
 
 - if controller_name == 'proceedings'
   %script{ id: 'editar-acta-tpl', type: 'text/html' }

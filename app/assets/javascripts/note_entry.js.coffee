@@ -102,6 +102,6 @@ class NoteEntry extends BarcodeReader
     @sumarSubtotal() - @descuento()
 
   totalParcial: ($fila) ->
-    amount = parseInt($fila.find('input.amount').val()) || 0
+    amount = parseFloat($fila.find('input.amount').val()) || 0
     unit_cost = parseFloat($fila.find('input.unit_cost').val()) || 0
     amount * unit_cost

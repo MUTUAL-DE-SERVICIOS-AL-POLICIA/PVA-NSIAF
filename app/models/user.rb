@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   belongs_to :department
   has_many :assets
   has_many :proceedings, foreign_key: :user_id
+  has_many :ingresos
 
   scope :actives, -> { where(status: '1') }
 

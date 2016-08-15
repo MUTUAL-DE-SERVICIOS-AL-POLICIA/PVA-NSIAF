@@ -15,6 +15,21 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :gestiones, except: [:destroy] do
+    put 'cerrar', on: :member
+  end
+  resources :ufvs, except: [:show, :destroy]
+  resources :ubicaciones, except: [:show, :destroy]
+  resources :ingresos
+
+  resources :reportes do
+    get 'kardex', on: :collection
+    get 'activos', on: :collection
+    get 'depreciacion', on: :collection
+    get 'resumen', on: :collection
+    get 'cuenta_contable', on: :collection
+  end
+
   resources :entry_subarticles, only: [:edit, :update]
 
   resources :almacenes, only: [:index]
@@ -123,7 +138,7 @@ Rails.application.routes.draw do
     get :historical, on: :member
   end
 
-  get '/datatables-spanish', to: redirect("#{ Rails.application.config.action_controller.relative_url_root }/locales/dataTables.spanish.txt"), as: :spanish_datatables
+  get '/datatables-spanish', to: 'welcome#datatables_spanish', as: :spanish_datatables
   get '/dashboard', to: 'dashboard#index', as: :dashboard
   patch '/dashboard/update_password', to: 'dashboard#update_password', as: :update_password_dashboard
   post '/dashboard/announcements/hide', to: 'dashboard#hide', as: :hide_announcement

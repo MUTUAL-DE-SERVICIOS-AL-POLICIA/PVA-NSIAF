@@ -14,10 +14,11 @@ class RequestsController < ApplicationController
       format.html
       format.json { render json: @request.delivery_verification(params[:barcode]) }
       format.pdf do
-        render pdf: "VSIAF-#{@request.user_name.parameterize || 'materiales'}",
+        render pdf: "#{@request.user_name.parameterize || 'materiales'}",
                disposition: 'attachment',
                template: 'requests/show.html.haml',
                layout: 'pdf.html',
+               # show_as_html: params.key?('debug'),
                page_size: 'Letter',
                margin: view_context.margin_pdf,
                header: { html: { template: 'shared/header.pdf.haml' } },

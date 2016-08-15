@@ -8,19 +8,10 @@ style_date = (id)->
   $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
 
 date_picker = (year = false) ->
-  if $(".edit_note_entry").length
-    days = $("#get_date").data('date')
-    date = "-#{days}d"
-  else
-    # TODO verificar el rango del último cierre para restringir rango de fechas
-    # date = if year then (new Date((new Date).getFullYear(), 0, 1)) else ""
-    date = ""
   $(".date").datepicker
     autoclose: true
     format: "dd/mm/yyyy"
     language: "es"
-    startDate: date
-    endDate: "+0d"
 
 validation_decline = ($form, id) ->
   input = $("##{id}")
@@ -256,7 +247,7 @@ jQuery ->
     style_date("date_#{id}")
     date_picker(true)
 
-  # BEGIN Editar notas de entrada
+  # BEGIN Editar notas de entrada almacenes y activos
   $(document).on 'click', '.editar-nota-entrada', (e) ->
     e.preventDefault()
     data = $(this).data('nota-entrada')
@@ -264,7 +255,7 @@ jQuery ->
     $('#confirm-modal').html(template.render(data))
     $('#modal-editar-nota-entrada').modal('show')
     $('#modal-editar-nota-entrada').on 'shown.bs.modal', (e) ->
-      $('#note_entry_nro_nota_ingreso').select()
+      $('.nro-nota-ingreso-select').select()
 
   $(document).on 'click', $('#modal-editar-nota-entrada').find('button[type=submit]').selector, (e) ->
     e.preventDefault()

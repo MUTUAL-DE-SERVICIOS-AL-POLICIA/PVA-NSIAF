@@ -35,6 +35,7 @@ es:
     print: 'Imprimir'
     migrate: 'Migrar'
     btn:
+      aceptar: "Aceptar"
       cancel: "Cancelar"
       save: "Guardar"
       edit: "Editar"
@@ -123,6 +124,20 @@ es:
   entry_subarticles:
     title:
       edit: "Editar Entrada"
+  gestiones:
+    title:
+      title: "Gestiones"
+      list: "Listado de gestiones"
+      new: "Nueva Gestión"
+      cerrar: "Cerrar Gestión"
+      create: "Nueva Gestión"
+      edit: "Editar Gestión"
+      update: "Editar Gestión"
+  ingresos:
+    title:
+      title: "Notas de Ingreso de activos fijos"
+      new: "Nueva Nota de Ingreso"
+      edit: "Editar Nota de Ingreso"
   materials:
     title:
       title: "Materiales"
@@ -163,18 +178,18 @@ es:
         all: 'Todo'
   subarticles:
     title:
-      title: "Sub Artículos de Materiales"
-      new: "Nuevo Sub Artículo"
-      create: "Nuevo Sub Artículo"
-      edit: "Editar Sub Artículo"
-      update: "Editar Sub Artículo"
-      modal: "Activación/Desactivación de Sub Artículo"
-      confirm-activate: "¿Está seguro de Activar el sub artículo <strong>%{name}</strong>?"
-      confirm-deactivate: "¿Está seguro de Desactivar el sub artículo <strong>%{name}</strong>?"
-      confirm-cannot_disable: "No se puede desactivar el sub artículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>Funcionario</strong>"
+      title: "Subartículos de Materiales"
+      new: "Nuevo Subartículo"
+      create: "Nuevo Subartículo"
+      edit: "Editar Subartículo"
+      update: "Editar Subartículo"
+      modal: "Activación/Desactivación de Subartículo"
+      confirm-activate: "¿Está seguro de Activar el subartículo <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el subartículo <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el subartículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>Funcionario</strong>"
     entry:
       btn: "Establecer Saldo Inicial"
-      first: "Establecer Saldo Inicial del Sub Artículo <strong>%{description}</strong>"
+      first: "Establecer Saldo Inicial del Subartículo <strong>%{description}</strong>"
   suppliers:
     title:
       title: "Proveedores"
@@ -183,6 +198,22 @@ es:
       edit: "Editar Proveedor"
       update: "Editar Proveedor"
       modal: "Activación/Desactivación de Proveedor"
+  ubicaciones:
+    title:
+      title: "Ubicaciones"
+      list: "Listado de ubicaciones"
+      new: "Nueva ubicación"
+      create: "Nueva ubicación"
+      edit: "Editar ubicación"
+      update: "Editar ubicación"
+  ufvs:
+    title:
+      title: "UFVs"
+      list: "Listado de UFV"
+      new: "Nueva UFV"
+      create: "Nueva UFV"
+      edit: "Editar UFV"
+      update: "Editar UFV"
   users:
     roles:
       super_admin: "Super Administrador"
@@ -323,6 +354,7 @@ es:
       building: "Entidad"
       department: "Unidad"
       entity: "Institución"
+      gestion: "Gestión"
       kardex: "Kardex"
       kardex_price: "Kardex Precios"
       material: "Material"
@@ -330,6 +362,7 @@ es:
       subarticle: "Sub Artículo"
       supplier: "Proveedor"
       proceeding: "Acta"
+      ubicacion: "Ubicación"
       user: "Funcionario"
 
     attributes:
@@ -337,12 +370,15 @@ es:
         auxiliaries: "Auxiliares"
         code: "Código"
         name: "Nombre"
+        vida_util: "Vida útil"
+        depreciar: "Depreciar"
+        actualizar: "Actualizar"
       article:
         code: "Código"
         description: "Descripción"
         status: "Estado"
       asset:
-        barcode: "Código de Barras"
+        barcode: "Código Barras"
         code: "Código"
         description: "Descripción"
         auxiliary: "Auxiliar"
@@ -353,6 +389,9 @@ es:
         description_decline: "Descripción"
         reason_decline: "Motivo"
         created_at: "Creado el"
+        incorporacion: "Incorporación"
+        supplier: "Proveedor"
+        ubicacion: "Ubicación"
       auxiliary:
         code: "Código"
         name: "Nombre"
@@ -379,6 +418,13 @@ es:
         invoice: "Factura"
         date: "Fecha"
         created_at: "Creado el"
+      gestion:
+        anio: "Año"
+        cerrado: "Cerrado"
+        fecha_cierre: "Fecha cierre"
+      ingreso:
+        suppliers: "Proveedor"
+        users: "Encargado(a)"
       kardex:
         kardex_date: "Fecha"
         invoice_number: "Nº de Factura"
@@ -418,6 +464,7 @@ es:
         title: "Cargo"
       subarticle:
         code: "Código"
+        code_old: "Código anterior"
         description: "Descripción"
         unit: "Unidad de Medida"
         article: "Artículo"
@@ -426,11 +473,16 @@ es:
         stock: "Stock"
         minimum: "Stock mínimo"
         barcode: "Código de Barra"
+        material: "Grupo contable"
       supplier:
         name: "Nombre"
         nit: "NIT"
         telefono: "Teléfono"
         contacto: "Contacto"
+        created_at: "Creado el"
+      ubicacion:
+        abreviacion: "Abreviación"
+        descripcion: "Descripción"
         created_at: "Creado el"
       user:
         assets_count: "Nro. Activos"

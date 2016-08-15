@@ -1,12 +1,17 @@
+
 table.kardex-table {
-  margin-bottom: 15px;
-  margin-left: 80px;
-  h3.title {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-  tr td {
-    padding-right: 10px;
+  margin: 0 0 10px 10px;
+  tr {
+    td.etiqueta {
+      font-weight: bold;
+      text-align: right;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+    td.valor {
+      padding-left: 10px;
+      vertical-align: top;
+    }
   }
 }
 

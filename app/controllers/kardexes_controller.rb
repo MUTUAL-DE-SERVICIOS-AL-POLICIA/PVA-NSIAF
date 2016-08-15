@@ -23,7 +23,7 @@ class KardexesController < ApplicationController
                layout: 'pdf.html',
                # show_as_html: params.key?('debug'),
                template: 'kardexes/index.html.haml',
-               orientation: 'Landscape',
+               orientation: 'Portrait',
                page_size: 'Letter',
                margin: view_context.margin_pdf,
                header: { html: { template: 'shared/header.pdf.haml' } },

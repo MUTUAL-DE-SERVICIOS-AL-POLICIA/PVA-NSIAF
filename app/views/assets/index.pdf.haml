@@ -7,6 +7,7 @@
       %th= Asset.human_attribute_name('code')
       %th= Asset.human_attribute_name('description')
       %th= Asset.human_attribute_name('user')
+      %th= Asset.human_attribute_name('ubicacion')
       - if controller_name == 'derecognised'
         %th Baja
   %tbody
@@ -15,5 +16,6 @@
         %td= asset.code
         %td= asset.description
         %td= asset.user_name
+        %td= asset.ubicacion_detalle
         - if asset.status == '0'
           %td= asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : ''

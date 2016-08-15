@@ -150,6 +150,11 @@ class Transaccion < ActiveRecord::Base
     retorno
   end
 
+  # Busca el precio unitario para las salidas de subatículos
+  def precio_unitario
+    subarticle.transacciones.saldo_al(self.fecha).first.costo_unitario rescue 0
+  end
+
   def saldo
     cantidad
   end

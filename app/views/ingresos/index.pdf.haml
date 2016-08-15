@@ -1,0 +1,29 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th.text-center= Ingreso.human_attribute_name('factura_fecha')
+      %th= Ingreso.human_attribute_name('numero')
+      %th= Ingreso.human_attribute_name('suppliers')
+      %th= Ingreso.human_attribute_name('users')
+      %th.text-right= Ingreso.human_attribute_name('total')
+      %th.text-center= Ingreso.human_attribute_name('nota_entrega_fecha')
+  %tbody
+    - @array.each_with_index do |ingreso, index|
+      %tr
+        %td.text-center= index + 1
+        %td.text-center= ingreso.factura_fecha.present? ? I18n.l(ingreso.factura_fecha) : ''
+        %td= ingreso.numero
+        %td= ingreso.supplier_name
+        %td= ingreso.user_name
+        %td.text-right= number_with_delimiter(ingreso.total)
+        %td.text-center= ingreso.nota_entrega_fecha.present? ? I18n.l(ingreso.nota_entrega_fecha) : ''
+    - if @array.present?
+      %tr
+        %th.text-right{colspan: 5} TOTAL
+        %th.text-right
+          = number_with_delimiter(@array.inject(0) { |s, ingreso| s + ingreso.total})
+        %th

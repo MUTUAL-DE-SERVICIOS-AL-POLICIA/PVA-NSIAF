@@ -100,4 +100,27 @@ namespace :db do
       end
     end
   end
+
+  ##
+  # Permite autoasignar a los subartículos un incremento por cada grupo de
+  # materiales. Esto con el fin de recodificar los códigos
+  desc "Recodificación de código por grupo de materiales"
+  task :recodificacion => :environment do
+    Subarticle.transaction do
+      Material.all.each do |m|
+        m.subarticulos.each_with_index do |s, index|
+          s.incremento = index + 1
+          s.barcode = "#{s.material_code}#{s.incremento}"
+          s.code = s.barcode.to_i
+          s.material_id = s.article.material_id if s.article.present?
+          s.save!
+        end
+      end
+    end
+  end
+
+  desc "Descargar e importar UFVs desde la página web del Banco Central de Bolivia"
+  task :ufv_importar => :environment do
+    Ufv.descargar_e_importar_si
+  end
 end
