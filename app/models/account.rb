@@ -46,13 +46,12 @@ class Account < ActiveRecord::Base
     end
   end
 
-  def self.with_assets
-    conditions = { assets: { id: nil } }
-    joins(:assets).where.not(conditions).uniq
-  end
-
   def self.con_activos
     joins(auxiliaries: :assets).uniq
+  end
+
+  def code_and_name
+    "#{code} - #{name}"
   end
 
   ##

@@ -9,7 +9,7 @@
           = text_field_tag :q, params[:q], class: 'form-control', id: 'buscar', placeholder: 'Buscar activos', autofocus: true
         .form-group
           %label.sr-only{for: 'cuentas'} Cuentas
-          = select_tag :cuentas, options_for_select(get_accounts, params[:cuentas]), class: 'form-control', prompt: 'Seleccionar cuentas'
+          = select_tag :cuentas, options_for_select(get_accounts(true), params[:cuentas]), class: 'form-control', prompt: 'Seleccionar cuentas'
         .form-group
           %label{for: 'fecha-desde'} Fechas
           = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
@@ -22,6 +22,8 @@
     .col-sm-12.text-center
       %h2= titulo
       %h4.fecha-al Al #{I18n.l fecha, format: :long}
+    .col-sm-12
+      = render 'encabezado_tabla', fecha: fecha
 
 .row.reporte.reporte-10
   .col-sm-12
