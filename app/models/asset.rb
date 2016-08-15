@@ -29,7 +29,7 @@ class Asset < ActiveRecord::Base
   scope :unassigned, -> { where(user_id: nil) }
 
   with_options if: :is_not_migrate? do |m|
-    m.validates :barcode, presence: true, uniqueness: true
+    # m.validates :barcode, presence: true, uniqueness: true
     m.validates :code, presence: true, uniqueness: true
     m.validates :detalle, :auxiliary_id, :user_id, :precio, presence: true
     # TODO validación de los códigos de barras desactivado.
