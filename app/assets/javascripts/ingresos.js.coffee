@@ -98,7 +98,7 @@ class Ingresos
   conversionNumeros: ->
     _activos.map (e, i) ->
       e.indice = i + 1
-      e.precio_formato = e.precio.formatNumber(2, '.', ',')
+      e.precio_formato = parseFloat(e.precio).formatNumber(2, '.', ',')
       e
 
   estaEnLaLista: (elemento) ->
@@ -170,5 +170,5 @@ class Ingresos
 
   sumaTotal: ->
     _activos.reduce (total, elemento) ->
-      total + elemento.precio
+      total + parseFloat(elemento.precio)
     , 0
