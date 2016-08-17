@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160812143959) do
+ActiveRecord::Schema.define(version: 20160817175059) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -121,8 +121,8 @@ ActiveRecord::Schema.define(version: 20160812143959) do
   add_index "buildings", ["entity_id"], name: "index_buildings_on_entity_id", using: :btree
 
   create_table "cierre_gestiones", force: :cascade do |t|
-    t.decimal  "actualizacion_gestion",           precision: 10, scale: 2
-    t.decimal  "depreciacion_gestion",            precision: 10, scale: 2
+    t.decimal  "actualizacion_gestion",           precision: 19, scale: 6
+    t.decimal  "depreciacion_gestion",            precision: 19, scale: 6
     t.decimal  "indice_ufv",                      precision: 6,  scale: 5
     t.integer  "asset_id",              limit: 4
     t.integer  "gestion_id",            limit: 4

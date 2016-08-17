@@ -290,7 +290,7 @@ class Asset < ActiveRecord::Base
   end
 
   def depreciacion_gestion(fecha = Date.today)
-    costo_actualizado(fecha) / 365 * dias_consumidos_ultimo(fecha) * porcentaje_depreciacion_anual / 100
+    costo_actualizado(fecha) / 365.0 * dias_consumidos_ultimo(fecha) * porcentaje_depreciacion_anual / 100.0
   end
 
   def actualizacion_depreciacion_acumulada(fecha = Date.today)
