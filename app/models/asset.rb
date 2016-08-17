@@ -275,7 +275,7 @@ class Asset < ActiveRecord::Base
   end
 
   def porcentaje_depreciacion_anual
-    100 / vida_util_residual_nominal
+    100 / vida_util_residual_nominal.to_f
   end
 
   # Días desde la adquisición del activo fijo
