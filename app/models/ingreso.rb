@@ -1,4 +1,6 @@
 class Ingreso < ActiveRecord::Base
+  default_scope -> { where(baja_logica: false) }
+
   belongs_to :supplier
   has_many :assets
   belongs_to :user
