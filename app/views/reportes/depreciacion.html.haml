@@ -20,9 +20,15 @@
       %h2= titulo
       %h4.fecha-al Al #{I18n.l fecha, format: :long}
 
+:css
+  .page-break	{ display: block; page-break-before: always; }
+
 .row.reporte.reporte-10
   .col-sm-12
     - @cuentas.each_with_index do |account, indice|
+      - if indice > 0
+        .page-break
+
       %table.table.table-condensed.table-bordered.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
         %thead
           - if is_pdf?
