@@ -11,3 +11,7 @@
       %td
         = number_with_delimiter Ufv.indice(fecha), 5
         Bs.
+    - if cuenta.present?
+      %tr
+        %td GRUPO CONTABLE:
+        %td{colspan: 5}= cuenta.name

@@ -312,25 +312,6 @@ class Asset < ActiveRecord::Base
     'NO'
   end
 
-  # Permite filtrar los activos mediante un buscador, cuentas, y una fecha
-  def self.inventario(q, cuentas, hasta)
-    if q.present? || cuentas.present? || hasta.present?
-      activos = includes(:ingreso, auxiliary: :account)
-      if q.present?
-        activos = activos.where("assets.description like :q OR assets.code like :code", q: "%#{q}%", code: "%#{q}%")
-      end
-      if cuentas.present?
-        activos = activos.where("accounts.id" => cuentas)
-      end
-      if hasta.present?
-        activos = activos.where("ingresos.factura_fecha <= ?", hasta).references(:ingreso)
-      end
-    else
-      activos = all
-    end
-    activos
-  end
-
   def self.costo_historico
     all.inject(0) { |s, a| redondear(a.costo_historico) + s }
   end

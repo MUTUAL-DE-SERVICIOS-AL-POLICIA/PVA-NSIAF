@@ -75,9 +75,9 @@ class ReportesController < ApplicationController
   # Depreciación de activos fijos - reporte 10 vSIAF
   def depreciacion
     @hasta = get_fecha(params, :hasta)
-    q = params[:q]
     cuentas = params[:cuentas]
-    @activos = Asset.inventario(q, cuentas, @hasta).order(:code)
+    @cuentas = Account.where(id: cuentas)
+    @cuentas = Account.con_activos if @cuentas.empty?
     respond_to do |format|
       format.html
       format.pdf do
