@@ -52,3 +52,7 @@
 //= require highcharts/highcharts
 //= require highcharts/highcharts-more
 //= require actas
+//= require ingresos
+//= require reportes
+//= require subarticulos
+//= require gestiones

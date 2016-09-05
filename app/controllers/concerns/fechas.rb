@@ -1,13 +1,24 @@
 module Fechas
   extend ActiveSupport::Concern
 
-  # Permite convertir un rango de fechas de String a Date
-  def get_fechas(params)
+  def get_fecha(params, nombre = :desde, sw = true)
     formato = '%d-%m-%Y'
-    params[:desde] = params[:desde].present? ? params[:desde] : Date.today.beginning_of_year.strftime(formato)
-    params[:hasta] = params[:hasta].present? ? params[:hasta] : Date.today.strftime(formato)
-    desde = Date.strptime(params[:desde], formato)
-    hasta = Date.strptime(params[:hasta], formato)
+    if sw == true
+      params[nombre] = params[nombre].present? ? params[nombre] : Date.today.strftime(formato)
+    end
+    fecha = Date.strptime(params[nombre], formato) if params[nombre].present?
+    fecha
+  end
+
+  # Permite convertir un rango de fechas de String a Date
+  def get_fechas(params, sw = true)
+    formato = '%d-%m-%Y'
+    if sw == true
+      params[:desde] = params[:desde].present? ? params[:desde] : Date.today.beginning_of_year.strftime(formato)
+      params[:hasta] = params[:hasta].present? ? params[:hasta] : Date.today.strftime(formato)
+    end
+    desde = Date.strptime(params[:desde], formato) if params[:desde].present?
+    hasta = Date.strptime(params[:hasta], formato) if params[:hasta].present?
     [desde, hasta]
   end
 

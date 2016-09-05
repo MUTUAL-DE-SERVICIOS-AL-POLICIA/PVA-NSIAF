@@ -21,16 +21,19 @@
 
 
 %dl.dl-horizontal
+  - if @subarticle.code_old.present?
+    %dt= Subarticle.human_attribute_name('code_old')
+    %dd= @subarticle.code_old
   %dt= Subarticle.human_attribute_name('unit')
   %dd= @subarticle.unit
-  %dt= Subarticle.human_attribute_name('article')
-  %dd= link_to_if @subarticle.article, @subarticle.article_name, @subarticle.article, title: @subarticle.article_code
   %dt= Subarticle.human_attribute_name('stock')
   %dd= number_with_delimiter @subarticle.stock, 0
-  %dt= Subarticle.human_attribute_name('minimum')
-  %dd= @subarticle.minimum
-  %dt= Subarticle.human_attribute_name('barcode')
-  %dd= @subarticle.barcode
+  - if @subarticle.minimum.present?
+    %dt= Subarticle.human_attribute_name('minimum')
+    %dd= @subarticle.minimum
+  - if @subarticle.material.present?
+    %dt= Subarticle.human_attribute_name('material')
+    %dd= link_to_if @subarticle.material, @subarticle.material_description, @subarticle.material, title: @subarticle.material_code
 
 %h3
   Histórico
@@ -90,15 +93,19 @@
           - else
             = transaccion.detalle
         %td.number
-          = transaccion.cantidad
+          = mostrar_entero_float transaccion.cantidad
         %td.number
           - if transaccion.cantidad.zero?
-            = transaccion.cantidad_saldo
+            = mostrar_entero_float transaccion.cantidad_saldo
             - saldo += transaccion.cantidad_saldo
           - else
-            = saldo + transaccion.cantidad
+            = mostrar_entero_float(saldo + transaccion.cantidad)
             - saldo += transaccion.cantidad
-        %td.number= number_with_delimiter(transaccion.costo_unitario.to_f)
+        %td.number
+          - if transaccion.tipo == 'entrada'
+            = number_with_delimiter(transaccion.costo_unitario.to_f)
+          - else
+            = number_with_delimiter(transaccion.precio_unitario.to_f)
         %td.text-center
           - if transaccion.saldo_inicial?
             %em -
@@ -115,5 +122,5 @@
     %tr
       %th
       %th.number{colspan: 5} STOCK
-      %th.number{colspan: 2}= saldo
+      %th.number{colspan: 2}= mostrar_entero_float saldo
       %th{colspan: 5}

@@ -3,7 +3,6 @@
   %td.text-center{rowspan: cantidad}
     = l transaccion.fecha.to_date, format: :default
   %td.text-center{rowspan: cantidad}= transaccion.factura
-  %td.text-center{rowspan: cantidad}= transaccion.nota_entrega
   %td.text-center{rowspan: cantidad}= transaccion.nro_solicitud
   %td{rowspan: cantidad}= transaccion.detalle
   - transaccion.items.each_with_index do |item, index|

@@ -47,46 +47,37 @@
       %tr.double-thick
         %th.text-center= material.code
         %th{colspan: 9}= material.description.to_s.upcase
-      - @articles.each do |article|
-        - if article.material == material
-          %tr.double-thick
-            %th.text-center= article.code
-            %th{colspan: 9}
-              - description = article.description.downcase
-              - description[0] = description[0].capitalize
-              = description
-          - @subarticles.each do |subarticle|
-            - if subarticle.article == article
-              - i_kardex = subarticle.saldo_inicial(@desde)
-              - f_kardex = subarticle.saldo_final(@hasta)
-              - kp = f_kardex.items.length
+      - material.subarticles.estado_activo.each do |subarticle|
+        - i_kardex = subarticle.saldo_inicial(@desde)
+        - f_kardex = subarticle.saldo_final(@hasta)
+        - kp = f_kardex.items.length
+        %tr
+          %td.text-center{rowspan: kp}= subarticle.code
+          %td{rowspan: kp}= subarticle.description
+          %td{rowspan: kp}= subarticle.unit.to_s.upcase
+          %td.number.contenedor{rowspan: kp}
+            %ul
+              - i_kardex.items.each_with_index do |p, i|
+                %li= p.cantidad_saldo
+          - Transaccion.suma_entradas(f_kardex.items, @desde, @hasta)
+          - Transaccion.suma_salidas(f_kardex.items, @desde, @hasta)
+          - f_kardex.items.each_with_index do |price, index|
+            - total += price.importe_saldo
+            - if index > 0
               %tr
-                %td.text-center{rowspan: kp}= subarticle.code
-                %td{rowspan: kp}= subarticle.description
-                %td{rowspan: kp}= subarticle.unit.to_s.upcase
-                %td.number.contenedor{rowspan: kp}
-                  %ul
-                    - i_kardex.items.each_with_index do |p, i|
-                      %li= p.cantidad_saldo
-                - Transaccion.suma_entradas(f_kardex.items, @desde, @hasta)
-                - Transaccion.suma_salidas(f_kardex.items, @desde, @hasta)
-                - f_kardex.items.each_with_index do |price, index|
-                  - total += price.importe_saldo
-                  - if index > 0
-                    %tr
-                      %td.number= price.cantidad_entrada
-                      %td.number= number_with_delimiter price.costo_unitario
-                      %td.number= price.cantidad_salida
-                      %td.number= price.cantidad_saldo
-                      %td.number= number_with_delimiter price.costo_unitario
-                      %td.number= number_with_delimiter price.importe_saldo
-                  - else
-                    %td.number= price.cantidad_entrada
-                    %td.number= number_with_delimiter price.costo_unitario
-                    %td.number= price.cantidad_salida
-                    %td.number= price.cantidad_saldo
-                    %td.number= number_with_delimiter price.costo_unitario
-                    %td.number= number_with_delimiter price.importe_saldo
+                %td.number= price.cantidad_entrada
+                %td.number= number_with_delimiter price.costo_unitario
+                %td.number= price.cantidad_salida
+                %td.number= price.cantidad_saldo
+                %td.number= number_with_delimiter price.costo_unitario
+                %td.number= number_with_delimiter price.importe_saldo
+            - else
+              %td.number= price.cantidad_entrada
+              %td.number= number_with_delimiter price.costo_unitario
+              %td.number= price.cantidad_salida
+              %td.number= price.cantidad_saldo
+              %td.number= number_with_delimiter price.costo_unitario
+              %td.number= number_with_delimiter price.importe_saldo
     %tr
       %th{colspan: 2} TOTALES
       %th{colspan: 7}

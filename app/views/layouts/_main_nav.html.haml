@@ -6,6 +6,10 @@
           Administración
           %b.caret
         %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_admin' }
+          - if can? :read, Gestion
+            %li{ role: 'presentation' }
+              = link_to t('gestiones.title.title'), gestiones_path, role: 'menuitem'
+            %li.divider
           - if can? :read, Entity
             %li{ role: 'presentation' }
               = link_to t('entities.title.title'), entities_path, role: 'menuitem'
@@ -21,6 +25,12 @@
           - if can? :read, Supplier
             %li{ role: 'presentation' }
               = link_to t('suppliers.title.title'), suppliers_path, role: 'menuitem'
+          - if can? :read, Ubicacion
+            %li{ role: 'presentation' }
+              = link_to t('ubicaciones.title.title'), ubicaciones_path, role: 'menuitem'
+          - if can? :read, Ufv
+            %li{ role: 'presentation' }
+              = link_to t('ufvs.title.title'), ufvs_path, role: 'menuitem'
     - if current_user.is_super_admin?
       %li
         = link_to 'Almacenes', almacenes_path
@@ -36,6 +46,9 @@
             = link_to 'Auxiliares', auxiliaries_path, role: 'menuitem'
           %li{ role: 'presentation' }
             = link_to t('assets.title.title'), assets_path, role: 'menuitem'
+          %li.divider
+          %li{ role: 'presentation' }
+            = link_to 'Ingreso de activos fijos', ingresos_path, role: 'menuitem'
           %li.divider
           %li{ role: 'presentation' }
             = link_to 'Asignación/Devolución', assignation_assets_path, role: 'menuitem'
@@ -62,8 +75,6 @@
           %li
             = link_to t('materials.title.title'), materials_path, role: 'menuitem'
           %li
-            = link_to t('articles.title.title'), articles_path
-          %li
             = link_to t('subarticles.title.title'), subarticles_path
       %li.dropdown
         = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
@@ -79,6 +90,16 @@
     - if !current_user.is_super_admin? && current_user.has_roles?
       %li
         = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
+    - if current_user.is_admin?
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Reportes
+          %b.caret
+        %ul.dropdown-menu{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
+          %li= link_to 'Reporte de activos fijos', activos_reportes_path
+          %li.divider
+          %li= link_to 'Resumen de activos fijos - rep6', resumen_reportes_path
+          %li= link_to 'Depreciación de activos - rep10', depreciacion_reportes_path
     - if current_user.is_admin_store?
       %li.dropdown
         = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
@@ -89,6 +110,9 @@
             = link_to 'Búsqueda de requerimientos', search_subarticles_requests_path
           %li
             = link_to 'Inventario Físico Valorado', reports_materials_path
+          %li= link_to 'Entradas y salidas valorado', cuenta_contable_reportes_path
+          %li.divider
+          %li= link_to 'Reporte de kardexes', kardex_reportes_path
     - if current_user.has_roles?
       %li
         = link_to 'Histórico', versions_path

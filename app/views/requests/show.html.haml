@@ -28,6 +28,10 @@
 
 #request.row
   .col-md-12
+    - if is_pdf?
+      %h4
+        %span.text-muted Nro de solicitud:
+        = @request.nro_solicitud
     - unless is_pdf?
       %h4
         %span.text-muted Estado:
@@ -99,6 +103,7 @@
                     - if @request.status == 'pending'
                       %td.delivered
                         %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
+        = fecha_impresion if is_pdf?
         .buttons-actions.text-center
 
     - if is_pdf?
@@ -110,9 +115,16 @@
           - if @status_pdf == 'delivered'
             %td.text-center.firma-funcionario
               _______________________
-              %p Vo. Bo.
+              %p V.° B.°
             %td.text-center.firma-funcionario
               _______________________
-              %p Recibí Conforme
+              %p Recibí conforme
+        %tr
+          %td.text-center.firma-funcionario
+          - if @status_pdf == 'delivered'
+            %td.text-center.firma-funcionario
+              _______________________
+              %p V.° B.° Inmediato superior
+            %td.text-center.firma-funcionario
 
 = render 'material'

@@ -29,6 +29,10 @@ class Auxiliary < ActiveRecord::Base
     account.present? ? account.name : ''
   end
 
+  def account_vida_util
+    account.present? ? account.vida_util : 0
+  end
+
   def verify_assignment
     assets.present?
   end

@@ -20,21 +20,17 @@ class ApplicationController < ActionController::Base
   end
 
   def format_to(name_model, datatable)
+    filename = "#{t("#{name_model}.title.title")}".parameterize
     respond_to do |format|
       format.html { render '/shared/index' }
       format.json { render json: datatable.new(view_context) }
-      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries suppliers).include?(name_model) ? 'id' : "#{name_model}.code"
-      case controller_name
-      when 'derecognised' then current = '0'
-      when 'assets' then current = '1'
-      when 'requests' then current = params[:status]
-      else current = current_user
+      format.csv do
+        @array = modelo_registros(name_model)
+        array_csv = controller_name == 'derecognised' ? @array.to_csv(true) : @array.to_csv
+        send_data array_csv, filename: "#{filename}.csv"
       end
-      @array = name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)
-      array_csv = controller_name == 'derecognised' ? @array.to_csv(true) : @array.to_csv
-      filename = "VSIAF-#{t("#{name_model}.title.title")}".parameterize
-      format.csv { send_data array_csv, filename: "#{filename}.csv" }
       format.pdf do
+        @array = modelo_registros(name_model)
         render pdf: filename,
                template: "#{name_model}/index.pdf.haml",
                disposition: 'attachment',
@@ -52,4 +48,17 @@ class ApplicationController < ActionController::Base
       { item_spanish: I18n.t(controller_name.to_s.downcase.singularize, scope: 'activerecord.models'), event: I18n.t(action_name, scope: 'versions') }
     end
   end
+
+  private
+
+    def modelo_registros(name_model)
+      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries suppliers ingresos ubicaciones ufvs gestiones).include?(name_model) ? 'id' : "#{name_model}.code"
+      case controller_name
+      when 'derecognised' then current = '0'
+      when 'assets' then current = '1'
+      when 'requests' then current = params[:status]
+      else current = current_user
+      end
+      name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)
+    end
 end

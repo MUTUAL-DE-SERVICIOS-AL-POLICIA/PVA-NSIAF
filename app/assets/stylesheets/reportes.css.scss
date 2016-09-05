@@ -1,0 +1,25 @@
+.reporte {
+  &.reporte-10 {
+    h2 {
+      font-size: 1.6em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+    h4 {
+      font-size: 1.2em;
+      text-transform: uppercase;
+      margin: 0 0 5px;
+    }
+    table.valorado{
+      font-size: 0.8rem;
+    }
+    table.valorado-sin{
+      border: none;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      td {
+        border-top: none;
+      }
+    }
+  }
+}

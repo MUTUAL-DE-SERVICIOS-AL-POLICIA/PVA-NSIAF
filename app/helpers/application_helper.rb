@@ -12,9 +12,22 @@ module ApplicationHelper
     acronym
   end
 
+  def entidad_actual
+    Entity.first
+  end
+
+  ##
+  # Muestra la fecha de impresión en el lugar especificado
+  # También soporta enviarle
+  def fecha_impresion(fecha_hora = DateTime.now)
+    content_tag(:p, class: 'text-right') do
+      content_tag :em, "Impreso el #{I18n.l fecha_hora, format: :long}"
+    end
+  end
+
   def get_accounts(assets = false)
-    accounts = assets == true ? Account.with_assets : Account.all
-    accounts.map { |b| [b.name, b.id] }
+    accounts = assets == true ? Account.con_activos : Account.all
+    accounts.order(:code).map { |b| [b.code_and_name, b.id] }
   end
 
   def get_buildings
@@ -29,8 +42,26 @@ module ApplicationHelper
     User::ROLES.map { |r| [t(r, scope: 'users.roles'), r] }
   end
 
+  def get_ubicaciones
+    Ubicacion.order(:abreviacion)
+  end
+
   def is_pdf?
     params['format'] == 'pdf'
+  end
+
+  # permite extraer la lista de campos
+  def listar_campos(activos)
+    campos = %w(detalle medidas material marca modelo serie color)
+    activos.inject([]) do |seleccionados, activo|
+      seleccionados + campos.select { |c| activo[c].present? }
+    end.uniq
+  end
+
+  # http://stackoverflow.com/a/18163626/1174245
+  # Si la cantidad no tiene decimales lo muestra como entero
+  def mostrar_entero_float(cantidad)
+    cantidad % 1 == 0 ? cantidad.to_i : cantidad
   end
 
   def proceeding_to_json(proceeding)
@@ -142,10 +173,12 @@ module ApplicationHelper
   end
 
   def links_actions(user, type= '')
-    link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), user, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) + ' ' +
-    link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), [:edit, user], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit')) + ' ' +
-    (link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(user), title: title_status(user.status)) unless type == 'asset') + ' ' +
-    (link_to(content_tag(:span, '', class: "glyphicon glyphicon-plus"), '#', class: 'btn btn-success btn-xs', data: data_entry_subarticle(user), title: I18n.t('subarticles.entry.btn')) if type == 'subarticle')
+    [
+      (link_to(content_tag(:span, "", class: 'glyphicon glyphicon-eye-open'), user, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) unless %w(ubicacion ufv).include?(type)),
+      (link_to(content_tag(:span, "", class: 'glyphicon glyphicon-edit'), [:edit, user], class: 'btn btn-primary btn-xs', title: I18n.t('general.btn.edit')) if can?(:edit, user)),
+      (link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(user.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(user), title: title_status(user.status)) unless %w(asset ingreso ubicacion ufv gestion).include?(type)),
+      (link_to(content_tag(:span, '', class: "glyphicon glyphicon-plus"), '#', class: 'btn btn-success btn-xs', data: data_entry_subarticle(user), title: I18n.t('subarticles.entry.btn')) if type == 'subarticle')
+    ].compact.join(' ')
   end
 
   def status_active(model)
@@ -331,5 +364,10 @@ module ApplicationHelper
   # Para los documentos en tamaño carta con el logo de AGETIC
   def margin_pdf
     { top: 25, bottom: 20, left: 20, right: 15 }
+  end
+
+  # Para los documentos en tamaño carta con el logo de AGETIC
+  def margin_pdf_horizontal_estrecho
+    { top: 20, bottom: 10, left: 5, right: 5 }
   end
 end

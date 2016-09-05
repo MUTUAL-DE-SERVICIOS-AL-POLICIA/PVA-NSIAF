@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.7.1'
 
 # Use mysql as the database for Active Record
 gem 'mysql2'
@@ -67,3 +67,9 @@ gem 'bower-rails'
 gem 'angular-rails-templates'
 
 gem 'active_model_serializers'
+
+# Comprimir archivos
+gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
+gem 'zip-zip' # will load compatibility for old rubyzip API.
+
+gem 'whenever', :require => false

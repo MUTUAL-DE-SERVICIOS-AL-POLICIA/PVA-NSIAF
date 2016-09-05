@@ -1,7 +1,10 @@
 class Subarticle < ActiveRecord::Base
   include Migrated, ManageStatus, VersionLog
+  include Autoincremento
+  include CodeNumber
 
   belongs_to :article
+  belongs_to :material
   has_many :subarticle_requests
   has_many :requests, through: :subarticle_requests
   has_many :entry_subarticles
@@ -9,9 +12,11 @@ class Subarticle < ActiveRecord::Base
   has_many :transacciones, :class_name => "Transaccion", :foreign_key => "subarticle_id"
 
   with_options if: :is_not_migrate? do |m|
+    m.validates :material_id, presence: true
     m.validates :barcode, presence: true, uniqueness: true
     m.validates :code, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-    m.validates :description, :unit, :article_id, presence: true
+    m.validates :description, :unit, presence: true
+    m.validates :incremento, presence: true, uniqueness: { scope: :material_id, message: "debe ser único por material" }
     #m.validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     #
     # TODO validación de los códigos de barras desactivado.
@@ -25,7 +30,7 @@ class Subarticle < ActiveRecord::Base
     m.validates :description, :unit, presence: true
   end
 
-  before_save :check_barcode
+  # before_save :check_barcode
 
   has_paper_trail
 
@@ -67,7 +72,14 @@ class Subarticle < ActiveRecord::Base
   end
 
   def self.estado_activo
-    where('status = ?', '1')
+    self.active
+  end
+
+  ##
+  # Utilizado para la migración de artículos a materiales, por tanto se queda
+  # en eliminar la categoría Artículos
+  def article_material_id
+    article.present? ? article.material : nil
   end
 
   ##
@@ -174,36 +186,54 @@ class Subarticle < ActiveRecord::Base
     kardexes
   end
 
+  ##
+  # Código del material al cual pertenece los subartículos
+  def material_code
+    if material.present?
+      material.code
+    elsif article.present?
+      article.material_code
+    else
+      ''
+    end
+  end
+
+  ##
+  # Descripción de model material asociado al subartículo
+  def material_description
+    material.present? ? material.description : ''
+  end
+
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'barcode'), h.get_column(self, 'article')]
+    [h.get_column(self, 'code'), h.get_column(self, 'code_old'), h.get_column(self, 'description'), h.get_column(self, 'unit'), h.get_column(self, 'material')]
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = includes(:article).order("#{sort_column} #{sort_direction}").references(:article)
+    array = includes(:material).order("#{sort_column} #{sort_direction}").references(:material)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       h = ApplicationController.helpers
       sSearch = h.changeBarcode(sSearch)
       if search_column.present?
-        type_search = search_column == 'article' ? 'articles.description' : "subarticles.#{search_column}"
+        type_search = search_column == 'material' ? 'materials.description' : "subarticles.#{search_column}"
         array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
       else
-        array = array.where("subarticles.code LIKE ? OR subarticles.description LIKE ? OR subarticles.unit LIKE ? OR articles.description LIKE ? OR subarticles.barcode LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+        array = array.where("subarticles.code LIKE ? OR subarticles.code_old LIKE ? OR subarticles.description LIKE ? OR subarticles.unit LIKE ? OR materials.description LIKE ? OR subarticles.barcode LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array
   end
 
   def self.to_csv
-    columns = %w(code description unit barcode article status)
+    columns = %w(code codel_old description unit material status)
     h = ApplicationController.helpers
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }
       all.each do |subarticle|
         a = subarticle.attributes.values_at(*columns)
         a.pop(2)
-        a.push(subarticle.article_name, h.type_status(subarticle.status))
+        a.push(subarticle.material_description, h.type_status(subarticle.status))
         csv << a
       end
     end
@@ -249,7 +279,7 @@ class Subarticle < ActiveRecord::Base
   def self.search_subarticle(q)
     h = ApplicationController.helpers
     q = h.changeBarcode(q)
-    where("(code LIKE ? OR description LIKE ? OR barcode LIKE ? ) AND status = ?", "%#{q}%", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock, days: s.get_days } : nil }.compact
+    where("(code LIKE ? OR code_old LIKE ? OR description LIKE ? OR barcode LIKE ? ) AND status = ?", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", 1).map { |s| s.entry_subarticles.first.present? ? { id: s.id, description: s.description, unit: s.unit, code: s.code, stock: s.stock, days: s.get_days } : nil }.compact
   end
 
   def get_days
@@ -289,5 +319,31 @@ class Subarticle < ActiveRecord::Base
   # Update stock=0 for all entry_subarticles
   def close_stock!(year = Date.today.year)
     entry_subarticles_exist(year).update_all(stock: 0, updated_at: Time.now)
+  end
+
+  def valorado_ingresos(desde, hasta)
+    _transacciones = reporte(desde, hasta)
+    _transacciones.inject(0) do |suma, transaccion|
+      if transaccion.tipo == 'entrada'
+        suma + (transaccion.cantidad * transaccion.costo_unitario)
+      else
+        suma
+      end
+    end
+  end
+
+  def valorado_salidas(desde, hasta)
+    _transacciones = reporte(desde, hasta)
+    _transacciones.inject(0) do |suma, transaccion|
+      if transaccion.tipo == 'salida'
+        suma + (-transaccion.cantidad * transaccion.precio_unitario)
+      else
+        suma
+      end
+    end
+  end
+
+  def valorado_saldo(desde, hasta)
+    valorado_ingresos(desde, hasta) - valorado_salidas(desde, hasta)
   end
 end

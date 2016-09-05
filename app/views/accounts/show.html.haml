@@ -11,5 +11,11 @@
   %dd= @account.code
   %dt= Account.human_attribute_name('name')
   %dd= @account.name
+  %dt= Account.human_attribute_name('vida_util')
+  %dd= @account.vida_util
+  %dt= Account.human_attribute_name('depreciar')
+  %dd= @account.depreciar ? 'SI' : 'NO'
+  %dt= Account.human_attribute_name('actualizar')
+  %dd= @account.actualizar ? 'SI' : 'NO'
   %dt= Account.human_attribute_name('auxiliaries')
   %dd= pluralize @account.auxiliaries.count, 'auxiliary'
