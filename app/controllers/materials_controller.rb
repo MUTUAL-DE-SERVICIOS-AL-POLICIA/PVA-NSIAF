@@ -62,8 +62,6 @@ class MaterialsController < ApplicationController
   def reports
     @desde, @hasta = get_fechas(params)
     @materials = Material.order("code ASC, description ASC")
-    @articles = Article.order("code ASC, description ASC")
-    @subarticles = Subarticle.order("code ASC, description ASC").estado_activo
     filename = 'inventario-fisico-valorado'
     respond_to do |format|
       format.html
