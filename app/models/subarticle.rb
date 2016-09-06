@@ -72,7 +72,7 @@ class Subarticle < ActiveRecord::Base
   end
 
   def self.estado_activo
-    where('status = ?', '1')
+    self.active
   end
 
   ##
