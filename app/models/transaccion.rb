@@ -6,6 +6,9 @@ class Transaccion < ActiveRecord::Base
   attr_accessor :cantidad_entrada
   attr_accessor :cantidad_salida
   attr_accessor :cantidad_saldo
+  attr_accessor :importe_entrada_resumen
+  attr_accessor :importe_salida_resumen
+  attr_accessor :importe_saldo_resumen
   attr_accessor :items
 
   after_initialize :inicializar
@@ -27,6 +30,16 @@ class Transaccion < ActiveRecord::Base
       detalle: 'SALDO FINAL'
     )
     saldo_final.crear_items(all.saldo_al(fecha))
+    saldo_final
+  end
+
+  def self.saldo_final_resumen(fecha = Date.today)
+    saldo_final = Transaccion.new(
+      fecha: fecha,
+      cantidad: 0,
+      detalle: 'SALDO FINAL'
+    )
+    saldo_final.items = [Transaccion.new]
     saldo_final
   end
 
@@ -98,6 +111,25 @@ class Transaccion < ActiveRecord::Base
     saldo_final.items.last.cantidad_entrada = entradas
   end
 
+  def self.generar_saldo_final(transacciones)
+    entradas = salidas = 0
+    importe_entradas = importe_salidas = 0
+    transacciones.each do |transaccion|
+      entradas += transaccion.items.sum(&:cantidad_entrada)
+      salidas += transaccion.items.sum(&:cantidad_salida)
+      importe_entradas += transaccion.items.sum(&:importe_entrada)
+      importe_salidas += transaccion.items.sum(&:importe_salida)
+    end
+    saldo_final = transacciones.last
+    saldo_final.items.first.cantidad_salida = salidas
+    saldo_final.items.first.cantidad_entrada = entradas
+    saldo_final.items.first.cantidad_saldo = entradas - salidas
+    saldo_final.items.first.costo_unitario = nil
+    saldo_final.items.first.importe_entrada_resumen = importe_entradas
+    saldo_final.items.first.importe_salida_resumen = importe_salidas
+    saldo_final.items.first.importe_saldo_resumen = importe_entradas - importe_salidas
+  end
+
   def crear_items(saldos)
     # Limpiar campos
     saldos.each { |s| s.cantidad_entrada=0; s.cantidad_salida=0}
@@ -132,15 +164,27 @@ class Transaccion < ActiveRecord::Base
   end
 
   def importe_entrada
-    cantidad_entrada.to_f * costo_unitario.to_f
+    if importe_entrada_resumen.nil?
+      cantidad_entrada.to_f * costo_unitario.to_f
+    else
+      importe_entrada_resumen
+    end
   end
 
   def importe_salida
-    cantidad_salida.to_f * costo_unitario.to_f
+    if importe_salida_resumen.nil?
+      cantidad_salida.to_f * costo_unitario.to_f
+    else
+      importe_salida_resumen
+    end
   end
 
   def importe_saldo
-    cantidad_saldo.to_f * costo_unitario.to_f
+    if importe_saldo_resumen.nil?
+      cantidad_saldo.to_f * costo_unitario.to_f
+    else
+      importe_saldo_resumen
+    end
   end
 
   def nro_solicitud

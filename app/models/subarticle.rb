@@ -114,7 +114,7 @@ class Subarticle < ActiveRecord::Base
     saldo_inicial = transacciones.saldo_inicial(desde)
 
     # Saldo Final
-    saldo_final = transacciones.saldo_final(hasta)
+    saldo_final = transacciones.saldo_final_resumen(hasta)
 
     lista = if !transacciones.first.nil? and desde < transacciones.first.fecha
               lista + [saldo_final]
@@ -123,7 +123,7 @@ class Subarticle < ActiveRecord::Base
             end
 
     # Sumar saldo final
-    Transaccion.sumar_saldo_final(lista)
+    Transaccion.generar_saldo_final(lista)
 
     lista
   end
@@ -316,7 +316,7 @@ class Subarticle < ActiveRecord::Base
 
   def self.search_by(article_id)
     subarticles = []
-    subarticles = where(article_id: article_id, status: 1) if article_id.present?
+    subarticles = where(article_id: article_id, status: 1) if artiCambiar saldo final en los kardex para que muestre el total y no así el parcial cle_id.present?
     [['', '--']] + subarticles.map { |d| [d.id, d.description] }
   end
 
