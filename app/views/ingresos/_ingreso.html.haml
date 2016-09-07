@@ -6,5 +6,5 @@
 %td(class="")= number_with_delimiter(r.total)
 %td(class="")= r.nota_entrega_fecha.present? ? I18n.l(r.nota_entrega_fecha) : ''
 %td(class="nowrap")
-  = links_actions(r, 'ingreso')
+  = raw(links_actions(r, 'ingreso'))
   = link_to(content_tag(:span, "", class: 'glyphicon glyphicon-sort-by-order'), '#editar', class: 'btn btn-info btn-xs editar-nota-entrada', title: 'Establecer número de nota de entrada', data: {"nota-entrada" => r.as_json}, id: dom_id(r))
