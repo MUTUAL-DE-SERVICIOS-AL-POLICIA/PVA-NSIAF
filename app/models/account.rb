@@ -61,6 +61,11 @@ class Account < ActiveRecord::Base
     activos.where('ingresos.factura_fecha <= ?', fecha)
   end
 
+  def auxiliares_activos(desde = Date.today, hasta = Date.today)
+    activos = Asset.joins(:ingreso).where(auxiliary_id: auxiliaries.ids)
+    activos.where('ingresos.factura_fecha >= ? AND ingresos.factura_fecha <= ?', desde, hasta)
+  end
+
   def cantidad_activos(fecha = Date.today)
     auxiliares_activos(fecha).length
   end
