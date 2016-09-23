@@ -1,6 +1,8 @@
 class NoteEntry < ActiveRecord::Base
   default_scope {where(invalidate: false)}
 
+  scope :of_the_year, -> (date) { where(invoice_date: date.beginning_of_year..date.end_of_year) }
+
   belongs_to :supplier
   belongs_to :user
 
