@@ -158,6 +158,12 @@ class NoteEntry < ActiveRecord::Base
   def tiene_nro_nota_ingreso?
     nro_nota_ingreso > 0 && invoice_date.present?
   end
+
+  def self.nro_nota_ingreso_posterior_regularizado(fecha)
+    fecha = fecha.to_date
+    nro_nota_ingreso = self.nro_nota_ingreso_anterior(fecha)
+    self.del_anio_por_fecha_factura(fecha).mayor_a_fecha_factura(fecha).where(nro_nota_ingreso: nro_nota_ingreso).first.try(:incremento_alfabetico)
+  end
   private
 
   def set_note_entry_date

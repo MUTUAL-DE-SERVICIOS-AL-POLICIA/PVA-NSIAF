@@ -48,9 +48,14 @@ module Autoincremento
         if diferencia > 1
           nota_ingreso.nro_nota_ingreso = nro_nota_anterior.to_i + 1
         else
-          max_incremento_alfabetico = NoteEntry.where(nro_nota_ingreso: nro_nota_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
-          nota_ingreso.nro_nota_ingreso = nro_nota_anterior.to_i
-          nota_ingreso.incremento_alfabetico = max_incremento_alfabetico.present? ? max_incremento_alfabetico.next : "A"
+          inc_alfabetico = NoteEntry.nro_nota_ingreso_posterior_regularizado(fecha)
+          if inc_alfabetico.present?
+            "no se puede contactese con el administrador"
+          else
+            max_incremento_alfabetico = NoteEntry.where(nro_nota_ingreso: nro_nota_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
+            nota_ingreso.nro_nota_ingreso = nro_nota_anterior.to_i
+            nota_ingreso.incremento_alfabetico = max_incremento_alfabetico.present? ? max_incremento_alfabetico.next : "A"
+          end
         end
       else
         nota_ingreso.nro_nota_ingreso = nro_nota_posterior.to_i - 1
