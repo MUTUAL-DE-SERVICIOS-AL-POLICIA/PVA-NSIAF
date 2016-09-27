@@ -1,7 +1,12 @@
 class NoteEntry < ActiveRecord::Base
+  include Autoincremento
+
   default_scope {where(invalidate: false)}
 
-  scope :of_the_year, -> (date) { where(invoice_date: date.beginning_of_year..date.end_of_year) }
+  scope :del_anio_por_fecha_factura, -> (fecha) { where(invoice_date: fecha.beginning_of_year..fecha.end_of_year) }
+  scope :mayor_a_fecha_factura, -> (fecha) { where('invoice_date > ?', fecha) }
+  scope :menor_igual_a_fecha_factura, -> (fecha) { where('invoice_date <= ?', fecha) }
+  scope :con_fecha_factura, -> { where.not('invoice_date is null') }
 
   belongs_to :supplier
   belongs_to :user
@@ -58,7 +63,14 @@ class NoteEntry < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = joins(:user, :supplier).order("#{sort_column} #{sort_direction}")
+    orden = "#{sort_column} #{sort_direction}"
+    case sort_column
+    when "note_entries.note_entry_date"
+      orden += ", note_entries.nro_nota_ingreso #{sort_direction}, note_entries.incremento_alfabetico #{sort_direction}"
+    when "note_entries.nro_nota_ingreso"
+      orden += ", note_entries.incremento_alfabetico #{sort_direction}"
+    end
+    array = joins(:user, :supplier).order(orden)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
@@ -125,6 +137,27 @@ class NoteEntry < ActiveRecord::Base
     end
   end
 
+  def obtiene_nro_nota_ingreso
+    if !incremento_alfabetico.present?
+      "#{nro_nota_ingreso}"
+    else
+      "#{nro_nota_ingreso}-#{incremento_alfabetico}"
+    end
+  end
+
+  def self.nro_nota_ingreso_anterior(fecha)
+    fecha = fecha.to_date
+    self.del_anio_por_fecha_factura(fecha).menor_igual_a_fecha_factura(fecha).where.not(nro_nota_ingreso: 0).maximum(:nro_nota_ingreso)
+  end
+
+  def self.nro_nota_ingreso_posterior(fecha)
+    fecha = fecha.to_date
+    self.del_anio_por_fecha_factura(fecha).mayor_a_fecha_factura(fecha).where.not(nro_nota_ingreso: 0).minimum(:nro_nota_ingreso)
+  end
+
+  def tiene_nro_nota_ingreso?
+    nro_nota_ingreso > 0 && invoice_date.present?
+  end
   private
 
   def set_note_entry_date

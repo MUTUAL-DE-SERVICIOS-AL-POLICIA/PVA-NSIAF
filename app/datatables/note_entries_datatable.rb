@@ -20,7 +20,7 @@ private
     array.map do |r|
       [
         I18n.l(r.note_entry_date),
-        r.nro_nota_ingreso,
+        r.obtiene_nro_nota_ingreso,
         r.supplier_name,
         r.user_name,
         r.total,
