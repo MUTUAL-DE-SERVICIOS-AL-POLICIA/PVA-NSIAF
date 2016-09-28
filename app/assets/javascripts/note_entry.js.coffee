@@ -15,12 +15,31 @@ class NoteEntry extends BarcodeReader
     @$inputSubtotal = $('#note_entry_subtotal')
 
     @alert = new Notices({ele: 'div.main'})
+    # Contenedores
+    @$confirmModal = $('#confirm-modal')
+    @$confirmarNotaIngresoModal = $('#modal-confirmar-nota-ingreso')
+
+    # Plantillas
+    @$ConfirmarNotaIngresoTpl = Hogan.compile $('#confirmar-nota-ingreso-tpl').html() || ''
 
   bindEvents: ->
     if @$inputSupplier?
       @get_suppliers()
-    $(document).on 'click', @btnSaveNoteEntry.selector, => @get_note_entry()
+    $(document).on 'click', @btnSaveNoteEntry.selector, (e) => @get_note_entry(e)
     $(document).on 'keyup', '.amount, .unit_cost, .descuento', (e) => @actualizarTotales(e)
+    $(document).on 'click', @$confirmarNotaIngresoModal.find('button[type=submit]').selector, (e) => @aceptarNotaIngreso(e)
+
+  confirmarNotaIngreso: (e) ->
+    e.preventDefault()
+    @$confirmModal.html @$ConfirmarNotaIngresoTpl.render()
+    modal = @$confirmModal.find(@$confirmarNotaIngresoModal.selector)
+    modal.modal('show')
+
+  aceptarNotaIngreso: (e) ->
+    e.preventDefault()
+    @$confirmModal.find(@$confirmarNotaIngresoModal.selector).modal('hide')
+    $form = $(e.target).closest('form')
+    $.post @formNoteEntry.attr('action'), @formNoteEntry.serialize(), null, 'script'
 
   actualizarTotales: (e) ->
     @mostrarTotalParcial($(e.target))
@@ -39,7 +58,7 @@ class NoteEntry extends BarcodeReader
       displayKey: "name"
       source: bestPictures.ttAdapter()
 
-  get_note_entry: ->
+  get_note_entry: (e)->
     if @$inputSupplier.val()
       @$inputSupplier.parents('.form-group').removeClass('has-error')
       @$inputSupplier.next().remove()
@@ -66,7 +85,7 @@ class NoteEntry extends BarcodeReader
       @valid = false
 
     if @valid
-      $.post @formNoteEntry.attr('action'), @formNoteEntry.serialize(), null, 'script'
+      @confirmarNotaIngreso(e)
 
   open_modal: (content) ->
     @alert.danger content

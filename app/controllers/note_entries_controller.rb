@@ -61,6 +61,11 @@ class NoteEntriesController < ApplicationController
     render json: Supplier.search_supplier(params[:q]), root: false
   end
 
+  def obt_cod_ingreso
+    params
+    render json: NoteEntry.obtiene_siguiente_nro_nota_ingreso(fecha), root: false
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_note_entry

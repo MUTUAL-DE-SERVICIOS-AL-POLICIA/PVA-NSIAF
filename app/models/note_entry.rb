@@ -164,6 +164,46 @@ class NoteEntry < ActiveRecord::Base
     nro_nota_ingreso = self.nro_nota_ingreso_anterior(fecha)
     self.del_anio_por_fecha_factura(fecha).mayor_a_fecha_factura(fecha).where(nro_nota_ingreso: nro_nota_ingreso).first.try(:incremento_alfabetico)
   end
+
+  def self.obtiene_siguiente_nro_nota_ingreso(fecha)
+    codigo_numerico = nil
+    codigo_alfabetico = nil
+    mensaje = ""
+    if fecha.present?
+      fecha = fecha.to_date
+      nro_nota_anterior = NoteEntry.nro_nota_ingreso_anterior(fecha)
+      nro_nota_posterior = NoteEntry.nro_nota_ingreso_posterior(fecha)
+      if nro_nota_anterior.present? && !nro_nota_posterior.present?
+        codigo_numerico = nro_nota_anterior.to_i + 1
+      elsif !nro_nota_anterior.present? && !nro_nota_posterior.present?
+        codigo_numerico = 1
+      elsif nro_nota_anterior.present? && nro_nota_posterior.present?
+        diferencia = nro_nota_posterior - nro_nota_anterior
+        if diferencia > 1
+          codigo_numerico = nro_nota_anterior.to_i + 1
+        else
+          inc_alfabetico = NoteEntry.nro_nota_ingreso_posterior_regularizado(fecha)
+          if inc_alfabetico.present?
+            mensaje = "No se puede introducir un nota de ingreso, por favor contactese con el administrador del sistema."
+          else
+            max_incremento_alfabetico = NoteEntry.where(nro_nota_ingreso: nro_nota_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
+            codigo_numerico = nro_nota_anterior.to_i
+            codigo_alfabetico = max_incremento_alfabetico.present? ? max_incremento_alfabetico.next : "A"
+          end
+        end
+      else
+        if nro_nota_posterior > 1
+          codigo_numerico = nro_nota_posterior.to_i - 1
+        else
+          mensaje = "No se puede introducir un nota de ingreso, por favor contactese con el administrador del sistema."
+        end
+      end
+    else
+      mensaje = "No fecha no es valida."
+    end
+    [codigo_numerico, codigo_alfabetico, mensaje]
+  end
+  
   private
 
   def set_note_entry_date
@@ -180,4 +220,5 @@ class NoteEntry < ActiveRecord::Base
     end
     first_date.to_date
   end
+
 end

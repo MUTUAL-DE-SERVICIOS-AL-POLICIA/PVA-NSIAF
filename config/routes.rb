@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
   resources :note_entries, except: [:destroy] do
     get :get_suppliers, on: :collection
+    get :obt_cod_ingreso, on: :collection
   end
 
   # proveedores
