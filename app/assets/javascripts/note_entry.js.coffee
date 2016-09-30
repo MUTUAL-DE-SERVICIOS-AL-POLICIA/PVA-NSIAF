@@ -3,10 +3,15 @@ $ -> new NoteEntry() if $('[data-action=note_entry]').length > 0
 class NoteEntry extends BarcodeReader
   cacheElements: ->
     @$note_entry_urls = $('#note_entry-urls')
+    @$obt_note_entry_urls = $('#obt_note_entry-urls')
+    @obt_note_entry_url = @$obt_note_entry_urls.data('obt-note-entry')
+    @id_note_entry = @$obt_note_entry_urls.data('noteEntry')
 
     @$inputSupplier = $('input#note_entry_supplier_id')
     @formNoteEntry = $('#new_note_entry')
+    @editFormNoteEntry = $('.edit_note_entry')
     @btnSaveNoteEntry = $('#save_note_entry .btn-primary')
+    @btnEditSaveNoteEntry = $('#edit_save_note_entry .btn-primary')
     @$subarticles = $('#subarticles')
     @$subtotalSuma = @$subarticles.find('.subtotal-suma')
     @$descuento = @$subarticles.find('.descuento')
@@ -14,7 +19,6 @@ class NoteEntry extends BarcodeReader
     @$inputTotal = $('#note_entry_total')
     @$inputSubtotal = $('#note_entry_subtotal')
     @$inputObservacion = $('#note_entry_observacion')
-    @$inputModalObservacion = $('#modal_observacion')
 
     @alert = new Notices({ele: 'div.main'})
     # Contenedores
@@ -30,14 +34,19 @@ class NoteEntry extends BarcodeReader
     if @$inputSupplier?
       @get_suppliers()
     $(document).on 'click', @btnSaveNoteEntry.selector, (e) => @get_note_entry(e)
+    $(document).on 'click', @btnEditSaveNoteEntry.selector, (e) => @confirmarNotaIngreso(e)
     $(document).on 'keyup', '.amount, .unit_cost, .descuento', (e) => @actualizarTotales(e)
-    $(document).on 'click', @$confirmarNotaIngresoModal.find('button[type=submit]').selector, (e) => @aceptarConfirmarNotaIngreso(e)
+    $(document).on 'click', @$confirmarNotaIngresoModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
     $(document).on 'click', @$alertaNotaIngresoModal.find('button[type=submit]').selector, (e) => @aceptarAlertaNotaIngreso(e)
 
   confirmarNotaIngreso: (e) ->
     e.preventDefault()
+    if @id_note_entry
+      url = @obt_note_entry_url + "?d=" + $("#note_entry_invoice_date").val() + '&n=' + @id_note_entry
+    else
+      url = @obt_note_entry_url + "?d=" + $("#note_entry_invoice_date").val()
     $.ajax
-      url: location.href.replace("new", "obt_cod_ingreso?d=") + $("#note_entry_invoice_date").val()
+      url: url
       type: 'GET'
       dataType: 'JSON'
     .done (xhr) =>
@@ -52,18 +61,42 @@ class NoteEntry extends BarcodeReader
           modal = @$confirmModal.find(@$alertaNotaIngresoModal.selector)
           modal.modal('show')
       else
-        $.post @formNoteEntry.attr('action'), @formNoteEntry.serialize(), null, 'script'
+        if @formNoteEntry.length > 0
+          $.post @formNoteEntry.attr('action'), @formNoteEntry.serialize(), null, 'script'
+        else if @editFormNoteEntry.length > 0
+          $.post @editFormNoteEntry.attr('action'), @editFormNoteEntry.serialize(), null, 'script'
 
   aceptarConfirmarNotaIngreso: (e) ->
     e.preventDefault()
-    @$inputObservacion.val(@$inputModalObservacion.val())
+    el = @$confirmModal.find('#modal_observacion')
+    if el
+      @$inputObservacion.val(el.val())
     @$confirmModal.find(@$confirmarNotaIngresoModal.selector).modal('hide')
     $form = $(e.target).closest('form')
-    $.post @formNoteEntry.attr('action'), @formNoteEntry.serialize(), null, 'script'
+    if @formNoteEntry.length > 0
+      $.post @formNoteEntry.attr('action'), @formNoteEntry.serialize(), null, 'script'
+    else if @editFormNoteEntry.length > 0
+      $.post @editFormNoteEntry.attr('action'), @editFormNoteEntry.serialize(), null, 'script'
+    else
+      false
+
+  validarObservacion: (e) ->
+    el = @$confirmModal.find('#modal_observacion')
+    if el
+      valor = $.trim(el.val())
+      if valor
+        el.parents('.form-group').removeClass('has-error')
+        el.next().remove()
+        @aceptarConfirmarNotaIngreso(e)
+      else
+        el.parents('.form-group').addClass('has-error')
+        el.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
+        false
 
   aceptarAlertaNotaIngreso: (e) ->
     e.preventDefault()
     @$confirmModal.find(@$alertaNotaIngresoModal.selector).modal('hide')
+    $form = $(e.target).closest('form')
     false
 
   actualizarTotales: (e) ->
@@ -93,8 +126,8 @@ class NoteEntry extends BarcodeReader
       @$inputSupplier.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
       @valid = false
 
-    size = @$subarticles.find('tr.subarticle').length
     if @$subarticles.find('tr.subarticle').length
+      size = @$subarticles.find('tr.subarticle').length
       @$subarticles.find('tr.subarticle').each (i, el) =>
         if $.isNumeric($(el).find('.amount').val()) && $.isNumeric($(el).find('.unit_cost').val())
           $(el).removeClass('danger')

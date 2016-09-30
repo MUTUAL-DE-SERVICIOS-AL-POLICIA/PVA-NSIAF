@@ -25,7 +25,7 @@ private
         r.user_name,
         r.total,
         r.note_date(r.delivery_note_date),
-        [links_actions(r, 'asset'), link_to(content_tag(:span, "", class: 'glyphicon glyphicon-sort-by-order'), '#editar', class: 'btn btn-info btn-xs editar-nota-entrada', title: 'Establecer número de nota de entrada', data: {"nota-entrada" => r.as_json}, id: dom_id(r))].join(' ')
+        [links_actions(r, 'asset')].join(' ')
       ]
     end
   end

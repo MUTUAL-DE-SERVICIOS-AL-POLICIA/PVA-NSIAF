@@ -97,6 +97,10 @@
               %tr
                 %th.text-right Fecha C-31
                 %td= I18n.l @note_entry.c31_fecha
+            - if @note_entry.observacion.present?
+              %tr
+                %th.text-right Observación
+                %td= @note_entry.observacion
       %td
 
 = fecha_impresion if is_pdf?

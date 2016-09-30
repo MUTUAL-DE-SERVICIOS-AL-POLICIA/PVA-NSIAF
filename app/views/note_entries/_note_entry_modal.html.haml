@@ -16,7 +16,7 @@
               %h2.text-center
                 {{{nro_nota_ingreso}}}
               %p
-                Es necesario especificar el motivo:
+                Es necesario especificar una observación:
               .form-group
                 = text_area_tag "modal_observacion", '', class: 'form-control'
           .modal-footer
@@ -50,7 +50,7 @@
                   %tr
                     %td {{{nro_nota_anterior}}}
                     %td {{{fecha_nota_anterior}}}
-                  %tr
+                  %tr.danger
                     %td
                       %strong ?
                     %td {{{fecha}}}

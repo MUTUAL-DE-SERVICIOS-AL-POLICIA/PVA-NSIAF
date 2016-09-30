@@ -65,7 +65,14 @@ class NoteEntriesController < ApplicationController
     resultado = Hash.new
     if params[:d].present?
       fecha = params[:d].to_date
-      resultado = NoteEntry.obtiene_siguiente_nro_nota_ingreso(fecha)
+      if params[:n].present?
+        nota_ingreso = NoteEntry.find(params[:n])
+        if nota_ingreso.nro_nota_ingreso == 0 || nota_ingreso.nro_nota_ingreso == nil
+          resultado = NoteEntry.obtiene_siguiente_nro_nota_ingreso(fecha)
+        end
+      else
+        resultado = NoteEntry.obtiene_siguiente_nro_nota_ingreso(fecha)
+      end
       if resultado[:tipo_respuesta] == 'confirmacion'
         resultado[:titulo] = "Confirmación de Nota de Ingreso"
       elsif resultado[:tipo_respuesta] == 'alerta'

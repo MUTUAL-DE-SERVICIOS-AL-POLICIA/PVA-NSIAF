@@ -2,6 +2,7 @@
 
 #request-urls{data: {'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY')}}
 #note_entry-urls{data: {'get-suppliers' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
+#obt_note_entry-urls{data: {'obt-note-entry' => obt_cod_ingreso_note_entries_path(format: :json), 'note_entry' => @note_entry.id}}
 
 .page-header{data: {action: 'request'}}
   %h2= t("note_entries.title.#{params[:action]}")
@@ -83,7 +84,8 @@
           = number_with_delimiter numero
 
   - if params[:action] == 'edit'
-    = render 'shared/form_buttons'
+    #edit_save_note_entry
+      = render 'shared/form_buttons'
 
 - if params[:action] == 'new'
   #save_note_entry

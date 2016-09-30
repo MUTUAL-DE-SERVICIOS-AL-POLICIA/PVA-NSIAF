@@ -175,18 +175,18 @@ class NoteEntry < ActiveRecord::Base
       nro_nota_anterior = NoteEntry.nro_nota_ingreso_anterior(fecha)
       nro_nota_posterior = NoteEntry.nro_nota_ingreso_posterior(fecha)
       if nro_nota_anterior.present? && !nro_nota_posterior.present?
-        codigo_numerico = nro_nota_anterior.to_i + 1
+        respuesta_hash[:codigo_numerico] = nro_nota_anterior.to_i + 1
       elsif !nro_nota_anterior.present? && !nro_nota_posterior.present?
-        codigo_numerico = 1
+        respuesta_hash[:codigo_numerico] = 1
       elsif nro_nota_anterior.present? && nro_nota_posterior.present?
         diferencia = nro_nota_posterior - nro_nota_anterior
         if diferencia > 1
-          codigo_numerico = nro_nota_anterior.to_i + 1
+          respuesta_hash[:codigo_numerico] = nro_nota_anterior.to_i + 1
         else
           inc_alfabetico = NoteEntry.nro_nota_ingreso_posterior_regularizado(fecha)
           if inc_alfabetico.present?
-            nota_anterior = NoteEntry.del_anio_por_fecha_factura(fecha).con_nro_nota_ingreso.menor_igual_a_fecha_factura(fecha).order(invoice_date: :desc, incremento_alfabetico: :desc).first
-            nota_posterior = NoteEntry.del_anio_por_fecha_factura(fecha).con_nro_nota_ingreso.mayor_a_fecha_factura(fecha).order(invoice_date: :asc, incremento_alfabetico: :asc).first
+            nota_anterior = NoteEntry.del_anio_por_fecha_factura(fecha).con_nro_nota_ingreso.menor_igual_a_fecha_factura(fecha).order(invoice_date: :desc, nro_nota_ingreso: :desc, incremento_alfabetico: :desc).first
+            nota_posterior = NoteEntry.del_anio_por_fecha_factura(fecha).con_nro_nota_ingreso.mayor_a_fecha_factura(fecha).order(invoice_date: :asc, nro_nota_ingreso: :asc, incremento_alfabetico: :asc).first
             respuesta_hash[:tipo_respuesta] = "alerta"
             respuesta_hash[:fecha] = fecha.strftime("%d/%m/%Y")
             respuesta_hash[:nro_nota_anterior] = nota_anterior.obtiene_nro_nota_ingreso
@@ -201,14 +201,14 @@ class NoteEntry < ActiveRecord::Base
             ultima_fecha = ultima_fecha.strftime("%d/%m/%Y") if ultima_fecha.present?
             respuesta_hash[:tipo_respuesta] = "confirmacion"
             respuesta_hash[:nro_nota_ingreso] = codigo_alfabetico.present? ? "#{codigo_numerico}-#{codigo_alfabetico}" : "#{codigo_numerico}"
-            respuesta_hash[:codigo_numerico] = "#{codigo_numerico}"
-            respuesta_hash[:codigo_alfabetico] = "#{codigo_alfabetico}"
+            respuesta_hash[:codigo_numerico] = codigo_numerico
+            respuesta_hash[:codigo_alfabetico] = codigo_alfabetico
             respuesta_hash[:ultima_fecha] = ultima_fecha
           end
         end
       else
         if nro_nota_posterior > 1
-          codigo_numerico = nro_nota_posterior.to_i - 1
+          respuesta_hash[:codigo_numerico] = nro_nota_posterior.to_i - 1
         else
           respuesta_hash[:tipo_respuesta] = "alerta"
           respuesta_hash[:mensaje] = "No se puede introducir una nota de ingreso para la fecha, por favor contactese con el administrador del sistema."
