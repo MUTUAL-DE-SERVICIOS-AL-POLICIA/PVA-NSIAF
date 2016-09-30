@@ -57,14 +57,14 @@ class Gestion < ActiveRecord::Base
   end
 
   def self.to_csv
-    columns = %w(anio cerrado fecha_cierre)
+    columns = %w(anio estado fecha_cierre)
     h = ApplicationController.helpers
     CSV.generate do |csv|
       csv << columns.map { |c| Department.human_attribute_name(c) }
       all.each do |ufv|
         a = Array.new
         a << ufv.anio
-        a << ufv.cerrado
+        a << (ufv.cerrado ? 'Cerrado' : 'Abierto')
         a << ufv.fecha_cierre
         csv << a
       end

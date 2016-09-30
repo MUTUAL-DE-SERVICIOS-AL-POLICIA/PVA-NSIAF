@@ -20,7 +20,7 @@ private
     array.map do |gestion|
       [
         gestion.anio,
-        (gestion.cerrado ? 'SI' : 'NO'),
+        (gestion.cerrado ? 'Cerrado' : 'Abierto'),
         (gestion.fecha_cierre ? I18n.l(gestion.fecha_cierre, format: :long) : nil),
         links_actions(gestion, 'gestion')
       ]

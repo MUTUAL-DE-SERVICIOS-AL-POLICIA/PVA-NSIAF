@@ -419,8 +419,10 @@ es:
         date: "Fecha"
         created_at: "Creado el"
       gestion:
-        anio: "Año"
+        anio: "Gestión"
         cerrado: "Cerrado"
+        estado: "Estado"
+        usuario: "Usuario"
         fecha_cierre: "Fecha cierre"
       ingreso:
         suppliers: "Proveedor"
