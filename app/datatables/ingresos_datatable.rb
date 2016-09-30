@@ -19,9 +19,11 @@ private
   def data
     array.map do |r|
       [
-        r.factura_fecha.present? ? I18n.l(r.factura_fecha) : '',
         r.numero,
+        r.factura_fecha.present? ? I18n.l(r.factura_fecha) : '',
+        r.factura_numero,
         r.supplier_name,
+        r.telefono_proveedor,
         r.user_name,
         number_with_delimiter(r.total),
         r.nota_entrega_fecha.present? ? I18n.l(r.nota_entrega_fecha) : '',
@@ -47,7 +49,7 @@ private
   end
 
   def sort_column
-    columns = %w[ingresos.factura_fecha ingresos.numero suppliers.name users.name ingresos.total ingresos.nota_entrega_fecha]
+    columns = %w[ingresos.numero ingresos.factura_fecha ingresos.factura_numero  ingresos.factura_fecha suppliers.name users.name ingresos.total ingresos.nota_entrega_fecha]
     columns[params[:iSortCol_0].to_i]
   end
 
