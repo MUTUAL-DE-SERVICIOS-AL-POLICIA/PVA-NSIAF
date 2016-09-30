@@ -31,6 +31,7 @@
         %tr
           %th.text-right{title: 'Numeración'} No
           %th.text-center{title: 'Código'} Código
+          %th.text-center{title: 'Número de Factura'} Factura
           %th.text-center{title: 'Fecha de incorporación'} Fecha
           %th{title: 'Descripción'} Descripción
           %th{title: 'Asiento contable'} Cuenta
@@ -40,6 +41,7 @@
           %tr
             %td.text-right= index + 1
             %td.text-center= activo.code
+            %td.text-center= activo.nro_factura
             %td.text-center= l activo.ingreso_fecha if activo.ingreso_fecha
             %td= activo.description
             %td= activo.account_name
