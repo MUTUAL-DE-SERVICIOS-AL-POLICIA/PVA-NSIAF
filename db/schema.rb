@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160906130717) do
+ActiveRecord::Schema.define(version: 20160929194914) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -266,23 +266,25 @@ ActiveRecord::Schema.define(version: 20160906130717) do
   end
 
   create_table "note_entries", force: :cascade do |t|
-    t.string   "delivery_note_number", limit: 255
+    t.string   "delivery_note_number",  limit: 255
     t.date     "delivery_note_date"
-    t.string   "invoice_number",       limit: 255,                          default: ""
+    t.string   "invoice_number",        limit: 255,                          default: ""
     t.date     "invoice_date"
-    t.integer  "supplier_id",          limit: 4
+    t.integer  "supplier_id",           limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "total",                            precision: 10, scale: 2
-    t.integer  "user_id",              limit: 4
+    t.decimal  "total",                             precision: 10, scale: 2
+    t.integer  "user_id",               limit: 4
     t.date     "note_entry_date"
-    t.boolean  "invalidate",                                                default: false
-    t.string   "message",              limit: 255
-    t.string   "invoice_autorizacion", limit: 255
-    t.string   "c31",                  limit: 255
-    t.integer  "nro_nota_ingreso",     limit: 4,                            default: 0
-    t.decimal  "subtotal",                         precision: 10, scale: 2, default: 0.0
-    t.decimal  "descuento",                        precision: 10, scale: 2, default: 0.0
+    t.boolean  "invalidate",                                                 default: false
+    t.string   "message",               limit: 255
+    t.string   "invoice_autorizacion",  limit: 255
+    t.string   "c31",                   limit: 255
+    t.integer  "nro_nota_ingreso",      limit: 4,                            default: 0
+    t.decimal  "subtotal",                          precision: 10, scale: 2, default: 0.0
+    t.decimal  "descuento",                         precision: 10, scale: 2, default: 0.0
+    t.string   "incremento_alfabetico", limit: 255
+    t.string   "observacion",           limit: 255
   end
 
   add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree

@@ -7,6 +7,7 @@ class NoteEntry < ActiveRecord::Base
   scope :mayor_a_fecha_factura, -> (fecha) { where('invoice_date > ?', fecha) }
   scope :menor_igual_a_fecha_factura, -> (fecha) { where('invoice_date <= ?', fecha) }
   scope :con_fecha_factura, -> { where.not('invoice_date is null') }
+  scope :con_nro_nota_ingreso, -> { where('nro_nota_ingreso != ?',0)}
 
   belongs_to :supplier
   belongs_to :user
@@ -168,7 +169,7 @@ class NoteEntry < ActiveRecord::Base
   def self.obtiene_siguiente_nro_nota_ingreso(fecha)
     codigo_numerico = nil
     codigo_alfabetico = nil
-    mensaje = ""
+    respuesta_hash = Hash.new
     if fecha.present?
       fecha = fecha.to_date
       nro_nota_anterior = NoteEntry.nro_nota_ingreso_anterior(fecha)
@@ -184,26 +185,39 @@ class NoteEntry < ActiveRecord::Base
         else
           inc_alfabetico = NoteEntry.nro_nota_ingreso_posterior_regularizado(fecha)
           if inc_alfabetico.present?
-            mensaje = "No se puede introducir un nota de ingreso, por favor contactese con el administrador del sistema."
+            nota_anterior = NoteEntry.del_anio_por_fecha_factura(fecha).con_nro_nota_ingreso.menor_igual_a_fecha_factura(fecha).order(invoice_date: :desc, incremento_alfabetico: :desc).first
+            nota_posterior = NoteEntry.del_anio_por_fecha_factura(fecha).con_nro_nota_ingreso.mayor_a_fecha_factura(fecha).order(invoice_date: :asc, incremento_alfabetico: :asc).first
+            respuesta_hash[:tipo_respuesta] = "alerta"
+            respuesta_hash[:fecha] = fecha.strftime("%d/%m/%Y")
+            respuesta_hash[:nro_nota_anterior] = nota_anterior.obtiene_nro_nota_ingreso
+            respuesta_hash[:fecha_nota_anterior] = nota_anterior.invoice_date.strftime("%d/%m/%Y") if nota_anterior.invoice_date.present?
+            respuesta_hash[:nro_nota_posterior] =  nota_posterior.obtiene_nro_nota_ingreso
+            respuesta_hash[:fecha_nota_posterior] = nota_posterior.invoice_date.strftime("%d/%m/%Y") if nota_posterior.invoice_date.present?
           else
             max_incremento_alfabetico = NoteEntry.where(nro_nota_ingreso: nro_nota_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
             codigo_numerico = nro_nota_anterior.to_i
             codigo_alfabetico = max_incremento_alfabetico.present? ? max_incremento_alfabetico.next : "A"
+            ultima_fecha = NoteEntry.del_anio_por_fecha_factura(fecha).order(invoice_date: :desc).first.try(:invoice_date)
+            ultima_fecha = ultima_fecha.strftime("%d/%m/%Y") if ultima_fecha.present?
+            respuesta_hash[:tipo_respuesta] = "confirmacion"
+            respuesta_hash[:nro_nota_ingreso] = codigo_alfabetico.present? ? "#{codigo_numerico}-#{codigo_alfabetico}" : "#{codigo_numerico}"
+            respuesta_hash[:codigo_numerico] = "#{codigo_numerico}"
+            respuesta_hash[:codigo_alfabetico] = "#{codigo_alfabetico}"
+            respuesta_hash[:ultima_fecha] = ultima_fecha
           end
         end
       else
         if nro_nota_posterior > 1
           codigo_numerico = nro_nota_posterior.to_i - 1
         else
-          mensaje = "No se puede introducir un nota de ingreso, por favor contactese con el administrador del sistema."
+          respuesta_hash[:tipo_respuesta] = "alerta"
+          respuesta_hash[:mensaje] = "No se puede introducir una nota de ingreso para la fecha, por favor contactese con el administrador del sistema."
         end
       end
-    else
-      mensaje = "No fecha no es valida."
     end
-    [codigo_numerico, codigo_alfabetico, mensaje]
+    respuesta_hash
   end
-  
+
   private
 
   def set_note_entry_date

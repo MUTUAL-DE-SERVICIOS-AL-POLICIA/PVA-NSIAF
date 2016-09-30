@@ -35,10 +35,10 @@ module Autoincremento
   end
 
   def autoincremento_notas_ingreso
-    codigo_numerico, codigo_alfabetico, _ = NoteEntry.obtiene_siguiente_nro_nota_ingreso(self.invoice_date)
-    if codigo_numerico.present?
-      self.nro_nota_ingreso = codigo_numerico if codigo_numerico.present?
-      self.incremento_alfabetico = codigo_alfabetico if codigo_alfabetico.present?
+    respuesta = NoteEntry.obtiene_siguiente_nro_nota_ingreso(self.invoice_date)
+    if respuesta[:codigo_numerico].present?
+      self.nro_nota_ingreso = respuesta[:codigo_numerico]
+      self.incremento_alfabetico = respuesta[:codigo_alfabetico] if respuesta[:codigo_alfabetico].present?
     end
   end
 

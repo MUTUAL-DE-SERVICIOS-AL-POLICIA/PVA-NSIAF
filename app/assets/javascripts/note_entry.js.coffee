@@ -13,33 +13,58 @@ class NoteEntry extends BarcodeReader
     @$totalSuma = @$subarticles.find('.total-suma')
     @$inputTotal = $('#note_entry_total')
     @$inputSubtotal = $('#note_entry_subtotal')
+    @$inputObservacion = $('#note_entry_observacion')
+    @$inputModalObservacion = $('#modal_observacion')
 
     @alert = new Notices({ele: 'div.main'})
     # Contenedores
     @$confirmModal = $('#confirm-modal')
     @$confirmarNotaIngresoModal = $('#modal-confirmar-nota-ingreso')
+    @$alertaNotaIngresoModal = $('#modal-alerta-nota-ingreso')
 
     # Plantillas
-    @$ConfirmarNotaIngresoTpl = Hogan.compile $('#confirmar-nota-ingreso-tpl').html() || ''
+    @$confirmarNotaIngresoTpl = Hogan.compile $('#confirmar-nota-ingreso-tpl').html() || ''
+    @$alertaNotaIngresoTpl = Hogan.compile $('#alerta-nota-ingreso-tpl').html() || ''
 
   bindEvents: ->
     if @$inputSupplier?
       @get_suppliers()
     $(document).on 'click', @btnSaveNoteEntry.selector, (e) => @get_note_entry(e)
     $(document).on 'keyup', '.amount, .unit_cost, .descuento', (e) => @actualizarTotales(e)
-    $(document).on 'click', @$confirmarNotaIngresoModal.find('button[type=submit]').selector, (e) => @aceptarNotaIngreso(e)
+    $(document).on 'click', @$confirmarNotaIngresoModal.find('button[type=submit]').selector, (e) => @aceptarConfirmarNotaIngreso(e)
+    $(document).on 'click', @$alertaNotaIngresoModal.find('button[type=submit]').selector, (e) => @aceptarAlertaNotaIngreso(e)
 
   confirmarNotaIngreso: (e) ->
     e.preventDefault()
-    @$confirmModal.html @$ConfirmarNotaIngresoTpl.render()
-    modal = @$confirmModal.find(@$confirmarNotaIngresoModal.selector)
-    modal.modal('show')
+    $.ajax
+      url: location.href.replace("new", "obt_cod_ingreso?d=") + $("#note_entry_invoice_date").val()
+      type: 'GET'
+      dataType: 'JSON'
+    .done (xhr) =>
+      data = xhr
+      if data["tipo_respuesta"]
+        if data["tipo_respuesta"] == "confirmacion"
+          @$confirmModal.html @$confirmarNotaIngresoTpl.render(data)
+          modal = @$confirmModal.find(@$confirmarNotaIngresoModal.selector)
+          modal.modal('show')
+        else if data["tipo_respuesta"] == "alerta"
+          @$confirmModal.html @$alertaNotaIngresoTpl.render(data)
+          modal = @$confirmModal.find(@$alertaNotaIngresoModal.selector)
+          modal.modal('show')
+      else
+        $.post @formNoteEntry.attr('action'), @formNoteEntry.serialize(), null, 'script'
 
-  aceptarNotaIngreso: (e) ->
+  aceptarConfirmarNotaIngreso: (e) ->
     e.preventDefault()
+    @$inputObservacion.val(@$inputModalObservacion.val())
     @$confirmModal.find(@$confirmarNotaIngresoModal.selector).modal('hide')
     $form = $(e.target).closest('form')
     $.post @formNoteEntry.attr('action'), @formNoteEntry.serialize(), null, 'script'
+
+  aceptarAlertaNotaIngreso: (e) ->
+    e.preventDefault()
+    @$confirmModal.find(@$alertaNotaIngresoModal.selector).modal('hide')
+    false
 
   actualizarTotales: (e) ->
     @mostrarTotalParcial($(e.target))
@@ -68,24 +93,22 @@ class NoteEntry extends BarcodeReader
       @$inputSupplier.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
       @valid = false
 
+    size = @$subarticles.find('tr.subarticle').length
     if @$subarticles.find('tr.subarticle').length
-      @$subarticles.find('tr.subarticle').each (i) ->
-        if $.isNumeric($(this).find('.amount').val()) && $.isNumeric($(this).find('.unit_cost').val())
-          $(this).removeClass('danger')
-          $(this).find('input').attr('style', '')
+      @$subarticles.find('tr.subarticle').each (i, el) =>
+        if $.isNumeric($(el).find('.amount').val()) && $.isNumeric($(el).find('.unit_cost').val())
+          $(el).removeClass('danger')
+          $(el).find('input').attr('style', '')
           @valid = true
+          @confirmarNotaIngreso(e) if @valid && i == (size - 1)
         else
-          $(this).addClass('danger')
-          $(this).find('input').css('background-color', '#f2dede')
-          new Notices({ele: 'div.main'}).danger "Verifique los campos a llenar del material '#{$(this).find('.description').text()}'"
+          $(el).addClass('danger')
+          $(el).find('input').css('background-color', '#f2dede')
+          new Notices({ele: 'div.main'}).danger "Verifique los campos a llenar del material '#{$(el).find('.description').text()}'"
           @valid = false
-      @valid
     else
       @open_modal 'Debe añadir al menos un material'
       @valid = false
-
-    if @valid
-      @confirmarNotaIngreso(e)
 
   open_modal: (content) ->
     @alert.danger content
