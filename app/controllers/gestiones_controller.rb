@@ -75,7 +75,7 @@ class GestionesController < ApplicationController
   def cerrar
     respond_to do |format|
       if @gestion.gestion_actual?
-        Gestion.cerrar_gestion_actual
+        Gestion.cerrar_gestion_actual(current_user)
         format.json { head :no_content }
       else
         error = { mensaje: 'No es la gestión actual vigente' }

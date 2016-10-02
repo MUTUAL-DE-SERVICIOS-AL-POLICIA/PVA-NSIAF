@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160906130717) do
+ActiveRecord::Schema.define(version: 20161002171713) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(version: 20160906130717) do
   create_table "entradas_salidas", id: false, force: :cascade do |t|
     t.integer  "id",             limit: 4,   default: 0,  null: false
     t.integer  "subarticle_id",  limit: 4
-    t.date     "fecha"
+    t.datetime "fecha"
     t.string   "factura",        limit: 255
     t.date     "nota_entrega"
     t.string   "nro_pedido",     limit: 11
@@ -201,7 +201,10 @@ ActiveRecord::Schema.define(version: 20160906130717) do
     t.datetime "fecha_cierre"
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
+    t.integer  "user_id",      limit: 4
   end
+
+  add_index "gestiones", ["user_id"], name: "index_gestiones_on_user_id", using: :btree
 
   create_table "ingresos", force: :cascade do |t|
     t.integer  "numero",               limit: 4
@@ -266,23 +269,24 @@ ActiveRecord::Schema.define(version: 20160906130717) do
   end
 
   create_table "note_entries", force: :cascade do |t|
-    t.string   "delivery_note_number", limit: 255
+    t.string   "delivery_note_number",  limit: 255
     t.date     "delivery_note_date"
-    t.string   "invoice_number",       limit: 255,                          default: ""
+    t.string   "invoice_number",        limit: 255,                          default: ""
     t.date     "invoice_date"
-    t.integer  "supplier_id",          limit: 4
+    t.integer  "supplier_id",           limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "total",                            precision: 10, scale: 2
-    t.integer  "user_id",              limit: 4
+    t.decimal  "total",                             precision: 10, scale: 2
+    t.integer  "user_id",               limit: 4
     t.date     "note_entry_date"
-    t.boolean  "invalidate",                                                default: false
-    t.string   "message",              limit: 255
-    t.string   "invoice_autorizacion", limit: 255
-    t.string   "c31",                  limit: 255
-    t.integer  "nro_nota_ingreso",     limit: 4,                            default: 0
-    t.decimal  "subtotal",                         precision: 10, scale: 2, default: 0.0
-    t.decimal  "descuento",                        precision: 10, scale: 2, default: 0.0
+    t.boolean  "invalidate",                                                 default: false
+    t.string   "message",               limit: 255
+    t.string   "invoice_autorizacion",  limit: 255
+    t.string   "c31",                   limit: 255
+    t.integer  "nro_nota_ingreso",      limit: 4,                            default: 0
+    t.decimal  "subtotal",                          precision: 10, scale: 2, default: 0.0
+    t.decimal  "descuento",                         precision: 10, scale: 2, default: 0.0
+    t.string   "incremento_alfabetico", limit: 255
   end
 
   add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree
@@ -428,6 +432,7 @@ ActiveRecord::Schema.define(version: 20160906130717) do
   add_foreign_key "assets", "ubicaciones"
   add_foreign_key "cierre_gestiones", "assets"
   add_foreign_key "cierre_gestiones", "gestiones"
+  add_foreign_key "gestiones", "users"
   add_foreign_key "ingresos", "suppliers"
   add_foreign_key "ingresos", "users"
   add_foreign_key "subarticles", "materials"
