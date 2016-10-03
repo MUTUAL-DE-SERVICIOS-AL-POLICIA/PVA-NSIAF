@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
     if cu
       [h.get_column(self, 'name'), h.get_column(self, 'role')]
     else
-      [h.get_column(self, 'code'), h.get_column(self, 'name'), h.get_column(self, 'title'), h.get_column(self, 'department')]
+      [h.get_column(self, 'ci'), h.get_column(self, 'name'), h.get_column(self, 'title'), h.get_column(self, 'department')]
     end
   end
 
@@ -158,7 +158,7 @@ class User < ActiveRecord::Base
         if current_user.is_super_admin?
           array = array.where("users.name LIKE ? OR users.role LIKE ?", "%#{sSearch}%", "%#{sSearch}%")
         else
-          array = array.where("users.code LIKE ? OR users.name LIKE ? OR users.title LIKE ? OR departments.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+          array = array.where("users.ci LIKE ? OR users.name LIKE ? OR users.title LIKE ? OR departments.name LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
         end
       end
     end
@@ -166,7 +166,7 @@ class User < ActiveRecord::Base
   end
 
   def self.to_csv
-    columns = %w(code name title department status)
+    columns = %w(ci name title department status)
     h = ApplicationController.helpers
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }

@@ -30,7 +30,7 @@ private
   def data
     array.map do |user|
       as = []
-      as << user.code
+      as << user.ci
       as << user.name
       as << user.title
       as << link_to_if(user.department, user.department_name, user.department, title: user.department_code)
@@ -39,7 +39,6 @@ private
       as << links_actions(user)
       as
     end
-
   end
 
   def array
@@ -59,7 +58,7 @@ private
   end
 
   def sort_column
-    columns = current_user.is_super_admin? ? %w[users.name role users.status] : %w[users.code users.name title departments.name users.assets_count users.status]
+    columns = current_user.is_super_admin? ? %w[users.name role users.status] : %w[users.ci users.name title departments.name users.assets_count users.status]
     columns[params[:iSortCol_0].to_i]
   end
 
