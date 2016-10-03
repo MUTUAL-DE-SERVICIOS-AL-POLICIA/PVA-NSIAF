@@ -2,6 +2,7 @@
 
 #request-urls{data: {'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY')}}
 #note_entry-urls{data: {'get-suppliers' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
+#obt_note_entry-urls{data: {'obt-note-entry' => obt_cod_ingreso_note_entries_path(format: :json), 'note_entry' => @note_entry.id}}
 
 .page-header{data: {action: 'request'}}
   %h2= t("note_entries.title.#{params[:action]}")
@@ -37,7 +38,7 @@
         %label.col-sm-3.col-md-3.col-lg-3.control-label= t('activerecord.models.subarticle')
         .col-xs-9.col-sm-9.col-md-9
           = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control', placeholder: 'Código o Descripción del Sub Artículo', disabled: disabled
-
+          = f.hidden_field :observacion, as: :text, label: false
   %table.table.table-bordered
     %thead
       %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
@@ -83,7 +84,8 @@
           = number_with_delimiter numero
 
   - if params[:action] == 'edit'
-    = render 'shared/form_buttons'
+    #edit_save_note_entry
+      = render 'shared/form_buttons'
 
 - if params[:action] == 'new'
   #save_note_entry
@@ -104,3 +106,6 @@
       = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
     %td.text-center
       %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }
+
+#confirm-modal
+= render 'note_entry_modal'

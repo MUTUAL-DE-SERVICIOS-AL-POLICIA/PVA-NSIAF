@@ -11,11 +11,11 @@
         %span.glyphicon.glyphicon-list
         = t("note_entries.title.title")
 
-    %h2 Nota de Ingreso Almacén Nro. #{@note_entry.nro_nota_ingreso}
+    %h2 Nota de Ingreso Almacén Nro. #{@note_entry.obtiene_nro_nota_ingreso}
 
 - if is_pdf?
   %h3
-    .text-left.proceeding-title Nro. #{@note_entry.nro_nota_ingreso}
+    .text-left.proceeding-title Nro. #{@note_entry.obtiene_nro_nota_ingreso}
     .text-center.proceeding-title Nota de Ingreso Almacén
 
 %table.table.table-condensed.table-bordered.valorado
@@ -97,6 +97,10 @@
               %tr
                 %th.text-right Fecha C-31
                 %td= I18n.l @note_entry.c31_fecha
+            - if @note_entry.observacion.present?
+              %tr
+                %th.text-right Observación
+                %td= @note_entry.observacion
       %td
 
 = fecha_impresion if is_pdf?

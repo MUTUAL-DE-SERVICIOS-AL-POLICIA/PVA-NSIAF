@@ -61,6 +61,27 @@ class NoteEntriesController < ApplicationController
     render json: Supplier.search_supplier(params[:q]), root: false
   end
 
+  def obt_cod_ingreso
+    resultado = Hash.new
+    if params[:d].present?
+      fecha = params[:d].to_date
+      if params[:n].present?
+        nota_ingreso = NoteEntry.find(params[:n])
+        if nota_ingreso.nro_nota_ingreso == 0 || nota_ingreso.nro_nota_ingreso == nil
+          resultado = NoteEntry.obtiene_siguiente_nro_nota_ingreso(fecha)
+        end
+      else
+        resultado = NoteEntry.obtiene_siguiente_nro_nota_ingreso(fecha)
+      end
+      if resultado[:tipo_respuesta] == 'confirmacion'
+        resultado[:titulo] = "Confirmación de Nota de Ingreso"
+      elsif resultado[:tipo_respuesta] == 'alerta'
+        resultado[:titulo] = "Alerta de Nota de Ingreso"
+      end
+    end
+    render json: resultado, root: false
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_note_entry
@@ -69,6 +90,6 @@ class NoteEntriesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def note_entry_params
-      params.require(:note_entry).permit(:delivery_note_number, :nro_nota_ingreso, :delivery_note_date, :invoice_number, :invoice_autorizacion, :c31, :invoice_date, :supplier_id, :subtotal, :total, :descuento, {entry_subarticles_attributes: [ :id, :subarticle_id, :amount, :unit_cost, :total_cost]})
+      params.require(:note_entry).permit(:delivery_note_number, :nro_nota_ingreso, :delivery_note_date, :invoice_number, :invoice_autorizacion, :c31, :invoice_date, :supplier_id, :subtotal, :total, :descuento, :observacion, {entry_subarticles_attributes: [ :id, :subarticle_id, :amount, :unit_cost, :total_cost]})
     end
 end

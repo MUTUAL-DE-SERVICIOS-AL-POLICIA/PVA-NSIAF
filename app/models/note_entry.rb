@@ -1,5 +1,13 @@
 class NoteEntry < ActiveRecord::Base
+  include Autoincremento
+
   default_scope {where(invalidate: false)}
+
+  scope :del_anio_por_fecha_factura, -> (fecha) { where(invoice_date: fecha.beginning_of_year..fecha.end_of_year) }
+  scope :mayor_a_fecha_factura, -> (fecha) { where('invoice_date > ?', fecha) }
+  scope :menor_igual_a_fecha_factura, -> (fecha) { where('invoice_date <= ?', fecha) }
+  scope :con_fecha_factura, -> { where.not('invoice_date is null') }
+  scope :con_nro_nota_ingreso, -> { where('nro_nota_ingreso != ?',0)}
 
   belongs_to :supplier
   belongs_to :user
@@ -56,7 +64,14 @@ class NoteEntry < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = joins(:user, :supplier).order("#{sort_column} #{sort_direction}")
+    orden = "#{sort_column} #{sort_direction}"
+    case sort_column
+    when "note_entries.note_entry_date"
+      orden += ", note_entries.nro_nota_ingreso #{sort_direction}, note_entries.incremento_alfabetico #{sort_direction}"
+    when "note_entries.nro_nota_ingreso"
+      orden += ", note_entries.incremento_alfabetico #{sort_direction}"
+    end
+    array = joins(:user, :supplier).order(orden)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
@@ -123,6 +138,86 @@ class NoteEntry < ActiveRecord::Base
     end
   end
 
+  def obtiene_nro_nota_ingreso
+    if !incremento_alfabetico.present?
+      "#{nro_nota_ingreso}"
+    else
+      "#{nro_nota_ingreso}-#{incremento_alfabetico}"
+    end
+  end
+
+  def self.nro_nota_ingreso_anterior(fecha)
+    fecha = fecha.to_date
+    self.del_anio_por_fecha_factura(fecha).menor_igual_a_fecha_factura(fecha).where.not(nro_nota_ingreso: 0).maximum(:nro_nota_ingreso)
+  end
+
+  def self.nro_nota_ingreso_posterior(fecha)
+    fecha = fecha.to_date
+    self.del_anio_por_fecha_factura(fecha).mayor_a_fecha_factura(fecha).where.not(nro_nota_ingreso: 0).minimum(:nro_nota_ingreso)
+  end
+
+  def tiene_nro_nota_ingreso?
+    nro_nota_ingreso > 0 && invoice_date.present?
+  end
+
+  def self.nro_nota_ingreso_posterior_regularizado(fecha)
+    fecha = fecha.to_date
+    nro_nota_ingreso = self.nro_nota_ingreso_anterior(fecha)
+    self.del_anio_por_fecha_factura(fecha).mayor_a_fecha_factura(fecha).where(nro_nota_ingreso: nro_nota_ingreso).first.try(:incremento_alfabetico)
+  end
+
+  def self.obtiene_siguiente_nro_nota_ingreso(fecha)
+    codigo_numerico = nil
+    codigo_alfabetico = nil
+    respuesta_hash = Hash.new
+    if fecha.present?
+      fecha = fecha.to_date
+      nro_nota_anterior = NoteEntry.nro_nota_ingreso_anterior(fecha)
+      nro_nota_posterior = NoteEntry.nro_nota_ingreso_posterior(fecha)
+      if nro_nota_anterior.present? && !nro_nota_posterior.present?
+        respuesta_hash[:codigo_numerico] = nro_nota_anterior.to_i + 1
+      elsif !nro_nota_anterior.present? && !nro_nota_posterior.present?
+        respuesta_hash[:codigo_numerico] = 1
+      elsif nro_nota_anterior.present? && nro_nota_posterior.present?
+        diferencia = nro_nota_posterior - nro_nota_anterior
+        if diferencia > 1
+          respuesta_hash[:codigo_numerico] = nro_nota_anterior.to_i + 1
+        else
+          inc_alfabetico = NoteEntry.nro_nota_ingreso_posterior_regularizado(fecha)
+          if inc_alfabetico.present?
+            nota_anterior = NoteEntry.del_anio_por_fecha_factura(fecha).con_nro_nota_ingreso.menor_igual_a_fecha_factura(fecha).order(invoice_date: :desc, nro_nota_ingreso: :desc, incremento_alfabetico: :desc).first
+            nota_posterior = NoteEntry.del_anio_por_fecha_factura(fecha).con_nro_nota_ingreso.mayor_a_fecha_factura(fecha).order(invoice_date: :asc, nro_nota_ingreso: :asc, incremento_alfabetico: :asc).first
+            respuesta_hash[:tipo_respuesta] = "alerta"
+            respuesta_hash[:fecha] = fecha.strftime("%d/%m/%Y")
+            respuesta_hash[:nro_nota_anterior] = nota_anterior.obtiene_nro_nota_ingreso
+            respuesta_hash[:fecha_nota_anterior] = nota_anterior.invoice_date.strftime("%d/%m/%Y") if nota_anterior.invoice_date.present?
+            respuesta_hash[:nro_nota_posterior] =  nota_posterior.obtiene_nro_nota_ingreso
+            respuesta_hash[:fecha_nota_posterior] = nota_posterior.invoice_date.strftime("%d/%m/%Y") if nota_posterior.invoice_date.present?
+          else
+            max_incremento_alfabetico = NoteEntry.where(nro_nota_ingreso: nro_nota_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
+            codigo_numerico = nro_nota_anterior.to_i
+            codigo_alfabetico = max_incremento_alfabetico.present? ? max_incremento_alfabetico.next : "A"
+            ultima_fecha = NoteEntry.del_anio_por_fecha_factura(fecha).order(invoice_date: :desc).first.try(:invoice_date)
+            ultima_fecha = ultima_fecha.strftime("%d/%m/%Y") if ultima_fecha.present?
+            respuesta_hash[:tipo_respuesta] = "confirmacion"
+            respuesta_hash[:nro_nota_ingreso] = codigo_alfabetico.present? ? "#{codigo_numerico}-#{codigo_alfabetico}" : "#{codigo_numerico}"
+            respuesta_hash[:codigo_numerico] = codigo_numerico
+            respuesta_hash[:codigo_alfabetico] = codigo_alfabetico
+            respuesta_hash[:ultima_fecha] = ultima_fecha
+          end
+        end
+      else
+        if nro_nota_posterior > 1
+          respuesta_hash[:codigo_numerico] = nro_nota_posterior.to_i - 1
+        else
+          respuesta_hash[:tipo_respuesta] = "alerta"
+          respuesta_hash[:mensaje] = "No se puede introducir una nota de ingreso para la fecha, por favor contactese con el administrador del sistema."
+        end
+      end
+    end
+    respuesta_hash
+  end
+
   private
 
   def set_note_entry_date
@@ -139,4 +234,5 @@ class NoteEntry < ActiveRecord::Base
     end
     first_date.to_date
   end
+
 end
