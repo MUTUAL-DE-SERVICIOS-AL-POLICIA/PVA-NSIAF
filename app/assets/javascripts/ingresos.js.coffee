@@ -7,6 +7,7 @@ class Ingresos
   _factura = {}
   _nota_entrega = {}
   _c31 = {}
+  _observacion = {}
 
   constructor: ->
     @cacheElements()
@@ -75,33 +76,37 @@ class Ingresos
 
   confirmarIngreso: (e) =>
     e.preventDefault()
-    if @id_ingreso
-      url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val() + '&n=' + @id_ingreso
-    else
-      url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val()
-    $.ajax
-      url: url
-      type: 'GET'
-      dataType: 'JSON'
-    .done (xhr) =>
-      data = xhr
-      if data["tipo_respuesta"]
-        if data["tipo_respuesta"] == "confirmacion"
-          @$confirmModal.html @$confirmarIngresoTpl.render(data)
-          modal = @$confirmModal.find(@$confirmarIngresoModal.selector)
-          modal.modal('show')
-        else if data["tipo_respuesta"] == "alerta"
-          @$confirmModal.html @$alertaIngresoTpl.render(data)
-          modal = @$confirmModal.find(@$alertaIngresoModal.selector)
-          modal.modal('show')
+    if @sonValidosDatos()
+      if @id_ingreso
+        url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val() + '&n=' + @id_ingreso
       else
-        @guardarIngresoActivosFijos(e)
+        url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val()
+      $.ajax
+        url: url
+        type: 'GET'
+        dataType: 'JSON'
+      .done (xhr) =>
+        data = xhr
+        if data["tipo_respuesta"]
+          if data["tipo_respuesta"] == "confirmacion"
+            @$confirmModal.html @$confirmarIngresoTpl.render(data)
+            modal = @$confirmModal.find(@$confirmarIngresoModal.selector)
+            modal.modal('show')
+          else if data["tipo_respuesta"] == "alerta"
+            @$confirmModal.html @$alertaIngresoTpl.render(data)
+            modal = @$confirmModal.find(@$alertaIngresoModal.selector)
+            modal.modal('show')
+        else
+          @guardarIngresoActivosFijos(e)
+    else
+      @alert.danger "Complete todos los datos requeridos"
 
   aceptarConfirmarIngreso: (e) =>
     e.preventDefault()
     el = @$confirmModal.find('#modal_observacion')
     if el
       @$inputObservacion.val(el.val())
+    @capturarObservacion()
     @$confirmModal.find(@$confirmarIngresoModal.selector).modal('hide')
     $form = $(e.target).closest('form')
     @guardarIngresoActivosFijos(e)
@@ -161,6 +166,9 @@ class Ingresos
     @$proveedorNit.val _proveedor.nit
     @$proveedorTelefono.val _proveedor.telefono
 
+  capturarObservacion: =>
+    _observacion.observacion = @$inputObservacion.val().trim()
+
   conversionNumeros: ->
     _activos.map (e, i) ->
       e.indice = i + 1
@@ -197,6 +205,7 @@ class Ingresos
       total: @sumaTotal()
     ingreso = $.extend({}, ingreso, _factura)
     ingreso = $.extend({}, ingreso, _nota_entrega)
+    ingreso = $.extend({}, ingreso, _observacion)
     $.extend({}, ingreso, _c31)
 
   mostrarActivos: (data) =>

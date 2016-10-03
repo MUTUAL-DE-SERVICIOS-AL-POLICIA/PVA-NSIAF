@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(version: 20161003014617) do
   create_table "entradas_salidas", id: false, force: :cascade do |t|
     t.integer  "id",             limit: 4,   default: 0,  null: false
     t.integer  "subarticle_id",  limit: 4
-    t.datetime "fecha"
+    t.date     "fecha"
     t.string   "factura",        limit: 255
     t.date     "nota_entrega"
     t.string   "nro_pedido",     limit: 11
@@ -201,10 +201,7 @@ ActiveRecord::Schema.define(version: 20161003014617) do
     t.datetime "fecha_cierre"
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
-    t.integer  "user_id",      limit: 4
   end
-
-  add_index "gestiones", ["user_id"], name: "index_gestiones_on_user_id", using: :btree
 
   create_table "ingresos", force: :cascade do |t|
     t.integer  "numero",                limit: 4
@@ -435,7 +432,6 @@ ActiveRecord::Schema.define(version: 20161003014617) do
   add_foreign_key "assets", "ubicaciones"
   add_foreign_key "cierre_gestiones", "assets"
   add_foreign_key "cierre_gestiones", "gestiones"
-  add_foreign_key "gestiones", "users"
   add_foreign_key "ingresos", "suppliers"
   add_foreign_key "ingresos", "users"
   add_foreign_key "subarticles", "materials"

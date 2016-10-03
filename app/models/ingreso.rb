@@ -14,7 +14,14 @@ class Ingreso < ActiveRecord::Base
   belongs_to :user
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = joins(:user, :supplier).order("#{sort_column} #{sort_direction}")
+    orden = "#{sort_column} #{sort_direction}"
+    case sort_column
+    when "ingresos.factura_fecha"
+      orden += ", ingresos.numero #{sort_direction}, ingresos.incremento_alfabetico #{sort_direction}"
+    when "ingresos.numero"
+      orden += ", ingresos.incremento_alfabetico #{sort_direction}"
+    end
+    array = joins(:user, :supplier).order(orden)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?

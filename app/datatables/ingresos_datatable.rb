@@ -19,7 +19,7 @@ private
   def data
     array.map do |r|
       [
-        r.numero,
+        r.obtiene_numero,
         r.factura_fecha.present? ? I18n.l(r.factura_fecha) : '',
         r.factura_numero,
         r.supplier_name,
@@ -27,7 +27,7 @@ private
         r.user_name,
         number_with_delimiter(r.total),
         r.nota_entrega_fecha.present? ? I18n.l(r.nota_entrega_fecha) : '',
-        [links_actions(r, 'ingreso'), link_to(content_tag(:span, "", class: 'glyphicon glyphicon-sort-by-order'), '#editar', class: 'btn btn-info btn-xs editar-nota-entrada', title: 'Establecer número de nota de entrada', data: {"nota-entrada" => r.as_json}, id: dom_id(r))].join(' ')
+        [links_actions(r, 'ingreso')].join(' ')
       ]
     end
   end
