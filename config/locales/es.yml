@@ -423,8 +423,14 @@ es:
         cerrado: "Cerrado"
         fecha_cierre: "Fecha cierre"
       ingreso:
-        suppliers: "Proveedor"
-        users: "Encargado(a)"
+        factura_fecha: "Fecha Factura"
+        factura_numero: "Número Factura"
+        numero: "Número"
+        supplier: "Proveedor"
+        telefono: "Teléfono"
+        users: "Usuario"
+        total: "Total compra"
+        nota_entrega_fecha: "Fecha Nota Entrega"
       kardex:
         kardex_date: "Fecha"
         invoice_number: "Nº de Factura"
