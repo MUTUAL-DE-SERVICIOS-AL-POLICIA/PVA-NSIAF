@@ -90,4 +90,9 @@ class Gestion < ActiveRecord::Base
     user.present? ? user.name : ""
   end
 
+  #retorna el cargo del usuario que cerro la gestión
+  def cargo_usuario
+    user.present? ? user.title : ""
+  end
+
 end

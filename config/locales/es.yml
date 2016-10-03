@@ -424,6 +424,9 @@ es:
         estado: "Estado"
         usuario: "Usuario"
         fecha_cierre: "Fecha cierre"
+        cargo: "Cargo"
+        reporte6: "Resumen de activos fijos - reporte 6"
+        reporte10: "Depreciación de activos - reporte 10"
       ingreso:
         suppliers: "Proveedor"
         users: "Encargado(a)"
