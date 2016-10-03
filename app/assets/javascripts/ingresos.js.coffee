@@ -18,6 +18,9 @@ class Ingresos
     # Variables
     @ingresosPath = @$ingresosUrls.data('activos')
     @proveedoresPath = @$ingresosUrls.data('proveedores')
+    @$obt_ingreso_urls = $('#obt_ingreso-urls')
+    @obt_ingreso_url = @$obt_ingreso_urls.data('obt-ingreso')
+    @id_ingreso = @$obt_ingreso_urls.data('ingreso')
     # Elementos
     @$barcode = $('#code')
     @$facturaForm = $('#factura-form')
@@ -38,10 +41,19 @@ class Ingresos
     @$notaEntregaFecha = @$facturaForm.find('#nota_entrega_fecha')
     @$c31Numero = @$facturaForm.find('#c31_numero')
     @$c31Fecha = @$facturaForm.find('#c31_fecha')
+    @$inputObservacion = $('#observacion')
     # Plantillas
     @$activosTpl = Hogan.compile $('#tpl-activo-seleccionado').html() || ''
     # Growl Notices
     @alert = new Notices({ele: 'div.main'})
+
+    @$confirmModal = $('#confirm-modal')
+    @$confirmarIngresoModal = $('#modal-confirmar-ingreso')
+    @$alertaIngresoModal = $('#modal-alerta-ingreso')
+
+    # Plantillas
+    @$confirmarIngresoTpl = Hogan.compile $('#confirmar-ingreso-tpl').html() || ''
+    @$alertaIngresoTpl = Hogan.compile $('#alerta-ingreso-tpl').html() || ''
 
   bindEvents: ->
     if @$proveedorAuto?
@@ -57,7 +69,61 @@ class Ingresos
     $(document).on 'change', @$notaEntregaFecha.selector, @capturarNotaEntrega
     $(document).on 'change', @$c31Numero.selector, @capturarC31
     $(document).on 'change', @$c31Fecha.selector, @capturarC31
-    $(document).on 'click', @$guardarBtn.selector, @guardarIngresoActivosFijos
+    $(document).on 'click', @$guardarBtn.selector, @confirmarIngreso
+    $(document).on 'click', @$confirmarIngresoModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
+    $(document).on 'click', @$alertaIngresoModal.find('button[type=submit]').selector, (e) => @aceptarAlertaIngreso(e)
+
+  confirmarIngreso: (e) =>
+    e.preventDefault()
+    if @id_ingreso
+      url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val() + '&n=' + @id_ingreso
+    else
+      url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val()
+    $.ajax
+      url: url
+      type: 'GET'
+      dataType: 'JSON'
+    .done (xhr) =>
+      data = xhr
+      if data["tipo_respuesta"]
+        if data["tipo_respuesta"] == "confirmacion"
+          @$confirmModal.html @$confirmarIngresoTpl.render(data)
+          modal = @$confirmModal.find(@$confirmarIngresoModal.selector)
+          modal.modal('show')
+        else if data["tipo_respuesta"] == "alerta"
+          @$confirmModal.html @$alertaIngresoTpl.render(data)
+          modal = @$confirmModal.find(@$alertaIngresoModal.selector)
+          modal.modal('show')
+      else
+        @guardarIngresoActivosFijos(e)
+
+  aceptarConfirmarIngreso: (e) =>
+    e.preventDefault()
+    el = @$confirmModal.find('#modal_observacion')
+    if el
+      @$inputObservacion.val(el.val())
+    @$confirmModal.find(@$confirmarIngresoModal.selector).modal('hide')
+    $form = $(e.target).closest('form')
+    @guardarIngresoActivosFijos(e)
+
+  validarObservacion: (e) =>
+    el = @$confirmModal.find('#modal_observacion')
+    if el
+      valor = $.trim(el.val())
+      if valor
+        el.parents('.form-group').removeClass('has-error')
+        el.next().remove()
+        @aceptarConfirmarIngreso(e)
+      else
+        el.parents('.form-group').addClass('has-error')
+        el.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
+        false
+
+  aceptarAlertaIngreso: (e) ->
+    e.preventDefault()
+    @$confirmModal.find(@$alertaIngresoModal.selector).modal('hide')
+    $form = $(e.target).closest('form')
+    false
 
   adicionarEnLaLista: (data, callback) ->
     _cantidad = 0
