@@ -54,7 +54,7 @@ class Asset < ActiveRecord::Base
     if q.present? || cuentas.present? || (desde.present? && hasta.present?)
       activos = includes(:ingreso, auxiliary: :account)
       if q.present?
-        activos = activos.where("assets.description like :q OR assets.code like :code", q: "%#{q}%", code: "%#{q}%")
+        activos = activos.joins(:ingreso).where("assets.description like :q OR assets.code like :code OR ingresos.factura_numero like :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
       end
       if cuentas.present?
         activos = activos.where("accounts.id" => cuentas)
@@ -139,6 +139,10 @@ class Asset < ActiveRecord::Base
   # Fecha de ingreso del activo fijo
   def ingreso_proveedor_nombre
     ingreso.present? ? ingreso.supplier_name : nil
+  end
+
+  def nro_factura
+    ingreso.present?  ? ingreso.factura_numero : nil
   end
 
   def name
