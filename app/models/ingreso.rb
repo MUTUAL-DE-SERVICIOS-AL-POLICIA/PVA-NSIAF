@@ -1,12 +1,27 @@
 class Ingreso < ActiveRecord::Base
+  include Autoincremento
+
   default_scope -> { where(baja_logica: false) }
+
+  scope :del_anio_por_fecha_factura, -> (fecha) { where(factura_fecha: fecha.beginning_of_year..fecha.end_of_year) }
+  scope :mayor_a_fecha_factura, -> (fecha) { where('factura_fecha > ?', fecha) }
+  scope :menor_igual_a_fecha_factura, -> (fecha) { where('factura_fecha <= ?', fecha) }
+  scope :con_fecha_factura, -> { where.not('factura_fecha is null') }
+  scope :con_numero, -> { where('numero is not null')}
 
   belongs_to :supplier
   has_many :assets
   belongs_to :user
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
-    array = joins(:user, :supplier).order("#{sort_column} #{sort_direction}")
+    orden = "#{sort_column} #{sort_direction}"
+    case sort_column
+    when "ingresos.factura_fecha"
+      orden += ", ingresos.numero #{sort_direction}, ingresos.incremento_alfabetico #{sort_direction}"
+    when "ingresos.numero"
+      orden += ", ingresos.incremento_alfabetico #{sort_direction}"
+    end
+    array = joins(:user, :supplier).order(orden)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
@@ -63,4 +78,85 @@ class Ingreso < ActiveRecord::Base
   def telefono_proveedor
     supplier.telefono
   end
+
+  def obtiene_numero
+    if !incremento_alfabetico.present?
+      "#{numero}"
+    else
+      "#{numero}-#{incremento_alfabetico}"
+    end
+  end
+
+  def self.numero_ingreso_anterior(fecha)
+    fecha = fecha.to_date
+    self.del_anio_por_fecha_factura(fecha).menor_igual_a_fecha_factura(fecha).con_numero.maximum(:numero)
+  end
+
+  def self.numero_ingreso_posterior(fecha)
+    fecha = fecha.to_date
+    self.del_anio_por_fecha_factura(fecha).mayor_a_fecha_factura(fecha).con_numero.minimum(:numero)
+  end
+
+  def tiene_numero?
+    numero.present? && factura_numero.present?
+  end
+
+  def self.numero_ingreso_posterior_regularizado(fecha)
+    fecha = fecha.to_date
+    numero = self.numero_ingreso_anterior(fecha)
+    self.del_anio_por_fecha_factura(fecha).mayor_a_fecha_factura(fecha).where(numero: numero).first.try(:incremento_alfabetico)
+  end
+
+  def self.obtiene_siguiente_numero_ingreso(fecha)
+    codigo_numerico = nil
+    codigo_alfabetico = nil
+    respuesta_hash = Hash.new
+    if fecha.present?
+      fecha = fecha.to_date
+      numero_ingreso_anterior = Ingreso.numero_ingreso_anterior(fecha)
+      numero_ingreso_posterior = Ingreso.numero_ingreso_posterior(fecha)
+      if numero_ingreso_anterior.present? && !numero_ingreso_posterior.present?
+        respuesta_hash[:codigo_numerico] = numero_ingreso_anterior.to_i + 1
+      elsif !numero_ingreso_anterior.present? && !numero_ingreso_posterior.present?
+        respuesta_hash[:codigo_numerico] = 1
+      elsif numero_ingreso_anterior.present? && numero_ingreso_posterior.present?
+        diferencia = numero_ingreso_posterior - numero_ingreso_anterior
+        if diferencia > 1
+          respuesta_hash[:codigo_numerico] = numero_ingreso_anterior.to_i + 1
+        else
+          inc_alfabetico = Ingreso.numero_ingreso_posterior_regularizado(fecha)
+          if inc_alfabetico.present?
+            ingreso_anterior = Ingreso.del_anio_por_fecha_factura(fecha).con_numero.menor_igual_a_fecha_factura(fecha).order(factura_fecha: :desc, numero: :desc, incremento_alfabetico: :desc).first
+            ingreso_posterior = Ingreso.del_anio_por_fecha_factura(fecha).con_numero.mayor_a_fecha_factura(fecha).order(factura_fecha: :asc, numero: :asc, incremento_alfabetico: :asc).first
+            respuesta_hash[:tipo_respuesta] = "alerta"
+            respuesta_hash[:fecha] = fecha.strftime("%d/%m/%Y")
+            respuesta_hash[:numero_ingreso_anterior] = ingreso_anterior.obtiene_numero
+            respuesta_hash[:fecha_ingreso_anterior] = ingreso_anterior.factura_fecha.strftime("%d/%m/%Y") if ingreso_anterior.factura_fecha.present?
+            respuesta_hash[:numero_ingreso_posterior] =  ingreso_posterior.obtiene_numero
+            respuesta_hash[:fecha_ingreso_posterior] = ingreso_posterior.factura_fecha.strftime("%d/%m/%Y") if ingreso_posterior.factura_fecha.present?
+          else
+            max_incremento_alfabetico = Ingreso.where(numero: numero_ingreso_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
+            codigo_numerico = numero_ingreso_anterior.to_i
+            codigo_alfabetico = max_incremento_alfabetico.present? ? max_incremento_alfabetico.next : "A"
+            ultima_fecha = Ingreso.del_anio_por_fecha_factura(fecha).order(factura_fecha: :desc).first.try(:factura_fecha)
+            ultima_fecha = ultima_fecha.strftime("%d/%m/%Y") if ultima_fecha.present?
+            respuesta_hash[:tipo_respuesta] = "confirmacion"
+            respuesta_hash[:numero] = codigo_alfabetico.present? ? "#{codigo_numerico}-#{codigo_alfabetico}" : "#{codigo_numerico}"
+            respuesta_hash[:codigo_numerico] = codigo_numerico
+            respuesta_hash[:codigo_alfabetico] = codigo_alfabetico
+            respuesta_hash[:ultima_fecha] = ultima_fecha
+          end
+        end
+      else
+        if numero_ingreso_posterior > 1
+          respuesta_hash[:codigo_numerico] = numero_ingreso_posterior.to_i - 1
+        else
+          respuesta_hash[:tipo_respuesta] = "alerta"
+          respuesta_hash[:mensaje] = "No se puede introducir un ingreso para la fecha, por favor contactese con el administrador del sistema."
+        end
+      end
+    end
+    respuesta_hash
+  end
+
 end

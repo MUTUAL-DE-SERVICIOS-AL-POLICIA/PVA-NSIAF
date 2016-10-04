@@ -20,7 +20,9 @@ Rails.application.routes.draw do
   end
   resources :ufvs, except: [:show, :destroy]
   resources :ubicaciones, except: [:show, :destroy]
-  resources :ingresos
+  resources :ingresos do
+    get :obt_cod_ingreso, on: :collection
+  end
 
   resources :reportes do
     get 'kardex', on: :collection
