@@ -511,6 +511,7 @@ es:
         role: "Rol"
         current_password: "Contraseña Actual"
         status: "Estado"
+        no: "Nro."
       version:
         item_id: "Código"
         created_at: "Fecha"

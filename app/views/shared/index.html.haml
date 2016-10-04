@@ -17,7 +17,6 @@
 - when 'ufvs' then new_url = new_ufv_path
 - when 'gestiones' then new_url = new_gestion_path
 - when 'proceedings' then accion = 'actas'
-
 - control = controller_name == 'derecognised' ? 'assets' : controller_name
 
 = title t("#{control}.title.title")
@@ -50,7 +49,7 @@
     %tr
       - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
-          %th= User.human_attribute_name('code')
+          %th= t('activerecord.attributes.user.ci')
         - if %w(subarticles).include?(control)
           %th= Subarticle.human_attribute_name('code_old')
         %th= %w(assets materials articles subarticles).include?(control) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
