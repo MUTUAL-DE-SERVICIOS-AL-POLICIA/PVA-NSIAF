@@ -34,7 +34,7 @@
     - @cuentas.each_with_index do |account, indice|
       - if indice > 0
         .page-break
-      - activos = account.auxiliares_activos(desde, fecha)
+      - activos = account.auxiliares_activos_depreciacion(desde, fecha)
       - if activos.size > 0
         - imprime_pdf = true
         %table.table.table-condensed.table-bordered.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
