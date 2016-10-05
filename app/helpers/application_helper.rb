@@ -183,7 +183,7 @@ module ApplicationHelper
 
   def status_active(model)
     orden = :name
-    if model == Material
+    if model == Material || model == Asset
       orden = :description
     end
     model.where(status: '1').order(orden)

@@ -30,6 +30,7 @@ private
   def data
     array.map do |user|
       as = []
+      as << user.code
       as << user.ci
       as << user.name
       as << user.title
@@ -58,7 +59,7 @@ private
   end
 
   def sort_column
-    columns = current_user.is_super_admin? ? %w[users.name role users.status] : %w[users.ci users.name title departments.name users.assets_count users.status]
+    columns = current_user.is_super_admin? ? %w[users.name role users.status] : %w[users.code users.ci users.name title departments.name users.assets_count users.status]
     columns[params[:iSortCol_0].to_i]
   end
 
