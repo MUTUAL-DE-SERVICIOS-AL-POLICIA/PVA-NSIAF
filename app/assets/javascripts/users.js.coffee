@@ -29,11 +29,9 @@ class UserAssets
     @$containerCurrentAssets.hide()
     unless @isHistoricalShowed()
       $.getJSON @$radioReportsHistorical.data('url'), (data) =>
-        data['assets?'] = data.assets.length > 0
         @$containerHistorical.html @$templateHistoricalAssets.render(data)
         _historicalShowed = true
       .fail (e) =>
-        data['assets?'] = data.assets.length > 0
         @$containerHistorical.html @$templateHistoricalAssets.render(data)
     @$containerHistorical.show()
 

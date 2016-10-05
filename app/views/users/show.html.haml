@@ -63,25 +63,26 @@
     #historical.col-lg-8.col-md-7.col-sm-12{style: 'display: none;'}
 
     %script{id: 'tpl-historical-assets', type: 'text/html'}
-      {{#assets?}}
       %h4 Histórico Activos Fijos Asignados
-
       %table.table.table-striped.table-condensed
+        {{#proceedings}}
         %thead
           %tr
+            %th{colspan: 3} {{tipo_acta}} - {{obt_fecha}}
+          %tr
             %th
-            %th= Asset.human_attribute_name('description')
-            %th= Asset.human_attribute_name('code')
+            %th Código
+            %th Descripción
         %tbody
           {{#assets}}
           %tr
             %td {{index}}
+            %td {{code}}
             %td {{description}}
-            %td.nowrap {{code}}
           {{/assets}}
-      {{/assets?}}
-      {{^assets}}
+        {{/proceedings}}
+        {{^proceedings}}
       .alert.alert-info.alert-dismissable
         %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
         No tiene histórico de activos que le fueron asignados.
-      {{/assets}}
+      {{/proceedings}}
