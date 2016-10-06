@@ -7,9 +7,9 @@ class ProceedingSerializer < ActiveModel::Serializer
   end
 
   def tipo_acta
-    if object.proceeding_type = 'E'
+    if object.proceeding_type == 'E'
       I18n.t('proceedings.type.assignation')
-    elsif object.proceeding_type = 'D'
+    elsif object.proceeding_type == 'D'
       I18n.t('proceedings.type.devolution')
     end
   end

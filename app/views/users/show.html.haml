@@ -1,3 +1,5 @@
+= react_component 'Funcionario', usuario: @user_json, activos: @activos_json
+
 .page-header{ data: {action: 'historical-current'} }
   .pull-right
     - if current_user.is_admin?
@@ -9,7 +11,7 @@
         %label.btn.btn-default.active
           = radio_button_tag 'reports', 'current', true
           %span.glyphicon.glyphicon-th-list
-          Designación Actual
+          Designación Actual= react_component 'ActivosUser', user_id: @user.id
 
     = link_to edit_user_path(@user), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
@@ -17,7 +19,6 @@
     = link_to users_path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("users.title.title")
-
   %h2= @user.name
 
 .row
@@ -45,6 +46,7 @@
       %dd= type_status(@user.status)
 
   - if current_user.is_admin?
+    = react_component 'ActivosUser', user_id: @user.id
     #current-assets.col-lg-8.col-md-7.col-sm-12
       - if @user.assets.present?
         .pull-right
@@ -52,7 +54,6 @@
           .btn-group.btn-group-xs
             = button_tag 'CSV', class: 'download-assets btn btn-default', data: { url: download_user_path(@user, format: :csv) }
             = button_tag 'PDF', class: 'download-assets btn btn-default', data: { url: download_user_path(@user, format: :pdf) }
-        %h4 Activos Fijos Asignados
 
         = render 'user_assets.pdf.haml'
       - else
@@ -63,7 +64,7 @@
     #historical.col-lg-8.col-md-7.col-sm-12{style: 'display: none;'}
 
     %script{id: 'tpl-historical-assets', type: 'text/html'}
-      %h4 Histórico Activos Fijos Asignados
+
       %table.table.table-striped.table-condensed
         {{#proceedings}}
         %thead

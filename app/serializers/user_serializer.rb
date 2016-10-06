@@ -1,3 +1,8 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :name, :title, :ci, :entity_name, :department_name
+  self.root = false
+  attributes :code, :name, :username, :title, :ci, :email, :entity_name, :department_name, :phone, :mobile, :role, :estado
+
+  def estado
+    object.status == "1" ? 'ACTIVO' : 'INACTIVO'
+  end
 end

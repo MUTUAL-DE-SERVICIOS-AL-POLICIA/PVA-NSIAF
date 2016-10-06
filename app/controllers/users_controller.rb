@@ -14,6 +14,8 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @assets = @user.assets
+    @user_json = UserSerializer.new(@user)
+    @activos_json = @assets.map { |a| ::AssetSerializer.new(a) }
     respond_to do |format|
       format.html
       format.json { render json: @user, root: false } # UserSerializer
@@ -106,7 +108,7 @@ class UsersController < ApplicationController
   def historical
     proceedings = @user.proceedings
     respond_to do |format|
-      format.json { render json: proceedings, each_serializer: ProceedingSerializer, root: 'proceedings' }
+      format.json { render json: proceedings, each_serializer: ProceedingSerializer, root: false }
     end
   end
 
