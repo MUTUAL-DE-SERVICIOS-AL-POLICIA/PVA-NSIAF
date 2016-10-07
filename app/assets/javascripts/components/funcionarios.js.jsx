@@ -1,0 +1,247 @@
+var Acta = React.createClass({
+    render() {
+        var indice= this.props.indice;
+        var fecha= this.props.acta.obt_fecha;
+        var tipo= this.props.acta.tipo_acta;
+        var activos = this.props.acta.assets.map((activo, i) => {
+          return (
+            <Activo indice = { i + 1 }
+                    activo = { activo }/>
+          )
+        });
+        return (
+          <div>
+          <h3>  {fecha} - {tipo} </h3>
+          <table className="table table-striped table-condensed table-bordered alineacion-media">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Descripción</th>
+              <th>Código</th>
+            </tr>
+          </thead>
+          <tbody>
+            { activos }
+          </tbody>
+          </table>
+        </div>
+        )
+    }
+});
+
+var ActivosHistorico = React.createClass({
+  getInitialState() {
+    return { actas: [] }
+  },
+
+  componentDidMount() {
+    var user_id = this.props.user_id;
+    var host = ".."
+    $.getJSON(host + '/api/users/' + user_id + '/obt_historico_actas', (response) => { this.setState({ actas: response }) });
+  },
+
+  render() {
+    var listado_actas = this.state.actas.map((acta, i) => {
+      return (
+        <Acta indice = { i + 1 }
+              acta = { acta }/>
+      )
+    });
+    return (
+      <div className="col-lg-8 col-md-7 col-sm-12" id="current-assets">
+        <h4>Histórico Activos Fijos Asignados</h4>
+        <div className="table-responsive col-md-6">
+          { listado_actas }
+        </div>
+      </div>
+    );
+  }
+});
+
+var Activo = React.createClass({
+    getLinkAsset(){
+      return "/assets/" + this.props.activo.code;
+    },
+
+    render() {
+        var indice = this.props.indice;
+        var descripcion = this.props.activo.description;
+        var codigo = this.props.activo.code;
+        var link = this.getLinkAsset();
+        return (
+            <tr>
+              <td>{ indice }</td>
+              <td>{ descripcion }</td>
+              <td className = 'nowrap text-center'>
+                <a href = {link}>{codigo}</a>
+              </td>
+            </tr>
+        )
+    }
+});
+
+var Activos = React.createClass({
+  render() {
+    var activos = this.props.activos.map((activo, i) => {
+      return (
+        <Activo indice = { i + 1 }
+                activo = { activo }/>
+      )
+    });
+    return (
+      <div className="col-lg-8 col-md-7 col-sm-12" id="current-assets">
+        <div className="pull-right">
+          Descargar:
+          <div className="btn-group btn-group-xs">
+            <button name="button" type="submit" className="download-assets btn btn-default" data-url="/users/40/download.csv">CSV</button>
+            <button name="button" type="submit" className="download-assets btn btn-default" data-url="/users/40/download.pdf">PDF</button>
+          </div>
+        </div>
+        <h4>Activos Fijos Asignados</h4>
+        <table className="table table-striped table-condensed table-bordered alineacion-media">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Descripción</th>
+              <th>Código</th>
+            </tr>
+          </thead>
+          <tbody>
+            { activos }
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+});
+
+var DatosUsuario = React.createClass({
+  render() {
+    var codigo = this.props.usuario.code;
+    var cargo = this.props.usuario.title;
+    var ci = this.props.usuario.ci;
+    var email = this.props.usuario.email;
+    var nombre_usuario = this.props.usuario.username;
+    var telefono = this.props.usuario.phone;
+    var celular = this.props.usuario.mobile;
+    var unidad = this.props.usuario.department_name;
+    var rol = this.props.usuario.role;
+    var estado = this.props.usuario.estado;
+
+    return (
+      <div className="col-lg-4 col-md-5 col-sm-12">
+        <dl className="dl-horizontal">
+          <dt>Código</dt>
+          <dd>{ codigo }</dd>
+          <dt>Cargo</dt>
+          <dd>{ cargo }</dd>
+          <dt>C.I.</dt>
+          <dd>{ ci } </dd>
+          <dt>Email</dt>
+          <dd>{ email }</dd>
+          <dt>Usuario</dt>
+          <dd>{ nombre_usuario }</dd>
+          <dt>Teléfono</dt>
+          <dd>{ telefono }</dd>
+          <dt>Celular</dt>
+          <dd>{ celular }</dd>
+          <dt>Unidad</dt>
+          <dd>{ unidad }</dd>
+          <dt>Rol</dt>
+          <dd>{  }</dd>
+          <dt>Estado</dt>
+          <dd>{ estado }</dd>
+        </dl>
+      </div>
+    );
+  }
+});
+
+var Cabecera = React.createClass({
+  manejadorBotonHistorico(){
+    this.props.actualizacionBoton("historico");
+  },
+
+  manejadorBotonActivos(){
+    this.props.actualizacionBoton("activos");
+  },
+
+  no_administrador(){
+    if(this.props.admin == '0'){
+      return(
+        <div className='btn-group' data-toggle='buttons'>
+          <label className='btn btn-default' onClick={this.manejadorBotonHistorico}>
+            <input type="radio" name="reports" id="reports_historical" value="historical" data-url="/users/31/historical" />
+            <span className='glyphicon glyphicon-list-alt'></span>
+            Histórico
+          </label>
+          <label className='btn btn-default active' onClick={this.manejadorBotonActivos}>
+            <input type="radio" name="reports" id="reports_current" value="current" checked="checked" />
+            <span className='glyphicon glyphicon-th-list'></span>
+          </label>
+        </div>
+      );
+    }
+  },
+  render() {
+    var nombre_usuario = this.props.usuario.name;
+
+    return (
+      <div className='page-header' data-action='historical-current'>
+        <div className='pull-right'>
+          { this.no_administrador() }
+          <a className="btn btn-primary" href="/users/31/edit"><span className='glyphicon glyphicon-edit'></span>
+          Editar
+          </a>
+          <a className="btn btn-default" href="/users"><span className='glyphicon glyphicon-list'></span>
+          Funcionarios
+          </a>
+        </div>
+        <h2>{ nombre_usuario }</h2>
+      </div>
+    );
+  }
+});
+
+var Cuerpo = React.createClass({
+  elige_vista: function() {
+    if(this.props.tipo_vista == "historico"){
+      return(<ActivosHistorico user_id = { this.props.usuario.id }/>);
+    }
+    else{
+      return(<Activos activos = { this.props.activos }/>);
+    }
+  },
+
+  render() {
+    return (
+      <div className='row'>
+        <DatosUsuario usuario = {this.props.usuario}/>
+        { this.elige_vista() }
+      </div>
+    );
+  }
+});
+
+var Funcionarios = React.createClass({
+  getInitialState: function() {
+      return {
+          tipo_vista: "activos"
+      };
+  },
+
+  manejoBoton(tipo_vista) {
+      this.setState({
+          tipo_vista: tipo_vista
+      });
+  },
+
+  render() {
+    return (
+      <div>
+        <Cabecera usuario = {this.props.usuario} admin = {this.props.admin} actualizacionBoton={this.manejoBoton}/>
+        <Cuerpo usuario = {this.props.usuario} admin = {this.props.admin} activos = {this.props.activos} tipo_vista = {this.state.tipo_vista}/>
+      </div >
+    );
+  }
+});
