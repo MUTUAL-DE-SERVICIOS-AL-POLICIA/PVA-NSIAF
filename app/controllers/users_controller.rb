@@ -16,10 +16,9 @@ class UsersController < ApplicationController
     @assets = @user.assets
     @user_json = UserSerializer.new(@user)
     @activos_json = @assets.map { |a| ::AssetSerializer.new(a) }
-    @admin = current_user.is_super_admin? ? '1' : '0'
+    @admin = current_user.is_admin? ? '1' : '0'
     respond_to do |format|
       format.html
-      format.json { render json: @user, root: false } # UserSerializer
     end
   end
 

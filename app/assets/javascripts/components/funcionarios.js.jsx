@@ -5,13 +5,14 @@ var Acta = React.createClass({
         var tipo= this.props.acta.tipo_acta;
         var activos = this.props.acta.assets.map((activo, i) => {
           return (
-            <Activo indice = { i + 1 }
+            <Activo key = { i+1 }
+                    indice = { i+1 }
                     activo = { activo }/>
           )
         });
         return (
           <div>
-          <h3>  {fecha} - {tipo} </h3>
+          <h3> {tipo} {fecha} </h3>
           <table className="table table-striped table-condensed table-bordered alineacion-media">
           <thead>
             <tr>
@@ -35,39 +36,47 @@ var ActivosHistorico = React.createClass({
   },
 
   componentDidMount() {
-    var user_id = this.props.user_id;
-    var host = ".."
-    $.getJSON(host + '/api/users/' + user_id + '/obt_historico_actas', (response) => { this.setState({ actas: response }) });
+    $.getJSON(this.props.usuario.urls.historico, (response) => {
+      this.setState({ actas: response }) });
   },
 
   render() {
     var listado_actas = this.state.actas.map((acta, i) => {
       return (
-        <Acta indice = { i + 1 }
+        <Acta key = { i + 1 }
+              indice = { i + 1 }
               acta = { acta }/>
       )
     });
-    return (
-      <div className="col-lg-8 col-md-7 col-sm-12" id="current-assets">
-        <h4>Histórico Activos Fijos Asignados</h4>
-        <div className="table-responsive col-md-6">
-          { listado_actas }
+    if(listado_actas.length > 0){
+      return (
+        <div className="col-lg-8 col-md-7 col-sm-12" id="current-assets">
+          <h4>Histórico Activos Fijos Asignados</h4>
+          <div className="table-responsive col-md-6">
+            { listado_actas }
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
+    else{
+      return(
+        <div className="col-lg-8 col-md-7 col-sm-12" id="historical-assets">
+          <div className="alert alert-info alert-dismissable">
+            <button aria-hidden="true" className="close" data-dismiss="alert" type="button">&times;</button>
+            No tiene histórico de activos que le fueron asignados.
+          </div>
+        </div>
+      );
+    }
   }
 });
 
 var Activo = React.createClass({
-    getLinkAsset(){
-      return "/assets/" + this.props.activo.code;
-    },
-
     render() {
         var indice = this.props.indice;
         var descripcion = this.props.activo.description;
         var codigo = this.props.activo.code;
-        var link = this.getLinkAsset();
+        var link = this.props.activo.urls.show;
         return (
             <tr>
               <td>{ indice }</td>
@@ -84,34 +93,47 @@ var Activos = React.createClass({
   render() {
     var activos = this.props.activos.map((activo, i) => {
       return (
-        <Activo indice = { i + 1 }
+        <Activo key = { i + 1 }
+                indice = { i + 1 }
                 activo = { activo }/>
       )
     });
-    return (
-      <div className="col-lg-8 col-md-7 col-sm-12" id="current-assets">
-        <div className="pull-right">
-          Descargar:
-          <div className="btn-group btn-group-xs">
-            <button name="button" type="submit" className="download-assets btn btn-default" data-url="/users/40/download.csv">CSV</button>
-            <button name="button" type="submit" className="download-assets btn btn-default" data-url="/users/40/download.pdf">PDF</button>
+    if(activos.length > 0){
+      return (
+        <div className="col-lg-8 col-md-7 col-sm-12" id="current-assets">
+          <div className="pull-right">
+            Descargar:
+            <div className="btn-group btn-group-xs">
+              <button name="button" type="submit" className="download-assets btn btn-default" data-url={ this.props.usuario.urls.download_activos_csv }>CSV</button>
+              <button name="button" type="submit" className="download-assets btn btn-default" data-url={ this.props.usuario.urls.download_activos_pdf }>PDF</button>
+            </div>
           </div>
+          <h4>Activos Fijos Asignados</h4>
+          <table className="table table-striped table-condensed table-bordered alineacion-media">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Descripción</th>
+                <th>Código</th>
+              </tr>
+            </thead>
+            <tbody>
+              { activos }
+            </tbody>
+          </table>
         </div>
-        <h4>Activos Fijos Asignados</h4>
-        <table className="table table-striped table-condensed table-bordered alineacion-media">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Descripción</th>
-              <th>Código</th>
-            </tr>
-          </thead>
-          <tbody>
-            { activos }
-          </tbody>
-        </table>
-      </div>
-    );
+      );
+    }
+    else {
+      return(
+        <div className="col-lg-8 col-md-7 col-sm-12" id="current-assets">
+          <div className="alert alert-info alert-dismissable">
+            <button aria-hidden="true" className="close" data-dismiss="alert" type="button">&times;</button>
+            No tiene activos asignados.
+          </div>
+        </div>);
+    }
+
   }
 });
 
@@ -166,17 +188,17 @@ var Cabecera = React.createClass({
     this.props.actualizacionBoton("activos");
   },
 
-  no_administrador(){
-    if(this.props.admin == '0'){
+  administrador(){
+    if(this.props.admin == '1'){
       return(
         <div className='btn-group' data-toggle='buttons'>
-          <label className='btn btn-default' onClick={this.manejadorBotonHistorico}>
-            <input type="radio" name="reports" id="reports_historical" value="historical" data-url="/users/31/historical" />
+          <label className='btn btn-default' onClick={ this.manejadorBotonHistorico }>
+            <input type="radio" name="reports" id="reports_historical" value="historical" />
             <span className='glyphicon glyphicon-list-alt'></span>
             Histórico
           </label>
-          <label className='btn btn-default active' onClick={this.manejadorBotonActivos}>
-            <input type="radio" name="reports" id="reports_current" value="current" checked="checked" />
+          <label className='btn btn-default active' onClick={ this.manejadorBotonActivos }>
+            <input type="radio" name="reports" id="reports_current" value="current" defaultChecked=""/>
             <span className='glyphicon glyphicon-th-list'></span>
           </label>
         </div>
@@ -187,15 +209,18 @@ var Cabecera = React.createClass({
     var nombre_usuario = this.props.usuario.name;
 
     return (
-      <div className='page-header' data-action='historical-current'>
+      <div className='page-header'>
         <div className='pull-right'>
-          { this.no_administrador() }
-          <a className="btn btn-primary" href="/users/31/edit"><span className='glyphicon glyphicon-edit'></span>
+          { this.administrador() }
+          &nbsp;
+          <a className="btn btn-primary" href={this.props.usuario.urls.edit}><span className='glyphicon glyphicon-edit'></span>
           Editar
           </a>
-          <a className="btn btn-default" href="/users"><span className='glyphicon glyphicon-list'></span>
+          &nbsp;
+          <a className="btn btn-default" href={this.props.usuario.urls.list}><span className='glyphicon glyphicon-list'></span>
           Funcionarios
           </a>
+          &nbsp;
         </div>
         <h2>{ nombre_usuario }</h2>
       </div>
@@ -205,18 +230,20 @@ var Cabecera = React.createClass({
 
 var Cuerpo = React.createClass({
   elige_vista: function() {
-    if(this.props.tipo_vista == "historico"){
-      return(<ActivosHistorico user_id = { this.props.usuario.id }/>);
-    }
-    else{
-      return(<Activos activos = { this.props.activos }/>);
+    if(this.props.admin == 1){
+      if(this.props.tipo_vista == "historico"){
+        return(<ActivosHistorico usuario = { this.props.usuario }/>);
+      }
+      else{
+        return(<Activos usuario = { this.props.usuario } activos = { this.props.activos }/>);
+      }
     }
   },
 
   render() {
     return (
       <div className='row'>
-        <DatosUsuario usuario = {this.props.usuario}/>
+        <DatosUsuario usuario = { this.props.usuario }/>
         { this.elige_vista() }
       </div>
     );
