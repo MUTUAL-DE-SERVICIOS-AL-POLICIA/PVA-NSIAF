@@ -95,4 +95,12 @@ class Gestion < ActiveRecord::Base
     user.present? ? user.title : ""
   end
 
+  def primer_dia_gestion
+    "01-01-#{ anio }" if anio.present?
+  end
+
+  def ultimo_dia_gestion
+    "31-12-#{ anio }" if anio.present?
+  end
+
 end

@@ -49,6 +49,8 @@
     %tr
       - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
+          %th= User.human_attribute_name('code')
+        - if control == 'users' && !current_user.is_super_admin?
           %th= t('activerecord.attributes.user.ci')
         - if %w(subarticles).include?(control)
           %th= Subarticle.human_attribute_name('code_old')
