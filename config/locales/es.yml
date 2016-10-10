@@ -392,6 +392,8 @@ es:
         incorporacion: "Incorporación"
         supplier: "Proveedor"
         ubicacion: "Ubicación"
+        invoice: "Número Factura"
+        all: "Todas"
       auxiliary:
         code: "Código"
         name: "Nombre"

@@ -50,11 +50,22 @@ class Asset < ActiveRecord::Base
   has_paper_trail
 
   # Permite filtrar los activos mediante un buscador, cuentas, y rango de fechas
-  def self.buscar(q, cuentas, desde, hasta)
-    if q.present? || cuentas.present? || (desde.present? && hasta.present?)
+  def self.buscar(col, q, cuentas, desde, hasta)
+    if q.present? || cuentas.present? || (desde.present? && hasta.present?) || col.present?
       activos = includes(:ingreso, auxiliary: :account)
       if q.present?
-        activos = activos.joins(:ingreso).where("assets.description like :q OR assets.code like :code OR ingresos.factura_numero like :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
+        if col == 'all'
+          activos = activos.joins(:ingreso).where("assets.description like :q OR assets.code like :code OR ingresos.factura_numero like :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
+        else
+          case col
+          when 'code'
+            activos = activos.where("assets.code like :q", q: "%#{q}%")
+          when 'description'
+            activos = activos.where("assets.description like :q", q: "%#{q}%")
+          when 'invoice'
+            activos = activos.joins(:ingreso).where("ingresos.factura_numero like :q", q: "%#{q}%")
+          end
+        end
       end
       if cuentas.present?
         activos = activos.where("accounts.id" => cuentas)

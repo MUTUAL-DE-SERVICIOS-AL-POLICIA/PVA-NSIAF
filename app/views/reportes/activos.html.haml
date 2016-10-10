@@ -1,8 +1,12 @@
 - titulo = 'Reporte de activos fijos'
+
 - unless is_pdf?
   .page-header
     .pull-right{data: {action: 'reportes-activos'}}
       = form_tag activos_reportes_path, method: :get, class: 'form-inline', id: 'buscador-form' do
+        .form-group
+          %label.sr-only{for: 'cuentas'} Columna
+          = select_tag :col, options_for_select(@columnas.map{|c| [t("activerecord.attributes.asset.#{c}"),c]}, params[:col]), class: 'form-control'
         .form-group
           %label.sr-only{for: 'buscar'} Buscar
           = text_field_tag :q, params[:q], class: 'form-control', id: 'buscar', placeholder: 'Buscar activos', autofocus: true
@@ -19,6 +23,13 @@
           %span.glyphicon.glyphicon-search
 
     %h2= titulo
+    = link_to activos_reportes_path(format: :pdf, col: params[:col], q: params[:q], cuentas: params[:cuentas], desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-success btn-lg' ,id: "alguito"  do
+      %span.glyphicon.glyphicon-save
+      PDF
+    %a#download_csv.btn.btn-info.btn-lg{:href => "#"}
+      %span.glyphicon.glyphicon-save
+      CSV
+
 - else
   .row
     .col-sm-12.text-center
@@ -48,15 +59,10 @@
             %td.number= number_with_delimiter activo.precio
         - if @activos.present?
           %tr
-            %th{ colspan: 4 }
+            %th{ colspan: 5 }
             %th.number TOTAL
             %th.number= number_with_delimiter @total
         - if @activos.empty?
           %tr
-            %td.text-center{colspan: 6}
+            %td.text-center{colspan: 7}
               No hay activos para mostrar.
-  - if @activos.length > 0 && !is_pdf?
-    .col-sm-12.text-center
-      = link_to activos_reportes_path(format: :pdf, q: params[:q], cuentas: params[:cuentas], desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-success btn-lg' do
-        %span.glyphicon.glyphicon-print
-        Imprimir
