@@ -42,7 +42,7 @@ gem 'will_paginate'
 gem 'carrierwave'
 gem 'ransack', github: 'activerecord-hackery/ransack'
 gem 'lazy_high_charts'
-gem 'paper_trail', '~> 3.0.0'
+gem 'paper_trail'
 
 gem 'autocomplete-off'
 gem 'wicked_pdf'
