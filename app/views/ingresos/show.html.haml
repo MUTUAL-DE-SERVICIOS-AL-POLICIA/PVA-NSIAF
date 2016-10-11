@@ -21,6 +21,10 @@
       %h3
         .text-left.proceeding-title Nro. #{@ingreso.numero}
         .text-center Ingreso de Activos Fijos
+      - if @ingreso.factura_fecha.present?
+        %p
+          .text-center
+            Fecha de Incorporación: #{I18n.l @ingreso.factura_fecha}
 
 %table.table.table-bordered.table-striped.table-hover.table-condensed.valorado
   %thead
