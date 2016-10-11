@@ -19,13 +19,15 @@ private
   def data
     array.map do |r|
       [
+        r.obtiene_numero,
         r.factura_fecha.present? ? I18n.l(r.factura_fecha) : '',
-        r.numero,
+        r.factura_numero,
         r.supplier_name,
+        r.telefono_proveedor,
         r.user_name,
         number_with_delimiter(r.total),
         r.nota_entrega_fecha.present? ? I18n.l(r.nota_entrega_fecha) : '',
-        [links_actions(r, 'ingreso'), link_to(content_tag(:span, "", class: 'glyphicon glyphicon-sort-by-order'), '#editar', class: 'btn btn-info btn-xs editar-nota-entrada', title: 'Establecer número de nota de entrada', data: {"nota-entrada" => r.as_json}, id: dom_id(r))].join(' ')
+        [links_actions(r, 'ingreso')].join(' ')
       ]
     end
   end
@@ -47,7 +49,7 @@ private
   end
 
   def sort_column
-    columns = %w[ingresos.factura_fecha ingresos.numero suppliers.name users.name ingresos.total ingresos.nota_entrega_fecha]
+    columns = %w[ingresos.numero ingresos.factura_fecha ingresos.factura_numero  ingresos.factura_fecha suppliers.name users.name ingresos.total ingresos.nota_entrega_fecha]
     columns[params[:iSortCol_0].to_i]
   end
 

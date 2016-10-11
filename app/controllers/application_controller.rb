@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  before_action :set_paper_trail_whodunnit
+
   rescue_from CanCan::AccessDenied do |exception|
     if current_user && !current_user.has_roles?
       redirect_to welcome_index_url

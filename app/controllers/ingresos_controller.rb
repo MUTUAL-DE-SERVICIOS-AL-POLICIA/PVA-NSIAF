@@ -68,6 +68,27 @@ class IngresosController < ApplicationController
     end
   end
 
+  def obt_cod_ingreso
+    resultado = Hash.new
+    if params[:d].present?
+      fecha = params[:d].to_date
+      if params[:n].present?
+        nota_ingreso = Ingreso.find(params[:n])
+        unless nota_ingreso.numero.present?
+          resultado = Ingreso.obtiene_siguiente_numero_ingreso(fecha)
+        end
+      else
+        resultado = Ingreso.obtiene_siguiente_numero_ingreso(fecha)
+      end
+      if resultado[:tipo_respuesta] == 'confirmacion'
+        resultado[:titulo] = "Confirmación de Ingreso"
+      elsif resultado[:tipo_respuesta] == 'alerta'
+        resultado[:titulo] = "Alerta de Ingreso"
+      end
+    end
+    render json: resultado, root: false
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_ingreso
@@ -76,6 +97,6 @@ class IngresosController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def ingreso_params
-      params.require(:ingreso).permit(:numero, :supplier_id, :factura_numero, :factura_autorizacion, :factura_fecha, :nota_entrega_numero, :nota_entrega_fecha, :c31_numero, :c31_fecha, :total, asset_ids: [])
+      params.require(:ingreso).permit(:numero, :supplier_id, :factura_numero, :factura_autorizacion, :factura_fecha, :nota_entrega_numero, :nota_entrega_fecha, :c31_numero, :c31_fecha, :total, :observacion, asset_ids: [])
     end
 end

@@ -13,6 +13,8 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-datatables-rails', '~> 1.12.2'
 
+gem 'react-rails', "~> 1.6.0"
+
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
 
@@ -26,13 +28,10 @@ gem 'jquery-rails'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
+
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
-
-# Use debugger
-gem 'byebug', group: [:development, :test]
 
 gem 'devise'
 gem 'simple_form'
@@ -43,7 +42,7 @@ gem 'will_paginate'
 gem 'carrierwave'
 gem 'ransack', github: 'activerecord-hackery/ransack'
 gem 'lazy_high_charts'
-gem 'paper_trail', '~> 3.0.0'
+gem 'paper_trail'
 
 gem 'autocomplete-off'
 gem 'wicked_pdf'
@@ -52,9 +51,14 @@ gem "non-stupid-digest-assets"
 
 gem 'rest_client'
 
-group :development do
+group :development, :test do
   gem 'rails-erd'
+  gem 'spring'
   gem 'web-console', '~> 2.0'
+  gem 'byebug'
+  gem 'rspec-rails', '~> 3.5'
+  gem 'capybara', '~> 2.5'
+  gem 'factory_girl_rails', '~> 4.5.0'
 end
 
 # Read Excel files

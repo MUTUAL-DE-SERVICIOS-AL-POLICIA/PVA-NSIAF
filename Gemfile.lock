@@ -49,6 +49,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.4.0)
     angular-rails-templates (0.2.0)
       railties (>= 3.1)
       sprockets (~> 2)
@@ -57,6 +58,10 @@ GEM
     autocomplete-off (0.2.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    babel-source (5.8.35)
+    babel-transpiler (0.7.0)
+      babel-source (>= 4.0, < 6)
+      execjs (~> 2.0)
     bcrypt (3.1.7)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -69,6 +74,13 @@ GEM
       debugger-linecache (~> 1.2)
       slop (~> 3.6)
     cancan (1.6.10)
+    capybara (2.10.0)
+      addressable
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -82,8 +94,9 @@ GEM
     coffee-script (2.2.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.7.0)
+    coffee-script-source (1.10.0)
     columnize (0.8.9)
+    connection_pool (2.2.0)
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
     devise (3.5.2)
@@ -93,8 +106,14 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.0.2)
+    factory_girl (4.5.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.5.0)
+      factory_girl (~> 4.5.0)
+      railties (>= 3.0.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     haml (4.0.5)
@@ -125,7 +144,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
-    minitest (5.9.0)
+    minitest (5.9.1)
     multi_json (1.12.1)
     mysql2 (0.3.16)
     netrc (0.7.7)
@@ -134,9 +153,9 @@ GEM
       pkg-config (~> 1.1.7)
     non-stupid-digest-assets (1.0.4)
     orm_adapter (0.5.0)
-    paper_trail (3.0.0)
-      activerecord (>= 3.0, < 5.0)
-      activesupport (>= 3.0, < 5.0)
+    paper_trail (5.2.2)
+      activerecord (>= 3.0, < 6.0)
+      request_store (~> 1.1)
     pkg-config (1.1.7)
     polyamorous (1.1.0)
       activerecord (>= 3.0)
@@ -175,7 +194,15 @@ GEM
     rake (11.2.2)
     rdoc (4.1.1)
       json (~> 1.4)
+    react-rails (1.6.2)
+      babel-transpiler (>= 0.7.0)
+      coffee-script-source (~> 1.8)
+      connection_pool
+      execjs
+      rails (>= 3.2)
+      tilt
     ref (1.0.5)
+    request_store (1.3.1)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     rest_client (1.7.3)
@@ -184,6 +211,23 @@ GEM
       nokogiri
       rubyzip
       spreadsheet (> 0.6.4)
+    rspec-core (3.5.4)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-rails (3.5.2)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
     ruby-graphviz (1.2.2)
     ruby-ole (1.2.11.7)
     rubyzip (1.1.6)
@@ -235,6 +279,8 @@ GEM
     wicked_pdf (0.9.10)
       rails
     will_paginate (3.0.5)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
     zip-zip (0.3)
       rubyzip (>= 1.0.0)
 
@@ -250,21 +296,25 @@ DEPENDENCIES
   bower-rails
   byebug
   cancan
+  capybara (~> 2.5)
   carrierwave
   coffee-rails (~> 4.0.0)
   devise
+  factory_girl_rails (~> 4.5.0)
   haml-rails
   jquery-datatables-rails (~> 1.12.2)
   jquery-rails
   lazy_high_charts
   mysql2
   non-stupid-digest-assets
-  paper_trail (~> 3.0.0)
+  paper_trail
   rails (= 4.2.7.1)
   rails-erd
   ransack!
+  react-rails (~> 1.6.0)
   rest_client
   roo
+  rspec-rails (~> 3.5)
   rubyzip (>= 1.0.0)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
@@ -279,4 +329,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   1.11.2
+   1.13.2

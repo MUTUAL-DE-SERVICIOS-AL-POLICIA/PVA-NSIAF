@@ -5,12 +5,17 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: :json}, except: [:new, :edit] do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
+
       resources :documentos, only: [:show, :create]
       resources :nota_entradas, only: [:index] do
         put :anular, on: :member
       end
       resources :solicitudes, only: [:index] do
         put :anular, on: :member
+      end
+      resources :users, only: [:obt_historico_actas] do
+        get :obt_historico_actas, on: :member
+        get :obt_activos, on: :member
       end
     end
   end
@@ -20,7 +25,9 @@ Rails.application.routes.draw do
   end
   resources :ufvs, except: [:show, :destroy]
   resources :ubicaciones, except: [:show, :destroy]
-  resources :ingresos
+  resources :ingresos do
+    get :obt_cod_ingreso, on: :collection
+  end
 
   resources :reportes do
     get 'kardex', on: :collection
@@ -36,6 +43,7 @@ Rails.application.routes.draw do
 
   resources :note_entries, except: [:destroy] do
     get :get_suppliers, on: :collection
+    get :obt_cod_ingreso, on: :collection
   end
 
   # proveedores

@@ -14,6 +14,9 @@
 //= require jquery_ujs
 //= require nprogress
 //= require bootstrap
+//= require react
+//= require react_ujs
+//= require components
 //= require dataTables/jquery.dataTables
 //= require dataTables/jquery.dataTables.bootstrap3
 //= require dataTables/extras/TableTools
@@ -40,7 +43,6 @@
 //= require devolutions
 //= require proceedings
 //= require print_barcodes
-//= require users
 //= require typeahead
 //= require notices
 //= require recoding

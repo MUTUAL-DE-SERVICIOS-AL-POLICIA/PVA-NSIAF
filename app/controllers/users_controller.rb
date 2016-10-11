@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include ActiveModel::Serialization
+
   load_and_authorize_resource
   before_action :set_user, only: [:show, :edit, :update, :change_status, :csv, :pdf, :historical]
 
@@ -12,9 +14,11 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @assets = @user.assets
+    @user_json = UserSerializer.new(@user)
+    @activos_json = @assets.map { |a| ::AssetSerializer.new(a) }
+    @admin = current_user.is_admin? ? '1' : '0'
     respond_to do |format|
       format.html
-      format.json { render json: @user, root: false } # UserSerializer
     end
   end
 
@@ -102,9 +106,9 @@ class UsersController < ApplicationController
   end
 
   def historical
-    assets = Asset.historical_assets(@user)
+    proceedings = @user.proceedings
     respond_to do |format|
-      format.json { render json: view_context.selected_assets_json(assets) }
+      format.json { render json: proceedings, each_serializer: ProceedingSerializer, root: false }
     end
   end
 

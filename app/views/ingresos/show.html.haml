@@ -11,7 +11,7 @@
         %span.glyphicon.glyphicon-list
         = t("ingresos.title.title")
 
-    %h2 Ingreso de Activos Fijos Nro. #{@ingreso.numero}
+    %h2 Ingreso de Activos Fijos Nro. #{@ingreso.obtiene_numero}
 
 - lista_de_campos = listar_campos(@activos)
 
@@ -19,7 +19,7 @@
   .row{data: {action: 'devolution'}}
     .col-md-12
       %h3
-        .text-left.proceeding-title Nro. #{@ingreso.numero}
+        .text-left.proceeding-title Nro. #{@ingreso.obtiene_numero}
         .text-center Ingreso de Activos Fijos
       - if @ingreso.factura_fecha.present?
         %p
@@ -93,6 +93,11 @@
               %tr
                 %th.text-right Fecha C-31
                 %td= I18n.l @ingreso.c31_fecha
+            - if @ingreso.observacion.present?
+              %tr
+                %th.text-right Observación
+                %td= @ingreso.observacion
+
       %td
 
 = fecha_impresion if is_pdf?
