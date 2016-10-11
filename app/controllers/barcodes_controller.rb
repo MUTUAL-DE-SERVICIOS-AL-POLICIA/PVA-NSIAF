@@ -15,7 +15,7 @@ class BarcodesController < ApplicationController
     params[:hasta] = 30 unless params[:hasta].present?
     @assets = generate_array_with_codes(params[:desde].to_i, params[:hasta].to_i)
     respond_to do |format|
-      format.json { render json: @assets.select([:id, :barcode, :detalle]), root: false }
+      format.json { render json: @assets, root: false }
     end
   end
 

@@ -5,19 +5,23 @@
   %thead
     %tr
       %th.text-center Nro
-      %th.text-center= Ingreso.human_attribute_name('factura_fecha')
-      %th= Ingreso.human_attribute_name('numero')
-      %th= Ingreso.human_attribute_name('suppliers')
-      %th= Ingreso.human_attribute_name('users')
-      %th.text-right= Ingreso.human_attribute_name('total')
-      %th.text-center= Ingreso.human_attribute_name('nota_entrega_fecha')
+      %th= t("activerecord.attributes.ingreso.numero")
+      %th.text-center= t("activerecord.attributes.ingreso.factura_fecha")
+      %th.text-center= t("activerecord.attributes.ingreso.factura_numero")
+      %th= t("activerecord.attributes.ingreso.supplier")
+      %th= t("activerecord.attributes.ingreso.telefono")
+      %th= t("activerecord.attributes.ingreso.users")
+      %th.text-right= t("activerecord.attributes.ingreso.total")
+      %th.text-center= t("activerecord.attributes.ingreso.nota_entrega_fecha")
   %tbody
     - @array.each_with_index do |ingreso, index|
       %tr
         %td.text-center= index + 1
-        %td.text-center= ingreso.factura_fecha.present? ? I18n.l(ingreso.factura_fecha) : ''
         %td= ingreso.numero
+        %td.text-center= ingreso.factura_fecha.present? ? I18n.l(ingreso.factura_fecha) : ''
+        %td= ingreso.factura_numero
         %td= ingreso.supplier_name
+        %td= ingreso.telefono_proveedor
         %td= ingreso.user_name
         %td.text-right= number_with_delimiter(ingreso.total)
         %td.text-center= ingreso.nota_entrega_fecha.present? ? I18n.l(ingreso.nota_entrega_fecha) : ''

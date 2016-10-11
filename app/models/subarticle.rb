@@ -72,7 +72,7 @@ class Subarticle < ActiveRecord::Base
   end
 
   def self.estado_activo
-    where('status = ?', '1')
+    self.active
   end
 
   ##
@@ -114,12 +114,16 @@ class Subarticle < ActiveRecord::Base
     saldo_inicial = transacciones.saldo_inicial(desde)
 
     # Saldo Final
-    saldo_final = transacciones.saldo_final(hasta)
+    saldo_final = transacciones.saldo_final_resumen(hasta)
 
-    lista = [saldo_inicial] + lista + [saldo_final]
+    lista = if !transacciones.first.nil? and desde < transacciones.first.fecha
+              lista + [saldo_final]
+            else
+              [saldo_inicial] + lista + [saldo_final]
+            end
 
     # Sumar saldo final
-    Transaccion.sumar_saldo_final(lista)
+    Transaccion.generar_saldo_final(lista)
 
     lista
   end

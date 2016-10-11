@@ -26,13 +26,20 @@
           .label.label-info{title: 'Gestión próxima'} PRÓXIMA
 
 %dl.dl-horizontal
-  %dt= Gestion.human_attribute_name('id')
-  %dd= @gestion.id
-  %dt= Gestion.human_attribute_name('cerrado')
-  %dd= @gestion.cerrado ? 'SI' : 'NO'
-  - if @gestion.fecha_cierre.present?
-    %dt= Gestion.human_attribute_name('fecha_cierre')
-    %dd= l @gestion.fecha_cierre, format: :version
+  %dt= Gestion.human_attribute_name('estado')
+  %dd= @gestion.cerrado ? 'Cerrado' : 'Abierto'
+  - if @gestion.cerrado
+    - if @gestion.fecha_cierre.present?
+      %dt= Gestion.human_attribute_name('fecha_cierre')
+      %dd= l @gestion.fecha_cierre, format: :version
+    - if @gestion.user.present?
+      %dt= t "activerecord.attributes.gestion.usuario"
+      %dd= @gestion.nombre_usuario
+      %dt= t "activerecord.attributes.gestion.cargo"
+      %dd= @gestion.cargo_usuario
+    %dd
+      = link_to t("activerecord.attributes.gestion.reporte6"), resumen_reportes_path({format: "pdf", hasta: @gestion.ultimo_dia_gestion}), class: "btn btn-success"
+      = link_to t("activerecord.attributes.gestion.reporte10"), depreciacion_reportes_path({format: "pdf", desde: @gestion.primer_dia_gestion , hasta: @gestion.ultimo_dia_gestion}), class: "btn btn-success"
 
 #confirm-modal
 

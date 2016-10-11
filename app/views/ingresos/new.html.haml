@@ -1,4 +1,5 @@
 #ingresos-urls{data: {'activos' => ingresos_path, 'proveedores' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
+#obt_ingreso-urls{data: {'obt-ingreso' => obt_cod_ingreso_ingresos_path(format: :json), 'ingreso' => @ingreso.id}}
 
 .row{data: {action: 'ingresos'}}
   .col-md-12
@@ -53,7 +54,7 @@
           = button_tag class: 'btn btn-success btn-lg' do
             %span.glyphicon.glyphicon-search
             Buscar
-
+          = hidden_field_tag :observacion
 %br/
 
 %table#ingresos-tbl.table.table-bordered.table-striped.table-hover.table-condensed
@@ -72,6 +73,9 @@
       = button_tag class: 'btn btn-primary guardar-btn', data: {disable_with: 'Guardando...'} do
         %span.glyphicon.glyphicon-floppy-save
         Guardar
+
+#confirm-modal
+= render 'ingreso_modal'
 
 %script{type: 'text/html', id: 'tpl-activo-seleccionado'}
   %thead

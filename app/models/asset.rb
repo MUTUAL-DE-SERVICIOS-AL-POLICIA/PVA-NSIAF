@@ -29,7 +29,7 @@ class Asset < ActiveRecord::Base
   scope :unassigned, -> { where(user_id: nil) }
 
   with_options if: :is_not_migrate? do |m|
-    m.validates :barcode, presence: true, uniqueness: true
+    # m.validates :barcode, presence: true, uniqueness: true
     m.validates :code, presence: true, uniqueness: true
     m.validates :detalle, :auxiliary_id, :user_id, :precio, presence: true
     # TODO validación de los códigos de barras desactivado.
@@ -54,7 +54,7 @@ class Asset < ActiveRecord::Base
     if q.present? || cuentas.present? || (desde.present? && hasta.present?)
       activos = includes(:ingreso, auxiliary: :account)
       if q.present?
-        activos = activos.where("assets.description like :q OR assets.code like :code", q: "%#{q}%", code: "%#{q}%")
+        activos = activos.joins(:ingreso).where("assets.description like :q OR assets.code like :code OR ingresos.factura_numero like :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
       end
       if cuentas.present?
         activos = activos.where("accounts.id" => cuentas)
@@ -139,6 +139,10 @@ class Asset < ActiveRecord::Base
   # Fecha de ingreso del activo fijo
   def ingreso_proveedor_nombre
     ingreso.present? ? ingreso.supplier_name : nil
+  end
+
+  def nro_factura
+    ingreso.present?  ? ingreso.factura_numero : nil
   end
 
   def name
@@ -275,7 +279,7 @@ class Asset < ActiveRecord::Base
   end
 
   def porcentaje_depreciacion_anual
-    100 / vida_util_residual_nominal
+    100 / vida_util_residual_nominal.to_f
   end
 
   # Días desde la adquisición del activo fijo
@@ -290,7 +294,7 @@ class Asset < ActiveRecord::Base
   end
 
   def depreciacion_gestion(fecha = Date.today)
-    costo_actualizado(fecha) / 365 * dias_consumidos_ultimo(fecha) * porcentaje_depreciacion_anual / 100
+    costo_actualizado(fecha) / 365.0 * dias_consumidos_ultimo(fecha) * porcentaje_depreciacion_anual / 100.0
   end
 
   def actualizacion_depreciacion_acumulada(fecha = Date.today)
@@ -310,25 +314,6 @@ class Asset < ActiveRecord::Base
   def dar_revaluo_o_baja
     # TODO cuando el activo está de baja o se haya revaluado
     'NO'
-  end
-
-  # Permite filtrar los activos mediante un buscador, cuentas, y una fecha
-  def self.inventario(q, cuentas, hasta)
-    if q.present? || cuentas.present? || hasta.present?
-      activos = includes(:ingreso, auxiliary: :account)
-      if q.present?
-        activos = activos.where("assets.description like :q OR assets.code like :code", q: "%#{q}%", code: "%#{q}%")
-      end
-      if cuentas.present?
-        activos = activos.where("accounts.id" => cuentas)
-      end
-      if hasta.present?
-        activos = activos.where("ingresos.factura_fecha <= ?", hasta).references(:ingreso)
-      end
-    else
-      activos = all
-    end
-    activos
   end
 
   def self.costo_historico

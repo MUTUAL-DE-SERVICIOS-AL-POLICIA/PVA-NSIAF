@@ -20,8 +20,9 @@ private
     array.map do |gestion|
       [
         gestion.anio,
-        (gestion.cerrado ? 'SI' : 'NO'),
+        (gestion.cerrado ? 'Cerrado' : 'Abierto'),
         (gestion.fecha_cierre ? I18n.l(gestion.fecha_cierre, format: :long) : nil),
+        gestion.nombre_usuario,
         links_actions(gestion, 'gestion')
       ]
     end
@@ -44,7 +45,7 @@ private
   end
 
   def sort_column
-    columns = %w[anio cerrado fecha_cierre]
+    columns = %w[anio cerrado fecha_cierre usuario]
     columns[params[:iSortCol_0].to_i]
   end
 
