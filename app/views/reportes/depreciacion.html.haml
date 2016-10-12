@@ -113,21 +113,21 @@
 
             - if @cuentas.length == indice + 1
               %tr.info
-                %th{colspan: 3} CANTIDAD DE ACTIVOS: #{@cuentas.cantidad_activos(fecha)}
+                %th{colspan: 3} CANTIDAD DE ACTIVOS: #{@cuentas.cantidad_activos(desde, fecha)}
                 %th{colspan: 3} TOTALES:
-                %th.number= number_with_delimiter @cuentas.costo_historico(fecha)
-                %th.number= number_with_delimiter @cuentas.costo_actualizado_inicial(fecha)
-                %th.number= number_with_delimiter @cuentas.depreciacion_acumulada_inicial(fecha)
+                %th.number= number_with_delimiter @cuentas.costo_historico(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.costo_actualizado_inicial(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.depreciacion_acumulada_inicial(desde, fecha)
                 %th
                 %th
-                %th.number= number_with_delimiter @cuentas.actualizacion_gestion(fecha)
-                %th.number= number_with_delimiter @cuentas.costo_actualizado(fecha)
+                %th.number= number_with_delimiter @cuentas.actualizacion_gestion(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.costo_actualizado(desde, fecha)
                 %th
                 %th
-                %th.number= number_with_delimiter @cuentas.depreciacion_gestion(fecha)
-                %th.number= number_with_delimiter @cuentas.actualizacion_depreciacion_acumulada(fecha)
-                %th.number= number_with_delimiter @cuentas.depreciacion_acumulada_total(fecha)
-                %th.number= number_with_delimiter @cuentas.valor_neto(fecha)
+                %th.number= number_with_delimiter @cuentas.depreciacion_gestion(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.actualizacion_depreciacion_acumulada(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.depreciacion_acumulada_total(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.valor_neto(desde, fecha)
                 %th
 
     = fecha_impresion if is_pdf?
