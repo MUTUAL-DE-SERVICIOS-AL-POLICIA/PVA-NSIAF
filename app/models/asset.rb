@@ -52,7 +52,7 @@ class Asset < ActiveRecord::Base
   # Permite filtrar los activos mediante un buscador, cuentas, y rango de fechas
   def self.buscar(col, q, cuentas, desde, hasta)
     if q.present? || cuentas.present? || (desde.present? && hasta.present?) || col.present?
-      activos = includes(:ingreso, auxiliary: :account)
+      activos = includes(:ingreso, :auxiliary)
       if q.present?
         if col == 'all'
           activos = activos.joins(:ingreso).where("assets.description like :q OR assets.code like :code OR ingresos.factura_numero like :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
@@ -68,10 +68,10 @@ class Asset < ActiveRecord::Base
         end
       end
       if cuentas.present?
-        activos = activos.where("accounts.id" => cuentas)
+        activos = activos.joins(:auxiliary).where("account_id" => cuentas)
       end
       if desde.present? && hasta.present?
-        activos = activos.where("ingresos.factura_fecha" => desde..hasta)
+        activos = activos.joins(:ingreso).where("ingresos.factura_fecha" => desde..hasta)
       end
     else
       activos = all
