@@ -1,6 +1,6 @@
 class AssetSerializer < ActiveModel::Serializer
   self.root = false
-  attributes :id, :code, :description, :detalle, :barcode, :observaciones, :urls
+  attributes :id, :code, :description, :detalle, :barcode, :observaciones, :precio, :urls
 
   def urls
     {
