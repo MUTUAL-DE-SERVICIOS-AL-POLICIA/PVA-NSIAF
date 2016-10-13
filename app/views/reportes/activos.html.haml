@@ -1,73 +1,37 @@
-= react_component 'ReporteActivos', url_activos: activos_api_reportes_url(host: Rails.application.secrets.rails_host)
+= react_component 'ReporteActivos', url: activos_api_reportes_url(host: Rails.application.secrets.rails_host), cuentas: @cuentas, columnas: @columnas
 
-
--#
--#
--# - titulo = 'Reporte de activos fijos'
--#
--# - unless is_pdf?
--#   .page-header
--#     .pull-right{data: {action: 'reportes-activos'}}
--#       = form_tag activos_reportes_path, method: :get, class: 'form-inline', id: 'buscador-form' do
--#         .form-group
--#           %label.sr-only{for: 'cuentas'} Columna
--#           = select_tag :col, options_for_select(@columnas.map{|c| [t("activerecord.attributes.asset.#{c}"),c]}, params[:col]), class: 'form-control'
--#         .form-group
--#           %label.sr-only{for: 'buscar'} Buscar
--#           = text_field_tag :q, params[:q], class: 'form-control', id: 'buscar', placeholder: 'Buscar activos', autofocus: true
--#         .form-group
--#           %label.sr-only{for: 'cuentas'} Cuentas
--#           = select_tag :cuentas, options_for_select(get_accounts, params[:cuentas]), class: 'form-control', prompt: 'Seleccionar cuentas'
--#         .form-group
--#           %label{for: 'fecha-desde'} Fechas
--#           = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
--#         .form-group
--#           %label.sr-only{for: 'fecha-hasta'} Hasta
--#           = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
--#         %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los subartículos'}
--#           %span.glyphicon.glyphicon-search
--#
--#     %h2= titulo
--#     = link_to activos_reportes_path(format: :pdf, col: params[:col], q: params[:q], cuentas: params[:cuentas], desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-success btn-lg' ,id: "alguito"  do
--#       %span.glyphicon.glyphicon-save
--#       PDF
--#     %a#download_csv.btn.btn-info.btn-lg{:href => "#"}
--#       %span.glyphicon.glyphicon-save
--#       CSV
--#
--# - else
--#   .row
--#     .col-sm-12.text-center
--#       %h2= titulo
--#
--# .row
--#   .col-sm-12
--#     %table.table.table-condensed.table-striped.table-bordered.valorado
--#       %thead
--#         %tr
--#           %th.text-right{title: 'Numeración'} No
--#           %th.text-center{title: 'Código'} Código
--#           %th.text-center{title: 'Número de Factura'} Factura
--#           %th.text-center{title: 'Fecha de incorporación'} Fecha
--#           %th{title: 'Descripción'} Descripción
--#           %th{title: 'Asiento contable'} Cuenta
--#           %th.number{title: 'Precio histórico'} Precio
--#       %tbody
--#         - @activos.each_with_index do |activo, index|
--#           %tr
--#             %td.text-right= index + 1
--#             %td.text-center= activo.code
--#             %td.text-center= activo.nro_factura
--#             %td.text-center= l activo.ingreso_fecha if activo.ingreso_fecha
--#             %td= activo.description
--#             %td= activo.account_name
--#             %td.number= number_with_delimiter activo.precio
--#         - if @activos.present?
--#           %tr
--#             %th{ colspan: 5 }
--#             %th.number TOTAL
--#             %th.number= number_with_delimiter @total
--#         - if @activos.empty?
--#           %tr
--#             %td.text-center{colspan: 7}
--#               No hay activos para mostrar.
+- if is_pdf?
+  .row
+    .col-sm-12.text-center
+      %h2= 'Reporte de activos fijos'
+  .row
+    .col-sm-12
+      %table.table.table-condensed.table-striped.table-bordered.valorado
+        %thead
+          %tr
+            %th.text-right{title: 'Numeración'} No
+            %th.text-center{title: 'Código'} Código
+            %th.text-center{title: 'Número de Factura'} Factura
+            %th.text-center{title: 'Fecha de incorporación'} Fecha
+            %th{title: 'Descripción'} Descripción
+            %th{title: 'Asiento contable'} Cuenta
+            %th.number{title: 'Precio histórico'} Precio
+        %tbody
+          - @activos.each_with_index do |activo, index|
+            %tr
+              %td.text-right= index + 1
+              %td.text-center= activo.codigo
+              %td.text-center= activo.factura
+              %td.text-center= l activo.fecha_ingreso if activo.fecha_ingreso
+              %td= activo.descripcion
+              %td= activo.cuenta
+              %td.number= number_with_delimiter activo.precio
+          - if @activos.present?
+            %tr
+              %th{ colspan: 5 }
+              %th.number TOTAL
+              %th.number= number_with_delimiter @total
+          - if @activos.empty?
+            %tr
+              %td.text-center{colspan: 7}
+                No hay activos para mostrar.

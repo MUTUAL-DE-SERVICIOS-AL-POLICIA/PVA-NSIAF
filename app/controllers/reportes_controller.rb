@@ -44,13 +44,16 @@ class ReportesController < ApplicationController
   # Reporte para activos fijos
   def activos
     @columnas = %w(all code invoice description)
+    @columnas = @columnas.map { |c| {descripcion: t("activerecord.attributes.asset.#{c}"), clave: c } }
+    @cuentas = Account.all
+    @cuentas = [{ descripcion: "Seleccionar cuenta", clave: ""}] + @cuentas.order(:code).map { |b| {descripcion: b.code_and_name, clave: b.id, } }
     desde, hasta = get_fechas(params, false)
     q = params[:q]
     col = params[:col]
     cuentas = params[:cuentas]
-    @activos = Asset.limit(20).buscar(col, q, cuentas, desde, hasta).order(:code)
-    @activos = []
+    @activos = Asset.all
     @total = @activos.inject(0.0) { |total, activo| total + activo.precio }
+
     respond_to do |format|
       format.html
       format.pdf do

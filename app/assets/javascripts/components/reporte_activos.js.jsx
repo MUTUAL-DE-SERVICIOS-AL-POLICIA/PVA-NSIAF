@@ -1,21 +1,16 @@
-
 var Celda = React.createClass({
   render() {
     if(typeof this.props.td != 'undefined'){
       return (
         <td>
-          <p>
-            { this.props.td }
-          </p>
+          { this.props.td }
         </td>
       );
     }
     else if (typeof this.props.th != 'undefined') {
       return (
         <th>
-          <p>
-            { this.props.th }
-          </p>
+          { this.props.th }
         </th>
       );
     }
@@ -24,6 +19,18 @@ var Celda = React.createClass({
         <td></td>
       );
     }
+  }
+});
+
+var Opcion = React.createClass({
+  render() {
+    var clave = this.props.opcion.clave;
+    var descripcion = this.props.opcion.descripcion;
+    return(
+        <option value = { clave }>
+          { descripcion }
+        </option>
+    );
   }
 });
 
@@ -50,22 +57,42 @@ var Fila = React.createClass({
   }
 });
 
-var FilaCabecera = React.createClass({
-  render() {
-    var columnas = this.props.cabecera.map((col, i) => {
-      return (
-        <Celda th = { col }/>
-      )
-    });
-    return (
-      <tr>
-        { columnas }
-      </tr>
-    );
-  }
-});
-
 var TablaReportes = React.createClass({
+  componentDidUpdate(){
+    var blob, blobURL, csv;
+    csv = '';
+    $('table > thead').find('tr').each(function() {
+      var sep;
+      sep = '';
+      $(this).find('th').each(function() {
+        csv += sep + $(this)[0].innerHTML;
+        return sep = ';';
+      });
+      return csv += '\n';
+    });
+    $('table > tbody').find('tr').each(function() {
+      var sep;
+      sep = '';
+      $(this).find('td').each(function() {
+        csv += sep + $(this)[0].innerHTML;
+        return sep = ';';
+      });
+      return csv += '\n';
+    });
+    $('table > tbody').find('tr:last').each(function() {
+      var sep;
+      sep = ';;;;';
+      $(this).find('th').each(function() {
+        csv += sep + $(this)[0].innerHTML;
+        return sep = ';';
+      });
+      csv += '\n';
+    });
+    window.URL = window.URL || window.webkiURL;
+    blob = new Blob([csv]);
+    blobURL = window.URL.createObjectURL(blob);
+    return $('#obtiene_csv').attr('href', blobURL).attr('download', 'data.csv');
+  },
   render() {
     if(this.props.cabecera.length > 0){
       var columnas = this.props.cabecera.map((col, i) => {
@@ -84,39 +111,53 @@ var TablaReportes = React.createClass({
         )
       });
       return (
-        <table className = "table table-condensed table-striped table-bordered valorado">
-          <thead>
-            { columnas }
-          </thead>
-          <tbody>
-            { filas }
-          </tbody>
-        </table>
+        <div>
+          <div className="pull-right">
+            <span >Descargar:</span>
+            <div className="btn-group btn-group-xs">
+              <a id="obtiene_csv" className="btn btn-default" href= {  }>CSV</a>
+              <a id="obtiene_pdf" className="btn btn-default">PDF</a>
+            </div>
+          </div>
+          <table className = "table table-condensed table-striped table-bordered valorado">
+            <thead>
+              <tr>
+                { columnas }
+              </tr>
+            </thead>
+            <tbody>
+              { filas }
+            </tbody>
+          </table>
+        </div>
       );
     }
     else {
       return (
         <table className = "table table-condensed table-striped table-bordered valorado">
           <thead>
-            { columnas }
+            <tr>
+              { columnas }
+            </tr>
           </thead>
           <tbody>
           </tbody>
         </table>
       );
     }
-
   }
 });
 
-var BuscadorReportes = React.createClass({
+var ReportesBuscadorBasico = React.createClass({
   aplicandoBuscador(){
-    var col = this.refs.col.value;
-    var q = this.refs.q.value;
-    var cuentas = this.refs.cuentas.value;
+    var host = this.props.url;
+    var cuenta = this.refs.cuenta.value;
     var desde = this.refs.desde.value;
     var hasta = this.refs.hasta.value;
-    var url = this.props.url_activos + "?col=" + col + "&q=" + q + "&cuentas=" + cuentas + "&desde=" + desde + "&hasta=" + hasta;
+    var col = this.refs.col.value;
+    var q = this.refs.q.value;
+    parametros = "?col=" + col + "&q=" + q + "&cu=" + cuenta + "&desde=" + desde + "&hasta=" + hasta;
+    url = host + parametros;
     $.ajax({
         url:  url,
         type: 'GET',
@@ -130,79 +171,203 @@ var BuscadorReportes = React.createClass({
   },
 
   render(){
+    if(this.props.cuentas.length > 0){
+      var cuentas = this.props.cuentas.map((opcion, i) => {
+        return (
+          <Opcion key = { i }
+                  opcion = { opcion }/>
+        )
+      });
+    }
+    var columnas = this.props.columnas.map((opcion, i) => {
+      return (
+        <Opcion key = { i }
+                opcion = { opcion }/>
+      )
+    });
     return(
-      <div className="page-header">
-               <div className= 'form-inline'>
-                  <div className="pull-right" data-action="reportes-activos">
-                    <div className="form-group">
-                      <label className="sr-only" for="cuentas">Columna</label>
-                      <select ref= "col" name="col" id="col" className="form-control"><option value="all">Todas</option>
-                      <option value="code">Código</option>
-                      <option value="invoice">Número Factura</option>
-                      <option value="description">Descripción</option></select>
-                    </div>
-                    <div className="form-group">
-                      <label className="sr-only" for="buscar">Buscar</label>
-                      <input ref = "q" type="text" name="q" id="buscar" className="form-control" placeholder="Buscar activos" autofocus="autofocus" autocomplete="off"/>
-                    </div>
-                    <div className="form-group">
-                      <label className="sr-only" for="cuentas">Cuentas</label>
-                      <select  ref = "cuentas" namresponsee="cuentas" id="cuentas" className="form-control"><option value="">Seleccionar cuentas</option><option value="1">1 - EDIFICACIONES</option>
-                      <option value="2">2 - MUEBLES Y ENSERES DE OFICINA</option>
-                      <option value="3">3 - MAQUINARIA EN GENERAL</option>
-                      <option value="31">4 - EQUIPO MEDICO Y DE LABORATORIO</option>
-                      <option value="32">5 - EQUIPO DE COMUNICACIONES</option>
-                      <option value="33">6 - EQUIPO EDUCACIONAL Y RECREATIVO</option>
-                      <option value="4">7 - BARCOS Y LANCHAS EN GENERAL</option>
-                      <option value="5">8 - VEHICULOS AUTOMOTORES</option>
-                      <option value="6">9 - AVIONES</option>
-                      <option value="7">10 - MAQUINARIA PARA LA CONSTRUCCION</option>
-                      <option value="8">11 - MAQUINARIA AGRICOLA</option>
-                      <option value="9">12 - ANIMALES DE TRABAJO</option>
-                      <option value="10">13 - HERRAMIENTAS EN GENERAL</option>
-                      <option value="11">14 - REPRODUCTORES Y HEMBRAS DE PEDIGREE</option>
-                      <option value="12">15 - EQUIPOS DE COMPUTACION</option>
-                      <option value="13">16 - CANALES DE REGADIO Y POZOS</option>
-                      <option value="14">17 - ESTANQUES, BA¥ADEROS Y ABREVADEROS</option>
-                      <option value="15">18 - ALAMBRADOS, TRANQUERAS Y VALLAS</option>
-                      <option value="16">19 - VIVIENDAS PARA EL PERSONAL</option>
-                      <option value="17">20 - MUEBLES Y ENSERES EN VIVIENDAS DE PERSONAL</option>
-                      <option value="18">21 - SILOS, ALMACENES Y GALPONES</option>
-                      <option value="19">22 - TINGLADOS Y COBERTIZOS DE MADERA</option>
-                      <option value="20">23 - TINGLADOS Y COBERTIZOS DE METAL</option>
-                      <option value="21">24 - INSTALACION DE ELECTRIFICACION Y TELEFONIA RURAL</option>
-                      <option value="22">25 - CAMINOS INTERIORES</option>
-                      <option value="23">26 - CA¥A DE AZUCAR</option>ref = "desde"
-                      <option value="24">27 - VIDES</option>
-                      <option value="25">28 - FRUTALES</option>
-                      <option value="27">29 - LINEAS DE RECOLECCION DE LA INDUSTRIA PETROLERA</option>
-                      <option value="26">30 - POZOS PETROLEROS</option>
-                      <option value="28">31 - EQUIPOS DE CAMPO DE LA INDUSTRIA PETROLERA</option>
-                      <option value="29">32 - PLANTA DE PROCESAMIENTO DE LA INDUSTRIA PETROLERA</option>
-                      <option value="30">33 - DUCTOS DE LA INDUSTRIA PETROLERA</option>
-                      <option value="34">34 - TERRENOS</option>
-                      <option value="35">36 - OTROS ACTIVOS FIJOS</option>
-                      <option value="36">37 - ACTIVOS INTANGIBLES</option>
-                      <option value="37">38 - EQUIPO E INSTALACIONES</option>
-                      <option value="38">39 - OTRAS PLANTACIONES</option>
-                      <option value="39">40 - ACTIVOS MUSEOLOGICOS Y CULTURALES</option></select>
-                    </div>
-                    <div className="form-group">
-                      <label for="fecha-desde">Fechas</label>
-                      <input ref = "desde" type="text" name="desde" id="fecha-desde" className="form-control fecha-buscador" placeholder="Desde fecha" autocomplete="off"/>
-                    </div>
-                    <div className="form-group">
-                      <label className="sr-only" for="fecha-hasta">Hasta</label>
-                      <input ref = "hasta" type="text" name="hasta" id="fecha-hasta" className="form-control fecha-buscador" placeholder="Hasta fecha" autocomplete="off"/>
-                    </div>
-                    <button className="btn btn-primary" title="Generar kardexes de todos los subartículos" type="#" onClick={ this.aplicandoBuscador } >
-                      <span className="glyphicon glyphicon-search"></span>
-                    </button>
-                  </div>
-                </div>
-                  <h2>Reporte de activos fijos</h2>
-                </div>
+      <div className="pull-right" data-action="reportes-activos">
+        <div className="form-group">
+          <label className="sr-only" htmlFor= "columnas">columnas</label>
+          <select ref = "col" name = "col" id="columnas" className = "form-control">
+            { columnas }
+          </select>
+        </div>
+        &nbsp;
+        <div className="form-group">
+          <label className="sr-only" htmlFor="buscar">Buscar</label>
+          <input ref = "q" type="text" name="q" id="q" className="form-control" placeholder="Buscar" autofocus="autofocus" autoComplete="off"/>
+        </div>
+        &nbsp;
+        <div className="form-group">
+          <label className="sr-only" htmlFor="cuenta">cuenta</label>
+          <select ref = "cuenta" name = "cuenta" id ="cuenta" className = "form-control">
+            { cuentas }
+          </select>
+        </div>
+        &nbsp;
+        &nbsp;
+        <div className="form-group">
+          <label htmlFor="fecha-desde">Fechas</label>
+          <input ref = "desde" type="text" name="desde" id="fecha-desde" className="form-control fecha-buscador" placeholder="Desde fecha" autoComplete="off"/>
+        </div>
+        &nbsp;
+        <div className="form-group">
+          <label className="sr-only" htmlFor="fecha-hasta">Hasta</label>
+          <input ref = "hasta" type="text" name="hasta" id="fecha-hasta" className="form-control fecha-buscador" placeholder="Hasta fecha" autoComplete="off"/>
+        </div>
+        &nbsp;
+        <button className="btn btn-primary" title="Generar kardexes de todos los subartículos" type="#" onClick={ this.aplicandoBuscador } >
+          <span className="glyphicon glyphicon-search"></span>
+        </button>
+      </div>
     );
+  }
+});
+
+var ReportesBuscadorAvanzado = React.createClass({
+  aplicandoBuscador(){
+    var host = this.props.url;
+    var cuenta = this.refs.cuenta.value;
+    var desde = this.refs.desde.value;
+    var hasta = this.refs.hasta.value;
+    var codigo = this.refs.codigo.value;
+    var numero_factura = this.refs.numero_factura.value;
+    var descripcion = this.refs.descripcion.value;
+    var precio = this.refs.precio.value;
+    parametros = "?co=" + codigo + "&nf=" + numero_factura + "&de=" + descripcion +  "&cu=" + cuenta +  "&pr=" + precio + "&desde=" + desde + "&hasta=" + hasta;
+    url = url + parametros;
+    $.ajax({
+        url:  url,
+        type: 'GET',
+        success: (response) => {
+          this.props.actualizacionTabla(response);
+        },
+        error:(xhr) => {
+          this.props.actualizacionTabla([]);
+        }
+    });
+  },
+
+  render(){
+    if(this.props.cuentas.length > 0){
+      var cuentas = this.props.cuentas.map((opcion, i) => {
+        return (
+          <Opcion key = { i }
+                  opcion = { opcion }/>
+        )
+      });
+    }
+    return(
+      <div className="pull-right" data-action="reportes-activos">
+        <div className="form-group">
+          <label className="sr-only">Código</label>
+          <input ref = "codigo" type="text" name="codigo" id="codigo" className="form-control" placeholder="Código" autofocus="autofocus" autoComplete="off"/>
+        </div>
+        &nbsp;
+        <div className="form-group">
+          <label className="sr-only">Factura</label>
+          <input ref = "numero_factura" type="text" name="numero_factura" id="factura" className="form-control" placeholder="Número Factura" autofocus="autofocus" autoComplete="off"/>
+        </div>
+        &nbsp;
+        <div className="form-group">
+          <label className="sr-only">Descripción</label>
+          <input ref = "descripcion" type="text" name="descripcion" id="descripcion" className="form-control" placeholder="Descripción" autofocus="autofocus" autoComplete="off"/>
+        </div>
+        &nbsp;
+        <div className="form-group">
+          <label className="sr-only">Precio</label>
+          <input ref = "precio" type="text" name="precio" id="precio" className="form-control" placeholder="Precios" autofocus="autofocus" autoComplete="off"/>
+        </div>
+        &nbsp;
+        <div className="form-group">
+          <label className="sr-only" htmlFor="cuenta">cuenta</label>
+          <select ref = "cuenta" id="cuenta" name = "cuenta" className = "form-control">
+            { cuentas }
+          </select>
+        </div>
+        &nbsp;
+        &nbsp;
+        <div className="form-group">
+          <label htmlFor="fecha-hasta">Fechas</label>
+          <input ref = "desde" type="text" name="desde" className="form-control fecha-buscador" placeholder="Desde fecha" autoComplete="off"/>
+        </div>
+        &nbsp;
+        <div className="form-group">
+          <label className="sr-only" htmlFor="fecha-hasta">Hasta</label>
+          <input ref = "hasta" type="text" name="hasta" className="form-control fecha-buscador" placeholder="Hasta fecha" autoComplete="off"/>
+        </div>
+        &nbsp;
+        <button className="btn btn-primary" title="Generar kardexes de todos los subartículos" type="#" onClick={ this.aplicandoBuscador } >
+          <span className="glyphicon glyphicon-search"></span>
+        </button>
+      </div>
+    );
+  }
+});
+
+var ReportesBuscador = React.createClass({
+  getInitialState() {
+    return { tipo_buscador: "basico"}
+  },
+
+  componentDidUpdate(){
+    $(".fecha-buscador").datepicker({
+      autoclose: true,
+      format: "dd-mm-yyyy",
+      language: "es"
+    });
+  },
+
+  cambioBuscador(){
+    if(this.state.tipo_buscador == "basico"){
+      this.setState({ tipo_buscador: "avanzado" });
+    }
+    else{
+      this.setState({ tipo_buscador: "basico" });
+    }
+  },
+
+  render(){
+    if(this.state.tipo_buscador == "basico"){
+      return(
+        <div>
+          <div className="page-header buscador-2">
+            <div className= 'form-inline'>
+              <ReportesBuscadorBasico cuentas = { this.props.cuentas }
+                                      columnas = { this.props.columnas }
+                                      actualizacionTabla = {this.props.actualizacionTabla }
+                                      url = { this.props.url }/>
+              <h2>Reporte de Activos Fijos</h2>
+            </div>
+            <div className="pull-right">
+              <a onClick= { this.cambioBuscador }>Búsqueda Avanzada</a>
+            </div>
+            <br/>
+          </div>
+        </div>
+      );
+    }
+    else {
+      if(this.props.columnas.length > 0){
+        return(
+          <div>
+            <div className="page-header buscador-2">
+              <div className= 'form-inline'>
+                <ReportesBuscadorAvanzado cuentas = { this.props.cuentas}
+                                          actualizacionTabla = {this.props.actualizacionTabla}
+                                          url = { this.props.url }/>
+                <h2>Reporte de Activos Fijos</h2>
+              </div>
+              <div className="pull-right">
+                <a onClick= { this.cambioBuscador }>Búsqueda Básica</a>
+              </div>
+              <br/>
+            </div>
+          </div>
+        );
+      }
+    }
   }
 });
 
@@ -212,7 +377,7 @@ var ReporteActivos = React.createClass({
              cabecera: [{th: "Nro"}, {th: "Código"}, {th: "Factura"}, {th: "Fecha"}, {th: "Descripción"}, {th: "Cuenta"}, {th: "Precio"}]}
   },
   componentWillMount() {
-    $.getJSON(this.props.url_activos, (response) => {
+    $.getJSON(this.props.url, (response) => {
       this.setState({ tabla: response }) });
   },
 
@@ -225,16 +390,9 @@ var ReporteActivos = React.createClass({
   render() {
     return (
       <div>
-        <BuscadorReportes url_activos =  { this.props.url_activos } actualizacionTabla={ this.actualizarTabla }/>
+        <ReportesBuscador url =  { this.props.url } actualizacionTabla={ this.actualizarTabla } cuentas = { this.props.cuentas } columnas = { this.props.columnas }/>
         <div className='row'>
           <div className='col-sm-12'>
-            <div className="pull-right">
-              <span >Descargar:</span>
-              <div className="btn-group btn-group-xs">
-                <button name="button" type="submit" className="download-assets btn btn-default" data-url="http://localhost:3000/users/11/download.csv" >CSV</button>
-                <button name="button" type="submit" className="download-assets btn btn-default" data-url="http://localhost:3000/users/11/download.pdf" >PDF</button>
-              </div>
-            </div>
             <TablaReportes key = "1"
                            cabecera = { this.state.cabecera }
                            tabla = { this.state.tabla } />

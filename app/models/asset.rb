@@ -34,7 +34,7 @@ class Asset < ActiveRecord::Base
     m.validates :detalle, :auxiliary_id, :user_id, :precio, presence: true
     # TODO validación de los códigos de barras desactivado.
     # m.validate do |asset|
-    #   BarcodeStatusValidator.new(asset).validate
+    #   BarcodeStatusValidator.new(asset).validate  has_many :proceedings, through: :asset_proceedingsbuscarasset_proceedingsbuscar
     # end
   end
 
@@ -49,13 +49,14 @@ class Asset < ActiveRecord::Base
 
   has_paper_trail
 
-  # Permite filtrar los activos mediante un buscador, cuentas, y rango de fechas
-  def self.buscar(col, q, cuentas, desde, hasta)
+  def self.busqueda_basica(col, q, cuentas, desde, hasta)
+    activos = self.select("assets.id as id, assets.code as codigo, assets.description as descripcion, assets.precio as precio, ingresos.factura_numero as factura, ingresos.factura_fecha as fecha_ingreso, accounts.name as cuenta")
+                  .joins("LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id")
+                  .joins(auxiliary: [:account])
     if q.present? || cuentas.present? || (desde.present? && hasta.present?) || col.present?
-      activos = includes(:ingreso, :auxiliary)
       if q.present?
         if col == 'all'
-          activos = activos.joins(:ingreso).where("assets.description like :q OR assets.code like :code OR ingresos.factura_numero like :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
+          activos = activos.where("assets.description like :q OR assets.code like :code OR ingresos.factura_numero like :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
         else
           case col
           when 'code'
@@ -63,18 +64,41 @@ class Asset < ActiveRecord::Base
           when 'description'
             activos = activos.where("assets.description like :q", q: "%#{q}%")
           when 'invoice'
-            activos = activos.joins(:ingreso).where("ingresos.factura_numero like :q", q: "%#{q}%")
+            activos = activos.where("ingresos.factura_numero = :q", q: q)
           end
         end
       end
       if cuentas.present?
-        activos = activos.joins(:auxiliary).where("account_id" => cuentas)
+        activos = activos.where("accounts.id = :c", c: cuentas)
       end
       if desde.present? && hasta.present?
-        activos = activos.joins(:ingreso).where("ingresos.factura_fecha" => desde..hasta)
+        activos = activos.where("ingresos.factura_fecha" => desde..hasta)
       end
-    else
-      activos = all
+    end
+    activos
+  end
+
+  def self.busqueda_avanzada(codigo, numero_factura, descripcion, cuenta, precio, desde, hasta)
+    activos = self.select("assets.id as id, assets.code as codigo, assets.description as descripcion, assets.precio as precio, ingresos.factura_numero as factura, ingresos.factura_fecha as fecha_ingreso, accounts.name as cuenta")
+                  .joins("LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id")
+                  .joins(auxiliary: [:account])
+    if codigo.present?
+      activos = activos.where("assets.code = :co", co: codigo)
+    end
+    if numero_factura.present?
+      activos = activos.where("ingresos.factura_numero = :nf", nf: numero_factura)
+    end
+    if descripcion.present?
+      activos = activos.where("assets.description = :de", de: descripcion)
+    end
+    if precio.present?
+      activos = activos.where("accounts.id = :pr", pr: precio)
+    end
+    if cuenta.present?
+      activos = activos.where("accounts.id = :cu", cu: cuenta)
+    end
+    if desde.present? && hasta.present?
+      activos = activos.where("ingresos.factura_fecha" => desde..hasta)
     end
     activos
   end
