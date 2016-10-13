@@ -147,13 +147,12 @@ class Transaccion < ActiveRecord::Base
       saldos.each do |saldo|
         resto = saldo.cantidad_saldo - numero
         saldo.cantidad_entrada = 0
+        saldo.cantidad_saldo = resto
         if resto > 0
           saldo.cantidad_salida = numero
-          saldo.cantidad_saldo = resto
           break
         else
           saldo.cantidad_salida = numero + resto
-          saldo.cantidad_saldo = 0
           numero = -resto
         end
       end

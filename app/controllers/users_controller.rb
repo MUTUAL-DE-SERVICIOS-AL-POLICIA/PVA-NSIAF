@@ -19,6 +19,7 @@ class UsersController < ApplicationController
     @admin = current_user.is_admin? ? '1' : '0'
     respond_to do |format|
       format.html
+      format.json { render json: @user, root: false }
     end
   end
 

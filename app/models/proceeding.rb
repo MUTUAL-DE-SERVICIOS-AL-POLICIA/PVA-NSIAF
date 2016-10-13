@@ -108,9 +108,9 @@ class Proceeding < ActiveRecord::Base
       user_id = self.user_id
       event = 'assignation'
     end
-    Asset.paper_trail_off
+    Asset.paper_trail.disable
     assets.map { |a| a.update_attributes(user_id: user_id) }
-    Asset.paper_trail_on
+    Asset.paper_trail.enable
     register_log(event)
   end
 

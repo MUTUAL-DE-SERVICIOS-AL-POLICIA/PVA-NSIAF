@@ -16,9 +16,9 @@ class DbfController < ApplicationController
     if check_dbf_file(params[:dbf])
       klass = params[:model].classify.safe_constantize
 
-      klass.paper_trail_off
+      klass.paper_trail.disable
       inserted, no_inserted, nils = klass.import_dbf(params[:dbf])
-      klass.paper_trail_on
+      klass.paper_trail.enable
       klass.register_log('migrated') if inserted > 0
 
       redirect_to :back, notice: t('migration.message_html', inserted: inserted, no_inserted: no_inserted)

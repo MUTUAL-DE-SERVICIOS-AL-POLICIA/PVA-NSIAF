@@ -79,8 +79,15 @@ class ReportesController < ApplicationController
   def depreciacion
     @desde, @hasta = get_fechas(params)
     cuentas = params[:cuentas]
-    @cuentas = Account.where(id: cuentas)
-    @cuentas = Account.con_activos if @cuentas.empty?
+    @cuentas = Account
+    @cuentas = @cuentas.where(id: cuentas) if cuentas.present?
+    if @desde && @hasta
+      @cuentas = @cuentas.joins(auxiliaries: {assets: :ingreso})
+                        .where('ingresos.factura_fecha' => @desde..@hasta)
+                        .uniq
+    else
+      @cuentas = @cuentas.none
+    end
     respond_to do |format|
       format.html
       format.pdf do
@@ -101,8 +108,15 @@ class ReportesController < ApplicationController
 
   # Resumen activos fijos - reporte 6 vSIAF
   def resumen
-    @hasta = get_fecha(params, :hasta)
-    @accounts = Account.con_activos.order(:code)
+    @desde, @hasta = get_fechas(params)
+    if @desde && @hasta
+      @accounts = Account.joins(auxiliaries: {assets: :ingreso})
+                         .where('ingresos.factura_fecha' => @desde..@hasta)
+                         .order(:code)
+                         .uniq
+    else
+      @accounts = Account.none
+    end
     respond_to do |format|
       format.html
       format.pdf do

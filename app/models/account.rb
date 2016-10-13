@@ -56,125 +56,125 @@ class Account < ActiveRecord::Base
 
   ##
   # BEGIN datos para el reporte resumen de activos fijos ordenado por grupo contable
-  def auxiliares_activos(fecha = Date.today)
+  def auxiliares_activos(desde = Date.today, hasta = Date.today)
     activos = Asset.joins(:ingreso).where(auxiliary_id: auxiliaries.ids)
-    activos.where('ingresos.factura_fecha <= ?', fecha)
+    activos.where('ingresos.factura_fecha' => desde..hasta)
   end
 
   def auxiliares_activos_depreciacion(desde = Date.today, hasta = Date.today)
     activos = Asset.joins(:ingreso).where(auxiliary_id: auxiliaries.ids)
-    activos.where('ingresos.factura_fecha >= ? AND ingresos.factura_fecha <= ?', desde, hasta)
+    activos.where('ingresos.factura_fecha' => desde..hasta)
   end
 
-  def cantidad_activos(fecha = Date.today)
-    auxiliares_activos(fecha).length
+  def cantidad_activos(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).length
   end
 
-  def costo_historico(fecha = Date.today)
-    auxiliares_activos(fecha).costo_historico
+  def costo_historico(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).costo_historico
   end
 
-  def costo_actualizado_inicial(fecha = Date.today)
-    auxiliares_activos(fecha).costo_actualizado_inicial(fecha)
+  def costo_actualizado_inicial(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).costo_actualizado_inicial(hasta)
   end
 
-  def depreciacion_acumulada_inicial(fecha = Date.today)
-    auxiliares_activos(fecha).depreciacion_acumulada_inicial(fecha)
+  def depreciacion_acumulada_inicial(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).depreciacion_acumulada_inicial(hasta)
   end
 
-  def valor_neto_inicial(fecha = Date.today)
-    auxiliares_activos(fecha).inject(0) do |suma, activo|
-      suma + activo.costo_actualizado_inicial(fecha) - activo.depreciacion_acumulada_inicial(fecha)
+  def valor_neto_inicial(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).inject(0) do |suma, activo|
+      suma + activo.costo_actualizado_inicial(hasta) - activo.depreciacion_acumulada_inicial(hasta)
     end
   end
 
-  def actualizacion_gestion(fecha = Date.today)
-    auxiliares_activos(fecha).actualizacion_gestion(fecha)
+  def actualizacion_gestion(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).actualizacion_gestion(hasta)
   end
 
-  def costo_actualizado(fecha = Date.today)
-    auxiliares_activos(fecha).costo_actualizado(fecha)
+  def costo_actualizado(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).costo_actualizado(hasta)
   end
 
-  def depreciacion_gestion(fecha = Date.today)
-    auxiliares_activos(fecha).depreciacion_gestion(fecha)
+  def depreciacion_gestion(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).depreciacion_gestion(hasta)
   end
 
-  def actualizacion_depreciacion_acumulada(fecha = Date.today)
-    auxiliares_activos(fecha).actualizacion_depreciacion_acumulada(fecha)
+  def actualizacion_depreciacion_acumulada(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).actualizacion_depreciacion_acumulada(hasta)
   end
 
-  def depreciacion_acumulada_total(fecha = Date.today)
-    auxiliares_activos(fecha).depreciacion_acumulada_total(fecha)
+  def depreciacion_acumulada_total(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).depreciacion_acumulada_total(hasta)
   end
 
-  def valor_neto(fecha = Date.today)
-    auxiliares_activos(fecha).valor_neto(fecha)
+  def valor_neto(desde = Date.today, hasta = Date.today)
+    auxiliares_activos(desde, hasta).valor_neto(hasta)
   end
 
-  def self.cantidad_activos(fecha = Date.today)
+  def self.cantidad_activos(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + cuenta.cantidad_activos(fecha)
+      suma + cuenta.cantidad_activos(desde, hasta)
     end
   end
 
-  def self.costo_historico(fecha = Date.today)
+  def self.costo_historico(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.costo_historico(fecha))
+      suma + redondear(cuenta.costo_historico(desde, hasta))
     end
   end
 
-  def self.costo_actualizado_inicial(fecha = Date.today)
+  def self.costo_actualizado_inicial(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.costo_actualizado_inicial(fecha))
+      suma + redondear(cuenta.costo_actualizado_inicial(desde, hasta))
     end
   end
 
-  def self.depreciacion_acumulada_inicial(fecha = Date.today)
+  def self.depreciacion_acumulada_inicial(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.depreciacion_acumulada_inicial(fecha))
+      suma + redondear(cuenta.depreciacion_acumulada_inicial(desde, hasta))
     end
   end
 
-  def self.valor_neto_inicial(fecha = Date.today)
+  def self.valor_neto_inicial(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.valor_neto_inicial(fecha))
+      suma + redondear(cuenta.valor_neto_inicial(desde, hasta))
     end
   end
 
-  def self.actualizacion_gestion(fecha = Date.today)
+  def self.actualizacion_gestion(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.actualizacion_gestion(fecha))
+      suma + redondear(cuenta.actualizacion_gestion(desde, hasta))
     end
   end
 
-  def self.costo_actualizado(fecha = Date.today)
+  def self.costo_actualizado(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.costo_actualizado(fecha))
+      suma + redondear(cuenta.costo_actualizado(desde, hasta))
     end
   end
 
-  def self.depreciacion_gestion(fecha = Date.today)
+  def self.depreciacion_gestion(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.depreciacion_gestion(fecha))
+      suma + redondear(cuenta.depreciacion_gestion(desde, hasta))
     end
   end
 
-  def self.actualizacion_depreciacion_acumulada(fecha = Date.today)
+  def self.actualizacion_depreciacion_acumulada(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.actualizacion_depreciacion_acumulada(fecha))
+      suma + redondear(cuenta.actualizacion_depreciacion_acumulada(desde, hasta))
     end
   end
 
-  def self.depreciacion_acumulada_total(fecha = Date.today)
+  def self.depreciacion_acumulada_total(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.depreciacion_acumulada_total(fecha))
+      suma + redondear(cuenta.depreciacion_acumulada_total(desde, hasta))
     end
   end
 
-  def self.valor_neto(fecha = Date.today)
+  def self.valor_neto(desde = Date.today, hasta = Date.today)
     all.inject(0) do |suma, cuenta|
-      suma + redondear(cuenta.valor_neto(fecha))
+      suma + redondear(cuenta.valor_neto(desde, hasta))
     end
   end
   # END datos para el reporte resumen de activos fijos ordenado por grupo contable
