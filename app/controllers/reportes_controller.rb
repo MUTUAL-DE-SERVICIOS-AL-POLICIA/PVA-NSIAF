@@ -47,28 +47,8 @@ class ReportesController < ApplicationController
     @columnas = @columnas.map { |c| {descripcion: t("activerecord.attributes.asset.#{c}"), clave: c } }
     @cuentas = Account.all
     @cuentas = [{ descripcion: "Seleccionar cuenta", clave: ""}] + @cuentas.order(:code).map { |b| {descripcion: b.code_and_name, clave: b.id, } }
-    desde, hasta = get_fechas(params, false)
-    q = params[:q]
-    col = params[:col]
-    cuentas = params[:cuentas]
-    @activos = Asset.all
-    @total = @activos.inject(0.0) { |total, activo| total + activo.precio }
-
     respond_to do |format|
       format.html
-      format.pdf do
-        filename = 'reporte-de-activos'
-        render pdf: filename,
-               disposition: 'attachment',
-               layout: 'pdf.html',
-               # show_as_html: params.key?('debug'),
-               template: 'reportes/activos.html.haml',
-               orientation: 'Portrait',
-               page_size: 'Letter',
-               margin: view_context.margin_pdf,
-               header: { html: { template: 'shared/header.pdf.haml' } },
-               footer: { html: { template: 'shared/footer.pdf.haml' } }
-      end
     end
   end
 

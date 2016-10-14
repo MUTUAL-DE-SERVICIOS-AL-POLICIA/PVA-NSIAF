@@ -2,14 +2,14 @@ var Celda = React.createClass({
   render() {
     if(typeof this.props.td != 'undefined'){
       return (
-        <td>
+        <td className= { this.props.className } >
           { this.props.td }
         </td>
       );
     }
     else if (typeof this.props.th != 'undefined') {
       return (
-        <th>
+        <th className= { this.props.className }>
           { this.props.th }
         </th>
       );
@@ -45,13 +45,13 @@ var Fila = React.createClass({
     var precio = this.props.fila.precio;
     return (
       <tr>
-        <Celda td = { indice }/>
-        <Celda td = { codigo }/>
-        <Celda td = { factura }/>
-        <Celda td = { fecha }/>
+        <Celda td = { indice } className = "text-right"/>
+        <Celda td = { codigo } className = "text-center"/>
+        <Celda td = { factura } className = "text-center"/>
+        <Celda td = { fecha } className = "text-center"/>
         <Celda td = { descripcion }/>
         <Celda td = { cuenta }/>
-        <Celda td = { precio }/>
+        <Celda td = { precio } className = "number"/>
       </tr>
     );
   }
@@ -93,15 +93,18 @@ var TablaReportes = React.createClass({
     blobURL = window.URL.createObjectURL(blob);
     return $('#obtiene_csv').attr('href', blobURL).attr('download', 'data.csv');
   },
+
+  mostrarTotal (){
+    return(
+      <tr>
+        <th colSpan ="5" ></th>
+        <th>TOTAL:</th>
+        <th>{ this.props.total }</th>
+      </tr>
+    );
+  },
+
   render() {
-    if(this.props.cabecera.length > 0){
-      var columnas = this.props.cabecera.map((col, i) => {
-        return (
-          <Celda key = { i }
-                 th = { col.th }/>
-        )
-      });
-    }
     if(this.props.tabla.length > 0){
       var filas = this.props.tabla.map((fila, i) => {
         return (
@@ -115,18 +118,25 @@ var TablaReportes = React.createClass({
           <div className="pull-right">
             <span >Descargar:</span>
             <div className="btn-group btn-group-xs">
-              <a id="obtiene_csv" className="btn btn-default" href= {  }>CSV</a>
-              <a id="obtiene_pdf" className="btn btn-default">PDF</a>
+              <a id="obtiene_csv" className="btn btn-default">CSV</a>
+              <a id="obtiene_pdf" className="btn btn-default" href = {this.props.url_pdf}>PDF</a>
             </div>
           </div>
           <table className = "table table-condensed table-striped table-bordered valorado">
             <thead>
               <tr>
-                { columnas }
+                <th className = "text-right">Nro</th>
+                <th className = "text-center">Código</th>
+                <th className = "text-center">Factura</th>
+                <th className = "text-center">Fecha</th>
+                <th>Descripción</th>
+                <th>Cuenta</th>
+                <th className = "number"> Precio</th>
               </tr>
             </thead>
             <tbody>
               { filas }
+              { this.mostrarTotal() }
             </tbody>
           </table>
         </div>
@@ -137,7 +147,13 @@ var TablaReportes = React.createClass({
         <table className = "table table-condensed table-striped table-bordered valorado">
           <thead>
             <tr>
-              { columnas }
+              <th className = "text-right">Nro</th>
+              <th className = "text-center">Código</th>
+              <th className = "text-center">Factura</th>
+              <th className = "text-center">Fecha</th>
+              <th>Descripción</th>
+              <th>Cuenta</th>
+              <th className = "number"> Precio</th>
             </tr>
           </thead>
           <tbody>
@@ -163,9 +179,18 @@ var ReportesBuscadorBasico = React.createClass({
         type: 'GET',
         success: (response) => {
           this.props.actualizacionTabla(response);
+          this.props.actualizacionUrlPDF({
+                                          url: host + ".pdf" + parametros
+                                        });
         },
         error:(xhr) => {
-          this.props.actualizacionTabla([]);
+          this.props.actualizacionTabla({
+                                          activos: [],
+                                          total: ""
+                                        });
+          this.props.actualizacionUrlPDF({
+                                          url: url + ".pdf" + parametros
+                                        });
         }
     });
   },
@@ -186,40 +211,41 @@ var ReportesBuscadorBasico = React.createClass({
       )
     });
     return(
-      <div className="pull-right" data-action="reportes-activos">
-        <div className="form-group">
-          <label className="sr-only" htmlFor= "columnas">columnas</label>
-          <select ref = "col" name = "col" id="columnas" className = "form-control">
-            { columnas }
-          </select>
+      <div>
+        <div className="pull-right">
+          <div className="form-group">
+            <label className="sr-only" htmlFor= "columnas">columnas</label>
+            <select ref = "col" name = "col" id="columnas" className = "form-control">
+              { columnas }
+            </select>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label className="sr-only" htmlFor="buscar">Buscar</label>
+            <input ref = "q" type="text" name="q" id="q" className="form-control" placeholder="Buscar" autofocus="autofocus" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label className="sr-only" htmlFor="cuenta">cuenta</label>
+            <select ref = "cuenta" name = "cuenta" id ="cuenta" className = "form-control">
+              { cuentas }
+            </select>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label htmlFor="fecha-desde">Fechas</label>
+            <input ref = "desde" type="text" name="desde" id="fecha-desde" className="form-control fecha-buscador" placeholder="Desde fecha" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label className="sr-only" htmlFor="fecha-hasta">Hasta</label>
+            <input ref = "hasta" type="text" name="hasta" id="fecha-hasta" className="form-control fecha-buscador" placeholder="Hasta fecha" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <button className="btn btn-primary" title="Generar kardexes de todos los subartículos" type="#" onClick={ this.aplicandoBuscador } >
+            <span className="glyphicon glyphicon-search"></span>
+          </button>
         </div>
-        &nbsp;
-        <div className="form-group">
-          <label className="sr-only" htmlFor="buscar">Buscar</label>
-          <input ref = "q" type="text" name="q" id="q" className="form-control" placeholder="Buscar" autofocus="autofocus" autoComplete="off"/>
-        </div>
-        &nbsp;
-        <div className="form-group">
-          <label className="sr-only" htmlFor="cuenta">cuenta</label>
-          <select ref = "cuenta" name = "cuenta" id ="cuenta" className = "form-control">
-            { cuentas }
-          </select>
-        </div>
-        &nbsp;
-        &nbsp;
-        <div className="form-group">
-          <label htmlFor="fecha-desde">Fechas</label>
-          <input ref = "desde" type="text" name="desde" id="fecha-desde" className="form-control fecha-buscador" placeholder="Desde fecha" autoComplete="off"/>
-        </div>
-        &nbsp;
-        <div className="form-group">
-          <label className="sr-only" htmlFor="fecha-hasta">Hasta</label>
-          <input ref = "hasta" type="text" name="hasta" id="fecha-hasta" className="form-control fecha-buscador" placeholder="Hasta fecha" autoComplete="off"/>
-        </div>
-        &nbsp;
-        <button className="btn btn-primary" title="Generar kardexes de todos los subartículos" type="#" onClick={ this.aplicandoBuscador } >
-          <span className="glyphicon glyphicon-search"></span>
-        </button>
       </div>
     );
   }
@@ -236,15 +262,27 @@ var ReportesBuscadorAvanzado = React.createClass({
     var descripcion = this.refs.descripcion.value;
     var precio = this.refs.precio.value;
     parametros = "?co=" + codigo + "&nf=" + numero_factura + "&de=" + descripcion +  "&cu=" + cuenta +  "&pr=" + precio + "&desde=" + desde + "&hasta=" + hasta;
-    url = url + parametros;
+    url = host + parametros;
     $.ajax({
         url:  url,
         type: 'GET',
         success: (response) => {
           this.props.actualizacionTabla(response);
+          this.props.actualizacionUrlPDF({
+                                          url: host + ".pdf" + parametros
+                                        });
         },
         error:(xhr) => {
-          this.props.actualizacionTabla([]);
+          this.props.actualizacionTabla({
+                                          tabla:{
+                                           activos: [],
+                                           total: ""
+                                          }
+                                        });
+          this.props.actualizacionUrlPDF({
+                                          url: url + ".pdf" + parametros
+                                        });
+
         }
     });
   },
@@ -259,48 +297,49 @@ var ReportesBuscadorAvanzado = React.createClass({
       });
     }
     return(
-      <div className="pull-right" data-action="reportes-activos">
-        <div className="form-group">
-          <label className="sr-only">Código</label>
-          <input ref = "codigo" type="text" name="codigo" id="codigo" className="form-control" placeholder="Código" autofocus="autofocus" autoComplete="off"/>
+      <div >
+        <div className = "pull-right">
+          <div className="form-group">
+            <label className="sr-only">Código</label>
+            <input ref = "codigo" type="text" name="codigo" id="codigo" className="form-control" placeholder="Código" autofocus="autofocus" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label className="sr-only">Factura</label>
+            <input ref = "numero_factura" type="text" name="numero_factura" id="factura" className="form-control" placeholder="Número Factura" autofocus="autofocus" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label className="sr-only">Descripción</label>
+            <input ref = "descripcion" type="text" name="descripcion" id="descripcion" className="form-control" placeholder="Descripción" autofocus="autofocus" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label className="sr-only">Precio</label>
+            <input ref = "precio" type="text" name="precio" id="precio" className="form-control" placeholder="Precios" autofocus="autofocus" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label className="sr-only" htmlFor="cuenta">cuenta</label>
+            <select ref = "cuenta" id="cuenta" name = "cuenta" className = "form-control">
+              { cuentas }
+            </select>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label htmlFor="fecha-hasta">Fechas</label>
+            <input ref = "desde" type="text" name="desde" className="form-control fecha-buscador" placeholder="Desde fecha" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label className="sr-only" htmlFor="fecha-hasta">Hasta</label>
+            <input ref = "hasta" type="text" name="hasta" className="form-control fecha-buscador" placeholder="Hasta fecha" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <button className="btn btn-primary" title="Generar kardexes de todos los subartículos" type="#" onClick={ this.aplicandoBuscador } >
+            <span className="glyphicon glyphicon-search"></span>
+          </button>
         </div>
-        &nbsp;
-        <div className="form-group">
-          <label className="sr-only">Factura</label>
-          <input ref = "numero_factura" type="text" name="numero_factura" id="factura" className="form-control" placeholder="Número Factura" autofocus="autofocus" autoComplete="off"/>
-        </div>
-        &nbsp;
-        <div className="form-group">
-          <label className="sr-only">Descripción</label>
-          <input ref = "descripcion" type="text" name="descripcion" id="descripcion" className="form-control" placeholder="Descripción" autofocus="autofocus" autoComplete="off"/>
-        </div>
-        &nbsp;
-        <div className="form-group">
-          <label className="sr-only">Precio</label>
-          <input ref = "precio" type="text" name="precio" id="precio" className="form-control" placeholder="Precios" autofocus="autofocus" autoComplete="off"/>
-        </div>
-        &nbsp;
-        <div className="form-group">
-          <label className="sr-only" htmlFor="cuenta">cuenta</label>
-          <select ref = "cuenta" id="cuenta" name = "cuenta" className = "form-control">
-            { cuentas }
-          </select>
-        </div>
-        &nbsp;
-        &nbsp;
-        <div className="form-group">
-          <label htmlFor="fecha-hasta">Fechas</label>
-          <input ref = "desde" type="text" name="desde" className="form-control fecha-buscador" placeholder="Desde fecha" autoComplete="off"/>
-        </div>
-        &nbsp;
-        <div className="form-group">
-          <label className="sr-only" htmlFor="fecha-hasta">Hasta</label>
-          <input ref = "hasta" type="text" name="hasta" className="form-control fecha-buscador" placeholder="Hasta fecha" autoComplete="off"/>
-        </div>
-        &nbsp;
-        <button className="btn btn-primary" title="Generar kardexes de todos los subartículos" type="#" onClick={ this.aplicandoBuscador } >
-          <span className="glyphicon glyphicon-search"></span>
-        </button>
       </div>
     );
   }
@@ -331,40 +370,40 @@ var ReportesBuscador = React.createClass({
   render(){
     if(this.state.tipo_buscador == "basico"){
       return(
-        <div>
-          <div className="page-header buscador-2">
+          <div className="page-header">
             <div className= 'form-inline'>
+              <h2>Reporte de Activos Fijos</h2>
               <ReportesBuscadorBasico cuentas = { this.props.cuentas }
                                       columnas = { this.props.columnas }
-                                      actualizacionTabla = {this.props.actualizacionTabla }
+                                      actualizacionTabla = { this.props.actualizacionTabla }
+                                      actualizacionUrlPDF = { this.props.actualizacionUrlPDF }
                                       url = { this.props.url }/>
-              <h2>Reporte de Activos Fijos</h2>
-            </div>
-            <div className="pull-right">
-              <a onClick= { this.cambioBuscador }>Búsqueda Avanzada</a>
+              <div className="clearfix"></div>
+              <div className="pull-right">
+                <a onClick= { this.cambioBuscador }>Búsqueda Avanzada</a>
+              </div>
             </div>
             <br/>
           </div>
-        </div>
       );
     }
     else {
       if(this.props.columnas.length > 0){
         return(
-          <div>
-            <div className="page-header buscador-2">
+            <div className="page-header">
               <div className= 'form-inline'>
-                <ReportesBuscadorAvanzado cuentas = { this.props.cuentas}
-                                          actualizacionTabla = {this.props.actualizacionTabla}
-                                          url = { this.props.url }/>
                 <h2>Reporte de Activos Fijos</h2>
+                <ReportesBuscadorAvanzado cuentas = { this.props.cuentas}
+                                          actualizacionTabla = { this.props.actualizacionTabla}
+                                          actualizacionUrlPDF = { this.props.actualizacionUrlPDF }
+                                          url = { this.props.url }/>
+                <div className="clearfix"></div>
+                <div className="pull-right">
+                  <a onClick= { this.cambioBuscador }>Búsqueda Básica</a>
+                </div>
+                <div className="clearfix"></div>
               </div>
-              <div className="pull-right">
-                <a onClick= { this.cambioBuscador }>Búsqueda Básica</a>
-              </div>
-              <br/>
             </div>
-          </div>
         );
       }
     }
@@ -374,28 +413,45 @@ var ReportesBuscador = React.createClass({
 var ReporteActivos = React.createClass({
   getInitialState() {
     return { tabla: [],
-             cabecera: [{th: "Nro"}, {th: "Código"}, {th: "Factura"}, {th: "Fecha"}, {th: "Descripción"}, {th: "Cuenta"}, {th: "Precio"}]}
+             total: "",
+             url_pdf: ""
+           }
   },
   componentWillMount() {
     $.getJSON(this.props.url, (response) => {
-      this.setState({ tabla: response }) });
+      this.setState({ tabla: response.activos,
+                      total: response.total,
+                      url_pdf: this.props.url + ".pdf"
+                    })
+    });
   },
 
   actualizarTabla(tabla) {
       this.setState({
-          tabla: tabla
+          tabla: tabla.activos,
+          total: tabla.total
+      });
+  },
+  actualizacionUrlPDF(data) {
+      this.setState({
+          url_pdf: data.url
       });
   },
 
   render() {
     return (
       <div>
-        <ReportesBuscador url =  { this.props.url } actualizacionTabla={ this.actualizarTabla } cuentas = { this.props.cuentas } columnas = { this.props.columnas }/>
+        <ReportesBuscador url =  { this.props.url }
+                          actualizacionTabla = { this.actualizarTabla }
+                          actualizacionUrlPDF = { this.actualizacionUrlPDF }
+                          cuentas = { this.props.cuentas }
+                          columnas = { this.props.columnas }/>
         <div className='row'>
           <div className='col-sm-12'>
             <TablaReportes key = "1"
-                           cabecera = { this.state.cabecera }
-                           tabla = { this.state.tabla } />
+                           tabla = { this.state.tabla }
+                           total = { this.state.total }
+                           url_pdf = { this.state.url_pdf }/>
           </div>
         </div>
       </div>

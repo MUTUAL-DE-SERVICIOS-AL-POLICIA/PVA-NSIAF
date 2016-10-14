@@ -22,7 +22,7 @@ module Api
         respond_to do |format|
           format.json do
             if @activos.present?
-              render json: @activos, each_serializer: ActivoSerializer, root: false,
+              render json: {activos: (ActiveModel::ArraySerializer.new(@activos, each_serializer: ActivoSerializer, root: false)), total: @total},
                      status: 200
             else
               render json: { mensaje: 'No se tienen activos.' },
