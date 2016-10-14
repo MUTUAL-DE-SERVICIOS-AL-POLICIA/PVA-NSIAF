@@ -342,18 +342,19 @@ ActiveRecord::Schema.define(version: 20161014215536) do
   end
 
   create_table "seguros", force: :cascade do |t|
-    t.integer  "supplier_id",          limit: 4
-    t.integer  "user_id",              limit: 4
-    t.string   "numero_contrato",      limit: 255
-    t.string   "factura_numero",       limit: 255
-    t.string   "factura_autorizacion", limit: 255
+    t.integer  "supplier_id",           limit: 4
+    t.integer  "user_id",               limit: 4
+    t.string   "numero_contrato",       limit: 255
+    t.string   "factura_numero",        limit: 255
+    t.string   "factura_autorizacion",  limit: 255
     t.date     "factura_fecha"
-    t.date     "fecha_inicio_validez"
-    t.date     "fecha_fin_validez"
-    t.boolean  "baja_logica",                      default: false
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
+    t.date     "fecha_inicio_vigencia"
+    t.date     "fecha_fin_vigencia"
+    t.boolean  "baja_logica",                       default: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
   end
+
   create_table "subarticle_requests", force: :cascade do |t|
     t.integer "subarticle_id",    limit: 4
     t.integer "request_id",       limit: 4

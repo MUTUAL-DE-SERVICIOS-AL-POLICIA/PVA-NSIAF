@@ -78,6 +78,6 @@ class SegurosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def seguro_params
-      params.require(:seguro).permit(:supplier, :user, :numero_contrato, :factura_numero, :factura_autorizacion, :factura_fecha, :fecha_inicio_validez, :fecha_fin_validez, :baja_logica)
+      params.require(:seguro).permit(:supplier, :user, :numero_contrato, :factura_numero, :factura_autorizacion, :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia, :baja_logica)
     end
 end

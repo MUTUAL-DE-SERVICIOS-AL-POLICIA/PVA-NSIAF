@@ -4,7 +4,7 @@ class Seguro < ActiveRecord::Base
   has_and_belongs_to_many :assets
 
   validates :supplier, :user, :factura_numero, :factura_autorizacion,
-            :factura_fecha, :fecha_inicio_validez, :fecha_fin_validez,
+            :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia,
             presence: true
 
   scope :activos, -> { where(baja_logica: false) }
@@ -26,8 +26,9 @@ class Seguro < ActiveRecord::Base
   end
 
   def self.vigentes
+    debugger
     fecha_actual = Date.today
-    self.activos.where("seguros.fecha_inicio_validez >= :fecha_inicio AND seguros.fecha_fin_validez <= :fecha_fin", fecha_inicio: fecha_actual, fecha_fin: fecha_actual )
+    self.activos.where("seguros.fecha_inicio_vigencia >= :fecha_inicio AND seguros.fecha_fin_vigencia <= :fecha_fin", fecha_inicio: fecha_actual, fecha_fin: fecha_actual )
   end
 
 end
