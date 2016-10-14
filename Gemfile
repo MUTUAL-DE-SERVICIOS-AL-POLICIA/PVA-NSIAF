@@ -54,7 +54,6 @@ gem 'rest_client'
 group :development, :test do
   gem 'rails-erd'
   gem 'spring'
-  gem 'web-console', '~> 2.0'
   gem 'byebug'
   gem 'rspec-rails', '~> 3.5'
   gem 'factory_girl_rails'
@@ -68,6 +67,7 @@ group :test do
   gem "selenium-webdriver", "~> 2.39.0"
   gem "guard-rspec"
   gem "spork"
+  #gem "spork-rails", :github => 'sporkrb/spork-rails'
   gem "guard-spork"
 end
 
