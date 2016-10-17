@@ -1,5 +1,6 @@
 class SegurosController < ApplicationController
   before_action :set_seguro, only: [:show, :edit, :update, :destroy]
+  before_action :set_usuario, only: [:create]
 
   # GET /seguros
   # GET /seguros.json
@@ -34,10 +35,10 @@ class SegurosController < ApplicationController
   # POST /seguros.json
   def create
     @seguro = Seguro.new(seguro_params)
-
+    @seguro.user = @usuario
     respond_to do |format|
       if @seguro.save
-        format.html { redirect_to @seguro, notice: 'Seguro was successfully created.' }
+        format.html { redirect_to @seguro, notice: 'Seguro creado exitosamente.' }
         format.json { render json: @seguro, status: :created }
       else
         format.html { render action: 'new' }
@@ -76,8 +77,12 @@ class SegurosController < ApplicationController
       @seguro = Seguro.find(params[:id])
     end
 
+    def set_usuario
+      @usuario = current_user
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def seguro_params
-      params.require(:seguro).permit(:supplier, :user, :numero_contrato, :factura_numero, :factura_autorizacion, :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia, :baja_logica)
+      params.require(:seguro).permit(:supplier_id, :user_id, :numero_contrato, :factura_numero, :factura_autorizacion, :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia, :baja_logica)
     end
 end

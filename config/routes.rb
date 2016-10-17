@@ -3,23 +3,30 @@ require 'api_constraints'
 
 Rails.application.routes.draw do
 
-  resources :seguros
   namespace :api, defaults: {format: :json}, except: [:new, :edit] do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
 
       resources :documentos, only: [:show, :create]
+
       resources :nota_entradas, only: [:index] do
         put :anular, on: :member
       end
+
       resources :solicitudes, only: [:index] do
         put :anular, on: :member
       end
+
       resources :users, only: [:obt_historico_actas] do
         get :obt_historico_actas, on: :member
         get :obt_activos, on: :member
       end
+
       resources :reportes, only: [:activos] do
         get :activos, on: :collection
+      end
+
+      resources :seguros, only: [:index, :create, :proveedores] do
+          get :proveedores, on: :collection
       end
     end
   end
@@ -56,6 +63,8 @@ Rails.application.routes.draw do
   resources :kardex_prices
 
   resources :kardexes
+
+  resources :seguros
 
   resources :derecognised, only: :index
 

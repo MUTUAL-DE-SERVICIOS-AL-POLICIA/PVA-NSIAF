@@ -430,6 +430,13 @@ class Asset < ActiveRecord::Base
     ubicacion.present? ? ubicacion.detalle : ''
   end
 
+  def self.sin_seguro_vigente
+    seguros_vigentes_ids = Seguro.vigentes
+    activos_todos = Asset.all
+    activos_con_seguro_vigente = Asset.joins(:seguros).where(assets_seguros: {seguro_id: seguros_vigentes_ids})
+    activos_todos - activos_con_seguro_vigente
+  end
+
   private
 
   ##

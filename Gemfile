@@ -60,7 +60,7 @@ group :development, :test do
 end
 
 group :test do
-  gem "faker", "~> 1.1.2"
+  gem "faker", "~> 1.2.0"
   gem 'capybara'
   gem "database_cleaner"
   gem "launchy", "~> 2.3.0"
@@ -69,6 +69,7 @@ group :test do
   gem "spork"
   #gem "spork-rails", :github => 'sporkrb/spork-rails'
   gem "guard-spork"
+  gem "timecop"
 end
 
 

@@ -58,3 +58,4 @@
 //= require reportes
 //= require subarticulos
 //= require gestiones
+//= require seguros
