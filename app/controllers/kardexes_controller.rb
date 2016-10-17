@@ -8,9 +8,9 @@ class KardexesController < ApplicationController
     if params[:subarticle_id].present?
       @subarticle = Subarticle.find(params[:subarticle_id])
 
-      desde, hasta = get_fechas(params)
-      @transacciones = @subarticle.kardexs(desde, hasta)
-      @year = desde.year
+      @desde, @hasta = get_fechas(params)
+      @transacciones = @subarticle.kardexs(@desde, @hasta)
+      @year = @desde.year
     else
       @kardexes = Kardex.all
     end

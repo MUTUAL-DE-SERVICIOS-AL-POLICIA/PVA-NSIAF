@@ -1,5 +1,7 @@
 - titulo = 'KARDEX DE EXISTENCIAS'
 - year = @year
+- desde = @desde
+- hasta = @hasta
 - unless is_pdf?
   .page-header
     .pull-right
@@ -20,7 +22,9 @@
 - else
   .row
     .col-sm-12
-      %h3.text-center= titulo
+      .text-center
+        %h3= titulo
+        %h5.fecha-al= titulo_rango_de_fechas(desde, hasta)
 
       %table.kardex-table
         %tbody
