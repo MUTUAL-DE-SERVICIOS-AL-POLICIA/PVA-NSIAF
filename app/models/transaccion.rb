@@ -152,15 +152,23 @@ class Transaccion < ActiveRecord::Base
       saldos.each do |saldo|
         resto = saldo.cantidad_saldo - numero
         saldo.cantidad_entrada = 0
-        saldo.cantidad_saldo = resto
         if resto > 0
           saldo.cantidad_salida = numero
+          saldo.cantidad_saldo = resto
           break
         else
           saldo.cantidad_salida = numero + resto
+          saldo.cantidad_saldo = 0
           numero = -resto
         end
       end
+    end
+
+    # Eliminar aquellos saldos con entradas, salidas, y saldo igual a cero
+    saldos.reject! do |saldo|
+      saldo.cantidad_saldo.zero? &&
+        saldo.cantidad_salida.zero? &&
+        saldo.cantidad_entrada.zero?
     end
 
     self.items = saldos.length > 0 ? saldos : [Transaccion.new]

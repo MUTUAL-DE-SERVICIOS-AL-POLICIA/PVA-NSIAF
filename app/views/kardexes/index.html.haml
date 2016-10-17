@@ -1,3 +1,4 @@
+- titulo = 'KARDEX DE EXISTENCIAS'
 - year = @year
 - unless is_pdf?
   .page-header
@@ -13,13 +14,13 @@
         %span.glyphicon.glyphicon-list
         Subartículos
 
-    %h3 KARDEX DE EXISTENCIAS
+    %h3= titulo
 
     #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
 - else
   .row
     .col-sm-12
-      %h3.text-center KARDEX DE EXISTENCIAS
+      %h3.text-center= titulo
 
       %table.kardex-table
         %tbody
