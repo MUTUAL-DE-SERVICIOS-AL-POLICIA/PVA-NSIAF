@@ -71,6 +71,14 @@ class Subarticle < ActiveRecord::Base
     subarticle_ids
   end
 
+  # FIXME Selecciona aquellos subartículos con saldo mayor a cero a una
+  # determinada fecha
+  def self.con_saldo_al(fecha = Date.today)
+    all.select do |subarticle|
+      subarticle.saldo(fecha + 1.day) > 0
+    end
+  end
+
   def self.estado_activo
     self.active
   end

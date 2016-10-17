@@ -4,7 +4,7 @@ class ReportesController < ApplicationController
 
   def kardex
     @desde, @hasta = get_fechas(params)
-    @subarticles = Subarticle.all
+    @subarticles = Subarticle.con_saldo_al(@desde)
     respond_to do |format|
       format.html
       format.pdf do
