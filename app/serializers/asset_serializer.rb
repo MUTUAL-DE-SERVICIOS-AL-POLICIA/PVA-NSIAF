@@ -4,7 +4,7 @@ class AssetSerializer < ActiveModel::Serializer
 
   def urls
     {
-      show: asset_url(object, host: Rails.application.secrets.rails_host)
+      show: asset_url(object)
     }
   end
 
