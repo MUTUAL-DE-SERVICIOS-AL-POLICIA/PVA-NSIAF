@@ -431,10 +431,9 @@ class Asset < ActiveRecord::Base
   end
 
   def self.sin_seguro_vigente
-    seguros_vigentes_ids = Seguro.vigentes
-    activos_todos = Asset.all
-    activos_con_seguro_vigente = Asset.joins(:seguros).where(assets_seguros: {seguro_id: seguros_vigentes_ids})
-    activos_todos - activos_con_seguro_vigente
+    seguros_vigentes_ids = Seguro.vigentes.ids
+    activos_ids = Asset.joins(:seguros).where(seguros: {id: seguros_vigentes_ids}).ids
+    Asset.where.not(id: activos_ids)
   end
 
   private

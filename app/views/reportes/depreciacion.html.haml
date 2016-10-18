@@ -24,7 +24,7 @@
   .row.reporte.reporte-10
     .col-sm-12.text-center
       %h2= titulo
-      %h4.fecha-al Desde #{I18n.l desde, format: :long} al #{I18n.l fecha, format: :long}
+      %h4.fecha-al= titulo_rango_de_fechas(desde, hasta)
 
 :css
   .page-break	{ display: block; page-break-before: always; }

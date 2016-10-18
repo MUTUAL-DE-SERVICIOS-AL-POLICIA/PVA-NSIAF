@@ -65,9 +65,8 @@ group :test do
   gem "database_cleaner"
   gem "launchy", "~> 2.3.0"
   gem "selenium-webdriver", "~> 2.39.0"
-  gem "guard-rspec"
-  gem "spork"
-  #gem "spork-rails", :github => 'sporkrb/spork-rails'
+  gem 'guard-rspec', require: false
+  gem "spork-rails"
   gem "guard-spork"
   gem "timecop"
 end
@@ -89,3 +88,5 @@ gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 gem 'whenever', :require => false
+
+gem 'where-or'

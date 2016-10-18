@@ -25,9 +25,13 @@ class Seguro < ActiveRecord::Base
     user.present? ? user.name : ''
   end
 
-  def self.vigentes(fecha_actual = nil)
-    fecha_actual = Date.today unless fecha_actual.present?
-    self.activos.where("seguros.fecha_inicio_vigencia <= :fecha_inicio AND seguros.fecha_fin_vigencia >= :fecha_fin", fecha_inicio: fecha_actual, fecha_fin: fecha_actual )
+  def vigente?(fecha_actual = Date.today)
+    fecha_inicio_vigencia <= fecha_actual && fecha_fin_vigencia >= fecha_actual
+  end
+
+  def self.vigentes(fecha_actual = Date.today)
+    self.activos.where("fecha_inicio_vigencia <= ?", fecha_actual)
+                .where("fecha_fin_vigencia >= ?", fecha_actual )
   end
 
   def expiracion_a_dias(nro_dias)

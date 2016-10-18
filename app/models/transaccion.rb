@@ -39,7 +39,14 @@ class Transaccion < ActiveRecord::Base
       cantidad: 0,
       detalle: 'SALDO FINAL'
     )
-    saldo_final.items = [Transaccion.new]
+    saldo_final.crear_items(all.saldo_al(fecha))
+    saldo = saldo_final.items.sum(&:cantidad_saldo)
+    importe_saldo = saldo_final.items.sum(&:importe_saldo)
+    transaccion = {
+      cantidad_saldo: saldo,
+      importe_saldo_resumen: importe_saldo
+    }
+    saldo_final.items = [Transaccion.new(transaccion)]
     saldo_final
   end
 
@@ -123,11 +130,9 @@ class Transaccion < ActiveRecord::Base
     saldo_final = transacciones.last
     saldo_final.items.first.cantidad_salida = salidas
     saldo_final.items.first.cantidad_entrada = entradas
-    saldo_final.items.first.cantidad_saldo = entradas - salidas
     saldo_final.items.first.costo_unitario = nil
     saldo_final.items.first.importe_entrada_resumen = importe_entradas
     saldo_final.items.first.importe_salida_resumen = importe_salidas
-    saldo_final.items.first.importe_saldo_resumen = importe_entradas - importe_salidas
   end
 
   def crear_items(saldos)
@@ -147,15 +152,23 @@ class Transaccion < ActiveRecord::Base
       saldos.each do |saldo|
         resto = saldo.cantidad_saldo - numero
         saldo.cantidad_entrada = 0
-        saldo.cantidad_saldo = resto
         if resto > 0
           saldo.cantidad_salida = numero
+          saldo.cantidad_saldo = resto
           break
         else
           saldo.cantidad_salida = numero + resto
+          saldo.cantidad_saldo = 0
           numero = -resto
         end
       end
+    end
+
+    # Eliminar aquellos saldos con entradas, salidas, y saldo igual a cero
+    saldos.reject! do |saldo|
+      saldo.cantidad_saldo.zero? &&
+        saldo.cantidad_salida.zero? &&
+        saldo.cantidad_entrada.zero?
     end
 
     self.items = saldos.length > 0 ? saldos : [Transaccion.new]

@@ -63,11 +63,13 @@ RSpec.describe Seguro, type: :model do
       expect(Asset.sin_seguro_vigente.size).to eq(3), "existen 3 activos sin seguro"
     end
 
-    it "verifcando la no existencia de activos sin seguro" do
+    it "verificando la no existencia de activos sin seguro" do
+      Timecop.freeze("20-08-2016".to_date)
       @seguro_vigente.assets << @activo_6
       @seguro_vigente.assets << @activo_7
       @seguro_vigente.assets << @activo_8
       expect(Asset.sin_seguro_vigente).to be_empty
+      Timecop.return
     end
 
     it "verificando la existencia de activos no asegurados posterior fecha fin de vigencia del seguro" do
@@ -87,6 +89,6 @@ RSpec.describe Seguro, type: :model do
       expect(@seguro_vigente.expiracion_a_dias(60)).to eq(true)
       Timecop.return
     end
-    
+
   end
 end

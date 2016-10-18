@@ -2,6 +2,8 @@ require 'year_constraint'
 require 'api_constraints'
 
 Rails.application.routes.draw do
+  default_url_options protocol: '//' # HTTP o HTTPS
+  default_url_options host: Rails.application.secrets.rails_host
 
   namespace :api, defaults: {format: :json}, except: [:new, :edit] do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do

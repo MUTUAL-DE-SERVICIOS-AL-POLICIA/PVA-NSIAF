@@ -9,7 +9,6 @@ FactoryGirl.define do
     trait :vigente do
       fecha_inicio_vigencia "2016-07-14"
       fecha_fin_vigencia "2016-11-14"
-
     end
     trait :no_vigente do
       fecha_inicio_vigencia "2015-07-14"
