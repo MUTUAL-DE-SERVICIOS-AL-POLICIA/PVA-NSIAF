@@ -14,7 +14,6 @@ module Api
       end
 
       def create
-        debugger
         @seguro = Seguro.new(seguro_params)
         @seguro.user = @usuario
         respond_to do |format|
@@ -39,7 +38,7 @@ module Api
       end
 
       def seguro_params
-        params.require(:seguro).permit(:supplier_id, :user_id, :numero_contrato, :factura_numero, :factura_autorizacion, :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia, :baja_logica, :asset_ids)
+        params.require(:seguro).permit(:supplier_id, :user_id, :numero_contrato, :factura_numero, :factura_autorizacion, :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia, :baja_logica, asset_ids: [])
       end
     end
   end

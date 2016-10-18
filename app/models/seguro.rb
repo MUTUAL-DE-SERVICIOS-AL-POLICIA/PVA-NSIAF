@@ -34,6 +34,10 @@ class Seguro < ActiveRecord::Base
                 .where("fecha_fin_vigencia >= ?", fecha_actual )
   end
 
+  def dias_para_expiracion(fecha_actual = Date.today)
+    (fecha_fin_vigencia - fecha_actual).to_i
+  end
+
   def expiracion_a_dias(nro_dias)
     fecha_inicio_alerta = fecha_fin_vigencia - nro_dias
     Date.today >= fecha_inicio_alerta

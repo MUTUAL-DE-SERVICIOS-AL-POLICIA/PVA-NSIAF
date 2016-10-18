@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Seguro, type: :model do
 
-  context "verificacion con 2 registros de seguros uno vigente y otro no vigente" do
+  context "cuando tenemos 2 registros de seguros uno vigente y otro no vigente" do
     before :each do
       @seguro_vigente = FactoryGirl.create(:seguro, :vigente)
       @seguro_no_vigente = FactoryGirl.create(:seguro, :no_vigente)
@@ -34,7 +34,7 @@ RSpec.describe Seguro, type: :model do
     end
   end
 
-  context "verificando la vigencia de los seguros" do
+  context "cuando tenemos 2 seguros uno vigente y otro no vigente" do
     before :each do
       @seguro_vigente = FactoryGirl.create(:seguro, :vigente)
       @seguro_no_vigente = FactoryGirl.create(:seguro, :no_vigente)
@@ -89,6 +89,35 @@ RSpec.describe Seguro, type: :model do
       expect(@seguro_vigente.expiracion_a_dias(60)).to eq(true)
       Timecop.return
     end
+  end
+
+  context "Probando la vigencia de un seguro" do
+    let(:seguro) { FactoryGirl.create :seguro, { fecha_inicio_vigencia: "01-01-2015", fecha_fin_vigencia:"31-12-2015" } }
+
+    it "Fecha antes de la fecha de inicio de vigencia" do
+      Timecop.freeze("13-04-2014")
+      expect(seguro.vigente?).to eq(false)
+      Timecop.return
+    end
+
+    it "Fecha en la fecha de inicio de vigencia" do
+      Timecop.freeze("01-01-2015")
+      expect(seguro.vigente?).to eq(true)
+      Timecop.return
+    end
+
+    it "Fecha en la fecha de fin de vigencia" do
+      Timecop.freeze("31-12-2015")
+      expect(seguro.vigente?).to eq(true)
+      Timecop.return
+    end
+
+    it "Fecha posterior a la fecha de fin de vigencia" do
+      Timecop.freeze("02-01-2016")
+      expect(seguro.vigente?).to eq(false)
+      Timecop.return
+    end
 
   end
+
 end

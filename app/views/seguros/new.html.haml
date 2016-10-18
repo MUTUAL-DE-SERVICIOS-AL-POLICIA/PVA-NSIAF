@@ -1,9 +1,6 @@
--# %h1 New seguro
--#
--# = render 'form'
--#
--# = link_to 'Back', seguros_path
-#seguros-urls{data: {'seguros' => api_seguros_url(host: Rails.application.secrets.rails_host), 'proveedores' => proveedores_api_seguros_url(format: :json, q: '%QUERY', host: Rails.application.secrets.rails_host)}}
+#seguros-urls{ data: {'seguros' => api_seguros_url,
+                      'seguro' => seguros_url, 
+                      'proveedores' => proveedores_api_seguros_url(format: :json, q: '%QUERY')}}
 
 .row{data: {action: 'seguros'}}
   .col-md-12

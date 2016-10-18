@@ -17,6 +17,7 @@ class Seguros
     # Variables
     @segurosPath = @$segurosUrls.data('seguros')
     @proveedoresPath = @$segurosUrls.data('proveedores')
+    @seguroPath = @$segurosUrls.data('seguro')
 
     @$obt_ingreso_urls = $('#obt_ingreso-urls')
     @obt_ingreso_url = @$obt_ingreso_urls.data('obt-ingreso')
@@ -59,56 +60,6 @@ class Seguros
     $(document).on 'change', @$fechaInicioVigencia.selector, @capturarContrato
     $(document).on 'change', @$fechaFinVigencia.selector, @capturarContrato
     $(document).on 'click', @$guardarBtn.selector, @guardarSeguros
-
-  confirmarIngreso: (e) =>
-    e.preventDefault()
-    if @sonValidosDatos()
-      if @id_ingreso
-        url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val() + '&n=' + @id_ingreso
-      else
-        url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val()
-      $.ajax
-        url: url
-        type: 'GET'
-        dataType: 'JSON'
-      .done (xhr) =>
-        data = xhr
-        if data["tipo_respuesta"]
-          if data["tipo_respuesta"] == "confirmacion"
-            @$confirmModal.html @$confirmarIngresoTpl.render(data)
-            modal = @$confirmModal.find(@$confirmarIngresoModal.selector)
-            modal.modal('show')
-          else if data["tipo_respuesta"] == "alerta"
-            @$confirmModal.html @$alertaIngresoTpl.render(data)
-            modal = @$confirmModal.find(@$alertaIngresoModal.selector)
-            modal.modal('show')
-        else
-          @guardarIngresoActivosFijos(e)
-    else
-      @alert.danger "Complete todos los datos requeridos"
-
-  aceptarConfirmarIngreso: (e) =>
-    e.preventDefault()
-    el = @$confirmModal.find('#modal_observacion')
-    if el
-      @$inputObservacion.val(el.val())
-    @capturarObservacion()
-    @$confirmModal.find(@$confirmarIngresoModal.selector).modal('hide')
-    $form = $(e.target).closest('form')
-    @guardarIngresoActivosFijos(e)
-
-  validarObservacion: (e) =>
-    el = @$confirmModal.find('#modal_observacion')
-    if el
-      valor = $.trim(el.val())
-      if valor
-        el.parents('.form-group').removeClass('has-error')
-        el.next().remove()
-        @aceptarConfirmarIngreso(e)
-      else
-        el.parents('.form-group').addClass('has-error')
-        el.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
-        false
 
   aceptarAlertaIngreso: (e) ->
     e.preventDefault()
@@ -170,7 +121,7 @@ class Seguros
         data: { seguro: @jsonSeguro() }
       .done (seguro) =>
         @alert.success "Se guardó correctamente el seguro"
-        window.location = "#{@segurosPath}/#{seguro.id}"
+        window.location = "#{@seguroPath}/#{seguro.id}"
       .fail (xhr, status) =>
         @alert.danger 'Error al guardar el seguro'
       .always (xhr, status) ->

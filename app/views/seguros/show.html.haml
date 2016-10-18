@@ -1,33 +1,39 @@
-%p#notice= notice
+.page-header{ data: {action: 'historical-reviews'} }
+  .pull-right
+    = link_to edit_asset_path(@seguro), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+    = link_to request.referer || assets_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("seguros.title.title")
 
-%p
-  %b Supplier:
-  = @seguro.supplier
-%p
-  %b User:
-  = @seguro.user
-%p
-  %b Numero contrato:
-  = @seguro.numero_contrato
-%p
-  %b Factura numero:
-  = @seguro.factura_numero
-%p
-  %b Factura autorizacion:
-  = @seguro.factura_autorizacion
-%p
-  %b Factura fecha:
-  = @seguro.factura_fecha
-%p
-  %b Fecha inicio vigencia:
-  = @seguro.fecha_inicio_vigencia
-%p
-  %b Fecha fin vigencia:
-  = @seguro.fecha_fin_vigencia
-%p
-  %b Baja logica:
-  = @seguro.baja_logica
+  %h2= @seguro.numero_contrato
+.row
+  .col-lg-4.col-md-5.col-sm-12
+    %dl.dl-horizontal
+      %dt= t "activerecord.attributes.seguro.factura_numero"
+      %dd= @seguro.factura_numero
+      %dt= t "activerecord.attributes.seguro.factura_autorizacion"
+      %dd= @seguro.factura_numero
+      %dt= t "activerecord.attributes.seguro.factura_fecha"
+      %dd= l @seguro.factura_fecha, format: :long
+      %dt= t "activerecord.attributes.seguro.fecha_inicio_vigencia"
+      %dd= l @seguro.fecha_inicio_vigencia, format: :long
+      %dt= t "activerecord.attributes.seguro.fecha_fin_vigencia"
+      %dd= l @seguro.fecha_fin_vigencia, format: :long
+      %dt= t "activerecord.attributes.seguro.estado"
+      - if @seguro.vigente?
+        %dd.text-success VIGENTE
+        %dt= t "seguros.title.nro_dias_expiracion"
+        %dd.text-info #{@seguro.dias_para_expiracion} días
+      - else
+        %dd.text-danger NO VIGENTE
 
-= link_to 'Edit', edit_seguro_path(@seguro)
-\|
-= link_to 'Back', seguros_path
+  .col-lg-8.col-md-7.col-sm-12
+
+    - if @seguro.assets.present?
+      = render "activos"
+    - else
+      .alert.alert-info.alert-dismissable
+        %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
+        No tiene activos asegurados.

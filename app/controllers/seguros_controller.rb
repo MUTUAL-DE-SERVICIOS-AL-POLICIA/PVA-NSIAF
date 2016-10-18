@@ -5,12 +5,7 @@ class SegurosController < ApplicationController
   # GET /seguros
   # GET /seguros.json
   def index
-    @seguros = Seguro.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @seguros }
-    end
+    format_to('seguros', SegurosDatatable)
   end
 
   # GET /seguros/1

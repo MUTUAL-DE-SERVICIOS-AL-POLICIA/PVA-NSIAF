@@ -1,0 +1,20 @@
+- unless is_pdf?
+  .pull-right
+    %span Descargar:
+    .btn-group.btn-group-xs
+      %button.download-assets.btn.btn-default{:name => "button", :type => "submit"} CSV
+      %button.download-assets.btn.btn-default{:name => "button", :type => "submit"} PDF
+%h4 Listado de activos asegurados
+%table.table.table-striped.table-condensed.table-bordered.alineacion-media
+  %thead
+    %tr
+      %th
+      %th Descripción
+      %th Código
+  %tbody
+    - @seguro.assets.each_with_index do |asset, index|
+      %tr
+        %td= index+1
+        %td= asset.description
+        %td.nowrap.text-center
+          %a{:href => asset_path(asset.id)}= asset.code
