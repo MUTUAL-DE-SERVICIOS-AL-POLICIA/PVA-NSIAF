@@ -33,6 +33,8 @@ GEM
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
     active_model_serializers (0.9.3)
       activemodel (>= 3.2)
+    active_record_union (1.2.0)
+      activerecord (>= 4.0)
     activejob (4.2.7.1)
       activesupport (= 4.2.7.1)
       globalid (>= 0.3.0)
@@ -340,6 +342,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  active_record_union
   angular-rails-templates
   autocomplete-off
   bcrypt (~> 3.1.7)

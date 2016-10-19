@@ -4,7 +4,8 @@ class ReportesController < ApplicationController
 
   def kardex
     @desde, @hasta = get_fechas(params)
-    @subarticles = Subarticle.all
+    @subarticles = Subarticle.con_saldo_y_movimientos_en(@desde, @hasta)
+                             .order(:code)
     respond_to do |format|
       format.html
       format.pdf do
@@ -23,7 +24,7 @@ class ReportesController < ApplicationController
             pdf: nombre_archivo,
             layout: 'pdf.html',
             template: 'kardexes/index.html.haml',
-            orientation: 'Landscape',
+            orientation: 'Portrait',
             page_size: 'Letter',
             margin: view_context.margin_pdf,
             header: {html: {template: 'shared/header.pdf.haml'}},
