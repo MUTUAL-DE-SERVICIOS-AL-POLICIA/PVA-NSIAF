@@ -71,12 +71,26 @@ class Subarticle < ActiveRecord::Base
     subarticle_ids
   end
 
-  # FIXME Selecciona aquellos subartículos con saldo mayor a cero a una
-  # determinada fecha
-  def self.con_saldo_al(fecha = Date.today)
-    all.select do |subarticle|
-      subarticle.saldo(fecha + 1.day) > 0
-    end
+  # Selecciona aquellos subartículos con saldo mayor a cero
+  # o que tuvieron movimientos de entrada/salida en un rango de fechas
+  def self.con_saldo_y_movimientos_en(desde = Date.today, hasta = Date.today)
+    self.con_saldo(desde)
+        .union(con_movimientos_en(desde, hasta))
+  end
+
+  # Lista de subartículos con movimientos de entrada/salida en un rango de fechas
+  def self.con_movimientos_en(desde = Date.today, hasta = Date.today)
+    self.joins(:transacciones)
+        .where(entradas_salidas: {fecha: desde..hasta})
+        .where("entradas_salidas.cantidad > 0")
+        .where(entradas_salidas: {tipo: 'entrada'})
+  end
+
+  # Subartículos que tienen saldo hasta una fecha indicada
+  def self.con_saldo(fecha = Date.today)
+    self.joins(:transacciones).where('fecha <= ?', fecha)
+                              .group(:id)
+                              .having('SUM(cantidad) > 0')
   end
 
   def self.estado_activo

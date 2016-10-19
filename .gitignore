@@ -29,3 +29,4 @@ pickle-email-*.html
 erd.pdf
 /public/assets
 /public/uploads
+/.byebug_history
