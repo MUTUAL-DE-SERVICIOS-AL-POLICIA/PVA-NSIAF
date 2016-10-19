@@ -274,10 +274,8 @@ var ReportesBuscadorAvanzado = React.createClass({
         },
         error:(xhr) => {
           this.props.actualizacionTabla({
-                                          tabla:{
-                                           activos: [],
-                                           total: ""
-                                          }
+                                          activos: [],
+                                          total: ""
                                         });
           this.props.actualizacionUrlPDF({
                                           url: url + ".pdf" + parametros

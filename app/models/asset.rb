@@ -57,13 +57,13 @@ class Asset < ActiveRecord::Base
     if q.present? || cuentas.present? || (desde.present? && hasta.present?) || col.present?
       if q.present?
         if col == 'all'
-          activos = activos.where("assets.description like :q OR assets.code like :code OR ingresos.factura_numero like :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
+          activos = activos.where("assets.description LIKE :q OR assets.code LIKE :code OR ingresos.factura_numero LIKE :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
         else
           case col
           when 'code'
-            activos = activos.where("assets.code like :q", q: "%#{q}%")
+            activos = activos.where("assets.code LIKE :q", q: "%#{q}%")
           when 'description'
-            activos = activos.where("assets.description like :q", q: "%#{q}%")
+            activos = activos.where("assets.description LIKE :q", q: "%#{q}%")
           when 'invoice'
             activos = activos.where("ingresos.factura_numero = :q", q: q)
           end
@@ -90,7 +90,7 @@ class Asset < ActiveRecord::Base
       activos = activos.where("ingresos.factura_numero = :nf", nf: numero_factura)
     end
     if descripcion.present?
-      activos = activos.where("assets.description = :de", de: descripcion)
+      activos = activos.where("assets.description LIKE :de", de: "%#{descripcion}%")
     end
     if precio.present?
       activos = activos.where("accounts.id = :pr", pr: precio)
