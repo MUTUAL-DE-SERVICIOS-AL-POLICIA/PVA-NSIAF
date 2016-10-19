@@ -21,13 +21,19 @@
       %dd= l @seguro.fecha_inicio_vigencia, format: :long
       %dt= t "activerecord.attributes.seguro.fecha_fin_vigencia"
       %dd= l @seguro.fecha_fin_vigencia, format: :long
-      %dt= t "activerecord.attributes.seguro.estado"
       - if @seguro.vigente?
-        %dd.text-success VIGENTE
         %dt= t "seguros.title.nro_dias_expiracion"
-        %dd.text-info #{@seguro.dias_para_expiracion} días
+        %dd
+          #{@seguro.dias_para_expiracion} días
+        %dt= t "activerecord.attributes.seguro.estado"
+        %dd
+          %span.label.label-success
+            VIGENTE
       - else
-        %dd.text-danger NO VIGENTE
+        %dt= t "activerecord.attributes.seguro.estado"      
+        %dd
+          %span.label.label-default
+            NO VIGENTE
 
   .col-lg-8.col-md-7.col-sm-12
 

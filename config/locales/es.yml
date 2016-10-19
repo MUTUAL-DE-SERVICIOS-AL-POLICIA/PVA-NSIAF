@@ -180,6 +180,7 @@ es:
     title:
       title: "Seguros"
       nro_dias_expiracion: "Días para la expiración"
+      new: "Nuevo seguro"
   subarticles:
     title:
       title: "Subartículos de Materiales"
@@ -519,7 +520,7 @@ es:
         status: "Estado"
         no: "Nro."
       seguro:
-        supplier: "Proveedor"
+        suppliers: "Proveedor"
         user: "Usuario"
         numero_contrato: "Número de contrato"
         factura_numero: "Número de factura"
@@ -528,6 +529,7 @@ es:
         fecha_inicio_vigencia: "Fecha inicio de vigencia"
         fecha_fin_vigencia: "Fecha fin de vigencia"
         estado: "Estado"
+        nro_assets: "Cantidad activos"
       version:
         item_id: "Código"
         created_at: "Fecha"

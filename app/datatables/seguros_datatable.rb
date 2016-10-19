@@ -8,7 +8,7 @@ class SegurosDatatable
   def as_json(options = {})
     {
       sEcho: params[:sEcho].to_i,
-      iTotalRecords: Ingreso.count,
+      iTotalRecords: Seguro.count,
       iTotalDisplayRecords: array.total_entries,
       aaData: data
     }
@@ -19,25 +19,24 @@ private
   def data
     array.map do |r|
       [
-        r.obtiene_numero,
-        r.factura_fecha.present? ? I18n.l(r.factura_fecha) : '',
+        r.numero_contrato,
+        r.proveedor_nombre,
         r.factura_numero,
-        r.supplier_name,
-        r.telefono_proveedor,
-        r.user_name,
-        number_with_delimiter(r.total),
-        r.nota_entrega_fecha.present? ? I18n.l(r.nota_entrega_fecha) : '',
-        [links_actions(r, 'ingreso')].join(' ')
+        r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_inicio_vigencia) : '',
+        r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_fin_vigencia) : '',
+        content_tag(:h4, content_tag(:span, r.estado, class: "label label-#{ r.vigente? ? "success" : "default" }")),
+        r.cantidad_activos,
+        [links_actions(r, 'seguro')].join(' ')
       ]
     end
   end
 
   def array
-    @ingresos ||= fetch_array
+    @seguros ||= fetch_array
   end
 
   def fetch_array
-    Ingreso.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
+    Seguro.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page
@@ -45,11 +44,11 @@ private
   end
 
   def per_page
-    params[:iDisplayLength].to_i < 0 ? Ingreso.count + 1 : params[:iDisplayLength].to_i
+    params[:iDisplayLength].to_i < 0 ? Seguro.count + 1 : params[:iDisplayLength].to_i
   end
 
   def sort_column
-    columns = %w[ingresos.numero ingresos.factura_fecha ingresos.factura_numero  ingresos.factura_fecha suppliers.name users.name ingresos.total ingresos.nota_entrega_fecha]
+    columns = %w[seguros.numero_contrato suppliers.name seguros.factura_numero  seguros.fecha_inicio_vigencia seguros.fecha_fin_vigencia]
     columns[params[:iSortCol_0].to_i]
   end
 

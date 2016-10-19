@@ -39,7 +39,6 @@
     = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }", disabled: disabled do
       %span{ class: "glyphicon glyphicon-#{ is_versions ? 'remove' : 'plus' }" }
       = t("#{control}.title.new")
-
     - if is_versions
       #versions-export{ 'data-url' => export_versions_path }
 
@@ -48,7 +47,7 @@
 %table.table.table-striped.table-hover.datatable
   %thead
     %tr
-      - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones).include?(control)
+      - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones seguros).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
           %th= User.human_attribute_name('code')
         - if control == 'users' && !current_user.is_super_admin?
