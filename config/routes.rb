@@ -27,9 +27,10 @@ Rails.application.routes.draw do
         get :activos, on: :collection
       end
 
-      resources :seguros, only: [:index, :create, :proveedores] do
-          get :proveedores, on: :collection
-      end
+      resources :seguros, only: [:index, :create]
+
+      resources :proveedores, only: [:index]
+
     end
   end
 

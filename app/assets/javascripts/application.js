@@ -16,6 +16,7 @@
 //= require bootstrap
 //= require react
 //= require react_ujs
+//= require autosuggest
 //= require components
 //= require dataTables/jquery.dataTables
 //= require dataTables/jquery.dataTables.bootstrap3

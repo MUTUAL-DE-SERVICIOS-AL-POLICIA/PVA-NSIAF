@@ -27,10 +27,6 @@ module Api
         end
       end
 
-      def proveedores
-        render json: Supplier.search_supplier(params[:q]), root: false, status: 200
-      end
-
       private
 
       def set_usuario
