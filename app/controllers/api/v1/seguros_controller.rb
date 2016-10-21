@@ -5,16 +5,23 @@ module Api
 
       respond_to :json
 
-      def index
-        if params[:barcode].present?
-          barcode = params[:barcode]
-          activos = Asset.buscar_por_barcode(barcode)
-          render json: activos, root: false
+      def create
+        @seguro = Seguro.new(seguro_params)
+        @seguro.user = @usuario
+        respond_to do |format|
+          if @seguro.save
+            format.html { redirect_to @seguro, notice: 'Seguro creado exitosamente.' }
+            format.json { render json: @seguro,  root: false, status: :created }
+          else
+            format.html { render action: 'new' }
+            format.json { render json: @seguro.errors, status: :unprocessable_entity }
+          end
         end
       end
 
-      def create
-        @seguro = Seguro.new(seguro_params)
+      def update
+        debugger
+      
         @seguro.user = @usuario
         respond_to do |format|
           if @seguro.save

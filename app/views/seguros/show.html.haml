@@ -1,9 +1,9 @@
 .page-header{ data: {action: 'historical-reviews'} }
   .pull-right
-    = link_to edit_asset_path(@seguro), class: 'btn btn-primary' do
+    = link_to edit_seguro_path(@seguro), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    = link_to request.referer || assets_path, class: 'btn btn-default' do
+    = link_to request.referer || seguros_path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("seguros.title.title")
 
@@ -11,10 +11,12 @@
 .row
   .col-lg-4.col-md-5.col-sm-12
     %dl.dl-horizontal
+      %dt= t "activerecord.attributes.seguro.suppliers"
+      %dd= @seguro.proveedor_nombre
       %dt= t "activerecord.attributes.seguro.factura_numero"
       %dd= @seguro.factura_numero
       %dt= t "activerecord.attributes.seguro.factura_autorizacion"
-      %dd= @seguro.factura_numero
+      %dd= @seguro.factura_autorizacion
       %dt= t "activerecord.attributes.seguro.factura_fecha"
       %dd= l @seguro.factura_fecha, format: :long
       %dt= t "activerecord.attributes.seguro.fecha_inicio_vigencia"

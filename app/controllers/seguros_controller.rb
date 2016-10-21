@@ -19,11 +19,33 @@ class SegurosController < ApplicationController
 
   # GET /seguros/new
   def new
-    @seguro = Seguro.new
+    @data =
+      {
+        titulo: "Nuevo Seguro",
+        urls:
+          {
+            proveedores: api_proveedores_url(format: :json),
+            activos: api_activos_url(format: :json),
+            seguros: api_seguros_url, seguro: seguros_url
+          },
+
+      }
   end
 
   # GET /seguros/1/edit
   def edit
+    @data =
+      {
+        titulo: "Editar Seguro",
+        seguro: SeguroSerializer.new(@seguro),
+        urls:
+          {
+            proveedores: api_proveedores_url(format: :json),
+            activos: api_activos_url(format: :json),
+            seguros: api_seguros_url,
+            seguro: seguros_url
+          }
+      }
   end
 
   # POST /seguros
