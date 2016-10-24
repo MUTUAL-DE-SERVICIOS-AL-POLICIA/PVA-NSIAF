@@ -21,7 +21,8 @@
 - control = controller_name == 'derecognised' ? 'assets' : controller_name
 
 = title t("#{control}.title.title")
-
+.alertas.pull-right
+  = render "shared/alertas"
 .page-header{data: {action: "#{accion if accion.present?}"}}
   %h2
     - if action_name == 'delivered'
@@ -30,7 +31,6 @@
       #{t("#{control}.title.title")} #{' dados de Baja' if controller_name == 'derecognised'}
       - if control == 'requests'
         = render 'dropdown', status: params[:status]
-
 .col-xs-2.button_new
   %span.controller_name= controller_name
   - if new_url.present?

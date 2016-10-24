@@ -14,6 +14,12 @@ var AutoCompleteProveedores = React.createClass({
     }
   },
 
+  componentDidMount() {
+    if(this.props.proveedor){
+      $("#proveedores").val(this.props.proveedor.name);
+    }
+  },
+
   onChange (event, { newValue, method }) {
     this.setState({
       value: newValue
@@ -40,7 +46,7 @@ var AutoCompleteProveedores = React.createClass({
       });
     }
     const regex = new RegExp(escapedValue, 'i');
-    $.getJSON(this.props.urls.proveedores + "?q=" + escapedValue, (response) => {
+    $.getJSON(this.props.urls.proveedores + "?q=" + escapedValue + "&limit=10", (response) => {
       this.setState({
         suggestions: response.filter(proveedor => regex.test(proveedor.name))
       });
@@ -132,7 +138,7 @@ var SeguroForm = React.createClass({
         <div className='form-group'>
           <label className='col-sm-2 control-label'>Proveedor</label>
           <div className='col-sm-3'>
-            <AutoCompleteProveedores urls = { this.props.urls } capturarProveedor = { this.props.capturarProveedor }/>
+            <AutoCompleteProveedores urls = { this.props.urls } capturarProveedor = { this.props.capturarProveedor } proveedor = {this.props.proveedor}/>
           </div>
           <div className='col-sm-3'>
             <input type="text" name="nit" id="nit" value= { this.props.proveedor ? this.props.proveedor.nit : '' } className="form-control" placeholder="NIT proveedor" disabled="disabled" autoComplete="off" />
@@ -365,13 +371,15 @@ var SeguroFormulario = React.createClass({
   guardarDatos(e){
     var alert = new Notices({ ele: 'div.main' });
     var url = this.props.data.urls.seguros;
-    if(this.props.seguro){
-      url = url + "/" + this.props.seguro.id
+    var metodo = 'POST';
+    if(this.props.data.seguro){
+      url = url + "/" + this.props.data.seguro.id
+      metodo = 'PUT';
     }
     var _ = this
     $.ajax({
       url: url,
-      type: 'POST',
+      type: metodo,
       dataType: 'JSON',
       data: {
         seguro: this.state.seguro
@@ -402,7 +410,7 @@ var SeguroFormulario = React.createClass({
             capturarFactura = { this.capturarFactura }
             capturarContrato = { this.capturarContrato }
             capturarActivos = { this.capturarActivos }
-            proveedor = {this.state.seguro}
+            proveedor = {this.state.proveedor}
             factura = { this.state.factura }
             contrato = { this.state.contrato }
             />

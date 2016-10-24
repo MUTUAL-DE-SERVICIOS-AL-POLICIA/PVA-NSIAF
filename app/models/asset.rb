@@ -436,6 +436,10 @@ class Asset < ActiveRecord::Base
     Asset.where.not(id: activos_ids)
   end
 
+  def self.alerta_sin_seguro_vigente
+    self.sin_seguro_vigente.present?
+  end
+
   private
 
   ##

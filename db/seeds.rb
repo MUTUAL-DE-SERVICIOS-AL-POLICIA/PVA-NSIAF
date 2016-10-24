@@ -22,3 +22,19 @@ if BarcodeStatus.count() == 0
   BarcodeStatus.create!(status)
   puts "#{BarcodeStatus.count()} estados adicionados"
 end
+
+unless Procedimiento.find_by_metodo("alerta_sin_seguro_vigente").present?
+  #-1.Introduciendo el procedimiento para verificar si existen activos sin seguro vigente.
+  procedimiento =
+    Procedimiento.create!(
+      { clase: "Asset",
+        metodo: "alerta_sin_seguro_vigente",
+        descripcion: "Métodos para verificar si existen activos sin un seguro vigente"})
+  Alerta.create(
+    { procedimiento_id: procedimiento.id,
+      mensaje: "Existen activos sin seguro!",
+      tipo: "danger",
+      clase: "Asset",
+      controlador: "assets",
+      accion: "index"})
+end

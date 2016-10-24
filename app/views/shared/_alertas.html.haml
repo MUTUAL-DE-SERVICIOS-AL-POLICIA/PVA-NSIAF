@@ -1,0 +1,7 @@
+- @alertas.each do |a|
+  - if  a.controlador == params[:controller] && a.accion == params[:action] && a.ejecuta_procedimiento
+    %div{ style: "margin-right: 20px;", class: "alert alert-#{ a.tipo } pull-right " }
+      %button.close{"data-dismiss" => "alert", :type => "button"}>
+        %span{"aria-hidden" => "true"} ×
+        %span.sr-only Close
+      #{ a.mensaje }

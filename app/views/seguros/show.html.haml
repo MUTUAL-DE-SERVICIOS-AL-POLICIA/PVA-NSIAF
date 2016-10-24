@@ -3,7 +3,7 @@
     = link_to edit_seguro_path(@seguro), class: 'btn btn-primary' do
       %span.glyphicon.glyphicon-edit
       = t("general.btn.edit")
-    = link_to request.referer || seguros_path, class: 'btn btn-default' do
+    = link_to seguros_path, class: 'btn btn-default' do
       %span.glyphicon.glyphicon-list
       = t("seguros.title.title")
 
@@ -32,7 +32,7 @@
           %span.label.label-success
             VIGENTE
       - else
-        %dt= t "activerecord.attributes.seguro.estado"      
+        %dt= t "activerecord.attributes.seguro.estado"
         %dd
           %span.label.label-default
             NO VIGENTE

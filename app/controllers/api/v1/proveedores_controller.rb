@@ -4,7 +4,11 @@ module Api
       respond_to :json
 
       def index
-        render json: Supplier.search_supplier(params[:q]), root: false, status: 200
+        if params[:limit].present?
+          render json: Supplier.limit(params[:limit]).search_supplier(params[:q]), root: false, status: 200
+        else
+          render json: Supplier.search_supplier(params[:q]), root: false, status: 200
+        end
       end
     end
   end

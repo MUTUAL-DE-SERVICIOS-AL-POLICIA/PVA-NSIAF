@@ -2,6 +2,8 @@ module Api
   module V1
     class SegurosController < ApplicationController
       before_action :set_usuario, only: [:create]
+      before_action :set_seguro, only: [:update]
+
 
       respond_to :json
 
@@ -20,11 +22,8 @@ module Api
       end
 
       def update
-        debugger
-      
-        @seguro.user = @usuario
         respond_to do |format|
-          if @seguro.save
+          if @seguro.update(seguro_params)
             format.html { redirect_to @seguro, notice: 'Seguro creado exitosamente.' }
             format.json { render json: @seguro,  root: false, status: :created }
           else
@@ -35,6 +34,10 @@ module Api
       end
 
       private
+
+      def set_seguro
+        @seguro = Seguro.find(params[:id])
+      end
 
       def set_usuario
         @usuario = current_user
