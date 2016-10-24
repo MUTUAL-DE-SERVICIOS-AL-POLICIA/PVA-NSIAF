@@ -440,6 +440,11 @@ class Asset < ActiveRecord::Base
     self.sin_seguro_vigente.present?
   end
 
+  def seguro_vigente?
+    seguros_ids = Seguro.vigentes.ids
+    seguros.where(id: seguros_ids).present?
+  end
+
   private
 
   ##

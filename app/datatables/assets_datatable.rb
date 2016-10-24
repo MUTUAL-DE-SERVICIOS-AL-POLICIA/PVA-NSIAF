@@ -27,7 +27,7 @@ private
       as << link_to_if(asset.account, asset.account_name, asset.account)
       as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
       as << content_tag(:span, asset.ubicacion_abreviacion, title: asset.ubicacion_detalle)
-      as << (asset.seguro? ? 'SI' : 'NO')
+      as << (asset.seguro_vigente? ? content_tag(:span, "", class: 'glyphicon glyphicon-lock') : '')
       if asset.status == '0'
         as << (asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : '')
       end
