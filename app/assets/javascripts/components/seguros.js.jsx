@@ -6,6 +6,41 @@ function escapeValor(value){
   return escapeRegexCharacters(value.trim());
 }
 
+var DatePicker = React.createClass({
+  getInitialState() {
+    return {
+      fecha: this.props.valor|| '',
+    }
+  },
+
+  componentDidMount() {
+    if(this){
+      _ = this;
+      $("#" + this.props.id).datepicker({
+        autoclose: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+      }).on("changeDate",function(){
+        _.capturaFecha();
+      });
+      $("#" + this.props.id).datepicker('setDate', new Date(this.props.valor));
+    }
+  },
+
+  capturaFecha(){
+    this.setState({
+      fecha: this.refs.datepicker.value
+    });
+    this.props.captura_fecha(this.state.fecha);
+  },
+
+  render(){
+    return(
+      <input type="text" ref='datepicker' name={this.props.id} id={this.props.id} className={this.props.classname} placeholder={this.props.placeholder} autoComplete="off" onChange= { this.capturaFecha }/>
+    )
+  }
+});
+
 var AutoCompleteProveedores = React.createClass({
   getInitialState() {
     return {
@@ -49,7 +84,7 @@ var AutoCompleteProveedores = React.createClass({
     $.getJSON(this.props.urls.proveedores + "?q=" + escapedValue + "&limit=10", (response) => {
       this.setState({
         suggestions: response.filter(proveedor => regex.test(proveedor.name))
-      });
+      });capturarFactura
     });
   },
 
@@ -81,35 +116,40 @@ var AutoCompleteProveedores = React.createClass({
 });
 
 var SeguroForm = React.createClass({
-  componentDidMount() {
-    _ = this;
-    $(".date").datepicker({
-      autoclose: true,
-      format: "dd-mm-yyyy",
-      language: "es"
-    }).on("changeDate",function(){
-      if(this.id == "factura_fecha"){
-        _.capturaDatosFactura();
-      }
-      if(this.id == "fecha_inicio_vigencia" || this.id == "fecha_fin_vigencia"){
-        _.capturaDatosContrato();
-      }
-    });
+  getInitialState() {
+    return {
+      fecha_1: this.refs.factura_fecha ? this.refs.factura_fecha.refs.datepicker.value : '',
+      fecha_2: this.refs.fecha_inicio_vigencia ?this.refs.fecha_inicio_vigencia.refs.datepicker.value : '',
+      fecha_3: this.refs.fecha_fin_vigencia ? this.refs.fecha_fin_vigencia.refs.datepicker.value : '',
+    }
   },
 
-  capturaDatosFactura(){
+  componentDidUpdate(){
+    console.log(this.state);
+  },
+
+  capturaDatosFactura(x){
+    console.log(x)
     this.props.capturarFactura({
       factura_numero: this.refs.factura_numero.value,
       factura_autorizacion: this.refs.factura_autorizacion.value,
-      factura_fecha: this.refs.factura_fecha.value
+      factura_fecha: x
     });
   },
 
-  capturaDatosContrato(){
+  capturaDatosContratoInicio(y){
+    console.log(y)
     this.props.capturarContrato({
       numero_contrato: this.refs.numero_contrato.value,
-      fecha_inicio_vigencia: this.refs.fecha_inicio_vigencia.value,
-      fecha_fin_vigencia: this.refs.fecha_fin_vigencia.value
+      fecha_inicio_vigencia: y
+    });
+  },
+
+  capturaDatosContratoFin(z){
+    console.log(z)
+    this.props.capturarContrato({
+      numero_contrato: this.refs.numero_contrato.value,
+      fecha_fin_vigencia: z
     });
   },
 
@@ -132,6 +172,19 @@ var SeguroForm = React.createClass({
     }
   },
 
+  capturaActualizaDatos(){
+    this.props.capturarFactura({
+      factura_numero: this.refs.factura_numero ? this.refs.factura_numero.value : '',
+      factura_autorizacion: this.refs.factura_autorizacion ? this.refs.factura_autorizacion.value : '',
+      factura_fecha: this.refs.factura_fecha ? this.refs.factura_fecha.refs.datepicker.value : ''
+    });
+    this.props.capturarContrato({
+      numero_contrato: this.refs.numero_contrato ? this.refs.numero_contrato.value : '',
+      fecha_inicio_vigencia: this.refs.fecha_inicio_vigencia ? this.refs.fecha_inicio_vigencia.refs.datepicker.value : '',
+      fecha_fin_vigencia: this.refs.fecha_fin_vigencia ? this.refs.fecha_fin_vigencia.refs.datepicker.value : ''
+    });
+  },
+
   render() {
     return(
       <div className='form-horizontal' id='factura-form' role='form'>
@@ -141,23 +194,23 @@ var SeguroForm = React.createClass({
             <AutoCompleteProveedores urls = { this.props.urls } capturarProveedor = { this.props.capturarProveedor } proveedor = {this.props.proveedor}/>
           </div>
           <div className='col-sm-3'>
-            <input type="text" name="nit" id="nit" value= { this.props.proveedor ? this.props.proveedor.nit : '' } className="form-control" placeholder="NIT proveedor" disabled="disabled" autoComplete="off" />
+            <input type="text" name="nit" id="nit" value= { this.props.proveedor ? this.props.proveedor.nit : '' } className="form-control" placeholder="NIT proveedor" disabled="disabled" autoComplete="off" readOnly />
           </div>
           <div className='col-sm-3'>
-            <input type="text" name="telefono" id="telefono" value = { this.props.proveedor ? this.props.proveedor.telefono : '' } className="form-control" placeholder="Teléfonos proveedor" disabled="disabled" autoComplete="off" />
+            <input type="text" name="telefono" id="telefono" value = { this.props.proveedor ? this.props.proveedor.telefono : '' } className="form-control" placeholder="Teléfonos proveedor" disabled="disabled" autoComplete="off" readOnly />
           </div>
         </div>
         <div className='form-group'>
           <label className='col-sm-2 control-label'>Factura</label>
           <div className='col-sm-3'>
-            <input type="text" name="factura_numero" ref="factura_numero" id="factura_numero" className="form-control" placeholder="Número de factura" autoComplete="off" onChange= { this.capturaDatosFactura } value = {this.props.factura.factura_numero }/>
+            <input type="text" name="factura_numero" ref="factura_numero" id="factura_numero" className="form-control" placeholder="Número de factura" autoComplete="off" onChange={ this.capturaActualizaDatos } value={ this.props.factura.factura_numero }/>
           </div>
           <div className='col-sm-3'>
-            <input type="text" name="factura_autorizacion" ref="factura_autorizacion" id="factura_autorizacion" className="form-control" placeholder="Número autorización" autoComplete="off" onChange= { this.capturaDatosFactura } value = {this.props.factura.factura_autorizacion}/>
+            <input type="text" name="factura_autorizacion" ref="factura_autorizacion" id="factura_autorizacion" className="form-control" placeholder="Número autorización" autoComplete="off" onChange= { this.capturaActualizaDatos } value={this.props.factura.factura_autorizacion}/>
           </div>
           <div className='col-sm-3'>
             <div className='input-group'>
-              <input type="text" ref="factura_fecha" name="factura_fecha" id="factura_fecha" className="form-control date" placeholder="Fecha de factura" autoComplete="off" onChange= { this.capturaDatosFactura } value = {this.props.factura.factura_fecha}/>
+              <DatePicker ref="factura_fecha" id="factura_fecha" valor={this.props.factura.factura_fecha} classname="form-control" captura_fecha={this.capturaActualizaDatos}/>
               <div className='input-group-addon'>
                 <span className='glyphicon glyphicon-calendar'></span>
               </div>
@@ -167,19 +220,19 @@ var SeguroForm = React.createClass({
         <div className='form-group'>
           <label className='col-sm-2 control-label'>Número de contrato</label>
           <div className='col-sm-3'>
-            <input type="text" ref="numero_contrato" name="numero_contrato" id="numero_contrato" className="form-control" placeholder="Número de contrato" autoComplete="off" onChange= {this.capturaDatosContrato} value = {this.props.contrato.numero_contrato}/>
+            <input type="text" ref="numero_contrato" name="numero_contrato" id="numero_contrato" className="form-control" placeholder="Número de contrato" autoComplete="off" onChange= {this.capturaActualizaDatos} value = {this.props.contrato.numero_contrato}/>
           </div>
           <div className='col-sm-3'>
             <div className='input-group'>
-              <input type="text" ref="fecha_inicio_vigencia" name="fecha_inicio_vigencia" id="fecha_inicio_vigencia" className="form-control date" placeholder="Fecha inicio vigencia" autoComplete="off" onChange= {this.capturaDatosContrato} value = {this.props.contrato.fecha_inicio_vigencia}/>
-              <div className='input-group-addon'>Nuevo
+              <DatePicker ref="fecha_inicio_vigencia"  id="fecha_inicio_vigencia" valor={this.props.contrato.fecha_inicio_vigencia} classname="form-control" captura_fecha={this.capturaActualizaDatos}/>
+              <div className='input-group-addon'>
                 <span className='glyphicon glyphicon-calendar'></span>
               </div>
             </div>
           </div>
           <div className='col-sm-3'>
             <div className='input-group'>
-              <input type="text" ref="fecha_fin_vigencia" name="fecha_fin_vigencia" id="fecha_fin_vigencia" className="form-control date" placeholder="Fecha fin vigencia" autoComplete="off" onChange= { this.capturaDatosContrato } value = {this.props.contrato.fecha_fin_vigencia}/>
+              <DatePicker ref="fecha_fin_vigencia" id="fecha_fin_vigencia" valor={this.props.contrato.fecha_fin_vigencia} classname="form-control" captura_fecha={this.capturaActualizaDatos}/>
               <div className='input-group-addon'>
                 <span className='glyphicon glyphicon-calendar'></span>
               </div>
@@ -393,34 +446,34 @@ var SeguroFormulario = React.createClass({
   },
 
   render() {
-    console.log(this.state.proveedor);
-    console.log(this.state.factura);
+    //  console.log(this.state.proveedor);
+    //console.log(this.state.factura);
     console.log(this.state.contrato);
-    console.log(this.state.activos);
-    console.log(this.state.seguro);
-    return (
-      <div>
-        <div className="row" data-action="seguros">
-          <div className="col-md-12">
-              <h3 className="text-center">{this.props.data.titulo}</h3>
-          </div>
-          <SeguroForm
-            urls = { this.props.data.urls }
-            capturarProveedor = { this.capturarProveedor }
-            capturarFactura = { this.capturarFactura }
-            capturarContrato = { this.capturarContrato }
-            capturarActivos = { this.capturarActivos }
-            proveedor = {this.state.proveedor}
-            factura = { this.state.factura }
-            contrato = { this.state.contrato }
-            />
-        </div>
-        <SeguroTablaActivos
-          activos = { this.state.activos }/>
-        <SeguroBotonesAcciones
-          urls = { this.props.data.urls }
-          guardarDatos = { this.guardarDatos }/>
-      </div>
+    //  console.log(this.state.activos);
+     console.log(this.state.seguro);
+     return (
+       <div>
+         <div className="row" data-action="seguros">
+           <div className="col-md-12">
+               <h3 className="text-center">{this.props.data.titulo}</h3>
+           </div>
+           <SeguroForm
+             urls = { this.props.data.urls }
+             capturarProveedor = { this.capturarProveedor }
+             capturarFactura = { this.capturarFactura }
+             capturarContrato = { this.capturarContrato }
+             capturarActivos = { this.capturarActivos }
+             proveedor = {this.state.proveedor}
+             factura = { this.state.factura }
+             contrato = { this.state.contrato }
+             />
+         </div>
+         <SeguroTablaActivos
+           activos = { this.state.activos }/>
+         <SeguroBotonesAcciones
+           urls = { this.props.data.urls }
+           guardarDatos = { this.guardarDatos }/>
+       </div>
     );
   }
 });
