@@ -187,7 +187,7 @@ ActiveRecord::Schema.define(version: 20161024174238) do
   create_table "entradas_salidas", id: false, force: :cascade do |t|
     t.integer  "id",             limit: 4,   default: 0,  null: false
     t.integer  "subarticle_id",  limit: 4
-    t.date     "fecha"
+    t.datetime "fecha"
     t.string   "factura",        limit: 255
     t.date     "nota_entrega"
     t.string   "nro_pedido",     limit: 11

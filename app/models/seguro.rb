@@ -51,6 +51,20 @@ class Seguro < ActiveRecord::Base
     Date.today >= fecha_inicio_alerta
   end
 
+  def self.alerta_30_dias_expiracion
+    self.vigentes.each do |s|
+      return true if s.expiracion_a_dias(30) && s.assets.present?
+    end
+    false
+  end
+
+  def self.alerta_10_dias_expiracion
+    self.vigentes.each do |s|
+      return true if s.expiracion_a_dias(10) && s.assets.present?
+    end
+    false
+  end
+
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
     orden = "#{sort_column} #{sort_direction}"
     array = joins(:supplier).order(orden)

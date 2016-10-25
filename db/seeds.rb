@@ -29,12 +29,28 @@ unless Procedimiento.find_by_metodo("alerta_sin_seguro_vigente").present?
     Procedimiento.create!(
       { clase: "Asset",
         metodo: "alerta_sin_seguro_vigente",
-        descripcion: "Métodos para verificar si existen activos sin un seguro vigente"})
+        descripcion: "Método para verificar si existen activos sin un seguro vigente"})
   Alerta.create(
     { procedimiento_id: procedimiento.id,
       mensaje: "Existen activos sin seguro!",
       tipo: "danger",
       clase: "Asset",
+      controlador: "assets",
+      accion: "index"})
+end
+
+unless Procedimiento.find_by_metodo("alerta_10_dias_expiracion").present?
+  #-1.Introduciendo el procedimiento para verificar si existen activos sin seguro vigente.
+  procedimiento =
+    Procedimiento.create!(
+      { clase: "Seguro",
+        metodo: "alerta_10_dias_expiracion",
+        descripcion: "Método para verificar la existencia de activos con un seguro que va expirar dentro de 10 dias o menos."})
+  Alerta.create(
+    { procedimiento_id: procedimiento.id,
+      mensaje: "Existen activos con un seguro que expirará dentro de 10 dias o menos.",
+      tipo: "warning",
+      clase: "Seguro",
       controlador: "assets",
       accion: "index"})
 end
