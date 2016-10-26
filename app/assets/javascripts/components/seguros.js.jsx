@@ -6,41 +6,6 @@ function escapeValor(value){
   return escapeRegexCharacters(value.trim());
 }
 
-var DatePicker = React.createClass({
-  getInitialState() {
-    return {
-      fecha: this.props.valor|| '',
-    }
-  },
-
-  componentDidMount() {
-    if(this){
-      _ = this;
-      $("#" + this.props.id).datepicker({
-        autoclose: true,
-        format: "dd/mm/yyyy",
-        language: "es"
-      }).on("changeDate",function(){
-        _.capturaFecha();
-      });
-      $("#" + this.props.id).datepicker('setDate', new Date(this.props.valor));
-    }
-  },
-
-  capturaFecha(){
-    this.setState({
-      fecha: this.refs.datepicker.value
-    });
-    this.props.captura_fecha(this.state.fecha);
-  },
-
-  render(){
-    return(
-      <input type="text" ref='datepicker' name={this.props.id} id={this.props.id} className={this.props.classname} placeholder={this.props.placeholder} autoComplete="off" onChange= { this.capturaFecha }/>
-    )
-  }
-});
-
 var AutoCompleteProveedores = React.createClass({
   getInitialState() {
     return {
@@ -84,7 +49,7 @@ var AutoCompleteProveedores = React.createClass({
     $.getJSON(this.props.urls.proveedores + "?q=" + escapedValue + "&limit=10", (response) => {
       this.setState({
         suggestions: response.filter(proveedor => regex.test(proveedor.name))
-      });capturarFactura
+      });
     });
   },
 
@@ -116,43 +81,6 @@ var AutoCompleteProveedores = React.createClass({
 });
 
 var SeguroForm = React.createClass({
-  getInitialState() {
-    return {
-      fecha_1: this.refs.factura_fecha ? this.refs.factura_fecha.refs.datepicker.value : '',
-      fecha_2: this.refs.fecha_inicio_vigencia ?this.refs.fecha_inicio_vigencia.refs.datepicker.value : '',
-      fecha_3: this.refs.fecha_fin_vigencia ? this.refs.fecha_fin_vigencia.refs.datepicker.value : '',
-    }
-  },
-
-  componentDidUpdate(){
-    console.log(this.state);
-  },
-
-  capturaDatosFactura(x){
-    console.log(x)
-    this.props.capturarFactura({
-      factura_numero: this.refs.factura_numero.value,
-      factura_autorizacion: this.refs.factura_autorizacion.value,
-      factura_fecha: x
-    });
-  },
-
-  capturaDatosContratoInicio(y){
-    console.log(y)
-    this.props.capturarContrato({
-      numero_contrato: this.refs.numero_contrato.value,
-      fecha_inicio_vigencia: y
-    });
-  },
-
-  capturaDatosContratoFin(z){
-    console.log(z)
-    this.props.capturarContrato({
-      numero_contrato: this.refs.numero_contrato.value,
-      fecha_fin_vigencia: z
-    });
-  },
-
   capturaEnter(e){
     if(e.which == 13){
       this.capturaDatosBarcode();
@@ -190,27 +118,30 @@ var SeguroForm = React.createClass({
       <div className='form-horizontal' id='factura-form' role='form'>
         <div className='form-group'>
           <label className='col-sm-2 control-label'>Proveedor</label>
-          <div className='col-sm-3'>
+          <div className='col-sm-4'>
             <AutoCompleteProveedores urls = { this.props.urls } capturarProveedor = { this.props.capturarProveedor } proveedor = {this.props.proveedor}/>
           </div>
-          <div className='col-sm-3'>
+          <div className='col-sm-2'>
             <input type="text" name="nit" id="nit" value= { this.props.proveedor ? this.props.proveedor.nit : '' } className="form-control" placeholder="NIT proveedor" disabled="disabled" autoComplete="off" readOnly />
           </div>
-          <div className='col-sm-3'>
+          <div className='col-sm-2'>
             <input type="text" name="telefono" id="telefono" value = { this.props.proveedor ? this.props.proveedor.telefono : '' } className="form-control" placeholder="Teléfonos proveedor" disabled="disabled" autoComplete="off" readOnly />
           </div>
         </div>
         <div className='form-group'>
           <label className='col-sm-2 control-label'>Factura</label>
-          <div className='col-sm-3'>
+          <div className='col-sm-2'>
             <input type="text" name="factura_numero" ref="factura_numero" id="factura_numero" className="form-control" placeholder="Número de factura" autoComplete="off" onChange={ this.capturaActualizaDatos } value={ this.props.factura.factura_numero }/>
           </div>
-          <div className='col-sm-3'>
+          <div className='col-sm-2'>
             <input type="text" name="factura_autorizacion" ref="factura_autorizacion" id="factura_autorizacion" className="form-control" placeholder="Número autorización" autoComplete="off" onChange= { this.capturaActualizaDatos } value={this.props.factura.factura_autorizacion}/>
           </div>
-          <div className='col-sm-3'>
+          <div className='col-sm-2'>
+            <input type="text" name="factura_monto" ref="factura_monto" id="factura_monto" className="form-control" placeholder="Monto" autoComplete="off" onChange= { this.capturaActualizaDatos } value={this.props.factura.factura_monto}/>
+          </div>
+          <div className='col-sm-2'>
             <div className='input-group'>
-              <DatePicker ref="factura_fecha" id="factura_fecha" valor={this.props.factura.factura_fecha} classname="form-control" captura_fecha={this.capturaActualizaDatos}/>
+              <DatePicker ref="factura_fecha" id="factura_fecha" placeholder={"Fecha de factura"} valor={this.props.factura.factura_fecha} classname="form-control" captura_fecha={this.capturaActualizaDatos}/>
               <div className='input-group-addon'>
                 <span className='glyphicon glyphicon-calendar'></span>
               </div>
@@ -219,20 +150,23 @@ var SeguroForm = React.createClass({
         </div>
         <div className='form-group'>
           <label className='col-sm-2 control-label'>Número de contrato</label>
-          <div className='col-sm-3'>
+            <div className='col-sm-2'>
+              <input type="text" ref="numero_poliza" name="numero_poliza" id="numero_poliza" className="form-control" placeholder="Poliza" autoComplete="off" onChange= {this.capturaActualizaDatos}/>
+            </div>
+          <div className='col-sm-2'>
             <input type="text" ref="numero_contrato" name="numero_contrato" id="numero_contrato" className="form-control" placeholder="Número de contrato" autoComplete="off" onChange= {this.capturaActualizaDatos} value = {this.props.contrato.numero_contrato}/>
           </div>
-          <div className='col-sm-3'>
+          <div className='col-sm-2'>
             <div className='input-group'>
-              <DatePicker ref="fecha_inicio_vigencia"  id="fecha_inicio_vigencia" valor={this.props.contrato.fecha_inicio_vigencia} classname="form-control" captura_fecha={this.capturaActualizaDatos}/>
+              <DateTimePicker ref="fecha_inicio_vigencia"  id="fecha_inicio_vigencia" placeholder={"Fecha inicio de vigencia"} valor={this.props.contrato.fecha_inicio_vigencia} classname="form-control" captura_fecha={this.capturaActualizaDatos} />
               <div className='input-group-addon'>
                 <span className='glyphicon glyphicon-calendar'></span>
               </div>
             </div>
           </div>
-          <div className='col-sm-3'>
+          <div className='col-sm-2'>
             <div className='input-group'>
-              <DatePicker ref="fecha_fin_vigencia" id="fecha_fin_vigencia" valor={this.props.contrato.fecha_fin_vigencia} classname="form-control" captura_fecha={this.capturaActualizaDatos}/>
+              <DateTimePicker ref="fecha_fin_vigencia" id="fecha_fin_vigencia" placeholder={"Fecha fin de vigencia"} valor={this.props.contrato.fecha_fin_vigencia} classname="form-control" captura_fecha={this.capturaActualizaDatos}/>
               <div className='input-group-addon'>
                 <span className='glyphicon glyphicon-calendar'></span>
               </div>
@@ -446,11 +380,6 @@ var SeguroFormulario = React.createClass({
   },
 
   render() {
-    //  console.log(this.state.proveedor);
-    //console.log(this.state.factura);
-    console.log(this.state.contrato);
-    //  console.log(this.state.activos);
-     console.log(this.state.seguro);
      return (
        <div>
          <div className="row" data-action="seguros">

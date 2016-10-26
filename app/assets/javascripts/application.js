@@ -14,6 +14,9 @@
 //= require jquery_ujs
 //= require nprogress
 //= require bootstrap
+//= require moment
+//= require bootstrap-datetimepicker
+//= require moment_es
 //= require react
 //= require react_ujs
 //= require autosuggest

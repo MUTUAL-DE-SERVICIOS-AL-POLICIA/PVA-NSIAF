@@ -445,6 +445,11 @@ class Asset < ActiveRecord::Base
     seguros.where(id: seguros_ids).present?
   end
 
+  def seguro_vigente
+    seguros.vigentes.order(fecha_fin_vigencia: :desc).first
+  end
+
+
   private
 
   ##
