@@ -57,6 +57,7 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec-rails', '~> 3.5'
   gem 'factory_girl_rails'
+  gem 'guard-livereload'
 end
 
 group :test do
