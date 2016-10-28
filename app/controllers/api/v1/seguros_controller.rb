@@ -4,7 +4,6 @@ module Api
       before_action :set_usuario, only: [:create]
       before_action :set_seguro, only: [:update]
 
-
       respond_to :json
 
       def create
@@ -12,10 +11,8 @@ module Api
         @seguro.user = @usuario
         respond_to do |format|
           if @seguro.save
-            format.html { redirect_to @seguro, notice: 'Seguro creado exitosamente.' }
             format.json { render json: @seguro,  root: false, status: :created }
           else
-            format.html { render action: 'new' }
             format.json { render json: @seguro.errors, status: :unprocessable_entity }
           end
         end

@@ -1,85 +1,3 @@
-function escapeRegexCharacters(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-}
-
-function escapeValor(value){
-  return escapeRegexCharacters(value.trim());
-}
-
-var AutoCompleteProveedores = React.createClass({
-  getInitialState() {
-    return {
-      value: '',
-      suggestions: []
-    }
-  },
-
-  componentDidMount() {
-    if(this.props.proveedor){
-      $("#proveedores").val(this.props.proveedor.name);
-    }
-  },
-
-  onChange (event, { newValue, method }) {
-    this.setState({
-      value: newValue
-    });
-  },
-
-  getSuggestionValue(suggestion) {
-    this.props.capturarProveedor(suggestion);
-    return suggestion.name;
-  },
-
-  renderSuggestion(suggestion) {
-    return (
-      <span>{suggestion.name}</span>
-    );
-  },
-
-  onSuggestionsFetchRequested ({ value }) {
-    this.props.capturarProveedor(null);
-    escapedValue = escapeValor(value);
-    if (escapedValue === '') {
-      this.setState({
-        suggestions: []
-      });
-    }
-    const regex = new RegExp(escapedValue, 'i');
-    $.getJSON(this.props.urls.proveedores + "?q=" + escapedValue + "&limit=10", (response) => {
-      this.setState({
-        suggestions: response.filter(proveedor => regex.test(proveedor.name))
-      });
-    });
-  },
-
-  onSuggestionsClearRequested () {
-    this.setState({
-      suggestions: []
-    });
-  },
-
-  render() {
-    const { value, suggestions } = this.state;
-    const inputProps = {
-      id: "proveedores",
-      placeholder: "Proveedor",
-      value,
-      onChange: this.onChange,
-      className: "form-control"
-    };
-    return (
-        <Autosuggest
-          suggestions={suggestions}
-          onSuggestionsFetchRequested = { this.onSuggestionsFetchRequested }
-          onSuggestionsClearRequested = { this.onSuggestionsClearRequested }
-          getSuggestionValue = { this.getSuggestionValue }
-          renderSuggestion = { this.renderSuggestion }
-          inputProps = { inputProps }/>
-    );
-  }
-});
-
 var SeguroForm = React.createClass({
   capturaEnter(e){
     if(e.which == 13){
@@ -100,6 +18,7 @@ var SeguroForm = React.createClass({
     }
   },
 
+
   capturaActualizaDatos(){
     this.props.capturarFactura({
       factura_numero: this.refs.factura_numero ? this.refs.factura_numero.value : '',
@@ -119,7 +38,7 @@ var SeguroForm = React.createClass({
         <div className='form-group'>
           <label className='col-sm-2 control-label'>Proveedor</label>
           <div className='col-sm-4'>
-            <AutoCompleteProveedores urls = { this.props.urls } capturarProveedor = { this.props.capturarProveedor } proveedor = {this.props.proveedor}/>
+            <AutoCompleteProveedor urls = { this.props.urls } capturarProveedor = { this.props.capturarProveedor } proveedor = {this.props.proveedor}/>
           </div>
           <div className='col-sm-2'>
             <input type="text" name="nit" id="nit" value= { this.props.proveedor ? this.props.proveedor.nit : '' } className="form-control" placeholder="NIT proveedor" disabled="disabled" autoComplete="off" readOnly />
@@ -184,72 +103,6 @@ var SeguroForm = React.createClass({
           </div>
         </div>
       </div>);
-  }
-});
-
-var SeguroTablaActivos = React.createClass({
-  render() {
-    var cantidad_activos  = this.props.activos.length;
-    if(cantidad_activos > 0){
-      var activos = this.props.activos.map((activo, i) => {
-        return (
-          <tr key = {i}>
-            <td className="text-center">
-              { i + 1 }
-            </td>
-            <td className="text-center">
-              { activo.code }
-            </td>
-            <td>
-              { activo.description }
-            </td>
-          </tr>
-        )
-      });
-      return (
-        <table className="table table-bordered table-striped table-hover table-condensed" id="ingresos-tbl">
-          <thead>
-            <tr>
-              <th className="text-center">
-                <strong className="badge" title="Total">{cantidad_activos}</strong>
-              </th>
-              <th className="text-center">Código</th>
-              <th>Descripción</th>
-            </tr>
-          </thead>
-          <tbody>
-            { activos }
-          </tbody>
-        </table>
-      );
-    }
-    else {
-      return(
-        <div>
-        </div>
-      );
-    }
-
-  }
-});
-
-var SeguroBotonesAcciones = React.createClass({
-  render() {
-    return (
-      <div className="row">
-        <div className="col-md-12 col-sm-12 text-center">
-          <a className="btn btn-danger cancelar-btn" href= {this.props.urls.seguros}>
-            <span className="glyphicon glyphicon-ban-circle"></span>
-          Cancelar
-        </a>
-        &nbsp;
-        <button name="button" type="submit" className="btn btn-primary guardar-btn" data-disable-with="Guardando..." onClick={this.props.guardarDatos}>
-          <span className="glyphicon glyphicon-floppy-save"></span>
-          Guardar
-        </button>
-        </div>
-      </div>
-    );
   }
 });
 

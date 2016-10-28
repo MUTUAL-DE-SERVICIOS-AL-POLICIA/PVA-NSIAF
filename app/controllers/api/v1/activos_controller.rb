@@ -5,13 +5,15 @@ module Api
       respond_to :json
 
       def index
-        if params[:barcode].present?
-          barcode = params[:barcode]
-          activos = Asset.buscar_por_barcode(barcode)
-          render json: activos, root: false
-        else
-          render json: Asset.all, root:false
-        end
+        activos =
+          if params[:barcode].present?
+            Asset.buscar_por_barcode(params[:barcode])
+          else
+            Asset.all
+          end
+        sumatoria = 0
+        activos.map{ |a| sumatoria += a.precio }
+        render json: { activos: activos, sumatoria: sumatoria }
       end
     end
   end

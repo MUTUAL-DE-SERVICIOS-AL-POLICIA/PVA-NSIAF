@@ -3,9 +3,11 @@ class Seguro < ActiveRecord::Base
   belongs_to :supplier, dependent: :destroy
   has_and_belongs_to_many :assets
 
-  validates :supplier_id, :user_id, :factura_numero, :factura_autorizacion,
-            :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia,
-            presence: true
+  validates :user_id, presence: true
+
+  # validates :supplier_id, :user_id, :factura_numero, :factura_autorizacion,
+  #           :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia,
+  #           presence: true
 
   scope :activos, -> { where(baja_logica: false) }
 
@@ -43,7 +45,7 @@ class Seguro < ActiveRecord::Base
   end
 
   def dias_para_expiracion(fecha_actual = Date.today)
-    (fecha_fin_vigencia - fecha_actual).to_i
+    #(fecha_fin_vigencia - fecha_actual).to_i
   end
 
   def expiracion_a_dias(nro_dias)

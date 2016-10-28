@@ -1,8 +1,9 @@
 class DateTimePicker extends React.Component {
-  getInitialState() {
-    return {
-      fecha: this.props.valor|| '',
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      fecha: this.props.valor|| ''
+    };
   }
 
   componentDidMount() {

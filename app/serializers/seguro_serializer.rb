@@ -4,14 +4,14 @@ class SeguroSerializer < ActiveModel::Serializer
   has_many :assets, serializer: AssetSerializer
 
   def factura_fecha
-    object.factura_fecha.to_time.iso8601
+    object.factura_fecha.to_time.iso8601 if object.factura_fecha.present?
   end
 
   def fecha_inicio_vigencia
-    object.fecha_inicio_vigencia.to_time.iso8601
+    object.fecha_inicio_vigencia.to_time.iso8601 if object.factura_fecha.present?
   end
 
   def fecha_fin_vigencia
-    object.fecha_fin_vigencia.to_time.iso8601
+    object.fecha_fin_vigencia.to_time.iso8601 if object.factura_fecha.present?
   end
 end

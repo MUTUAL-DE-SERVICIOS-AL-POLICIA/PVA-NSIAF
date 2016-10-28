@@ -21,12 +21,13 @@ class SegurosController < ApplicationController
   def new
     @data =
       {
-        titulo: "Nuevo Seguro",
+        titulo: "Obtener Cotización",
         urls:
           {
             proveedores: api_proveedores_url(format: :json),
             activos: api_activos_url(format: :json),
-            seguros: api_seguros_url, seguro: seguros_url
+            listado_seguros: seguros_url,
+            seguros: api_seguros_url,
           },
 
       }

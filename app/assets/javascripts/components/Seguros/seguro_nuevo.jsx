@@ -1,0 +1,74 @@
+class SeguroNuevo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.capturaActivos = this.capturaActivos.bind(this);
+    this.guardarDatos = this.guardarDatos.bind(this);
+    this.state={
+      activos: [],
+      sumatoria: 0
+    };
+  }
+
+  capturaActivos(activos, sumatoria){
+    this.setState({
+        activos: activos,
+        sumatoria: sumatoria
+    });
+  }
+
+  jsonGuardar(){
+    return({
+        asset_ids: this.state.activos.map(function(e) {
+          return e.id;
+        })
+      });
+  }
+
+  guardarDatos(e){
+    var alert = new Notices({ ele: 'div.main' });
+    var url = this.props.data.urls.seguros;
+    _ = this;
+    $.ajax({
+      url: url,
+      type: 'POST',
+      dataType: 'JSON',
+      data: {
+        seguro: this.jsonGuardar()
+      }
+    }).done(function(seguro) {
+      alert.success("Se guardó correctamente la cotización.");
+      return window.location = _.props.data.urls.listado_seguros + "/" + seguro.id;
+    }).fail(function(xhr, status) {
+      alert.danger("Error al guardar la cotización.");
+    });
+  }
+
+  render() {
+    return(
+      <div>
+        <div className="row">
+          <div className="col-md-12">
+            <h3 className="text-center">
+              {this.props.data.titulo}
+            </h3>
+          </div>
+          <BusquedaActivos id="barcode_activos"  capturaActivos={this.capturaActivos} urls={this.props.data.urls} />
+        </div>
+        <SeguroTablaActivos activos={this.state.activos} sumatoria={this.state.sumatoria} />
+        <div className="row">
+          <div className="action-buttons col-md-12 col-sm-12 text-center">
+            <a className="btn btn-danger cancelar-btn" href={this.props.data.urls.listado_seguros}>
+              <span className="glyphicon glyphicon-ban-circle"></span>
+              Cancelar
+            </a>
+            &nbsp;
+            <button name="button" type="submit" className="btn btn-primary guardar-btn" data-disable-with="Guardando..." onClick={this.guardarDatos}>
+              <span className="glyphicon glyphicon-floppy-save"></span>
+              Cotizar
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
