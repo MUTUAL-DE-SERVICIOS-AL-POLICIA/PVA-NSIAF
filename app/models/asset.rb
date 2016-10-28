@@ -110,7 +110,7 @@ class Asset < ActiveRecord::Base
       guiones = rango.split('-').map(&:strip)
       guiones.length > 1 ? Array(guiones[0].to_i..guiones[1].to_i).map(&:to_s) : guiones
     end
-    where(barcode: barcodes.flatten.uniq).order(:barcode)
+    self.todos.where(barcode: barcodes.flatten.uniq).order(:barcode)
   end
 
   def self.derecognised
@@ -447,6 +447,12 @@ class Asset < ActiveRecord::Base
 
   def seguro_vigente
     seguros.vigentes.order(fecha_fin_vigencia: :desc).first
+  end
+
+  def self.todos
+    self.select("assets.id, assets.code, assets.barcode, assets.description, assets.precio, ingresos.factura_numero, assets.detalle,  ingresos.factura_fecha, assets.observaciones, accounts.name as cuenta")
+        .joins("LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id")
+        .joins(auxiliary: [:account])
   end
 
 

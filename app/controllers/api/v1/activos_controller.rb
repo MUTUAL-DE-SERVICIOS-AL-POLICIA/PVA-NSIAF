@@ -9,11 +9,15 @@ module Api
           if params[:barcode].present?
             Asset.buscar_por_barcode(params[:barcode])
           else
-            Asset.all
+            Asset.todos
           end
-        sumatoria = 0
-        activos.map{ |a| sumatoria += a.precio }
-        render json: { activos: activos, sumatoria: sumatoria }
+        sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
+        resumen = activos.select("accounts.name as nombre, sum(assets.precio) as sumatoria").group("accounts.name")
+        sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
+        render json: { activos: activos,
+                       sumatoria: sumatoria,
+                       resumen: ActiveModel::ArraySerializer.new(resumen, each_serializer: ResumenSerializer),
+                       sumatoria_resumen: sumatoria_resumen }
       end
     end
   end

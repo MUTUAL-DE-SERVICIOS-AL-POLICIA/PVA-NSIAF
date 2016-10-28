@@ -22,7 +22,7 @@ class BusquedaActivos extends React.Component {
   componentDidMount(){
     _ = this;
     $.getJSON(this.props.urls.activos, (response) => {
-      _.props.capturaActivos(response.activos, response.sumatoria);
+      _.props.capturaActivos(response.activos, response.sumatoria, response.resumen, response.sumatoria_resumen);
     });
   }
 
@@ -30,7 +30,7 @@ class BusquedaActivos extends React.Component {
     var barcode = this.escapeValor(this.refs.barcode.value);
     _ = this;
     $.getJSON(this.props.urls.activos + "?barcode=" + barcode, (response) => {
-      _.props.capturaActivos(response.activos, response.sumatoria);
+      _.props.capturaActivos(response.activos, response.sumatoria, response.resumen, response.sumatoria_resumen);
     });
   }
 

@@ -5,14 +5,18 @@ class SeguroNuevo extends React.Component {
     this.guardarDatos = this.guardarDatos.bind(this);
     this.state={
       activos: [],
-      sumatoria: 0
+      sumatoria: 0,
+      resumen: [],
+      sumatoria_resumen: 0
     };
   }
 
-  capturaActivos(activos, sumatoria){
+  capturaActivos(activos, sumatoria, resumen, sumatoria_resumen){
     this.setState({
         activos: activos,
-        sumatoria: sumatoria
+        sumatoria: sumatoria,
+        resumen: resumen,
+        sumatoria_resumen: sumatoria_resumen
     });
   }
 
@@ -54,7 +58,7 @@ class SeguroNuevo extends React.Component {
           </div>
           <BusquedaActivos id="barcode_activos"  capturaActivos={this.capturaActivos} urls={this.props.data.urls} />
         </div>
-        <SeguroTablaActivos activos={this.state.activos} sumatoria={this.state.sumatoria} />
+        <SeguroTablaActivos activos={this.state.activos} sumatoria={this.state.sumatoria} resumen={this.state.resumen} sumatoria_resumen={this.state.sumatoria_resumen} />
         <div className="row">
           <div className="action-buttons col-md-12 col-sm-12 text-center">
             <a className="btn btn-danger cancelar-btn" href={this.props.data.urls.listado_seguros}>

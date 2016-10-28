@@ -11,7 +11,7 @@ module Api
         @seguro.user = @usuario
         respond_to do |format|
           if @seguro.save
-            format.json { render json: @seguro,  root: false, status: :created }
+            format.json { render json: @seguro, root: false, status: :created }
           else
             format.json { render json: @seguro.errors, status: :unprocessable_entity }
           end
