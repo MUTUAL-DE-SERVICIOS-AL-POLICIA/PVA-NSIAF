@@ -106,7 +106,7 @@ var SeguroForm = React.createClass({
   }
 });
 
-var SeguroFormulario = React.createClass({
+var SeguroFormularioAntiguo = React.createClass({
   getFactura(data){
     return {
       factura_numero: data.factura_numero,

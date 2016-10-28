@@ -69,7 +69,9 @@ Rails.application.routes.draw do
 
   resources :kardexes
 
-  resources :seguros
+  resources :seguros do
+    get :asegurar, on: :member
+  end
 
   resources :derecognised, only: :index
 

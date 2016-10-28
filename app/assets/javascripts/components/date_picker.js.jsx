@@ -1,6 +1,7 @@
 class DatePicker extends React.Component {
   constructor(props) {
     super(props);
+    this.capturaFecha = this.capturaFecha.bind(this);
     this.state = {
       fecha: this.props.valor|| ''
     };

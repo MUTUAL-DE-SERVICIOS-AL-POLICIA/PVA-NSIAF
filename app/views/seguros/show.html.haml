@@ -1,68 +1,70 @@
-.page-header{ data: {action: 'historical-reviews'} }
-  .pull-right
-    = link_to edit_seguro_path(@seguro), class: 'btn btn-primary' do
-      %span.glyphicon.glyphicon-edit
-      = t("general.btn.edit")
-    = link_to seguros_path, class: 'btn btn-default' do
-      %span.glyphicon.glyphicon-list
-      = t("seguros.title.title")
+= react_component 'SeguroDesplegar', data: @data
 
-  %h2= @seguro.numero_contrato
-.row
-  .col-lg-4.col-md-5.col-sm-12
-    %dl.dl-horizontal
-      - if @seguro.supplier_id.present?
-        %dt= Seguro.human_attribute_name('suppliers')
-        %dd= @seguro.proveedor_nombre
-      - if @seguro.factura_numero.present?
-        %dt= Seguro.human_attribute_name('factura_numero')
-        %dd= @seguro.factura_numero
-
-      - if @seguro.factura_autorizacion.present?
-        %dt= Seguro.human_attribute_name('factura_autorizacion')
-        %dd= @seguro.factura_autorizacion
-
-      - if @seguro.factura_fecha.present?
-        %dt= Seguro.human_attribute_name('factura_fecha')
-        %dd= l @seguro.factura_fecha, format: :long
-
-      - if @seguro.fecha_inicio_vigencia.present?
-        %dt= Seguro.human_attribute_name('fecha_inicio_vigencia')
-        %dd= l @seguro.fecha_inicio_vigencia, format: :long
-
-      - if @seguro.fecha_fin_vigencia.present?
-        %dt= Seguro.human_attribute_name('fecha_fin_vigencia')
-        %dd= l @seguro.fecha_fin_vigencia, format: :long
-
-      - if @seguro.fecha_inicio_vigencia.present? && @seguro.fecha_fin_vigencia.present?
-        -if @seguro.vigente?
-          %dt= t "seguros.title.nro_dias_expiracion"
-          %dd
-            #{@seguro.dias_para_expiracion} días
-          //%dt= Seguro.human_attribute_name('estado')
-          %dd
-            %span.label.label-success
-              VIGENTE
-        - else
-          %dt= Seguro.human_attribute_name('estado')
-          %dd
-            %span.label.label-default
-              NO VIGENTE
-
-  .col-lg-8.col-md-7.col-sm-12
-    .bd-example.bd-example-tabs{:role => "tabpanel"}
-      %ul#myTab.nav.nav-tabs{:role => "tablist"}
-        %li.nav-item.active
-          %a#home-tab.nav-link.active{"aria-controls" => "home", "aria-expanded" => "true", "data-toggle" => "tab", :href => "#home", :role => "tab"} Resumen
-        %li.nav-item
-          %a#profile-tab.nav-link{"aria-controls" => "profile", "aria-expanded" => "false", "data-toggle" => "tab", :href => "#profile", :role => "tab"} Desglose
-      #myTabContent.tab-content
-        #home.tab-pane.fade.active.in{"aria-expanded" => "true", "aria-labelledby" => "home-tab", :role => "tabpanel"}
-          - if @seguro.assets.present?
-            = render "activos"
-          - else
-            .alert.alert-info.alert-dismissable
-              %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
-              No tiene activos asegurados.
-        #profile.tab-pane.fade{"aria-expanded" => "false", "aria-labelledby" => "profile-tab", :role => "tabpanel"}
-          %p Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
+-# .page-header{ data: {action: 'historical-reviews'} }
+-#   .pull-right
+-#     = link_to edit_seguro_path(@seguro), class: 'btn btn-primary' do
+-#       %span.glyphicon.glyphicon-edit
+-#       = t("general.btn.edit")
+-#     = link_to seguros_path, class: 'btn btn-default' do
+-#       %span.glyphicon.glyphicon-list
+-#       = t("seguros.title.title")
+-#
+-#   %h2= @seguro.numero_contrato
+-# .row
+-#   .col-lg-4.col-md-5.col-sm-12
+-#     %dl.dl-horizontal
+-#       - if @seguro.supplier_id.present?
+-#         %dt= Seguro.human_attribute_name('suppliers')
+-#         %dd= @seguro.proveedor_nombre
+-#       - if @seguro.factura_numero.present?
+-#         %dt= Seguro.human_attribute_name('factura_numero')
+-#         %dd= @seguro.factura_numero
+-#
+-#       - if @seguro.factura_autorizacion.present?
+-#         %dt= Seguro.human_attribute_name('factura_autorizacion')
+-#         %dd= @seguro.factura_autorizacion
+-#
+-#       - if @seguro.factura_fecha.present?
+-#         %dt= Seguro.human_attribute_name('factura_fecha')
+-#         %dd= l @seguro.factura_fecha, format: :long
+-#
+-#       - if @seguro.fecha_inicio_vigencia.present?
+-#         %dt= Seguro.human_attribute_name('fecha_inicio_vigencia')
+-#         %dd= l @seguro.fecha_inicio_vigencia, format: :long
+-#
+-#       - if @seguro.fecha_fin_vigencia.present?
+-#         %dt= Seguro.human_attribute_name('fecha_fin_vigencia')
+-#         %dd= l @seguro.fecha_fin_vigencia, format: :long
+-#
+-#       - if @seguro.fecha_inicio_vigencia.present? && @seguro.fecha_fin_vigencia.present?
+-#         -if @seguro.vigente?
+-#           %dt= t "seguros.title.nro_dias_expiracion"
+-#           %dd
+-#             #{@seguro.dias_para_expiracion} días
+-#           //%dt= Seguro.human_attribute_name('estado')
+-#           %dd
+-#             %span.label.label-success
+-#               VIGENTE
+-#         - else
+-#           %dt= Seguro.human_attribute_name('estado')
+-#           %dd
+-#             %span.label.label-default
+-#               NO VIGENTE
+-#
+-#   .col-lg-8.col-md-7.col-sm-12
+-#     .bd-example.bd-example-tabs{:role => "tabpanel"}
+-#       %ul#myTab.nav.nav-tabs{:role => "tablist"}
+-#         %li.nav-item.active
+-#           %a#home-tab.nav-link.active{"aria-controls" => "home", "aria-expanded" => "true", "data-toggle" => "tab", :href => "#home", :role => "tab"} Resumen
+-#         %li.nav-item
+-#           %a#profile-tab.nav-link{"aria-controls" => "profile", "aria-expanded" => "false", "data-toggle" => "tab", :href => "#profile", :role => "tab"} Desglose
+-#       #myTabContent.tab-content
+-#         #home.tab-pane.fade.active.in{"aria-expanded" => "true", "aria-labelledby" => "home-tab", :role => "tabpanel"}
+-#           - if @seguro.assets.present?
+-#             = render "activos"
+-#           - else
+-#             .alert.alert-info.alert-dismissable
+-#               %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
+-#               No tiene activos asegurados.
+-#         #profile.tab-pane.fade{"aria-expanded" => "false", "aria-labelledby" => "profile-tab", :role => "tabpanel"}
+-#           %p Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.

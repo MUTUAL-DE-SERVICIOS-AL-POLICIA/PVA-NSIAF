@@ -1,5 +1,5 @@
 class SegurosController < ApplicationController
-  before_action :set_seguro, only: [:show, :edit, :update, :destroy]
+  before_action :set_seguro, only: [:show, :edit, :update, :destroy, :asegurar]
   before_action :set_usuario, only: [:create]
 
   # GET /seguros
@@ -11,42 +11,70 @@ class SegurosController < ApplicationController
   # GET /seguros/1
   # GET /seguros/1.json
   def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @seguro }
-    end
+    activos_ids = @seguro.assets.try(:ids)
+    activos = Asset.todos.where(id: activos_ids)
+    sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
+    resumen = activos.select("accounts.name as nombre, sum(assets.precio) as sumatoria").group("accounts.name")
+    sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
+    @data = {
+      titulo: "Seguro",
+      seguro: @seguro,
+      activos: ActiveModel::ArraySerializer.new(activos, each_serializer: AssetSerializer),
+      sumatoria: sumatoria,
+      resumen: ActiveModel::ArraySerializer.new(resumen, each_serializer: ResumenSerializer),
+      sumatoria_resumen: sumatoria_resumen,
+      urls: {
+        listado_seguros: seguros_url,
+        asegurar: asegurar_seguro_url(@seguro)
+      }
+    }
   end
 
-  # GET /seguros/new
   def new
-    @data =
-      {
-        titulo: "Obtener Cotización",
-        urls:
-          {
-            proveedores: api_proveedores_url(format: :json),
-            activos: api_activos_url(format: :json),
-            listado_seguros: seguros_url,
-            seguros: api_seguros_url,
-          },
-
+    @data = {
+      titulo: "Obtener Cotización",
+      urls: {
+        activos: api_activos_url(format: :json),
+        listado_seguros: seguros_url,
+        seguros: api_seguros_url
       }
+    }
   end
 
-  # GET /seguros/1/edit
   def edit
-    @data =
-      {
-        titulo: "Editar Seguro",
-        seguro: SeguroSerializer.new(@seguro),
-        urls:
-          {
-            proveedores: api_proveedores_url(format: :json),
-            activos: api_activos_url(format: :json),
-            seguros: api_seguros_url,
-            seguro: seguros_url
-          }
+    @data = {
+      titulo: "Editar Seguro",
+      seguro: SeguroSerializer.new(@seguro),
+      urls: {
+        proveedores: api_proveedores_url(format: :json),
+        activos: api_activos_url(format: :json),
+        seguros: api_seguros_url,
+        seguro: seguros_url
       }
+    }
+  end
+
+  def asegurar
+    activos_ids = @seguro.assets.try(:ids)
+    activos = Asset.todos.where(id: activos_ids)
+    sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
+    resumen = activos.select("accounts.name as nombre, sum(assets.precio) as sumatoria").group("accounts.name")
+    sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
+    @data = {
+      titulo: "Asegurar",
+      seguro: @seguro,
+      activos: ActiveModel::ArraySerializer.new(activos, each_serializer: AssetSerializer),
+      sumatoria: sumatoria,
+      resumen: ActiveModel::ArraySerializer.new(resumen, each_serializer: ResumenSerializer),
+      sumatoria_resumen: sumatoria_resumen,
+      urls: {
+        proveedores: api_proveedores_url(format: :json),
+        listado_seguros: seguros_url,
+        activos: api_activos_url(format: :json),
+        asegurar: asegurar_seguro_url(@seguro),
+        seguros: api_seguros_url
+      }
+    }
   end
 
   # POST /seguros
