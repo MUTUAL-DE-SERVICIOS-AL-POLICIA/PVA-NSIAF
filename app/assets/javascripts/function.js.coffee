@@ -333,3 +333,8 @@ jQuery ->
         id = $new_entry.attr('id').substr(11)
         $("a.btn-success[data-id='#{id}']").remove()
         $new_entry.parents('.modal').modal('hide')
+
+  $('.serie_activo').on 'keyup keypress', (e) ->
+    keyCode = e.keyCode or e.which
+    if keyCode == 13
+      e.preventDefault()
