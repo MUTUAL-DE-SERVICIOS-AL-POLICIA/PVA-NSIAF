@@ -1,7 +1,10 @@
 class Seguro < ActiveRecord::Base
+
   belongs_to :user, dependent: :destroy
   belongs_to :supplier, dependent: :destroy
   has_and_belongs_to_many :assets
+  belongs_to :origen, :class_name => 'Seguro'
+  has_many :incorporaciones, :class_name => 'Seguro', :foreign_key => 'seguro_id'
 
   validates :user_id, presence: true
 
@@ -10,6 +13,12 @@ class Seguro < ActiveRecord::Base
   #           presence: true
 
   scope :activos, -> { where(baja_logica: false) }
+
+  state_machine :state, :initial => :cotizado do
+    event :asegurar do
+      transition [:cotizado] => :asegurado
+    end
+  end
 
   def proveedor_nombre
     supplier.present? ? supplier.name : ''

@@ -17,17 +17,15 @@ class SeguroFormulario extends React.Component {
 
   capturaDatos() {
     this.props.capturarDatos({
-      data: {
-        supplier_id: this.state.proveedor ? this.state.proveedor.id : '',
-        factura_numero: this.refs.factura_numero ? this.refs.factura_numero.value : '',
-        factura_autorizacion: this.refs.factura_autorizacion ? this.refs.factura_autorizacion.value : '',
-        factura_monto: this.refs.factura_monto ? this.refs.factura_monto.value : '',
-        factura_fecha: this.refs.factura_fecha ? this.refs.factura_fecha.value : '',
-        numero_poliza: this.refs.numero_poliza ? this.refs.numero_poliza.value : '',
-        numero_contrato: this.refs.numero_contrato ? this.refs.numero_poliza.value : '',
-        fecha_inicio_vigencia: this.refs.fecha_inicio_vigencia ? this.refs.fecha_inicio_vigencia.value : '' ,
-        fecha_fin_vigencia: this.refs.fecha_fin_vigencia ? this.refs.fecha_fin_vigencia.value : ''
-      }
+      supplier_id: this.state.proveedor ? this.state.proveedor.id : '',
+      factura_numero: this.refs.factura_numero ? this.refs.factura_numero.value : '',
+      factura_autorizacion: this.refs.factura_autorizacion ? this.refs.factura_autorizacion.value : '',
+      factura_monto: this.refs.factura_monto ? this.refs.factura_monto.value : '',
+      factura_fecha: this.refs.factura_fecha ? this.refs.factura_fecha.refs.datepicker.value : '',
+      numero_poliza: this.refs.numero_poliza ? this.refs.numero_poliza.value : '',
+      numero_contrato: this.refs.numero_contrato ? this.refs.numero_contrato.value : '',
+      fecha_inicio_vigencia: this.refs.fecha_inicio_vigencia ? this.refs.fecha_inicio_vigencia.refs.datepicker.value : '' ,
+      fecha_fin_vigencia: this.refs.fecha_fin_vigencia ? this.refs.fecha_fin_vigencia.refs.datepicker.value : ''
     });
   }
 
@@ -67,7 +65,7 @@ class SeguroFormulario extends React.Component {
           </div>
         </div>
         <div className='form-group'>
-          <label className='col-sm-2 control-label'>Número de contrato</label>
+          <label className='col-sm-2 control-label'>Póliza</label>
             <div className='col-sm-2'>
               <input type="text" ref="numero_poliza" name="numero_poliza" className="form-control" placeholder="Poliza" autoComplete="off" onChange={this.capturaDatos} />
             </div>

@@ -26,6 +26,48 @@ class SeguroDesplegar extends React.Component {
   }
 
   render() {
+    let titulo;
+    let datos_seguro;
+    let boton_asegurar;
+    if(this.props.data.seguro.numero_poliza){
+      let poliza = this.props.data.seguro.numero_poliza;
+      let fecha_inicio = new Date(this.props.data.seguro.fecha_inicio_vigencia);
+      let fecha_fin = new Date(this.props.data.seguro.fecha_fin_vigencia);
+      titulo = <h2>Póliza: {poliza} desde {moment(fecha_inicio).format("DD/MM/YYYY HH:MM")} hasta {moment(fecha_fin).format("DD/MM/YYYY HH:MM")}</h2>;
+      boton_asegurar =
+          <button type="button" className="btn btn-success btn-lg pull-right" data-toggle="tooltip" title="Asegurar">
+            <span className="glyphicon glyphicon-lock" aria-hidden="true"></span>
+          </button>;
+      datos_seguro =
+        <div>
+          <div className="col-lg-4 col-md-5 col-sm-12">
+            <dl className="dl-horizontal">
+              <dt>Número de contrato</dt>
+              <dd>{this.props.data.seguro.numero_contrato}</dd>
+              <dt>Número de autorización</dt>
+              <dd>{this.props.data.seguro.factura_autorizacion}</dd>
+              <dt>Monto de factura</dt>
+              <dd>{this.props.data.seguro.factura_monto}</dd>
+            </dl>
+          </div>
+          <div className="col-lg-4 col-md-5 col-sm-12">
+            <dl className="dl-horizontal">
+              <dt>Número de factura</dt>
+              <dd>{this.props.data.seguro.factura_numero}</dd>
+              <dt>Fecha de factura</dt>
+              <dd>{this.props.data.seguro.factura_fecha}</dd>
+            </dl>
+          </div>
+          <div className="clearfix visible-xs-block"></div>
+        </div>;
+    }
+    else {
+      titulo = <h2>Cotización</h2>;
+      boton_asegurar =
+        <button type="button" className="btn btn-warning btn-lg pull-right" data-toggle="tooltip" title="Asegurar" onClick={this.asegurar}>
+          <span className="glyphicon glyphicon-lock" aria-hidden="true"></span>
+        </button>;
+    }
     return(
       <div className="col-md-12">
         <div className='page-header'>
@@ -40,17 +82,7 @@ class SeguroDesplegar extends React.Component {
             </a>
             &nbsp;
           </div>
-          <h2>Cotización</h2>
-        </div>
-        <div className='row'>
-          <div className="col-lg-1 col-md-1 col-sm-12">
-            <button type="button" className="btn btn-warning btn-lg pull-right" data-toggle="tooltip" title="Asegurar" onClick={this.asegurar}>
-              <span className="glyphicon glyphicon-lock" aria-hidden="true"></span>
-            </button>
-          </div>
-          <div className="col-lg-11 col-md-11 col-sm-12">
-            <SeguroTablaActivos activos={this.state.activos} sumatoria={this.state.sumatoria} resumen={this.state.resumen} sumatoria_resumen={this.state.sumatoria_resumen} />
-          </div>
+          {titulo}
         </div>
       </div>
     );

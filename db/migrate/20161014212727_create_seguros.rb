@@ -8,8 +8,7 @@ class CreateSeguros < ActiveRecord::Migration
       t.string :factura_numero,  limit: 255
       t.string :factura_autorizacion, limit: 255
       t.date :factura_fecha
-      t.date :factura_monto
-      t.float :costo_unitario, limit: 53
+      t.float :factura_monto , limit: 53
       t.datetime :fecha_inicio_vigencia
       t.datetime :fecha_fin_vigencia
       t.boolean :baja_logica,  default: false

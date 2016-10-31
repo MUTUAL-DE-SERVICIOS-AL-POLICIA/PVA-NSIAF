@@ -95,3 +95,5 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 gem 'whenever', :require => false
 
 gem 'where-or'
+
+gem 'state_machine'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161024174238) do
+ActiveRecord::Schema.define(version: 20161031103748) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -187,7 +187,7 @@ ActiveRecord::Schema.define(version: 20161024174238) do
   create_table "entradas_salidas", id: false, force: :cascade do |t|
     t.integer  "id",             limit: 4,   default: 0,  null: false
     t.integer  "subarticle_id",  limit: 4
-    t.date     "fecha"
+    t.datetime "fecha"
     t.string   "factura",        limit: 255
     t.date     "nota_entrega"
     t.string   "nro_pedido",     limit: 11
@@ -371,14 +371,17 @@ ActiveRecord::Schema.define(version: 20161024174238) do
     t.string   "factura_numero",        limit: 255
     t.string   "factura_autorizacion",  limit: 255
     t.date     "factura_fecha"
-    t.date     "factura_monto"
-    t.float    "costo_unitario",        limit: 53
+    t.float    "factura_monto",         limit: 53
     t.datetime "fecha_inicio_vigencia"
     t.datetime "fecha_fin_vigencia"
     t.boolean  "baja_logica",                       default: false
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
+    t.string   "state",                 limit: 255
+    t.integer  "seguro_id",             limit: 4
   end
+
+  add_index "seguros", ["seguro_id"], name: "index_seguros_on_seguro_id", using: :btree
 
   create_table "subarticle_requests", force: :cascade do |t|
     t.integer "subarticle_id",    limit: 4
@@ -485,5 +488,6 @@ ActiveRecord::Schema.define(version: 20161024174238) do
   add_foreign_key "gestiones", "users"
   add_foreign_key "ingresos", "suppliers"
   add_foreign_key "ingresos", "users"
+  add_foreign_key "seguros", "seguros"
   add_foreign_key "subarticles", "materials"
 end

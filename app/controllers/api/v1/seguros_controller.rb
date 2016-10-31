@@ -41,7 +41,7 @@ module Api
       end
 
       def seguro_params
-        params.require(:seguro).permit(:supplier_id, :user_id, :numero_contrato, :factura_numero, :factura_autorizacion, :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia, :baja_logica, asset_ids: [])
+        params.require(:seguro).permit(:supplier_id, :user_id, :numero_contrato, :factura_numero, :factura_autorizacion, :factura_fecha, :factura_monto, :numero_poliza, :fecha_inicio_vigencia, :fecha_fin_vigencia, :baja_logica, asset_ids: [])
       end
     end
   end

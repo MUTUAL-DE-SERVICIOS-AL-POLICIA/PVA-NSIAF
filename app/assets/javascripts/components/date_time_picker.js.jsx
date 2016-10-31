@@ -12,8 +12,7 @@ class DateTimePicker extends React.Component {
     $("#" + this.props.id).datetimepicker({
       format: 'DD/MM/YYYY HH:mm',
       locale: 'es'
-    }).on("change",function(){
-      debugger
+    }).on("dp.change",function(){
       _.capturaFecha();
     });
   }

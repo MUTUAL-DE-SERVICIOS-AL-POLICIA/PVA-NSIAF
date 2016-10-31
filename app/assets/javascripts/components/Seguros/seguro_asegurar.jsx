@@ -4,16 +4,18 @@ class SeguroAsegurar extends React.Component {
     this.guardarDatos = this.guardarDatos.bind(this);
     this.capturarDatos = this.capturarDatos.bind(this);
     this.state={
-      seguro: {},
-      supplier_id: '',
-      factura_numero: '',
-      factura_autorizacion: '',
-      factura_monto: '',
-      factura_fecha: '',
-      numero_poliza: '',
-      numero_contrato: '',
-      fecha_inicio_vigencia: '',
-      fecha_fin_vigencia: '',
+      seguro: {
+        id: this.props.data.seguro.id,
+        supplier_id: '',
+        factura_numero: '',
+        factura_autorizacion: '',
+        factura_monto: '',
+        factura_fecha: '',
+        numero_poliza: '',
+        numero_contrato: '',
+        fecha_inicio_vigencia: '',
+        fecha_fin_vigencia: '',
+      },
       activos: [],
       sumatoria: 0,
       resumen: [],
@@ -22,19 +24,20 @@ class SeguroAsegurar extends React.Component {
   }
 
   capturarDatos(data) {
-    debugger
     this.setState({
-      supplier_id: data.supplier_id,
-      factura_numero: data.factura_numero,
-      factura_autorizacion: data.factura_autorizacion,
-      factura_monto: data.factura_monto,
-      factura_fecha: data.factura_fecha,
-      numero_poliza: data.numero_poliza,
-      numero_contrato: data.numero_contrato,
-      fecha_inicio_vigencia: data.fecha_inicio_vigencia,
-      fecha_fin_vigencia: data.fecha_fin_vigencia
+      seguro: {
+        id: this.props.data.seguro.id,
+        supplier_id: data.supplier_id,
+        factura_numero: data.factura_numero,
+        factura_autorizacion: data.factura_autorizacion,
+        factura_monto: data.factura_monto,
+        factura_fecha: data.factura_fecha,
+        numero_poliza: data.numero_poliza,
+        numero_contrato: data.numero_contrato,
+        fecha_inicio_vigencia: data.fecha_inicio_vigencia,
+        fecha_fin_vigencia: data.fecha_fin_vigencia
+      }
     });
-    console.log(this.state);
   }
 
   componentWillMount(){
@@ -48,20 +51,20 @@ class SeguroAsegurar extends React.Component {
 
   guardarDatos(e){
     var alert = new Notices({ ele: 'div.main' });
-    var url = this.props.data.urls.seguros;
+    var url = this.props.data.urls.seguros + "/" + this.props.data.seguro.id;
     _ = this;
     $.ajax({
       url: url,
-      type: 'POST',
+      type: 'PUT',
       dataType: 'JSON',
       data: {
-        seguro: this.jsonGuardar()
+        seguro: this.state.seguro
       }
     }).done(function(seguro) {
-      alert.success("Se guardó correctamente la cotización.");
+      alert.success("Se guardó correctamente el seguro.");
       return window.location = _.props.data.urls.listado_seguros + "/" + seguro.id;
     }).fail(function(xhr, status) {
-      alert.danger("Error al guardar la cotización.");
+      alert.danger("Error al guardar el seguro.");
     });
   }
 
