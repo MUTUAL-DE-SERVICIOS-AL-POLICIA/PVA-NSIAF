@@ -50,8 +50,8 @@ class SeguroAsegurar extends React.Component {
   }
 
   guardarDatos(e){
-    var alert = new Notices({ ele: 'div.main' });
-    var url = this.props.data.urls.seguros + "/" + this.props.data.seguro.id;
+    const alert = new Notices({ ele: 'div.main' });
+    let url = this.props.data.urls.seguros + "/" + this.props.data.seguro.id;
     _ = this;
     $.ajax({
       url: url,
@@ -62,7 +62,8 @@ class SeguroAsegurar extends React.Component {
       }
     }).done(function(seguro) {
       alert.success("Se guardó correctamente el seguro.");
-      return window.location = _.props.data.urls.listado_seguros + "/" + seguro.id;
+      const id = _.props.data.seguro.seguro_id ? _.props.data.seguro.seguro_id : _.props.data.seguro.id;
+      return window.location = _.props.data.urls.listado_seguros + "/" + id;
     }).fail(function(xhr, status) {
       alert.danger("Error al guardar el seguro.");
     });
@@ -77,7 +78,7 @@ class SeguroAsegurar extends React.Component {
               {this.props.data.titulo}
             </h3>
           </div>
-          <SeguroFormulario urls={this.props.data.urls} capturarDatos={this.capturarDatos}/>
+          <SeguroFormulario seguro_id={this.props.data.seguro.seguro_id}  urls={this.props.data.urls} capturarDatos={this.capturarDatos}/>
         </div>
         <SeguroTablaActivos activos={this.state.activos} sumatoria={this.state.sumatoria} resumen={this.state.resumen} sumatoria_resumen={this.state.sumatoria_resumen} />
         <div className="row">

@@ -1,5 +1,5 @@
 class SeguroTablaActivos extends React.Component {
-  tabla_desglose(cantidad) {
+  tabla_detalle(cantidad) {
       const activos = this.props.activos.map((activo, i) => {
         return (
           <tr key = {i}>
@@ -63,17 +63,22 @@ class SeguroTablaActivos extends React.Component {
   }
 
   tabla_resumen(){
+    let cantidad_total = 0;
     const cuentas = this.props.resumen.map((cuenta, i) => {
+      cantidad_total = cantidad_total + cuenta.cantidad;
       return (
         <tr key = {i}>
           <td className="text-center">
-            { i + 1 }
+            {i + 1}
           </td>
           <td>
-            { cuenta.nombre }
+            {cuenta.nombre}
           </td>
           <td className = "number">
-            { cuenta.sumatoria }
+            {cuenta.cantidad}
+          </td>
+          <td className="number">
+            {cuenta.sumatoria}
           </td>
         </tr>
       )
@@ -90,8 +95,13 @@ class SeguroTablaActivos extends React.Component {
             </td>
             <td className = "number">
               <strong>
+                {cantidad_total}
+              </strong>
+            </td>
+            <td className = "number">
+              <strong>
                 {this.props.sumatoria_resumen}
-            </strong>
+              </strong>
             </td>
           </tr>
     );
@@ -100,10 +110,10 @@ class SeguroTablaActivos extends React.Component {
       <table className="table table-bordered table-striped table-hover table-condensed">
         <thead>
           <tr>
-            <th>
-            </th>
-            <th className="text-center">Cuenta</th>
+            <th></th>
             <th className="text-center">Monto</th>
+            <th className="text-center">Cantidad</th>
+            <th className="text-center">Cuenta</th>
           </tr>
         </thead>
         <tbody>
@@ -119,20 +129,20 @@ class SeguroTablaActivos extends React.Component {
     if(cantidad_activos > 0){
       return (
         <div role="tabpanel">
-          <ul className="nav nav-tabs" id="myTab" role="tablist">
+          <ul className="nav nav-tabs" role="tablist">
             <li className="nav-item active">
-              <a aria-controls="resumen" aria-expanded="true" className="nav-link active" data-toggle="tab" href="#resumen" id="resumen-tab" role="tab">Resumen</a>
+              <a aria-controls={'resumen-' + this.props.name} aria-expanded="true" className="nav-link active" data-toggle="tab" href={'#resumen-' + this.props.name} id={'resumen-' + this.props.name + '-tab'} role="tab">Resumen</a>
             </li>
             <li className="nav-item">
-              <a aria-controls="desglose" aria-expanded="false" className="nav-link" data-toggle="tab" href="#desglose" id="desglose-tab" role="tab">Desglose</a>
+              <a aria-controls={'detalle-' + this.props.name} aria-expanded="false" className="nav-link" data-toggle="tab" href={'#detalle-' + this.props.name} id={'detalle-' + this.props.name + '-tab'} role="tab">Detalle</a>
             </li>
           </ul>
-          <div className="tab-content" id="myTabContent">
-            <div aria-expanded="true" aria-labelledby="resumen-tab" className="tab-pane fade active in" id="resumen" role="tabpanel">
+          <div className="tab-content">
+            <div aria-expanded="true" aria-labelledby={'resumen-' + this.props.name + '-tab'} className="tab-pane fade active in" id={'resumen-' + this.props.name} role="tabpanel">
               {this.tabla_resumen()}
             </div>
-            <div aria-expanded="false" aria-labelledby="desglose-tab" className="tab-pane fade" id="desglose" role="tabpanel">
-              {this.tabla_desglose(cantidad_activos)}
+            <div aria-expanded="false" aria-labelledby={'detalle-' + this.props.name + '-tab'} className="tab-pane fade" id={'detalle-' + this.props.name} role="tabpanel">
+              {this.tabla_detalle(cantidad_activos)}
             </div>
           </div>
         </div>

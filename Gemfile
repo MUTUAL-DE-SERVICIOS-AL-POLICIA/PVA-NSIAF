@@ -96,4 +96,4 @@ gem 'whenever', :require => false
 
 gem 'where-or'
 
-gem 'state_machine'
+gem 'aasm'

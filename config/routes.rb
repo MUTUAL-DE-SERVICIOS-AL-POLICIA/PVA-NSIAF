@@ -31,7 +31,9 @@ Rails.application.routes.draw do
 
       resources :proveedores, only: [:index]
 
-      resources :activos, only: [:index]
+      resources :activos, only: [:index] do
+        get :sin_seguro_vigente, on: :member
+      end
 
     end
   end
@@ -71,6 +73,7 @@ Rails.application.routes.draw do
 
   resources :seguros do
     get :asegurar, on: :member
+    get :incorporaciones, on: :member
   end
 
   resources :derecognised, only: :index

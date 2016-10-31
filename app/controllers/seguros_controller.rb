@@ -1,5 +1,5 @@
 class SegurosController < ApplicationController
-  before_action :set_seguro, only: [:show, :edit, :update, :destroy, :asegurar]
+  before_action :set_seguro, only: [:show, :edit, :update, :destroy, :asegurar, :incorporaciones]
   before_action :set_usuario, only: [:create]
 
   # GET /seguros
@@ -12,20 +12,22 @@ class SegurosController < ApplicationController
   # GET /seguros/1.json
   def show
     activos_ids = @seguro.assets.try(:ids)
-    activos = Asset.todos.where(id: activos_ids)
+    activos = Asset.todos.where(id: activos_ids).order(code: :asc)
     sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
-    resumen = activos.select("accounts.name as nombre, sum(assets.precio) as sumatoria").group("accounts.name")
+    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name")
     sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
     @data = {
       titulo: "Seguro",
-      seguro: @seguro,
+      seguro: SeguroSerializer.new(@seguro),
       activos: ActiveModel::ArraySerializer.new(activos, each_serializer: AssetSerializer),
       sumatoria: sumatoria,
       resumen: ActiveModel::ArraySerializer.new(resumen, each_serializer: ResumenSerializer),
       sumatoria_resumen: sumatoria_resumen,
+      incorporaciones: @seguro.incorporaciones_json,
       urls: {
         listado_seguros: seguros_url,
-        asegurar: asegurar_seguro_url(@seguro)
+        asegurar: asegurar_seguro_url(@seguro),
+        incorporaciones:  incorporaciones_seguro_url(@seguro)
       }
     }
   end
@@ -56,9 +58,9 @@ class SegurosController < ApplicationController
 
   def asegurar
     activos_ids = @seguro.assets.try(:ids)
-    activos = Asset.todos.where(id: activos_ids)
+    activos = Asset.todos.where(id: activos_ids).order(:code)
     sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
-    resumen = activos.select("accounts.name as nombre, sum(assets.precio) as sumatoria").group("accounts.name")
+    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name")
     sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
     @data = {
       titulo: "Asegurar",
@@ -75,6 +77,20 @@ class SegurosController < ApplicationController
         seguros: api_seguros_url
       }
     }
+  end
+
+  def incorporaciones
+    @data = {
+      titulo: "Incorporar Activos",
+      seguro: SeguroSerializer.new(@seguro),
+      urls: {
+        activos: api_activos_url(format: :json),
+        listado_seguros: seguros_url,
+        seguros: api_seguros_url,
+        sin_seguro: sin_seguro_vigente_api_activo_url(@seguro)
+      }
+    }
+    render template: "seguros/new"
   end
 
   # POST /seguros

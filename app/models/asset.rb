@@ -110,7 +110,7 @@ class Asset < ActiveRecord::Base
       guiones = rango.split('-').map(&:strip)
       guiones.length > 1 ? Array(guiones[0].to_i..guiones[1].to_i).map(&:to_s) : guiones
     end
-    self.todos.where(barcode: barcodes.flatten.uniq).order(:barcode)
+    self.todos.where(barcode: barcodes.flatten.uniq).order(:code)
   end
 
   def self.derecognised
@@ -433,7 +433,7 @@ class Asset < ActiveRecord::Base
   def self.sin_seguro_vigente
     seguros_vigentes_ids = Seguro.vigentes.ids
     activos_ids = Asset.joins(:seguros).where(seguros: {id: seguros_vigentes_ids}).ids
-    Asset.where.not(id: activos_ids)
+    Asset.todos.where.not(id: activos_ids).order(:code)
   end
 
   def self.alerta_sin_seguro_vigente

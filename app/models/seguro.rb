@@ -1,10 +1,15 @@
 class Seguro < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
+  include AASM
+
+  scope :activos, -> { where.not(baja_logica: nil) }
 
   belongs_to :user, dependent: :destroy
   belongs_to :supplier, dependent: :destroy
   has_and_belongs_to_many :assets
-  belongs_to :origen, :class_name => 'Seguro'
-  has_many :incorporaciones, :class_name => 'Seguro', :foreign_key => 'seguro_id'
+  has_many :incorporaciones, class_name: 'Seguro',
+                             foreign_key: 'seguro_id'
+  belongs_to :seguro, class_name: 'Seguro'
 
   validates :user_id, presence: true
 
@@ -12,11 +17,13 @@ class Seguro < ActiveRecord::Base
   #           :factura_fecha, :fecha_inicio_vigencia, :fecha_fin_vigencia,
   #           presence: true
 
-  scope :activos, -> { where(baja_logica: false) }
 
-  state_machine :state, :initial => :cotizado do
+  aasm :column => :state do
+    state :cotizado, :initial => true
+    state :asegurado
+
     event :asegurar do
-      transition [:cotizado] => :asegurado
+      transitions :from => :cotizado, :to => :asegurado
     end
   end
 
@@ -114,5 +121,34 @@ class Seguro < ActiveRecord::Base
         csv << a
       end
     end
+  end
+
+  def incorporaciones_json
+    respuesta = []
+    self.incorporaciones.order(state: :desc).each do |inc|
+      activos_ids = inc.assets.try(:ids)
+      activos = Asset.todos.where(id: activos_ids)
+      sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
+      resumen = activos.select("accounts.name as nombre, count(accounts.name) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name")
+      sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
+      respuesta << {
+        titulo: "Incorporación",
+        seguro: SeguroSerializer.new(inc),
+        activos: ActiveModel::ArraySerializer.new(activos, each_serializer: AssetSerializer),
+        sumatoria: sumatoria,
+        resumen: ActiveModel::ArraySerializer.new(resumen, each_serializer: ResumenSerializer),
+        sumatoria_resumen: sumatoria_resumen,
+        urls: {
+          asegurar: asegurar_seguro_url(inc),
+        }
+      }
+    end
+    respuesta
+  end
+
+  def activos_sin_seguro
+    seguros_ids = [self.id] + self.incorporaciones.pluck(:id)
+    activos_ids = Asset.joins(:seguros).where(seguros: {id: seguros_ids}).ids
+    Asset.todos.where.not(id: activos_ids).order(:code)
   end
 end

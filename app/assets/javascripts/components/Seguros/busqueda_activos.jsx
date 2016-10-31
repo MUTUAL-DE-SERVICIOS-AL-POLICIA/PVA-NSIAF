@@ -21,9 +21,20 @@ class BusquedaActivos extends React.Component {
 
   componentDidMount(){
     _ = this;
-    $.getJSON(this.props.urls.activos, (response) => {
-      _.props.capturaActivos(response.activos, response.sumatoria, response.resumen, response.sumatoria_resumen);
-    });
+    if(this.props.seguro){
+      $.getJSON(this.props.urls.sin_seguro, (response) => {
+        if(response.activos.length < 1){
+          var alert = new Notices({ ele: 'div.main' });
+          alert.danger("No existen activos sin seguro.");
+        }
+        _.props.capturaActivos(response.activos, response.sumatoria, response.resumen, response.sumatoria_resumen);
+      });
+    }
+    else{
+      $.getJSON(this.props.urls.activos, (response) => {
+        _.props.capturaActivos(response.activos, response.sumatoria, response.resumen, response.sumatoria_resumen);
+      });
+    }
   }
 
   capturaDatosBarcode(){
