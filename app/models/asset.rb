@@ -109,7 +109,7 @@ class Asset < ActiveRecord::Base
       guiones = rango.split('-').map(&:strip)
       guiones.length > 1 ? Array(guiones[0].to_i..guiones[1].to_i).map(&:to_s) : guiones
     end
-    where(barcode: barcodes.flatten.uniq).order(:barcode)
+    where(barcode: barcodes.flatten.uniq).order(:code)
   end
 
   def self.derecognised
