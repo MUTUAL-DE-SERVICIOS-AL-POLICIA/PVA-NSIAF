@@ -125,10 +125,20 @@ class SeguroTablaActivos extends React.Component {
   }
 
   render() {
+    const botones_descarga =
+      <div className="pull-right">
+        <span>Descargar:</span>
+        <div className="btn-group btn-group-xs">
+          <button name="button" type="submit" className="download-assets btn btn-default">CSV</button>
+          <button name="button" type="submit" className="download-assets btn btn-default">PDF</button>
+        </div>
+      </div>;
+
     const cantidad_activos  = this.props.activos.length;
     if(cantidad_activos > 0){
       return (
         <div role="tabpanel">
+          {botones_descarga}
           <ul className="nav nav-tabs" role="tablist">
             <li className="nav-item active">
               <a aria-controls={'resumen-' + this.props.name} aria-expanded="true" className="nav-link active" data-toggle="tab" href={'#resumen-' + this.props.name} id={'resumen-' + this.props.name + '-tab'} role="tab">Resumen</a>

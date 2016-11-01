@@ -44,15 +44,20 @@ class Seguro < ActiveRecord::Base
   end
 
   def vigente?(fecha_actual = Date.today)
-    fecha_inicio_vigencia <= fecha_actual && fecha_fin_vigencia >= fecha_actual
+    if fecha_inicio_vigencia.present? && fecha_fin_vigencia.present?
+      fecha_inicio_vigencia <= fecha_actual && fecha_fin_vigencia >= fecha_actual
+    else
+      false
+    end
   end
 
   def estado
-    vigente? ? "VIGENTE" : "NO VIGENTE"
+    cotizado? ? "COTIZACION" : vigente? ? "VIGENTE" : "NO VIGENTE"
   end
 
   def cantidad_activos
-    "#{assets.size}"
+    seguros_ids = [self.id] + self.incorporaciones.pluck(:id)
+    "#{Asset.joins(:seguros).where(seguros: {id: seguros_ids}).uniq.size}"
   end
 
   def self.vigentes(fecha_actual = Date.today)
@@ -85,7 +90,7 @@ class Seguro < ActiveRecord::Base
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
     orden = "#{sort_column} #{sort_direction}"
-    array = joins(:supplier).order(orden)
+    array = joins("LEFT JOIN suppliers ON seguros.supplier_id = suppliers.id").where(seguro_id: nil).order(orden)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?

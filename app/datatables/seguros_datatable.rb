@@ -24,7 +24,7 @@ private
         r.factura_numero,
         r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_inicio_vigencia) : '',
         r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_fin_vigencia) : '',
-        content_tag(:h4, content_tag(:span, r.estado, class: "label label-#{ r.vigente? ? "success" : "default" }")),
+        content_tag(:h4, content_tag(:span, r.estado, class: "label label-#{ r.cotizado? ? "warning" : r.vigente? ? "success" : "default" }")),
         r.cantidad_activos,
         [links_actions(r, 'seguro')].join(' ')
       ]
