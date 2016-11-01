@@ -1,4 +1,10 @@
-class SeguroTablaActivos extends React.Component {
+class SeguroTablaActivos extends React.Component{
+  constructor(props) {
+    super(props);
+    this.generarCSV = this.generarCSV.bind(this);
+    this.generarTipoCSV = this.generarTipoCSV.bind(this);
+  }
+
   tabla_detalle(cantidad) {
       const activos = this.props.activos.map((activo, i) => {
         return (
@@ -40,7 +46,7 @@ class SeguroTablaActivos extends React.Component {
       );
 
     return(
-      <table className="table table-bordered table-striped table-hover table-condensed">
+      <table className={'table table-bordered table-striped table-hover table-condensed tabla-detalle-' + this.props.name}>
         <thead>
           <tr>
             <th className="text-center">
@@ -107,7 +113,7 @@ class SeguroTablaActivos extends React.Component {
     );
 
     return(
-      <table className="table table-bordered table-striped table-hover table-condensed">
+      <table className={'table table-bordered table-striped table-hover table-condensed tabla-resumen-' +this.props.name}>
         <thead>
           <tr>
             <th></th>
@@ -117,11 +123,52 @@ class SeguroTablaActivos extends React.Component {
           </tr>
         </thead>
         <tbody>
-          { cuentas }
-          { sumatoria_resumen }
+          {cuentas}
+          {sumatoria_resumen}
         </tbody>
       </table>
     );
+  }
+
+  generarTipoCSV(e) {
+    this.generarCSV(e.target.getAttribute("data-type"), this.props.name);
+  }
+
+  generarCSV(tipo, name) {
+    let blob, blobURL, csv;
+    csv = '';
+    $('table.tabla-' + tipo + '-' + name + ' > thead').find('tr').each(function() {
+      var sep;
+      sep = '';
+      $(this).find('th').each(function() {
+        if($(this).find('strong').length > 0){
+          csv += sep + $(this).find('strong')[0].innerHTML;
+        }
+        else{
+          csv += sep + $(this)[0].innerHTML;
+        }
+        return sep = ';';
+      });
+      return csv += '\n';
+    });
+    $('table.tabla-' + tipo + '-' + name + ' > tbody').find('tr').each(function() {
+      var sep;
+      sep = '';
+      $(this).find('td').each(function() {
+        if($(this).find('strong').length > 0){
+          csv += sep + $(this).find('strong')[0].innerHTML;
+        }
+        else{
+          csv += sep + $(this)[0].innerHTML;
+        }
+        return sep = ';';
+      });
+      return csv += '\n';
+    });
+    window.URL = window.URL || window.webkiURL;
+    blob = new Blob([csv]);
+    blobURL = window.URL.createObjectURL(blob);
+    return $('.csv-' + name).attr('href', blobURL).attr('download', 'data.csv');
   }
 
   render() {
@@ -129,8 +176,8 @@ class SeguroTablaActivos extends React.Component {
       <div className="pull-right">
         <span>Descargar:</span>
         <div className="btn-group btn-group-xs">
-          <button name="button" type="submit" className="download-assets btn btn-default">CSV</button>
-          <button name="button" type="submit" className="download-assets btn btn-default">PDF</button>
+          <a className={'btn btn-default ' + 'csv-' + this.props.name}>CSV</a>
+          <a className={'btn btn-default ' + 'pdf-' + this.props.name} href = {this.props.url_pdf}>PDF</a>
         </div>
       </div>;
 
@@ -141,10 +188,10 @@ class SeguroTablaActivos extends React.Component {
           {botones_descarga}
           <ul className="nav nav-tabs" role="tablist">
             <li className="nav-item active">
-              <a aria-controls={'resumen-' + this.props.name} aria-expanded="true" className="nav-link active" data-toggle="tab" href={'#resumen-' + this.props.name} id={'resumen-' + this.props.name + '-tab'} role="tab">Resumen</a>
+              <a ref="resumen" aria-controls={'resumen-' + this.props.name} aria-expanded="true" className="nav-link active" data-type="resumen" data-toggle="tab" href={'#resumen-' + this.props.name} id={'resumen-' + this.props.name + '-tab'} role="tab" onClick={this.generarTipoCSV}>Resumen</a>
             </li>
             <li className="nav-item">
-              <a aria-controls={'detalle-' + this.props.name} aria-expanded="false" className="nav-link" data-toggle="tab" href={'#detalle-' + this.props.name} id={'detalle-' + this.props.name + '-tab'} role="tab">Detalle</a>
+              <a ref="detalle" aria-controls={'detalle-' + this.props.name} aria-expanded="false" className="nav-link" data-type="detalle" data-toggle="tab" href={'#detalle-' + this.props.name} id={'detalle-' + this.props.name + '-tab'} role="tab" onClick={this.generarTipoCSV}>Detalle</a>
             </li>
           </ul>
           <div className="tab-content">

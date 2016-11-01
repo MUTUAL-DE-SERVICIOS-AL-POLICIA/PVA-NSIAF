@@ -5,6 +5,7 @@ class CreateAlerta < ActiveRecord::Migration
       t.string :mensaje
       t.string :tipo
       t.string :clase
+      t.boolean :parpadeo, default: false
       t.string :controlador
       t.string :accion
       t.boolean :baja_logica, default: false

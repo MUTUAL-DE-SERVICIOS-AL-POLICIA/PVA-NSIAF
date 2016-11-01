@@ -26,7 +26,7 @@ class SeguroDesplegar extends React.Component {
   }
 
   asegurar() {
-    window.location = this.props.data.urls.asegurar
+    window.location = this.props.data.urls.asegurar;
   }
 
   render() {

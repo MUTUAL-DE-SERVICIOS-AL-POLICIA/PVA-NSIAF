@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20161031132408) do
     t.string   "mensaje",          limit: 255
     t.string   "tipo",             limit: 255
     t.string   "clase",            limit: 255
+    t.boolean  "parpadeo",                     default: false
     t.string   "controlador",      limit: 255
     t.string   "accion",           limit: 255
     t.boolean  "baja_logica",                  default: false
