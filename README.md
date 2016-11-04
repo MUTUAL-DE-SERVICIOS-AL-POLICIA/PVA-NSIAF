@@ -144,3 +144,55 @@ rails server
 ```
 
 y visitar en el navegador el link `http://localhost:3000`
+
+## Test
+
+### Preparar la base de datos
+
+* Configurar el archivo `config/database.yml` en la sección de `test`:
+
+```
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: nsiaf_test
+  pool: 5
+  username: root
+  password: root
+  socket: /var/run/mysqld/mysqld.sock
+```
+
+* Crear la base de datos
+
+```console
+bundle exec rake db:create RAILS_ENV=test
+```
+
+* Ejecutar las migraciones
+
+```console
+bundle exec rake db:migrate RAILS_ENV=test
+```
+
+Nota: Se usa las migraciones para cargar la vista de base de datos existente el
+cual no se carga correctamente cuando se usa el comando `rake db:test:prepare`
+
+### Ejecución de tests
+
+* Ejecutar todos los tests
+
+```console
+bundle exec rake
+```
+
+* Ejecutar los tests de un archivo específico
+
+```console
+bundle exec rspec spec/models/subarticle_spec.rb
+```
+
+* Escuchar modificaciones de archivos durante el desarrollo (TDD)
+
+```console
+bundle exec guard
+```
