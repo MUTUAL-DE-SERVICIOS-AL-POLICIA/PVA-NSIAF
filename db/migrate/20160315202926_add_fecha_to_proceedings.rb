@@ -1,7 +1,7 @@
 class AddFechaToProceedings < ActiveRecord::Migration
   def up
     add_column :proceedings, :fecha, :date
-    Proceeding.update_all('fecha = created_at')
+    Proceeding.unscoped.update_all('fecha = created_at')
   end
 
   def down

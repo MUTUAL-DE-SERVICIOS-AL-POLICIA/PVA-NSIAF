@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 20161019142524) do
   end
 
   add_index "barcodes", ["entity_id"], name: "index_barcodes_on_entity_id", using: :btree
+  add_index "barcodes", ["status"], name: "index_barcodes_on_status", using: :btree
 
   create_table "buildings", force: :cascade do |t|
     t.string   "code",       limit: 50
