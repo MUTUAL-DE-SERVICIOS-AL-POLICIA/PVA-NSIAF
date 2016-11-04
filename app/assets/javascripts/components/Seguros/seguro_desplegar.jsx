@@ -68,7 +68,7 @@ class SeguroDesplegar extends React.Component {
           {titulo}
         </div>
         {incorporaciones}
-        <SeguroPanelActivos name="panel-origen"  seguro={this.props.data.seguro} activos={this.props.data.activos} sumatoria={this.props.data.sumatoria} resumen={this.props.data.resumen} sumatoria_resumen={this.props.data.sumatoria_resumen} urls={this.props.data.urls} />
+        <SeguroPanelActivos name="panel-origen"  seguro={this.props.data.seguro} activos={this.props.data.activos} sumatoria={this.props.data.sumatoria} resumen={this.props.data.resumen} sumatoria_resumen={this.props.data.sumatoria_resumen} urls={this.props.data.urls} links_descarga="SI" />
       </div>
     );
   }

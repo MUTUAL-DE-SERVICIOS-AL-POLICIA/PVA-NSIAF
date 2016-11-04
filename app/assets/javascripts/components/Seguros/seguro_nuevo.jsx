@@ -64,7 +64,7 @@ class SeguroNuevo extends React.Component {
           </div>
           <BusquedaActivos id="barcode_activos" seguro={this.props.data.seguro} capturaActivos={this.capturaActivos} urls={this.props.data.urls} />
         </div>
-        <SeguroTablaActivos activos={this.state.activos} sumatoria={this.state.sumatoria} resumen={this.state.resumen} sumatoria_resumen={this.state.sumatoria_resumen} />
+        <SeguroTablaActivos activos={this.state.activos} sumatoria={this.state.sumatoria} resumen={this.state.resumen} sumatoria_resumen={this.state.sumatoria_resumen} links_descarga="NO"/>
         <div className="row">
           <div className="action-buttons col-md-12 col-sm-12 text-center">
             <a className="btn btn-danger cancelar-btn" href={this.props.data.urls.listado_seguros}>

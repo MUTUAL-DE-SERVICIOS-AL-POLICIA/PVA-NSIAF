@@ -74,6 +74,7 @@ Rails.application.routes.draw do
   resources :seguros do
     get :asegurar, on: :member
     get :incorporaciones, on: :member
+    get :activos, on: :member
   end
 
   resources :derecognised, only: :index

@@ -1,5 +1,5 @@
 class SegurosController < ApplicationController
-  before_action :set_seguro, only: [:show, :edit, :update, :destroy, :asegurar, :incorporaciones]
+  before_action :set_seguro, only: [:show, :edit, :update, :destroy, :asegurar, :incorporaciones, :activos]
   before_action :set_usuario, only: [:create]
 
   # GET /seguros
@@ -27,7 +27,8 @@ class SegurosController < ApplicationController
       urls: {
         listado_seguros: seguros_url,
         asegurar: asegurar_seguro_url(@seguro),
-        incorporaciones:  incorporaciones_seguro_url(@seguro)
+        incorporaciones:  incorporaciones_seguro_url(@seguro),
+        activos: activos_seguro_url(@seguro, format: :pdf)
       }
     }
   end
@@ -91,6 +92,25 @@ class SegurosController < ApplicationController
       }
     }
     render template: "seguros/new"
+  end
+
+  def activos
+    @activos=@seguro.assets
+    @sumatoria = @activos.inject(0.0) { |total, activo| total + activo.precio }
+    respond_to do |format|
+      format.pdf do
+        filename = 'reporte-de-activos'
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               template: 'seguros/activos.pdf.haml',
+               orientation: 'Portrait',
+               page_size: 'Letter',
+               margin: view_context.margin_pdf,
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
   end
 
   # POST /seguros

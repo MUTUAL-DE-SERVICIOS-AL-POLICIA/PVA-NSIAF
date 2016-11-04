@@ -62,7 +62,7 @@ class SeguroPanelActivos extends React.Component {
         </div>
         <div className="col-lg-11 col-md-11 col-sm-12">
           {datos_seguro}
-          <SeguroTablaActivos name={this.props.name} activos={this.props.activos} sumatoria={this.props.sumatoria} resumen={this.props.resumen} sumatoria_resumen={this.props.sumatoria_resumen} />
+          <SeguroTablaActivos name={this.props.name} activos={this.props.activos} sumatoria={this.props.sumatoria} resumen={this.props.resumen} sumatoria_resumen={this.props.sumatoria_resumen} urls={this.props.urls} links_descarga={this.props.links_descarga} />
         </div>
       </div>
     );

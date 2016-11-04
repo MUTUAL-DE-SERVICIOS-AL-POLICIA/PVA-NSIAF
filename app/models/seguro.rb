@@ -154,6 +154,7 @@ class Seguro < ActiveRecord::Base
         sumatoria_resumen: sumatoria_resumen,
         urls: {
           asegurar: asegurar_seguro_url(inc),
+          activos: activos_seguro_url(inc, format: :pdf)
         }
       }
     end

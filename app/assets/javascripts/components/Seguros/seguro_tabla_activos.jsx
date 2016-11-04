@@ -172,15 +172,16 @@ class SeguroTablaActivos extends React.Component{
   }
 
   render() {
-    const botones_descarga =
-      <div className="pull-right">
-        <span>Descargar:</span>
-        <div className="btn-group btn-group-xs">
-          <a className={'btn btn-default ' + 'csv-' + this.props.name}>CSV</a>
-          <a className={'btn btn-default ' + 'pdf-' + this.props.name} href = {this.props.url_pdf}>PDF</a>
-        </div>
-      </div>;
-
+    let botones_descarga = <div></div>;
+    if(this.props.links_descarga=='SI'){
+      botones_descarga =  <div className="pull-right">
+                            <span>Descargar:</span>
+                            <div className="btn-group btn-group-xs">
+                              <a className={'btn btn-default ' + 'csv-' + this.props.name}>CSV</a>
+                            <a className={'btn btn-default ' + 'pdf-' + this.props.name} href = {this.props.urls.activos}>PDF</a>
+                            </div>
+                          </div>;
+    }
     const cantidad_activos  = this.props.activos.length;
     if(cantidad_activos > 0){
       return (
