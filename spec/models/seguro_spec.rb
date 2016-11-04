@@ -59,11 +59,12 @@ RSpec.describe Seguro, type: :model do
     end
 
     it "verificando la existencia de activos sin seguro" do
+      Timecop.travel("13-08-2016 13:00".to_datetime)
       expect(Asset.sin_seguro_vigente.size).to eq(3), "existen 3 activos sin seguro"
     end
 
     it "verificando la no existencia de activos sin seguro" do
-      Timecop.freeze("20-08-2016".to_date)
+      Timecop.freeze("20-08-2016 12:00".to_datetime)
       @seguro_vigente.assets << @activo_6
       @seguro_vigente.assets << @activo_7
       @seguro_vigente.assets << @activo_8
@@ -112,28 +113,46 @@ RSpec.describe Seguro, type: :model do
   end
 
   context "Probando la vigencia de un seguro" do
-    let(:seguro) { FactoryGirl.create :seguro, { fecha_inicio_vigencia: "01-01-2015", fecha_fin_vigencia:"31-12-2015" } }
+    let(:seguro) { FactoryGirl.create :seguro, { fecha_inicio_vigencia: "01-01-2015 12:00", fecha_fin_vigencia:"31-12-2015 12:01" } }
 
     it "Fecha antes de la fecha de inicio de vigencia" do
-      Timecop.freeze("13-04-2014")
+      Timecop.freeze("13-04-2014 12:00")
       expect(seguro.vigente?).to eq(false)
       Timecop.return
     end
 
     it "Fecha en la fecha de inicio de vigencia" do
-      Timecop.freeze("01-01-2015")
+      Timecop.freeze("01-01-2015 12:00")
       expect(seguro.vigente?).to eq(true)
       Timecop.return
     end
 
     it "Fecha en la fecha de fin de vigencia" do
-      Timecop.freeze("31-12-2015")
+      Timecop.freeze("31-12-2015 08:00")
       expect(seguro.vigente?).to eq(true)
       Timecop.return
     end
 
     it "Fecha posterior a la fecha de fin de vigencia" do
-      Timecop.freeze("02-01-2016")
+      Timecop.freeze("02-01-2016 13:00")
+      expect(seguro.vigente?).to eq(false)
+      Timecop.return
+    end
+
+    it "Fecha y hora antes de la fecha y hora fin de vigencia" do
+      Timecop.freeze("31-12-2015 12:00")
+      expect(seguro.vigente?).to eq(true)
+      Timecop.return
+    end
+
+    it "Fecha y hora igual de la fecha fin de vigencia" do
+      Timecop.freeze("31-12-2015 12:01")
+      expect(seguro.vigente?).to eq(true)
+      Timecop.return
+    end
+
+    it "Fecha y hora despues de la fecha fin de vigencia" do
+      Timecop.freeze("31-12-2015 12:02")
       expect(seguro.vigente?).to eq(false)
       Timecop.return
     end

@@ -18,12 +18,12 @@ class Seguro < ActiveRecord::Base
   #           presence: true
 
 
-  aasm :column => :state do
-    state :cotizado, :initial => true
+  aasm column: :state do
+    state :cotizado, initial: true
     state :asegurado
 
     event :asegurar do
-      transitions :from => :cotizado, :to => :asegurado
+      transitions from: :cotizado, to: :asegurado
     end
   end
 

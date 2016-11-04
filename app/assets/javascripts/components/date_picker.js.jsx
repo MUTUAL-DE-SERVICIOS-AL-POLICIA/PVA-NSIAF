@@ -28,7 +28,7 @@ class DatePicker extends React.Component {
 
   render(){
     return(
-      <input type="text" ref='datepicker' id={this.props.id} className={this.props.classname} placeholder={this.props.placeholder} autoComplete="off" onChange={this.capturaFecha} />
+      <input type="text" ref='datepicker' id={this.props.id} className={this.props.classname} placeholder={this.props.placeholder} autoComplete="off" onSelect={this.capturaFecha} onChange={this.capturaFecha} />
     )
   }
 }

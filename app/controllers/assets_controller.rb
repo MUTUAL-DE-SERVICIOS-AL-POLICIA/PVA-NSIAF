@@ -5,6 +5,7 @@ class AssetsController < ApplicationController
   # GET /assets
   # GET /assets.json
   def index
+    @activos_sin_seguro = Asset.sin_seguro_vigente.size
     @seguros = Seguro.vigentes
     format_to('assets', AssetsDatatable)
   end
@@ -133,9 +134,9 @@ class AssetsController < ApplicationController
     def asset_params
       if action_name == 'create'
         params[:asset][:user_id] = current_user.id
-        params.require(:asset).permit(:code, :detalle, :medidas, :material, :color, :marca, :modelo, :serie, :precio, :proceso, :observaciones, :auxiliary_id, :user_id, :state, :seguro, :ubicacion_id)
+        params.require(:asset).permit(:code, :detalle, :medidas, :material, :color, :marca, :modelo, :serie, :precio, :proceso, :observaciones, :auxiliary_id, :user_id, :state, :ubicacion_id)
       else
-        params.require(:asset).permit(:code, :detalle, :medidas, :material, :color, :marca, :modelo, :serie, :precio, :proceso, :observaciones, :auxiliary_id, :state, :derecognised, :description_decline, :reason_decline, :decline_user_id, :seguro, :ubicacion_id)
+        params.require(:asset).permit(:code, :detalle, :medidas, :material, :color, :marca, :modelo, :serie, :precio, :proceso, :observaciones, :auxiliary_id, :state, :derecognised, :description_decline, :reason_decline, :decline_user_id, :ubicacion_id)
       end
     end
 end

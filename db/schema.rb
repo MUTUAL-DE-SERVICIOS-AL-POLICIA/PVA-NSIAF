@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161031132408) do
+ActiveRecord::Schema.define(version: 20170108201838) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -21,19 +21,6 @@ ActiveRecord::Schema.define(version: 20161031132408) do
     t.integer  "vida_util",  limit: 4,   default: 0,     null: false
     t.boolean  "depreciar",              default: false, null: false
     t.boolean  "actualizar",             default: false, null: false
-  end
-
-  create_table "alerta", force: :cascade do |t|
-    t.integer  "procedimiento_id", limit: 4
-    t.string   "mensaje",          limit: 255
-    t.string   "tipo",             limit: 255
-    t.string   "clase",            limit: 255
-    t.boolean  "parpadeo",                     default: false
-    t.string   "controlador",      limit: 255
-    t.string   "accion",           limit: 255
-    t.boolean  "baja_logica",                  default: false
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
   end
 
   create_table "articles", force: :cascade do |t|
@@ -75,7 +62,7 @@ ActiveRecord::Schema.define(version: 20161031132408) do
     t.integer  "decline_user_id",     limit: 4
     t.string   "proceso",             limit: 255
     t.string   "observaciones",       limit: 255
-    t.decimal  "precio",                            precision: 10, scale: 2, default: 0.0,   null: false
+    t.decimal  "precio",                            precision: 10, scale: 2, default: 0.0, null: false
     t.string   "detalle",             limit: 255
     t.string   "medidas",             limit: 255
     t.string   "material",            limit: 255
@@ -84,7 +71,6 @@ ActiveRecord::Schema.define(version: 20161031132408) do
     t.string   "modelo",              limit: 255
     t.string   "serie",               limit: 255
     t.integer  "ingreso_id",          limit: 4
-    t.boolean  "seguro",                                                     default: false, null: false
     t.integer  "ubicacion_id",        limit: 4
   end
 
@@ -128,7 +114,6 @@ ActiveRecord::Schema.define(version: 20161031132408) do
   end
 
   add_index "barcodes", ["entity_id"], name: "index_barcodes_on_entity_id", using: :btree
-  add_index "barcodes", ["status"], name: "index_barcodes_on_status", using: :btree
 
   create_table "buildings", force: :cascade do |t|
     t.string   "code",       limit: 50
@@ -315,16 +300,6 @@ ActiveRecord::Schema.define(version: 20161031132408) do
   end
 
   add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree
-
-  create_table "procedimientos", force: :cascade do |t|
-    t.string   "clase",       limit: 255
-    t.string   "metodo",      limit: 255
-    t.string   "parametros",  limit: 255
-    t.string   "descripcion", limit: 255
-    t.boolean  "baja_logica",             default: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-  end
 
   create_table "proceedings", force: :cascade do |t|
     t.integer  "user_id",         limit: 4

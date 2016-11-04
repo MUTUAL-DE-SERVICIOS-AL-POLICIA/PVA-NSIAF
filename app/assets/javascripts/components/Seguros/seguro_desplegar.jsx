@@ -40,10 +40,12 @@ class SeguroDesplegar extends React.Component {
       let fecha_fin = new Date(this.props.data.seguro.fecha_fin_vigencia);
       let fecha_factura = new Date(this.props.data.seguro.factura_fecha);
       titulo = <h2>Póliza: {poliza} desde {moment(fecha_inicio).format("DD/MM/YYYY HH:mm")} hasta {moment(fecha_fin).format("DD/MM/YYYY HH:mm")}</h2>;
-      boton_incorporar =
-        <a className="btn btn-primary" href={this.props.data.urls.incorporaciones}><span className='glyphicon glyphicon-edit'></span>
-          Incorporaciones
-        </a>;
+      if(incorporaciones.length == 0) {
+        boton_incorporar =
+          <a className="btn btn-primary" href={this.props.data.urls.incorporaciones}><span className='glyphicon glyphicon-edit'></span>
+            Incorporaciones
+          </a>;
+      }
       incorporaciones = this.props.data.incorporaciones.map((incorporacion, i) => {
         let name = "panel-" + i;
         return (

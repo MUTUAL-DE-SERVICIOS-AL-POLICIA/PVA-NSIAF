@@ -334,16 +334,6 @@ jQuery ->
         $("a.btn-success[data-id='#{id}']").remove()
         $new_entry.parents('.modal').modal('hide')
 
-  setInterval (->
-    @state = if @state then false else true
-    @list = document.getElementsByTagName('blink')
-    i = @list.length - 1
-    while i >= 0
-      @list[i].style.display = if @state then 'none' else 'inherit'
-      i--
-    return
-  ), 1000
-
   $('.serie_activo').on 'keyup keypress', (e) ->
     keyCode = e.keyCode or e.which
     if keyCode == 13

@@ -3,6 +3,7 @@ class SeguroAsegurar extends React.Component {
     super(props);
     this.guardarDatos = this.guardarDatos.bind(this);
     this.capturarDatos = this.capturarDatos.bind(this);
+    this.verificaSeguro = this.verificaSeguro.bind(this);
     this.state={
       seguro: {
         id: this.props.data.seguro.id,
@@ -23,6 +24,15 @@ class SeguroAsegurar extends React.Component {
     };
   }
 
+  escapeRegexCharacters(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  }
+
+  escapeValor(value){
+    let valor = typeof(value) == "undefined" ? '' : value;
+    return this.escapeRegexCharacters(valor.trim());
+  }
+
   capturarDatos(data) {
     this.setState({
       seguro: {
@@ -38,6 +48,26 @@ class SeguroAsegurar extends React.Component {
         fecha_fin_vigencia: data.fecha_fin_vigencia
       }
     });
+    console.log(this.state.seguro);
+  }
+
+  verificaSeguro(){
+    const supplier_id = this.state.seguro.supplier_id;
+    const factura_numero = this.escapeValor(this.state.seguro.factura_numero);
+    const factura_autorizacion = this.escapeValor(this.state.seguro.factura_autorizacion);
+    const factura_monto = this.escapeValor(this.state.seguro.factura_monto);
+    const factura_fecha = this.state.seguro.factura_fecha;
+    const numero_poliza = this.escapeValor(this.state.seguro.numero_poliza);
+    const numero_contrato = this.escapeValor(this.state.seguro.numero_contrato);
+    const fecha_inicio_vigencia = this.state.seguro.fecha_inicio_vigencia;
+    const fecha_fin_vigencia = this.state.seguro.fecha_fin_vigencia;
+    if(supplier_id === '' || factura_numero === '' || factura_autorizacion === '' || factura_fecha === '' ||
+       factura_monto === '' || numero_poliza === '' || numero_contrato === '' ||  fecha_inicio_vigencia === '' || fecha_fin_vigencia === ''){
+      return false;
+    }
+    else{
+      return true;
+    }
   }
 
   componentWillMount(){
@@ -53,20 +83,25 @@ class SeguroAsegurar extends React.Component {
     const alert = new Notices({ ele: 'div.main' });
     let url = this.props.data.urls.seguros + "/" + this.props.data.seguro.id;
     _ = this;
-    $.ajax({
-      url: url,
-      type: 'PUT',
-      dataType: 'JSON',
-      data: {
-        seguro: this.state.seguro
-      }
-    }).done(function(seguro) {
-      alert.success("Se guardó correctamente el seguro.");
-      const id = _.props.data.seguro.seguro_id ? _.props.data.seguro.seguro_id : _.props.data.seguro.id;
-      return window.location = _.props.data.urls.listado_seguros + "/" + id;
-    }).fail(function(xhr, status) {
-      alert.danger("Error al guardar el seguro.");
-    });
+    if(this.verificaSeguro()){
+      $.ajax({
+        url: url,
+        type: 'PUT',
+        dataType: 'JSON',
+        data: {
+          seguro: this.state.seguro
+        }
+      }).done(function(seguro) {
+        alert.success("Se guardó correctamente el seguro.");
+        const id = _.props.data.seguro.seguro_id ? _.props.data.seguro.seguro_id : _.props.data.seguro.id;
+        return window.location = _.props.data.urls.listado_seguros + "/" + id;
+      }).fail(function(xhr, status) {
+        alert.danger("Error al guardar el seguro.");
+      });
+    }
+    else{
+      alert.danger("Complete todos los datos requeridos.");
+    }
   }
 
   render() {

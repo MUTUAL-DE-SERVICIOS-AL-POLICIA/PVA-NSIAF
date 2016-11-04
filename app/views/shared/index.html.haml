@@ -21,8 +21,9 @@
 - control = controller_name == 'derecognised' ? 'assets' : controller_name
 
 = title t("#{control}.title.title")
-.alertas.pull-right
-  = render "shared/alertas"
+- if controller_name == 'assets'
+  .alertas.pull-right
+    = render "shared/alertas"
 .page-header{data: {action: "#{accion if accion.present?}"}}
   %h2
     - if action_name == 'delivered'

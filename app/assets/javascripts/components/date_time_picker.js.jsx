@@ -3,7 +3,7 @@ class DateTimePicker extends React.Component {
     super(props);
     this.capturaFecha = this.capturaFecha.bind(this);
     this.state = {
-      fecha: this.props.valor|| ''
+      fecha: this.props.valor || ''
     };
   }
 
@@ -12,8 +12,6 @@ class DateTimePicker extends React.Component {
     $("#" + this.props.id).datetimepicker({
       format: 'DD/MM/YYYY HH:mm',
       locale: 'es'
-    }).on("dp.change",function(){
-      _.capturaFecha();
     });
   }
 
@@ -26,7 +24,7 @@ class DateTimePicker extends React.Component {
 
   render(){
     return(
-      <input type="text" ref='datepicker' id={this.props.id} className={this.props.classname} placeholder={this.props.placeholder} autoComplete="off" onChange={this.capturaFecha} />
+      <input type="text" ref='datepicker' id={this.props.id} className={this.props.classname} placeholder={this.props.placeholder} autoComplete="off" onSelect={this.capturaFecha} onChange={this.capturaFecha} />
     )
   }
 }
