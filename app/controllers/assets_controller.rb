@@ -107,7 +107,7 @@ class AssetsController < ApplicationController
   def historical
     proceedings = Proceeding.includes(:user).joins(:asset_proceedings).where(asset_proceedings: {asset_id: @asset.id}).order(created_at: :desc)
     respond_to do |format|
-      format.json { render json: view_context.proceedings_json(proceedings) }
+      format.json { render json: view_context.proceedings_json(proceedings), root: false }
     end
   end
 
