@@ -96,7 +96,7 @@ Rails.application.routes.draw do
 
   resources :barcodes, only: [:index] do
     collection do
-      get :load_data
+      get :obt_cod_barra
       post :pdf
     end
   end
