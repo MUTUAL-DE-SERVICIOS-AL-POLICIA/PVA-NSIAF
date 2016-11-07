@@ -48,7 +48,6 @@ class SeguroAsegurar extends React.Component {
         fecha_fin_vigencia: data.fecha_fin_vigencia
       }
     });
-    console.log(this.state.seguro);
   }
 
   verificaSeguro(){
