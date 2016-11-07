@@ -15,7 +15,7 @@ class Barcode
     @$containerPreviewBarcodes = $('#preview-barcodes')
     @pdf_barcodes_path = @$barcodes_urls.data('barcodes-pdf')
     @obt_cod_barra_path = @$barcodes_urls.data('barcodes-obt-cod-barra')
-    @$btnNewCargar = @$containerPreviewBarcodes.find('button.Newcargar-barcode')
+    @$btnNuevoCargar = @$containerPreviewBarcodes.find('button.nuevo-cargar-barcode')
     @$btnPrintPdf  = @$containerPreviewBarcodes.find('button.imprimir')
     @alert = new Notices({ele: 'div.main'})
     @$templatePdfBarcode = Hogan.compile $('#tpl-barcode').html() || ''
@@ -28,7 +28,7 @@ class Barcode
     _barcode = {barcode: @$InputBarCode.val()}
 
   bindEvents: ->
-    $(document).on 'click', @$btnNewCargar.selector, (e) => @cargarBarcodes(e)
+    $(document).on 'click', @$btnNuevoCargar.selector, (e) => @cargarBarcodes(e)
     $(document).on 'click', @$btnPrintPdf.selector,(e) => @printPdf(e)
 
   cargarBarcodes: (e) =>
