@@ -1,8 +1,8 @@
-$ -> new PrintBarcodes() if $('[data-action=print-barcode]').length > 0
+$ -> new Barcode() if $('[data-action=barcode]').length > 0
 
-class PrintBarcodes
+class Barcode
   _activos = []
-
+  val = ""
   constructor: ->
     @cacheElements()
     @bindEvents()
@@ -10,43 +10,40 @@ class PrintBarcodes
 
   cacheElements: ->
     @$barcodes_urls = $('#barcodes-urls')
-    # urls
-    @load_data_path = @$barcodes_urls.data('barcodes-load-data')
-    @pdf_barcodes_path = @$barcodes_urls.data('barcodes-pdf')
-    # containers
+    @$InputBarCode = $('#code')
     @$containerPreviewBarcodes = $('#preview-barcodes')
-    # buttons
-    @$btnPrint = @$containerPreviewBarcodes.find('button.imprimir')
-    @$btnCargar = @$containerPreviewBarcodes.find('button.cargar-barcodes')
-
-    # Growl Notices
+    @pdf_barcodes_path = @$barcodes_urls.data('barcodes-pdf')
+    @obt_cod_barra_path = @$barcodes_urls.data('barcodes-obt-cod-barra')
+    @$btnNewCargar = @$containerPreviewBarcodes.find('button.Newcargar-barcode')
+    @$btnPrintPdf  = @$containerPreviewBarcodes.find('button.imprimir')
+    @$TxtCriteria = @$InputBarCode
     @alert = new Notices({ele: 'div.main'})
-    # templates
     @$templatePdfBarcode = Hogan.compile $('#tpl-barcode').html() || ''
-
+  buscarBarCode: (e) =>
+    e.preventDefault()
+    _barcode = {barcode: @$InputBarCode.val()}
   bindEvents: ->
-    $(document).on 'click', @$btnPrint.selector, (e) => @printPdf(e)
-    $(document).on 'click', @$btnCargar.selector, (e) => @cargarBarcodes(e)
-
+    $(document).on 'click', @$btnNewCargar.selector, (e) => @cargarBarcodes(e)
+    $(document).on 'click', @$btnPrintPdf.selector,(e) => @printPdf(e)
   cargarBarcodes: (e)->
     e.preventDefault()
     @loadDataAndDisplay @cargarParametros()
 
   cargarParametros: ->
-    desde: $('#barcode-desde').val() || 1
-    hasta: $('#barcode-hasta').val() || 30
-
+    searchParam : $('#code').val() || 0
   displayBarcodes: ->
+    if val != 0
+      $('#code').val(val)
     @$containerPreviewBarcodes.find('.row .thumbnail .barcode').each (i, e) ->
       $(e).barcode $(e).data('barcode').toString(), 'code128', { barWidth: 1, barHeight: 50 }
 
   generateCodes: ->
     assets: _activos
-    desde: @cargarParametros().desde
-    hasta: @cargarParametros().hasta
+    searchParam: @cargarParametros().searchParam
 
   loadDataAndDisplay: (parametros = {})->
-    $.getJSON @load_data_path, parametros, (data) =>
+    val = @cargarParametros().searchParam
+    $.getJSON @obt_cod_barra_path, parametros, (data) =>
       _activos = data
       @previewBarcodes()
     .fail =>
@@ -55,11 +52,12 @@ class PrintBarcodes
   previewBarcodes: ->
     @$containerPreviewBarcodes.html @$templatePdfBarcode.render(@generateCodes())
     @displayBarcodes()
+    $('#code').select()
 
   printPdf: (e)->
     e.preventDefault()
     data =
       authenticity_token: $('meta[name="csrf-token"]').attr('content')
-      desde: @cargarParametros().desde
-      hasta: @cargarParametros().hasta
-    $.fileDownload @pdf_barcodes_path, { data: data, httpMethod: 'POST' }
+      searchParam: @cargarParametros().searchParam || val
+    $.fileDownload @pdf_barcodes_path, { data: data , httpMethod: 'POST' }
+    $('#code').select()

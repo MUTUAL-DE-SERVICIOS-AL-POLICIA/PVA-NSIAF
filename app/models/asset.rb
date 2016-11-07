@@ -112,6 +112,28 @@ class Asset < ActiveRecord::Base
     where(barcode: barcodes.flatten.uniq).order(:code)
   end
 
+  #agregados
+  def self.buscar_barcode_to_pdf(barcode)
+    barcodes = barcode.split(',').map(&:strip)
+    arrayVal = Array.new
+    barcodes.map! do |rango|
+      guiones = rango.split('-').map(&:strip)
+      guiones.length > 1 ? Array(guiones[0].to_i..guiones[1].to_i).map(&:to_s) : guiones
+    end
+    barcodes.each do |x|
+      if x[0].include?("x")
+        mult = x[0].split('x').map(&:to_i)
+        for i in 1..mult[0]
+          activos = where(barcode: mult[1])
+          arrayVal += activos
+        end
+      end
+      activos = where(barcode: x.flatten)
+      arrayVal += activos
+    end
+    arrayVal
+  end
+
   def self.derecognised
     where(status: 0)
   end
