@@ -62,6 +62,7 @@ Rails.application.routes.draw do
 
   resources :requests, except: [:edit, :destroy] do
     get :search_subarticles, on: :collection
+    get :obtiene_nro_solicitud, on: :collection
   end
 
   resources :materials, except: [:destroy] do

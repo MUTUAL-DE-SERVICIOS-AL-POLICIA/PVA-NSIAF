@@ -15,6 +15,8 @@ module Autoincremento
         autoincremento_notas_ingreso if (self.nro_nota_ingreso == nil || self.nro_nota_ingreso == 0) && self.invoice_date.present?
       when 'Ingreso'
         autoincremento_ingresos unless self.numero.present?
+      when 'Request'
+        autoincremento_request unless self.tiene_numero?
       end
     end
   end
@@ -26,6 +28,8 @@ module Autoincremento
         autoincremento_notas_ingreso if (self.nro_nota_ingreso == nil || self.nro_nota_ingreso == 0) && self.invoice_date.present?
       when 'Ingreso'
         autoincremento_ingresos unless self.numero.present?
+      when 'Request'
+        autoincremento_request unless self.tiene_numero?
       end
     end
   end
@@ -50,6 +54,14 @@ module Autoincremento
     respuesta = Ingreso.obtiene_siguiente_numero_ingreso(self.factura_fecha)
     if respuesta[:codigo_numerico].present? && self.numero == nil
       self.numero = respuesta[:codigo_numerico]
+      self.incremento_alfabetico = respuesta[:codigo_alfabetico] if respuesta[:codigo_alfabetico].present?
+    end
+  end
+
+  def autoincremento_request
+    respuesta = Request.obtiene_siguiente_numero_solicitud(self.created_at)
+    if respuesta[:codigo_numerico].present? && !self.tiene_numero?
+      self.nro_solicitud = respuesta[:codigo_numerico]
       self.incremento_alfabetico = respuesta[:codigo_alfabetico] if respuesta[:codigo_alfabetico].present?
     end
   end

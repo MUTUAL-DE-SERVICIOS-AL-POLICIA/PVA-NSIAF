@@ -1,13 +1,15 @@
 $ -> new Request() if $('[data-action=request]').length > 0
 
 class Request extends BarcodeReader
+  _nro_solicitud = ''
+  _observacion = ''
+
   cacheElements: ->
     @selected_user = null
     @$request_urls = $('#request-urls')
 
     @$date = $('input#date')
     @$user = $('input#people')
-    @$nro_solicitud = $('input#nro_solicitud')
     @$request = $('#request')
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
@@ -50,8 +52,17 @@ class Request extends BarcodeReader
     @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
     @user_url = decodeURIComponent(@$request_urls.data('users-id'))
     @users_json_url = decodeURIComponent @$request_urls.data('get-users')
+    @obtiene_nro_solicitud_url = decodeURIComponent @$request_urls.data('obtiene-nro-solicitud')
 
     @alert = new Notices({ele: 'div.main'})
+
+    @$confirmModal = $('#confirm-modal')
+    @$confirmarSolicitudModal = $('#modal-confirmar-solicitud')
+    @$alertaSolicitudModal = $('#modal-alerta-solicitud')
+
+    # Plantillas
+    @$confirmarSolicitudTpl = Hogan.compile $('#confirmar-solicitud-tpl').html() || ''
+    @$alertaSolicitudTpl = Hogan.compile $('#alerta-solicitud-tpl').html() || ''
 
   bindEvents: ->
     $(document).on 'click', @$btnShowRequest.selector, => @show_request()
@@ -65,8 +76,10 @@ class Request extends BarcodeReader
     $(document).on 'click', @btnSubarticleRequestRemove.selector, (e) => @subarticle_request_remove(e)
     $(document).on 'click', @btnShowNewRequest.selector, => @show_new_request()
     $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
-    $(document).on 'click', @$btnSaveNewRequest.selector, => @save_new_request()
+    $(document).on 'click', @$btnSaveNewRequest.selector, (e) => @confirmarSolicitud(e)
     $(document).on 'keyup', @$subarticle.selector, => @changeBarcode(@$subarticle)
+    $(document).on 'click', @$confirmarSolicitudModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
+    $(document).on 'click', @$alertaSolicitudModal.find('button[type=submit]').selector, (e) => @aceptarAlertaSolicitud(e)
 
     if @$material?
       @$article.remoteChained(@$material.selector, @$request_urls.data('subarticles-articles'))
@@ -75,6 +88,55 @@ class Request extends BarcodeReader
       @get_subarticles()
     if @$user?
       @get_users()
+
+  confirmarSolicitud: (e) =>
+    e.preventDefault()
+    url = @obtiene_nro_solicitud_url + "?d=" + $("#date").val()
+    $.ajax
+      url: url
+      type: 'GET'
+      dataType: 'JSON'
+    .done (xhr) =>
+      data = xhr
+      if data["tipo_respuesta"]
+        if data["tipo_respuesta"] == "confirmacion"
+          @$confirmModal.html @$confirmarSolicitudTpl.render(data)
+          modal = @$confirmModal.find(@$confirmarSolicitudModal.selector)
+          modal.modal('show')
+        else if data["tipo_respuesta"] == "alerta"
+          @$confirmModal.html @$alertaSolicitudTpl.render(data)
+          modal = @$confirmModal.find(@$alertaSolicitudModal.selector)
+          modal.modal('show')
+      else
+        @save_new_request()
+
+  aceptarConfirmarSolicitud: (e) =>
+    e.preventDefault()
+    el = @$confirmModal.find('#modal_observacion')
+    if el
+      _observacion = el.val()
+    @$confirmModal.find(@$confirmarSolicitudModal.selector).modal('hide')
+    $form = $(e.target).closest('form')
+    @save_new_request()
+
+  validarObservacion: (e) =>
+    el = @$confirmModal.find('#modal_observacion')
+    if el
+      valor = $.trim(el.val())
+      if valor
+        el.parents('.form-group').removeClass('has-error')
+        el.next().remove()
+        @aceptarConfirmarSolicitud(e)
+      else
+        el.parents('.form-group').addClass('has-error')
+        el.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
+        false
+
+  aceptarAlertaSolicitud: (e) ->
+    e.preventDefault()
+    @$confirmModal.find(@$alertaSolicitudModal.selector).modal('hide')
+    $form = $(e.target).closest('form')
+    false
 
   show_request: ->
     sw = 0
@@ -208,19 +270,16 @@ class Request extends BarcodeReader
     if @$subarticles.find('tr').length
       if @selected_user
         if @$date.val().trim()
-          if @$nro_solicitud.val().trim()
-            @btnShowNewRequest.hide()
-            @$selectionSubarticles.hide()
-            table = @$subarticles.parent().clone()
-            table.find('.actions-request').remove()
-            table.find('thead tr').prepend '<th>#</th>'
-            table.find('#subarticles tr').each (i) ->
-              $(this).prepend "<td>#{ i+1 }</td>"
-            @$selected_subarticles.append table
-            @$selected_subarticles.append @$templateBtnsNewRequest.render()
-            @showUserInfo()
-          else
-            @open_modal("Se debe especificar el número de solicitud")
+          @btnShowNewRequest.hide()
+          @$selectionSubarticles.hide()
+          table = @$subarticles.parent().clone()
+          table.find('.actions-request').remove()
+          table.find('thead tr').prepend '<th>#</th>'
+          table.find('#subarticles tr').each (i) ->
+            $(this).prepend "<td>#{ i+1 }</td>"
+          @$selected_subarticles.append table
+          @$selected_subarticles.append @$templateBtnsNewRequest.render()
+          @showUserInfo()
         else
           @open_modal("Se debe especificar una fecha")
       else
@@ -248,7 +307,7 @@ class Request extends BarcodeReader
     json_data =
       status: 'initiation'
       user_id: @selected_user.id
-      nro_solicitud: @$nro_solicitud.val()
+      observacion: _observacion
       subarticle_requests_attributes: subarticles
       created_at: @parse_date_time(@$date.val()) # yyyy/mm/dd HH:MM:SS
     $.post @request_save_url.replace(/{id}/, ''), { request: json_data }, null, 'script'
@@ -256,7 +315,6 @@ class Request extends BarcodeReader
   showUserInfo: ->
     result = $.extend(@selected_user, {
       date: @$date.val(),
-      nro_solicitud: @$nro_solicitud.val()
     })
     $user = @$templateUserInfo.render(result)
     $table = @$selected_subarticles.find("table")

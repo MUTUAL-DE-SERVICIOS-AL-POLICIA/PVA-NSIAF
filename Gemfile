@@ -57,6 +57,7 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec-rails', '~> 3.5'
   gem 'factory_girl_rails'
+  gem 'guard-livereload'
 end
 
 group :test do
@@ -65,10 +66,10 @@ group :test do
   gem "database_cleaner"
   gem "launchy", "~> 2.3.0"
   gem "selenium-webdriver", "~> 2.39.0"
-  gem "guard-rspec"
-  gem "spork"
-  #gem "spork-rails", :github => 'sporkrb/spork-rails'
+  gem 'guard-rspec', require: false
+  gem "spork-rails"
   gem "guard-spork"
+  gem "timecop"
 end
 
 

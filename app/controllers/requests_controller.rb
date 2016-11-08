@@ -65,6 +65,27 @@ class RequestsController < ApplicationController
     end
   end
 
+  def obtiene_nro_solicitud
+    resultado = Hash.new
+    if params[:d].present?
+      fecha = params[:d].to_date
+      if params[:n].present?
+        solicitud = Request.find(params[:n])
+        unless solicitud.nro_solicitud.present?
+          resultado = Request.obtiene_siguiente_numero_solicitud(fecha)
+        end
+      else
+        resultado = Request.obtiene_siguiente_numero_solicitud(fecha)
+      end
+      if resultado[:tipo_respuesta] == 'confirmacion'
+        resultado[:titulo] = "Confirmación de Ingreso"
+      elsif resultado[:tipo_respuesta] == 'alerta'
+        resultado[:titulo] = "Alerta de Ingreso"
+      end
+    end
+    render json: resultado, root: false
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_request
@@ -73,7 +94,7 @@ class RequestsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def request_params
-      params.require(:request).permit(:user_id, :status, :delivery_date, :created_at, :nro_solicitud, { subarticle_requests_attributes: [ :id, :subarticle_id, :amount, :amount_delivered ] } )
+      params.require(:request).permit(:user_id, :status, :delivery_date, :created_at, :nro_solicitud, :observacion, { subarticle_requests_attributes: [ :id, :subarticle_id, :amount, :amount_delivered ] } )
     end
 
   def search_date

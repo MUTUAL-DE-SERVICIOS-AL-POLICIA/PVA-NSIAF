@@ -22,7 +22,7 @@
       Solicitud de Material
       %span#request_id{data: {id: @request.id}}
         - if @request.nro_solicitud != 0 && @request.nro_solicitud.present?
-          Nro. #{@request.nro_solicitud}
+          Nro. #{@request.obtiene_numero_solicitud}
 
     #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
 
@@ -31,7 +31,7 @@
     - if is_pdf?
       %h4
         %span.text-muted Nro de solicitud:
-        = @request.nro_solicitud
+        = @request.obtiene_numero_solicitud
     - unless is_pdf?
       %h4
         %span.text-muted Estado:

@@ -1,5 +1,12 @@
 class Request < ActiveRecord::Base
+  include Autoincremento
   default_scope {where(invalidate: false)}
+
+  scope :del_anio_por_fecha_creacion, -> (fecha) { where(created_at: fecha.beginning_of_year..fecha.end_of_year) }
+  scope :mayor_a_fecha_creacion, -> (fecha) { where('DATE(created_at) > ?', fecha) }
+  scope :menor_igual_a_fecha_creacion, -> (fecha) { where('DATE(created_at) <= ?', fecha) }
+  scope :con_fecha_creacion, -> { where.not('created_at is null') }
+  scope :con_nro_solicitud, -> { where('nro_solicitud is not null')}
 
   belongs_to :user
   belongs_to :admin, class_name: 'User'
@@ -31,8 +38,15 @@ class Request < ActiveRecord::Base
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
+    orden = "#{sort_column} #{sort_direction}"
+    case sort_column
+    when "requests.created_at"
+      orden += ", requests.nro_solicitud #{sort_direction}, requests.incremento_alfabetico #{sort_direction}"
+    when "requests.nro_solicitud"
+      orden += ", requests.incremento_alfabetico #{sort_direction}"
+    end
     status = status == '' || status == nil ? 'all' : status
-    array = joins(:user).order("#{sort_column} #{sort_direction}")
+    array = joins(:user).order(orden)
     array = array.where(status: status) unless status == 'all'
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
@@ -97,5 +111,85 @@ class Request < ActiveRecord::Base
       subarticle_requests.invalidate_subarticles
       kardexes.invalidate_kardexes
     end
+  end
+
+  def obtiene_numero_solicitud
+    if !incremento_alfabetico.present?
+      "#{nro_solicitud}"
+    else
+      "#{nro_solicitud}-#{incremento_alfabetico}"
+    end
+  end
+
+  def self.numero_solicitud_anterior(fecha)
+    fecha = fecha.to_date
+    self.del_anio_por_fecha_creacion(fecha).menor_igual_a_fecha_creacion(fecha).con_nro_solicitud.maximum(:nro_solicitud)
+  end
+
+  def self.numero_solicitud_posterior(fecha)
+    fecha = fecha.to_date
+    self.del_anio_por_fecha_creacion(fecha).mayor_a_fecha_creacion(fecha).con_nro_solicitud.minimum(:nro_solicitud)
+  end
+
+  def tiene_numero?
+    nro_solicitud.present? && nro_solicitud != 0
+  end
+
+  def self.numero_solicitud_posterior_regularizado(fecha)
+    fecha = fecha.to_date
+    numero = self.numero_solicitud_anterior(fecha)
+    self.del_anio_por_fecha_creacion(fecha).mayor_a_fecha_creacion(fecha).where(nro_solicitud: numero).first.try(:incremento_alfabetico)
+  end
+
+  def self.obtiene_siguiente_numero_solicitud(fecha)
+    codigo_numerico = nil
+    codigo_alfabetico = nil
+    respuesta_hash = Hash.new
+    if fecha.present?
+      fecha = fecha.to_date
+      numero_solicitud_anterior = self.numero_solicitud_anterior(fecha)
+      numero_solicitud_posterior = self.numero_solicitud_posterior(fecha)
+      if numero_solicitud_anterior.present? && !numero_solicitud_posterior.present?
+        respuesta_hash[:codigo_numerico] = numero_solicitud_anterior.to_i + 1
+      elsif !numero_solicitud_anterior.present? && !numero_solicitud_posterior.present?
+        respuesta_hash[:codigo_numerico] = 1
+      elsif numero_solicitud_anterior.present? && numero_solicitud_posterior.present?
+        diferencia = numero_solicitud_posterior - numero_solicitud_anterior
+        if diferencia > 1
+          respuesta_hash[:codigo_numerico] = numero_solicitud_anterior.to_i + 1
+        else
+          inc_alfabetico = self.numero_solicitud_posterior_regularizado(fecha)
+          if inc_alfabetico.present?
+            solicitud_anterior = self.del_anio_por_fecha_creacion(fecha).con_nro_solicitud.menor_igual_a_fecha_creacion(fecha).order(created_at: :desc, nro_solicitud: :desc, incremento_alfabetico: :desc).first
+            solicitud_posterior = self.del_anio_por_fecha_creacion(fecha).con_nro_solicitud.mayor_a_fecha_creacion(fecha).order(created_at: :asc, nro_solicitud: :asc, incremento_alfabetico: :asc).first
+            respuesta_hash[:tipo_respuesta] = "alerta"
+            respuesta_hash[:fecha] = fecha.strftime("%d/%m/%Y")
+            respuesta_hash[:numero_solicitud_anterior] = solicitud_anterior.obtiene_numero_solicitud
+            respuesta_hash[:fecha_solicitud_anterior] = solicitud_anterior.created_at.strftime("%d/%m/%Y") if solicitud_anterior.created_at.present?
+            respuesta_hash[:numero_solicitud_posterior] =  solicitud_posterior.obtiene_numero_solicitud
+            respuesta_hash[:fecha_solicitud_posterior] = solicitud_posterior.created_at.strftime("%d/%m/%Y") if solicitud_posterior.created_at.present?
+          else
+            max_incremento_alfabetico = self.where(nro_solicitud: numero_solicitud_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
+            codigo_numerico = numero_solicitud_anterior.to_i
+            codigo_alfabetico = max_incremento_alfabetico.present? ? max_incremento_alfabetico.next : "A"
+            ultima_fecha = self.del_anio_por_fecha_creacion(fecha).order(created_at: :desc).first.try(:created_at)
+            ultima_fecha = ultima_fecha.strftime("%d/%m/%Y") if ultima_fecha.present?
+            respuesta_hash[:tipo_respuesta] = "confirmacion"
+            respuesta_hash[:numero] = codigo_alfabetico.present? ? "#{codigo_numerico}-#{codigo_alfabetico}" : "#{codigo_numerico}"
+            respuesta_hash[:codigo_numerico] = codigo_numerico
+            respuesta_hash[:codigo_alfabetico] = codigo_alfabetico
+            respuesta_hash[:ultima_fecha] = ultima_fecha
+          end
+        end
+      else
+        if numero_solicitud_posterior > 1
+          respuesta_hash[:codigo_numerico] = numero_solicitud_posterior.to_i - 1
+        else
+          respuesta_hash[:tipo_respuesta] = "alerta"
+          respuesta_hash[:mensaje] = "No se puede introducir una solicitud para la fecha, por favor contactese con el administrador del sistema."
+        end
+      end
+    end
+    respuesta_hash
   end
 end
