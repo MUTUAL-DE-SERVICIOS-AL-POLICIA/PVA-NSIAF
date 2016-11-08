@@ -7,8 +7,8 @@ RSpec.describe Request, type: :model do
       # Creación de materiales
       @request1 = FactoryGirl.create(:request, :julio)
       @request2 = FactoryGirl.create(:request, :agosto)
-      @request3 = FactoryGirl.create(:request, :septiembre, nro_solicitud: nil)
-      @request3 = FactoryGirl.create(:request, :anio_anterior, nro_solicitud: nil)
+      @request3 = FactoryGirl.create(:request, :septiembre)
+      @request4 = FactoryGirl.create(:request, :anio_anterior)
     end
 
     it 'de la gestión' do
@@ -28,7 +28,7 @@ RSpec.describe Request, type: :model do
     end
 
     it 'con nro solicitud' do
-      expect(Request.con_nro_solicitud.size).to eq(2)
+      expect(Request.con_nro_solicitud.size).to eq(4)
     end
   end
 

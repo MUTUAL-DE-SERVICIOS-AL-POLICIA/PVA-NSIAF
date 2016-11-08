@@ -5,8 +5,8 @@ class Request < ActiveRecord::Base
   scope :del_anio_por_fecha_creacion, -> (fecha) { where(created_at: fecha.beginning_of_year..fecha.end_of_year) }
   scope :mayor_a_fecha_creacion, -> (fecha) { where('DATE(created_at) > ?', fecha) }
   scope :menor_igual_a_fecha_creacion, -> (fecha) { where('DATE(created_at) <= ?', fecha) }
-  scope :con_fecha_creacion, -> { where.not('created_at is null') }
-  scope :con_nro_solicitud, -> { where('nro_solicitud is not null')}
+  scope :con_fecha_creacion, -> { where.not(created_at: nil) }
+  scope :con_nro_solicitud, -> { where.not(nro_solicitud: nil).where.not(nro_solicitud: 0)}
 
   belongs_to :user
   belongs_to :admin, class_name: 'User'
