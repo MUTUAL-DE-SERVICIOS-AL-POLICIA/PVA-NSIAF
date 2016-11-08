@@ -9,19 +9,19 @@ class BarcodesController < ApplicationController
     end
   end
 
-  def load_data
-    authorize! :load_data, :barcode
-    params[:desde] = 1 unless params[:desde].present?
-    params[:hasta] = 30 unless params[:hasta].present?
-    @assets = generate_array_with_codes(params[:desde].to_i, params[:hasta].to_i)
-    respond_to do |format|
-      format.json { render json: @assets, root: false }
-    end
+  def obt_cod_barra
+      authorize! :obt_cod_barra, :barcode
+      params[:searchParam] = "0" unless params[:searchParam].present?
+      @activos = Asset.buscar_barcode_to_pdf(params[:searchParam])
+      respond_to do |format|
+        format.json { render json: @activos, root: false }
+      end
   end
 
   def pdf
     authorize! :pdf, :barcode
-    @assets = generate_array_with_codes(params[:desde].to_i, params[:hasta].to_i)
+    params[:searchParam] = "0" unless params[:searchParam].present?
+    @assets = Asset.buscar_barcode_to_pdf(params[:searchParam])
     # Barcode.register_assets(@assets) if @assets.length > 0
     respond_to do |format|
       format.pdf do
@@ -42,10 +42,10 @@ class BarcodesController < ApplicationController
       end
     end
   end
-
   private
 
     def generate_array_with_codes(desde, hasta)
       Asset.where(code: desde..hasta).order(:code)
     end
+
 end

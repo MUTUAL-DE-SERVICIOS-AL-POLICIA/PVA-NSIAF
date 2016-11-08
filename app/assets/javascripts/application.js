@@ -42,7 +42,6 @@
 //= require assignations
 //= require devolutions
 //= require proceedings
-//= require print_barcodes
 //= require typeahead
 //= require notices
 //= require recoding
@@ -58,3 +57,4 @@
 //= require reportes
 //= require subarticulos
 //= require gestiones
+//= require barcode

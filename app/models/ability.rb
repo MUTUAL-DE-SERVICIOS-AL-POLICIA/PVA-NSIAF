@@ -24,7 +24,7 @@ class Ability
       can :manage, Asset
       can :manage, Ingreso
       can :manage, Proceeding
-      can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
+      can [:index, :account, :asset, :auxiliary, :obt_cod_barra, :pdf], :barcode
       can :manage, Version
       can :manage, NoteEntry
       can :manage, Ubicacion
@@ -41,7 +41,7 @@ class Ability
       can :manage, Subarticle
       can :manage, NoteEntry
       can :manage, EntrySubarticle
-      can [:index, :account, :asset, :auxiliary, :load_data, :pdf], :barcode
+      can [:index, :account, :asset, :auxiliary, :obt_cod_barra, :pdf], :barcode
       can :manage, Building
       can :manage, Department
       can :manage, User
