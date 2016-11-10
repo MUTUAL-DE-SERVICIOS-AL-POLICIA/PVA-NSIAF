@@ -120,7 +120,6 @@ class Subarticle < ActiveRecord::Base
             entry_subarticle.decrementando_stock(stock_entry_subarticle)
             cantidad_solicitada -= stock_entry_subarticle
           end
-        else
         end
       end
     else

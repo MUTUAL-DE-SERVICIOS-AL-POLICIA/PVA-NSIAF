@@ -91,8 +91,16 @@ RSpec.describe Request, type: :model do
 
     context 'entregando los subarticulos' do
       it 'saldo posterior a la entrega de subarticulos' do
-        request_params = {"status"=>"pending", "subarticle_requests_attributes"=>{"0"=>{"id"=>solicitud_subarticulo.id, "amount_delivered"=>"250"}}}
-        expect(solicitud.status).to eq("iniation")
+        request_params = {
+          'status' => 'pending',
+          'subarticle_requests_attributes' => {
+            '0' => {
+              'id' => solicitud_subarticulo.id,
+              'amount_delivered' => '250'
+            }
+          }
+        }
+        expect(solicitud.status).to eq('iniation')
         solicitud.entregar_subarticulos(request_params)
         expect(subarticulo.stock).to eq(60)
         expect(subarticulo.entry_subarticles_exist.inject(0){ |suma, es| suma + es.stock }).to eq(60)
@@ -100,7 +108,7 @@ RSpec.describe Request, type: :model do
         expect(solicitud_subarticulo_auxiliar.amount_delivered).to eq(250)
         expect(solicitud_subarticulo_auxiliar.total_delivered).to eq(250)
         solicitud_auxiliar = Request.find(solicitud.id)
-        expect(solicitud_auxiliar.status).to eq("delivered")
+        expect(solicitud_auxiliar.status).to eq('delivered')
       end
     end
   end
