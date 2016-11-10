@@ -81,14 +81,6 @@ ActiveRecord::Schema.define(version: 20161107221322) do
   add_index "assets", ["ubicacion_id"], name: "index_assets_on_ubicacion_id", using: :btree
   add_index "assets", ["user_id"], name: "index_assets_on_user_id", using: :btree
 
-  create_table "assets_seguros", id: false, force: :cascade do |t|
-    t.integer "asset_id",  limit: 4, null: false
-    t.integer "seguro_id", limit: 4, null: false
-  end
-
-  add_index "assets_seguros", ["asset_id", "seguro_id"], name: "index_assets_seguros_on_asset_id_and_seguro_id", using: :btree
-  add_index "assets_seguros", ["seguro_id", "asset_id"], name: "index_assets_seguros_on_seguro_id_and_asset_id", using: :btree
-
   create_table "auxiliaries", force: :cascade do |t|
     t.integer  "code",       limit: 4
     t.string   "name",       limit: 230
@@ -115,7 +107,6 @@ ActiveRecord::Schema.define(version: 20161107221322) do
   end
 
   add_index "barcodes", ["entity_id"], name: "index_barcodes_on_entity_id", using: :btree
-  add_index "barcodes", ["status"], name: "index_barcodes_on_status", using: :btree
 
   create_table "buildings", force: :cascade do |t|
     t.string   "code",       limit: 50
@@ -330,25 +321,19 @@ ActiveRecord::Schema.define(version: 20161107221322) do
     t.string   "observacion",           limit: 255
   end
 
-  create_table "seguros", force: :cascade do |t|
-    t.integer  "supplier_id",           limit: 4
-    t.integer  "user_id",               limit: 4
-    t.string   "numero_poliza",         limit: 255
-    t.string   "numero_contrato",       limit: 255
-    t.string   "factura_numero",        limit: 255
-    t.string   "factura_autorizacion",  limit: 255
-    t.date     "factura_fecha"
-    t.float    "factura_monto",         limit: 53
-    t.datetime "fecha_inicio_vigencia"
-    t.datetime "fecha_fin_vigencia"
-    t.boolean  "baja_logica",                       default: false
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
-    t.integer  "seguro_id",             limit: 4
-    t.string   "state",                 limit: 255
+  create_table "resumen", id: false, force: :cascade do |t|
+    t.integer "id",               limit: 4,  default: 0,     null: false
+    t.integer "subarticle_id",    limit: 4
+    t.integer "request_id",       limit: 4
+    t.integer "amount",           limit: 4
+    t.integer "amount_delivered", limit: 4
+    t.integer "total_delivered",  limit: 4,  default: 0
+    t.boolean "invalidate",                  default: false
+    t.integer "code",             limit: 4
+    t.float   "monto1",           limit: 24
+    t.integer "stock",            limit: 4,  default: 0,     null: false
+    t.integer "monto2",           limit: 4
   end
-
-  add_index "seguros", ["seguro_id"], name: "index_seguros_on_seguro_id", using: :btree
 
   create_table "subarticle_requests", force: :cascade do |t|
     t.integer "subarticle_id",    limit: 4
@@ -455,6 +440,5 @@ ActiveRecord::Schema.define(version: 20161107221322) do
   add_foreign_key "gestiones", "users"
   add_foreign_key "ingresos", "suppliers"
   add_foreign_key "ingresos", "users"
-  add_foreign_key "seguros", "seguros"
   add_foreign_key "subarticles", "materials"
 end

@@ -37,7 +37,7 @@ class Request < ActiveRecord::Base
     [h.get_column(self, 'created_at'), h.get_column(self, 'nro_solicitud'), h.get_column(self, 'name'), h.get_column(self, 'title')]
   end
 
-  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
+    def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
     orden = "#{sort_column} #{sort_direction}"
     case sort_column
     when "requests.created_at"
@@ -98,8 +98,15 @@ class Request < ActiveRecord::Base
   end
 
   def request_deliver
-    #update_attributes(status: 'delivered', delivery_date: Time.now)
-    update_attributes(status: 'delivered', delivery_date: created_at)
+    anulado = true
+    subarticle_requests.each do |subarticle_request|
+      if subarticle_request.amount_delivered > 0
+        anulado = false
+        break
+      end
+    end
+    estado = anulado ? 'canceled' : 'delivered'
+    update_attributes(status: estado, delivery_date: created_at)
     kardexes.update_all(kardex_date: delivery_date.to_date)
   end
 
@@ -115,7 +122,7 @@ class Request < ActiveRecord::Base
 
   def obtiene_numero_solicitud
     if !incremento_alfabetico.present?
-      "#{nro_solicitud}"
+      nro_solicitud.to_s
     else
       "#{nro_solicitud}-#{incremento_alfabetico}"
     end
@@ -191,5 +198,16 @@ class Request < ActiveRecord::Base
       end
     end
     respuesta_hash
+  end
+
+  def entregar_subarticulos(request_params)
+    ActiveRecord::Base.transaction do
+      update(request_params)
+      subarticle_requests.entregar_subarticulos
+      request_deliver
+    end
+    true
+  rescue
+    false
   end
 end

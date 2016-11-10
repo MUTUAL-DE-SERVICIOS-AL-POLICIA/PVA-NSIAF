@@ -104,6 +104,30 @@ class Subarticle < ActiveRecord::Base
     article.present? ? article.material : nil
   end
 
+  # Decrementar el stock del subartículo
+  def entregar_subarticulo(cantidad)
+    cantidad_solicitada = cantidad
+    if stock >= cantidad_solicitada
+      while cantidad_solicitada > 0
+        if stock >= cantidad_solicitada
+          entry_subarticle = entry_subarticles_exist.first
+          raise ActiveRecord::Rollback unless entry_subarticle.present?
+          stock_entry_subarticle = entry_subarticle.stock
+          if stock_entry_subarticle >= cantidad_solicitada
+            entry_subarticle.decrementando_stock(cantidad_solicitada)
+            cantidad_solicitada = 0
+          else
+            entry_subarticle.decrementando_stock(stock_entry_subarticle)
+            cantidad_solicitada -= stock_entry_subarticle
+          end
+        else
+        end
+      end
+    else
+      raise ActiveRecord::Rollback
+    end
+  end
+
   ##
   # Obtiene un reporte en un rango de fechas dado. Adiciona el saldo a la fecha
   # seleccionada

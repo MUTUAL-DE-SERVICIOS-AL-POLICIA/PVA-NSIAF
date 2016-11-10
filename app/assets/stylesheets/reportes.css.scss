@@ -23,3 +23,18 @@
     }
   }
 }
+
+.anulado{
+  display: inline-block;
+  height: 400px;
+  width: 400px;
+  left: 220px;
+  position: absolute;
+  top: 100px;
+  z-index: 300;
+  -webkit-transform: rotate(-35deg);
+  -moz-transform: rotate(-35deg);
+  h1 {
+    font-size: 800%;
+  }
+}

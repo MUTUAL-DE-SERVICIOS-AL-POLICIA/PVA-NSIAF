@@ -10,6 +10,19 @@ class SubarticleRequest < ActiveRecord::Base
     update_all(invalidate: true)
   end
 
+  # Se entrega todos los subartículos solicitados haciendo la resta al stock
+  def self.entregar_subarticulos
+    all.each do |subarticle_request|
+      subarticle_request.entregar_subarticulo
+    end
+  end
+
+  # Realizar la resta del stock al subartículo
+  def entregar_subarticulo
+    subarticle.entregar_subarticulo(amount_delivered)
+    incremento_total_delivered(amount_delivered)
+  end
+
   def subarticle_unit
     subarticle.present? ? subarticle.unit : ''
   end
@@ -33,6 +46,10 @@ class SubarticleRequest < ActiveRecord::Base
   def increase_total_delivered
     increase = total_delivered + 1
     update_attribute('total_delivered', increase)
+  end
+
+  def incremento_total_delivered(cantidad)
+    update_attribute('total_delivered', cantidad)
   end
 
   def self.is_delivered?

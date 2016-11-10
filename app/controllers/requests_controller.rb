@@ -36,15 +36,19 @@ class RequestsController < ApplicationController
     @request = Request.new(request_params)
     @request.admin_id = current_user.id
     @request.save
-    Subarticle.register_log("request")
+    Subarticle.register_log('request')
   end
 
   # PATCH/PUT /requests/1
   def update
     @request.admin_id = current_user.id
-    @request.update(request_params)
+    if @request.status == 'initiation'
+      @request.entregar_subarticulos(request_params)
+    else
+      @request.update(request_params)
+    end
     respond_to do |format|
-      format.html { redirect_to requests_url, notice: "Actualizado correctamente" }
+      format.html { redirect_to requests_url, notice: 'Actualizado correctamente' }
       format.json { render nothing: true }
       format.js
     end
