@@ -37,7 +37,7 @@ class Request < ActiveRecord::Base
     [h.get_column(self, 'created_at'), h.get_column(self, 'nro_solicitud'), h.get_column(self, 'name'), h.get_column(self, 'title')]
   end
 
-    def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
     orden = "#{sort_column} #{sort_direction}"
     case sort_column
     when "requests.created_at"
@@ -72,59 +72,6 @@ class Request < ActiveRecord::Base
         a.push(request.user_title)
         csv << a
       end
-    end
-  end
-
-  def delivery_verification(barcode)
-    subarticle = Subarticle.get_barcode(barcode).take
-    s_request = nil
-    if subarticle.present?
-      if subarticle.exists_amount?
-        s_request = subarticle_requests.get_subarticle(subarticle.id)
-        if s_request.present?
-          if s_request.total_delivered < s_request.amount_delivered
-            transaction do
-              subarticle.decrease_amount
-              s_request.increase_total_delivered
-              request_deliver unless subarticle_requests.is_delivered?
-            end
-          end
-        end
-      else
-        s_request = { amount: 0 }
-      end
-    end
-    s_request
-  end
-
-  def request_deliver
-    anulado = true
-    subarticle_requests.each do |subarticle_request|
-      if subarticle_request.amount_delivered > 0
-        anulado = false
-        break
-      end
-    end
-    estado = anulado ? 'canceled' : 'delivered'
-    update_attributes(status: estado, delivery_date: created_at)
-    kardexes.update_all(kardex_date: delivery_date.to_date)
-  end
-
-  # Anula una Solicitud de Material, y también de los subartículos seleccionados
-  # y es necesario especificar el motivo de la anulación.
-  def invalidate_request(message="")
-    transaction do
-      update(invalidate: true, message: message)
-      subarticle_requests.invalidate_subarticles
-      kardexes.invalidate_kardexes
-    end
-  end
-
-  def obtiene_numero_solicitud
-    if !incremento_alfabetico.present?
-      nro_solicitud.to_s
-    else
-      "#{nro_solicitud}-#{incremento_alfabetico}"
     end
   end
 
@@ -200,6 +147,42 @@ class Request < ActiveRecord::Base
     respuesta_hash
   end
 
+  def delivery_verification(barcode)
+    subarticle = Subarticle.get_barcode(barcode).take
+    s_request = nil
+    if subarticle.present?
+      if subarticle.exists_amount?
+        s_request = subarticle_requests.get_subarticle(subarticle.id)
+        if s_request.present?
+          if s_request.total_delivered < s_request.amount_delivered
+            transaction do
+              subarticle.decrease_amount
+              s_request.increase_total_delivered
+              request_deliver unless subarticle_requests.is_delivered?
+            end
+          end
+        end
+      else
+        s_request = { amount: 0 }
+      end
+    end
+    s_request
+  end
+
+  def request_deliver
+    anulado = true
+    subarticle_requests.each do |subarticle_request|
+      if subarticle_request.amount_delivered > 0
+        anulado = false
+        break
+      end
+    end
+    estado = anulado ? 'canceled' : 'delivered'
+    update_attributes(status: estado, delivery_date: created_at)
+    kardexes.update_all(kardex_date: delivery_date.to_date)
+  end
+
+  # Entrega los productos solicitados
   def entregar_subarticulos(request_params)
     ActiveRecord::Base.transaction do
       update(request_params)
@@ -209,5 +192,27 @@ class Request < ActiveRecord::Base
     true
   rescue
     false
+  end
+
+  # Anula una Solicitud de Material, y también de los subartículos seleccionados
+  # y es necesario especificar el motivo de la anulación.
+  def invalidate_request(message="")
+    transaction do
+      update(invalidate: true, message: message)
+      subarticle_requests.invalidate_subarticles
+      kardexes.invalidate_kardexes
+    end
+  end
+
+  def obtiene_numero_solicitud
+    if !incremento_alfabetico.present?
+      nro_solicitud.to_s
+    else
+      "#{nro_solicitud}-#{incremento_alfabetico}"
+    end
+  end
+
+  def validar_cantidades(cantidades_subarticulo)
+    subarticle_requests.validar_cantidades(cantidades_subarticulo)
   end
 end

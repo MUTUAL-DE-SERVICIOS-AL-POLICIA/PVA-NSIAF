@@ -17,6 +17,17 @@ class SubarticleRequest < ActiveRecord::Base
     end
   end
 
+  # Realiza la iteracion de las solicitudes de subarticulo con la cantidad a
+  # entregar.
+  def self.validar_cantidades(cantidades_subarticulo)
+    resultado = []
+    all.each do |solic_subart|
+      cantidad_subarticulo = cantidades_subarticulo.select { |s| s['id'] == solic_subart.id.to_s }
+      resultado << solic_subart.validar_cantidad(cantidad_subarticulo.first)
+    end
+    resultado
+  end
+
   # Realizar la resta del stock al subartículo
   def entregar_subarticulo
     subarticle.entregar_subarticulo(amount_delivered)
@@ -50,6 +61,19 @@ class SubarticleRequest < ActiveRecord::Base
 
   def incremento_total_delivered(cantidad)
     update_attribute('total_delivered', cantidad)
+  end
+
+  # Verificación de la cantidad a entregar sea mayor o igual a 0, sea menor o
+  # igual al stock y a la cantidad solicitada
+  def validar_cantidad(cantidad_subarticulo)
+    cantidad_entregar = cantidad_subarticulo['cantidad'].to_i
+    verificacion = true
+    mensaje = ''
+    if cantidad_entregar > subarticle.stock
+      mensaje = 'La cantidad a entregar es mayor al stock disponible.'
+      verificacion = false
+    end
+    { id: id, verificacion: verificacion, mensaje: mensaje }
   end
 
   def self.is_delivered?
