@@ -7,7 +7,6 @@ class Request extends BarcodeReader
   cacheElements: ->
     @selected_user = null
     @$request_urls = $('#request-urls')
-
     @$date = $('input#date')
     @$user = $('input#people')
     @$request = $('#request')
@@ -23,9 +22,7 @@ class Request extends BarcodeReader
     @$selected_subarticles = $('#selected_subarticles')
     @delivery_date = $(".input-group.note_entry_delivery_note_date")
     @invoice_date = $(".input-group.note_entry_invoice_date")
-
     @$idRequest = $('#request_id').data('id')
-
     @$btnEditRequest = $('#btn_edit_request')
     @$btnShowRequest = $('#btn-show-request')
     @$btnSaveRequest = $('#btn_save_request')
@@ -47,6 +44,7 @@ class Request extends BarcodeReader
     @$templateBtnsNewRequest = Hogan.compile $('#cancel_new_request').html() || ''
     @$templateUserInfo = Hogan.compile $('#show_user_info').html() || ''
     @$templateSelectedUser = Hogan.compile $('#selected-user-tpl').html() || ''
+    @$templateBusyIndicator = Hogan.compile $('#busy_indicator').html() || ''
 
     @request_save_url = decodeURIComponent @$request_urls.data('request-id')
     @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
@@ -54,7 +52,7 @@ class Request extends BarcodeReader
     @users_json_url = decodeURIComponent @$request_urls.data('get-users')
     @obtiene_nro_solicitud_url = decodeURIComponent @$request_urls.data('obtiene-nro-solicitud')
 
-    @alert = new Notices({ele: 'div.main'})
+    @alert = new Notices({ele: 'div.main', delay: 2000})
 
     @$confirmModal = $('#confirm-modal')
     @$confirmarSolicitudModal = $('#modal-confirmar-solicitud')
@@ -162,6 +160,8 @@ class Request extends BarcodeReader
     @$request.find('table tbody tr').append @$templateRequestInput.render()
 
   update_request: ->
+    @$table_request.find('.text-center').hide()
+    @$table_request.append @$templateBusyIndicator.render()
     materials = $.map(@$request.find('tbody tr'), (val, i) ->
       id: val.id
       amount_delivered: $(val).find('td.col-md-2').text()
@@ -177,7 +177,7 @@ class Request extends BarcodeReader
   cancel_request: ->
     @$table_request.find('.text-center').show()
     @$table_request.find('.text-center').next().remove()
-    @input_to_text()
+    @edit_request()
 
   deliver_request: ->
     @show_buttons()
@@ -248,18 +248,6 @@ class Request extends BarcodeReader
         $(@$templateNewRequest.render(data)).insertBefore(@$subtotal_sum)
         #@refresh_date()
 
-  subarticle_request_plus: ($this) ->
-    $tr = @get_amount($this)
-    $amount = $tr.find('.amount')
-    if $amount.text() < $tr.find('.amount').data('stock')
-      $amount.text(parseInt($amount.text()) + 1)
-    else
-      @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo '#{$tr.find('td:first').text()}'")
-
-  subarticle_request_minus: ($this) ->
-    $amount = @get_amount($this).find('.amount')
-    $amount.text(parseInt($amount.text()) - 1) unless $amount.text() is '1'
-
   subarticle_request_remove: ($this) ->
     @get_amount($this).remove()
 
@@ -274,6 +262,9 @@ class Request extends BarcodeReader
           @$selectionSubarticles.hide()
           table = @$subarticles.parent().clone()
           table.find('.actions-request').remove()
+          table.find('.amount').each (l) ->
+            d = ($(this).find('#amount').val())
+            $(this).text(parseInt(d))
           table.find('thead tr').prepend '<th>#</th>'
           table.find('#subarticles tr').each (i) ->
             $(this).prepend "<td>#{ i+1 }</td>"
@@ -300,9 +291,11 @@ class Request extends BarcodeReader
     "#{date.join('/')} #{time.join(':')}"
 
   save_new_request: ->
+    @$selected_subarticles.find('.text-center').hide()
+    @$selected_subarticles.append @$templateBusyIndicator.render()
     subarticles = $.map(@$subarticles.find('tr'), (val, i) ->
       subarticle_id: val.id
-      amount: $(val).find('td.amount').text()
+      amount: $(val).find('input').val()
     )
     json_data =
       status: 'initiation'
@@ -331,6 +324,7 @@ class Request extends BarcodeReader
     @$user.typeahead null,
       displayKey: 'name'
       source: bestPictures.ttAdapter(),
+
       templates:
         empty: [
           '<p class="empty-message">',
