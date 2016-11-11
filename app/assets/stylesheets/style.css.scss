@@ -77,6 +77,16 @@ input.image{
   width: 100%;
 }
 
+input[type=number] {
+  background: #ededed !important;
+  border: 0;
+  height: 27px;
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
 form .thumbnail{ height: 190px; }
 
 .barcode-statistics {

@@ -16,6 +16,7 @@ class Request extends BarcodeReader
     @$article = $('#article')
     @$subarticle = $('#subarticle')
     @$subarticles = $('#subarticles')
+    @$amountInput = $('#amount')
     @$selected_user = $('#selected-user')
     @$subtotal_sum = $('#subarticles .subtotal-sum')
     @$selectionSubarticles = $('#selection_subarticles')
@@ -76,6 +77,7 @@ class Request extends BarcodeReader
     $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
     $(document).on 'click', @$btnSaveNewRequest.selector, (e) => @confirmarSolicitud(e)
     $(document).on 'keyup', @$subarticle.selector, => @changeBarcode(@$subarticle)
+    $(document).on 'keyup', @$amountInput.selector,  => @val_amount()
     $(document).on 'click', @$confirmarSolicitudModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
     $(document).on 'click', @$alertaSolicitudModal.find('button[type=submit]').selector, (e) => @aceptarAlertaSolicitud(e)
 
@@ -86,6 +88,19 @@ class Request extends BarcodeReader
       @get_subarticles()
     if @$user?
       @get_users()
+
+  val_amount:  =>
+    valin = document.activeElement.value
+    valamount = document.activeElement.max
+
+    if(parseInt(valin) < 0)
+      document.activeElement.value='0'
+      @open_modal('la cantidad no puede ser negativa')
+    if(parseInt(valin) > parseInt(valamount))
+      document.activeElement.value=(parseInt(valamount))
+      @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo ")
+    if(parseInt(valin) < '')
+      document.activeElement.value='0'
 
   confirmarSolicitud: (e) =>
     e.preventDefault()
@@ -137,13 +152,21 @@ class Request extends BarcodeReader
     false
 
   show_request: ->
+    _ = @
     sw = 0
     @$table_request.find('.col-md-2 :input').each ->
       if $(this).val() > $(this).parent().prev().text()
         $(this).parent().addClass('has-error')
+        _.open_modal('La cantidad a entregar es mayor a la cantidad solicitada')
         sw = 1
       else
-        $(this).parent().removeClass('has-error')
+        if $(this).val() <0
+          $(this).parent().addClass('has-error')
+          _.open_modal('La cantidad a entregar es menor a 0')
+          sw = 1
+        else
+          $(this).parent().removeClass('has-error')
+
     if sw == 0
       @$table_request.find('.col-md-2 :input').each ->
         val = $(this).val()
@@ -151,8 +174,6 @@ class Request extends BarcodeReader
         $(this).parent().html val
       @$table_request.find('.text-center').hide()
       @$table_request.append @$templateRequestButtons.render()
-    else
-      @open_modal('La cantidad a entregar es mayor a la cantidad solicitada')
 
   edit_request: ->
     @show_buttons()
@@ -246,7 +267,6 @@ class Request extends BarcodeReader
           @$subarticles.append @$templateNewRequest.render(data)
       else
         $(@$templateNewRequest.render(data)).insertBefore(@$subtotal_sum)
-        #@refresh_date()
 
   subarticle_request_remove: ($this) ->
     @get_amount($this).remove()
