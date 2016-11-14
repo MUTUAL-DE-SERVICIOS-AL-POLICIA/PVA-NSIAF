@@ -12,7 +12,6 @@ class RequestsController < ApplicationController
     @status_pdf = params[:status]
     respond_to do |format|
       format.html
-      format.json { render json: @request.delivery_verification(params[:barcode]) }
       format.pdf do
         render pdf: "#{@request.user_name.parameterize || 'materiales'}",
                disposition: 'attachment',

@@ -178,19 +178,14 @@ class Request extends BarcodeReader
         cantidad_solicitada = parseInt(elemento.find('td')[4].innerText)
         if elemento.find('input').val() > cantidad_solicitada
           if val.verificacion
-            elemento.addClass('has-error')
             _.open_modal('La cantidad a entregar es mayor a la cantidad solicitada.')
           else
-            elemento.addClass('has-error')
             _.open_modal(val.mensaje)
           sw = 1
         else
           if elemento.find('input').val() < 0
-            elemento.addClass('has-error')
             _.open_modal('La cantidad a entregar es menor a 0.')
             sw = 1
-          else
-            elemento.removeClass('has-error')
       )
       if sw == 0
         @$table_request.find('.col-md-2 :input').each ->

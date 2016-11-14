@@ -98,7 +98,7 @@ class Request < ActiveRecord::Base
   def self.obtiene_siguiente_numero_solicitud(fecha)
     codigo_numerico = nil
     codigo_alfabetico = nil
-    respuesta_hash = Hash.new
+    respuesta_hash = {}
     if fecha.present?
       fecha = fecha.to_date
       numero_solicitud_anterior = self.numero_solicitud_anterior(fecha)
@@ -112,23 +112,23 @@ class Request < ActiveRecord::Base
         if diferencia > 1
           respuesta_hash[:codigo_numerico] = numero_solicitud_anterior.to_i + 1
         else
-          inc_alfabetico = self.numero_solicitud_posterior_regularizado(fecha)
+          inc_alfabetico = numero_solicitud_posterior_regularizado(fecha)
           if inc_alfabetico.present?
-            solicitud_anterior = self.del_anio_por_fecha_creacion(fecha).con_nro_solicitud.menor_igual_a_fecha_creacion(fecha).order(created_at: :desc, nro_solicitud: :desc, incremento_alfabetico: :desc).first
-            solicitud_posterior = self.del_anio_por_fecha_creacion(fecha).con_nro_solicitud.mayor_a_fecha_creacion(fecha).order(created_at: :asc, nro_solicitud: :asc, incremento_alfabetico: :asc).first
-            respuesta_hash[:tipo_respuesta] = "alerta"
-            respuesta_hash[:fecha] = fecha.strftime("%d/%m/%Y")
+            solicitud_anterior = del_anio_por_fecha_creacion(fecha).con_nro_solicitud.menor_igual_a_fecha_creacion(fecha).order(created_at: :desc, nro_solicitud: :desc, incremento_alfabetico: :desc).first
+            solicitud_posterior = del_anio_por_fecha_creacion(fecha).con_nro_solicitud.mayor_a_fecha_creacion(fecha).order(created_at: :asc, nro_solicitud: :asc, incremento_alfabetico: :asc).first
+            respuesta_hash[:tipo_respuesta] = 'alerta'
+            respuesta_hash[:fecha] = fecha.strftime('%d/%m/%Y')
             respuesta_hash[:numero_solicitud_anterior] = solicitud_anterior.obtiene_numero_solicitud
-            respuesta_hash[:fecha_solicitud_anterior] = solicitud_anterior.created_at.strftime("%d/%m/%Y") if solicitud_anterior.created_at.present?
+            respuesta_hash[:fecha_solicitud_anterior] = solicitud_anterior.created_at.strftime('%d/%m/%Y') if solicitud_anterior.created_at.present?
             respuesta_hash[:numero_solicitud_posterior] =  solicitud_posterior.obtiene_numero_solicitud
-            respuesta_hash[:fecha_solicitud_posterior] = solicitud_posterior.created_at.strftime("%d/%m/%Y") if solicitud_posterior.created_at.present?
+            respuesta_hash[:fecha_solicitud_posterior] = solicitud_posterior.created_at.strftime('%d/%m/%Y') if solicitud_posterior.created_at.present?
           else
-            max_incremento_alfabetico = self.where(nro_solicitud: numero_solicitud_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
+            max_incremento_alfabetico = where(nro_solicitud: numero_solicitud_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
             codigo_numerico = numero_solicitud_anterior.to_i
             codigo_alfabetico = max_incremento_alfabetico.present? ? max_incremento_alfabetico.next : "A"
-            ultima_fecha = self.del_anio_por_fecha_creacion(fecha).order(created_at: :desc).first.try(:created_at)
-            ultima_fecha = ultima_fecha.strftime("%d/%m/%Y") if ultima_fecha.present?
-            respuesta_hash[:tipo_respuesta] = "confirmacion"
+            ultima_fecha = del_anio_por_fecha_creacion(fecha).order(created_at: :desc).first.try(:created_at)
+            ultima_fecha = ultima_fecha.strftime('%d/%m/%Y') if ultima_fecha.present?
+            respuesta_hash[:tipo_respuesta] = 'confirmacion'
             respuesta_hash[:numero] = codigo_alfabetico.present? ? "#{codigo_numerico}-#{codigo_alfabetico}" : "#{codigo_numerico}"
             respuesta_hash[:codigo_numerico] = codigo_numerico
             respuesta_hash[:codigo_alfabetico] = codigo_alfabetico
@@ -139,34 +139,15 @@ class Request < ActiveRecord::Base
         if numero_solicitud_posterior > 1
           respuesta_hash[:codigo_numerico] = numero_solicitud_posterior.to_i - 1
         else
-          respuesta_hash[:tipo_respuesta] = "alerta"
-          respuesta_hash[:mensaje] = "No se puede introducir una solicitud para la fecha, por favor contactese con el administrador del sistema."
+          respuesta_hash[:tipo_respuesta] = 'alerta'
+          respuesta_hash[:fecha] = fecha.strftime('%d/%m/%Y')
+          solicitud_posterior = del_anio_por_fecha_creacion(fecha).con_nro_solicitud.mayor_a_fecha_creacion(fecha).order(created_at: :asc, nro_solicitud: :asc, incremento_alfabetico: :asc).first
+          respuesta_hash[:numero_solicitud_posterior] =  solicitud_posterior.obtiene_numero_solicitud
+          respuesta_hash[:fecha_solicitud_posterior] = solicitud_posterior.created_at.strftime('%d/%m/%Y') if solicitud_posterior.created_at.present?
         end
       end
     end
     respuesta_hash
-  end
-
-  def delivery_verification(barcode)
-    subarticle = Subarticle.get_barcode(barcode).take
-    s_request = nil
-    if subarticle.present?
-      if subarticle.exists_amount?
-        s_request = subarticle_requests.get_subarticle(subarticle.id)
-        if s_request.present?
-          if s_request.total_delivered < s_request.amount_delivered
-            transaction do
-              subarticle.decrease_amount
-              s_request.increase_total_delivered
-              request_deliver unless subarticle_requests.is_delivered?
-            end
-          end
-        end
-      else
-        s_request = { amount: 0 }
-      end
-    end
-    s_request
   end
 
   def request_deliver
