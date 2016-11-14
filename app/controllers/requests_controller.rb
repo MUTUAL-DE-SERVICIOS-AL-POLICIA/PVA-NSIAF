@@ -82,9 +82,9 @@ class RequestsController < ApplicationController
         resultado = Request.obtiene_siguiente_numero_solicitud(fecha)
       end
       if resultado[:tipo_respuesta] == 'confirmacion'
-        resultado[:titulo] = "Confirmación de Ingreso"
+        resultado[:titulo] = 'Confirmación de Solicitud'
       elsif resultado[:tipo_respuesta] == 'alerta'
-        resultado[:titulo] = "Alerta de Ingreso"
+        resultado[:titulo] = 'Alerta de Solicitud'
       end
     end
     render json: resultado, root: false

@@ -175,7 +175,8 @@ class Request extends BarcodeReader
     .done (respuesta) =>
       $.map(respuesta.data, (val, i) ->
         elemento = $('#' + val.id)
-        if elemento.find('input').val() > elemento.find('td')[4].innerText
+        cantidad_solicitada = parseInt(elemento.find('td')[4].innerText)
+        if elemento.find('input').val() > cantidad_solicitada
           if val.verificacion
             elemento.addClass('has-error')
             _.open_modal('La cantidad a entregar es mayor a la cantidad solicitada.')
@@ -193,7 +194,7 @@ class Request extends BarcodeReader
       )
       if sw == 0
         @$table_request.find('.col-md-2 :input').each ->
-          val = $(this).val()
+          val = parseInt($(this).val())
           val = if val then val else 0
           $(this).parent().html val
         @$table_request.find('.text-center').hide()
