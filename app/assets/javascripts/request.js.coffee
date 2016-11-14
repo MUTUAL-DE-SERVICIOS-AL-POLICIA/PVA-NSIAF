@@ -51,6 +51,7 @@ class Request extends BarcodeReader
     @user_url = decodeURIComponent(@$request_urls.data('users-id'))
     @users_json_url = decodeURIComponent @$request_urls.data('get-users')
     @obtiene_nro_solicitud_url = decodeURIComponent @$request_urls.data('obtiene-nro-solicitud')
+    @obtiene_validar_stock_url = decodeURIComponent @$request_urls.data('validar-stocks')
 
     @alert = new Notices({ele: 'div.main', delay: 2000})
 
@@ -154,28 +155,51 @@ class Request extends BarcodeReader
     false
 
   show_request: ->
-    _ = @
+    @validar_cantidades(@$idRequest, @generar_datos())
+
+  generar_datos: ->
+    data = []
+    @$table_request.find('tbody > tr').each (i) ->
+      data.push { id: this.getAttribute("id"), cantidad: $(this).find("input").val() }
+    data
+
+  validar_cantidades: (id, data) ->
+    url = @obtiene_validar_stock_url.replace(/{id}/, id)
     sw = 0
-    @$table_request.find('.col-md-2 :input').each ->
-      if $(this).val() > $(this).parent().prev().text()
-        $(this).parent().addClass('has-error')
-        _.open_modal('La cantidad a entregar es mayor a la cantidad solicitada')
-        sw = 1
-      else
-        if $(this).val() <0
-          $(this).parent().addClass('has-error')
-          _.open_modal('La cantidad a entregar es menor a 0')
+    _ = @
+    $.ajax
+      url: url
+      type: 'POST'
+      dataType: 'JSON'
+      data: { cantidades: data }
+    .done (respuesta) =>
+      $.map(respuesta.data, (val, i) ->
+        elemento = $('#' + val.id)
+        if elemento.find('input').val() > elemento.find('td')[4].innerText
+          if val.verificacion
+            elemento.addClass('has-error')
+            _.open_modal('La cantidad a entregar es mayor a la cantidad solicitada.')
+          else
+            elemento.addClass('has-error')
+            _.open_modal(val.mensaje)
           sw = 1
         else
-          $(this).parent().removeClass('has-error')
-
-    if sw == 0
-      @$table_request.find('.col-md-2 :input').each ->
-        val = $(this).val()
-        val = if val then val else 0
-        $(this).parent().html val
-      @$table_request.find('.text-center').hide()
-      @$table_request.append @$templateRequestButtons.render()
+          if elemento.find('input').val() < 0
+            elemento.addClass('has-error')
+            _.open_modal('La cantidad a entregar es menor a 0.')
+            sw = 1
+          else
+            elemento.removeClass('has-error')
+      )
+      if sw == 0
+        @$table_request.find('.col-md-2 :input').each ->
+          val = $(this).val()
+          val = if val then val else 0
+          $(this).parent().html val
+        @$table_request.find('.text-center').hide()
+        @$table_request.append @$templateRequestButtons.render()
+    .fail (xhr, status) =>
+      @alert.danger 'Se ha producido un error vuelva intentarlo.'
 
   edit_request: ->
     @show_buttons()
