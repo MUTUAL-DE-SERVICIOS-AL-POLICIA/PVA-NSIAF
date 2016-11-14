@@ -36,7 +36,6 @@ class Request extends BarcodeReader
     @btnShowNewRequest = $('#btn-show-new-request')
     @$btnCancelNewRequest = $('#btn_cancel_new_request')
     @$btnSaveNewRequest = $('#btn_save_new_request')
-
     @$templateRequestButtons = Hogan.compile $('#request_buttons').html() || ''
     @$templateRequestAccept = Hogan.compile $('#request_accept').html() || ''
     @$templateRequestInput = Hogan.compile $('#request_input').html() || ''
@@ -92,15 +91,18 @@ class Request extends BarcodeReader
   val_amount:  =>
     valin = document.activeElement.value
     valamount = document.activeElement.max
-
-    if(parseInt(valin) < 0)
-      document.activeElement.value='0'
+    regex = /[0-9]|\./
+    if !regex.test(valin)
+      valin = ''
+    if parseInt(valin) < 0
+      valin = ''
+      document.activeElement.value = '0'
       @open_modal('la cantidad no puede ser negativa')
-    if(parseInt(valin) > parseInt(valamount))
-      document.activeElement.value=(parseInt(valamount))
+    if parseInt(valin) > parseInt(valamount)
+      document.activeElement.value = parseInt(valamount)
       @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo ")
-    if(parseInt(valin) < '')
-      document.activeElement.value='0'
+    if valin == ''
+      document.activeElement.value = '0'
 
   confirmarSolicitud: (e) =>
     e.preventDefault()
@@ -248,7 +250,14 @@ class Request extends BarcodeReader
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace("description")
       queryTokenizer: Bloodhound.tokenizers.whitespace
       limit: 100
-      remote: @subarticles_json_url
+      remote:
+        url: @subarticles_json_url,
+        ajax:
+          beforeSend: (xhr, settings) ->
+            if  $(document.activeElement).typeahead != null
+              $(document.activeElement).addClass('loadinggif')
+          complete: ->
+            $(document.activeElement).removeClass('loadinggif')
     )
     bestPictures.initialize()
     @$subarticle.typeahead null,
@@ -338,7 +347,15 @@ class Request extends BarcodeReader
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
       queryTokenizer: Bloodhound.tokenizers.whitespace
       limit: 100
-      remote: @users_json_url
+      remote:
+        url: @users_json_url,
+        ajax:
+          beforeSend: (xhr, settings) ->
+            if ($(document.activeElement).typeahead != null)
+              $(document.activeElement).addClass('loadinggif')
+          complete: ->
+            $(document.activeElement).removeClass('loadinggif')
+
     )
     bestPictures.initialize()
     @$user.typeahead null,

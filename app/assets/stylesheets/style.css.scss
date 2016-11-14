@@ -112,6 +112,13 @@ table {
   }
 }
 
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
+}
+.table tbody>tr>td{
+    vertical-align: top;
+}
+
 .note{
   padding: 3px !important;
 
@@ -156,6 +163,11 @@ table {
       }
     }
   }
+}
+.loadinggif {
+    background: #ededed;
+    background:image_url('loader.gif') no-repeat right center;
+
 }
 
 #selected-user {

@@ -15,7 +15,7 @@
 
 %script{ type: 'text/html', id: 'request_input' }
   %td.col-md-2
-    = text_field_tag :amount, '', class: 'form-control input-sm', type: 'number', min:'0', max:"{{stock}}"
+    = text_field_tag :amount, '',id:'amount',  class: 'form-control input-sm text-right', type: 'number', min:'0', max:"{{stock}}"
 
 %script{ type: 'text/html', id: 'request_barcode' }
   .row
@@ -35,10 +35,9 @@
     %td {{description}}
     %td.text-center {{unit}}
     %td.amount.text-center
-      = number_field_tag "quantity", '1',  id: 'amount', class: 'form-control  text-right', disabled: false, type: 'number', min: 0 , max:"{{stock}}"
-
-    %td.actions-request
-      %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }
+      = number_field_tag "quantity", '1',  id: 'amount', class: 'form-control  text-right', disabled: false, type: 'number', min: 0 , max:"{{stock}} +1"
+    %td.actions-request.vert-align
+      %span.glyphicon.glyphicon-trash.pointer{ title: 'Eliminar' }
 
 %script{ type: 'text/html', id: 'cancel_new_request' }
   .row
