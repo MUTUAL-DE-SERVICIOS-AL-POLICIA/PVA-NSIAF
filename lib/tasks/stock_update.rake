@@ -5,7 +5,7 @@ namespace :db do
   # tengan esta diferencia.
   # uso: rake db:stock_update
   desc 'Actualizando los subarticulos que tengan la diferencia en el stock y la sumatoria de entry_subarticles'
-  task :stock_update do
+  task stock_update: :environment do
     archivo = File.new('stock_update.txt', 'w')
     texto = ''
     cantidad_stock_mayor = 0
@@ -26,7 +26,7 @@ namespace :db do
       mostrar_escribir(archivo, texto)
       texto = "Transacciones: #{subarticulo.transacciones.pluck(:cantidad)}"
       mostrar_escribir(archivo, texto)
-      texto = "Entry_subarticles: #{subarticulo}"
+      texto = "Entry_subarticles: #{subarticulo.entry_subarticles_exist.pluck(:stock)}"
       mostrar_escribir(archivo, texto)
       texto = "Cantidad entry_subarticles: #{subarticulo.entry_subarticles_exist.size}"
       mostrar_escribir(archivo, texto)
