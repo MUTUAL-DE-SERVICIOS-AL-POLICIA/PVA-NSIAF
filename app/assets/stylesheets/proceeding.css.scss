@@ -30,6 +30,7 @@ table#pdf-assets-print {
       padding: 0;
       margin: 0;
       height: 96px !important;
+      max-height: 96px;
       td {
         border: 1px dotted white !important;
         padding: 0;
@@ -38,15 +39,15 @@ table#pdf-assets-print {
         min-width: 34%;
         max-width: 34%;
         &:first-child {
-        min-width: 33%;
-        max-width: 33%;
+          min-width: 33%;
+          max-width: 33%;
         }
         &:last-child {
-        min-width: 33%;
-        max-width: 33%;
+          min-width: 33%;
+          max-width: 33%;
         }
         .contenedor {
-          margin: 2px 10px;
+          margin: 0px 0px 0px 0px;
           border: 1px dotted transparent !important;
           .detalle {
             line-height: 1;
