@@ -175,6 +175,7 @@ es:
         initiation: 'Nuevo'
         pending: 'Pendiente'
         delivered: 'Entregado'
+        canceled: 'Anulado'
         all: 'Todo'
   subarticles:
     title:

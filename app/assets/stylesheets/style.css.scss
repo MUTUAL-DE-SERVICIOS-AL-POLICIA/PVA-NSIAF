@@ -77,6 +77,16 @@ input.image{
   width: 100%;
 }
 
+input[type=number] {
+  background: #ededed !important;
+  border: 0;
+  height: 27px;
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
 form .thumbnail{ height: 190px; }
 
 .barcode-statistics {
@@ -102,13 +112,26 @@ table {
   }
 }
 
-.note{
-  padding: 3px !important;
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
+}
+.table tbody>tr>td{
+    vertical-align: top;
+}
 
+.note{
+  padding: 0px !important;
+  text-align: center;
+  vertical-align: middle !important;
   input{
-    background: #ededed !important;
-    border: 0;
-    height: 27px;
+    background: #FFFADB !important;
+    border: none;
+    border-radius: 0;
+    box-shadow: none !important;
+    font-size: 12px;
+    height: 34px;
+    -webkit-box-shadow: none;
+    -webkit-user-select: none;
   }
 }
 
@@ -146,6 +169,11 @@ table {
       }
     }
   }
+}
+.loadinggif {
+    background: #ededed;
+    background:image_url('loader.gif') no-repeat right center;
+
 }
 
 #selected-user {

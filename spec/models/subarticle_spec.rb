@@ -84,4 +84,19 @@ RSpec.describe Subarticle, type: :model do
     end
   end
 
+  context 'verificacion de stock' do
+    let(:papel)              { FactoryGirl.create :material, :papel }
+    let(:entry_subarticle_1) { FactoryGirl.create :entry_subarticle_junio_10 }
+    let(:entry_subarticle_2) { FactoryGirl.create :entry_subarticle_agosto_100 }
+    let(:subarticulo)        { FactoryGirl.create :subarticle, material: papel, entry_subarticles: [entry_subarticle_1, entry_subarticle_2] }
+
+    it 'subarticulo valido' do
+      expect(subarticulo).to be_valid
+      expect(subarticulo.entry_subarticles.size).to eq(2)
+    end
+
+    it 'saldo inicial' do
+      expect(subarticulo.stock).to eq(subarticulo.entry_subarticles_exist.inject(0){ |suma, es| suma + es.stock })
+    end
+  end
 end

@@ -7,6 +7,11 @@ style_date = (id)->
   $("input##{id}").appendTo(".input-group.#{id}")
   $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
 
+style_date_restricted = (id)->
+  $("<div class='input-group date #{id} ' data-date-end-date='0d'></div>").insertBefore("input##{id}")
+  $("input##{id}").appendTo(".input-group.#{id}")
+  $("<span class='input-group-addon glyphicon glyphicon-calendar'></span>").insertAfter("input##{id}")
+
 date_picker = (year = false) ->
   $(".date").datepicker
     autoclose: true
@@ -106,7 +111,6 @@ jQuery ->
       ]
     fnDrawCallback: (oSettings) ->
       $('#select_column').appendTo $('.dataTables_filter')
-
 
   #grid report subarticle
   $("#report_subarticle").parent().attr('class','col-md-offset-1 col-lg-offset-1 col-md-10 col-lg-10')
@@ -226,7 +230,7 @@ jQuery ->
   style_date("q_request_created_at_lteq")
 
   # Formato de fecha en la creación de nueva solicitud
-  style_date("date")
+  style_date_restricted("date_restricted")
 
   date_picker()
 

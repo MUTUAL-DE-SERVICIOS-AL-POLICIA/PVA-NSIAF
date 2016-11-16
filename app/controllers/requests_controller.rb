@@ -12,7 +12,6 @@ class RequestsController < ApplicationController
     @status_pdf = params[:status]
     respond_to do |format|
       format.html
-      format.json { render json: @request.delivery_verification(params[:barcode]) }
       format.pdf do
         render pdf: "#{@request.user_name.parameterize || 'materiales'}",
                disposition: 'attachment',
@@ -36,15 +35,19 @@ class RequestsController < ApplicationController
     @request = Request.new(request_params)
     @request.admin_id = current_user.id
     @request.save
-    Subarticle.register_log("request")
+    Subarticle.register_log('request')
   end
 
   # PATCH/PUT /requests/1
   def update
     @request.admin_id = current_user.id
-    @request.update(request_params)
+    if @request.status == 'initiation'
+      @request.entregar_subarticulos(request_params)
+    else
+      @request.update(request_params)
+    end
     respond_to do |format|
-      format.html { redirect_to requests_url, notice: "Actualizado correctamente" }
+      format.html { redirect_to requests_url, notice: 'Actualizado correctamente' }
       format.json { render nothing: true }
       format.js
     end
@@ -78,9 +81,9 @@ class RequestsController < ApplicationController
         resultado = Request.obtiene_siguiente_numero_solicitud(fecha)
       end
       if resultado[:tipo_respuesta] == 'confirmacion'
-        resultado[:titulo] = "Confirmación de Ingreso"
+        resultado[:titulo] = 'Confirmación de Solicitud'
       elsif resultado[:tipo_respuesta] == 'alerta'
-        resultado[:titulo] = "Alerta de Ingreso"
+        resultado[:titulo] = 'Alerta de Solicitud'
       end
     end
     render json: resultado, root: false

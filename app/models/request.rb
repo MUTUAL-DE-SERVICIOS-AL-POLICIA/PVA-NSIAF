@@ -54,7 +54,7 @@ class Request < ActiveRecord::Base
         type_search = %w(name title).include?(search_column) ? "users.#{search_column}" : "requests.#{search_column}"
         array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
       else
-        array = array.where("requests.id LIKE ? OR requests.created_at LIKE ? OR users.name LIKE ? OR users.title LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+        array = array.where("requests.nro_solicitud LIKE ? OR  requests.created_at LIKE ? OR users.name LIKE ? OR users.title LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array
@@ -72,52 +72,6 @@ class Request < ActiveRecord::Base
         a.push(request.user_title)
         csv << a
       end
-    end
-  end
-
-  def delivery_verification(barcode)
-    subarticle = Subarticle.get_barcode(barcode).take
-    s_request = nil
-    if subarticle.present?
-      if subarticle.exists_amount?
-        s_request = subarticle_requests.get_subarticle(subarticle.id)
-        if s_request.present?
-          if s_request.total_delivered < s_request.amount_delivered
-            transaction do
-              subarticle.decrease_amount
-              s_request.increase_total_delivered
-              request_deliver unless subarticle_requests.is_delivered?
-            end
-          end
-        end
-      else
-        s_request = { amount: 0 }
-      end
-    end
-    s_request
-  end
-
-  def request_deliver
-    #update_attributes(status: 'delivered', delivery_date: Time.now)
-    update_attributes(status: 'delivered', delivery_date: created_at)
-    kardexes.update_all(kardex_date: delivery_date.to_date)
-  end
-
-  # Anula una Solicitud de Material, y también de los subartículos seleccionados
-  # y es necesario especificar el motivo de la anulación.
-  def invalidate_request(message="")
-    transaction do
-      update(invalidate: true, message: message)
-      subarticle_requests.invalidate_subarticles
-      kardexes.invalidate_kardexes
-    end
-  end
-
-  def obtiene_numero_solicitud
-    if !incremento_alfabetico.present?
-      "#{nro_solicitud}"
-    else
-      "#{nro_solicitud}-#{incremento_alfabetico}"
     end
   end
 
@@ -144,7 +98,7 @@ class Request < ActiveRecord::Base
   def self.obtiene_siguiente_numero_solicitud(fecha)
     codigo_numerico = nil
     codigo_alfabetico = nil
-    respuesta_hash = Hash.new
+    respuesta_hash = {}
     if fecha.present?
       fecha = fecha.to_date
       numero_solicitud_anterior = self.numero_solicitud_anterior(fecha)
@@ -158,23 +112,23 @@ class Request < ActiveRecord::Base
         if diferencia > 1
           respuesta_hash[:codigo_numerico] = numero_solicitud_anterior.to_i + 1
         else
-          inc_alfabetico = self.numero_solicitud_posterior_regularizado(fecha)
+          inc_alfabetico = numero_solicitud_posterior_regularizado(fecha)
           if inc_alfabetico.present?
-            solicitud_anterior = self.del_anio_por_fecha_creacion(fecha).con_nro_solicitud.menor_igual_a_fecha_creacion(fecha).order(created_at: :desc, nro_solicitud: :desc, incremento_alfabetico: :desc).first
-            solicitud_posterior = self.del_anio_por_fecha_creacion(fecha).con_nro_solicitud.mayor_a_fecha_creacion(fecha).order(created_at: :asc, nro_solicitud: :asc, incremento_alfabetico: :asc).first
-            respuesta_hash[:tipo_respuesta] = "alerta"
-            respuesta_hash[:fecha] = fecha.strftime("%d/%m/%Y")
+            solicitud_anterior = del_anio_por_fecha_creacion(fecha).con_nro_solicitud.menor_igual_a_fecha_creacion(fecha).order(created_at: :desc, nro_solicitud: :desc, incremento_alfabetico: :desc).first
+            solicitud_posterior = del_anio_por_fecha_creacion(fecha).con_nro_solicitud.mayor_a_fecha_creacion(fecha).order(created_at: :asc, nro_solicitud: :asc, incremento_alfabetico: :asc).first
+            respuesta_hash[:tipo_respuesta] = 'alerta'
+            respuesta_hash[:fecha] = fecha.strftime('%d/%m/%Y')
             respuesta_hash[:numero_solicitud_anterior] = solicitud_anterior.obtiene_numero_solicitud
-            respuesta_hash[:fecha_solicitud_anterior] = solicitud_anterior.created_at.strftime("%d/%m/%Y") if solicitud_anterior.created_at.present?
+            respuesta_hash[:fecha_solicitud_anterior] = solicitud_anterior.created_at.strftime('%d/%m/%Y') if solicitud_anterior.created_at.present?
             respuesta_hash[:numero_solicitud_posterior] =  solicitud_posterior.obtiene_numero_solicitud
-            respuesta_hash[:fecha_solicitud_posterior] = solicitud_posterior.created_at.strftime("%d/%m/%Y") if solicitud_posterior.created_at.present?
+            respuesta_hash[:fecha_solicitud_posterior] = solicitud_posterior.created_at.strftime('%d/%m/%Y') if solicitud_posterior.created_at.present?
           else
-            max_incremento_alfabetico = self.where(nro_solicitud: numero_solicitud_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
+            max_incremento_alfabetico = where(nro_solicitud: numero_solicitud_anterior).order(incremento_alfabetico: :desc).first.incremento_alfabetico
             codigo_numerico = numero_solicitud_anterior.to_i
             codigo_alfabetico = max_incremento_alfabetico.present? ? max_incremento_alfabetico.next : "A"
-            ultima_fecha = self.del_anio_por_fecha_creacion(fecha).order(created_at: :desc).first.try(:created_at)
-            ultima_fecha = ultima_fecha.strftime("%d/%m/%Y") if ultima_fecha.present?
-            respuesta_hash[:tipo_respuesta] = "confirmacion"
+            ultima_fecha = del_anio_por_fecha_creacion(fecha).order(created_at: :desc).first.try(:created_at)
+            ultima_fecha = ultima_fecha.strftime('%d/%m/%Y') if ultima_fecha.present?
+            respuesta_hash[:tipo_respuesta] = 'confirmacion'
             respuesta_hash[:numero] = codigo_alfabetico.present? ? "#{codigo_numerico}-#{codigo_alfabetico}" : "#{codigo_numerico}"
             respuesta_hash[:codigo_numerico] = codigo_numerico
             respuesta_hash[:codigo_alfabetico] = codigo_alfabetico
@@ -185,11 +139,61 @@ class Request < ActiveRecord::Base
         if numero_solicitud_posterior > 1
           respuesta_hash[:codigo_numerico] = numero_solicitud_posterior.to_i - 1
         else
-          respuesta_hash[:tipo_respuesta] = "alerta"
-          respuesta_hash[:mensaje] = "No se puede introducir una solicitud para la fecha, por favor contactese con el administrador del sistema."
+          respuesta_hash[:tipo_respuesta] = 'alerta'
+          respuesta_hash[:fecha] = fecha.strftime('%d/%m/%Y')
+          solicitud_posterior = del_anio_por_fecha_creacion(fecha).con_nro_solicitud.mayor_a_fecha_creacion(fecha).order(created_at: :asc, nro_solicitud: :asc, incremento_alfabetico: :asc).first
+          respuesta_hash[:numero_solicitud_posterior] =  solicitud_posterior.obtiene_numero_solicitud
+          respuesta_hash[:fecha_solicitud_posterior] = solicitud_posterior.created_at.strftime('%d/%m/%Y') if solicitud_posterior.created_at.present?
         end
       end
     end
     respuesta_hash
+  end
+
+  def request_deliver
+    anulado = true
+    subarticle_requests.each do |subarticle_request|
+      if subarticle_request.amount_delivered > 0
+        anulado = false
+        break
+      end
+    end
+    estado = anulado ? 'canceled' : 'delivered'
+    update_attributes(status: estado, delivery_date: created_at)
+    kardexes.update_all(kardex_date: delivery_date.to_date)
+  end
+
+  # Entrega los productos solicitados
+  def entregar_subarticulos(request_params)
+    ActiveRecord::Base.transaction do
+      update(request_params)
+      subarticle_requests.entregar_subarticulos
+      request_deliver
+    end
+    true
+  rescue
+    false
+  end
+
+  # Anula una Solicitud de Material, y también de los subartículos seleccionados
+  # y es necesario especificar el motivo de la anulación.
+  def invalidate_request(message="")
+    transaction do
+      update(invalidate: true, message: message)
+      subarticle_requests.invalidate_subarticles
+      kardexes.invalidate_kardexes
+    end
+  end
+
+  def obtiene_numero_solicitud
+    if !incremento_alfabetico.present?
+      nro_solicitud.to_s
+    else
+      "#{nro_solicitud}-#{incremento_alfabetico}"
+    end
+  end
+
+  def validar_cantidades(cantidades_subarticulo)
+    subarticle_requests.validar_cantidades(cantidades_subarticulo)
   end
 end

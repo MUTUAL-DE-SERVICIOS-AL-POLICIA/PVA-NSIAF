@@ -23,6 +23,16 @@ FactoryGirl.define do
       created_at '2016-09-23 16:22:30'
     end
 
+    trait :iniation do
+      delivery_date ''
+      status 'iniation' # inicial
+    end
+
+    trait :pending do
+      delivery_date { created_at }
+      status 'pending' # pendiente
+    end
+
     trait :delivered do
       delivery_date { created_at }
       status 'delivered' # Entregado

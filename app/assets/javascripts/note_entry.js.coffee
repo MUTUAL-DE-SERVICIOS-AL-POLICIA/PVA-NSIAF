@@ -6,7 +6,6 @@ class NoteEntry extends BarcodeReader
     @$obt_note_entry_urls = $('#obt_note_entry-urls')
     @obt_note_entry_url = @$obt_note_entry_urls.data('obt-note-entry')
     @id_note_entry = @$obt_note_entry_urls.data('noteEntry')
-
     @$inputSupplier = $('input#note_entry_supplier_id')
     @formNoteEntry = $('#new_note_entry')
     @editFormNoteEntry = $('.edit_note_entry')
