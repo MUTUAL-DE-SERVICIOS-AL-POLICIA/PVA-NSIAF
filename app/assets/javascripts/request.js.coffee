@@ -188,7 +188,7 @@ class Request extends BarcodeReader
             sw = 1
       )
       if sw == 0
-        @$table_request.find('.col-md-2 :input').each ->
+        @$table_request.find('input').each ->
           val = parseInt($(this).val())
           val = if val then val else 0
           $(this).parent().html val
@@ -207,7 +207,7 @@ class Request extends BarcodeReader
     @$table_request.append @$templateBusyIndicator.render()
     materials = $.map(@$request.find('tbody tr'), (val, i) ->
       id: val.id
-      amount_delivered: $(val).find('input').val()
+      amount_delivered: $(val).find('td.col-md-1').text()
     )
     data = { status: 'pending', subarticle_requests_attributes: materials }
     $.ajax
