@@ -380,6 +380,7 @@ es:
       asset:
         barcode: "Código Barras"
         code: "Código"
+        code_old: "Código Anterior"
         description: "Descripción"
         auxiliary: "Auxiliar"
         account: "Cuenta"
