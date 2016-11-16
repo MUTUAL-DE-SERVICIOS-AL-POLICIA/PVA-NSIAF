@@ -27,7 +27,6 @@ table#pdf-assets-print {
   margin-right:-6px;
   tbody {
     tr {
-      padding: 0;
       margin: 0;
       height: 96px !important;
       max-height: 96px;
@@ -36,15 +35,15 @@ table#pdf-assets-print {
         padding: 0;
         vertical-align: middle;
         display: inline-block;
-        min-width: 34%;
-        max-width: 34%;
+        max-width: 33.5%;
+        min-width: 33.5%;
         &:first-child {
-          min-width: 33%;
           max-width: 33%;
+          min-width: 33%;
         }
         &:last-child {
-          min-width: 33%;
           max-width: 33%;
+          min-width: 33%;
         }
         .contenedor {
           margin: 0px 0px 0px 0px;
