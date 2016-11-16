@@ -32,7 +32,6 @@ class SubarticlesController < ApplicationController
 
   # POST /subarticles
   def create
-    debugger
     @subarticle = Subarticle.new(subarticle_params)
 
     respond_to do |format|
