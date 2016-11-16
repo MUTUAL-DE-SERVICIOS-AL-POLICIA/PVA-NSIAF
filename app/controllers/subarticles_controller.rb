@@ -32,6 +32,7 @@ class SubarticlesController < ApplicationController
 
   # POST /subarticles
   def create
+    debugger
     @subarticle = Subarticle.new(subarticle_params)
 
     respond_to do |format|
@@ -117,7 +118,7 @@ class SubarticlesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def subarticle_params
-      params.require(:subarticle).permit(:description, :unit, :status, :amount, :minimum, :material_id)
+      params.require(:subarticle).permit(:description, :code_old, :unit, :status, :amount, :minimum, :material_id)
     end
 
     def entry_subarticle_params
