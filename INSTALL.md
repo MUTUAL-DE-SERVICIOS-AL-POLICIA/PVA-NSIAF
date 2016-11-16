@@ -4,7 +4,7 @@
 
 * Sistema Operativo: Debian Jessie
 * Usuario: nsiaf
-* Servidor: www.dominio.com
+* Servidor: www.dominio.com.bo
 
 ## Paquetes y dependencias
 
@@ -195,18 +195,35 @@ production:
   secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
   wkhtmltopdf: '/opt/wkhtmltox/bin/wkhtmltopdf'
   ufv_desde: '01-01-2015'
+  exception_notification:
+    email_prefix: "[NSIAF] "
+    sender_address: "notificador <noreply@dominio.gob.bo>"
+    exception_recipients: "desarrolladores@dominio.gob.bo"
+  smtp_settings:
+    address: 'smtp.dominio.gob.bo'
+    port: 587
+    domain: 'dominio.gob.bo'
+    user_name: 'nsiaf'
+    password: 'mi-super-password'
+    authentication: 'plain'
+    enable_starttls_auto: true
 ```
 
 donde:
 
 * `convert_api_url` es la URL donde se encuentra instalado el API de [Conversión de Formatos](https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos)
-* `rails_host` es el host del servidor de deploy tal como: `www.dominio.com`
-* `rails_relative_url_root` es la ubicación del subdirectorio de deploy tal como: `www.dominio.com/activos`
-dejar una cadena vacía en el caso que el deploy sea en la raíz del dominio.
+* `rails_host` es el host del servidor de deploy tal como: `www.dominio.com.bo`
+* `rails_relative_url_root` es la ubicación del subdirectorio de deploy tal como: `www.dominio.com.bo/activos`
+  dejar una cadena vacía en el caso que el deploy sea en la raíz del dominio.
 * `secret_key_base` se **DEBE** reemplazar con la clave secreta generada en el
 * `wkhtmltopdf` es la ubicación del binario para conversión de HTML a PDF.
 * `ufv_desde` descarga UFVs desde esa fecha del sitio web del Banco Central de
-Bolivia.
+  Bolivia.
+* `sender_address` es el email desde donde se haran las notificaciones por email
+* `exception_recipients` ahí va los destinos de los emails puede ser uno o
+  varios emails separados por comas: `des1@dominio.gob.bo, des2@dominio.gob.bo`
+* `smtp_settings` la configuración del servidor de email desde el cual se
+  enviará los emails de notificación de excepciones
 
 Compilamos los archivos CSS y JS:
 
@@ -323,7 +340,7 @@ Adicionar el siguiente contenido si se va instalar la aplicación en la raiz del
 
 ```apache
 <VirtualHost *:80>
-  ServerName www.dominio.com
+  ServerName www.dominio.com.bo
   DocumentRoot /var/www/html/nsiaf/public
   RailsEnv production
   <Directory /var/www/html/nsiaf/public>
@@ -337,7 +354,7 @@ Contenido para deploy de la aplicación en un subdirectorio `/activos`
 
 ```apache
 <VirtualHost *:80>
-  ServerName www.dominio.com
+  ServerName www.dominio.com.bo
   DocumentRoot /var/www/html
 
   <IfModule mod_rewrite.c>
@@ -362,14 +379,14 @@ Contenido para deploy de la aplicación en un subdirectorio `/activos`
 Habilitar el nuevo sitio y reiniciar Apache
 
 ```console
-sudo a2ensite www.dominio.com
+sudo a2ensite www.dominio.com.bo
 sudo service apache2 restart
 ```
 
 Nota: Puede ser necesario deshabilitar el dominio por defecto con el comando
 `sudo a2dissite 000-default`
 
-Visitamos el sitio http://www.dominio.com o http://www.dominio.com/activos depende
+Visitamos el sitio http://www.dominio.com.bo o http://www.dominio.com.bo/activos depende
 de la configuración que se haya elegido para el deploy.
 
 ## Actualización
