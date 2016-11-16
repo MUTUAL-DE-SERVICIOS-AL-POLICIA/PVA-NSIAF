@@ -54,6 +54,8 @@
           %th= t('activerecord.attributes.user.ci')
         - if %w(subarticles).include?(control)
           %th= Subarticle.human_attribute_name('code_old')
+        - if 'assets' == control
+          %th= Asset.human_attribute_name('code_old')
         %th= %w(assets materials articles subarticles).include?(control) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
       = render "#{control}/#{control}"
       - unless %w(versions).include?(control)

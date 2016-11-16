@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161107221322) do
+ActiveRecord::Schema.define(version: 20161116185150) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20161107221322) do
     t.integer  "ingreso_id",          limit: 4
     t.boolean  "seguro",                                                     default: false, null: false
     t.integer  "ubicacion_id",        limit: 4
+    t.string   "code_old",            limit: 255
   end
 
   add_index "assets", ["account_id"], name: "index_assets_on_account_id", using: :btree

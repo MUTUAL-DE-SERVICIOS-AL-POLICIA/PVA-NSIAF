@@ -216,7 +216,7 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'supplier'), h.get_column(self, 'account'), h.get_column(self, 'user'), h.get_column(self, 'ubicacion')]
+    [h.get_column(self, 'code'), h.get_column(self, 'code_old'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'supplier'), h.get_column(self, 'account'), h.get_column(self, 'user'), h.get_column(self, 'ubicacion')]
   end
 
   def self.without_barcode
@@ -249,7 +249,7 @@ class Asset < ActiveRecord::Base
           array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
         end
       else
-         array = array.where("assets.code LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR suppliers.name LIKE ? OR ingresos.factura_fecha LIKE ? OR ubicaciones.abreviacion LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%", "%#{sSearch}%")
+         array = array.where("assets.code LIKE ? OR assets.code_old LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR suppliers.name LIKE ? OR ingresos.factura_fecha LIKE ? OR ubicaciones.abreviacion LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%", "%#{sSearch}%")
       end
     end
     array
