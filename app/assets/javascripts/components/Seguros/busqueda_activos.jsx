@@ -48,7 +48,7 @@ class BusquedaActivos extends React.Component {
   render () {
     return (
       <div className='form-group' >
-        <div className="col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-md-6 col-sm-6 col-xs-6">
+        <div className="col-md-offset-3 col-sm-offset-3 col-xs-offset-3 col-md-5 col-sm-5 col-xs-5">
           <input type="text" ref="barcode" name={this.props.id} id={this.props.id} className="form-control input-lg" placeholder="Código de Barras de Activos Fijos (ej. 1-10, 12-15, 17, 20, ...)" autofocus="autofocus" autoComplete="off" onKeyPress={this.capturaEnter} />
         </div>
         <div className="col-md-3 col-sm-3 col-xs-3">

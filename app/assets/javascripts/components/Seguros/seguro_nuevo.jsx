@@ -37,20 +37,25 @@ class SeguroNuevo extends React.Component {
     let alert = new Notices({ ele: 'div.main' });
     let url = this.props.data.urls.seguros;
     _ = this;
-    $.ajax({
-      url: url,
-      type: 'POST',
-      dataType: 'JSON',
-      data: {
-        seguro: this.jsonGuardar()
-      }
-    }).done(function(seguro) {
-      alert.success("Se guardó correctamente la cotización.");
-      const id = _.props.data.seguro ? _.props.data.seguro.id : seguro.id;
-      return window.location = _.props.data.urls.listado_seguros + "/" + id;
-    }).fail(function(xhr, status) {
+    if(this.state.activos.length > 0){
+      $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+          seguro: this.jsonGuardar()
+        }
+      }).done(function(seguro) {
+        alert.success("Se guardó correctamente la cotización.");
+        const id = _.props.data.seguro ? _.props.data.seguro.id : seguro.id;
+        return window.location = _.props.data.urls.listado_seguros + "/" + id;
+      }).fail(function(xhr, status) {
+        alert.danger("Error al guardar la cotización.");
+      });
+    }
+    else{
       alert.danger("Error al guardar la cotización.");
-    });
+    }
   }
 
   render() {
