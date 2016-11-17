@@ -60,12 +60,23 @@ class SeguroAsegurar extends React.Component {
     const numero_contrato = this.escapeValor(this.state.seguro.numero_contrato);
     const fecha_inicio_vigencia = this.state.seguro.fecha_inicio_vigencia;
     const fecha_fin_vigencia = this.state.seguro.fecha_fin_vigencia;
-    if(supplier_id === '' || factura_numero === '' || factura_autorizacion === '' || factura_fecha === '' ||
-       factura_monto === '' || numero_poliza === '' || numero_contrato === '' ||  fecha_inicio_vigencia === '' || fecha_fin_vigencia === ''){
-      return false;
+    if(this.props.data.seguro.seguro_id){
+      if(factura_numero === '' || factura_autorizacion === '' || factura_fecha === '' ||
+         factura_monto === '' || numero_contrato === ''){
+        return false;
+      }
+      else{
+        return true;
+      }
     }
     else{
-      return true;
+      if(supplier_id === '' || factura_numero === '' || factura_autorizacion === '' || factura_fecha === '' ||
+         factura_monto === '' || numero_poliza === '' || numero_contrato === '' ||  fecha_inicio_vigencia === '' || fecha_fin_vigencia === ''){
+        return false;
+      }
+      else{
+        return true;
+      }
     }
   }
 
