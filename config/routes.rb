@@ -35,6 +35,9 @@ Rails.application.routes.draw do
         get :sin_seguro_vigente, on: :member
       end
 
+      resources :requests, only: [:show] do
+        post :validar_cantidades, on: :member
+      end
     end
   end
 
@@ -82,6 +85,7 @@ Rails.application.routes.draw do
 
   resources :requests, except: [:edit, :destroy] do
     get :search_subarticles, on: :collection
+    get :obtiene_nro_solicitud, on: :collection
   end
 
   resources :materials, except: [:destroy] do
@@ -116,7 +120,7 @@ Rails.application.routes.draw do
 
   resources :barcodes, only: [:index] do
     collection do
-      get :load_data
+      get :obt_cod_barra
       post :pdf
     end
   end

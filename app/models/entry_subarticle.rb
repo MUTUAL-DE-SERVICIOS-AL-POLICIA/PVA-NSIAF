@@ -47,6 +47,15 @@ class EntrySubarticle < ActiveRecord::Base
     end
   end
 
+  def decrementando_stock(cantidad)
+    if self.stock >= cantidad
+      self.stock = self.stock - cantidad
+      self.save
+    else
+      Rails.logger.info "No se pudo decrementar porque no es mayor a la cantidad solicitada"
+    end
+  end
+
   def set_date_value
     if note_entry.present?
       self.date = note_entry.note_entry_date

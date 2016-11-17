@@ -2,9 +2,9 @@
   .page-header{data: {action: 'request'}}
     .pull-right
       - if @request.status == 'initiation'
-        = button_tag class: 'btn btn-primary buttonRequest', id: "btn_edit_request" do
-          %span.glyphicon.glyphicon-edit
-          Editar cantidad
+        = button_tag class: 'btn btn-success buttonRequest', id: "btn_edit_request" do
+          %span.glyphicon.glyphicon-shopping-cart
+          Entregar producto
       = link_to request_path(status: 'initiation', format: :pdf), class: 'btn btn-info' do
         %span.glyphicon.glyphicon-print
         Imprimir Solicitud
@@ -12,26 +12,26 @@
         = link_to request_path(status: 'delivered', format: :pdf), class: 'btn btn-success' do
           %span.glyphicon.glyphicon-print
           Imprimir Entrega
-      - if @request.status == 'pending'
-        = button_tag class: 'btn btn-success buttonRequest', id: 'btn_deliver_request' do
-          %span.glyphicon.glyphicon-shopping-cart
-          Entregar producto
+
       = render 'dropdown', status: @request.status
 
     %h2
       Solicitud de Material
       %span#request_id{data: {id: @request.id}}
         - if @request.nro_solicitud != 0 && @request.nro_solicitud.present?
-          Nro. #{@request.nro_solicitud}
+          Nro. #{@request.obtiene_numero_solicitud}
 
-    #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
+    #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'validar-stocks' => validar_cantidades_api_request_url('{id}'), 'users-id' => user_path('{id}', format: :json)}}
+- if is_pdf? && @request.status == 'canceled'
+  .anulado
+    %h1 ANULADO
 
 #request.row
   .col-md-12
     - if is_pdf?
       %h4
         %span.text-muted Nro de solicitud:
-        = @request.nro_solicitud
+        = @request.obtiene_numero_solicitud
     - unless is_pdf?
       %h4
         %span.text-muted Estado:
@@ -77,32 +77,42 @@
                 %th.text-center Cantidad solicitada
                 - if @request.status == 'pending'
                   %th Cantidad a entregar
-                - if %w(pending delivered).include?(@request.status)
+                - if %w(delivered canceled).include?(@request.status)
                   %th.amount_delivered.text-center Cantidad entregada
                 - if @request.status == 'pending'
                   %th.delivered
           %tbody
             - @request.subarticle_requests.each do |s_request|
-              - if s_request.amount_delivered != 0
+              - if is_pdf?
+                - if @status_pdf == 'canceled' || @status_pdf == 'initiation'
+                  %tr{ id: s_request.id }
+                    %td= s_request.subarticle_code
+                    %td= s_request.subarticle_unit
+                    %td{title: s_request.subarticle_barcode}
+                      = s_request.subarticle_description
+                    %td.text-center
+                      = s_request.amount
+                - elsif s_request.amount_delivered != 0
+                  %tr{ id: s_request.id }
+                    %td= s_request.subarticle_code
+                    %td= s_request.subarticle_unit
+                    %td{title: s_request.subarticle_barcode}
+                      = s_request.subarticle_description
+                    %td.text-center
+                      - if @status_pdf == 'initiation'
+                        = s_request.amount
+                      - elsif @status_pdf == 'delivered'
+                        = s_request.total_delivered
+              - else
                 %tr{ id: s_request.id }
-                  - unless is_pdf?
-                    %td= s_request.subarticle_barcode
+                  %td= s_request.subarticle_barcode
                   %td= s_request.subarticle_code
                   %td= s_request.subarticle_unit
                   %td{title: s_request.subarticle_barcode}
                     = s_request.subarticle_description
-                  - if is_pdf?
-                    %td.text-center
-                      = @status_pdf == 'initiation' ? s_request.amount : s_request.total_delivered
-                  - else
-                    %td.text-center= s_request.amount
-                    - if @request.status == 'pending'
-                      %td.col-md-2.text-center= s_request.amount_delivered
-                    - if %w(pending delivered).include?(@request.status)
-                      %td.amount_delivered.text-center= s_request.total_delivered
-                    - if @request.status == 'pending'
-                      %td.delivered
-                        %span.glyphicon{ class: "#{'glyphicon-ok' if s_request.total_delivered == s_request.amount_delivered}" }
+                  %td.text-center= s_request.amount
+                  - if %w(delivered canceled).include?(@request.status)
+                    %td.amount_delivered.text-center= s_request.total_delivered
         = fecha_impresion if is_pdf?
         .buttons-actions.text-center
 

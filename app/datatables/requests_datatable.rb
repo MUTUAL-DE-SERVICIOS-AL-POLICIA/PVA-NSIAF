@@ -20,11 +20,10 @@ private
     array.map do |r|
       [
         I18n.l(r.created_at, format: :version),
-        r.nro_solicitud,
+        r.obtiene_numero_solicitud,
         r.user_name,
         r.user_title,
-        link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-eye-open'), r, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show')) + ' ' +
-        link_to(content_tag(:span, "", class: 'glyphicon glyphicon-sort-by-order'), '#editar', class: 'btn btn-info btn-xs editar-solicitud', title: 'Establecer número de solicitud', data: {solicitud: r.as_json}, id: dom_id(r))
+        link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-eye-open'), r, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show'))
       ]
     end
   end

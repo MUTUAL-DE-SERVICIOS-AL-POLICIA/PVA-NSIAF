@@ -21,6 +21,7 @@ private
       seguro_vigente = asset.seguros.vigentes.present? ? asset.seguros.vigentes.first : nil
       as = []
       as << asset.code
+      as << asset.code_old
       as << asset.description
       as << (asset.ingreso_fecha.present? ? I18n.l(asset.ingreso_fecha) : nil)
       as << asset.precio
@@ -56,7 +57,7 @@ private
   end
 
   def sort_column
-    columns = %w[assets.code description ingresos.factura_fecha assets.precio suppliers.name accounts.name users.name ubicaciones.abreviacion assets.seguro]
+    columns = %w[assets.code assets.code_old description ingresos.factura_fecha assets.precio suppliers.name accounts.name users.name ubicaciones.abreviacion assets.seguro]
     columns[params[:iSortCol_0].to_i]
   end
 

@@ -15,7 +15,6 @@
     margin: 20px 0 0;
     td:last-child { white-space: nowrap; }
   }
-
   .proceeding-date { margin-top: 30px; }
 }
 
@@ -24,23 +23,30 @@ table#pdf-assets-print {
   box-sizing: initial;
   -webkit-box-sizing: initial;
   -moz-box-sizing: initial;
+  margin-left:-5px;
+  margin-right:-6px;
   tbody {
     tr {
-      padding: 0;
       margin: 0;
       height: 96px !important;
+      max-height: 96px;
       td {
         border: 1px dotted white !important;
         padding: 0;
         vertical-align: middle;
+        display: inline-block;
+        max-width: 33.5%;
+        min-width: 33.5%;
         &:first-child {
-          width: 33.5%;
+          max-width: 33%;
+          min-width: 33%;
         }
         &:last-child {
-          width: 33%;
+          max-width: 33%;
+          min-width: 33%;
         }
         .contenedor {
-          margin: 2px 10px;
+          margin: 0px 0px 0px 0px;
           border: 1px dotted transparent !important;
           .detalle {
             line-height: 1;
@@ -57,7 +63,7 @@ table#pdf-assets-print {
 }
 
 #header{
-  padding-bottom: 2px;
+  padding-bottom: 10px;
   .image {
     width: 685px;
   }

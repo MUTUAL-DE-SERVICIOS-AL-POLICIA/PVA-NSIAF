@@ -1,13 +1,14 @@
 $ -> new Request() if $('[data-action=request]').length > 0
 
 class Request extends BarcodeReader
+  _nro_solicitud = ''
+  _observacion = ''
+
   cacheElements: ->
     @selected_user = null
     @$request_urls = $('#request-urls')
-
-    @$date = $('input#date')
+    @$date = $('input#date_restricted')
     @$user = $('input#people')
-    @$nro_solicitud = $('input#nro_solicitud')
     @$request = $('#request')
     @$barcode = $('#barcode')
     @$table_request = $('#table_request')
@@ -15,15 +16,14 @@ class Request extends BarcodeReader
     @$article = $('#article')
     @$subarticle = $('#subarticle')
     @$subarticles = $('#subarticles')
+    @$amountInput = $('#amount')
     @$selected_user = $('#selected-user')
     @$subtotal_sum = $('#subarticles .subtotal-sum')
     @$selectionSubarticles = $('#selection_subarticles')
     @$selected_subarticles = $('#selected_subarticles')
     @delivery_date = $(".input-group.note_entry_delivery_note_date")
     @invoice_date = $(".input-group.note_entry_invoice_date")
-
     @$idRequest = $('#request_id').data('id')
-
     @$btnEditRequest = $('#btn_edit_request')
     @$btnShowRequest = $('#btn-show-request')
     @$btnSaveRequest = $('#btn_save_request')
@@ -36,7 +36,6 @@ class Request extends BarcodeReader
     @btnShowNewRequest = $('#btn-show-new-request')
     @$btnCancelNewRequest = $('#btn_cancel_new_request')
     @$btnSaveNewRequest = $('#btn_save_new_request')
-
     @$templateRequestButtons = Hogan.compile $('#request_buttons').html() || ''
     @$templateRequestAccept = Hogan.compile $('#request_accept').html() || ''
     @$templateRequestInput = Hogan.compile $('#request_input').html() || ''
@@ -45,13 +44,24 @@ class Request extends BarcodeReader
     @$templateBtnsNewRequest = Hogan.compile $('#cancel_new_request').html() || ''
     @$templateUserInfo = Hogan.compile $('#show_user_info').html() || ''
     @$templateSelectedUser = Hogan.compile $('#selected-user-tpl').html() || ''
+    @$templateBusyIndicator = Hogan.compile $('#busy_indicator').html() || ''
 
     @request_save_url = decodeURIComponent @$request_urls.data('request-id')
     @subarticles_json_url = decodeURIComponent @$request_urls.data('get-subarticles')
     @user_url = decodeURIComponent(@$request_urls.data('users-id'))
     @users_json_url = decodeURIComponent @$request_urls.data('get-users')
+    @obtiene_nro_solicitud_url = decodeURIComponent @$request_urls.data('obtiene-nro-solicitud')
+    @obtiene_validar_stock_url = decodeURIComponent @$request_urls.data('validar-stocks')
 
-    @alert = new Notices({ele: 'div.main'})
+    @alert = new Notices({ele: 'div.main', delay: 2000})
+
+    @$confirmModal = $('#confirm-modal')
+    @$confirmarSolicitudModal = $('#modal-confirmar-solicitud')
+    @$alertaSolicitudModal = $('#modal-alerta-solicitud')
+
+    # Plantillas
+    @$confirmarSolicitudTpl = Hogan.compile $('#confirmar-solicitud-tpl').html() || ''
+    @$alertaSolicitudTpl = Hogan.compile $('#alerta-solicitud-tpl').html() || ''
 
   bindEvents: ->
     $(document).on 'click', @$btnShowRequest.selector, => @show_request()
@@ -65,8 +75,11 @@ class Request extends BarcodeReader
     $(document).on 'click', @btnSubarticleRequestRemove.selector, (e) => @subarticle_request_remove(e)
     $(document).on 'click', @btnShowNewRequest.selector, => @show_new_request()
     $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
-    $(document).on 'click', @$btnSaveNewRequest.selector, => @save_new_request()
+    $(document).on 'click', @$btnSaveNewRequest.selector, (e) => @confirmarSolicitud(e)
     $(document).on 'keyup', @$subarticle.selector, => @changeBarcode(@$subarticle)
+    $(document).on 'keyup', @$amountInput.selector,  => @val_amount()
+    $(document).on 'click', @$confirmarSolicitudModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
+    $(document).on 'click', @$alertaSolicitudModal.find('button[type=submit]').selector, (e) => @aceptarAlertaSolicitud(e)
 
     if @$material?
       @$article.remoteChained(@$material.selector, @$request_urls.data('subarticles-articles'))
@@ -76,23 +89,113 @@ class Request extends BarcodeReader
     if @$user?
       @get_users()
 
-  show_request: ->
-    sw = 0
-    @$table_request.find('.col-md-2 :input').each ->
-      if $(this).val() > $(this).parent().prev().text()
-        $(this).parent().addClass('has-error')
-        sw = 1
+  val_amount:  =>
+    valin = document.activeElement.value
+    valamount = document.activeElement.max
+    regex = /[0-9]|\./
+    if !regex.test(valin)
+      valin = ''
+    if parseInt(valin) < 0
+      valin = ''
+      document.activeElement.value = '0'
+      @open_modal('la cantidad no puede ser negativa')
+    if parseInt(valin) > parseInt(valamount)
+      document.activeElement.value = parseInt(valamount)
+      @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo ")
+    if valin == ''
+      document.activeElement.value = '0'
+
+  confirmarSolicitud: (e) =>
+    e.preventDefault()
+    url = @obtiene_nro_solicitud_url + "?d=" + $("#date_restricted").val()
+    $.ajax
+      url: url
+      type: 'GET'
+      dataType: 'JSON'
+    .done (xhr) =>
+      data = xhr
+      if data["tipo_respuesta"]
+        if data["tipo_respuesta"] == "confirmacion"
+          @$confirmModal.html @$confirmarSolicitudTpl.render(data)
+          modal = @$confirmModal.find(@$confirmarSolicitudModal.selector)
+          modal.modal('show')
+        else if data["tipo_respuesta"] == "alerta"
+          @$confirmModal.html @$alertaSolicitudTpl.render(data)
+          modal = @$confirmModal.find(@$alertaSolicitudModal.selector)
+          modal.modal('show')
       else
-        $(this).parent().removeClass('has-error')
-    if sw == 0
-      @$table_request.find('.col-md-2 :input').each ->
-        val = $(this).val()
-        val = if val then val else 0
-        $(this).parent().html val
-      @$table_request.find('.text-center').hide()
-      @$table_request.append @$templateRequestButtons.render()
-    else
-      @open_modal('La cantidad a entregar es mayor a la cantidad solicitada')
+        @save_new_request()
+
+  aceptarConfirmarSolicitud: (e) =>
+    e.preventDefault()
+    el = @$confirmModal.find('#modal_observacion')
+    if el
+      _observacion = el.val()
+    @$confirmModal.find(@$confirmarSolicitudModal.selector).modal('hide')
+    $form = $(e.target).closest('form')
+    @save_new_request()
+
+  validarObservacion: (e) =>
+    el = @$confirmModal.find('#modal_observacion')
+    if el
+      valor = $.trim(el.val())
+      if valor
+        el.parents('.form-group').removeClass('has-error')
+        el.next().remove()
+        @aceptarConfirmarSolicitud(e)
+      else
+        el.parents('.form-group').addClass('has-error')
+        el.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
+        false
+
+  aceptarAlertaSolicitud: (e) ->
+    e.preventDefault()
+    @$confirmModal.find(@$alertaSolicitudModal.selector).modal('hide')
+    $form = $(e.target).closest('form')
+    false
+
+  show_request: ->
+    @validar_cantidades(@$idRequest, @generar_datos())
+
+  generar_datos: ->
+    data = []
+    @$table_request.find('tbody > tr').each (i) ->
+      data.push { id: this.getAttribute("id"), cantidad: $(this).find("input").val() }
+    data
+
+  validar_cantidades: (id, data) ->
+    url = @obtiene_validar_stock_url.replace(/{id}/, id)
+    sw = 0
+    _ = @
+    $.ajax
+      url: url
+      type: 'POST'
+      dataType: 'JSON'
+      data: { cantidades: data }
+    .done (respuesta) =>
+      $.map(respuesta.data, (val, i) ->
+        elemento = $('#' + val.id)
+        cantidad_solicitada = parseInt(elemento.find('td')[4].innerText)
+        if elemento.find('input').val() > cantidad_solicitada
+          if val.verificacion
+            _.open_modal('La cantidad a entregar es mayor a la cantidad solicitada.')
+          else
+            _.open_modal(val.mensaje)
+          sw = 1
+        else
+          if elemento.find('input').val() < 0
+            _.open_modal('La cantidad a entregar es menor a 0.')
+            sw = 1
+      )
+      if sw == 0
+        @$table_request.find('input').each ->
+          val = parseInt($(this).val())
+          val = if val then val else 0
+          $(this).parent().html val
+        @$table_request.find('.text-center').hide()
+        @$table_request.append @$templateRequestButtons.render()
+    .fail (xhr, status) =>
+      @alert.danger 'Se ha producido un error vuelva intentarlo.'
 
   edit_request: ->
     @show_buttons()
@@ -100,9 +203,11 @@ class Request extends BarcodeReader
     @$request.find('table tbody tr').append @$templateRequestInput.render()
 
   update_request: ->
+    @$table_request.find('.text-center').hide()
+    @$table_request.append @$templateBusyIndicator.render()
     materials = $.map(@$request.find('tbody tr'), (val, i) ->
       id: val.id
-      amount_delivered: $(val).find('td.col-md-2').text()
+      amount_delivered: $(val).find('td.col-md-1').text()
     )
     data = { status: 'pending', subarticle_requests_attributes: materials }
     $.ajax
@@ -115,7 +220,7 @@ class Request extends BarcodeReader
   cancel_request: ->
     @$table_request.find('.text-center').show()
     @$table_request.find('.text-center').next().remove()
-    @input_to_text()
+    @edit_request()
 
   deliver_request: ->
     @show_buttons()
@@ -165,7 +270,14 @@ class Request extends BarcodeReader
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace("description")
       queryTokenizer: Bloodhound.tokenizers.whitespace
       limit: 100
-      remote: @subarticles_json_url
+      remote:
+        url: @subarticles_json_url,
+        ajax:
+          beforeSend: (xhr, settings) ->
+            if  $(document.activeElement).typeahead != null
+              $(document.activeElement).addClass('loadinggif')
+          complete: ->
+            $(document.activeElement).removeClass('loadinggif')
     )
     bestPictures.initialize()
     @$subarticle.typeahead null,
@@ -184,19 +296,6 @@ class Request extends BarcodeReader
           @$subarticles.append @$templateNewRequest.render(data)
       else
         $(@$templateNewRequest.render(data)).insertBefore(@$subtotal_sum)
-        #@refresh_date()
-
-  subarticle_request_plus: ($this) ->
-    $tr = @get_amount($this)
-    $amount = $tr.find('.amount')
-    if $amount.text() < $tr.find('.amount').data('stock')
-      $amount.text(parseInt($amount.text()) + 1)
-    else
-      @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo '#{$tr.find('td:first').text()}'")
-
-  subarticle_request_minus: ($this) ->
-    $amount = @get_amount($this).find('.amount')
-    $amount.text(parseInt($amount.text()) - 1) unless $amount.text() is '1'
 
   subarticle_request_remove: ($this) ->
     @get_amount($this).remove()
@@ -208,19 +307,19 @@ class Request extends BarcodeReader
     if @$subarticles.find('tr').length
       if @selected_user
         if @$date.val().trim()
-          if @$nro_solicitud.val().trim()
-            @btnShowNewRequest.hide()
-            @$selectionSubarticles.hide()
-            table = @$subarticles.parent().clone()
-            table.find('.actions-request').remove()
-            table.find('thead tr').prepend '<th>#</th>'
-            table.find('#subarticles tr').each (i) ->
-              $(this).prepend "<td>#{ i+1 }</td>"
-            @$selected_subarticles.append table
-            @$selected_subarticles.append @$templateBtnsNewRequest.render()
-            @showUserInfo()
-          else
-            @open_modal("Se debe especificar el número de solicitud")
+          @btnShowNewRequest.hide()
+          @$selectionSubarticles.hide()
+          table = @$subarticles.parent().clone()
+          table.find('.actions-request').remove()
+          table.find('.amount').each (l) ->
+            d = ($(this).find('#amount').val())
+            $(this).text(parseInt(d))
+          table.find('thead tr').prepend '<th>#</th>'
+          table.find('#subarticles tr').each (i) ->
+            $(this).prepend "<td>#{ i+1 }</td>"
+          @$selected_subarticles.append table
+          @$selected_subarticles.append @$templateBtnsNewRequest.render()
+          @showUserInfo()
         else
           @open_modal("Se debe especificar una fecha")
       else
@@ -241,14 +340,16 @@ class Request extends BarcodeReader
     "#{date.join('/')} #{time.join(':')}"
 
   save_new_request: ->
+    @$selected_subarticles.find('.text-center').hide()
+    @$selected_subarticles.append @$templateBusyIndicator.render()
     subarticles = $.map(@$subarticles.find('tr'), (val, i) ->
       subarticle_id: val.id
-      amount: $(val).find('td.amount').text()
+      amount: $(val).find('input').val()
     )
     json_data =
       status: 'initiation'
       user_id: @selected_user.id
-      nro_solicitud: @$nro_solicitud.val()
+      observacion: _observacion
       subarticle_requests_attributes: subarticles
       created_at: @parse_date_time(@$date.val()) # yyyy/mm/dd HH:MM:SS
     $.post @request_save_url.replace(/{id}/, ''), { request: json_data }, null, 'script'
@@ -256,7 +357,6 @@ class Request extends BarcodeReader
   showUserInfo: ->
     result = $.extend(@selected_user, {
       date: @$date.val(),
-      nro_solicitud: @$nro_solicitud.val()
     })
     $user = @$templateUserInfo.render(result)
     $table = @$selected_subarticles.find("table")
@@ -267,12 +367,21 @@ class Request extends BarcodeReader
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name")
       queryTokenizer: Bloodhound.tokenizers.whitespace
       limit: 100
-      remote: @users_json_url
+      remote:
+        url: @users_json_url,
+        ajax:
+          beforeSend: (xhr, settings) ->
+            if ($(document.activeElement).typeahead != null)
+              $(document.activeElement).addClass('loadinggif')
+          complete: ->
+            $(document.activeElement).removeClass('loadinggif')
+
     )
     bestPictures.initialize()
     @$user.typeahead null,
       displayKey: 'name'
       source: bestPictures.ttAdapter(),
+
       templates:
         empty: [
           '<p class="empty-message">',
@@ -290,26 +399,3 @@ class Request extends BarcodeReader
   display_selected_user: ->
     selected_user = @$templateSelectedUser.render(@selected_user)
     @$selected_user.html(selected_user)
-
-  refresh_date: ->
-    @delivery_date.empty().append('<input id="note_entry_delivery_note_date" class="form-control" type="text" name="note_entry[delivery_note_date]"><span class="input-group-addon glyphicon glyphicon-calendar"></span>')
-    delivery_id = @delivery_date.find('input').attr('id')
-    @date_picker(@get_day(), delivery_id)
-    @invoice_date.empty().append('<input id="note_entry_invoice_date" class="form-control" type="text" name="note_entry[invoice_date]"><span class="input-group-addon glyphicon glyphicon-calendar"></span>')
-    invoice_date = @invoice_date.find('input').attr('id')
-    @date_picker(@get_day(), invoice_date)
-
-  get_day: ->
-    day = 9999
-    @$subarticles.find('tr .date_entry').each ->
-      val = parseInt($(this).text())
-      day = val if val < day
-    day
-
-  date_picker : (days, id) ->
-    $("##{id}").datepicker
-      autoclose: true
-      format: "dd/mm/yyyy"
-      language: "es"
-      startDate: "-#{days}d"
-      endDate: "+0d"

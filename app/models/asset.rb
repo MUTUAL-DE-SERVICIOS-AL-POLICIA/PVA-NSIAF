@@ -113,6 +113,28 @@ class Asset < ActiveRecord::Base
     self.todos.where(barcode: barcodes.flatten.uniq).order(:code)
   end
 
+  #agregados
+  def self.buscar_barcode_to_pdf(barcode)
+    barcodes = barcode.split(',').map(&:strip)
+    arrayVal = Array.new
+    barcodes.map! do |rango|
+      guiones = rango.split('-').map(&:strip)
+      guiones.length > 1 ? Array(guiones[0].to_i..guiones[1].to_i).map(&:to_s) : guiones
+    end
+    barcodes.each do |x|
+      if x[0].include?("x")
+        mult = x[0].split('x').map(&:to_i)
+        for i in 1..mult[0]
+          activos = where(barcode: mult[1])
+          arrayVal += activos
+        end
+      end
+      activos = where(barcode: x.flatten)
+      arrayVal += activos
+    end
+    arrayVal
+  end
+
   def self.derecognised
     where(status: 0)
   end
@@ -195,7 +217,7 @@ class Asset < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'code'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'supplier'), h.get_column(self, 'account'), h.get_column(self, 'user'), h.get_column(self, 'ubicacion')]
+    [h.get_column(self, 'code'), h.get_column(self, 'code_old'), h.get_column(self, 'description'), h.get_column(self, 'incorporacion'), h.get_column(self, 'supplier'), h.get_column(self, 'account'), h.get_column(self, 'user'), h.get_column(self, 'ubicacion')]
   end
 
   def self.without_barcode
@@ -228,7 +250,7 @@ class Asset < ActiveRecord::Base
           array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
         end
       else
-         array = array.where("assets.code LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR suppliers.name LIKE ? OR ingresos.factura_fecha LIKE ? OR ubicaciones.abreviacion LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%", "%#{sSearch}%")
+         array = array.where("assets.code LIKE ? OR assets.code_old LIKE ? OR assets.description LIKE ? OR users.name LIKE ? OR accounts.name LIKE ? OR suppliers.name LIKE ? OR ingresos.factura_fecha LIKE ? OR ubicaciones.abreviacion LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{convertir_fecha(sSearch)}%", "%#{sSearch}%")
       end
     end
     array

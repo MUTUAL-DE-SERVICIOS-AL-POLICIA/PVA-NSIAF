@@ -100,3 +100,5 @@ gem 'aasm'
 
 # Queries con el operador UNION para ActiveRecord
 gem 'active_record_union'
+
+gem 'exception_notification'

@@ -1,7 +1,7 @@
 .page-header{data: {action: 'request'}}
   %h2= t("requests.title.new")
 
-#request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'get-users' => autocomplete_users_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
+#request-urls{data: {'obtiene-nro-solicitud' => obtiene_nro_solicitud_requests_path, 'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'get-users' => autocomplete_users_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
 
 #selection_subarticles
   %p.bg-info En la caja de texto busque el Sub Artículo a desear, el cual sera añadido en la tabla una vez seleccionado
@@ -9,13 +9,9 @@
     .col-md-4
       %form.form-horizontal
         .form-group
-          %label.col-sm-4.control-label Nro Solicitud
-          .col-sm-8
-            = text_field_tag 'nro_solicitud', '', class: 'form-control', autofocus: true
-        .form-group
           %label.col-sm-4.control-label Fecha
           .col-sm-8
-            = text_field_tag 'date', format_date(Date.today), class: 'form-control'
+            = text_field_tag 'date_restricted', format_date(Date.today), class: 'form-control'
         .form-group
           %label.col-sm-4.control-label Funcionario
           .col-sm-8
@@ -50,3 +46,6 @@
 #selected_subarticles
 
 = render 'material'
+
+#confirm-modal
+= render 'request_modal'

@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20170108201838) do
     t.string   "serie",               limit: 255
     t.integer  "ingreso_id",          limit: 4
     t.integer  "ubicacion_id",        limit: 4
+    t.string   "code_old",            limit: 255
   end
 
   add_index "assets", ["account_id"], name: "index_assets_on_account_id", using: :btree
@@ -315,15 +316,17 @@ ActiveRecord::Schema.define(version: 20170108201838) do
   add_index "proceedings", ["user_id"], name: "index_proceedings_on_user_id", using: :btree
 
   create_table "requests", force: :cascade do |t|
-    t.integer  "admin_id",      limit: 4
-    t.integer  "user_id",       limit: 4
+    t.integer  "admin_id",              limit: 4
+    t.integer  "user_id",               limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "status",        limit: 255, default: "0"
+    t.string   "status",                limit: 255, default: "0"
     t.datetime "delivery_date"
-    t.boolean  "invalidate",                default: false
-    t.string   "message",       limit: 255
-    t.integer  "nro_solicitud", limit: 4,   default: 0
+    t.boolean  "invalidate",                        default: false
+    t.string   "message",               limit: 255
+    t.integer  "nro_solicitud",         limit: 4,   default: 0
+    t.string   "incremento_alfabetico", limit: 255
+    t.string   "observacion",           limit: 255
   end
 
   create_table "resumen", id: false, force: :cascade do |t|

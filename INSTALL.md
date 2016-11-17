@@ -2,89 +2,99 @@
 
 ## Requisitos
 
-Esta instalación se la realizó sobre lo siguiente:
-
-* Sistema Operativo: Debian Wheezy
-* Usuario: uactivos
-* Servidor: www.dominio.com
-* Usuario base de datos: root
-* Contraseña base de datos: root
+* Sistema Operativo: Debian Jessie
+* Usuario: nsiaf
+* Servidor: www.dominio.com.bo
 
 ## Paquetes y dependencias
 
 La instalación de paquetes en el servidor remoto
 
 ```console
-sudo apt-get install apache2 curl git build-essential zlibc zlib1g-dev zlib1g libcurl4-openssl-dev apache2-threaded-dev libssl-dev libopenssl-ruby apache2-prefork-dev libapr1-dev libaprutil1-dev libreadline6 libreadline6-dev
+sudo apt-get install -y curl checkinstall patch bzip2 gawk g++ gcc make \
+libc6-dev patch libreadline6-dev zlib1g-dev libssl-dev libyaml-dev \
+libsqlite3-dev sqlite3 autoconf libgmp-dev libgdbm-dev libncurses5-dev \
+automake libtool bison pkg-config libffi-dev wget
 ```
 
 Instalar [Git](http://git-scm.com/)
 
 ```console
-sudo apt-get install git git-core
+sudo apt-get install -y git git-core
 ```
 
 Instalar [ImageMagick](http://www.imagemagick.org/)
 
 ```console
-sudo apt-get install imagemagick
+sudo apt-get install -y imagemagick libmagickwand-dev
+```
+
+Instalar Vim como editor por defecto:
+
+```console
+sudo apt-get install -y vim
+sudo update-alternatives --set editor /usr/bin/vim.basic
 ```
 
 ### wkhtmltopdf
 
-[wkhtmltopdf](http://wkhtmltopdf.org/) permite la conversión de HTML a PDF. En los respositorios oficiales de Debian está la versión `0.9.9` el cual no cumple correctamente con su función, debido a que estamos utilizando funciones nuevas. Se recomienda la versión `0.12.0` o superiores, el cual se puede descargar manualmente desde http://wkhtmltopdf.org/downloads.html
+[wkhtmltopdf](http://wkhtmltopdf.org/) permite la conversión de HTML a PDF. En
+los respositorios oficiales de Debian está la versión `0.9.9` el cual no cumple
+correctamente con su función, debido a que estamos utilizando funciones nuevas.
+Se recomienda la versión `0.12.0` o superiores, el cual se puede descargar
+manualmente desde http://wkhtmltopdf.org/downloads.html
 
-Para el caso de Debian Wheezy descargué la versión de 64-bit:
-
+```console
+wget -c http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
+tar -xvf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
+sudo mv wkhtmltox /opt/
 ```
-wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.1/wkhtmltox-0.12.1_linux-wheezy-amd64.deb
-sudo dpkg -i wkhtmltox-0.12.1_linux-wheezy-amd64.deb
-```
 
-La instalación se hará en `/usr/local/bin/wkhtmltopdf`
+La ubicación del binario es: `/opt/wkhtmltox/bin/wkhtmltopdf`
 
 ### Conversión de formatos
 
-Éste sistema depende del API de Conversión de Formatos para la importación de archivos `DBF`, cuyo repositorio es https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos
+Éste sistema depende del API de Conversión de Formatos para la importación de
+archivos `DBF`, cuyo repositorio es https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos
 
 La instalación del API de Conversión de Formatos está descrita en el archivo [INSTALL.md](https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos/blob/master/INSTALL.md)
 
+Nota: Por incompatibilidad en las versiones del framework phalcon no funciona
+correctamente la instalación, por tanto se recomienda utilizar el servicio
+provisto por la ADSIB: `https://intranet.adsib.gob.bo/conversion-formatos`
+
 ## Ruby
 
-Instalando [Ruby Version Manager - RVM](https://rvm.io/)
+Eliminar la versión actual de ruby en el sistema:
 
 ```console
-curl -L get.rvm.io | bash -s stable
+sudo apt-get remove ruby1.8
 ```
 
-Recargar el comando `rvm`
+Descargar Ruby y compilarlo:
 
 ```console
-source ~/.rvm/scripts/rvm
+mkdir /tmp/ruby && cd /tmp/ruby
+curl --remote-name --progress https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz
+echo 'c39b4001f7acb4e334cb60a0f4df72d434bef711  ruby-2.3.1.tar.gz' | shasum -c - && tar xzf ruby-2.3.1.tar.gz
+cd ruby-2.3.1
+./configure --disable-install-rdoc
+make
+sudo make install
 ```
 
-Instalando [Ruby](https://www.ruby-lang.org/)
+Instalar la gema Bundler:
 
 ```console
-rvm install 2.1
+sudo gem install bundler --no-ri --no-rdoc
 ```
 
-Estableciendo la versión de `Ruby` por defecto
+## Usuario de Sistema Operativo
 
-```console
-rvm use 2.1 --default
+Crear el usuario `nsiaf`:
+
 ```
-
-Evitar que se instale `ri` y `rdoc`
-
-```console
-echo "gem: --no-document" > ~/.gemrc
-```
-
-Instalar `RubyGems`
-
-```console
-rvm rubygems current
+sudo adduser --disabled-login --gecos 'NSIAF' nsiaf
 ```
 
 ## Base de Datos
@@ -101,32 +111,51 @@ Creación de la base de datos
 mysql -u root -p
 
 mysql> CREATE DATABASE IF NOT EXISTS `nsiaf_production` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_unicode_ci`;
+mysql> exit
+Bye
 ```
 
-## Deploy
+## NSIAF
 
-Clonamos el repositorio del Sistema de Activos Fijos y Almacenes
+Instalar NSIAF en el directorio home del usuario "nsiaf":
 
 ```console
-cd ~
-git clone git@gitlab.geo.gob.bo:adsib/nsiaf.git
-cd nsiaf
+cd /home/nsiaf
 ```
 
-Instalar las gemas
+Clonar el código fuente:
 
 ```console
-bundle install --without development test
+sudo -u nsiaf -H git clone https://gitlab.geo.gob.bo/adsib/nsiaf.git -b master nsiaf
 ```
 
-Renombramos los archivos de ejemplo
+Configurar el sistema:
 
 ```console
-cp config/database.yml.sample config/database.yml
-cp config/secrets.yml.sample config/secrets.yml
+# Ingresar al folder de instalación
+cd /home/nsiaf/nsiaf
+
+# Copiar el archivo de configuración de la base de datos de ejemplo
+sudo -u nsiaf -H cp config/database.yml.sample config/database.yml
+
+# Copiar el archivo secrets de ejemplo
+sudo -u nsiaf -H cp config/secrets.yml.sample config/secrets.yml
+sudo -u nsiaf -H chmod 0600 config/secrets.yml
 ```
 
-Editar `database.yml` con el siguiente contenido
+Instalar las gemas:
+
+```console
+sudo -u nsiaf -H bundle install --deployment --without development test
+```
+
+Editar `config/database.yml`:
+
+```console
+sudo -u nsiaf -H editor config/database.yml
+```
+
+si se necesita hacer una configuración más específica cambiar lo siguiente:
 
 ```yaml
 production:
@@ -135,39 +164,79 @@ production:
   database: nsiaf_production
   pool: 5
   username: root
-  password: root
+  password:
   socket: /var/run/mysqld/mysqld.sock
 ```
 
+Hacer que `config/database.yml` solo sea accesible por el usuario nsiaf:
+
+```console
+sudo -u nsiaf -H chmod o-rwx config/database.yml
+```
+
+Generar la clave secreta:
+
+```console
+sudo -u nsiaf -H bundle exec rake secret
+```
+
+copiar la clave secreta y editar `config/secrets.yml`:
+
+```console
+sudo -u nsiaf -H editor config/secrets.yml
+```
 Editar `secrets.yml` con el siguiente contenido
 
 ```yml
 production:
-  convert_api_url: 'http://localhost/conversion-formatos'
-  rails_relative_url_root: ''           # Deploy en la raíz del dominio (/)
-  # rails_relative_url_root: '/activos' # Deploy en subdirectorio activos (/activos)
-  secret_key_base: d7c345615c14afe85dd35d9169e9743c4f24de413990b3133b93865f1f5f490db6a3c1327e9a5af3fc845937a7f489bbda865a25caa424144580d2d106cb121c
+  convert_api_url: <%= ENV["CONVERT_API_URL"] %>
+  rails_host: <%= ENV["RAILS_HOST"] %>
+  rails_relative_url_root: <%= ENV["RAILS_RELATIVE_URL_ROOT"] %>
+  secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
+  wkhtmltopdf: '/opt/wkhtmltox/bin/wkhtmltopdf'
+  ufv_desde: '01-01-2015'
+  exception_notification:
+    email_prefix: "[NSIAF] "
+    sender_address: "notificador <noreply@dominio.gob.bo>"
+    exception_recipients: "desarrolladores@dominio.gob.bo"
+  smtp_settings:
+    address: 'smtp.dominio.gob.bo'
+    port: 587
+    domain: 'dominio.gob.bo'
+    user_name: 'nsiaf'
+    password: 'mi-super-password'
+    authentication: 'plain'
+    enable_starttls_auto: true
 ```
 
 donde:
 
 * `convert_api_url` es la URL donde se encuentra instalado el API de [Conversión de Formatos](https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos)
-* `rails_relative_url_root` es la ubicación del subdirectorio de deploy tal como: `www.dominio.com/nsiaf`
-* `secret_key_base` se **DEBE** volver a generar desde la línea de comandos con `rake secret`
+* `rails_host` es el host del servidor de deploy tal como: `www.dominio.com.bo`
+* `rails_relative_url_root` es la ubicación del subdirectorio de deploy tal como: `www.dominio.com.bo/activos`
+  dejar una cadena vacía en el caso que el deploy sea en la raíz del dominio.
+* `secret_key_base` se **DEBE** reemplazar con la clave secreta generada en el
+* `wkhtmltopdf` es la ubicación del binario para conversión de HTML a PDF.
+* `ufv_desde` descarga UFVs desde esa fecha del sitio web del Banco Central de
+  Bolivia.
+* `sender_address` es el email desde donde se haran las notificaciones por email
+* `exception_recipients` ahí va los destinos de los emails puede ser uno o
+  varios emails separados por comas: `des1@dominio.gob.bo, des2@dominio.gob.bo`
+* `smtp_settings` la configuración del servidor de email desde el cual se
+  enviará los emails de notificación de excepciones
 
-Compilamos los archivos CSS y JS
+Compilamos los archivos CSS y JS:
 
 ```console
-RAILS_ENV=production bundle exec rake assets:clobber
-RAILS_ENV=production bundle exec rake assets:precompile
+sudo -u nsiaf -H bundle exec rake assets:clobber RAILS_ENV=production
+sudo -u nsiaf -H bundle exec rake assets:precompile RAILS_ENV=production
 ```
 
-Crear la base de datos e inicializar con la configuración por defecto
+Crear la estructura de tablas e inicializar con la configuración por defecto
 
 ```console
-RAILS_ENV=production bundle exec rake db:create
-RAILS_ENV=production bundle exec rake db:migrate
-RAILS_ENV=production bundle exec rake db:seed
+sudo -u nsiaf -H bundle exec rake db:migrate RAILS_ENV=production
+sudo -u nsiaf -H bundle exec rake db:seed RAILS_ENV=production
 ```
 
 El último comando establece los datos del usuario `super administrador`
@@ -175,105 +244,150 @@ El último comando establece los datos del usuario `super administrador`
 * Usuario: `admin`
 * Contraseña: `demo123`
 
+## Cron Jobs
+
+Instalación de crontab:
+
+```console
+sudo apt-get install -y cron
+```
+
+Configurar los tareas programadas:
+
+```console
+sudo -u nsiaf -H bundle exec whenever -s 'environment=production' --update-crontab
+```
+
 ## Apache
 
-Instalar `passenger` en el servidor remoto
+Instalar `apache2` en el servidor:
 
 ```console
-gem install passenger
+sudo apt-get install -y apache2 libcurl4-openssl-dev apache2-mpm-worker \
+apache2-threaded-dev libapr1-dev libaprutil1-dev
 ```
 
-Instalar el módulo de `passenger` para `apache2`
+Instalar `passenger` en el servidor:
 
 ```console
-rvmsudo passenger-install-apache2-module
+sudo gem install passenger --version 5.0.30 --no-ri --no-rdoc
 ```
 
-Después de instalar el módulo de `passenger`, es necesario adicionar a la configuración de Apache las líneas que indica al final de la instalación del módulo. Esto depende de la versión de `Ruby` instalado con `rvm` y la versión de la gema `passenger`.
+Nota: se puede realizar la instalación de Passenger sin especificar la versión
+solamente tener cuidado de copiar la ruta exacta para los archivos `passenger.conf`
+y `passenger.load`.
+
+Instalar el módulo de `passenger` para `apache2`:
 
 ```console
-sudo nano /etc/apache2/apache2.conf
+sudo passenger-install-apache2-module
 ```
 
-Agregamos al final las siguientes líneas:
+Nota:
+
+En la parte que `passenger-install-apache2-module` pide seleccionar los lenguajes
+de programación para los cuales se instalará el módulo, seleccionar Ruby solamente.
+
+Después de instalar el módulo de `passenger`, crear los archivos de configuración:
+
+```console
+sudo editor /etc/apache2/mods-available/passenger.conf
+```
 
 ```apache
-LoadModule passenger_module /home/uactivos/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.50/buildout/apache2/mod_passenger.so
 <IfModule mod_passenger.c>
-  PassengerRoot /home/uactivos/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.50
-  PassengerDefaultRuby /home/uactivos/.rvm/gems/ruby-2.1.2/wrappers/ruby
+  PassengerRoot /usr/local/lib/ruby/gems/2.3.0/gems/passenger-5.0.30
+  PassengerDefaultRuby /usr/local/bin/ruby
 </IfModule>
 ```
 
-Reiniciamos el servidor Apache
-
 ```console
-sudo /etc/init.d/apache2 restart
+sudo editor /etc/apache2/mods-available/passenger.load
 ```
 
-Habilitamos el módulo `mod_rewrite` para Apache
+```apache
+LoadModule passenger_module /usr/local/lib/ruby/gems/2.3.0/gems/passenger-5.0.30/buildout/apache2/mod_passenger.so
+```
+
+Nota: El contenido de éstos dos archivos depende de la versión de Ruby y de la
+versión de la gema Passenger.
+
+Habilitar el módulo `passenger`:
+
+```console
+sudo a2enmod passenger
+```
+
+Habilitar el módulo `mod_rewrite` para Apache
 
 ```console
 sudo a2enmod rewrite
 ```
 
-Movemos el sistema al directorio `/var/www`
-
-```
-cd ~
-sudo mv nsiaf /var/www
-```
-
-Configuración de Apache para el sistema de activos
+Mover NSIAF a `/var/www/html`:
 
 ```console
-sudo nano /etc/apache2/sites-available/activos.dominio.com
+sudo mv /home/nsiaf/nsiaf /var/www/html/
+```
+
+Configuración de Apache para el sistema NSIAF
+
+```console
+sudo editor /etc/apache2/sites-available/www.dominio.com.conf
 ```
 
 Adicionar el siguiente contenido si se va instalar la aplicación en la raiz del dominio
 
 ```apache
 <VirtualHost *:80>
-  ServerName www.dominio.com
-  DocumentRoot /var/www/nsiaf/public
+  ServerName www.dominio.com.bo
+  DocumentRoot /var/www/html/nsiaf/public
   RailsEnv production
-  <Directory /var/www/nsiaf/public>
+  <Directory /var/www/html/nsiaf/public>
     Allow from all
     Options -MultiViews
   </Directory>
 </VirtualHost>
 ```
 
-Contenido para deploy de la aplicación en un subdirectorio llamado `/activos`
+Contenido para deploy de la aplicación en un subdirectorio `/activos`
 
 ```apache
-<IfModule mod_rewrite.c>
-    RewriteEngine on
-    RewriteRule ^/activos$ /activos/ [R]
-</IfModule>
+<VirtualHost *:80>
+  ServerName www.dominio.com.bo
+  DocumentRoot /var/www/html
 
-Alias /activos /var/www/nsiaf/public
-RailsBaseURI /activos
-<Directory /var/www/nsiaf/public>
-    RailsEnv production
-    PassengerAppRoot /var/www/nsiaf/
-    PassengerUser uactivos
+  <IfModule mod_rewrite.c>
+      RewriteEngine on
+      RewriteRule ^/activos$ /activos/ [R]
+  </IfModule>
 
-    Options FollowSymLinks -MultiViews
-    AllowOverride All
-    Order deny,allow
-    allow from all
-</Directory>
+  Alias /activos /var/www/html/nsiaf/public
+  RailsBaseURI /activos
+  <Directory /var/www/html/nsiaf/public>
+      RailsEnv production
+      PassengerAppRoot /var/www/html/nsiaf/
+
+      # Options FollowSymLinks -MultiViews -Indexes
+      AllowOverride All
+      Order deny,allow
+      allow from all
+  </Directory>
+</VirtualHost>
 ```
 
 Habilitar el nuevo sitio y reiniciar Apache
 
 ```console
-sudo a2ensite activos.dominio.com
-sudo /etc/init.d/apache2 restart
+sudo a2ensite www.dominio.com.bo
+sudo service apache2 restart
 ```
 
-Visitamos el sitio http://activos.dominio.com o http://dominio.com/activos depende de la configuración que se haya elegido para el deploy.
+Nota: Puede ser necesario deshabilitar el dominio por defecto con el comando
+`sudo a2dissite 000-default`
+
+Visitamos el sitio http://www.dominio.com.bo o http://www.dominio.com.bo/activos depende
+de la configuración que se haya elegido para el deploy.
 
 ## Actualización
 
@@ -282,31 +396,37 @@ Para actualizar a una versión reciente del sistema realizar los siguientes paso
 Actualización del repositorio:
 
 ```console
-cd /var/www/nsiaf
-git pull origin master
+cd /var/www/html/nsiaf
+sudo -u nsiaf -H git pull origin master
 ```
 Actualización de gemas:
 
 ```console
-bundle install --without development test
+sudo -u nsiaf -H bundle install --deployment --without development test
 ```
 
 Ejecución de migraciones:
 
 ```console
-RAILS_ENV=production bundle exec rake db:migrate
-RAILS_ENV=production bundle exec rake db:seed
+sudo -u nsiaf -H bundle exec rake db:migrate RAILS_ENV=production
+sudo -u nsiaf -H bundle exec rake db:seed RAILS_ENV=production
 ```
 
 Compilación de archivos CSS y JS:
 
 ```console
-RAILS_ENV=production bundle exec rake assets:clobber
-RAILS_ENV=production bundle exec rake assets:precompile
+sudo -u nsiaf -H bundle exec rake assets:clobber RAILS_ENV=production
+sudo -u nsiaf -H bundle exec rake assets:precompile RAILS_ENV=production
+```
+
+Actualización de tareas programadas:
+
+```console
+sudo -u nsiaf -H bundle exec whenever -s 'environment=production' --update-crontab
 ```
 
 Reinicio del servidor mediante `passenger`:
 
 ```console
-touch tmp/restart.txt
+sudo -u nsiaf -H touch tmp/restart.txt
 ```
