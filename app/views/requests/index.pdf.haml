@@ -1,17 +1,19 @@
 .title_pdf
   %h3 #{t("#{controller_name}.title.title")}
 
-%table.table.table-condensed.table-bordered
+%table.table.table-condensed.table-bordered.valorado
   %thead
     %tr
-      %th= Request.human_attribute_name('id')
-      %th= Request.human_attribute_name('created_at')
+      %th Nro
+      %th= Request.human_attribute_name('nro_solicitud')
+      %th.col-xs-1= Request.human_attribute_name('created_at')
       %th= Request.human_attribute_name('name')
       %th= Request.human_attribute_name('title')
   %tbody
-    - @array.each do |r|
+    - @array.each_with_index do |req, i|
       %tr
-        %td= r.id
-        %td= I18n.l(r.created_at, format: :version)
-        %td= r.user_name
-        %td= r.user_title
+        %td= i + 1
+        %td= req.obtiene_numero_solicitud
+        %td= I18n.l(req.created_at, format: :version)
+        %td= req.user_name
+        %td= req.user_title
