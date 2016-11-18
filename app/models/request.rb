@@ -61,12 +61,12 @@ class Request < ActiveRecord::Base
   end
 
   def self.to_csv
-    columns = %w(created_at nro_solicitud name title)
+    columns = %w(nro_solicitud created_at name title)
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }
       all.each do |request|
-        a = request.attributes.values_at(*columns)
-        a.pop(3)
+        a = []
+        a.push(request.obtiene_numero_solicitud)
         a.push(I18n.l(request.created_at, format: :version))
         a.push(request.user_name)
         a.push(request.user_title)
