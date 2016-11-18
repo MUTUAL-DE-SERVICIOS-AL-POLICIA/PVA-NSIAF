@@ -23,6 +23,7 @@ private
         r.obtiene_numero_solicitud,
         r.user_name,
         r.user_title,
+        content_tag(:h4, content_tag(:span, I18n.t("requests.title.status.#{r.status}"), class: "label label-#{ r.tipo_estado }")),
         link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-eye-open'), r, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show'))
       ]
     end
@@ -45,7 +46,7 @@ private
   end
 
   def sort_column
-    columns = %w[requests.created_at requests.nro_solicitud users.name users.title]
+    columns = %w[requests.created_at requests.nro_solicitud users.name users.title status]
     columns[params[:iSortCol_0].to_i]
   end
 

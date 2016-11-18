@@ -61,7 +61,7 @@ class Request < ActiveRecord::Base
   end
 
   def self.to_csv
-    columns = %w(nro_solicitud created_at name title)
+    columns = %w(nro_solicitud created_at name title status)
     CSV.generate do |csv|
       csv << columns.map { |c| self.human_attribute_name(c) }
       all.each do |request|
@@ -70,6 +70,7 @@ class Request < ActiveRecord::Base
         a.push(I18n.l(request.created_at, format: :version))
         a.push(request.user_name)
         a.push(request.user_title)
+        a.push(I18n.t("requests.title.status.#{request.status}"))
         csv << a
       end
     end
@@ -111,6 +112,11 @@ class Request < ActiveRecord::Base
         diferencia = numero_solicitud_posterior - numero_solicitud_anterior
         if diferencia > 1
           respuesta_hash[:codigo_numerico] = numero_solicitud_anterior.to_i + 1
+          respuesta_hash[:tipo_respuesta] = 'confirmacion'
+          respuesta_hash[:numero] = numero_solicitud_anterior.to_i + 1
+          ultima_fecha = del_anio_por_fecha_creacion(fecha).order(created_at: :desc).first.try(:created_at)
+          ultima_fecha = ultima_fecha.strftime('%d/%m/%Y') if ultima_fecha.present?
+          respuesta_hash[:ultima_fecha] = ultima_fecha
         else
           inc_alfabetico = numero_solicitud_posterior_regularizado(fecha)
           if inc_alfabetico.present?
@@ -195,5 +201,16 @@ class Request < ActiveRecord::Base
 
   def validar_cantidades(cantidades_subarticulo)
     subarticle_requests.validar_cantidades(cantidades_subarticulo)
+  end
+
+  def tipo_estado
+    case status
+    when 'initiation'
+      'warning'
+    when 'delivered'
+      'success'
+    when 'canceled'
+      'default'
+    end
   end
 end
