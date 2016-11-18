@@ -477,6 +477,7 @@ es:
         created_at: "Fecha"
         name: "Nombre"
         title: "Cargo"
+        status: "Estado"
       subarticle:
         code: "Código"
         code_old: "Código anterior"

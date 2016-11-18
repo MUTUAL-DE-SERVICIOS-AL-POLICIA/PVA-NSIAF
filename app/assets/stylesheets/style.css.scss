@@ -99,6 +99,12 @@ form .thumbnail{ height: 190px; }
 }
 table {
   tr {
+    td{
+      h4{
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
     &.vertical-align {
       th {
         vertical-align: middle;
