@@ -30,6 +30,9 @@ Rails.application.routes.draw do
       resources :requests, only: [:show] do
         post :validar_cantidades, on: :member
       end
+
+      resources :auxiliares, only: [:show]
+
     end
   end
 

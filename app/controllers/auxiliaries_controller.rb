@@ -11,6 +11,14 @@ class AuxiliariesController < ApplicationController
   # GET /auxiliaries/1
   # GET /auxiliaries/1.json
   def show
+    @data = {
+      id: @auxiliary.id,
+      urls: {
+        show: api_auxiliare_path(@auxiliary),
+        edit: edit_auxiliary_path(@auxiliary),
+        list: auxiliaries_path
+      }
+    }
   end
 
   # GET /auxiliaries/new
