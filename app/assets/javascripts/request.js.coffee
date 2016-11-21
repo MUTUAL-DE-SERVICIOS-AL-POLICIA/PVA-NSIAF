@@ -6,6 +6,7 @@ class Request extends BarcodeReader
 
   cacheElements: ->
     @selected_user = null
+    @$tdCantidad = $('.td-cantidad')
     @$request_urls = $('#request-urls')
     @$date = $('input#date_restricted')
     @$user = $('input#people')
@@ -77,9 +78,11 @@ class Request extends BarcodeReader
     $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
     $(document).on 'click', @$btnSaveNewRequest.selector, (e) => @confirmarSolicitud(e)
     $(document).on 'keyup', @$subarticle.selector, => @changeBarcode(@$subarticle)
-    $(document).on 'keyup', @$amountInput.selector,  => @val_amount()
+    $(document).on 'focus', @$amountInput.selector, (e) => @get_focused(e)
+    $(document).on 'keyup', @$amountInput.selector, (e) => @val_amount(e)
     $(document).on 'click', @$confirmarSolicitudModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
     $(document).on 'click', @$alertaSolicitudModal.find('button[type=submit]').selector, (e) => @aceptarAlertaSolicitud(e)
+    $(document).on 'click', @$tdCantidad.selector, (e) => @update_number_input(e)
 
     if @$material?
       @$article.remoteChained(@$material.selector, @$request_urls.data('subarticles-articles'))
@@ -89,7 +92,7 @@ class Request extends BarcodeReader
     if @$user?
       @get_users()
 
-  val_amount:  =>
+  val_amount: (e) =>
     valin = document.activeElement.value
     valamount = document.activeElement.max
     regex = /[0-9]|\./
@@ -104,6 +107,11 @@ class Request extends BarcodeReader
       @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo ")
     if valin == ''
       document.activeElement.value = '0'
+
+  get_focused: (e) =>
+    td = e.currentTarget
+    @$des = (td.closest('tr')).getElementsByClassName('input-sm')
+    @$des.amount.select()
 
   confirmarSolicitud: (e) =>
     e.preventDefault()
@@ -182,10 +190,19 @@ class Request extends BarcodeReader
           else
             _.open_modal(val.mensaje)
           sw = 1
+          elemento.find('input').addClass('error-input')
         else
-          if elemento.find('input').val() < 0
-            _.open_modal('La cantidad a entregar es menor a 0.')
+          if val.verificacion
+            if elemento.find('input').val() < 0
+              _.open_modal('La cantidad a entregar es menor a 0.')
+              sw = 1
+              elemento.find('input').addClass('error-input')
+            else
+              elemento.find('input').removeClass('error-input')
+          else
+            _.open_modal(val.mensaje)
             sw = 1
+            elemento.find('input').addClass('error-input')
       )
       if sw == 0
         @$table_request.find('input').each ->
@@ -201,6 +218,22 @@ class Request extends BarcodeReader
     @show_buttons()
     @$request.find('table thead tr').append '<th>Cantidad a entregar</th>'
     @$request.find('table tbody tr').append @$templateRequestInput.render()
+    @$request.find('.td-cantidad' ).css 'cursor', 'pointer'
+    @$request.find('#td-cantidad-header' ).css 'cursor', 'pointer'
+    $('#td-cantidad-header').click =>
+      @update_all_columns()
+
+  update_all_columns: =>
+    $('#table_request table tbody tr').each (i, el)->
+      @$origin  = el.getElementsByClassName('td-cantidad')
+      @$end = el.getElementsByClassName('input-sm')
+      @$end.amount.value = (parseInt(@$origin.tdcant.textContent))
+
+  update_number_input: (e) ->
+    td = e.currentTarget
+    @$des = (td.closest('tr')).getElementsByClassName('input-sm')
+    @$des.amount.value = (parseInt(td.textContent))
+    @$des.amount.select()
 
   update_request: ->
     @$table_request.find('.text-center').hide()

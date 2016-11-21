@@ -139,6 +139,9 @@ table {
     -webkit-box-shadow: none;
     -webkit-user-select: none;
   }
+  input.error-input{
+    background: #ffdbdb !important;
+  }
 }
 
 .padding-note { padding-left: 0; }
