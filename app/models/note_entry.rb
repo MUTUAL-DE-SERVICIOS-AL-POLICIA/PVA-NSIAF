@@ -104,14 +104,7 @@ class NoteEntry < ActiveRecord::Base
       end
     end
   end
-
-  ##
-  # TODO definir éste campo a nivel de tabla para las notas de entrada
-  # Cuando se cree el campo eliminar éste método
-  def c31_fecha
-    ''
-  end
-
+  
   def change_date_entries
     entry_subarticles.each do |entry|
       entry.set_date_value

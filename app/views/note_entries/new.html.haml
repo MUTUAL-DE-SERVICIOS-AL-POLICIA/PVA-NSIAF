@@ -17,6 +17,9 @@
   .row
     .col-sm-12.col-md-8.col-lg-8
       = f.input :c31, placeholder: 'Número C31'
+    .col-sm-12.col-md-4.col-lg-4
+      = f.input :c31_fecha, as: :string, input_html: { value: format_date(f.object.c31_fecha) }, label: false, placeholder: 'Fecha C31'
+
   .row
     .col-sm-12.col-md-8.col-lg-8
       = f.input :delivery_note_number, placeholder: 'Número de nota de entrega'

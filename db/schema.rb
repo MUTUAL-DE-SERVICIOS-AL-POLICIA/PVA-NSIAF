@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116185150) do
+ActiveRecord::Schema.define(version: 20161121155851) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -108,7 +108,6 @@ ActiveRecord::Schema.define(version: 20161116185150) do
   end
 
   add_index "barcodes", ["entity_id"], name: "index_barcodes_on_entity_id", using: :btree
-  add_index "barcodes", ["status"], name: "index_barcodes_on_status", using: :btree
 
   create_table "buildings", force: :cascade do |t|
     t.string   "code",       limit: 50
@@ -292,9 +291,19 @@ ActiveRecord::Schema.define(version: 20161116185150) do
     t.decimal  "descuento",                         precision: 10, scale: 2, default: 0.0
     t.string   "incremento_alfabetico", limit: 255
     t.string   "observacion",           limit: 255
+    t.date     "c31_fecha"
   end
 
   add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree
+
+  create_table "personas", force: :cascade do |t|
+    t.string   "nombre",     limit: 255
+    t.integer  "edad",       limit: 4
+    t.string   "email",      limit: 255
+    t.float    "sueldo",     limit: 24
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "proceedings", force: :cascade do |t|
     t.integer  "user_id",         limit: 4
@@ -321,6 +330,20 @@ ActiveRecord::Schema.define(version: 20161116185150) do
     t.integer  "nro_solicitud",         limit: 4,   default: 0
     t.string   "incremento_alfabetico", limit: 255
     t.string   "observacion",           limit: 255
+  end
+
+  create_table "resumen", id: false, force: :cascade do |t|
+    t.integer "id",               limit: 4,  default: 0,     null: false
+    t.integer "subarticle_id",    limit: 4
+    t.integer "request_id",       limit: 4
+    t.integer "amount",           limit: 4
+    t.integer "amount_delivered", limit: 4
+    t.integer "total_delivered",  limit: 4,  default: 0
+    t.boolean "invalidate",                  default: false
+    t.integer "code",             limit: 4
+    t.float   "monto1",           limit: 24
+    t.integer "stock",            limit: 4,  default: 0,     null: false
+    t.integer "monto2",           limit: 4
   end
 
   create_table "subarticle_requests", force: :cascade do |t|
@@ -361,6 +384,13 @@ ActiveRecord::Schema.define(version: 20161116185150) do
     t.string   "nit",        limit: 255
     t.string   "telefono",   limit: 255
     t.string   "contacto",   limit: 255
+  end
+
+  create_table "test1s", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.integer  "edad",       limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "ubicaciones", force: :cascade do |t|
