@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :asset do
-    code "1"
     description "activo 1"
     auxiliary_id "1"
     account_id "2"

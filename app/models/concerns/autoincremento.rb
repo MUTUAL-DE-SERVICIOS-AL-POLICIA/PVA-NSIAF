@@ -17,6 +17,8 @@ module Autoincremento
         autoincremento_ingresos unless self.numero.present?
       when 'Request'
         autoincremento_request unless self.tiene_numero?
+      when 'Asset'
+        autoincremento_asset unless tiene_codigo?
       end
     end
   end
@@ -30,6 +32,8 @@ module Autoincremento
         autoincremento_ingresos unless self.numero.present?
       when 'Request'
         autoincremento_request unless self.tiene_numero?
+      when 'Asset'
+        autoincremento_asset unless tiene_codigo?
       end
     end
   end
@@ -63,6 +67,13 @@ module Autoincremento
     if respuesta[:codigo_numerico].present? && !self.tiene_numero?
       self.nro_solicitud = respuesta[:codigo_numerico]
       self.incremento_alfabetico = respuesta[:codigo_alfabetico] if respuesta[:codigo_alfabetico].present?
+    end
+  end
+
+  def autoincremento_asset
+    nuevo_codigo = Asset.obtiene_siguiente_codigo
+    unless tiene_codigo?
+      self.code = nuevo_codigo
     end
   end
 end

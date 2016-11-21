@@ -1,6 +1,7 @@
 class Asset < ActiveRecord::Base
   include ImportDbf, Migrated, VersionLog, ManageStatus
   include Moneda
+  include Autoincremento
 
   CORRELATIONS = {
     'CODIGO' => 'code',
@@ -136,6 +137,11 @@ class Asset < ActiveRecord::Base
 
   def self.derecognised
     where(status: 0)
+  end
+
+  # Método para obtener el siguiente codigo de activo.
+  def self.obtiene_siguiente_codigo
+    Asset.all.empty? ? 1 : Asset.maximum(:code) + 1
   end
 
   def self.historical_assets(user)
@@ -449,6 +455,11 @@ class Asset < ActiveRecord::Base
 
   def ubicacion_detalle
     ubicacion.present? ? ubicacion.detalle : ''
+  end
+
+  # método que verifica si el activo tiene un código.
+  def tiene_codigo?
+    code.present?
   end
 
   private
