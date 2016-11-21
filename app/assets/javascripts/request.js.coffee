@@ -190,14 +190,19 @@ class Request extends BarcodeReader
           else
             _.open_modal(val.mensaje)
           sw = 1
+          elemento.find('input').addClass('error-input')
         else
           if val.verificacion
             if elemento.find('input').val() < 0
               _.open_modal('La cantidad a entregar es menor a 0.')
               sw = 1
+              elemento.find('input').addClass('error-input')
+            else
+              elemento.find('input').removeClass('error-input')
           else
             _.open_modal(val.mensaje)
             sw = 1
+            elemento.find('input').addClass('error-input')
       )
       if sw == 0
         @$table_request.find('input').each ->
@@ -228,7 +233,6 @@ class Request extends BarcodeReader
     td = e.currentTarget
     @$des = (td.closest('tr')).getElementsByClassName('input-sm')
     @$des.amount.value = (parseInt(td.textContent))
-    #@$des.('#amount').val(td.textContent)
     @$des.amount.select()
 
   update_request: ->
