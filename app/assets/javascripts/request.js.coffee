@@ -197,6 +197,7 @@ class Request extends BarcodeReader
               sw = 1
           else
             _.open_modal(val.mensaje)
+            sw = 1
       )
       if sw == 0
         @$table_request.find('input').each ->
