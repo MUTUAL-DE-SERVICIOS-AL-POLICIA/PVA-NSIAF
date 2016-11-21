@@ -140,6 +140,7 @@ Rails.application.routes.draw do
 
   resources :auxiliaries, except: [:destroy] do
     post :change_status, on: :member
+    get :activos, on: :member
   end
 
   resources :accounts, only: [:index, :show]

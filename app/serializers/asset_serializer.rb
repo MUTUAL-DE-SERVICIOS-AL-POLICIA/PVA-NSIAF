@@ -4,8 +4,7 @@ class AssetSerializer < ActiveModel::Serializer
 
   def urls
     {
-      show: asset_url(object)
+      show: asset_path(object)
     }
   end
-
 end

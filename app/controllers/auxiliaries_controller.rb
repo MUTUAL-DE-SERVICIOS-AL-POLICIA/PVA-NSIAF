@@ -1,6 +1,6 @@
 class AuxiliariesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_auxiliary, only: [:show, :edit, :update, :change_status]
+  before_action :set_auxiliary, only: [:show, :edit, :update, :change_status, :activos]
 
   # GET /auxiliaries
   # GET /auxiliaries.json
@@ -16,7 +16,8 @@ class AuxiliariesController < ApplicationController
       urls: {
         show: api_auxiliare_path(@auxiliary),
         edit: edit_auxiliary_path(@auxiliary),
-        list: auxiliaries_path
+        list: auxiliaries_path,
+        pdf: activos_auxiliary_path(@auxiliary, format: :pdf)
       }
     }
   end
@@ -70,6 +71,24 @@ class AuxiliariesController < ApplicationController
     @auxiliary.change_status unless @auxiliary.verify_assignment
     respond_to do |format|
       format.json { head :no_content }
+    end
+  end
+
+  def activos
+    @activos = @auxiliary.assets
+    respond_to do |format|
+      format.pdf do
+        filename = 'activos'
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               template: 'auxiliaries/activos.pdf.haml',
+               orientation: 'Portrait',
+               page_size: 'Letter',
+               margin: view_context.margin_pdf,
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
     end
   end
 
