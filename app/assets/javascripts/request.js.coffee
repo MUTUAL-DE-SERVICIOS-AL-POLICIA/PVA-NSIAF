@@ -191,9 +191,12 @@ class Request extends BarcodeReader
             _.open_modal(val.mensaje)
           sw = 1
         else
-          if elemento.find('input').val() < 0
-            _.open_modal('La cantidad a entregar es menor a 0.')
-            sw = 1
+          if val.verificacion
+            if elemento.find('input').val() < 0
+              _.open_modal('La cantidad a entregar es menor a 0.')
+              sw = 1
+          else
+            _.open_modal(val.mensaje)
       )
       if sw == 0
         @$table_request.find('input').each ->
