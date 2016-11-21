@@ -74,7 +74,7 @@
               - if is_pdf?
                 %th.text-center Cantidad
               - else
-                %th.text-center Cantidad solicitada
+                %th.text-center#tdCantidadHeader Cantidad solicitada
                 - if @request.status == 'pending'
                   %th Cantidad a entregar
                 - if %w(delivered canceled).include?(@request.status)
@@ -107,10 +107,10 @@
                 %tr{ id: s_request.id }
                   %td= s_request.subarticle_barcode
                   %td= s_request.subarticle_code
-                  %td= s_request.subarticle_unit
+                  %td{id: 'subarticle_unit'}= s_request.subarticle_unit
                   %td{title: s_request.subarticle_barcode}
                     = s_request.subarticle_description
-                  %td.text-center= s_request.amount
+                  %td.text-center.tdCantidad{id: "tdCant"}= s_request.amount
                   - if %w(delivered canceled).include?(@request.status)
                     %td.amount_delivered.text-center= s_request.total_delivered
         = fecha_impresion if is_pdf?

@@ -6,6 +6,7 @@ class Request extends BarcodeReader
 
   cacheElements: ->
     @selected_user = null
+    @$tdCantidad = $('.tdCantidad')
     @$request_urls = $('#request-urls')
     @$date = $('input#date_restricted')
     @$user = $('input#people')
@@ -77,9 +78,10 @@ class Request extends BarcodeReader
     $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
     $(document).on 'click', @$btnSaveNewRequest.selector, (e) => @confirmarSolicitud(e)
     $(document).on 'keyup', @$subarticle.selector, => @changeBarcode(@$subarticle)
-    $(document).on 'keyup', @$amountInput.selector,  => @val_amount()
+    $(document).on 'focus', @$amountInput.selector, (e) => @val_amount(e)
     $(document).on 'click', @$confirmarSolicitudModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
     $(document).on 'click', @$alertaSolicitudModal.find('button[type=submit]').selector, (e) => @aceptarAlertaSolicitud(e)
+    $(document).on 'click', @$tdCantidad.selector, (e) => @update_number_input(e)
 
     if @$material?
       @$article.remoteChained(@$material.selector, @$request_urls.data('subarticles-articles'))
@@ -89,7 +91,7 @@ class Request extends BarcodeReader
     if @$user?
       @get_users()
 
-  val_amount:  =>
+  val_amount: (e) =>
     valin = document.activeElement.value
     valamount = document.activeElement.max
     regex = /[0-9]|\./
@@ -104,6 +106,9 @@ class Request extends BarcodeReader
       @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo ")
     if valin == ''
       document.activeElement.value = '0'
+    td = e.currentTarget
+    @$des = (td.closest('tr')).getElementsByClassName('input-sm')
+    @$des.amount.select()
 
   confirmarSolicitud: (e) =>
     e.preventDefault()
@@ -201,6 +206,23 @@ class Request extends BarcodeReader
     @show_buttons()
     @$request.find('table thead tr').append '<th>Cantidad a entregar</th>'
     @$request.find('table tbody tr').append @$templateRequestInput.render()
+    @$request.find('.tdCantidad' ).css 'cursor', 'pointer'
+    @$request.find('#tdCantidadHeader' ).css 'cursor', 'pointer'
+    $('#tdCantidadHeader').click =>
+      @update_all_columns()
+
+  update_all_columns: =>
+    $('#table_request table tbody tr').each (i, el)->
+      @$origin  = el.getElementsByClassName('tdCantidad')
+      @$end = el.getElementsByClassName('input-sm')
+      @$end.amount.value = (parseInt(@$origin.tdCant.textContent))
+
+  update_number_input: (e) ->
+    td = e.currentTarget
+    @$des = (td.closest('tr')).getElementsByClassName('input-sm')
+    @$des.amount.value = (parseInt(td.textContent))
+    #@$des.('#amount').val(td.textContent)
+    @$des.amount.select()
 
   update_request: ->
     @$table_request.find('.text-center').hide()
