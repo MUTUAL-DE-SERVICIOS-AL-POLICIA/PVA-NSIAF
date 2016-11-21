@@ -78,7 +78,8 @@ class Request extends BarcodeReader
     $(document).on 'click', @$btnCancelNewRequest.selector, => @cancel_new_request()
     $(document).on 'click', @$btnSaveNewRequest.selector, (e) => @confirmarSolicitud(e)
     $(document).on 'keyup', @$subarticle.selector, => @changeBarcode(@$subarticle)
-    $(document).on 'focus', @$amountInput.selector, (e) => @val_amount(e)
+    $(document).on 'focus', @$amountInput.selector, (e) => @get_focused(e)
+    $(document).on 'keyup', @$amountInput.selector, (e) => @val_amount(e)
     $(document).on 'click', @$confirmarSolicitudModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
     $(document).on 'click', @$alertaSolicitudModal.find('button[type=submit]').selector, (e) => @aceptarAlertaSolicitud(e)
     $(document).on 'click', @$tdCantidad.selector, (e) => @update_number_input(e)
@@ -106,6 +107,8 @@ class Request extends BarcodeReader
       @open_modal("Ya no se encuentra la cantidad requerida en el inventario del Sub Artículo ")
     if valin == ''
       document.activeElement.value = '0'
+
+  get_focused: (e) =>
     td = e.currentTarget
     @$des = (td.closest('tr')).getElementsByClassName('input-sm')
     @$des.amount.select()

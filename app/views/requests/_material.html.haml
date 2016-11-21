@@ -35,7 +35,7 @@
     %td {{description}}
     %td.text-center {{unit}}
     %td.amount.text-center.note.col-md-1
-      = number_field_tag "quantity", '1',  id: 'amount', class: 'form-control  text-right', disabled: false, type: 'number', min: 0 , max:"{{stock}} +1"
+      = number_field_tag "quantity", '1',  id: 'amount', class: 'form-control input-sm  text-right', disabled: false, type: 'number', min: 0 , max:"{{stock}} +1"
     %td.actions-request.vert-align.text-center
       %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }
 
