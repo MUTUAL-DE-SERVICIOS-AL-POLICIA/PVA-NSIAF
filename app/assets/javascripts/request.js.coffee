@@ -6,7 +6,7 @@ class Request extends BarcodeReader
 
   cacheElements: ->
     @selected_user = null
-    @$tdCantidad = $('.tdCantidad')
+    @$tdCantidad = $('.td-cantidad')
     @$request_urls = $('#request-urls')
     @$date = $('input#date_restricted')
     @$user = $('input#people')
@@ -206,16 +206,16 @@ class Request extends BarcodeReader
     @show_buttons()
     @$request.find('table thead tr').append '<th>Cantidad a entregar</th>'
     @$request.find('table tbody tr').append @$templateRequestInput.render()
-    @$request.find('.tdCantidad' ).css 'cursor', 'pointer'
-    @$request.find('#tdCantidadHeader' ).css 'cursor', 'pointer'
-    $('#tdCantidadHeader').click =>
+    @$request.find('.td-cantidad' ).css 'cursor', 'pointer'
+    @$request.find('#td-cantidad-header' ).css 'cursor', 'pointer'
+    $('#td-cantidad-header').click =>
       @update_all_columns()
 
   update_all_columns: =>
     $('#table_request table tbody tr').each (i, el)->
-      @$origin  = el.getElementsByClassName('tdCantidad')
+      @$origin  = el.getElementsByClassName('td-cantidad')
       @$end = el.getElementsByClassName('input-sm')
-      @$end.amount.value = (parseInt(@$origin.tdCant.textContent))
+      @$end.amount.value = (parseInt(@$origin.tdcant.textContent))
 
   update_number_input: (e) ->
     td = e.currentTarget
