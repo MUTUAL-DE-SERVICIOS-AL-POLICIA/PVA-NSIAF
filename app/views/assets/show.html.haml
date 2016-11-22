@@ -71,46 +71,47 @@
     %dt= Asset.human_attribute_name('created_at')
     %dd= l @asset.created_at, format: :long
 .col-xs-4
-  %table.table.table-bordered.table-condensed.valorado.table-striped
-    %thead
-      %tr
-        %th.col-md-4.col-sm-4.col-xs-4 Datos de Nota de Ingreso
-    %tbody
-      %tr
-        %td
-          %table.table-condensed
-            %tbody
-              %dl.dl-horizontal
-                - if @asset.ingreso.numero.present?
-                  %dt= Ingreso.human_attribute_name('numero')
-                  %dd= @asset.ingreso.numero
-                - if @asset.ingreso.c31_fecha.present?
-                  %dt= Ingreso.human_attribute_name('supplier')
-                  %dd= @asset.ingreso.supplier.name
-                - if @asset.ingreso.supplier.nit.present?
-                  %dt= Supplier.human_attribute_name('nit')
-                  %dd= @asset.ingreso.supplier.nit
-                - if @asset.ingreso.factura_autorizacion.present?
-                  %dt= Supplier.human_attribute_name('factura_autorizacion')
-                  %dd= @asset.ingreso.factura_autorizacion
-                - if @asset.ingreso.factura_numero.present?
-                  %dt= Asset.human_attribute_name('factura_numero')
-                  %dd= @asset.ingreso.factura_numero
-                - if @asset.ingreso.factura_fecha.present?
-                  %dt= Asset.human_attribute_name('factura_fecha')
-                  %dd= I18n.l @asset.ingreso.factura_fecha
-                - if  @asset.ingreso.nota_entrega_numero.present?
-                  %dt= Asset.human_attribute_name('nota_entrega_numero')
-                  %dd= @asset.ingreso.nota_entrega_numero
-                - if @asset.ingreso.nota_entrega_fecha.present?
-                  %dt= Asset.human_attribute_name('nota_entrega_fecha')
-                  %dd= I18n.l @asset.ingreso.nota_entrega_fecha
-                - if @asset.ingreso.c31_fecha.present?
-                  %dt= Asset.human_attribute_name('c31_numero')
-                  %dd= @asset.ingreso.c31_numero
-                - if @asset.ingreso.c31_fecha.present?
-                  %dt= Asset.human_attribute_name('c31_fecha')
-                  %dd= I18n.l @asset.ingreso.c31_fecha
+  -if @asset.ingreso.present?
+    %table.table.table-bordered.table-condensed.valorado.table-striped
+      %thead
+        %tr
+          %th.col-md-4.col-sm-4.col-xs-4 Datos de Nota de Ingreso
+      %tbody
+        %tr
+          %td
+            %table.table-condensed
+              %tbody
+                %dl.dl-horizontal
+                  - if @asset.ingreso.numero.present?
+                    %dt= Ingreso.human_attribute_name('numero')
+                    %dd= @asset.ingreso.numero
+                  - if @asset.ingreso.c31_fecha.present?
+                    %dt= Ingreso.human_attribute_name('supplier')
+                    %dd= @asset.ingreso.supplier.name
+                  - if @asset.ingreso.supplier.nit.present?
+                    %dt= Supplier.human_attribute_name('nit')
+                    %dd= @asset.ingreso.supplier.nit
+                  - if @asset.ingreso.factura_autorizacion.present?
+                    %dt= Supplier.human_attribute_name('factura_autorizacion')
+                    %dd= @asset.ingreso.factura_autorizacion
+                  - if @asset.ingreso.factura_numero.present?
+                    %dt= Asset.human_attribute_name('factura_numero')
+                    %dd= @asset.ingreso.factura_numero
+                  - if @asset.ingreso.factura_fecha.present?
+                    %dt= Asset.human_attribute_name('factura_fecha')
+                    %dd= I18n.l @asset.ingreso.factura_fecha
+                  - if  @asset.ingreso.nota_entrega_numero.present?
+                    %dt= Asset.human_attribute_name('nota_entrega_numero')
+                    %dd= @asset.ingreso.nota_entrega_numero
+                  - if @asset.ingreso.nota_entrega_fecha.present?
+                    %dt= Asset.human_attribute_name('nota_entrega_fecha')
+                    %dd= I18n.l @asset.ingreso.nota_entrega_fecha
+                  - if @asset.ingreso.c31_fecha.present?
+                    %dt= Asset.human_attribute_name('c31_numero')
+                    %dd= @asset.ingreso.c31_numero
+                  - if @asset.ingreso.c31_fecha.present?
+                    %dt= Asset.human_attribute_name('c31_fecha')
+                    %dd= I18n.l @asset.ingreso.c31_fecha
 
 .row
   .col-sm-12.historical-reviews
