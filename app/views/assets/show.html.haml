@@ -14,62 +14,103 @@
       = t("assets.title.title")
 
   %h2= @asset.description
-
-%dl.dl-horizontal
-  %dt= Asset.human_attribute_name('code')
-  %dd= @asset.code
-  %dt= Asset.human_attribute_name('code_old')
-  %dd= @asset.code_old
-  %dt= Asset.human_attribute_name('barcode')
-  %dd= @asset.barcode || "<em>No asignado</em>".html_safe
-  %dt= Asset.human_attribute_name('detalle')
-  %dd= @asset.detalle
-  - if @asset.medidas.present?
-    %dt= Asset.human_attribute_name('medidas')
-    %dd= @asset.medidas
-  - if @asset.material.present?
-    %dt= Asset.human_attribute_name('material')
-    %dd= @asset.material
-  - if @asset.color.present?
-    %dt= Asset.human_attribute_name('color')
-    %dd= @asset.color
-  - if @asset.marca.present?
-    %dt= Asset.human_attribute_name('marca')
-    %dd= @asset.marca
-  - if @asset.modelo.present?
-    %dt= Asset.human_attribute_name('modelo')
-    %dd= @asset.modelo
-  - if @asset.serie.present?
-    %dt= Asset.human_attribute_name('serie')
-    %dd= @asset.serie
-  %dt= Asset.human_attribute_name('precio')
-  %dd= number_with_delimiter @asset.precio
-  %dt= Asset.human_attribute_name('proceso')
-  %dd= @asset.proceso
-  %dt= Asset.human_attribute_name('observaciones')
-  %dd= simple_format @asset.observaciones
-  %dt= Asset.human_attribute_name('seguro')
-  %dd= @asset.seguro ? 'SI' : 'NO'
-  %dt= Asset.human_attribute_name('ubicacion')
-  %dd= @asset.ubicacion_detalle
-  %dt= Asset.human_attribute_name('state')
-  %dd= @asset.get_state
-  %dt= Asset.human_attribute_name('user')
-  %dd= link_to_if @asset.user, @asset.user_name, @asset.user, title: @asset.user_code
-  %dt= Asset.human_attribute_name('account')
-  %dd= link_to_if @asset.account, @asset.account_name, @asset.account, title: @asset.account_code
-  %dt= Asset.human_attribute_name('auxiliary')
-  %dd= link_to_if @asset.auxiliary, @asset.auxiliary_name, @asset.auxiliary, title: @asset.auxiliary_code
-  - if @asset.status == '0'
-    %h3 Dado de baja
-    %dt Fecha de baja
-    %dd= l(@asset.derecognised, format: :version) if @asset.derecognised.present?
-    %dt= Asset.human_attribute_name('description_decline')
-    %dd= @asset.description_decline
-    %dt= Asset.human_attribute_name('reason_decline')
-    %dd= @asset.reason_decline
-  %dt= Asset.human_attribute_name('created_at')
-  %dd= l @asset.created_at, format: :long
+.col-xs-6
+  %dl.dl-horizontal
+    %dt= Asset.human_attribute_name('code')
+    %dd= @asset.code
+    %dt= Asset.human_attribute_name('code_old')
+    %dd= @asset.code_old
+    %dt= Asset.human_attribute_name('barcode')
+    %dd= @asset.barcode || "<em>No asignado</em>".html_safe
+    %dt= Asset.human_attribute_name('detalle')
+    %dd= @asset.detalle
+    - if @asset.medidas.present?
+      %dt= Asset.human_attribute_name('medidas')
+      %dd= @asset.medidas
+    - if @asset.material.present?
+      %dt= Asset.human_attribute_name('material')
+      %dd= @asset.material
+    - if @asset.color.present?
+      %dt= Asset.human_attribute_name('color')
+      %dd= @asset.color
+    - if @asset.marca.present?
+      %dt= Asset.human_attribute_name('marca')
+      %dd= @asset.marca
+    - if @asset.modelo.present?
+      %dt= Asset.human_attribute_name('modelo')
+      %dd= @asset.modelo
+    - if @asset.serie.present?
+      %dt= Asset.human_attribute_name('serie')
+      %dd= @asset.serie
+    %dt= Asset.human_attribute_name('precio')
+    %dd= number_with_delimiter @asset.precio
+    %dt= Asset.human_attribute_name('proceso')
+    %dd= @asset.proceso
+    %dt= Asset.human_attribute_name('observaciones')
+    %dd= simple_format @asset.observaciones
+    %dt= Asset.human_attribute_name('seguro')
+    %dd= @asset.seguro ? 'SI' : 'NO'
+    %dt= Asset.human_attribute_name('ubicacion')
+    %dd= @asset.ubicacion_detalle
+    %dt= Asset.human_attribute_name('state')
+    %dd= @asset.get_state
+    %dt= Asset.human_attribute_name('user')
+    %dd= link_to_if @asset.user, @asset.user_name, @asset.user, title: @asset.user_code
+    %dt= Asset.human_attribute_name('account')
+    %dd= link_to_if @asset.account, @asset.account_name, @asset.account, title: @asset.account_code
+    %dt= Asset.human_attribute_name('auxiliary')
+    %dd= link_to_if @asset.auxiliary, @asset.auxiliary_name, @asset.auxiliary, title: @asset.auxiliary_code
+    - if @asset.status == '0'
+      %h3 Dado de baja
+      %dt Fecha de baja
+      %dd= l(@asset.derecognised, format: :version) if @asset.derecognised.present?
+      %dt= Asset.human_attribute_name('description_decline')
+      %dd= @asset.description_decline
+      %dt= Asset.human_attribute_name('reason_decline')
+      %dd= @asset.reason_decline
+    %dt= Asset.human_attribute_name('created_at')
+    %dd= l @asset.created_at, format: :long
+.col-xs-4
+  %table.table.table-bordered.table-condensed.valorado.table-striped
+    %thead
+      %tr
+        %th.col-md-4.col-sm-4.col-xs-4 Datos de Nota de Ingreso
+    %tbody
+      %tr
+        %td
+          %table.table-condensed
+            %tbody
+              %dl.dl-horizontal
+                - if @asset.ingreso.numero.present?
+                  %dt= Ingreso.human_attribute_name('numero')
+                  %dd= @asset.ingreso.numero
+                - if @asset.ingreso.c31_fecha.present?
+                  %dt= Ingreso.human_attribute_name('supplier')
+                  %dd= @asset.ingreso.supplier.name
+                - if @asset.ingreso.supplier.nit.present?
+                  %dt= Supplier.human_attribute_name('nit')
+                  %dd= @asset.ingreso.supplier.nit
+                - if @asset.ingreso.factura_autorizacion.present?
+                  %dt= Supplier.human_attribute_name('factura_autorizacion')
+                  %dd= @asset.ingreso.factura_autorizacion
+                - if @asset.ingreso.factura_numero.present?
+                  %dt= Asset.human_attribute_name('factura_numero')
+                  %dd= @asset.ingreso.factura_numero
+                - if @asset.ingreso.factura_fecha.present?
+                  %dt= Asset.human_attribute_name('factura_fecha')
+                  %dd= I18n.l @asset.ingreso.factura_fecha
+                - if  @asset.ingreso.nota_entrega_numero.present?
+                  %dt= Asset.human_attribute_name('nota_entrega_numero')
+                  %dd= @asset.ingreso.nota_entrega_numero
+                - if @asset.ingreso.nota_entrega_fecha.present?
+                  %dt= Asset.human_attribute_name('nota_entrega_fecha')
+                  %dd= I18n.l @asset.ingreso.nota_entrega_fecha
+                - if @asset.ingreso.c31_fecha.present?
+                  %dt= Asset.human_attribute_name('c31_numero')
+                  %dd= @asset.ingreso.c31_numero
+                - if @asset.ingreso.c31_fecha.present?
+                  %dt= Asset.human_attribute_name('c31_fecha')
+                  %dd= I18n.l @asset.ingreso.c31_fecha
 
 .row
   .col-sm-12.historical-reviews

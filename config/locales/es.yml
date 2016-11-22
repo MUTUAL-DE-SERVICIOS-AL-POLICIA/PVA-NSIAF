@@ -434,12 +434,16 @@ es:
       ingreso:
         factura_fecha: "Fecha Factura"
         factura_numero: "Número Factura"
-        numero: "Número"
+        factura_autorizacion: "Autorización"
+        numero: "Número de Ingreso"
         supplier: "Proveedor"
         telefono: "Teléfono"
         users: "Usuario"
         total: "Total compra"
-        nota_entrega_fecha: "Fecha Nota Entrega"
+        nota_entrega_fecha: "Fecha nota de entrega"
+        nota_entrega_numero: "Número nota de entrega"
+        c31_numero: "Número c31"
+        c31_fecha: "Fecha c31"
       kardex:
         kardex_date: "Fecha"
         invoice_number: "Nº de Factura"
