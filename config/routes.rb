@@ -27,6 +27,14 @@ Rails.application.routes.draw do
         get :activos, on: :collection
       end
 
+      resources :seguros, only: [:create, :update]
+
+      resources :proveedores, only: [:index]
+
+      resources :activos, only: [:index] do
+        get :sin_seguro_vigente, on: :member
+      end
+
       resources :requests, only: [:show] do
         post :validar_cantidades, on: :member
       end
@@ -68,6 +76,13 @@ Rails.application.routes.draw do
   resources :kardex_prices
 
   resources :kardexes
+
+  resources :seguros do
+    get :asegurar, on: :member
+    get :incorporaciones, on: :member
+    get :activos, on: :member
+    get :resumen, on: :member
+  end
 
   resources :derecognised, only: :index
 

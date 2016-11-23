@@ -45,7 +45,7 @@ class BarcodesController < ApplicationController
   private
 
     def generate_array_with_codes(desde, hasta)
-      Asset.where(code: desde..hasta).order(:code)
+      Asset.todos.where(code: desde..hasta).order(:code)
     end
 
 end

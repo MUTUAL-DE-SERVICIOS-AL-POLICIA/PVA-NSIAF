@@ -1,0 +1,22 @@
+%h4 Listado de activos
+%table.table.table-striped.table-condensed.table-bordered.alineacion-media
+  %thead
+    %tr
+      %th
+      %th.text-center Código
+      %th.text-center Descripción
+      %th.text-center Cuenta
+      %th.text-center Precio
+  %tbody
+    - if @activos.present?
+      - @activos.each_with_index do |activo, index|
+        %tr
+          %td= index + 1
+          %td.text-center= activo.code
+          %td= activo.description
+          %td= activo.cuenta
+          %td.number= activo.precio
+      %tr
+        %th{ colspan: "3" }
+        %th.text-right Total
+        %th.number= @sumatoria

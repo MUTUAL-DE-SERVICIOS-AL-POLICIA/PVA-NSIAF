@@ -25,8 +25,8 @@ module Api
               render json: {activos: (ActiveModel::ArraySerializer.new(@activos, each_serializer: ActivoSerializer, root: false)), total: @total},
                      status: 200
             else
-              render json: { mensaje: 'No se tienen activos.' },
-                     status: 404
+              render json: { mensaje: 'No se tienen activos.', activos: [], total: nil },
+                     status: 200
             end
           end
           format.pdf do

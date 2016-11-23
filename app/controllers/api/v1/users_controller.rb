@@ -12,7 +12,7 @@ module Api
                      status: 200
             else
               render json: { mensaje: 'No tiene activos asignados.' },
-                     status: 404
+                     status: 200
             end
           }
         end
@@ -27,7 +27,7 @@ module Api
                      status: 200
             else
               render json: { mensaje: 'No tiene histórico de activos que le fueron asignados.' },
-                     status: 404
+                     status: 200
             end
           }
         end

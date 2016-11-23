@@ -99,7 +99,7 @@ var TablaReportes = React.createClass({
       <tr>
         <th colSpan ="5" ></th>
         <th>TOTAL:</th>
-        <th>{ this.props.total }</th>
+        <th className = "number">{ this.props.total }</th>
       </tr>
     );
   },
@@ -274,10 +274,8 @@ var ReportesBuscadorAvanzado = React.createClass({
         },
         error:(xhr) => {
           this.props.actualizacionTabla({
-                                          tabla:{
-                                           activos: [],
-                                           total: ""
-                                          }
+                                          activos: [],
+                                          total: ""
                                         });
           this.props.actualizacionUrlPDF({
                                           url: url + ".pdf" + parametros

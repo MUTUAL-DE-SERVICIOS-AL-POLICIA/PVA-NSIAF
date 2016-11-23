@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161121155851) do
+ActiveRecord::Schema.define(version: 20170108201838) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20161121155851) do
     t.integer  "decline_user_id",     limit: 4
     t.string   "proceso",             limit: 255
     t.string   "observaciones",       limit: 255
-    t.decimal  "precio",                            precision: 10, scale: 2, default: 0.0,   null: false
+    t.decimal  "precio",                            precision: 10, scale: 2, default: 0.0, null: false
     t.string   "detalle",             limit: 255
     t.string   "medidas",             limit: 255
     t.string   "material",            limit: 255
@@ -71,7 +71,6 @@ ActiveRecord::Schema.define(version: 20161121155851) do
     t.string   "modelo",              limit: 255
     t.string   "serie",               limit: 255
     t.integer  "ingreso_id",          limit: 4
-    t.boolean  "seguro",                                                     default: false, null: false
     t.integer  "ubicacion_id",        limit: 4
     t.string   "code_old",            limit: 255
   end
@@ -81,6 +80,14 @@ ActiveRecord::Schema.define(version: 20161121155851) do
   add_index "assets", ["ingreso_id"], name: "index_assets_on_ingreso_id", using: :btree
   add_index "assets", ["ubicacion_id"], name: "index_assets_on_ubicacion_id", using: :btree
   add_index "assets", ["user_id"], name: "index_assets_on_user_id", using: :btree
+
+  create_table "assets_seguros", id: false, force: :cascade do |t|
+    t.integer "asset_id",  limit: 4, null: false
+    t.integer "seguro_id", limit: 4, null: false
+  end
+
+  add_index "assets_seguros", ["asset_id", "seguro_id"], name: "index_assets_seguros_on_asset_id_and_seguro_id", using: :btree
+  add_index "assets_seguros", ["seguro_id", "asset_id"], name: "index_assets_seguros_on_seguro_id_and_asset_id", using: :btree
 
   create_table "auxiliaries", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -324,6 +331,26 @@ ActiveRecord::Schema.define(version: 20161121155851) do
     t.string   "observacion",           limit: 255
   end
 
+  create_table "seguros", force: :cascade do |t|
+    t.integer  "supplier_id",           limit: 4
+    t.integer  "user_id",               limit: 4
+    t.string   "numero_poliza",         limit: 255
+    t.string   "numero_contrato",       limit: 255
+    t.string   "factura_numero",        limit: 255
+    t.string   "factura_autorizacion",  limit: 255
+    t.date     "factura_fecha"
+    t.float    "factura_monto",         limit: 53
+    t.datetime "fecha_inicio_vigencia"
+    t.datetime "fecha_fin_vigencia"
+    t.boolean  "baja_logica",                       default: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.integer  "seguro_id",             limit: 4
+    t.string   "state",                 limit: 255
+  end
+
+  add_index "seguros", ["seguro_id"], name: "index_seguros_on_seguro_id", using: :btree
+
   create_table "subarticle_requests", force: :cascade do |t|
     t.integer "subarticle_id",    limit: 4
     t.integer "request_id",       limit: 4
@@ -429,5 +456,6 @@ ActiveRecord::Schema.define(version: 20161121155851) do
   add_foreign_key "gestiones", "users"
   add_foreign_key "ingresos", "suppliers"
   add_foreign_key "ingresos", "users"
+  add_foreign_key "seguros", "seguros"
   add_foreign_key "subarticles", "materials"
 end

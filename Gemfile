@@ -61,7 +61,7 @@ group :development, :test do
 end
 
 group :test do
-  gem "faker", "~> 1.1.2"
+  gem "faker", "~> 1.2.0"
   gem 'capybara'
   gem "database_cleaner"
   gem "launchy", "~> 2.3.0"
@@ -84,11 +84,19 @@ gem 'angular-rails-templates'
 
 gem 'active_model_serializers'
 
+gem 'momentjs-rails', '>= 2.9.0'
+
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
+
 # Comprimir archivos
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 gem 'whenever', :require => false
+
+gem 'where-or'
+
+gem 'aasm'
 
 # Queries con el operador UNION para ActiveRecord
 gem 'active_record_union'

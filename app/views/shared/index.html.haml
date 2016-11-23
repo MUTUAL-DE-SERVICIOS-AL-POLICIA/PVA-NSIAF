@@ -14,13 +14,16 @@
 - when 'note_entries' then new_url = new_note_entry_path
 - when 'ingresos' then new_url = new_ingreso_path
 - when 'ubicaciones' then new_url = new_ubicacion_path
+- when 'seguros' then new_url = new_seguro_path
 - when 'ufvs' then new_url = new_ufv_path
 - when 'gestiones' then new_url = new_gestion_path
 - when 'proceedings' then accion = 'actas'
 - control = controller_name == 'derecognised' ? 'assets' : controller_name
 
 = title t("#{control}.title.title")
-
+- if controller_name == 'assets'
+  .alertas.pull-right
+    = render "shared/alertas"
 .page-header{data: {action: "#{accion if accion.present?}"}}
   %h2
     - if action_name == 'delivered'
@@ -29,7 +32,6 @@
       #{t("#{control}.title.title")} #{' dados de Baja' if controller_name == 'derecognised'}
       - if control == 'requests'
         = render 'dropdown', status: params[:status]
-
 .col-xs-2.button_new
   %span.controller_name= controller_name
   - if new_url.present?
@@ -38,7 +40,6 @@
     = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }", disabled: disabled do
       %span{ class: "glyphicon glyphicon-#{ is_versions ? 'remove' : 'plus' }" }
       = t("#{control}.title.new")
-
     - if is_versions
       #versions-export{ 'data-url' => export_versions_path }
 
@@ -47,7 +48,7 @@
 %table.table.table-striped.table-hover.datatable
   %thead
     %tr
-      - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones).include?(control)
+      - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones seguros).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
           %th= User.human_attribute_name('code')
         - if control == 'users' && !current_user.is_super_admin?

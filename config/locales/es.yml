@@ -177,6 +177,11 @@ es:
         delivered: 'Entregado'
         canceled: 'Anulado'
         all: 'Todo'
+  seguros:
+    title:
+      title: "Seguros"
+      nro_dias_expiracion: "Días para la expiración"
+      new: "Nuevo seguro"
   subarticles:
     title:
       title: "Subartículos de Materiales"
@@ -517,6 +522,18 @@ es:
         current_password: "Contraseña Actual"
         status: "Estado"
         no: "Nro."
+      seguro:
+        suppliers: "Proveedor"
+        user: "Usuario"
+        numero_contrato: "Número de contrato"
+        factura_numero: "Número de factura"
+        factura_autorizacion: "Número de autorización"
+        factura_fecha: "Fecha de factura"
+        fecha_inicio_vigencia: "Fecha inicio de vigencia"
+        fecha_fin_vigencia: "Fecha fin de vigencia"
+        estado: "Estado"
+        nro_assets: "Cantidad activos"
+        numero_poliza: "Poliza"
       version:
         item_id: "Código"
         created_at: "Fecha"

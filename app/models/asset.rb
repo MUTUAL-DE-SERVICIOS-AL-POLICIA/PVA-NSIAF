@@ -24,6 +24,7 @@ class Asset < ActiveRecord::Base
   has_many :proceedings, through: :asset_proceedings
   has_many :cierre_gestiones
   has_many :gestiones, through: :cierre_gestiones
+  has_and_belongs_to_many :seguros
 
   scope :assigned, -> { where.not(user_id: nil) }
   scope :unassigned, -> { where(user_id: nil) }
@@ -56,13 +57,13 @@ class Asset < ActiveRecord::Base
     if q.present? || cuentas.present? || (desde.present? && hasta.present?) || col.present?
       if q.present?
         if col == 'all'
-          activos = activos.where("assets.description like :q OR assets.code like :code OR ingresos.factura_numero like :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
+          activos = activos.where("assets.description LIKE :q OR assets.code LIKE :code OR ingresos.factura_numero LIKE :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
         else
           case col
           when 'code'
-            activos = activos.where("assets.code like :q", q: "%#{q}%")
+            activos = activos.where("assets.code LIKE :q", q: "%#{q}%")
           when 'description'
-            activos = activos.where("assets.description like :q", q: "%#{q}%")
+            activos = activos.where("assets.description LIKE :q", q: "%#{q}%")
           when 'invoice'
             activos = activos.where("ingresos.factura_numero = :q", q: q)
           end
@@ -89,7 +90,7 @@ class Asset < ActiveRecord::Base
       activos = activos.where("ingresos.factura_numero = :nf", nf: numero_factura)
     end
     if descripcion.present?
-      activos = activos.where("assets.description = :de", de: descripcion)
+      activos = activos.where("assets.description LIKE :de", de: "%#{descripcion}%")
     end
     if precio.present?
       activos = activos.where("accounts.id = :pr", pr: precio)
@@ -109,7 +110,7 @@ class Asset < ActiveRecord::Base
       guiones = rango.split('-').map(&:strip)
       guiones.length > 1 ? Array(guiones[0].to_i..guiones[1].to_i).map(&:to_s) : guiones
     end
-    where(barcode: barcodes.flatten.uniq).order(:code)
+    self.todos.where(barcode: barcodes.flatten.uniq).order(:code)
   end
 
   #agregados
@@ -449,6 +450,27 @@ class Asset < ActiveRecord::Base
 
   def ubicacion_detalle
     ubicacion.present? ? ubicacion.detalle : ''
+  end
+
+  def self.sin_seguro_vigente
+    seguros_vigentes_ids = Seguro.vigentes.ids
+    activos_ids = Asset.joins(:seguros).where(seguros: {id: seguros_vigentes_ids}).ids
+    Asset.todos.where.not(id: activos_ids).order(:code)
+  end
+
+  def self.alerta_sin_seguro_vigente
+    self.sin_seguro_vigente.present?
+  end
+
+  def seguro_vigente?
+    seguros_ids = Seguro.vigentes.ids
+    seguros.where(id: seguros_ids).present?
+  end
+
+  def self.todos
+    self.select("assets.id, assets.code, assets.barcode, assets.description, assets.precio, ingresos.factura_numero, assets.detalle,  ingresos.factura_fecha, assets.observaciones, accounts.name as cuenta")
+        .joins("LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id")
+        .joins(auxiliary: [:account])
   end
 
   private

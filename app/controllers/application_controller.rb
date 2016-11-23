@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   private
 
     def modelo_registros(name_model)
-      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries suppliers ingresos ubicaciones ufvs gestiones).include?(name_model) ? 'id' : "#{name_model}.code"
+      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries suppliers ingresos ubicaciones ufvs gestiones seguros).include?(name_model) ? 'id' : "#{name_model}.code"
       column_order = 'nro_solicitud' if name_model == 'requests'
       case controller_name
       when 'derecognised' then current = '0'

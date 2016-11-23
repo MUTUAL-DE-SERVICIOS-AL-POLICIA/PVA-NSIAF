@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :asset do
-    code "1"
+    code {Faker::Code.isbn}
     description "activo 1"
     auxiliary_id "1"
     account_id "2"
@@ -12,5 +12,7 @@ FactoryGirl.define do
     marca "corimexo"
     modelo "2012"
     serie "12x12x2"
+    association :ingreso
+    association :auxiliary
   end
 end
