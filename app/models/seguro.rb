@@ -60,10 +60,17 @@ class Seguro < ActiveRecord::Base
     "#{Asset.joins(:seguros).where(seguros: {id: seguros_ids}).uniq.size}"
   end
 
+  # Obtiene los seguros vigentes no se toman en cuentas las incorporaciones.
   def self.vigentes(fecha_actual = DateTime.now)
-    self.activos.where(state: "asegurado")
-                .where("fecha_inicio_vigencia <= ?", fecha_actual)
-                .where("fecha_fin_vigencia >= ?", fecha_actual )
+    activos.where(state: 'asegurado')
+           .where('fecha_inicio_vigencia <= ?', fecha_actual)
+           .where('fecha_fin_vigencia >= ?', fecha_actual)
+  end
+
+  # Obtiene todo los seguros vigentes incluyendo las incorporaciones
+  def self.vigentes_incorporaciones(fecha_actual = DateTime.now)
+    vigentes(fecha_actual).or(activos.where(state: 'asegurado')
+                                     .where(seguro_id: vigentes.ids))
   end
 
   def expiracion_a_dias(nro_dias)

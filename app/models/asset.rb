@@ -458,18 +458,21 @@ class Asset < ActiveRecord::Base
     ubicacion.present? ? ubicacion.detalle : ''
   end
 
+  # Obtiene los activos sin seguro
   def self.sin_seguro_vigente
-    seguros_vigentes_ids = Seguro.vigentes.ids
-    activos_ids = Asset.joins(:seguros).where(seguros: {id: seguros_vigentes_ids}).ids
+    seguros_vigentes_ids = Seguro.vigentes_incorporaciones.ids
+    activos_ids = Asset.joins(:seguros)
+                       .where(seguros: { id: seguros_vigentes_ids }).ids
     Asset.todos.where.not(id: activos_ids).order(:code)
   end
 
+  # Obtiene la alerta para los activos sin seguro
   def self.alerta_sin_seguro_vigente
-    self.sin_seguro_vigente.present?
+    sin_seguro_vigente.present?
   end
 
   def seguro_vigente?
-    seguros_ids = Seguro.vigentes.ids
+    seguros_ids = Seguro.vigentes_incorporaciones.ids
     seguros.where(id: seguros_ids).present?
   end
 
