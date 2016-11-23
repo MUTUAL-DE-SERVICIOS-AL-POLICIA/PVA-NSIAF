@@ -63,9 +63,10 @@ end
 group :test do
   gem "faker", "~> 1.2.0"
   gem 'capybara'
+  gem 'capybara-webkit'
   gem "database_cleaner"
   gem "launchy", "~> 2.3.0"
-  gem "selenium-webdriver", "~> 2.39.0"
+  gem 'selenium-webdriver', '~> 2.53', '>= 2.53.4'
   gem 'guard-rspec', require: false
   gem "spork-rails"
   gem "guard-spork"
