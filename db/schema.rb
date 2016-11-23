@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170108201838) do
+ActiveRecord::Schema.define(version: 20161123094938) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -115,7 +115,6 @@ ActiveRecord::Schema.define(version: 20170108201838) do
   end
 
   add_index "barcodes", ["entity_id"], name: "index_barcodes_on_entity_id", using: :btree
-  add_index "barcodes", ["status"], name: "index_barcodes_on_status", using: :btree
 
   create_table "buildings", force: :cascade do |t|
     t.string   "code",       limit: 50
@@ -329,6 +328,20 @@ ActiveRecord::Schema.define(version: 20170108201838) do
     t.integer  "nro_solicitud",         limit: 4,   default: 0
     t.string   "incremento_alfabetico", limit: 255
     t.string   "observacion",           limit: 255
+  end
+
+  create_table "resumen", id: false, force: :cascade do |t|
+    t.integer "id",               limit: 4,  default: 0,     null: false
+    t.integer "subarticle_id",    limit: 4
+    t.integer "request_id",       limit: 4
+    t.integer "amount",           limit: 4
+    t.integer "amount_delivered", limit: 4
+    t.integer "total_delivered",  limit: 4,  default: 0
+    t.boolean "invalidate",                  default: false
+    t.integer "code",             limit: 4
+    t.float   "monto1",           limit: 24
+    t.integer "stock",            limit: 4,  default: 0,     null: false
+    t.integer "monto2",           limit: 4
   end
 
   create_table "seguros", force: :cascade do |t|
