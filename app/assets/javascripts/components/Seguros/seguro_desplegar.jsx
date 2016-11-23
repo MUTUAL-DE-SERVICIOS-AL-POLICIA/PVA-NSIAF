@@ -46,12 +46,10 @@ class SeguroDesplegar extends React.Component {
           <SeguroPanelActivos key={i} name={name} seguro={incorporacion.seguro} activos={incorporacion.activos} sumatoria={incorporacion.sumatoria} resumen={incorporacion.resumen} sumatoria_resumen={incorporacion.sumatoria_resumen} urls={incorporacion.urls} links_descarga="SI"/>
         )
       });
-      if(incorporaciones.length == 0) {
-        boton_incorporar =
-          <a className="btn btn-primary" href={this.props.data.urls.incorporaciones}><span className='glyphicon glyphicon-edit'></span>
-            Incorporaciones
-          </a>;
-      }
+      boton_incorporar =
+        <a className="btn btn-primary" href={this.props.data.urls.incorporaciones}><span className='glyphicon glyphicon-edit'></span>
+          Incorporaciones
+        </a>;
     }
     else {
       titulo = <h2>Cotización</h2>;
