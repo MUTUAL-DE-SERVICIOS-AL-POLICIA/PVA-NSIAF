@@ -3,9 +3,8 @@
 
 .col-sm-9.column.col-sm-offset-1
   = simple_form_for @asset, html: { class: 'form-horizontal' } do |f|
-    = f.input :code, required: true, input_html: {autofocus: true}
-    = f.input :code_old
     = f.input :detalle, required: true, as: :string
+    = f.input :code_old
     = f.input :medidas
     = f.input :material
     = f.input :color

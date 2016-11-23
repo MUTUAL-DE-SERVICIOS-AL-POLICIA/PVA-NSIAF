@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :asset do
-    code {Faker::Code.isbn}
     description "activo 1"
     auxiliary_id "1"
     account_id "2"

@@ -207,4 +207,19 @@ RSpec.describe Request, type: :model do
       end
     end
   end
+
+  context 'Generación automática de codigos de activos' do
+    it 'Sin ningún activo' do
+      expect(Asset.obtiene_siguiente_codigo).to eq(1)
+    end
+
+    it 'Con activos' do
+      FactoryGirl.create :asset
+      FactoryGirl.create :asset
+      FactoryGirl.create :asset
+      FactoryGirl.create :asset
+      a = FactoryGirl.create :asset
+      expect(a.code).to eq(5)
+    end
+  end
 end
