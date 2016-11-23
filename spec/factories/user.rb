@@ -6,6 +6,7 @@ FactoryGirl.define do
     ci '1234567 LP'
     sequence(:email) { |n| "jrocha#{n}@agetic.gob.bo" }
     sequence(:username, 'a') { |n| "jrocha#{n}" }
+    password { 'Demo1234' }
     phone '212345'
     mobile '70612345'
     department

@@ -84,6 +84,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-webkit (1.1.0)
+      capybara (~> 2.0, >= 2.0.2)
+      json
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -308,11 +311,10 @@ GEM
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
-    selenium-webdriver (2.39.0)
-      childprocess (>= 0.2.5)
-      multi_json (~> 1.0)
+    selenium-webdriver (2.53.4)
+      childprocess (~> 0.5)
       rubyzip (~> 1.0)
-      websocket (~> 1.0.4)
+      websocket (~> 1.0)
     shellany (0.0.1)
     simple_form (3.0.2)
       actionpack (~> 4.0)
@@ -348,7 +350,7 @@ GEM
       json (>= 1.8.0)
     warden (1.2.3)
       rack (>= 1.0)
-    websocket (1.0.7)
+    websocket (1.2.3)
     whenever (0.9.7)
       chronic (>= 0.6.3)
     where-or (0.1.2)
@@ -376,6 +378,7 @@ DEPENDENCIES
   byebug
   cancan
   capybara
+  capybara-webkit
   carrierwave
   coffee-rails (~> 4.0.0)
   database_cleaner
@@ -405,7 +408,7 @@ DEPENDENCIES
   rubyzip (>= 1.0.0)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
-  selenium-webdriver (~> 2.39.0)
+  selenium-webdriver (~> 2.53, >= 2.53.4)
   simple_form
   spork-rails
   spring

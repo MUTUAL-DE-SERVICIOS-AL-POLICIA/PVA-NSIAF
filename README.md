@@ -179,6 +179,16 @@ cual no se carga correctamente cuando se usa el comando `rake db:test:prepare`
 
 ### Ejecución de tests
 
+* Requisitos de Sistema Operativo para los tests de aceptación
+
+```console
+sudo apt-get install qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base \
+gstreamer1.0-tools gstreamer1.0-x
+```
+
+Nota: Esto es necesario para instalar la gema `capybara-webkit` y para mayor
+información [ver link](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
+
 * Ejecutar todos los tests
 
 ```console
