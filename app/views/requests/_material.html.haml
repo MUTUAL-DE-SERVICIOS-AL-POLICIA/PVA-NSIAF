@@ -34,6 +34,9 @@
     %td.text-center {{code}}
     %td {{description}}
     %td.text-center {{unit}}
+    %td.text-center
+      %strong.badge{title: 'Stock'}
+        {{stock}}
     %td.amount.text-center.note.col-md-1
       = number_field_tag "quantity", '1',  id: 'amount', class: 'form-control input-sm  text-right', disabled: false, type: 'number', min: 0 , max:"{{stock}} +1"
     %td.actions-request.vert-align.text-center

@@ -76,6 +76,11 @@ class SubarticleRequest < ActiveRecord::Base
     { id: id, verificacion: verificacion, mensaje: mensaje }
   end
 
+  # Obtiene el stock disponible del subarticulo asociado.
+  def obtiene_stock
+    subarticle.present? ? subarticle.stock.round : 0
+  end
+
   def self.is_delivered?
     where('total_delivered < amount_delivered').present?
   end

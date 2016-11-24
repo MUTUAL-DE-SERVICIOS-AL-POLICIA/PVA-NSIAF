@@ -183,7 +183,7 @@ class Request extends BarcodeReader
     .done (respuesta) =>
       $.map(respuesta.data, (val, i) ->
         elemento = $('#' + val.id)
-        cantidad_solicitada = parseInt(elemento.find('td')[4].innerText)
+        cantidad_solicitada = parseInt(elemento.find('td')[5].innerText)
         if elemento.find('input').val() > cantidad_solicitada
           if val.verificacion
             _.open_modal('La cantidad a entregar es mayor a la cantidad solicitada.')
