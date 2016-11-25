@@ -50,6 +50,11 @@ class SubarticleRequest < ActiveRecord::Base
     subarticle.present? ? subarticle.barcode : ''
   end
 
+  # Obtiene el stock disponible del subarticulo asociado.
+  def subarticle_stock
+    subarticle.present? ? subarticle.stock : 0
+  end
+
   def self.get_subarticle(subarticle_id)
     where(subarticle_id: subarticle_id).first
   end
@@ -74,11 +79,6 @@ class SubarticleRequest < ActiveRecord::Base
       verificacion = false
     end
     { id: id, verificacion: verificacion, mensaje: mensaje }
-  end
-
-  # Obtiene el stock disponible del subarticulo asociado.
-  def obtiene_stock
-    subarticle.present? ? subarticle.stock : 0
   end
 
   def self.is_delivered?
