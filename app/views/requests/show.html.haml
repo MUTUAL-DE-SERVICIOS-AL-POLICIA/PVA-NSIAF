@@ -115,7 +115,7 @@
                   - if @request.status == 'initiation'
                     %td.text-center
                       %strong.badge{title: 'Stock'}
-                        = s_request.obtiene_stock
+                        = mostrar_entero_float(s_request.obtiene_stock)
                   %td.text-center.td-cantidad{id: "tdcant"}= s_request.amount
                   - if %w(delivered canceled).include?(@request.status)
                     %td.amount_delivered.text-center= s_request.total_delivered

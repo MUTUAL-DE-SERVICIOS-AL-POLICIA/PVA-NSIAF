@@ -78,7 +78,7 @@ class SubarticleRequest < ActiveRecord::Base
 
   # Obtiene el stock disponible del subarticulo asociado.
   def obtiene_stock
-    subarticle.present? ? subarticle.stock.round : 0
+    subarticle.present? ? subarticle.stock : 0
   end
 
   def self.is_delivered?
