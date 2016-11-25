@@ -66,8 +66,6 @@
         %table.table.table-bordered.table-condensed{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
           %thead
             %tr
-              - unless is_pdf?
-                %th Código Barras
               %th Código
               %th Unidad
               %th Descripción
@@ -90,16 +88,14 @@
                   %tr{ id: s_request.id }
                     %td= s_request.subarticle_code
                     %td= s_request.subarticle_unit
-                    %td{title: s_request.subarticle_barcode}
-                      = s_request.subarticle_description
+                    %td= s_request.subarticle_description
                     %td.text-center
                       = s_request.amount
                 - elsif s_request.amount_delivered != 0
                   %tr{ id: s_request.id }
                     %td= s_request.subarticle_code
                     %td= s_request.subarticle_unit
-                    %td{title: s_request.subarticle_barcode}
-                      = s_request.subarticle_description
+                    %td= s_request.subarticle_description
                     %td.text-center
                       - if @status_pdf == 'initiation'
                         = s_request.amount
@@ -107,11 +103,9 @@
                         = s_request.total_delivered
               - else
                 %tr{ id: s_request.id }
-                  %td= s_request.subarticle_barcode
                   %td= s_request.subarticle_code
                   %td{id: 'subarticle_unit'}= s_request.subarticle_unit
-                  %td{title: s_request.subarticle_barcode}
-                    = s_request.subarticle_description
+                  %td= s_request.subarticle_description
                   - if @request.status == 'initiation'
                     %td.text-center
                       %strong.badge{title: 'Stock'}
