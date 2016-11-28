@@ -77,10 +77,6 @@ class SubarticlesController < ApplicationController
     render json: Subarticle.search_subarticle(params[:q]), root: false
   end
 
-  def recode
-    render "assets/recode"
-  end
-
   def autocomplete
     subarticles = view_context.search_asset_subarticle(Subarticle, params[:q])
     respond_to do |format|

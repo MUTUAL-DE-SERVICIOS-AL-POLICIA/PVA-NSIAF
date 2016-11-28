@@ -114,7 +114,6 @@ Rails.application.routes.draw do
     collection do
       get :articles
       get :get_subarticles
-      get :recode
       get :autocomplete
       get :subarticles_array
       post :first_entry
@@ -149,7 +148,6 @@ Rails.application.routes.draw do
       get :devolution
       get :users
       get :departments
-      get :recode
     end
   end
 

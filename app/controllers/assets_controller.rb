@@ -113,9 +113,6 @@ class AssetsController < ApplicationController
     end
   end
 
-  def recode
-  end
-
   # search by code and description
   def autocomplete
     assets = view_context.search_asset_subarticle(Asset, params[:q])

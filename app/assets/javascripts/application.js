@@ -48,7 +48,6 @@
 //= require proceedings
 //= require typeahead
 //= require notices
-//= require recoding
 //= require holder
 //= require bootstrap-datepicker
 //= require bootstrap-datepicker.es
