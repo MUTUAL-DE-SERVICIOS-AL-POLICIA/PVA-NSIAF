@@ -260,56 +260,6 @@ module ApplicationHelper
       delimiter: ','
   end
 
-  def graphic_statistics(array, graphic)
-    LazyHighCharts::HighChart.new(graphic) do |f|
-      f.chart({ defaultSeriesType: graphic })
-      if graphic == 'pie'
-        f.series(
-          data: get_array_graphic(array),
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            style: { fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif", fontSize: "12px" },
-            format: "<b>{point.code}</b>: {point.percentage:.1f} %"
-          },
-        )
-      else
-        f.xAxis(
-          categories: array.map.with_index { |f, index| index == 1 ? 'Otros' : f.code },
-          labels: { style: { fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif", fontSize: "12px" } }
-        )
-        f.yAxis( min: 0, title: { text: 'Bs' } )
-        f.legend( enabled: false )
-        f.series(
-          data: get_array_graphic(array),
-          dataLabels: {
-            enabled: true,
-            rotation: -90,
-            color: '#FFFFFF',
-            align: 'right',
-            x: 4,
-            y: 10,
-            style: { fontSize: '12px', fontFamily: 'Helvetica Neue,Helvetica,Arial,sans-serif' }
-          }
-        )
-      end
-      f.tooltip( pointFormat: "<b>{point.date}</b>" )
-    end
-  end
-
-  def get_array_graphic(array)
-    array.map.with_index { |f, index| index < 11 ? ( array_search(f, index, array) ) : nil }.compact
-  end
-
-  def array_search(f, index, array)
-    index == 10 ? { code: 'Otros', name: "Otros(#{sum_array_others(array)})", y: 1 } : { code: f.code, name: "#{f.description}(#{f.total_amount}) - #{f.max_cost.to_f} Bs.", y: f.max_cost.to_f, date: (l f.created_at.to_date) }
-  end
-
-  def sum_array_others(array)
-    count = array.map.count
-    array.last(count - 10).inject(0) { |sum, (f, index)| sum + f.total_amount }
-  end
-
   def title_system
     case current_user.role
     when 'super_admin' then 'Sistema de Activos Fijos y Almacenes'

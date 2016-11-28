@@ -87,7 +87,6 @@ Rails.application.routes.draw do
   resources :derecognised, only: :index
 
   resources :requests, except: [:edit, :destroy] do
-    get :search_subarticles, on: :collection
     get :obtiene_nro_solicitud, on: :collection
   end
 
@@ -112,10 +111,8 @@ Rails.application.routes.draw do
       get :kardex
     end
     collection do
-      get :articles
       get :get_subarticles
       get :autocomplete
-      get :subarticles_array
       post :first_entry
     end
   end
@@ -146,8 +143,6 @@ Rails.application.routes.draw do
       get :search
       get :assignation
       get :devolution
-      get :users
-      get :departments
     end
   end
 

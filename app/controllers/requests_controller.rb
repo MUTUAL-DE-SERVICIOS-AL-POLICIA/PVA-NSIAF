@@ -53,21 +53,6 @@ class RequestsController < ApplicationController
     end
   end
 
-  def search_subarticles
-    if params[:q].present?
-      search_date
-      date = false
-    else
-      date = true
-    end
-    @q = SubarticleRequest.search(params[:q])
-    @requests = @q.result.user_requests(date)
-    respond_to do |format|
-      format.html
-      format.js
-    end
-  end
-
   def obtiene_nro_solicitud
     resultado = Hash.new
     if params[:d].present?
