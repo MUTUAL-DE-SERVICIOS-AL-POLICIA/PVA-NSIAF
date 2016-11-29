@@ -1,5 +1,6 @@
 class Supplier < ActiveRecord::Base
   has_many :note_entries
+  has_many :ingresos
 
   validates :name, presence: true, uniqueness: true
 

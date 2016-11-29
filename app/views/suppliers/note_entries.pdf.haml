@@ -1,0 +1,21 @@
+.title_pdf
+  %h3 Notas de Ingreso a Almacenes
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th Nro
+      %th Empresa
+      %th Encargado
+      %th Factura
+      %th Nro nota entrega
+      %th Fecha
+
+  %tbody
+    - @note_entries.each_with_index do |nota, i|
+      %tr
+        %td= i + 1
+        %td= @supplier.name
+        %td= nota.user.name
+        %td= nota.invoice_number
+        %td= nota.nro_nota_ingreso
+        %td= I18n.l nota.note_entry_date if nota.note_entry_date.present?
