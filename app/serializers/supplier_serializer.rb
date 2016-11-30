@@ -11,10 +11,10 @@ class SupplierSerializer < ActiveModel::Serializer
   end
 
   def note_entries
-    serialization_options[:role] == 'admin_store' || serialization_options[:role] == 'super_admin' ?  object.note_entries : []
+    %w(super_admin admin_store).include?(serialization_options[:role]) ? object.note_entries : []
   end
 
   def ingresos
-    serialization_options[:role] == 'admin' || serialization_options[:role] == 'super_admin' ? object.ingresos : []
+    %w(super_admin admin).include?(serialization_options[:role]) ? object.ingresos : []
   end
 end

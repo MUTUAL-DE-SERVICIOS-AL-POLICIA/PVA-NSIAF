@@ -32,7 +32,7 @@ class NotaEntradaSerializer < ActiveModel::Serializer
   end
 
   def creado_el
-    object.note_entry_date.present? ? I18n.l(object.created_at) : ''
+    object.created_at.present? ? I18n.l(object.created_at) : ''
   end
 
   def anulado
