@@ -17,9 +17,9 @@ class Note extends React.Component{
         <td className='text-center'>{ indice }</td>
         <td>{empresa}</td>
         <td>{encargado}</td>
-        <td>{factura_nro}</td>
-        <td><a href={link}>{nro}</a></td>
-        <td>{fecha}</td>
+        <td className='text-center'>{factura_nro}</td>
+        <td className='text-center'><a href={link}>{nro}</a></td>
+        <td className='text-center'>{fecha}</td>
       </tr>
     )
   }

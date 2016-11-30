@@ -20,13 +20,13 @@ class SupplierDespliega extends React.Component{
     let blob, blobURL, csv;
     csv = '';
     $('table.ingresos > thead').find('tr').each(function() {
-      return csv = ';empresa;encargado;factura_nro;nota_entrega_nro;fecha\n';
+      return csv = ';Empresa;Encargado;Nro. de Factura;Nro. Nota de Ingreso;Fecha Nota de Ingreso\n';
     });
-    $('table.ingresos > tbody').find('tr').each(function(){
+    $('table.ingresos > tbody').find('tr').each(function() {
       var sep;
       sep='';
       $(this).find('td').each(function() {
-        if($(this).find('a').length > 0){
+        if($(this).find('a').length > 0) {
           csv += sep + $(this).find('a')[0].innerHTML;
         }
         else{
@@ -46,13 +46,13 @@ class SupplierDespliega extends React.Component{
     let blob, blobURL, csv;
     csv = '';
     $('table.notes > thead').find('tr').each(function() {
-      return csv = ';empresa;encargado;factura_nro;nota_entrega_nro;fecha\n';
+      return csv = ';Empresa;Encargado;Nro. de Factura;Nro. Nota de Ingreso;Fecha Nota de Ingreso\n';
     });
-    $('table.notes > tbody').find('tr').each(function(){
+    $('table.notes > tbody').find('tr').each(function() {
       var sep;
       sep='';
       $(this).find('td').each(function() {
-        if($(this).find('a').length > 0){
+        if($(this).find('a').length > 0) {
           csv += sep + $(this).find('a')[0].innerHTML;
         }
         else{
@@ -105,7 +105,7 @@ class SupplierDespliega extends React.Component{
               <a className="btn btn-default pfd" href={this.props.data.urls.pdf_note_entry}>PDF</a>
             </div>
           </div>
-          <h3>Notas en Almacenes</h3>
+          <h3>Notas de Ingreso de Almacenes</h3>
           <table className ="table table-striped table-condensed table-bordered alineacion-media notes">
             <thead>
               <tr>
@@ -116,9 +116,9 @@ class SupplierDespliega extends React.Component{
                 </th>
                 <th>Empresa</th>
                 <th>Encargado</th>
-                <th>Nro factura</th>
-                <th>Nro Nota Ingreso</th>
-                <th>Fecha Nota Ingreso</th>
+                <th className='text-center'>Nro. de Factura</th>
+                <th className='text-center'>Nro. Nota de Ingreso</th>
+                <th className='text-center'>Fecha Nota de Ingreso</th>
               </tr>
             </thead>
             <tbody>
@@ -139,35 +139,36 @@ class SupplierDespliega extends React.Component{
         )
       });
       cantidadIngresos = this.state.supplier.ingresos.length;
-      ingresosRender = <div>
-                        <div className="pull-right">
-                          Descargar:
-                          <div className="btn-group btn-group-xs">
-                            <a className="btn btn-default csvingreso">CSV</a>
-                            <a className="btn btn-default pfd" href={this.props.data.urls.pdf_ingreso}>PDF</a>
-                          </div>
-                        </div>
-                        <h3>Notas en Activos</h3>
-                        <table className ="table table-striped table-condensed table-bordered alineacion-media ingresos">
-                          <thead>
-                            <tr>
-                                <th className="text-center">
-                                <strong className="badge" title="Total">
-                                  {cantidadIngresos}
-                                </strong>
-                              </th>
-                              <th>Empresa</th>
-                              <th>Encargado</th>
-                              <th>Nro Factura</th>
-                              <th>Nro de Ingreso</th>
-                              <th>Fecha nota</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {ingresos}
-                          </tbody>
-                        </table>
-                      </div>
+      ingresosRender =
+        <div>
+          <div className="pull-right">
+            Descargar:
+            <div className="btn-group btn-group-xs">
+              <a className="btn btn-default csvingreso">CSV</a>
+              <a className="btn btn-default pfd" href={this.props.data.urls.pdf_ingreso}>PDF</a>
+            </div>
+          </div>
+          <h3>Notas de Ingreso de Activos Fijos</h3>
+          <table className ="table table-striped table-condensed table-bordered alineacion-media ingresos">
+            <thead>
+              <tr>
+                  <th className="text-center">
+                  <strong className="badge" title="Total">
+                    {cantidadIngresos}
+                  </strong>
+                </th>
+                <th>Empresa</th>
+                <th>Encargado</th>
+                <th className='text-center'>Nro. de Factura</th>
+                <th className='text-center'>Nro. Nota de Ingreso</th>
+                <th className='text-center'>Fecha Nota de Ingreso</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ingresos}
+            </tbody>
+          </table>
+        </div>
     }
 
     return (
@@ -190,13 +191,13 @@ class SupplierDespliega extends React.Component{
             <dl className="dl-horizontal">
               <dt>Nombre</dt>
               <dd>{this.state.supplier.name}</dd>
-              <dt>nit</dt>
+              <dt>NIT</dt>
               <dd>{this.state.supplier.nit}</dd>
-              <dt>telefono</dt>
+              <dt>Teléfono</dt>
               <dd>{this.state.supplier.telefono}</dd>
-              <dt>contacto</dt>
+              <dt>Contacto</dt>
               <dd>{this.state.supplier.contacto}</dd>
-              <dt>fecha creacion</dt>
+              <dt>Fecha de creación</dt>
               <dd>{this.state.supplier.created_at}</dd>
             </dl>
           </div>

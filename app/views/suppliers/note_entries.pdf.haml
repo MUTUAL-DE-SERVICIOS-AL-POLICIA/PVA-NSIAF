@@ -6,9 +6,9 @@
       %th Nro
       %th Empresa
       %th Encargado
-      %th Factura
-      %th Nro nota entrega
-      %th Fecha
+      %th.text-center Nro. de Factura
+      %th.text-center Nro. Nota de Ingreso
+      %th.text-center Fecha Nota de Ingreso
 
   %tbody
     - @note_entries.each_with_index do |nota, i|
@@ -16,6 +16,6 @@
         %td= i + 1
         %td= @supplier.name
         %td= nota.user.name
-        %td= nota.invoice_number
-        %td= nota.nro_nota_ingreso
-        %td= I18n.l nota.note_entry_date if nota.note_entry_date.present?
+        %td.text-center= nota.invoice_number
+        %td.text-center= nota.nro_nota_ingreso
+        %td.text-center= I18n.l nota.note_entry_date if nota.note_entry_date.present?

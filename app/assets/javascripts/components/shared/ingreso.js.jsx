@@ -16,9 +16,9 @@ class Ingreso extends React.Component{
         <td className='text-center'>{indice}</td>
         <td>{empresa}</td>
         <td>{encargado}</td>
-        <td>{factura_numero}</td>
-        <td><a href={link}>{numero}</a></td>
-        <td>{nota_entrega_fecha}</td>
+        <td className='text-center'>{factura_numero}</td>
+        <td className='text-center'><a href={link}>{numero}</a></td>
+        <td className='text-center'>{nota_entrega_fecha}</td>
       </tr>
     )
   }
