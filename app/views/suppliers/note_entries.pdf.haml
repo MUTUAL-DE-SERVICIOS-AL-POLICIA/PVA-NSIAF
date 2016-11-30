@@ -13,7 +13,7 @@
   %tbody
     - @note_entries.each_with_index do |nota, i|
       %tr
-        %td= i + 1
+        %td.text-center= i + 1
         %td= @supplier.name
         %td= nota.user.name
         %td.text-center= nota.invoice_number

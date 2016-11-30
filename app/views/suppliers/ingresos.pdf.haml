@@ -12,7 +12,7 @@
   %tbody
     - @ingresos.each_with_index do |ingreso, i|
       %tr
-        %td= i + 1
+        %td.text-center= i + 1
         %td= @supplier.name
         %td= ingreso.user.name
         %td.text-center= ingreso.factura_numero
