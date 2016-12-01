@@ -15,7 +15,8 @@ class SegurosController < ApplicationController
     activos_ids = @seguro.assets.try(:ids)
     activos = Asset.todos.where(id: activos_ids).order(code: :asc)
     sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
-    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name").order("nombre")
+    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria")
+                      .group("accounts.name").order("nombre")
     sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
     @data = {
       titulo: 'Seguro',

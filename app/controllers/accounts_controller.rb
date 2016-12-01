@@ -11,6 +11,15 @@ class AccountsController < ApplicationController
   # GET /accounts/1
   # GET /accounts/1.json
   def show
+    auxiliares = @account.cuenta_auxiliares
+    debugger
+    @data = {
+      id: @account.id,
+      urls: {
+        show_account: api_account_path(@account)
+
+      }
+    }
   end
 
   # GET /accounts/new

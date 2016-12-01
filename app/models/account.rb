@@ -179,4 +179,13 @@ class Account < ActiveRecord::Base
   end
   # END datos para el reporte resumen de activos fijos ordenado por grupo contable
   ##
+  #
+  ##
+
+  def cuenta_auxiliares
+    lista = auxiliaries.joins(:assets)
+                       .select("auxiliaries.id,auxiliaries.code, auxiliaries.name, count(assets.id) as cantidad_activos , sum(assets.precio) as monto_activos")
+                       .group("auxiliaries.id")
+                       .order("auxiliaries.code")
+  end
 end

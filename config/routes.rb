@@ -41,6 +41,8 @@ Rails.application.routes.draw do
 
       resources :auxiliares, only: [:show]
 
+      resources :accounts, only: [:show]
+
       resources :suppliers, only: [:show]
     end
   end
