@@ -1,5 +1,7 @@
 class NotaEntradaSerializer < ActiveModel::Serializer
-  attributes :id, :nro, :empresa, :encargado, :fecha, :total, :nota_entrega_nro, :factura_nro, :anulado, :mensaje, :creado_el
+  attributes :id, :nro, :nro_nota_ingreso, :empresa, :encargado, :fecha, :total,
+             :nota_entrega_nro, :factura_nro, :anulado, :mensaje, :creado_el,
+             :observacion, :links
 
   def nro
     ''
@@ -14,7 +16,11 @@ class NotaEntradaSerializer < ActiveModel::Serializer
   end
 
   def fecha
-    object.note_entry_date
+    object.note_entry_date.present? ? I18n.l(object.note_entry_date) : ''
+  end
+
+  def nro_nota_ingreso
+    object.obtiene_nro_nota_ingreso
   end
 
   def nota_entrega_nro
@@ -26,7 +32,7 @@ class NotaEntradaSerializer < ActiveModel::Serializer
   end
 
   def creado_el
-    object.created_at
+    object.created_at.present? ? I18n.l(object.created_at) : ''
   end
 
   def anulado
@@ -35,5 +41,9 @@ class NotaEntradaSerializer < ActiveModel::Serializer
 
   def mensaje
     object.message
+  end
+
+  def links
+    { show: note_entry_path(object) }
   end
 end
