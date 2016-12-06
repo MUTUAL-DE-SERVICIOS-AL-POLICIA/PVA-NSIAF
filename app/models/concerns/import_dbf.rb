@@ -15,10 +15,10 @@ module ImportDbf
     def import_dbf(dbf)
       url_base = Rails.application.secrets.convert_api_url
       url_api = 'dbf/json' # DBF => JSON
-      site = RestClient::Resource.new url_base
+      site = RestClient::Resource.new url_base, verify_ssl: false
       file = File.new(dbf.tempfile, 'rb')
       users = JSON.parse(site[url_api].post(filedata: file))
-
+      users = Asset.ordenar_fecha_factura(users) if self.name == 'Asset'
       i = j = n = 0
       transaction do
         users.each_with_index do |record, index|
@@ -32,6 +32,8 @@ module ImportDbf
           end
           puts ''
         end
+        # Obtiene las UFVs necesarias y las gestiones de los activos actuales.
+        Asset.completa_migracion if self.name == 'Asset'
       end
       [i, n, j] # insertados, no insertados, nils
     end

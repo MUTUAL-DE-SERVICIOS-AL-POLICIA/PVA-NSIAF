@@ -4,10 +4,11 @@ class Asset < ActiveRecord::Base
   include Autoincremento
 
   CORRELATIONS = {
-    'CODIGO' => 'code',
-    'DESCRIP' => 'description',
+    'CODIGO' => 'code_old',
+    'DESCRIP' => 'detalle',
     'CODESTADO' => 'state',
-    'OBSERV' => 'observation'
+    'OBSERV' => 'observation',
+    'COSTO' => 'precio'
   }
 
   STATE = {
@@ -47,7 +48,7 @@ class Asset < ActiveRecord::Base
 
   before_save :establecer_barcode
   before_save :check_barcode
-  before_save :generar_descripcion
+  before_validation :generar_descripcion
 
   has_paper_trail
 
@@ -147,6 +148,11 @@ class Asset < ActiveRecord::Base
 
   def self.historical_assets(user)
     includes(:user).joins(:asset_proceedings).where(asset_proceedings: {proceeding_id: user.proceeding_ids})
+  end
+
+  # Metodo para ordenar por la fecha de ingreso de los activos.
+  def self.ordenar_fecha_factura(activos)
+    activos.sort { |a, b| [a['ANO'], a['MES'], a['DIA']] <=> [b['ANO'], b['MES'], b['DIA']] }
   end
 
   def auxiliary_code
@@ -487,19 +493,41 @@ class Asset < ActiveRecord::Base
     code.present?
   end
 
+  # Método que genera un ingreso asociado a un activo para las migraciones.
+  def generar_ingreso(anio, mes, dia)
+    return unless anio.present? && mes.present? && dia.present?
+    user = User.first
+    supplier = Supplier.find_or_create_by(name: 'MIGRACION')
+    ingreso = Ingreso.find_or_create_by(
+      factura_fecha: Date.strptime("#{anio}-#{mes}-#{dia}", '%Y-%m-%d'),
+      supplier_id: supplier.id,
+      user_id: user.id
+    )
+    update_attributes!(ingreso_id: ingreso.id)
+  end
+
   private
 
-  ##
   # Guarda en la base de datos de acuerdo a la correspondencia de campos.
   def self.save_correlations(record)
     asset = { is_migrate: true }
     CORRELATIONS.each do |origin, destination|
-      asset.merge!({ destination => record[origin] })
+      asset.merge!(destination => record[origin])
     end
     ac = Account.find_by_code(record['CODCONT'])
     ax = Auxiliary.joins(:account).where(code: record['CODAUX'], accounts: { code: record['CODCONT'] }).take
     u = User.joins(:department).where(code: record['CODRESP'], departments: { code: record['CODOFIC'] }).take
-    asset.present? && new(asset.merge!({ account: ac, auxiliary: ax, user: u })).save
+    if asset.present? && (activo = new(asset.merge!(account_id: ac.id, auxiliary: ax, user: u ))).save
+      if record['ANO'].present? && record['MES'].present? && record['DIA'].present?
+        activo.generar_ingreso(record['ANO'], record['MES'], record['DIA'])
+      end
+    end
+  end
+
+  # Importa los datos de las UFVs y crea las gestiones correspondientes.
+  def self.completa_migracion
+    Ufv.descargar_e_importar_activos
+    Gestion.generar_gestiones_migracion
   end
 
   ##
@@ -516,13 +544,13 @@ class Asset < ActiveRecord::Base
 
   def generar_descripcion
     descripcion = []
-    descripcion << detalle if detalle.strip.present?
-    descripcion << "MEDIDAS #{medidas}" if medidas.strip.present?
-    descripcion << "MATERIAL #{material}" if material.strip.present?
-    descripcion << "COLOR #{color}" if color.strip.present?
-    descripcion << "MARCA #{marca}" if marca.strip.present?
-    descripcion << "MODELO #{modelo}" if modelo.strip.present?
-    descripcion << "SERIE #{serie}" if serie.strip.present?
+    descripcion << detalle if detalle.present? && detalle.strip.present?
+    descripcion << "MEDIDAS #{medidas}" if medidas.present? && medidas.strip.present?
+    descripcion << "MATERIAL #{material}" if material.present? && material.strip.present?
+    descripcion << "COLOR #{color}" if color.present? && color.strip.present?
+    descripcion << "MARCA #{marca}" if marca.present? && marca.strip.present?
+    descripcion << "MODELO #{modelo}" if modelo.present? && modelo.strip.present?
+    descripcion << "SERIE #{serie}" if serie.present? && serie.strip.present?
     self.description = descripcion.join(' ').squish
   end
 end
