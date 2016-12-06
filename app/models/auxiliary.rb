@@ -65,16 +65,6 @@ class Auxiliary < ActiveRecord::Base
     end
   end
 
-  ##
-  #
-  def assets_per_auxiliary
-    assets.present? ? assets.count : 0
-  end
-
-  def sumatoria_precio_activos
-    assets.inject(0.0) { |total, assets| total + assets.precio }
-  end
-
   private
 
   ##
