@@ -182,10 +182,17 @@ class Account < ActiveRecord::Base
   #
   ##
 
-  def cuenta_auxiliares
-    lista = auxiliaries.joins(:assets)
-                       .select("auxiliaries.id,auxiliaries.code, auxiliaries.name, count(assets.id) as cantidad_activos , sum(assets.precio) as monto_activos")
-                       .group("auxiliaries.id")
-                       .order("auxiliaries.code")
+  def retorna_auxiliares
+    auxiliaries.select('auxiliaries.id,auxiliaries.code, auxiliaries.name, count(assets.id) as cantidad_activos , sum(assets.precio) as monto_activos')
+               .joins(:assets)
+               .group('auxiliaries.id')
+               .order('auxiliaries.code')
+
+  end
+
+  def retorna_activos
+    auxiliaries.select('assets.id, assets.code, assets.description, auxiliaries.name, assets.precio')
+               .joins(:assets)
+               .order('assets.code')
   end
 end

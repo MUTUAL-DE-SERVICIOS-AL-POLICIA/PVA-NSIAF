@@ -79,6 +79,11 @@ Rails.application.routes.draw do
     get :ingresos, on: :member
   end
 
+  resources :accounts do
+    get :auxiliares, on: :member
+    get :activos, on: :member
+  end
+
   resources :kardex_prices
 
   resources :kardexes

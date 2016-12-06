@@ -10,14 +10,25 @@ class AccountsController < ApplicationController
 
   # GET /accounts/1
   # GET /accounts/1.json
+
   def show
-    auxiliares = @account.cuenta_auxiliares
-    debugger
+    lista_auxiliares = @account.retorna_auxiliares
+    lista_activos = @account.retorna_activos
+    monto_activos = lista_activos.inject(0.0){ |sum, x| sum + x.precio }
     @data = {
       id: @account.id,
+      lista_auxiliares: ActiveModel::ArraySerializer.new(lista_auxiliares, each_serializer: AuxiliaryAccountSerializer),
+      lista_activos: ActiveModel::ArraySerializer.new(lista_activos, each_serializer:AssetAccountSerializer),
+      cuenta: AccountSerializer.new(@account),
+      monto_activos: monto_activos,
+      cantidad_activos: lista_activos.size,
       urls: {
-        show_account: api_account_path(@account)
-
+        show_account: api_account_path(@account),
+        show_auxiliar: auxiliary_path,
+        show_activo: asset_path,
+        show_list: accounts_path,
+        pdf_activos: activos_account_path(@account, format: :pdf),
+        pdf_auxiliares: auxiliares_account_path(@account, format: :pdf)
       }
     }
   end
@@ -76,6 +87,45 @@ class AccountsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def auxiliares
+    @data = @account.retorna_auxiliares
+    @cantidad_activos = @account.retorna_activos.size
+    @monto_activos = @account.retorna_activos.inject(0.0){ |sum, x| sum + x.precio }
+    respond_to do |format|
+      format.pdf do
+        filename = 'auxiliares'
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               template: 'accounts/auxiliares.pdf.haml',
+               orientation: 'Portrait',
+               page_size: 'Letter',
+               margin: view_context.margin_pdf,
+               header: { html: { template: 'shared/header.pdf.haml'} },
+               footer: { html: { template: 'shared/footer.pdf.haml'} }
+      end
+    end
+  end
+
+  def activos
+    @data = @account.retorna_activos
+    @monto_activos = @account.retorna_activos.inject(0.0){ |sum, x| sum + x.precio }
+    respond_to do |format|
+      format.pdf do
+        filename = 'activos'
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               template: 'accounts/activos.pdf.haml',
+               orientation: 'Portrait',
+               page_size: 'Letter',
+               margin: view_context.margin_pdf,
+               header: { html: { template: 'shared/header.pdf.haml'} },
+               footer: { html: { template: 'shared/footer.pdf.haml'} }
+        end
+      end
+   end
 
   private
     # Use callbacks to share common setup or constraints between actions.

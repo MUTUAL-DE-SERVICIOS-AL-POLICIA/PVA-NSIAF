@@ -1,7 +1,6 @@
 class AccountSerializer < ActiveModel::Serializer
   self.root = false
-  attributes  :id, :codigo, :nombre, :vida_util, :depreciar, :actualizar,
-              :auxiliaries , :asset
+  attributes  :id, :codigo, :nombre, :vida_util, :depreciar, :actualizar
 
   def codigo
     object.code
@@ -17,9 +16,5 @@ class AccountSerializer < ActiveModel::Serializer
 
   def actualizar
     object.actualizar == true ? 'Si' : 'No'
-  end
-
-  def asset
-    object.cuenta_auxiliares
   end
 end
