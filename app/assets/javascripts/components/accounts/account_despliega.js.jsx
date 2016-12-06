@@ -104,12 +104,12 @@ class AccountDespliega extends React.Component {
                 Auxiliar
               </strong>
             </th>
-            <th className='text-center'>
+            <th className='text-right'>
               <strong>
                 Cantidad Activos
               </strong>
             </th>
-            <th className='text-center'>
+            <th className='text-right'>
               <strong>
                 Monto Total
               </strong>
@@ -226,7 +226,7 @@ class AccountDespliega extends React.Component {
               <dd>{this.props.data.cuenta.depreciar}</dd>
               <dt>Actualizar</dt>
               <dd>{this.props.data.cuenta.actualizar}</dd>
-              <dt>Auxiliares</dt>
+              <dt>Cantidad de Auxiliares</dt>
               <dd>{this.props.data.lista_auxiliares.length}</dd>
             </dl>
           </div>
