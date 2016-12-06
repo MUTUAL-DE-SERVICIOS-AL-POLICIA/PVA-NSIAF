@@ -1,6 +1,6 @@
 class AssetAccountSerializer < ActiveModel::Serializer
   self.root = false
-  attributes  :id, :codigo, :descripcion, :auxiliar, :precio
+  attributes  :id, :codigo, :descripcion, :auxiliar, :precio, :url
 
   def codigo
     object.code
@@ -12,5 +12,9 @@ class AssetAccountSerializer < ActiveModel::Serializer
 
   def auxiliar
     object.name
+  end
+
+  def url
+    { show: asset_path(object) }
   end
 end

@@ -17,7 +17,8 @@ class AuxiliariesController < ApplicationController
         show: api_auxiliare_path(@auxiliary),
         edit: edit_auxiliary_path(@auxiliary),
         list: auxiliaries_path,
-        pdf: activos_auxiliary_path(@auxiliary, format: :pdf)
+        pdf: activos_auxiliary_path(@auxiliary, format: :pdf),
+        account_url: account_path(@auxiliary.account_id)
       }
     }
   end

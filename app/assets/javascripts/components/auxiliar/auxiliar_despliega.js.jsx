@@ -76,46 +76,46 @@ class AuxiliarDespliega extends React.Component {
     }
     return(
       <div>
-        <div className="page-header">
-          <div className="pull-right">
-            <a className="btn btn-primary" href={this.props.data.urls.edit}>
-              <span className="glyphicon glyphicon-edit"></span>
+        <div className='page-header'>
+          <div className='pull-right'>
+            <a className='btn btn-primary' href={this.props.data.urls.edit}>
+              <span className='glyphicon glyphicon-edit'></span>
               Editar
             </a>
             &nbsp;
-            <a className="btn btn-default" href={this.props.data.urls.list}>
-              <span className="glyphicon glyphicon-list"></span>
+            <a className='btn btn-default' href={this.props.data.urls.list}>
+              <span className='glyphicon glyphicon-list'></span>
               Auxiliares
             </a>
           </div>
           <h2>Auxiliar</h2>
         </div>
-        <div className="col-lg-4 col-md-5 col-sm-12">
-          <dl className="dl-horizontal">
+        <div className='col-lg-4 col-md-5 col-sm-12'>
+          <dl className='dl-horizontal'>
             <dt>Código</dt>
             <dd>{this.state.auxiliar.code}</dd>
             <dt>Nombre</dt>
             <dd>{this.state.auxiliar.name}</dd>
             <dt>Cuenta</dt>
-            <dd><a title="15" href={'/accounts/'+this.state.auxiliar.account.id}>{this.state.auxiliar.account.name}</a></dd>
+            <dd><a title='15' href={this.props.data.urls.account_url}>{this.state.auxiliar.account.name}</a></dd>
             <dt>Estado</dt>
             <dd>{this.obtieneEstado()}</dd>
           </dl>
         </div>
-        <div className="col-lg-8 col-md-7 col-sm-12" id="current-assets">
-          <div className="pull-right">
+        <div className='col-lg-8 col-md-7 col-sm-12' id='current-assets'>
+          <div className='pull-right'>
             Descargar:
-            <div className="btn-group btn-group-xs">
+            <div className='btn-group btn-group-xs'>
               <a className='btn btn-default csv'>CSV</a>
               <a className='btn btn-default pdf' href={this.props.data.urls.pdf}>PDF</a>
             </div>
           </div>
           <h4>Activos</h4>
-          <table className="table table-striped table-condensed table-bordered alineacion-media">
+          <table className='table table-striped table-condensed table-bordered alineacion-media'>
             <thead>
               <tr>
                 <th className='text-center'>
-                  <strong className="badge" title="Total">
+                  <strong className='badge' title='Total'>
                     {cantidad}
                   </strong>
                 </th>

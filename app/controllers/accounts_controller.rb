@@ -25,8 +25,6 @@ class AccountsController < ApplicationController
       urls: {
         show_account: api_account_path(@account),
         show_auxiliar: auxiliary_path,
-        show_activo: asset_path,
-        show_list: accounts_path,
         pdf_activos: activos_account_path(@account, format: :pdf),
         pdf_auxiliares: auxiliares_account_path(@account, format: :pdf)
       }

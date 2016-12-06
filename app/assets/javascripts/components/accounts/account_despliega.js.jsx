@@ -65,7 +65,7 @@ class AccountDespliega extends React.Component {
       auxiliares: this.props.data.lista_auxiliares,
       activos: this.props.data.lista_activos,
       urls: this.props.data.urls
-   })
+   });
  }
 
   componentDidMount() {
@@ -79,7 +79,7 @@ class AccountDespliega extends React.Component {
       return (
         <tr key={auxiliar.id}>
           <td className='text-center'>{i + 1}</td>
-          <td className='text-center'><a href={'/auxiliaries/'+auxiliar.id}>{auxiliar.codigo}</a></td>
+          <td className='text-center'><a href={auxiliar.url.show}>{auxiliar.codigo}</a></td>
           <td>{auxiliar.nombre}</td>
           <td className='text-right'>{auxiliar.cantidad_activos}</td>
           <td className='text-right'>{auxiliar.monto_activos}</td>
@@ -99,7 +99,7 @@ class AccountDespliega extends React.Component {
             <th className='text-center'>
                <strong>Código</strong>
             </th>
-            <th className='text-center'>
+            <th>
               <strong>
                 Auxiliar
               </strong>
@@ -146,7 +146,7 @@ class AccountDespliega extends React.Component {
         return (
           <tr key= {activo.codigo}>
             <td className='text-center'>{i + 1}</td>
-            <td className='text-center'><a href={'/assets/'+activo.codigo}> {activo.codigo}</a></td>
+            <td className='text-center'><a href={activo.url.show}> {activo.codigo}</a></td>
             <td>{activo.descripcion}</td>
             <td>{activo.auxiliar}</td>
             <td className='text-right'>{activo.precio}</td>
@@ -165,12 +165,12 @@ class AccountDespliega extends React.Component {
               <th>
                 <strong>Código</strong>
               </th>
-              <th className='text-center'>
+              <th>
                 <strong>
                   Activo
                 </strong>
               </th>
-              <th className='text-center'>
+              <th>
                 <strong>
                   Auxiliar
                 </strong>
