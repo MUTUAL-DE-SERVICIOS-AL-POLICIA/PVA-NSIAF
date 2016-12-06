@@ -85,12 +85,6 @@ class SubarticleRequest < ActiveRecord::Base
     where('total_delivered < amount_delivered').present?
   end
 
-  def self.user_requests(date)
-    request = joins(subarticle: [{article: :material}, :entry_subarticles], request: [user: :department]).group("subarticle_requests.subarticle_id").select("subarticles.code, subarticles.description, sum(subarticle_requests.amount) as total_amount, requests.created_at, max(entry_subarticles.unit_cost) as max_cost").where('entry_subarticles.unit_cost = (SELECT MAX(entry_subarticles.unit_cost) FROM entry_subarticles WHERE entry_subarticles.subarticle_id = subarticles.id)').order('max(entry_subarticles.unit_cost) DESC')
-    request = request.where("requests.created_at >= ? AND requests.created_at <= ?", Time.now.beginning_of_day, Time.now.end_of_day) if date
-    return request
-  end
-
   private
 
   # Register in kardex when delivery subarticles

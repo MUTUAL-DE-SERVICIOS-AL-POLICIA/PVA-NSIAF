@@ -48,14 +48,11 @@
 //= require proceedings
 //= require typeahead
 //= require notices
-//= require recoding
 //= require holder
 //= require bootstrap-datepicker
 //= require bootstrap-datepicker.es
 //= require note_entry
 //= require subarticles_close
-//= require highcharts/highcharts
-//= require highcharts/highcharts-more
 //= require actas
 //= require ingresos
 //= require reportes

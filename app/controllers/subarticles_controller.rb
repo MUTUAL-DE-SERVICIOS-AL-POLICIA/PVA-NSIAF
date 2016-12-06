@@ -64,21 +64,8 @@ class SubarticlesController < ApplicationController
     end
   end
 
-  def articles
-    material = params[:material].present? ? params[:material] : (params[:q].present? ? params[:q][:subarticle_article_material_id_eq] : '')
-    render json: Article.search_by(material), root: false
-  end
-
-  def subarticles_array
-    render json: Subarticle.search_by(params[:q][:subarticle_article_id_eq])
-  end
-
   def get_subarticles
     render json: Subarticle.search_subarticle(params[:q]), root: false
-  end
-
-  def recode
-    render "assets/recode"
   end
 
   def autocomplete

@@ -41,7 +41,6 @@ gem 'cancan'
 gem 'will_paginate'
 gem 'carrierwave'
 gem 'ransack'
-gem 'lazy_high_charts'
 gem 'paper_trail'
 
 gem 'autocomplete-off'

@@ -5,12 +5,6 @@ class Ability
     user ||= User.new # guest user (not logged in)
     if user.is_super_admin?
       can :manage, :all
-      # can :manage, Entity
-      # can :manage, User
-      # cannot [:show, :update], User, id: user.id
-      # can [:index, :import], :dbf
-      # can :manage, Version
-      # can :indice, :almacenes
     elsif user.is_admin? # Responsable Activos fijos
       can :manage, Supplier
       can :manage, Building
@@ -41,7 +35,6 @@ class Ability
       can :manage, Subarticle
       can :manage, NoteEntry
       can :manage, EntrySubarticle
-      can [:index, :account, :asset, :auxiliary, :obt_cod_barra, :pdf], :barcode
       can :manage, Building
       can :manage, Department
       can :manage, User
