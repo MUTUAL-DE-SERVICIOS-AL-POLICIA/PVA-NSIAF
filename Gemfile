@@ -40,7 +40,7 @@ gem 'haml-rails'
 gem 'cancan'
 gem 'will_paginate'
 gem 'carrierwave'
-gem 'ransack', github: 'activerecord-hackery/ransack'
+gem 'ransack'
 gem 'lazy_high_charts'
 gem 'paper_trail'
 
