@@ -83,4 +83,10 @@ Rails.application.configure do
   # Exception notification
   Rails.application.config.middleware.use ExceptionNotification::Rack,
     :email => Rails.application.secrets.exception_notification.symbolize_keys
+
+  # React.js builds
+  config.react.variant = :production
+
+  # React.js addons
+  config.react.addons = false
 end

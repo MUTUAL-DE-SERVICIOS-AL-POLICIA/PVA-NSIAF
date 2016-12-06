@@ -13,7 +13,7 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-datatables-rails', '~> 1.12.2'
 
-gem 'react-rails', "~> 1.6.0"
+gem 'react-rails'
 
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
