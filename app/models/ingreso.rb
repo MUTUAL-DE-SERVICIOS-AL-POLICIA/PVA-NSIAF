@@ -59,6 +59,13 @@ class Ingreso < ActiveRecord::Base
     end
   end
 
+  # Método para obtener las gestiones involucradas de los ingresos generados.
+  def self.obtiene_gestiones
+    Ingreso.select('extract(year from factura_fecha) as gestion')
+           .group('extract(year from factura_fecha)')
+           .order('extract(year from factura_fecha) asc')
+  end
+
   def supplier_name
     supplier.present? ? supplier.name : ''
   end

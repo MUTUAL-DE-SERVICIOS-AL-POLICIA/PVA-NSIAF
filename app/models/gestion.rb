@@ -80,6 +80,13 @@ class Gestion < ActiveRecord::Base
     end
   end
 
+  # Genera las gestiones relacionadas a los ingresos de los activos migrados.
+  def self.generar_gestiones_migracion
+    Ingreso.obtiene_gestiones.each do |anio|
+      find_or_create_by(anio: anio.gestion)
+    end
+  end
+
   # Verificar si una gestión es la gestión actual
   def gestion_actual?
     Gestion.gestion_actual == self
