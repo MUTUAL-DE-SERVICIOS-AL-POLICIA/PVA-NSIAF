@@ -19,7 +19,7 @@
 //= require moment_es
 //= require react
 //= require react_ujs
-//= require autosuggest
+//= require autosuggest.min
 //= require components
 //= require dataTables/jquery.dataTables
 //= require dataTables/jquery.dataTables.bootstrap3
