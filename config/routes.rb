@@ -41,6 +41,8 @@ Rails.application.routes.draw do
 
       resources :auxiliares, only: [:show]
 
+      resources :accounts, only: [:show]
+
       resources :suppliers, only: [:show]
     end
   end
@@ -75,6 +77,11 @@ Rails.application.routes.draw do
   resources :suppliers do
     get :note_entries, on: :member
     get :ingresos, on: :member
+  end
+
+  resources :accounts do
+    get :auxiliares, on: :member
+    get :activos, on: :member
   end
 
   resources :kardex_prices

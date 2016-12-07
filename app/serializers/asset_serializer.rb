@@ -3,9 +3,7 @@ class AssetSerializer < ActiveModel::Serializer
   attributes :id, :code, :description, :detalle, :barcode, :observaciones, :precio, :cuenta, :urls
 
   def urls
-    {
-      show: asset_path(object)
-    }
+    { show: asset_path(object) }
   end
 
   def cuenta
