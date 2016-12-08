@@ -16,8 +16,8 @@ class SubarticlesDatatable
 
 private
 
-    def data
-      array.map do |subarticle|
+  def data
+    array.map do |subarticle|
       as = []
       as << subarticle.code
       as << subarticle.code_old
@@ -49,7 +49,6 @@ private
       'pull-right badge badge-success'
     end
   end
-
 
   def array
     @subarticles ||= fetch_array
