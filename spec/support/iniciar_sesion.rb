@@ -7,6 +7,12 @@ module IniciarSesion
 
     click_on 'INGRESAR'
   end
+
+  def cerrar_sesion(usuario)
+    click_link usuario.name
+
+    click_link 'Cerrar Sesión'
+  end
 end
 
 RSpec.configure do |config|

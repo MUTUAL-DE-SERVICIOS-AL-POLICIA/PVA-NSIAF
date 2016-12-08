@@ -34,6 +34,16 @@ class Department < ActiveRecord::Base
     building.present? ? building.entity_name : ''
   end
 
+  # Obtiene la imagen para el pie de página de los documentos
+  def get_image_footer
+    building.present? ? building.get_image_footer : ''
+  end
+
+  # Obtiene la imagen para el encabezado de los documentos
+  def get_image_header
+    building.present? ? building.get_image_header : ''
+  end
+
   def self.search_by(building_id)
     departments = []
     departments = where(building_id: building_id) if building_id.present?

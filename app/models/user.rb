@@ -25,8 +25,8 @@ class User < ActiveRecord::Base
   with_options if: :is_not_migrate? do |m|
     m.validates :email, presence: false, allow_blank: true
     m.validates :code, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-    m.validates :name, :title, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
-    m.validates :username, presence: true, length: {minimum: 4, maximum: 128}, uniqueness: true, format: { with: /\A[a-z]+\z/ }
+    m.validates :name, :title, presence: true
+    m.validates :username, presence: true, length: {minimum: 4, maximum: 128}, uniqueness: true
     m.validates :phone, :mobile, numericality: { only_integer: true }, allow_blank: true
     m.validates :department_id, presence: true
   end
@@ -37,8 +37,8 @@ class User < ActiveRecord::Base
   end
 
   with_options if: :is_admin_or_super? do |m|
-    m.validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
-    m.validates :username, presence: true, length: {minimum: 4, maximum: 128}, uniqueness: true, format: { with: /\A[a-z]+\z/ }
+    m.validates :name, presence: true
+    m.validates :username, presence: true, length: {minimum: 4, maximum: 128}, uniqueness: true
     m.validates :role, presence: true, format: { with: /#{ROLES.join('|')}/ }
   end
 
@@ -88,6 +88,21 @@ class User < ActiveRecord::Base
 
   def entity_name
     department.present? ? department.entity_name : ''
+  end
+
+  # Obtiene la imagen para los encabezados y pie para un documento
+  def get_image(tipo)
+    tipo == 'header' ? get_image_header : get_image_footer
+  end
+
+  # Obtiene la imagen para el pie de página de los documentos
+  def get_image_footer
+    department.present? ? department.get_image_footer : ''
+  end
+
+  # Obtiene la imagen para el encabezado de los documentos
+  def get_image_header
+    department.present? ? department.get_image_header : ''
   end
 
   def has_roles?

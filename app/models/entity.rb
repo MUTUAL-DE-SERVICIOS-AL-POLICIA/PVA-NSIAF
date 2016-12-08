@@ -4,10 +4,12 @@ class Entity < ActiveRecord::Base
   mount_uploader :footer, ImageUploader
 
   validates :code, presence: true, uniqueness: true
-  validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
+  validates :name, presence: true
   validates :acronym, presence: true
 
   has_paper_trail
+
+  has_many :buildings
 
   def self.set_columns
     h = ApplicationController.helpers
@@ -41,7 +43,15 @@ class Entity < ActiveRecord::Base
     header.present? ? header_url.to_s : ''
   end
 
+  def get_image_header
+    get_header
+  end
+
   def get_footer
     footer.present? ? footer_url.to_s : ''
+  end
+
+  def get_image_footer
+    get_footer
   end
 end

@@ -1,16 +1,17 @@
 FactoryGirl.define do
   factory :user do
     sequence(:code)
-    sequence(:name, 'a') { |n| "Juan José Rocha #{n}" }
-    title 'Profesional de Desarrollo'
-    ci '1234567 LP'
-    sequence(:email) { |n| "jrocha#{n}@agetic.gob.bo" }
-    sequence(:username, 'a') { |n| "jrocha#{n}" }
-    password { 'Demo1234' }
-    phone '212345'
-    mobile '70612345'
-    department
+    name     { Faker::Name.name_with_middle }
+    title    { Faker::Name.title }
+    ci       { Faker::Number.number(10) }
+    email    { Faker::Internet.email }
+    username { Faker::Internet.user_name(4) }
+    password { Faker::Internet.password(6) }
+    phone    { Faker::Number.number(7) }
+    mobile   { Faker::Number.number(8) }
     role nil
+
+    department
 
     trait :super_admin do # Super administrador
       role 'super_admin'

@@ -223,13 +223,7 @@ module ApplicationHelper
     if current_user.is_super_admin?
       img = "/images/#{type}.jpg"
     else
-      belongs_department = current_user.department
-      if belongs_department.present?
-        entity = belongs_department.building.entity
-        img = type == 'header' ? entity.get_header : entity.get_footer
-      else
-        img = ""
-      end
+      img = current_user.get_image(type)
     end
     img.present? ? pdf_image_tag(img, class: "image") : ''
   end
