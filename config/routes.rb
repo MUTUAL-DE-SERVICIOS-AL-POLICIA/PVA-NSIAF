@@ -154,6 +154,8 @@ Rails.application.routes.draw do
       get :search
       get :assignation
       get :devolution
+      get :users
+      get :departments
     end
   end
 

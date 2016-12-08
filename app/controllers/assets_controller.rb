@@ -73,6 +73,20 @@ class AssetsController < ApplicationController
     render nothing: true
   end
 
+  def users
+    department = params[:department].present? ? params[:department] : (params[:q].present? ? params[:q][:request_user_department_id_eq] : '')
+    respond_to do |format|
+      format.json { render json: User.actives.order(:name).search_by(department), root: false }
+    end
+  end
+
+  def departments
+    building = params[:building].present? ? params[:building] : params[:q][:request_user_department_building_id_eq]
+    respond_to do |format|
+      format.json { render json: Department.actives.order(:name).search_by(building), root: false }
+    end
+  end
+
   def search
     asset = Asset.assigned.find_by_barcode params[:code]
     respond_to do |format|
