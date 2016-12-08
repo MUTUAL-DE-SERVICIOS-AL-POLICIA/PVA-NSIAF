@@ -4,20 +4,15 @@ describe 'Inicio de sesión de usuarios' do
   let(:usuario) { create(:user) }
 
   it 'con credenciales válidos' do
-    visit new_user_session_path
-    fill_in 'user_username', with: usuario.username
-    fill_in 'user_password', with: usuario.password
-
-    click_on 'INGRESAR'
+    iniciar_sesion(usuario)
 
     expect(page).to have_content('Has iniciado sesión correctamente.')
   end
 
 
   it 'con credenciales inválidos' do
-    visit new_user_session_path
-    fill_in 'user_username', with: usuario.username
-    fill_in 'user_password', with: 'contraseña-equivocada'
+    usuario.password = 'contraseña-inválida'
+    iniciar_sesion(usuario)
 
     click_on 'INGRESAR'
 

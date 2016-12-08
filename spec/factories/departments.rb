@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :department do
     sequence(:code)
-    name 'Unidad de Innovación, Investigación y Desarrollo'
+    name { Faker::Address.city }
+
     building
   end
 end

@@ -8,12 +8,12 @@ class UserSerializer < ActiveModel::Serializer
 
   def urls
     {
-      list: users_url,
-      show: user_url(object),
-      edit: edit_user_url(object),
-      historico: obt_historico_actas_api_user_url(object , format: :json),
-      download_activos_pdf: download_user_url(object, format: :pdf),
-      download_activos_csv: download_user_url(object, format: :csv)
+      list: users_path,
+      show: user_path(object),
+      edit: edit_user_path(object),
+      historico: obt_historico_actas_api_user_path(object , format: :json),
+      download_activos_pdf: download_user_path(object, format: :pdf),
+      download_activos_csv: download_user_path(object, format: :csv)
     }
   end
 end
