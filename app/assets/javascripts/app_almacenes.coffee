@@ -21,7 +21,7 @@ almacenes.controller('EntradasController', ['$scope', '$http', ($scope, $http) -
   host = "." # "http://127.0.0.1:3000"
 
   $http.get("#{host}/api/nota_entradas").success((data) ->
-    $scope.entradas = data.nota_entradas
+    $scope.entradas = data
   ).error (data, status) ->
     console.log status, data
 
@@ -43,7 +43,7 @@ almacenes.controller('SalidasController', ['$scope', '$http', ($scope, $http) ->
   host = "." # "http://127.0.0.1:3000"
 
   $http.get("#{host}/api/solicitudes").success((data) ->
-    $scope.solicitudes = data.solicitudes
+    $scope.solicitudes = data
   ).error (data, status) ->
     console.error status, data
 

@@ -76,9 +76,6 @@ end
 # Read Excel files
 gem 'roo'
 
-# Bower para rails
-gem 'bower-rails'
-
 # Angular templates into the Asset Pipeline
 gem 'angular-rails-templates'
 

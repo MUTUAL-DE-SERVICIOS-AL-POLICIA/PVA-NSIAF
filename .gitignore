@@ -30,3 +30,4 @@ erd.pdf
 /public/assets
 /public/uploads
 /.byebug_history
+/vendor/assets/bower_components

@@ -1,4 +1,0 @@
-asset 'angular'
-asset 'angular-resource'
-asset 'angular-route'
-# vim: ft=ruby

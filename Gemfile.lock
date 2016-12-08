@@ -59,7 +59,6 @@ GEM
       sass (~> 3.2)
     bootstrap3-datetimepicker-rails (4.17.42)
       momentjs-rails (>= 2.8.1)
-    bower-rails (0.10.0)
     builder (3.2.2)
     byebug (3.5.1)
       columnize (~> 0.8)
@@ -363,7 +362,6 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootstrap-sass (~> 3.1.1.0)
   bootstrap3-datetimepicker-rails (~> 4.17.42)
-  bower-rails
   byebug
   cancan
   capybara
@@ -410,4 +408,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   1.13.4
+   1.13.6
