@@ -1,5 +1,5 @@
 class SubarticlesDatatable
-  delegate :params, :link_to_if, :type_status, :links_actions, to: :@view
+  delegate :params, :link_to_if, :content_tag, :type_status, :links_actions, to: :@view
 
   def initialize(view)
     @view = view
@@ -24,10 +24,29 @@ private
       as << subarticle.description
       as << subarticle.unit
       as << link_to_if(subarticle.material, subarticle.material_description, subarticle.material, title: subarticle.material_code)
+      as << content_tag(:span, subarticle.stock.floor, class: style_stock(subarticle.minimum, subarticle.stock))
       as << type_status(subarticle.status)
       entry = subarticle.entry_subarticles.present? ? '' : 'subarticle'
       as << links_actions(subarticle, entry)
       as
+    end
+  end
+
+  def style_stock(minimum, stock)
+    if minimum.nil?
+      if stock.zero?
+        'pull-right badge badge-error'
+      else
+        'pull-right badge'
+      end
+    elsif stock < minimum
+      if stock.zero?
+        'pull-right badge badge-error'
+      else
+        'pull-right badge badge-warning'
+      end
+    else
+      'pull-right badge badge-success'
     end
   end
 
@@ -48,7 +67,8 @@ private
   end
 
   def sort_column
-    columns = %w[subarticles.code subarticles.code_old subarticles.description subarticles.unit materials.description subarticles.status]
+    # TODO el penúltimo campo subarticles.status corresponde al campo stock al cual falta colocar ordenación.  
+    columns = %w[subarticles.code subarticles.code_old subarticles.description subarticles.unit materials.description subarticles.status subarticles.status]
     columns[params[:iSortCol_0].to_i]
   end
 
