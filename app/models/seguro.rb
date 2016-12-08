@@ -146,7 +146,7 @@ class Seguro < ActiveRecord::Base
 
   def incorporaciones_json
     respuesta = []
-    self.incorporaciones.order(state: :desc, created_at: :desc).each do |inc|
+    incorporaciones.order(state: :desc, created_at: :desc).each do |inc|
       activos_ids = inc.assets.try(:ids)
       activos = Asset.todos.where(id: activos_ids).order(:code)
       sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
@@ -154,7 +154,7 @@ class Seguro < ActiveRecord::Base
                        .group("accounts.name").order("nombre")
       sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
       respuesta << {
-        titulo: "Incorporación",
+        titulo: 'Incorporación',
         seguro: SeguroSerializer.new(inc),
         activos: ActiveModel::ArraySerializer.new(activos, each_serializer: AssetSerializer),
         sumatoria: sumatoria,

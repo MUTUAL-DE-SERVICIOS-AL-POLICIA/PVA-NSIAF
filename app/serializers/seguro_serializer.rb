@@ -4,7 +4,7 @@ class SeguroSerializer < ActiveModel::Serializer
              :factura_numero, :factura_autorizacion, :factura_fecha,
              :factura_monto, :fecha_inicio_vigencia, :fecha_fin_vigencia,
              :baja_logica, :proveedor, :proveedor_nit, :proveedor_telefono,
-             :state, :tipo, :seguro_id
+             :state, :tipo, :seguro_id, :urls
   has_many :assets, serializer: AssetSerializer
 
   def factura_fecha
@@ -29,5 +29,9 @@ class SeguroSerializer < ActiveModel::Serializer
 
   def proveedor_telefono
     object.proveedor_telefono
+  end
+
+  def urls
+    { edit: edit_seguro_path(object)}
   end
 end

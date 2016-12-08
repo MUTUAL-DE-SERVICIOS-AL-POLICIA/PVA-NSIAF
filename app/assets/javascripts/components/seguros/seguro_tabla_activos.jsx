@@ -55,9 +55,9 @@ class SeguroTablaActivos extends React.Component{
               </strong>
             </th>
             <th className="text-center">Código</th>
-            <th className="text-center">Descripción</th>
-            <th className="text-center">Cuenta</th>
-            <th className="text-center">Precio</th>
+            <th>Descripción</th>
+            <th>Cuenta</th>
+            <th className="text-right">Precio</th>
           </tr>
         </thead>
         <tbody>
@@ -117,9 +117,9 @@ class SeguroTablaActivos extends React.Component{
         <thead>
           <tr>
             <th></th>
-            <th className="text-center">Cuenta</th>
-            <th className="text-center">Cantidad</th>
-            <th className="text-center">Monto</th>
+            <th>Cuenta</th>
+            <th className="text-right">Cantidad</th>
+            <th className="text-right">Monto</th>
           </tr>
         </thead>
         <tbody>

@@ -4,9 +4,9 @@
     %tr
       %th
       %th.text-center Código
-      %th.text-center Descripción
-      %th.text-center Cuenta
-      %th.text-center Precio
+      %th Descripción
+      %th Cuenta
+      %th.text-right Precio
   %tbody
     - if @activos.present?
       - @activos.each_with_index do |activo, index|

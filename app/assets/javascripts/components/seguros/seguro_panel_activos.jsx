@@ -24,9 +24,16 @@ class SeguroPanelActivos extends React.Component {
       let fecha_factura = new Date(this.props.seguro.factura_fecha);
       const incorporacion = this.props.incorporacion;
       boton_asegurar =
-        <a className="btn btn-success pull-right" href="#">
-          <i aria-hidden="true" className="fa fa-lock fa-2x"></i>
-        </a>
+        <div>
+          <a className='btn btn-success pull-right' href='#' title='Asegurado'>
+            <i aria-hidden='true' className='fa fa-lock fa-2x'></i>
+          </a>
+          <div className='clearfix visible-xs-block'></div>
+          <br />
+          <a className='btn btn-primary btn-xs pull-right' title='Editar' href={this.props.seguro.urls.edit}>
+            <span className='glyphicon glyphicon-edit'></span>
+          </a>
+        </div>
       datos_seguro =
         <div>
           <div className="col-lg-4 col-md-5 col-sm-12">
@@ -55,7 +62,7 @@ class SeguroPanelActivos extends React.Component {
     }
     else {
       boton_asegurar =
-        <a className="btn btn-warning pull-right" onClick={this.asegurar}>
+        <a className="btn btn-warning pull-right" onClick={this.asegurar} title='Por Asegurar'>
           <i aria-hidden="true" className="fa fa-unlock-alt fa-2x"></i>
         </a>;
     }

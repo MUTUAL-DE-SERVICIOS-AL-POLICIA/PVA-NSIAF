@@ -47,9 +47,18 @@ class SegurosController < ApplicationController
   end
 
   def edit
+    activos_ids = @seguro.assets.try(:ids)
+    activos = Asset.todos.where(id: activos_ids).order(code: :asc)
+    sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
+    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name").order("nombre")
+    sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
     @data = {
       titulo: 'Editar Seguro',
       seguro: SeguroSerializer.new(@seguro),
+      activos: ActiveModel::ArraySerializer.new(activos, each_serializer: AssetSerializer),
+      sumatoria: sumatoria,
+      resumen: ActiveModel::ArraySerializer.new(resumen, each_serializer: ResumenSerializer),
+      sumatoria_resumen: sumatoria_resumen,
       urls: {
         proveedores: api_proveedores_path(format: :json),
         activos: api_activos_path(format: :json),
