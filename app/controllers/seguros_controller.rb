@@ -60,6 +60,7 @@ class SegurosController < ApplicationController
   end
 
   def asegurar
+    seguro_padre = @seguro.seguro
     activos_ids = @seguro.assets.try(:ids)
     activos = Asset.todos.where(id: activos_ids).order(:code)
     sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
@@ -68,6 +69,7 @@ class SegurosController < ApplicationController
     @data = {
       titulo: 'Asegurar',
       seguro: @seguro,
+      numero_contrato: seguro_padre.numero_contrato,
       activos: ActiveModel::ArraySerializer.new(activos, each_serializer: AssetSerializer),
       sumatoria: sumatoria,
       resumen: ActiveModel::ArraySerializer.new(resumen, each_serializer: ResumenSerializer),

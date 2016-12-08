@@ -1,7 +1,10 @@
 class SeguroSerializer < ActiveModel::Serializer
   self.root = false
-  attributes :id, :supplier, :user, :numero_poliza, :numero_contrato, :factura_numero, :factura_autorizacion, :factura_fecha, :factura_monto,
-             :fecha_inicio_vigencia, :fecha_fin_vigencia, :baja_logica, :proveedor, :proveedor_nit, :proveedor_telefono, :state, :seguro_id
+  attributes :id, :supplier, :user, :numero_poliza, :numero_contrato,
+             :factura_numero, :factura_autorizacion, :factura_fecha,
+             :factura_monto, :fecha_inicio_vigencia, :fecha_fin_vigencia,
+             :baja_logica, :proveedor, :proveedor_nit, :proveedor_telefono,
+             :state, :tipo, :seguro_id
   has_many :assets, serializer: AssetSerializer
 
   def factura_fecha

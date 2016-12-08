@@ -36,14 +36,19 @@ class SeguroDesplegar extends React.Component {
     let name;
     if(this.verificaAsegurado()){
       let poliza = this.props.data.seguro.numero_poliza;
+      let tipo = this.props.data.seguro.tipo;
       let fecha_inicio = new Date(this.props.data.seguro.fecha_inicio_vigencia);
       let fecha_fin = new Date(this.props.data.seguro.fecha_fin_vigencia);
       let fecha_factura = new Date(this.props.data.seguro.factura_fecha);
-      titulo = <h2>Póliza: {poliza} desde {moment(fecha_inicio).format("DD/MM/YYYY HH:mm")} hasta {moment(fecha_fin).format("DD/MM/YYYY HH:mm")}</h2>;
+      titulo =
+        <div>
+          <h2>Póliza: {poliza} desde {moment(fecha_inicio).format("DD/MM/YYYY HH:mm")} hasta {moment(fecha_fin).format("DD/MM/YYYY HH:mm")}</h2>
+          <h3>Tipo de Seguro: {tipo}</h3>
+        </div>;
       incorporaciones = this.props.data.incorporaciones.map((incorporacion, i) => {
         let name = "panel-" + i;
         return (
-          <SeguroPanelActivos key={i} name={name} seguro={incorporacion.seguro} activos={incorporacion.activos} sumatoria={incorporacion.sumatoria} resumen={incorporacion.resumen} sumatoria_resumen={incorporacion.sumatoria_resumen} urls={incorporacion.urls} links_descarga="SI"/>
+          <SeguroPanelActivos key={i} name={name} seguro={incorporacion.seguro} activos={incorporacion.activos} sumatoria={incorporacion.sumatoria} resumen={incorporacion.resumen} sumatoria_resumen={incorporacion.sumatoria_resumen} urls={incorporacion.urls} links_descarga='SI' incorporacion='SI'/>
         )
       });
       boton_incorporar =
@@ -67,6 +72,7 @@ class SeguroDesplegar extends React.Component {
           {titulo}
         </div>
         {incorporaciones}
+        <br />
         <SeguroPanelActivos name="panel-origen"  seguro={this.props.data.seguro} activos={this.props.data.activos} sumatoria={this.props.data.sumatoria} resumen={this.props.data.resumen} sumatoria_resumen={this.props.data.sumatoria_resumen} urls={this.props.data.urls} links_descarga="SI" />
       </div>
     );

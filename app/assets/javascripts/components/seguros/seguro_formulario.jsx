@@ -22,6 +22,7 @@ class SeguroFormulario extends React.Component {
       factura_autorizacion: this.refs.factura_autorizacion ? this.refs.factura_autorizacion.value : '',
       factura_monto: this.refs.factura_monto ? this.refs.factura_monto.value : '',
       factura_fecha: this.refs.factura_fecha ? this.refs.factura_fecha.refs.datepicker.value : '',
+      tipo: this.refs.tipo ? this.refs.tipo.value : '',
       numero_poliza: this.refs.numero_poliza ? this.refs.numero_poliza.value : '',
       numero_contrato: this.refs.numero_contrato ? this.refs.numero_contrato.value : '',
       fecha_inicio_vigencia: this.refs.fecha_inicio_vigencia ? this.refs.fecha_inicio_vigencia.refs.datepicker.value : '' ,
@@ -56,7 +57,7 @@ class SeguroFormulario extends React.Component {
           <div className='form-group'>
             <label className='col-sm-2 control-label'>Contrato</label>
             <div className='col-sm-2'>
-              <input type="text" ref="numero_contrato" name="numero_contrato" className="form-control" placeholder="Número de contrato" autoComplete="off" onChange={this.capturaDatos} />
+              <input type="text" ref="numero_contrato" name="numero_contrato" className="form-control" placeholder="Número de contrato" autoComplete="off" value={this.props.numero_contrato} readOnly />
             </div>
           </div>
         </div>);
@@ -98,12 +99,18 @@ class SeguroFormulario extends React.Component {
           </div>
           <div className='form-group'>
             <label className='col-sm-2 control-label'>Póliza</label>
-              <div className='col-sm-2'>
-                <input type="text" ref="numero_poliza" name="numero_poliza" className="form-control" placeholder="Poliza" autoComplete="off" onChange={this.capturaDatos} />
-              </div>
+            <div className='col-sm-4'>
+              <input type="text" ref="tipo" name="tipo" className="form-control" placeholder="Tipo de Póliza" autoComplete="off" onChange={this.capturaDatos} />
+            </div>
+            <div className='col-sm-2'>
+              <input type="text" ref="numero_poliza" name="numero_poliza" className="form-control" placeholder="Póliza" autoComplete="off" onChange={this.capturaDatos} />
+            </div>
             <div className='col-sm-2'>
               <input type="text" ref="numero_contrato" name="numero_contrato" className="form-control" placeholder="Número de contrato" autoComplete="off" onChange={this.capturaDatos} />
             </div>
+          </div>
+          <div className='form-group'>
+            <label className='col-sm-2 control-label'>Vigencia de la Póliza</label>
             <div className='col-sm-2'>
               <div className='input-group'>
                 <DateTimePicker ref="fecha_inicio_vigencia"  id="fecha_inicio_vigencia" placeholder={"Fecha inicio de vigencia"} classname="form-control" captura_fecha={this.capturaDatos} />

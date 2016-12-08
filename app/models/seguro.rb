@@ -146,9 +146,9 @@ class Seguro < ActiveRecord::Base
 
   def incorporaciones_json
     respuesta = []
-    self.incorporaciones.order(state: :desc).each do |inc|
+    self.incorporaciones.order(state: :desc, created_at: :desc).each do |inc|
       activos_ids = inc.assets.try(:ids)
-      activos = Asset.todos.where(id: activos_ids)
+      activos = Asset.todos.where(id: activos_ids).order(:code)
       sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
       resumen = activos.select("accounts.name as nombre, count(accounts.name) as cantidad, sum(assets.precio) as sumatoria")
                        .group("accounts.name").order("nombre")

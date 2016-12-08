@@ -12,6 +12,7 @@ class SeguroAsegurar extends React.Component {
         factura_autorizacion: '',
         factura_monto: '',
         factura_fecha: '',
+        tipo: '',
         numero_poliza: '',
         numero_contrato: '',
         fecha_inicio_vigencia: '',
@@ -42,6 +43,7 @@ class SeguroAsegurar extends React.Component {
         factura_autorizacion: data.factura_autorizacion,
         factura_monto: data.factura_monto,
         factura_fecha: data.factura_fecha,
+        tipo: data.tipo,
         numero_poliza: data.numero_poliza,
         numero_contrato: data.numero_contrato,
         fecha_inicio_vigencia: data.fecha_inicio_vigencia,
@@ -56,6 +58,7 @@ class SeguroAsegurar extends React.Component {
     const factura_autorizacion = this.escapeValor(this.state.seguro.factura_autorizacion);
     const factura_monto = this.escapeValor(this.state.seguro.factura_monto);
     const factura_fecha = this.state.seguro.factura_fecha;
+    const tipo = this.escapeValor(this.state.seguro.tipo);
     const numero_poliza = this.escapeValor(this.state.seguro.numero_poliza);
     const numero_contrato = this.escapeValor(this.state.seguro.numero_contrato);
     const fecha_inicio_vigencia = this.state.seguro.fecha_inicio_vigencia;
@@ -71,7 +74,8 @@ class SeguroAsegurar extends React.Component {
     }
     else{
       if(supplier_id === '' || factura_numero === '' || factura_autorizacion === '' || factura_fecha === '' ||
-         factura_monto === '' || numero_poliza === '' || numero_contrato === '' ||  fecha_inicio_vigencia === '' || fecha_fin_vigencia === ''){
+         factura_monto === '' || tipo === '' || numero_poliza === '' || numero_contrato === '' ||
+         fecha_inicio_vigencia === '' || fecha_fin_vigencia === '') {
         return false;
       }
       else{
@@ -123,7 +127,7 @@ class SeguroAsegurar extends React.Component {
               {this.props.data.titulo}
             </h3>
           </div>
-          <SeguroFormulario seguro_id={this.props.data.seguro.seguro_id}  urls={this.props.data.urls} capturarDatos={this.capturarDatos}/>
+          <SeguroFormulario seguro_id={this.props.data.seguro.seguro_id}  urls={this.props.data.urls} capturarDatos={this.capturarDatos} numero_contrato={this.props.data.numero_contrato} />
         </div>
         <SeguroTablaActivos activos={this.state.activos} sumatoria={this.state.sumatoria} resumen={this.state.resumen} sumatoria_resumen={this.state.sumatoria_resumen} />
         <div className="row">
