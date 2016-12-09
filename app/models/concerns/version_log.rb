@@ -22,10 +22,10 @@ module VersionLog
       whodunnit: PaperTrail.whodunnit,
       event: I18n.t(event, scope: 'versions')
     }
-    PaperTrail::Version.create! merge_metadata(data)
+    PaperTrail::Version.create! paper_trail.merge_metadata(data)
   end
 
   def set_merge_metadata(data)
-    merge_metadata(data)
+    paper_trail.merge_metadata(data)
   end
 end
