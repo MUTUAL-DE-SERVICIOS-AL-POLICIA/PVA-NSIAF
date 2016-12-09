@@ -45,7 +45,7 @@ gem 'wicked_pdf'
 
 gem 'non-stupid-digest-assets'
 
-gem 'rest_client'
+gem 'rest-client'
 
 group :development, :test do
   gem 'rails-erd'
