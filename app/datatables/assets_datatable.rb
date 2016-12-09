@@ -56,7 +56,9 @@ private
   end
 
   def sort_column
-    columns = %w[assets.code assets.code_old description ingresos.factura_fecha assets.precio suppliers.name accounts.name users.name ubicaciones.abreviacion assets.seguro]
+    # TODO se tiene que corregir el último campo ubicaciones.abreviacion para
+    # ordenación de seguros
+    columns = %w[assets.code assets.code_old description ingresos.factura_fecha assets.precio suppliers.name accounts.name users.name ubicaciones.abreviacion ubicaciones.abreviacion]
     columns[params[:iSortCol_0].to_i]
   end
 
