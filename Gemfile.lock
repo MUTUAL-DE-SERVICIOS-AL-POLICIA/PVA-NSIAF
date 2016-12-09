@@ -304,7 +304,7 @@ GEM
       rubyzip (~> 1.0)
       websocket (~> 1.0)
     shellany (0.0.1)
-    simple_form (3.0.2)
+    simple_form (3.0.4)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
     slop (3.6.0)
