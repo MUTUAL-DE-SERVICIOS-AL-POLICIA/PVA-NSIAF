@@ -27,9 +27,6 @@ gem 'jquery-rails'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
-# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-
-
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
@@ -46,9 +43,9 @@ gem 'paper_trail'
 gem 'autocomplete-off'
 gem 'wicked_pdf'
 
-gem "non-stupid-digest-assets"
+gem 'non-stupid-digest-assets'
 
-gem 'rest_client'
+gem 'rest-client'
 
 group :development, :test do
   gem 'rails-erd'
@@ -63,15 +60,14 @@ group :test do
   gem 'faker'
   gem 'capybara'
   gem 'capybara-webkit'
-  gem "database_cleaner"
-  gem "launchy", "~> 2.3.0"
+  gem 'database_cleaner'
+  gem 'launchy', '~> 2.3.0'
   gem 'selenium-webdriver', '~> 2.53', '>= 2.53.4'
   gem 'guard-rspec', require: false
-  gem "spork-rails"
-  gem "guard-spork"
-  gem "timecop"
+  gem 'spork-rails'
+  gem 'guard-spork'
+  gem 'timecop'
 end
-
 
 # Read Excel files
 gem 'roo'
