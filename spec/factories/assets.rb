@@ -1,17 +1,16 @@
 FactoryGirl.define do
   factory :asset do
-    description "activo 1"
-    auxiliary_id "1"
-    account_id "2"
-    detalle "detalle 1"
-    user_id "2"
-    medidas "12"
-    material "madera"
-    color "blanco"
-    marca "corimexo"
-    modelo "2012"
-    serie "12x12x2"
-    association :ingreso
-    association :auxiliary
+    detalle  { Faker::Beer.name }
+    medidas  { Faker::Beer.blg }
+    material { Faker::Commerce.color }
+    color    { Faker::Color.color_name }
+    marca    { Faker::Vehicle.manufacture }
+    modelo   { Faker::Code.asin }
+    serie    { Faker::Code.isbn }
+
+    ingreso
+    auxiliary
+    user
+    ubicacion
   end
 end

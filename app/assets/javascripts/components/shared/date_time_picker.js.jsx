@@ -8,8 +8,8 @@ class DateTimePicker extends React.Component {
   }
 
   componentDidMount() {
-    _ = this;
     $("#" + this.props.id).datetimepicker({
+      defaultDate: new Date(this.props.valor),
       format: 'DD/MM/YYYY HH:mm',
       locale: 'es'
     });

@@ -63,7 +63,7 @@ class SegurosController < ApplicationController
         proveedores: api_proveedores_path(format: :json),
         activos: api_activos_path(format: :json),
         seguros: api_seguros_path,
-        seguro: seguros_path
+        seguro: seguro_path(@seguro)
       }
     }
   end

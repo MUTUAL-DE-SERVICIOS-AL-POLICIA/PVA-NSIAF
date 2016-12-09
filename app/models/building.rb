@@ -10,7 +10,7 @@ class Building < ActiveRecord::Base
   has_many :departments
 
   validates :code, presence: true, uniqueness: { scope: :entity_id }
-  validates :name, presence: true, format: { with: /\A[[:alpha:]\s]+\z/u }
+  validates :name, presence: true
   validates :entity_id, presence: true
 
   has_paper_trail ignore: [:status, :updated_at]
@@ -25,6 +25,16 @@ class Building < ActiveRecord::Base
 
   def entity_name
     entity.present? ? entity.name : ''
+  end
+
+  # Obtiene la imagen para el pie de página de los documentos
+  def get_image_footer
+    entity.present? ? entity.get_image_footer : ''
+  end
+
+  # Obtiene la imagen para el encabezado de los documentos
+  def get_image_header
+    entity.present? ? entity.get_image_header : ''
   end
 
   def self.set_columns

@@ -21,6 +21,7 @@
     "angular-resource": "^1.5.8",
     "angular-route": "^1.5.8",
     "angular": "^1.5.8",
-    "fontawesome": "~4.2.0"
+    "fontawesome": "~4.2.0",
+    "eonasdan-bootstrap-datetimepicker" : "^4.17.43"
   }
 }

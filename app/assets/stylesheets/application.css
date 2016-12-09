@@ -17,6 +17,6 @@
  *= require proceeding
  *= require typeahead
  *= require datepicker
- *= require bootstrap-datetimepicker
+ *= require eonasdan-bootstrap-datetimepicker
  *= require fontawesome
  */

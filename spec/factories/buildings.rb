@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :building do
     sequence(:code)
-    name 'Agencia de Gobierno Electrónico y Tecnologías de la información y Comunicación'
+    name { Faker::Address.state }
+
     entity
   end
 end

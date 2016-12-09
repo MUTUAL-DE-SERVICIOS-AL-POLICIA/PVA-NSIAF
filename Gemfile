@@ -60,7 +60,7 @@ group :development, :test do
 end
 
 group :test do
-  gem "faker", "~> 1.2.0"
+  gem 'faker'
   gem 'capybara'
   gem 'capybara-webkit'
   gem "database_cleaner"
@@ -82,8 +82,6 @@ gem 'angular-rails-templates'
 gem 'active_model_serializers'
 
 gem 'momentjs-rails', '>= 2.9.0'
-
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
 
 # Comprimir archivos
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
