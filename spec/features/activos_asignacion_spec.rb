@@ -59,7 +59,7 @@ describe 'Activos fijos', js: true do
       expect(page).to have_content(usuario.title)
     end
 
-    it 'selección de activos fijos y previsualizarión de acta', logout: true do
+    it 'selección de activos fijos y previsualización de acta', logout: true do
       visit assignation_assets_path
 
       seleccionar_funcionario(entidad, unidad, usuario)
@@ -88,14 +88,12 @@ describe 'Activos fijos', js: true do
 
       sleep 1 # A la espera para la descarga
 
-      if Capybara.javascript_driver == :wekit
+      if Capybara.javascript_driver == :webkit
         # El acta de entrega en PDF (no implementado en selenium)
         archivo = "#{usuario.name.parameterize || 'acta'}.pdf"
         expect(response_headers['Content-Type']).to eq('application/pdf')
         expect(response_headers['Content-Disposition']).to eq("attachment; filename=\"#{archivo}\"")
         expect(response_headers['Content-Transfer-Encoding']).to eq('binary')
-
-        click_cancelar 'Cancelar'
       end
 
       # Cantidades que debe haber
