@@ -6,7 +6,7 @@ class AutoCompleteProveedor extends React.Component {
     this.getSuggestionValue = this.getSuggestionValue.bind(this);
     this.renderSuggestion = this.renderSuggestion.bind(this);
     this.state = {
-      value: '',
+      value: this.props.proveedor ? this.props.proveedor.name : '',
       suggestions: []
     };
   }
@@ -17,12 +17,6 @@ class AutoCompleteProveedor extends React.Component {
 
   escapeValor(value){
     return this.escapeRegexCharacters(value.trim());
-  }
-
-  componentDidMount() {
-    if(this.props.proveedor){
-      $("#proveedores").val(this.props.proveedor.name);
-    }
   }
 
   onChange (event, { newValue, method }) {
@@ -43,7 +37,7 @@ class AutoCompleteProveedor extends React.Component {
   }
 
   onSuggestionsFetchRequested ({ value }) {
-    this.props.capturarProveedor(null);
+    this.props.capturarProveedor('');
     escapedValue = this.escapeValor(value);
     if (escapedValue === '') {
       this.setState({

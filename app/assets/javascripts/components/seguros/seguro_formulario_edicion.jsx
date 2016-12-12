@@ -4,7 +4,9 @@ class SeguroFormularioEdicion extends React.Component {
     this.capturaDatos = this.capturaDatos.bind(this);
     this.capturaProveedor = this.capturaProveedor.bind(this);
     this.state = {
-      supplier_id: this.props.seguro.supplier ? this.props.seguro.supplier.id : ''
+      supplier_id: this.props.seguro.supplier ? this.props.seguro.supplier.id : '',
+      proveedor: this.props.seguro.supplier ? this.props.seguro.supplier : {},
+      numero_contrato: this.props.numero_contrato ? this.props.numero_contrato : '',
     }
   }
 
@@ -12,6 +14,8 @@ class SeguroFormularioEdicion extends React.Component {
     this.setState({
       proveedor: proveedor
     });
+    $('#nit').val(proveedor.nit);
+    $('#telefono').val(proveedor.telefono);
     this.capturaDatos();
   }
 
@@ -31,9 +35,7 @@ class SeguroFormularioEdicion extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.seguro.supplier){
-      $("#proveedores").val(this.props.seguro.supplier.name);
-    }
+    this.capturaDatos();
   }
 
   render () {
@@ -43,17 +45,17 @@ class SeguroFormularioEdicion extends React.Component {
           <div className='form-group'>
             <label className='col-sm-2 control-label'>Factura</label>
             <div className='col-sm-2'>
-              <input type="text" ref="factura_numero" name="factura_numero" className="form-control" placeholder="Número de factura" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_numero} />
+              <input type="text" ref="factura_numero" name="factura_numero" className="form-control" placeholder="Número de factura" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_numero ? this.props.seguro.factura_numero : ''} />
             </div>
             <div className='col-sm-2'>
-              <input type="text" ref="factura_autorizacion" name="factura_autorizacion" className="form-control" placeholder="Número autorización" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_autorizacion} />
+              <input type="text" ref="factura_autorizacion" name="factura_autorizacion" className="form-control" placeholder="Número autorización" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_autorizacion ? this.props.seguro.factura_autorizacion : '' } />
             </div>
             <div className='col-sm-2'>
-              <input type="text" ref="factura_monto" name="factura_monto" className="form-control" placeholder="Monto" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_monto} />
+              <input type="text" ref="factura_monto" name="factura_monto" className="form-control" placeholder="Monto" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_monto ? this.props.seguro.factura_monto : ''} />
             </div>
             <div className='col-sm-2'>
               <div className='input-group'>
-                <DatePicker ref="factura_fecha" id="factura_fecha" placeholder="Fecha de factura" classname="form-control" captura_fecha={this.capturaDatos} valor={this.props.seguro.factura_fecha} />
+                <DatePicker ref="factura_fecha" id="factura_fecha" placeholder="Fecha de factura" classname="form-control" captura_fecha={this.capturaDatos} valor={this.props.seguro.factura_fecha ? this.props.seguro.factura_fecha : ''} />
                 <div className='input-group-addon'>
                   <span className='glyphicon glyphicon-calendar'></span>
                 </div>
@@ -74,29 +76,29 @@ class SeguroFormularioEdicion extends React.Component {
           <div className='form-group'>
             <label className='col-sm-2 control-label'>Proveedor</label>
             <div className='col-sm-4'>
-              <AutoCompleteProveedor urls={this.props.urls} capturarProveedor={this.capturaProveedor} />
+              <AutoCompleteProveedor urls={this.props.urls} capturarProveedor={this.capturaProveedor} proveedor={this.props.seguro.supplier ? this.props.seguro.supplier : ''} />
             </div>
             <div className='col-sm-2'>
-              <input type="text" id="nit" value={this.state.proveedor ? this.state.proveedor.nit : ''} className="form-control" placeholder="NIT proveedor" disabled="disabled" />
+              <input type="text" id="nit" className="form-control" placeholder="NIT proveedor" disabled="disabled" />
             </div>
             <div className='col-sm-2'>
-              <input type="text" id="telefono" value={this.state.proveedor ? this.state.proveedor.telefono : ''} className="form-control" placeholder="Teléfonos proveedor" disabled="disabled" />
+              <input type="text" id="telefono" className="form-control" placeholder="Teléfonos proveedor" disabled="disabled" />
             </div>
           </div>
           <div className='form-group'>
             <label className='col-sm-2 control-label'>Factura</label>
             <div className='col-sm-2'>
-              <input type="text" ref="factura_numero" name="factura_numero" className="form-control" placeholder="Número de factura" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_numero} />
+              <input type="text" ref="factura_numero" name="factura_numero" className="form-control" placeholder="Número de factura" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_numero ? this.props.seguro.factura_numero : ''} />
             </div>
             <div className='col-sm-2'>
-              <input type="text" ref="factura_autorizacion" name="factura_autorizacion" className="form-control" placeholder="Número autorización" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_autorizacion}/>
+              <input type="text" ref="factura_autorizacion" name="factura_autorizacion" className="form-control" placeholder="Número autorización" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_autorizacion ? this.props.seguro.factura_autorizacion : ''}/>
             </div>
             <div className='col-sm-2'>
-              <input type="text" ref="factura_monto" name="factura_monto" className="form-control" placeholder="Monto" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_monto} />
+              <input type="text" ref="factura_monto" name="factura_monto" className="form-control" placeholder="Monto" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.factura_monto ? this.props.seguro.factura_monto : ''} />
             </div>
             <div className='col-sm-2'>
               <div className='input-group'>
-                <DatePicker ref="factura_fecha" id="factura_fecha" placeholder="Fecha de factura" classname="form-control" captura_fecha={this.capturaDatos} valor={this.props.seguro.factura_fecha} />
+                <DatePicker ref="factura_fecha" id="factura_fecha" placeholder="Fecha de factura" classname="form-control" captura_fecha={this.capturaDatos} valor={this.props.seguro.factura_fecha ? this.props.seguro.factura_fecha : ''} />
                 <div className='input-group-addon'>
                   <span className='glyphicon glyphicon-calendar'></span>
                 </div>
@@ -106,20 +108,20 @@ class SeguroFormularioEdicion extends React.Component {
           <div className='form-group'>
             <label className='col-sm-2 control-label'>Póliza</label>
             <div className='col-sm-4'>
-              <input type="text" ref="tipo" name="tipo" className="form-control" placeholder="Tipo de Póliza" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.tipo} />
+              <input type="text" ref="tipo" name="tipo" className="form-control" placeholder="Tipo de Póliza" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.tipo ? this.props.seguro.tipo : ''} />
             </div>
             <div className='col-sm-2'>
-              <input type="text" ref="numero_poliza" name="numero_poliza" className="form-control" placeholder="Póliza" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.numero_poliza} />
+              <input type="text" ref="numero_poliza" name="numero_poliza" className="form-control" placeholder="Póliza" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.numero_poliza ? this.props.seguro.numero_poliza : '' } />
             </div>
             <div className='col-sm-2'>
-              <input type="text" ref="numero_contrato" name="numero_contrato" className="form-control" placeholder="Número de contrato" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.numero_contrato} />
+              <input type="text" ref="numero_contrato" name="numero_contrato" className="form-control" placeholder="Número de contrato" autoComplete="off" onChange={this.capturaDatos} defaultValue={this.props.seguro.numero_contrato ? this.props.seguro.numero_contrato : ''} />
             </div>
           </div>
           <div className='form-group'>
             <label className='col-sm-2 control-label'>Vigencia de la Póliza</label>
             <div className='col-sm-2'>
               <div className='input-group'>
-                <DateTimePicker ref="fecha_inicio_vigencia"  id="fecha_inicio_vigencia" placeholder={"Fecha inicio de vigencia"} classname="form-control" captura_fecha={this.capturaDatos} valor={this.props.seguro.fecha_inicio_vigencia} />
+                <DateTimePicker ref="fecha_inicio_vigencia"  id="fecha_inicio_vigencia" placeholder={"Fecha inicio de vigencia"} classname="form-control" captura_fecha={this.capturaDatos} valor={this.props.seguro.fecha_inicio_vigencia ? this.props.seguro.fecha_inicio_vigencia : ''} />
                 <div className='input-group-addon'>
                   <span className='glyphicon glyphicon-calendar'></span>
                 </div>
@@ -127,7 +129,7 @@ class SeguroFormularioEdicion extends React.Component {
             </div>
             <div className='col-sm-2'>
               <div className='input-group'>
-                <DateTimePicker ref="fecha_fin_vigencia" id="fecha_fin_vigencia" placeholder={"Fecha fin de vigencia"} classname="form-control" captura_fecha={this.capturaDatos} valor={this.props.seguro.fecha_fin_vigencia}/>
+                <DateTimePicker ref="fecha_fin_vigencia" id="fecha_fin_vigencia" placeholder={"Fecha fin de vigencia"} classname="form-control" captura_fecha={this.capturaDatos} valor={this.props.seguro.fecha_fin_vigencia ? this.props.seguro.fecha_fin_vigencia : ''}/>
                 <div className='input-group-addon'>
                   <span className='glyphicon glyphicon-calendar'></span>
                 </div>

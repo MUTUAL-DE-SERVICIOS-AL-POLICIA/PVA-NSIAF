@@ -33,13 +33,19 @@ class SeguroPanelActivos extends React.Component {
           <a className='btn btn-primary btn-xs pull-right' title='Editar' href={this.props.seguro.urls.edit}>
             <span className='glyphicon glyphicon-edit'></span>
           </a>
-        </div>
+        </div>;
       datos_seguro =
         <div>
           <div className="col-lg-4 col-md-5 col-sm-12">
             <dl className="dl-horizontal">
               <dt>Número de contrato</dt>
               <dd>{this.props.seguro.numero_contrato}</dd>
+              <dt>{this.props.seguro.supplier ? 'Proveedor' : ''}</dt>
+              <dd>{this.props.seguro.supplier ? this.props.seguro.supplier.name : ''}</dd>
+              <dt>{this.props.seguro.supplier ? 'NIT' : ''}</dt>
+              <dd>{this.props.seguro.supplier ? this.props.seguro.supplier.nit : ''}</dd>
+              <dt>{this.props.seguro.supplier ? 'Teléfono' : ''}</dt>
+              <dd>{this.props.seguro.supplier ? this.props.seguro.supplier.telefono : ''}</dd>
             </dl>
           </div>
           <div className="col-lg-4 col-md-5 col-sm-12">

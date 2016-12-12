@@ -22,8 +22,8 @@ module Api
         respond_to do |format|
           if @seguro.update(seguro_params)
             @seguro.asegurar! if @seguro.cotizado?
-            format.html { redirect_to @seguro, notice: 'Seguro creado exitosamente.' }
-            format.json { render json: @seguro,  root: false, status: :created }
+            format.html { redirect_to @seguro, notice: 'El Seguro fue actualizado exitosamente.' }
+            format.json { render json: @seguro, root: false, status: :created }
           else
             format.html { render action: 'new' }
             format.json { render json: @seguro.errors, status: :unprocessable_entity }

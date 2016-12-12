@@ -12,6 +12,8 @@ class SeguroFormulario extends React.Component {
     this.setState({
       proveedor: proveedor
     });
+    $('#nit').val(proveedor.nit);
+    $('#telefono').val(proveedor.telefono);
     this.capturaDatos();
   }
 
@@ -71,10 +73,10 @@ class SeguroFormulario extends React.Component {
               <AutoCompleteProveedor urls={this.props.urls} capturarProveedor={this.capturaProveedor} proveedor={this.props.proveedor} />
             </div>
             <div className='col-sm-2'>
-              <input type="text" id="nit" value={this.state.proveedor ? this.state.proveedor.nit : ''} className="form-control" placeholder="NIT proveedor" disabled="disabled" />
+              <input type="text" id="nit" className="form-control" placeholder="NIT proveedor" disabled="disabled" />
             </div>
             <div className='col-sm-2'>
-              <input type="text" id="telefono" value={this.state.proveedor ? this.state.proveedor.telefono : ''} className="form-control" placeholder="Teléfonos proveedor" disabled="disabled" />
+              <input type="text" id="telefono" className="form-control" placeholder="Teléfonos proveedor" disabled="disabled" />
             </div>
           </div>
           <div className='form-group'>

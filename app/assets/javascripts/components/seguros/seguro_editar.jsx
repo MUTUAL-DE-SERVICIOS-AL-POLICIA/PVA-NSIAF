@@ -7,16 +7,16 @@ class SeguroEditar extends React.Component {
     this.state={
       seguro: {
         id: this.props.data.seguro.id,
-        supplier_id: '',
-        factura_numero: '',
-        factura_autorizacion: '',
-        factura_monto: '',
-        factura_fecha: '',
-        tipo: '',
-        numero_poliza: '',
-        numero_contrato: '',
-        fecha_inicio_vigencia: '',
-        fecha_fin_vigencia: '',
+        supplier_id: this.props.data.seguro.supplier_id,
+        factura_numero: this.props.data.seguro.factura_numero,
+        factura_autorizacion: this.props.data.seguro.factura_autorizacion,
+        factura_monto: this.props.data.seguro.factura_monto,
+        factura_fecha: this.props.data.seguro.factura_fecha,
+        tipo: this.props.data.seguro.tipo,
+        numero_poliza: this.props.data.seguro.numero_poliza,
+        numero_contrato: this.props.data.seguro.numero_contrato,
+        fecha_inicio_vigencia: this.props.data.seguro.fecha_inicio_vigencia,
+        fecha_fin_vigencia: this.props.data.seguro.fecha_fin_vigencia
       },
       activos: [],
       sumatoria: 0,
@@ -76,6 +76,9 @@ class SeguroEditar extends React.Component {
       if(supplier_id === '' || factura_numero === '' || factura_autorizacion === '' || factura_fecha === '' ||
          factura_monto === '' || tipo === '' || numero_poliza === '' || numero_contrato === '' ||
          fecha_inicio_vigencia === '' || fecha_fin_vigencia === '') {
+        console.log(supplier_id + '-' + factura_numero + '-' + factura_autorizacion + '-' + factura_fecha + '-' +
+           factura_monto + '-' + tipo + '-' + numero_poliza + '-' + numero_contrato + '-' +
+           fecha_inicio_vigencia + '-' + fecha_fin_vigencia);
         return false;
       }
       else{
@@ -108,7 +111,7 @@ class SeguroEditar extends React.Component {
       }).done(function(seguro) {
         alert.success("Se guardó correctamente el seguro.");
         const id = _.props.data.seguro.seguro_id ? _.props.data.seguro.seguro_id : _.props.data.seguro.id;
-        return window.location = _.props.data.urls.listado_seguros + "/" + id;
+        return window.location = _.props.data.urls.seguros + "/" + id;
       }).fail(function(xhr, status) {
         alert.danger("Error al guardar el seguro.");
       });
