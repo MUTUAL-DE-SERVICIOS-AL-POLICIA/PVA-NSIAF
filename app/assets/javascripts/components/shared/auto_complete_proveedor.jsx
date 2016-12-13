@@ -12,17 +12,15 @@ class AutoCompleteProveedor extends React.Component {
   }
 
   escapeRegexCharacters(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  escapeValor(value){
+  escapeValor(value) {
     return this.escapeRegexCharacters(value.trim());
   }
 
-  onChange (event, { newValue, method }) {
-    this.setState({
-      value: newValue
-    });
+  onChange(event, { newValue, method }) {
+    this.setState({ value: newValue });
   }
 
   getSuggestionValue(suggestion) {
@@ -31,12 +29,10 @@ class AutoCompleteProveedor extends React.Component {
   }
 
   renderSuggestion(suggestion) {
-    return (
-      <span>{suggestion.name}</span>
-    );
+    return <span>{suggestion.name}</span>;
   }
 
-  onSuggestionsFetchRequested ({ value }) {
+  onSuggestionsFetchRequested({ value }) {
     this.props.capturarProveedor('');
     escapedValue = this.escapeValor(value);
     if (escapedValue === '') {
@@ -45,14 +41,14 @@ class AutoCompleteProveedor extends React.Component {
       });
     }
     const regex = new RegExp(escapedValue, 'i');
-    $.getJSON(this.props.urls.proveedores + "?q=" + escapedValue + "&limit=10", (response) => {
+    $.getJSON(this.props.urls.proveedores + '?q=' + escapedValue + '&limit=10', (response) => {
       this.setState({
         suggestions: response.filter(proveedor => regex.test(proveedor.name))
       });
     });
   }
 
-  onSuggestionsClearRequested () {
+  onSuggestionsClearRequested() {
     this.setState({
       suggestions: []
     });
@@ -61,11 +57,11 @@ class AutoCompleteProveedor extends React.Component {
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      id: "proveedores",
-      placeholder: "Proveedor",
+      id: 'proveedores',
+      placeholder: 'Proveedor',
       value,
       onChange: this.onChange.bind(this),
-      className: "form-control"
+      className: 'form-control'
     };
     return (
         <Autosuggest
