@@ -47,19 +47,31 @@ class SegurosController < ApplicationController
   end
 
   def edit
+    seguro_padre = @seguro.seguro
+    activos_ids = @seguro.assets.try(:ids)
+    activos = Asset.todos.where(id: activos_ids).order(code: :asc)
+    sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
+    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name").order("nombre")
+    sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
     @data = {
       titulo: 'Editar Seguro',
       seguro: SeguroSerializer.new(@seguro),
+      numero_contrato: seguro_padre.present? ? seguro_padre.numero_contrato : nil,
+      activos: ActiveModel::ArraySerializer.new(activos, each_serializer: AssetSerializer),
+      sumatoria: sumatoria,
+      resumen: ActiveModel::ArraySerializer.new(resumen, each_serializer: ResumenSerializer),
+      sumatoria_resumen: sumatoria_resumen,
       urls: {
         proveedores: api_proveedores_path(format: :json),
         activos: api_activos_path(format: :json),
-        seguros: api_seguros_path,
-        seguro: seguros_path
+        seguros: seguros_path,
+        seguro: seguro_path(@seguro)
       }
     }
   end
 
   def asegurar
+    seguro_padre = @seguro.seguro
     activos_ids = @seguro.assets.try(:ids)
     activos = Asset.todos.where(id: activos_ids).order(:code)
     sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
@@ -68,6 +80,7 @@ class SegurosController < ApplicationController
     @data = {
       titulo: 'Asegurar',
       seguro: @seguro,
+      numero_contrato: seguro_padre.present? ? seguro_padre.numero_contrato : nil,
       activos: ActiveModel::ArraySerializer.new(activos, each_serializer: AssetSerializer),
       sumatoria: sumatoria,
       resumen: ActiveModel::ArraySerializer.new(resumen, each_serializer: ResumenSerializer),
@@ -189,8 +202,9 @@ class SegurosController < ApplicationController
 
   def seguro_params
     params.require(:seguro)
-          .permit(:supplier_id, :user_id, :numero_contrato, :factura_numero,
-                  :factura_autorizacion, :factura_fecha, :fecha_inicio_vigencia,
+          .permit(:supplier_id, :user_id, :factura_numero,
+                  :factura_autorizacion, :factura_fecha, :factura_monto, :tipo,
+                  :numero_poliza, :numero_contrato, :fecha_inicio_vigencia,
                   :fecha_fin_vigencia, :baja_logica)
   end
 end

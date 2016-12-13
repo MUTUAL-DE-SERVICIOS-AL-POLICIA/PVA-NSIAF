@@ -15,7 +15,7 @@
 //= require nprogress
 //= require bootstrap
 //= require moment
-//= require bootstrap-datetimepicker
+//= require eonasdan-bootstrap-datetimepicker
 //= require moment_es
 //= require react
 //= require react_ujs

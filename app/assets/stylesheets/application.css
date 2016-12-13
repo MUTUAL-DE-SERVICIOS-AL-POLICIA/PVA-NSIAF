@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require bootstrap_and_overrides
+ *= require font-awesome
  *= require dataTables/jquery.dataTables.bootstrap3
  *= require dataTables/extras/TableTools_JUI
  *= require dataTables/extras/TableTools
@@ -17,5 +18,5 @@
  *= require proceeding
  *= require typeahead
  *= require datepicker
- *= require bootstrap-datetimepicker
+ *= require eonasdan-bootstrap-datetimepicker
  */

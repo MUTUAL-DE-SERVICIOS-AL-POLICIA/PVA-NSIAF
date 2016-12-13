@@ -22,38 +22,55 @@ class SeguroPanelActivos extends React.Component {
     if(this.verificaAsegurado()){
       let poliza = this.props.seguro.numero_poliza;
       let fecha_factura = new Date(this.props.seguro.factura_fecha);
+      const incorporacion = this.props.incorporacion;
       boton_asegurar =
-        <button type="button" className="btn btn-success btn-lg pull-right" data-toggle="tooltip" title="Asegurado">
-          <span className="glyphicon glyphicon-lock" aria-hidden="true"></span>
-        </button>;
+        <div>
+          <a className='btn btn-success pull-right' href='#' title='Asegurado'>
+            <i aria-hidden='true' className='fa fa-lock fa-2x'></i>
+          </a>
+          <div className='clearfix visible-xs-block'></div>
+          <br />
+          <a className='btn btn-primary btn-xs pull-right' title='Editar' href={this.props.seguro.urls.edit}>
+            <span className='glyphicon glyphicon-edit'></span>
+          </a>
+        </div>;
       datos_seguro =
         <div>
           <div className="col-lg-4 col-md-5 col-sm-12">
             <dl className="dl-horizontal">
               <dt>Número de contrato</dt>
               <dd>{this.props.seguro.numero_contrato}</dd>
-              <dt>Número de autorización</dt>
-              <dd>{this.props.seguro.factura_autorizacion}</dd>
-              <dt>Monto de factura</dt>
-              <dd>{this.props.seguro.factura_monto}</dd>
+              <dt>{this.props.seguro.supplier ? 'Proveedor' : ''}</dt>
+              <dd>{this.props.seguro.supplier ? this.props.seguro.supplier.name : ''}</dd>
+              <dt>{this.props.seguro.supplier ? 'NIT' : ''}</dt>
+              <dd>{this.props.seguro.supplier ? this.props.seguro.supplier.nit : ''}</dd>
+              <dt>{this.props.seguro.supplier ? 'Teléfono' : ''}</dt>
+              <dd>{this.props.seguro.supplier ? this.props.seguro.supplier.telefono : ''}</dd>
             </dl>
           </div>
           <div className="col-lg-4 col-md-5 col-sm-12">
             <dl className="dl-horizontal">
               <dt>Número de factura</dt>
               <dd>{this.props.seguro.factura_numero}</dd>
+              <dt>Número de autorización</dt>
+              <dd>{this.props.seguro.factura_autorizacion}</dd>
               <dt>Fecha de factura</dt>
               <dd>{moment(fecha_factura).format("DD/MM/YYYY")}</dd>
+              <dt>Monto de factura</dt>
+              <dd>{this.props.seguro.factura_monto}</dd>
             </dl>
+          </div>
+          <div className='pull-right'>
+            <h3>{incorporacion=='SI' ? 'INCORPORACIÓN': 'CONTRATO' }</h3>
           </div>
           <div className="clearfix visible-xs-block"></div>
         </div>;
     }
     else {
       boton_asegurar =
-        <button type="button" className="btn btn-warning btn-lg pull-right" data-toggle="tooltip" title="Asegurar" onClick={this.asegurar}>
-          <span className="glyphicon glyphicon-lock" aria-hidden="true"></span>
-        </button>;
+        <a className="btn btn-warning pull-right" onClick={this.asegurar} title='Por Asegurar'>
+          <i aria-hidden="true" className="fa fa-unlock-alt fa-2x"></i>
+        </a>;
     }
     return(
       <div className='row'>

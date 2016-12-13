@@ -79,8 +79,6 @@ gem 'active_model_serializers'
 
 gem 'momentjs-rails', '>= 2.9.0'
 
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
-
 # Comprimir archivos
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
 gem 'zip-zip' # will load compatibility for old rubyzip API.

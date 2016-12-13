@@ -19,6 +19,7 @@ private
   def data
     array.map do |r|
       [
+        r.tipo,
         r.numero_poliza,
         r.numero_contrato,
         r.proveedor_nombre,
@@ -48,7 +49,7 @@ private
   end
 
   def sort_column
-    columns = %w[seguros.fecha_inicio_vigencia seguros.fecha_fin_vigencia seguros.numero_poliza seguros.numero_contrato suppliers.name seguros.factura_numero ]
+    columns = %w[tipo fecha_inicio_vigencia fecha_fin_vigencia numero_poliza numero_contrato name factura_numero]
     columns[params[:iSortCol_0].to_i]
   end
 

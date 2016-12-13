@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123094938) do
+ActiveRecord::Schema.define(version: 20161208130735) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -347,6 +347,7 @@ ActiveRecord::Schema.define(version: 20161123094938) do
     t.datetime "updated_at",                                        null: false
     t.integer  "seguro_id",             limit: 4
     t.string   "state",                 limit: 255
+    t.string   "tipo",                  limit: 255
   end
 
   add_index "seguros", ["seguro_id"], name: "index_seguros_on_seguro_id", using: :btree
