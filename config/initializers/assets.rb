@@ -9,3 +9,5 @@ Rails.application.config.assets.paths << Rails.root.join("vendor", "assets", "bo
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 Rails.application.config.assets.precompile += %w( login.css pdf.css pdf.js )
+
+Rails.application.config.assets.precompile << Proc.new { |path| path =~ /fontawesome\/fonts/ and File.extname(path).in?(['.otf', '.eot', '.svg', '.ttf', '.woff']) }
