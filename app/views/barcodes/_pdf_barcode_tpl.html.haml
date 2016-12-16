@@ -26,6 +26,7 @@
 
   .row
     .action-buttons.col-md-12.col-sm-12.text-center
-      = button_tag class: 'imprimir btn btn-lg btn-primary' do
+      = button_to pdf_barcodes_path(format: :pdf), class: 'imprimir btn btn-lg btn-primary' do
+        = hidden_field_tag 'searchParam', ''
         %span.glyphicon.glyphicon-print
         Imprimir

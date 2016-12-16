@@ -63,9 +63,5 @@ class Barcode
     @$InputBarCode.select()
 
   printPdf: (e) =>
-    e.preventDefault()
-    data =
-      authenticity_token: $('meta[name="csrf-token"]').attr('content')
-      searchParam: @cargarParametros().searchParam || _codigo
-    $.fileDownload @pdf_barcodes_path, { data: data , httpMethod: 'POST' }
+    $('#searchParam').val(@cargarParametros().searchParam || _codigo)
     @$InputBarCode.select()
