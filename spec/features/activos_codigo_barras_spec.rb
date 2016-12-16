@@ -9,9 +9,9 @@ describe 'Activos fijos códigos de barras', js: true do
   let!(:activo5)  { create :asset, user: usuario_activos, ingreso: nil }
 
   before { iniciar_sesion(usuario_activos) }
-  after  { cerrar_sesion(usuario_activos) }
+  after(:each, logout: true) { cerrar_sesion(usuario_activos) }
 
-  it 'ingresar al enlace' do 
+  it 'ingresar al enlace', logout: true do
     visit barcodes_path
 
     expect(page).to have_content('Sistema de Activos Fijos')
@@ -19,7 +19,7 @@ describe 'Activos fijos códigos de barras', js: true do
     expect(page).to have_content('Buscar')
   end
 
-  it 'seleccionar activos por rango' do
+  it 'seleccionar activos por rango', logout: true do
     visit barcodes_path
 
     rango = "#{activo1.code}-#{activo4.code}"
@@ -39,7 +39,7 @@ describe 'Activos fijos códigos de barras', js: true do
     expect(page).to have_css('button.imprimir')
   end
 
-  it 'seleccionar varias veces un activo' do
+  it 'seleccionar varias veces un activo', logout: true do
     visit barcodes_path
 
     rangos = []
@@ -57,7 +57,7 @@ describe 'Activos fijos códigos de barras', js: true do
     expect(page).to have_content(activo5.detalle)
   end
 
-  it 'descargar archivo PDF' do
+  it 'descargar archivo PDF', driver: :webkit do
     visit barcodes_path
 
     rangos = []
@@ -72,19 +72,14 @@ describe 'Activos fijos códigos de barras', js: true do
     expect(find('#preview-barcodes')).to have_selector('.thumbnail', count: 5)
     expect(page).to have_content('Imprimir')
 
-    # TODO falta agregar
-    #click_on 'Imprimir'
+    click_on 'Imprimir'
 
-    #sleep 1 # A la espera para la descarga
+    sleep 1 # A la espera para la descarga
 
-    #debugger
-
-    #if Capybara.javascript_driver == :webkit
-    #  # El acta de entrega en PDF (no implementado en selenium)
-    #  archivo = "#{'código de barras'.parameterize}.pdf"
-    #  expect(response_headers['Content-Type']).to eq('application/pdf')
-    #  expect(response_headers['Content-Disposition']).to eq("attachment; filename=\"#{archivo}\"")
-    #  expect(response_headers['Content-Transfer-Encoding']).to eq('binary')
-    #end
+    # El acta de entrega en PDF (no implementado en selenium)
+    archivo = "#{'código de barras'.parameterize}.pdf"
+    expect(response_headers['Content-Type']).to eq('application/pdf')
+    expect(response_headers['Content-Disposition']).to eq("attachment; filename=\"#{archivo}\"")
+    expect(response_headers['Content-Transfer-Encoding']).to eq('binary')
   end
 end

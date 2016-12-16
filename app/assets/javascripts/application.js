@@ -28,7 +28,6 @@
 //= require hogan-2.0.0
 //= require jquery.chained.remote
 //= require jquery-barcode
-//= require jquery.fileDownload
 //= require bootstrap-growl
 //= require angular/angular
 //= require angular-rails-templates
