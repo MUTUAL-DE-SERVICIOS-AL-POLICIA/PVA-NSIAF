@@ -530,6 +530,7 @@ es:
         fecha_fin_vigencia: "Fecha fin de vigencia"
         estado: "Estado"
         nro_assets: "Cantidad activos"
+        numero_poliza: "Poliza"
       version:
         item_id: "Código"
         created_at: "Fecha"

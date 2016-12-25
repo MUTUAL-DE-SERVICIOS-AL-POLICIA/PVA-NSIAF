@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_filter :authenticate_user!, :get_alerts
+  before_filter :authenticate_user!
 
   before_filter do
     resource = controller_path.singularize.gsub('/', '_').to_sym
@@ -43,10 +43,6 @@ class ApplicationController < ActionController::Base
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
     end
-  end
-
-  def get_alerts
-    @alertas ||= Alerta.activos
   end
 
   def info_for_paper_trail

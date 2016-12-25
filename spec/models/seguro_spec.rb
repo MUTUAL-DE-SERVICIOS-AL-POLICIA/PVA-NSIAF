@@ -14,23 +14,23 @@ RSpec.describe Seguro, type: :model do
     end
 
     it "verificando antes de la fecha inicio de vigencia" do
-      expect(Seguro.vigentes("13-07-2016".to_date)).to be_empty, "no existe seguros validos"
+      expect(Seguro.vigentes("13-07-2016 12:00".to_datetime)).to be_empty, "no existe seguros validos"
     end
 
-    it "verificando  en la fecha inicio de vigencia" do
-      expect(Seguro.vigentes("14-07-2016".to_date)).not_to be_empty, "existe seguros validos"
+    it "verificando en la fecha inicio de vigencia" do
+      expect(Seguro.vigentes("14-07-2016 12:00".to_datetime)).not_to be_empty, "existe seguros validos"
     end
 
     it "verificando antes de la fecha fin de vigencia" do
-      expect(Seguro.vigentes("14-07-2016".to_date)).not_to be_empty
+      expect(Seguro.vigentes("14-07-2016 12:00".to_datetime)).not_to be_empty
     end
 
     it "verificando en la fecha fin de vigencia" do
-      expect(Seguro.vigentes("14-11-2016".to_date)).not_to be_empty
+      expect(Seguro.vigentes("14-11-2016 12:00".to_datetime)).not_to be_empty
     end
 
     it "verificando posterior a la fecha fin de vigencia" do
-      expect(Seguro.vigentes("15-11-2016".to_date)).to be_empty
+      expect(Seguro.vigentes("15-11-2016 12:00".to_datetime)).to be_empty
     end
   end
 
@@ -56,7 +56,6 @@ RSpec.describe Seguro, type: :model do
       @seguro_no_vigente.assets << @activo_6
       @seguro_no_vigente.assets << @activo_7
       @seguro_no_vigente.assets << @activo_8
-
     end
 
     it "verificando la existencia de activos sin seguro" do
@@ -117,7 +116,6 @@ RSpec.describe Seguro, type: :model do
       expect(seguro.vigente?).to eq(false)
       Timecop.return
     end
-
   end
 
 end

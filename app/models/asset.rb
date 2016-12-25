@@ -445,16 +445,11 @@ class Asset < ActiveRecord::Base
     seguros.where(id: seguros_ids).present?
   end
 
-  def seguro_vigente
-    seguros.vigentes.order(fecha_fin_vigencia: :desc).first
-  end
-
   def self.todos
     self.select("assets.id, assets.code, assets.barcode, assets.description, assets.precio, ingresos.factura_numero, assets.detalle,  ingresos.factura_fecha, assets.observaciones, accounts.name as cuenta")
         .joins("LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id")
         .joins(auxiliary: [:account])
   end
-
 
   private
 

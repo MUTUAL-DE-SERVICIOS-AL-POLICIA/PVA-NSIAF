@@ -39,7 +39,7 @@ class SeguroDesplegar extends React.Component {
       let fecha_inicio = new Date(this.props.data.seguro.fecha_inicio_vigencia);
       let fecha_fin = new Date(this.props.data.seguro.fecha_fin_vigencia);
       let fecha_factura = new Date(this.props.data.seguro.factura_fecha);
-      titulo = <h2>Póliza: {poliza} desde {moment(fecha_inicio).format("DD/MM/YYYY HH:MM")} hasta {moment(fecha_fin).format("DD/MM/YYYY HH:MM")}</h2>;
+      titulo = <h2>Póliza: {poliza} desde {moment(fecha_inicio).format("DD/MM/YYYY HH:mm")} hasta {moment(fecha_fin).format("DD/MM/YYYY HH:mm")}</h2>;
       boton_incorporar =
         <a className="btn btn-primary" href={this.props.data.urls.incorporaciones}><span className='glyphicon glyphicon-edit'></span>
           Incorporaciones
@@ -60,10 +60,6 @@ class SeguroDesplegar extends React.Component {
         <div className='page-header'>
           <div className='pull-right'>
             {boton_incorporar}
-            &nbsp;
-            <a className="btn btn-primary" href=""><span className='glyphicon glyphicon-edit'></span>
-            Editar
-            </a>
             &nbsp;
             <a className="btn btn-default" href={this.props.data.urls.listado_seguros}><span className='glyphicon glyphicon-list'></span>
             Seguros

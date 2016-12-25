@@ -5,6 +5,7 @@ class AssetsController < ApplicationController
   # GET /assets
   # GET /assets.json
   def index
+    @seguros = Seguro.vigentes
     format_to('assets', AssetsDatatable)
   end
 

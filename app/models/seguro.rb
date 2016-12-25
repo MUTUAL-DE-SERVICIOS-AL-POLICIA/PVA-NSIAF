@@ -60,8 +60,9 @@ class Seguro < ActiveRecord::Base
     "#{Asset.joins(:seguros).where(seguros: {id: seguros_ids}).uniq.size}"
   end
 
-  def self.vigentes(fecha_actual = Date.today)
-    self.activos.where("fecha_inicio_vigencia <= ?", fecha_actual)
+  def self.vigentes(fecha_actual = DateTime.now)
+    self.activos.where(state: "asegurado")
+                .where("fecha_inicio_vigencia <= ?", fecha_actual)
                 .where("fecha_fin_vigencia >= ?", fecha_actual )
   end
 
@@ -86,6 +87,32 @@ class Seguro < ActiveRecord::Base
       return true if s.expiracion_a_dias(10) && s.assets.present?
     end
     false
+  end
+
+  def alerta_expiracion(fecha_actual=DateTime.now)
+    respuesta =   {
+      mensaje: "El seguro vence el #{I18n.localize fecha_fin_vigencia, format: :customize}.",
+      tipo: "success",
+      parpadeo: false
+    }
+    fin_vigencia = fecha_fin_vigencia
+    inicio_vigencia = fin_vigencia - 7.days
+    if fecha_actual >= inicio_vigencia && fecha_actual <= fin_vigencia
+      respuesta[:parpadeo] = true
+      respuesta[:tipo] = "danger"
+      return respuesta
+    end
+    inicio_vigencia = fin_vigencia - 30.days
+    if fecha_actual >= inicio_vigencia && fecha_actual <= fin_vigencia
+      respuesta[:tipo] = "danger"
+      return respuesta
+    end
+    inicio_vigencia = fin_vigencia - 90.days
+    if fecha_actual >= inicio_vigencia && fecha_actual <= fin_vigencia
+      respuesta[:tipo] = "warning"
+      return respuesta
+    end
+    respuesta
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')

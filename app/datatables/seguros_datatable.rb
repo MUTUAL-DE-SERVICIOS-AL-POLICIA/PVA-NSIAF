@@ -19,11 +19,11 @@ private
   def data
     array.map do |r|
       [
+        r.numero_poliza,
         r.numero_contrato,
         r.proveedor_nombre,
-        r.factura_numero,
-        r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_inicio_vigencia) : '',
-        r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_fin_vigencia) : '',
+        r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_inicio_vigencia, format: :long) : '',
+        r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_fin_vigencia, format: :long) : '',
         content_tag(:h4, content_tag(:span, r.estado, class: "label label-#{ r.cotizado? ? "warning" : r.vigente? ? "success" : "default" }")),
         r.cantidad_activos,
         [links_actions(r, 'seguro')].join(' ')
@@ -48,7 +48,7 @@ private
   end
 
   def sort_column
-    columns = %w[seguros.numero_contrato suppliers.name seguros.factura_numero  seguros.fecha_inicio_vigencia seguros.fecha_fin_vigencia]
+    columns = %w[seguros.numero_poliza seguros.numero_contrato suppliers.name seguros.factura_numero  seguros.fecha_inicio_vigencia seguros.fecha_fin_vigencia]
     columns[params[:iSortCol_0].to_i]
   end
 
