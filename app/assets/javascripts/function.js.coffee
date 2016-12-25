@@ -343,3 +343,8 @@ jQuery ->
       i--
     return
   ), 1000
+
+  $('.serie_activo').on 'keyup keypress', (e) ->
+    keyCode = e.keyCode or e.which
+    if keyCode == 13
+      e.preventDefault()

@@ -4,9 +4,9 @@
 %table.table.table-condensed.table-bordered.valorado
   %thead
     %tr
+      %th= Seguro.human_attribute_name("numero_poliza")
       %th= Seguro.human_attribute_name("numero_contrato")
       %th= Seguro.human_attribute_name("suppliers")
-      %th= Seguro.human_attribute_name("factura_numero")
       %th.text-center= Seguro.human_attribute_name("fecha_inicio_vigencia")
       %th.text-center= Seguro.human_attribute_name("fecha_fin_vigencia")
       %th= Seguro.human_attribute_name("estado")

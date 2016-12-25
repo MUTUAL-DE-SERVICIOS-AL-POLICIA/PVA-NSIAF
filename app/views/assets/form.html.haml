@@ -10,7 +10,7 @@
     = f.input :color
     = f.input :marca
     = f.input :modelo
-    = f.input :serie
+    = f.input :serie, input_html: { class: "serie_activo" }
     = f.input :precio, placeholder: 'Precio Unitario'
     = f.input :proceso, as: :integer
     = f.input :observaciones, as: :text, placeholder: 'Nro factura, empresa, ...', input_html: {rows: 5}

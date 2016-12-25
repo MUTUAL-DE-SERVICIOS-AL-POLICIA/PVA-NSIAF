@@ -97,3 +97,6 @@ gem 'whenever', :require => false
 gem 'where-or'
 
 gem 'aasm'
+
+# Queries con el operador UNION para ActiveRecord
+gem 'active_record_union'

@@ -48,7 +48,7 @@ private
   end
 
   def sort_column
-    columns = %w[seguros.numero_poliza seguros.numero_contrato suppliers.name seguros.factura_numero  seguros.fecha_inicio_vigencia seguros.fecha_fin_vigencia]
+    columns = %w[seguros.fecha_inicio_vigencia seguros.fecha_fin_vigencia seguros.numero_poliza seguros.numero_contrato suppliers.name seguros.factura_numero ]
     columns[params[:iSortCol_0].to_i]
   end
 
