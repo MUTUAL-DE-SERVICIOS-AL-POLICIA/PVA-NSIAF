@@ -117,9 +117,9 @@ class SeguroTablaActivos extends React.Component{
         <thead>
           <tr>
             <th></th>
-            <th className="text-center">Monto</th>
-            <th className="text-center">Cantidad</th>
             <th className="text-center">Cuenta</th>
+            <th className="text-center">Cantidad</th>
+            <th className="text-center">Monto</th>
           </tr>
         </thead>
         <tbody>
@@ -130,8 +130,23 @@ class SeguroTablaActivos extends React.Component{
     );
   }
 
+  componentDidMount() {
+    if(this.props.links_descarga == 'SI'){
+      this.generarCSV("resumen", this.props.name);
+      $('.pdf-' + this.props.name).attr('href', this.props.urls.resumen);
+    }
+  }
+
   generarTipoCSV(e) {
-    this.generarCSV(e.target.getAttribute("data-type"), this.props.name);
+    if(this.props.links_descarga == 'SI'){
+      this.generarCSV(e.target.getAttribute("data-type"), this.props.name);
+      if(e.target.getAttribute("data-type")=="resumen"){
+        $('.pdf-' + this.props.name).attr('href', this.props.urls.resumen);
+      }
+      else {
+        $('.pdf-' + this.props.name).attr('href', this.props.urls.activos);
+      }
+    }
   }
 
   generarCSV(tipo, name) {
@@ -178,7 +193,7 @@ class SeguroTablaActivos extends React.Component{
                             <span>Descargar:</span>
                             <div className="btn-group btn-group-xs">
                               <a className={'btn btn-default ' + 'csv-' + this.props.name}>CSV</a>
-                            <a className={'btn btn-default ' + 'pdf-' + this.props.name} href = {this.props.urls.activos}>PDF</a>
+                              <a className={'btn btn-default ' + 'pdf-' + this.props.name} href = {this.props.urls.activos}>PDF</a>
                             </div>
                           </div>;
     }

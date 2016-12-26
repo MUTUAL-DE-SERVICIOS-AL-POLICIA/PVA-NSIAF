@@ -47,7 +47,7 @@ class SeguroDesplegar extends React.Component {
       incorporaciones = this.props.data.incorporaciones.map((incorporacion, i) => {
         let name = "panel-" + i;
         return (
-          <SeguroPanelActivos key={i} name={name} seguro={incorporacion.seguro} activos={incorporacion.activos} sumatoria={incorporacion.sumatoria} resumen={incorporacion.resumen} sumatoria_resumen={incorporacion.sumatoria_resumen} urls={incorporacion.urls} />
+          <SeguroPanelActivos key={i} name={name} seguro={incorporacion.seguro} activos={incorporacion.activos} sumatoria={incorporacion.sumatoria} resumen={incorporacion.resumen} sumatoria_resumen={incorporacion.sumatoria_resumen} urls={incorporacion.urls} links_descarga="SI"/>
         )
       });
 

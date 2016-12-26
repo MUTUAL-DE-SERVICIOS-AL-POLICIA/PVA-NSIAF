@@ -12,11 +12,11 @@
       - @activos.each_with_index do |activo, index|
         %tr
           %td= index + 1
-          %td= activo.code
-          %td= activo.name
-          %td= activo.account_name
-          %td= activo.precio
+          %td.text-center= activo.code
+          %td= activo.description
+          %td= activo.cuenta
+          %td.number= activo.precio
       %tr
-        %td{ colspan: "3" }
-        %td Total
-        %td= @sumatoria
+        %th{ colspan: "3" }
+        %th.text-right Total
+        %th.number= @sumatoria

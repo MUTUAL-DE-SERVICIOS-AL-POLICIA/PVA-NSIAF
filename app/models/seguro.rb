@@ -143,7 +143,7 @@ class Seguro < ActiveRecord::Base
       activos_ids = inc.assets.try(:ids)
       activos = Asset.todos.where(id: activos_ids)
       sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
-      resumen = activos.select("accounts.name as nombre, count(accounts.name) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name")
+      resumen = activos.select("accounts.name as nombre, count(accounts.name) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name").order("nombre")
       sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
       respuesta << {
         titulo: "Incorporación",
@@ -154,7 +154,8 @@ class Seguro < ActiveRecord::Base
         sumatoria_resumen: sumatoria_resumen,
         urls: {
           asegurar: asegurar_seguro_url(inc),
-          activos: activos_seguro_url(inc, format: :pdf)
+          activos: activos_seguro_url(inc, format: :pdf),
+          resumen: resumen_seguro_url(inc, format: :pdf)
         }
       }
     end

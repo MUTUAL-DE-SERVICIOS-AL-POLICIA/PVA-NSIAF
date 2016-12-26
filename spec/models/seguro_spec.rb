@@ -59,7 +59,6 @@ RSpec.describe Seguro, type: :model do
     end
 
     it "verificando la existencia de activos sin seguro" do
-      debugger
       expect(Asset.sin_seguro_vigente.size).to eq(3), "existen 3 activos sin seguro"
     end
 

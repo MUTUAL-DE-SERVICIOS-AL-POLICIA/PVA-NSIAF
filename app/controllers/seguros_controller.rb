@@ -1,5 +1,5 @@
 class SegurosController < ApplicationController
-  before_action :set_seguro, only: [:show, :edit, :update, :destroy, :asegurar, :incorporaciones, :activos]
+  before_action :set_seguro, only: [:show, :edit, :update, :destroy, :asegurar, :incorporaciones, :activos, :resumen]
   before_action :set_usuario, only: [:create]
 
   # GET /seguros
@@ -14,7 +14,7 @@ class SegurosController < ApplicationController
     activos_ids = @seguro.assets.try(:ids)
     activos = Asset.todos.where(id: activos_ids).order(code: :asc)
     sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
-    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name")
+    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name").order("nombre")
     sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
     @data = {
       titulo: "Seguro",
@@ -28,7 +28,8 @@ class SegurosController < ApplicationController
         listado_seguros: seguros_url,
         asegurar: asegurar_seguro_url(@seguro),
         incorporaciones:  incorporaciones_seguro_url(@seguro),
-        activos: activos_seguro_url(@seguro, format: :pdf)
+        activos: activos_seguro_url(@seguro, format: :pdf),
+        resumen: resumen_seguro_url(@seguro, format: :pdf)
       }
     }
   end
@@ -61,7 +62,7 @@ class SegurosController < ApplicationController
     activos_ids = @seguro.assets.try(:ids)
     activos = Asset.todos.where(id: activos_ids).order(:code)
     sumatoria = activos.inject(0.0) { |total, activo| total + activo.precio }
-    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name")
+    resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name").order("nombre")
     sumatoria_resumen = resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
     @data = {
       titulo: "Asegurar",
@@ -95,7 +96,8 @@ class SegurosController < ApplicationController
   end
 
   def activos
-    @activos=@seguro.assets
+    activos_ids = @seguro.assets.try(:ids)
+    @activos = Asset.todos.where(id: activos_ids).order(code: :asc)
     @sumatoria = @activos.inject(0.0) { |total, activo| total + activo.precio }
     respond_to do |format|
       format.pdf do
@@ -104,6 +106,27 @@ class SegurosController < ApplicationController
                disposition: 'attachment',
                layout: 'pdf.html',
                template: 'seguros/activos.pdf.haml',
+               orientation: 'Portrait',
+               page_size: 'Letter',
+               margin: view_context.margin_pdf,
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
+  end
+
+  def resumen
+    activos_ids = @seguro.assets.try(:ids)
+    activos = Asset.todos.where(id: activos_ids).order(code: :asc)
+    @resumen = activos.select("accounts.name as nombre, count(*) as cantidad, sum(assets.precio) as sumatoria").group("accounts.name").order("nombre")
+    @sumatoria_resumen = @resumen.inject(0.0) { |total, cuenta| total + cuenta.sumatoria }
+    respond_to do |format|
+      format.pdf do
+        filename = 'resumen-de-activos'
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               template: 'seguros/resumen.pdf.haml',
                orientation: 'Portrait',
                page_size: 'Letter',
                margin: view_context.margin_pdf,
