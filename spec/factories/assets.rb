@@ -12,5 +12,7 @@ FactoryGirl.define do
     marca "corimexo"
     modelo "2012"
     serie "12x12x2"
+    association :ingreso
+    association :auxiliary
   end
 end

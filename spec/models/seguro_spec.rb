@@ -59,6 +59,7 @@ RSpec.describe Seguro, type: :model do
     end
 
     it "verificando la existencia de activos sin seguro" do
+      debugger
       expect(Asset.sin_seguro_vigente.size).to eq(3), "existen 3 activos sin seguro"
     end
 
@@ -71,21 +72,42 @@ RSpec.describe Seguro, type: :model do
       Timecop.return
     end
 
-    it "verificando la existencia de activos no asegurados posterior fecha fin de vigencia del seguro" do
-      Timecop.freeze("20-11-2016".to_date)
-      expect(Asset.sin_seguro_vigente.size).to eq(8), "existen 8 activos sin seguro"
+    it "Alerta de expiración antes de los 90 dias" do
+      Timecop.freeze(@seguro_vigente.fecha_fin_vigencia - 91.days)
+      expect(@seguro_vigente.alerta_expiracion).to eq({
+                                                        mensaje: "El seguro vence el 14 de noviembre de 2016 a las 12:00.",
+                                                        tipo: "success",
+                                                        parpadeo: false
+                                                      })
       Timecop.return
     end
 
-    it "verificando la alerta de la vigencia antes de los 60 dias" do
-      Timecop.freeze("20-07-2016".to_date)
-      expect(@seguro_vigente.expiracion_a_dias(60)).to eq(false)
+    it "Alerta de expiración antes de los 30 dias" do
+      Timecop.freeze(@seguro_vigente.fecha_fin_vigencia - 31.days)
+      expect(@seguro_vigente.alerta_expiracion).to eq({
+                                                        mensaje: "El seguro vence el 14 de noviembre de 2016 a las 12:00.",
+                                                        tipo: "warning",
+                                                        parpadeo: false
+                                                      })
+      Timecop.return    end
+
+    it "Alerta de expiración antes de los 7 dias" do
+      Timecop.freeze(@seguro_vigente.fecha_fin_vigencia - 8.days)
+      expect(@seguro_vigente.alerta_expiracion).to eq({
+                                                        mensaje: "El seguro vence el 14 de noviembre de 2016 a las 12:00.",
+                                                        tipo: "danger",
+                                                        parpadeo: false
+                                                      })
       Timecop.return
     end
 
-    it "verificando la alerta de la vigencia a los 60 dias" do
-      Timecop.freeze("18-09-2016".to_date)
-      expect(@seguro_vigente.expiracion_a_dias(60)).to eq(true)
+    it "Alerta de expiración dentro de los 7 dias" do
+      Timecop.freeze(@seguro_vigente.fecha_fin_vigencia - 5.days)
+      expect(@seguro_vigente.alerta_expiracion).to eq({
+                                                        mensaje: "El seguro vence el 14 de noviembre de 2016 a las 12:00.",
+                                                        tipo: "danger",
+                                                        parpadeo: true
+                                                      })
       Timecop.return
     end
   end

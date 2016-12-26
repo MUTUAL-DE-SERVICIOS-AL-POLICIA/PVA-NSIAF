@@ -43,7 +43,7 @@ class Seguro < ActiveRecord::Base
     user.present? ? user.name : ''
   end
 
-  def vigente?(fecha_actual = Date.today)
+  def vigente?(fecha_actual = DateTime.now)
     if fecha_inicio_vigencia.present? && fecha_fin_vigencia.present?
       fecha_inicio_vigencia <= fecha_actual && fecha_fin_vigencia >= fecha_actual
     else
@@ -66,27 +66,9 @@ class Seguro < ActiveRecord::Base
                 .where("fecha_fin_vigencia >= ?", fecha_actual )
   end
 
-  def dias_para_expiracion(fecha_actual = Date.today)
-    #(fecha_fin_vigencia - fecha_actual).to_i
-  end
-
   def expiracion_a_dias(nro_dias)
     fecha_inicio_alerta = fecha_fin_vigencia - nro_dias
     Date.today >= fecha_inicio_alerta
-  end
-
-  def self.alerta_30_dias_expiracion
-    self.vigentes.each do |s|
-      return true if s.expiracion_a_dias(30) && s.assets.present?
-    end
-    false
-  end
-
-  def self.alerta_10_dias_expiracion
-    self.vigentes.each do |s|
-      return true if s.expiracion_a_dias(10) && s.assets.present?
-    end
-    false
   end
 
   def alerta_expiracion(fecha_actual=DateTime.now)
