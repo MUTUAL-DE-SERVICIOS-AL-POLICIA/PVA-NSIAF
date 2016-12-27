@@ -4,14 +4,14 @@
 
 * Sistema Operativo: Debian Jessie
 * Usuario: nsiaf
-* Servidor: www.dominio.com.bo
+* Servidor: www.dominio.gob.bo
 
 ## Paquetes y dependencias
 
 La instalación de paquetes en el servidor remoto
 
 ```console
-sudo apt-get install -y curl checkinstall patch bzip2 gawk g++ gcc make \
+sudo apt-get install -y curl checkinstall bzip2 gawk g++ gcc make \
 libc6-dev patch libreadline6-dev zlib1g-dev libssl-dev libyaml-dev \
 libsqlite3-dev sqlite3 autoconf libgmp-dev libgdbm-dev libncurses5-dev \
 automake libtool bison pkg-config libffi-dev wget
@@ -45,8 +45,8 @@ Se recomienda la versión `0.12.0` o superiores, el cual se puede descargar
 manualmente desde http://wkhtmltopdf.org/downloads.html
 
 ```console
-wget -c http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
-tar -xvf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
+wget -c http://download.gna.org/wkhtmltopdf/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 sudo mv wkhtmltox /opt/
 ```
 
@@ -75,9 +75,9 @@ Descargar Ruby y compilarlo:
 
 ```console
 mkdir /tmp/ruby && cd /tmp/ruby
-curl --remote-name --progress https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz
-echo 'c39b4001f7acb4e334cb60a0f4df72d434bef711  ruby-2.3.1.tar.gz' | shasum -c - && tar xzf ruby-2.3.1.tar.gz
-cd ruby-2.3.1
+curl --remote-name --progress https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.3.tar.gz
+echo '241408c8c555b258846368830a06146e4849a1d58dcaf6b14a3b6a73058115b7  ruby-2.3.3.tar.gz' | shasum -c - && tar xzf ruby-2.3.3.tar.gz
+cd ruby-2.3.3
 ./configure --disable-install-rdoc
 make
 sudo make install
@@ -87,6 +87,27 @@ Instalar la gema Bundler:
 
 ```console
 sudo gem install bundler --no-ri --no-rdoc
+```
+
+## NodeJS
+
+Instalación de [NodeJS v6](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions):
+
+```console
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+Actualización del paquete npm:
+
+```console
+sudo npm install -g npm
+```
+
+Instalación del paquete bower:
+
+```console
+sudo npm install -g bower
 ```
 
 ## Usuario de Sistema Operativo
@@ -102,7 +123,7 @@ sudo adduser --disabled-login --gecos 'NSIAF' nsiaf
 Instalación de `MySQL`
 
 ```console
-sudo apt-get install mysql-server libmysqlclient-dev
+sudo apt-get install -y mysql-server libmysqlclient-dev
 ```
 
 Creación de la base de datos
@@ -212,10 +233,10 @@ production:
 donde:
 
 * `convert_api_url` es la URL donde se encuentra instalado el API de [Conversión de Formatos](https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos)
-* `rails_host` es el host del servidor de deploy tal como: `www.dominio.com.bo`
-* `rails_relative_url_root` es la ubicación del subdirectorio de deploy tal como: `www.dominio.com.bo/activos`
+* `rails_host` es el host del servidor de deploy tal como: `www.dominio.gob.bo`
+* `rails_relative_url_root` es la ubicación del subdirectorio de deploy tal como: `www.dominio.gob.bo/activos`
   dejar una cadena vacía en el caso que el deploy sea en la raíz del dominio.
-* `secret_key_base` se **DEBE** reemplazar con la clave secreta generada en el
+* `secret_key_base` se **DEBE** reemplazar con la clave secreta generada
 * `wkhtmltopdf` es la ubicación del binario para conversión de HTML a PDF.
 * `ufv_desde` descarga UFVs desde esa fecha del sitio web del Banco Central de
   Bolivia.
@@ -224,6 +245,12 @@ donde:
   varios emails separados por comas: `des1@dominio.gob.bo, des2@dominio.gob.bo`
 * `smtp_settings` la configuración del servidor de email desde el cual se
   enviará los emails de notificación de excepciones
+
+Descargar las dependencias para frontend:
+
+```console
+sudo -u nsiaf -H bundle exec bower install
+```
 
 Compilamos los archivos CSS y JS:
 
@@ -333,14 +360,14 @@ sudo mv /home/nsiaf/nsiaf /var/www/html/
 Configuración de Apache para el sistema NSIAF
 
 ```console
-sudo editor /etc/apache2/sites-available/www.dominio.com.conf
+sudo editor /etc/apache2/sites-available/www.dominio.gob.bo.conf
 ```
 
 Adicionar el siguiente contenido si se va instalar la aplicación en la raiz del dominio
 
 ```apache
 <VirtualHost *:80>
-  ServerName www.dominio.com.bo
+  ServerName www.dominio.gob.bo
   DocumentRoot /var/www/html/nsiaf/public
   RailsEnv production
   <Directory /var/www/html/nsiaf/public>
@@ -354,7 +381,7 @@ Contenido para deploy de la aplicación en un subdirectorio `/activos`
 
 ```apache
 <VirtualHost *:80>
-  ServerName www.dominio.com.bo
+  ServerName www.dominio.gob.bo
   DocumentRoot /var/www/html
 
   <IfModule mod_rewrite.c>
@@ -379,14 +406,14 @@ Contenido para deploy de la aplicación en un subdirectorio `/activos`
 Habilitar el nuevo sitio y reiniciar Apache
 
 ```console
-sudo a2ensite www.dominio.com.bo
+sudo a2ensite www.dominio.gob.bo
 sudo service apache2 restart
 ```
 
 Nota: Puede ser necesario deshabilitar el dominio por defecto con el comando
 `sudo a2dissite 000-default`
 
-Visitamos el sitio http://www.dominio.com.bo o http://www.dominio.com.bo/activos depende
+Visitamos el sitio http://www.dominio.gob.bo o http://www.dominio.gob.bo/activos depende
 de la configuración que se haya elegido para el deploy.
 
 ## Actualización
