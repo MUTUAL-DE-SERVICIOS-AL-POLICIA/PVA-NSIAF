@@ -53,13 +53,22 @@ class Asset < ActiveRecord::Base
   has_paper_trail
 
   def self.busqueda_basica(col, q, cuentas, desde, hasta)
-    activos = self.select("assets.id as id, assets.code as codigo, assets.description as descripcion, assets.precio as precio, ingresos.factura_numero as factura, ingresos.factura_fecha as fecha_ingreso, accounts.name as cuenta")
-                  .joins("LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id")
-                  .joins(auxiliary: [:account])
+    activos = self.select('assets.id as id, assets.code as codigo, assets.description as descripcion, assets.precio as precio, ingresos.factura_numero as factura, ingresos.factura_fecha as fecha_ingreso, accounts.name as cuenta, ubicaciones.abreviacion as lugar')
+                  .joins('LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id')
+                  .joins(:ubicacion, auxiliary: [:account])
     if q.present? || cuentas.present? || (desde.present? && hasta.present?) || col.present?
       if q.present?
         if col == 'all'
-          activos = activos.where("assets.description LIKE :q OR assets.code LIKE :code OR ingresos.factura_numero LIKE :nf", q: "%#{q}%", code: "%#{q}%", nf: "%#{q}%")
+          activos = activos.where('
+                      ubicaciones.descripcion LIKE :de OR
+                      ubicaciones.abreviacion LIKE :ab OR
+                      assets.description LIKE :q OR
+                      assets.code LIKE :code OR
+                      ingresos.factura_numero LIKE :nf', de: "%#{q}%",
+                                                         ab: "%#{q}%",
+                                                         q: "%#{q}%",
+                                                         code: "%#{q}%",
+                                                         nf: "%#{q}%")
         else
           case col
           when 'code'
@@ -81,10 +90,10 @@ class Asset < ActiveRecord::Base
     activos
   end
 
-  def self.busqueda_avanzada(codigo, numero_factura, descripcion, cuenta, precio, desde, hasta)
-    activos = self.select("assets.id as id, assets.code as codigo, assets.description as descripcion, assets.precio as precio, ingresos.factura_numero as factura, ingresos.factura_fecha as fecha_ingreso, accounts.name as cuenta")
+  def self.busqueda_avanzada(codigo, numero_factura, descripcion, cuenta, precio, desde, hasta, ubicacion)
+    activos = self.select("assets.id as id, assets.code as codigo, assets.description as descripcion, assets.precio as precio, ingresos.factura_numero as factura, ingresos.factura_fecha as fecha_ingreso, accounts.name as cuenta, ubicaciones.abreviacion as lugar")
                   .joins("LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id")
-                  .joins(auxiliary: [:account])
+                  .joins(:ubicacion, auxiliary: [:account])
     if codigo.present?
       activos = activos.where("assets.code = :co", co: codigo)
     end
@@ -102,6 +111,9 @@ class Asset < ActiveRecord::Base
     end
     if desde.present? && hasta.present?
       activos = activos.where("ingresos.factura_fecha" => desde..hasta)
+    end
+    if ubicacion.present?
+      activos = activos.where('ubicaciones.descripcion LIKE :de OR ubicaciones.abreviacion LIKE :ab', de: "%#{ubicacion}%", ab: "%#{ubicacion}%")
     end
     activos
   end

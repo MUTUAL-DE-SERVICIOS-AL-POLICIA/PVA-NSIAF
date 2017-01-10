@@ -43,6 +43,7 @@ var Fila = React.createClass({
     var descripcion = this.props.fila.descripcion;
     var cuenta = this.props.fila.cuenta;
     var precio = this.props.fila.precio;
+    var lugar = this.props.fila.lugar;
     return (
       <tr>
         <Celda td = { indice } className = "text-right"/>
@@ -51,6 +52,7 @@ var Fila = React.createClass({
         <Celda td = { fecha } className = "text-center"/>
         <Celda td = { descripcion }/>
         <Celda td = { cuenta }/>
+        <Celda td = { lugar }/>
         <Celda td = { precio } className = "number"/>
       </tr>
     );
@@ -97,7 +99,7 @@ var TablaReportes = React.createClass({
   mostrarTotal (){
     return(
       <tr>
-        <th colSpan ="5" ></th>
+        <th colSpan ='6' ></th>
         <th>TOTAL:</th>
         <th className = "number">{ this.props.total }</th>
       </tr>
@@ -131,6 +133,7 @@ var TablaReportes = React.createClass({
                 <th className = "text-center">Fecha</th>
                 <th>Descripción</th>
                 <th>Cuenta</th>
+                <th>Ubicación</th>
                 <th className = "number"> Precio</th>
               </tr>
             </thead>
@@ -153,6 +156,7 @@ var TablaReportes = React.createClass({
               <th className = "text-center">Fecha</th>
               <th>Descripción</th>
               <th>Cuenta</th>
+                <th>Ubicación</th>
               <th className = "number"> Precio</th>
             </tr>
           </thead>
@@ -222,7 +226,7 @@ var ReportesBuscadorBasico = React.createClass({
           &nbsp;
           <div className="form-group">
             <label className="sr-only" htmlFor="buscar">Buscar</label>
-            <input ref = "q" type="text" name="q" id="q" className="form-control" placeholder="Buscar" autofocus="autofocus" autoComplete="off"/>
+            <input ref = "q" type="text" name="q" id="q" className="form-control" placeholder="Buscar" autoComplete="off"/>
           </div>
           &nbsp;
           <div className="form-group">
@@ -261,7 +265,8 @@ var ReportesBuscadorAvanzado = React.createClass({
     var numero_factura = this.refs.numero_factura.value;
     var descripcion = this.refs.descripcion.value;
     var precio = this.refs.precio.value;
-    parametros = "?co=" + codigo + "&nf=" + numero_factura + "&de=" + descripcion +  "&cu=" + cuenta +  "&pr=" + precio + "&desde=" + desde + "&hasta=" + hasta;
+    var ubicacion = this.refs.ubicacion.value;
+    parametros = "?co=" + codigo + "&nf=" + numero_factura + "&de=" + descripcion +  "&cu=" + cuenta +  "&pr=" + precio + "&desde=" + desde + "&hasta=" + hasta + '&ub=' + ubicacion;
     url = host + parametros;
     $.ajax({
         url:  url,
@@ -299,22 +304,27 @@ var ReportesBuscadorAvanzado = React.createClass({
         <div className = "pull-right">
           <div className="form-group">
             <label className="sr-only">Código</label>
-            <input ref = "codigo" type="text" name="codigo" id="codigo" className="form-control" placeholder="Código" autofocus="autofocus" autoComplete="off"/>
+            <input ref = "ubicacion" type="text" name="ubicacion" id="ubicacion" className="form-control" placeholder="Ubicación" autoComplete="off"/>
+          </div>
+          &nbsp;
+          <div className="form-group">
+            <label className="sr-only">Código</label>
+            <input ref = "codigo" type="text" name="codigo" id="codigo" className="form-control" placeholder="Código" autoComplete="off"/>
           </div>
           &nbsp;
           <div className="form-group">
             <label className="sr-only">Factura</label>
-            <input ref = "numero_factura" type="text" name="numero_factura" id="factura" className="form-control" placeholder="Número Factura" autofocus="autofocus" autoComplete="off"/>
+            <input ref = "numero_factura" type="text" name="numero_factura" id="factura" className="form-control" placeholder="Número Factura" autoComplete="off"/>
           </div>
           &nbsp;
           <div className="form-group">
             <label className="sr-only">Descripción</label>
-            <input ref = "descripcion" type="text" name="descripcion" id="descripcion" className="form-control" placeholder="Descripción" autofocus="autofocus" autoComplete="off"/>
+            <input ref = "descripcion" type="text" name="descripcion" id="descripcion" className="form-control" placeholder="Descripción" autoComplete="off"/>
           </div>
           &nbsp;
           <div className="form-group">
             <label className="sr-only">Precio</label>
-            <input ref = "precio" type="text" name="precio" id="precio" className="form-control" placeholder="Precios" autofocus="autofocus" autoComplete="off"/>
+            <input ref = "precio" type="text" name="precio" id="precio" className="form-control" placeholder="Precios" autoComplete="off"/>
           </div>
           &nbsp;
           <div className="form-group">

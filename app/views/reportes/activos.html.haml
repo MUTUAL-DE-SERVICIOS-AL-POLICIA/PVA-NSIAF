@@ -1,4 +1,4 @@
-= react_component 'ReporteActivos', url: activos_api_reportes_url, cuentas: @cuentas, columnas: @columnas
+= react_component 'ReporteActivos', url: activos_api_reportes_path, cuentas: @cuentas, columnas: @columnas
 
 - if is_pdf?
   .row
@@ -15,6 +15,7 @@
             %th.text-center{title: 'Fecha de incorporación'} Fecha
             %th{title: 'Descripción'} Descripción
             %th{title: 'Asiento contable'} Cuenta
+            %th{title: 'Ubicación'} Ubicación
             %th.number{title: 'Precio histórico'} Precio
         %tbody
           - @activos.each_with_index do |activo, index|
@@ -25,10 +26,11 @@
               %td.text-center= l activo.fecha_ingreso if activo.fecha_ingreso
               %td= activo.descripcion
               %td= activo.cuenta
+              %td= activo.lugar
               %td.number= number_with_delimiter activo.precio
           - if @activos.present?
             %tr
-              %th{ colspan: 5 }
+              %th{ colspan: 6 }
               %th.number TOTAL
               %th.number= number_with_delimiter @total
           - if @activos.empty?

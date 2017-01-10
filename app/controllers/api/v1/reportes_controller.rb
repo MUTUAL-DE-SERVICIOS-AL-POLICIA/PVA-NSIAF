@@ -16,7 +16,8 @@ module Api
             numero_factura = params[:nf]
             descripcion = params[:de]
             precio = params[:pr]
-            Asset.busqueda_avanzada(codigo, numero_factura, descripcion, cuenta, precio, desde, hasta).order(:code)
+            ubicacion = params[:ub]
+            Asset.busqueda_avanzada(codigo, numero_factura, descripcion, cuenta, precio, desde, hasta, ubicacion).order(:code)
           end
         @total = @activos.inject(0.0) { |total, activo| total + activo.precio }
         respond_to do |format|
