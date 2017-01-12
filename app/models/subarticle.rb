@@ -97,6 +97,14 @@ class Subarticle < ActiveRecord::Base
     self.active
   end
 
+  # Suma el importe total para cada grupo de materiales
+  def self.total(hasta = Date.today)
+    all.inject(0) do |suma, subarticle|
+      f_kardex = subarticle.saldo_final(hasta)
+      suma + f_kardex.items.sum(&:importe_saldo)
+    end
+  end
+
   ##
   # Utilizado para la migración de artículos a materiales, por tanto se queda
   # en eliminar la categoría Artículos

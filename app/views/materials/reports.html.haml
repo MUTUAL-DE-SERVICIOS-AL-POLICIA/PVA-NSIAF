@@ -46,7 +46,8 @@
     - @materials.each do |material|
       %tr.double-thick
         %th.text-center= material.code
-        %th{colspan: 9}= material.description.to_s.upcase
+        %th{colspan: 8}= material.description.to_s.upcase
+        %th.number= number_with_delimiter material.subarticles.estado_activo.total(@hasta)
       - material.subarticles.estado_activo.each do |subarticle|
         - i_kardex = subarticle.saldo_inicial(@desde)
         - f_kardex = subarticle.saldo_final(@hasta)
@@ -58,7 +59,7 @@
           %td.number.contenedor{rowspan: kp}
             %ul
               - i_kardex.items.each_with_index do |p, i|
-                %li= mostrar_entero_float p.cantidad_saldo
+                %li{title: p.costo_unitario}= mostrar_entero_float p.cantidad_saldo
           - Transaccion.suma_entradas(f_kardex.items, @desde, @hasta)
           - Transaccion.suma_salidas(f_kardex.items, @desde, @hasta)
           - f_kardex.items.each_with_index do |price, index|
@@ -66,14 +67,22 @@
             - if index > 0
               %tr
                 %td.number= mostrar_entero_float price.cantidad_entrada
-                %td.number= number_with_delimiter price.costo_unitario
+                %td.number
+                  - if price.cantidad_entrada > 0
+                    = number_with_delimiter price.costo_unitario
+                  - else
+                    0
                 %td.number= mostrar_entero_float price.cantidad_salida
                 %td.number= mostrar_entero_float price.cantidad_saldo
                 %td.number= number_with_delimiter price.costo_unitario
                 %td.number= number_with_delimiter price.importe_saldo
             - else
               %td.number= mostrar_entero_float price.cantidad_entrada
-              %td.number= number_with_delimiter price.costo_unitario
+              %td.number
+                - if price.cantidad_entrada > 0
+                  = number_with_delimiter price.costo_unitario
+                - else
+                  0
               %td.number= mostrar_entero_float price.cantidad_salida
               %td.number= mostrar_entero_float price.cantidad_saldo
               %td.number= number_with_delimiter price.costo_unitario
