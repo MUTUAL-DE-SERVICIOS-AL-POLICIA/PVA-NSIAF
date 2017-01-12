@@ -55,7 +55,8 @@ class Asset < ActiveRecord::Base
   def self.busqueda_basica(col, q, cuentas, desde, hasta)
     activos = self.select('assets.id as id, assets.code as codigo, assets.description as descripcion, assets.precio as precio, ingresos.factura_numero as factura, ingresos.factura_fecha as fecha_ingreso, accounts.name as cuenta, ubicaciones.abreviacion as lugar')
                   .joins('LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id')
-                  .joins(:ubicacion, auxiliary: [:account])
+                  .joins('LEFT JOIN ubicaciones ON ubicaciones.id = assets.ubicacion_id')
+                  .joins(auxiliary: [:account])
     if q.present? || cuentas.present? || (desde.present? && hasta.present?) || col.present?
       if q.present?
         if col == 'all'
@@ -93,7 +94,8 @@ class Asset < ActiveRecord::Base
   def self.busqueda_avanzada(codigo, numero_factura, descripcion, cuenta, precio, desde, hasta, ubicacion)
     activos = self.select("assets.id as id, assets.code as codigo, assets.description as descripcion, assets.precio as precio, ingresos.factura_numero as factura, ingresos.factura_fecha as fecha_ingreso, accounts.name as cuenta, ubicaciones.abreviacion as lugar")
                   .joins("LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id")
-                  .joins(:ubicacion, auxiliary: [:account])
+                  .joins("LEFT JOIN ubicaciones ON ubicaciones.id = assets.ubicacion_id")
+                  .joins(auxiliary: [:account])
     if codigo.present?
       activos = activos.where("assets.code = :co", co: codigo)
     end
