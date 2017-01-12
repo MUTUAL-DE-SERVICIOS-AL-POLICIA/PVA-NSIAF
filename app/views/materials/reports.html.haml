@@ -58,24 +58,24 @@
           %td.number.contenedor{rowspan: kp}
             %ul
               - i_kardex.items.each_with_index do |p, i|
-                %li= p.cantidad_saldo
+                %li= mostrar_entero_float p.cantidad_saldo
           - Transaccion.suma_entradas(f_kardex.items, @desde, @hasta)
           - Transaccion.suma_salidas(f_kardex.items, @desde, @hasta)
           - f_kardex.items.each_with_index do |price, index|
             - total += price.importe_saldo
             - if index > 0
               %tr
-                %td.number= price.cantidad_entrada
+                %td.number= mostrar_entero_float price.cantidad_entrada
                 %td.number= number_with_delimiter price.costo_unitario
-                %td.number= price.cantidad_salida
-                %td.number= price.cantidad_saldo
+                %td.number= mostrar_entero_float price.cantidad_salida
+                %td.number= mostrar_entero_float price.cantidad_saldo
                 %td.number= number_with_delimiter price.costo_unitario
                 %td.number= number_with_delimiter price.importe_saldo
             - else
-              %td.number= price.cantidad_entrada
+              %td.number= mostrar_entero_float price.cantidad_entrada
               %td.number= number_with_delimiter price.costo_unitario
-              %td.number= price.cantidad_salida
-              %td.number= price.cantidad_saldo
+              %td.number= mostrar_entero_float price.cantidad_salida
+              %td.number= mostrar_entero_float price.cantidad_saldo
               %td.number= number_with_delimiter price.costo_unitario
               %td.number= number_with_delimiter price.importe_saldo
     %tr
