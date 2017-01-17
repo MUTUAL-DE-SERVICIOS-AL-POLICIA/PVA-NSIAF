@@ -1,5 +1,6 @@
-%h4 Listado de activos
-%table.table.table-striped.table-condensed.table-bordered.alineacion-media
+= render 'encabezado', seguro: @seguro
+
+%table.table.table-striped.table-condensed.table-bordered.alineacion-media.valorado
   %thead
     %tr
       %th
@@ -14,10 +15,10 @@
           %td= index + 1
           %td= cuenta.nombre
           %td.number= cuenta.cantidad
-          %td.number= cuenta.sumatoria
+          %td.number= number_with_delimiter cuenta.sumatoria
         - sumatoria_cantidad += cuenta.cantidad
       %tr
         %th
         %th.text-right Total
         %th.number= sumatoria_cantidad
-        %th.number= @sumatoria_resumen
+        %th.number= number_with_delimiter @sumatoria_resumen

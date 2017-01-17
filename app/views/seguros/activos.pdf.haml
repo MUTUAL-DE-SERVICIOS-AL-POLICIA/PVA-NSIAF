@@ -1,10 +1,11 @@
-%h4 Listado de activos
-%table.table.table-striped.table-condensed.table-bordered.alineacion-media
+= render 'encabezado', seguro: @seguro
+
+%table.table.table-striped.table-condensed.table-bordered.alineacion-media.valorado
   %thead
     %tr
       %th
       %th.text-center Código
-      %th Descripción
+      %th.col-xs-7 Descripción
       %th Cuenta
       %th.text-right Precio
   %tbody
