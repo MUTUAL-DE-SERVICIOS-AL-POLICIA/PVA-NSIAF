@@ -24,6 +24,26 @@ table.valorado {
   }
 }
 
+table.valorado-sin-borde {
+  @include table-border();
+  font-size: 0.9rem;
+  thead {
+    tr {
+      th {
+        padding: 2px 3px 3px;
+      }
+    }
+  }
+  tbody {
+    tr {
+      th, td {
+        padding: 0px 3px;
+        border-top: none;
+      }
+    }
+  }
+}
+
 table.alineacion-media {
   tbody {
     tr {

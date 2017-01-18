@@ -1,34 +1,24 @@
-%h3
-  Activos Fijos con Seguro
-  .pull-right.text-muted
-    = seguro.seguro ? 'INCORPORACIÓN' : 'CONTRATO'
+- if seguro.state == 'cotizado'
+  %h3 Listado de Activos Fijos
+- elsif seguro.state == 'asegurado'
+  %h3
+    Activos Fijos con Seguro
+    .pull-right.text-muted
+      = seguro.seguro ? 'INCORPORACIÓN' : 'CONTRATO'
 
-- seguro_padre = seguro.seguro || seguro
-
-%table.table.table-condensed.valorado
-  %tbody
-    %tr
-      %th Póliza
-      %td{colspan: 3}= seguro_padre.numero_poliza
-      %th Desde
-      %td= l seguro_padre.fecha_inicio_vigencia, format: :version
-      %th Hasta
-      %td= l seguro_padre.fecha_fin_vigencia, format: :version
-    %tr
-      %th Número de contrato
-      %td= seguro.numero_contrato
-      %th Proveedor
-      %td= seguro.proveedor_nombre
-      %th NIT
-      %td= seguro.proveedor_nit
-      %th Teléfono(s)
-      %td= seguro.proveedor_telefono
-    %tr
-      %th Número de factura
-      %td= seguro.factura_numero
-      %th Número de autorización
-      %td= seguro.factura_autorizacion
-      %th Fecha factura
-      %td= l seguro.factura_fecha
-      %th Monto factura
-      %td= seguro.factura_monto
+  - seguro_padre = seguro.seguro || seguro
+  - datos = seguros_datos(seguro)
+  - division = (datos.length / 2.0).round
+  
+  %table.table.table-condensed.valorado-sin-borde
+    %tbody
+      - (0...division).each do |i|
+        %tr
+          %th.text-right= datos[i].first
+          %td= datos[i].second
+          - if datos[i+division].present?
+            %th.text-right= datos[i+division].first
+            %td= datos[i+division].second
+          - else
+            %th
+            %td
