@@ -103,18 +103,31 @@ namespace :db do
 
   ##
   # Permite autoasignar a los subartículos un incremento por cada grupo de
-  # materiales. Esto con el fin de recodificar los códigos
+  # materiales. Esto con el fin de recodificar automáticamente los subartículos
   desc "Recodificación de código por grupo de materiales"
-  task :recodificacion => :environment do
+  task 'recodificacion:almacenes' => :environment do
     Subarticle.transaction do
       Material.all.each do |m|
-        m.subarticulos.each_with_index do |s, index|
+        m.subarticulos.order(:code_old).each_with_index do |s, index|
           s.incremento = index + 1
           s.barcode = "#{s.material_code}#{s.incremento}"
           s.code = s.barcode.to_i
           s.material_id = s.article.material_id if s.article.present?
           s.save!
         end
+      end
+    end
+  end
+
+  ##
+  # Permite autoasignar a los activos fijos un incremento por cada cuenta
+  # contable. Esto con el fin de recodificar automáticamente los activos
+  desc "Recodificación de código de activos por cuenta contable"
+  task 'recodificacion:activos' => :environment do
+    Asset.transaction do
+      Asset.order(:code_old).each_with_index do |s, index|
+        s.code = index + 1
+        s.save!(validate: false)
       end
     end
   end
