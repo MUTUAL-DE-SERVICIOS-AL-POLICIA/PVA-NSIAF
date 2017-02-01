@@ -1,5 +1,5 @@
 class AddCodeOldToAssets < ActiveRecord::Migration
   def change
-    add_column :assets, :code_old, :string
+    rename_column :assets, :codigo_antiguo, :code_old
   end
 end

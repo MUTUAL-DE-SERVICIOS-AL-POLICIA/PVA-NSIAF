@@ -70,9 +70,9 @@ ActiveRecord::Schema.define(version: 20161208130735) do
     t.string   "marca",               limit: 255
     t.string   "modelo",              limit: 255
     t.string   "serie",               limit: 255
+    t.string   "code_old",            limit: 255
     t.integer  "ingreso_id",          limit: 4
     t.integer  "ubicacion_id",        limit: 4
-    t.string   "code_old",            limit: 255
   end
 
   add_index "assets", ["account_id"], name: "index_assets_on_account_id", using: :btree
