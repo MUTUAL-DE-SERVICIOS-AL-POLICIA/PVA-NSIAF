@@ -12,6 +12,12 @@ FactoryGirl.define do
       total_cost 200
     end
 
+    trait :trescientos do
+      amount 300
+      unit_cost 1.8
+      total_cost 5400
+    end
+
     trait :enero do
       amount 1
       unit_cost 2050.66

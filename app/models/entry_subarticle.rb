@@ -9,7 +9,6 @@ class EntrySubarticle < ActiveRecord::Base
 
   before_create :set_stock_value
   before_create :set_date_value
-  after_create :create_kardex_price
 
   # Anula las entradas de subartículos, estableciendo el campo invalidate a true
   def self.invalidate_entries
