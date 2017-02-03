@@ -18,18 +18,12 @@ class Subarticle < ActiveRecord::Base
     m.validates :incremento, presence: true, uniqueness: { scope: :material_id, message: "debe ser único por material" }
     #m.validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     #
-    # TODO validación de los códigos de barras desactivado.
-    # m.validate do |subarticle|
-    #   BarcodeStatusValidator.new(subarticle).validate
-    # end
   end
 
   with_options if: :is_migrate? do |m|
     m.validates :code, presence: true, uniqueness: true
     m.validates :description, :unit, presence: true
   end
-
-  # before_save :check_barcode
 
   has_paper_trail
 
@@ -297,16 +291,6 @@ class Subarticle < ActiveRecord::Base
       date = date.to_i
     end
     date
-  end
-
-  def check_barcode
-    if is_not_migrate?
-      bcode = Barcode.find_by_code barcode
-      if bcode.present?
-        self.barcode = bcode.code
-        bcode.change_to_used
-      end
-    end
   end
 
   def esta_activo?

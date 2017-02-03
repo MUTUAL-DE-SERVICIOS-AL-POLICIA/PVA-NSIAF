@@ -1,5 +1,5 @@
 class RemoveDocumento < ActiveRecord::Migration
-  def change
+  def up
     drop_table :documentos
   end
 

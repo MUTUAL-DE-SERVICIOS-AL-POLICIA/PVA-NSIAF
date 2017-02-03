@@ -35,10 +35,6 @@ class Asset < ActiveRecord::Base
     # m.validates :barcode, presence: true, uniqueness: true
     m.validates :code, presence: true, uniqueness: true
     m.validates :detalle, :auxiliary_id, :user_id, :precio, presence: true
-    # TODO validación de los códigos de barras desactivado.
-    # m.validate do |asset|
-    #   BarcodeStatusValidator.new(asset).validate  has_many :proceedings, through: :asset_proceedingsbuscarasset_proceedingsbuscar
-    # end
   end
 
   with_options if: :is_migrate? do |m|
@@ -47,7 +43,6 @@ class Asset < ActiveRecord::Base
   end
 
   before_save :establecer_barcode
-  before_save :check_barcode
   before_validation :generar_descripcion
 
   has_paper_trail
@@ -189,26 +184,8 @@ class Asset < ActiveRecord::Base
     auxiliary.present? ? auxiliary.account_name : ''
   end
 
-  def change_barcode_to_deleted
-    if self.barcode_was.present? && self.barcode_was != self.barcode
-      bc = Barcode.find_by_code barcode_was
-      bc.change_to_deleted if bc.present?
-    end
-  end
-
   def establecer_barcode
     self.barcode = self.code
-  end
-
-  def check_barcode
-    if is_not_migrate?
-      bcode = Barcode.find_by_code barcode
-      if bcode.present?
-        self.barcode = bcode.code
-        bcode.change_to_used
-      end
-      change_barcode_to_deleted
-    end
   end
 
   # Fecha de ingreso del activo fijo

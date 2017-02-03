@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170203211000) do
+ActiveRecord::Schema.define(version: 20170203214629) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -99,23 +99,6 @@ ActiveRecord::Schema.define(version: 20170203211000) do
   end
 
   add_index "auxiliaries", ["account_id"], name: "index_auxiliaries_on_account_id", using: :btree
-
-  create_table "barcode_statuses", primary_key: "status", force: :cascade do |t|
-    t.string   "description", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "barcodes", force: :cascade do |t|
-    t.string   "code",       limit: 255
-    t.integer  "entity_id",  limit: 4
-    t.integer  "status",     limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "barcodes", ["entity_id"], name: "index_barcodes_on_entity_id", using: :btree
-  add_index "barcodes", ["status"], name: "index_barcodes_on_status", using: :btree
 
   create_table "buildings", force: :cascade do |t|
     t.string   "code",       limit: 50
