@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170203214629) do
+ActiveRecord::Schema.define(version: 20170203225558) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -22,17 +22,6 @@ ActiveRecord::Schema.define(version: 20170203214629) do
     t.boolean  "depreciar",              default: false, null: false
     t.boolean  "actualizar",             default: false, null: false
   end
-
-  create_table "articles", force: :cascade do |t|
-    t.string   "code",        limit: 255
-    t.string   "description", limit: 255
-    t.string   "status",      limit: 255
-    t.integer  "material_id", limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "articles", ["material_id"], name: "index_articles_on_material_id", using: :btree
 
   create_table "asset_proceedings", force: :cascade do |t|
     t.integer  "proceeding_id", limit: 4

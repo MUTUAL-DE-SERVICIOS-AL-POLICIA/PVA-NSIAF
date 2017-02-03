@@ -16,19 +16,3 @@
   %dd= @material.description
   %dt= t('general.status')
   %dd= type_status(@material.status)
-
-%h3 Artículos
-%table.table.table-hover
-  %thead
-    %tr
-      %th #
-      %th= Article.human_attribute_name('code')
-      %th= Article.human_attribute_name('description')
-      %th= t('general.status')
-  %tbody
-    - @material.articles.each_with_index do |article, index|
-      %tr
-        %td= index + 1
-        %td= article.code
-        %td= link_to_if article.description, article.description, article
-        %td= type_status(article.status)

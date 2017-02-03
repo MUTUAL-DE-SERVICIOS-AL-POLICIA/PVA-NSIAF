@@ -100,10 +100,6 @@ Rails.application.routes.draw do
     get :reports, on: :collection
   end
 
-  resources :articles, except: [:destroy] do
-    post :change_status, on: :member
-  end
-
   resources :subarticles, except: [:destroy] do
     resources :kardexes, only: [:index]
     member do

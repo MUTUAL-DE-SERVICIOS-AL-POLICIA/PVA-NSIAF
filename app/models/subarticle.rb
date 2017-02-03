@@ -3,7 +3,6 @@ class Subarticle < ActiveRecord::Base
   include Autoincremento
   include CodeNumber
 
-  belongs_to :article
   belongs_to :material
   has_many :subarticle_requests
   has_many :requests, through: :subarticle_requests
@@ -63,13 +62,6 @@ class Subarticle < ActiveRecord::Base
       f_kardex = subarticle.saldo_final(hasta)
       suma + f_kardex.items.sum(&:importe_saldo)
     end
-  end
-
-  ##
-  # Utilizado para la migración de artículos a materiales, por tanto se queda
-  # en eliminar la categoría Artículos
-  def article_material_id
-    article.present? ? article.material : nil
   end
 
   # Decrementar el stock del subartículo
@@ -200,8 +192,6 @@ class Subarticle < ActiveRecord::Base
   def material_code
     if material.present?
       material.code
-    elsif article.present?
-      article.material_code
     else
       ''
     end
