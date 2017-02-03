@@ -11,7 +11,6 @@ class Request < ActiveRecord::Base
   belongs_to :user
   belongs_to :admin, class_name: 'User'
 
-  has_many :kardexes
   has_many :subarticle_requests
   has_many :subarticles, through: :subarticle_requests
   accepts_nested_attributes_for :subarticle_requests
@@ -166,7 +165,6 @@ class Request < ActiveRecord::Base
     end
     estado = anulado ? 'canceled' : 'delivered'
     update_attributes(status: estado, delivery_date: created_at)
-    kardexes.update_all(kardex_date: delivery_date.to_date)
   end
 
   # Entrega los productos solicitados
@@ -187,7 +185,6 @@ class Request < ActiveRecord::Base
     transaction do
       update(invalidate: true, message: message)
       subarticle_requests.invalidate_subarticles
-      kardexes.invalidate_kardexes
     end
   end
 

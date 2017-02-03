@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161208130735) do
+ActiveRecord::Schema.define(version: 20170203200857) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -236,40 +236,6 @@ ActiveRecord::Schema.define(version: 20161208130735) do
 
   add_index "ingresos", ["supplier_id"], name: "index_ingresos_on_supplier_id", using: :btree
   add_index "ingresos", ["user_id"], name: "index_ingresos_on_user_id", using: :btree
-
-  create_table "kardex_prices", force: :cascade do |t|
-    t.integer  "input_quantities",   limit: 4,                          default: 0,     null: false
-    t.integer  "output_quantities",  limit: 4,                          default: 0,     null: false
-    t.integer  "balance_quantities", limit: 4,                          default: 0,     null: false
-    t.decimal  "unit_cost",                    precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "input_amount",                 precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "output_amount",                precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "balance_amount",               precision: 10, scale: 2, default: 0.0,   null: false
-    t.integer  "kardex_id",          limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "invalidate",                                            default: false
-  end
-
-  add_index "kardex_prices", ["kardex_id"], name: "index_kardex_prices_on_kardex_id", using: :btree
-
-  create_table "kardexes", force: :cascade do |t|
-    t.date     "kardex_date"
-    t.string   "invoice_number",       limit: 255, default: "0"
-    t.integer  "order_number",         limit: 4
-    t.string   "detail",               limit: 255
-    t.integer  "subarticle_id",        limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "delivery_note_number", limit: 255
-    t.integer  "request_id",           limit: 4
-    t.integer  "note_entry_id",        limit: 4
-    t.boolean  "invalidate",                       default: false
-  end
-
-  add_index "kardexes", ["note_entry_id"], name: "index_kardexes_on_note_entry_id", using: :btree
-  add_index "kardexes", ["request_id"], name: "index_kardexes_on_request_id", using: :btree
-  add_index "kardexes", ["subarticle_id"], name: "index_kardexes_on_subarticle_id", using: :btree
 
   create_table "materials", force: :cascade do |t|
     t.string   "code",        limit: 50

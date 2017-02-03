@@ -39,7 +39,7 @@ describe 'Subartículos' do
     fill_in 'subarticle[description]', with: descripcion
     fill_in 'subarticle[unit]', with: unidad
     fill_in 'subarticle[minimum]', with: minimo
-    click_on 'Guardar'
+    click_on 'Guardar'; wait_for_ajax
     expect(page).to have_content(codigo_anterior)
     expect(page).to have_content(descripcion)
     expect(page).to have_content(unidad)

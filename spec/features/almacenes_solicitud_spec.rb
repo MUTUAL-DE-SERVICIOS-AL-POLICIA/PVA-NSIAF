@@ -54,7 +54,7 @@ describe 'Subartículos' do
     expect(page).to have_content('Entregar')
     click_on 'Entregar'
     visit requests_path(subarticulo, format: :html)
-    expect(page).to have_content('Estado: Entregado')
+    expect(page).to have_content('Entregado')
     expect(page).to have_content('Imprimir Solicitud')
     expect(page).to have_content('Imprimir Entrega')
     visit subarticle_path(subarticulo)

@@ -14,7 +14,6 @@ class NoteEntry < ActiveRecord::Base
 
   has_many :entry_subarticles
   accepts_nested_attributes_for :entry_subarticles
-  has_many :kardexes
 
   has_paper_trail
 
@@ -112,22 +111,12 @@ class NoteEntry < ActiveRecord::Base
     end
   end
 
-  def change_kardexes
-    kardexes.each do |kardex|
-      kardex.kardex_date = note_entry_date
-      kardex.invoice_number = get_invoice_number
-      kardex.delivery_note_number = get_delivery_note_number
-      kardex.save
-    end
-  end
-
   # Anula una Nota de Entrada, y también los subartículos asociados al mismo.
   # Es necesario especificar el motivo de la anulación
   def invalidate_note(message="")
     transaction do
       update(invalidate: true, message: message)
       entry_subarticles.invalidate_entries
-      kardexes.invalidate_kardexes
     end
   end
 

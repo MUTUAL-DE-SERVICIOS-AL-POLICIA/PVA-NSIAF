@@ -8,7 +8,6 @@ class Subarticle < ActiveRecord::Base
   has_many :subarticle_requests
   has_many :requests, through: :subarticle_requests
   has_many :entry_subarticles
-  has_many :kardexes
   has_many :transacciones, :class_name => "Transaccion", :foreign_key => "subarticle_id"
 
   with_options if: :is_not_migrate? do |m|
@@ -202,14 +201,6 @@ class Subarticle < ActiveRecord::Base
     entry_subarticles.search(stock_gt: 0).result(distinct: true)
   end
 
-  def kardexes_from_year(year = Date.today.year)
-    s_date = Date.strptime(year.to_s, '%Y').beginning_of_year
-    e_date = s_date.end_of_year
-    # TODO arreglar para "cerrar" una gestión, puede ser un rango de fechas
-    # kardexes.where(kardex_date: s_date..e_date)
-    kardexes
-  end
-
   ##
   # Código del material al cual pertenece los subartículos
   def material_code
@@ -292,14 +283,6 @@ class Subarticle < ActiveRecord::Base
     end
   end
 
-  def final_kardex(year = Date.today.year)
-    self.kardexes_from_year(year).final_kardex
-  end
-
-  def initial_kardex(year = Date.today.year)
-    self.kardexes_from_year(year).initial_kardex
-  end
-
   def self.search_subarticle(q)
     h = ApplicationController.helpers
     q = h.changeBarcode(q)
@@ -328,10 +311,6 @@ class Subarticle < ActiveRecord::Base
 
   def esta_activo?
     status == '1'
-  end
-
-  def last_kardex
-    kardexes.last
   end
 
   def self.search_by(article_id)

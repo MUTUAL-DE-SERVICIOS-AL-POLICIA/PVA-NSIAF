@@ -67,46 +67,4 @@ class EntrySubarticle < ActiveRecord::Base
     self.stock = amount
   end
 
-
-  # Register in kardex when purchase subarticles (note entries)
-  def create_kardex_price
-    kardex = subarticle.last_kardex
-    if kardex.present?
-      kardex = kardex.replicate
-      kardex_price = kardex.last_kardex_price(unit_cost)
-    else
-      kardex = subarticle.kardexes.new
-    end
-    kardex.reset_kardex_prices
-    kardex.remove_zero_balance
-    kardex_price = kardex.kardex_prices.new unless kardex_price.present?
-
-    balance = amount
-    balance += kardex_price.balance_quantities
-
-    if note_entry.present?
-      kardex.note_entry = note_entry
-      kardex.kardex_date = note_entry.note_entry_date
-      kardex.invoice_number = note_entry.get_invoice_number
-      kardex.delivery_note_number = note_entry.get_delivery_note_number
-      kardex.detail = note_entry.supplier_name
-      kardex.order_number = 0
-      kardex_price.input_quantities = amount
-      kardex_price.input_amount = amount * unit_cost
-    else
-      kardex.kardex_date = self.date
-      kardex.invoice_number = 0
-      kardex.delivery_note_number = 0
-      kardex.detail = 'SALDO INICIAL'
-      kardex.order_number = 0
-      kardex_price.input_quantities = 0
-      kardex_price.input_amount = 0
-    end
-    kardex_price.output_quantities = 0
-    kardex_price.balance_quantities = balance
-    kardex_price.unit_cost = unit_cost
-    kardex_price.output_amount = 0
-    kardex_price.balance_amount = balance * unit_cost
-    kardex.save!
-  end
 end

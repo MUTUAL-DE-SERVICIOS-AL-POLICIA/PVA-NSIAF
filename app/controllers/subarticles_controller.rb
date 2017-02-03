@@ -1,6 +1,6 @@
 class SubarticlesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_subarticle, only: [:show, :edit, :update, :destroy, :change_status, :kardex]
+  before_action :set_subarticle, only: [:show, :edit, :update, :destroy, :change_status]
 
   include Fechas
 
@@ -75,24 +75,10 @@ class SubarticlesController < ApplicationController
     end
   end
 
-  def kardex
-  end
-
   def first_entry
     entry_subarticle_params.each{ |i,f| EntrySubarticle.create(f)}
     respond_to do |format|
       format.json { head :no_content }
-    end
-  end
-
-  def close
-    @subarticles = Subarticle.with_stock(params[:year])
-  end
-
-  def close_subarticles
-    @subarticle_ids = Subarticle.close_subarticles(params)
-    respond_to do |format|
-      format.json { render json: @subarticle_ids }
     end
   end
 

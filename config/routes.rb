@@ -84,10 +84,6 @@ Rails.application.routes.draw do
     get :activos, on: :member
   end
 
-  resources :kardex_prices
-
-  resources :kardexes
-
   resources :seguros do
     get :asegurar, on: :member
     get :incorporaciones, on: :member
@@ -110,16 +106,10 @@ Rails.application.routes.draw do
     post :change_status, on: :member
   end
 
-  constraints YearConstraint do
-    get '/subarticles/close/:year' => 'subarticles#close', as: 'close_subarticles'
-    post '/subarticles/close/:year' => 'subarticles#close_subarticles'
-  end
-
   resources :subarticles, except: [:destroy] do
-    resources :kardexes
+    resources :kardexes, only: [:index]
     member do
       post :change_status
-      get :kardex
     end
     collection do
       get :get_subarticles
