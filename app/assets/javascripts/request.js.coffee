@@ -247,6 +247,7 @@ class Request extends BarcodeReader
       type: "PUT"
       url: @request_save_url.replace(/{id}/, @$idRequest)
       data: { request: data }
+      dataType: 'json'
       complete: (data, xhr) ->
         window.location = window.location
 
