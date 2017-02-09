@@ -38,8 +38,8 @@
       %dt= t "activerecord.attributes.gestion.cargo"
       %dd= @gestion.cargo_usuario
     %dd
-      = link_to t("activerecord.attributes.gestion.reporte6"), resumen_reportes_path({format: "pdf", hasta: @gestion.ultimo_dia_gestion}), class: "btn btn-success"
-      = link_to t("activerecord.attributes.gestion.reporte10"), depreciacion_reportes_path({format: "pdf", desde: @gestion.primer_dia_gestion , hasta: @gestion.ultimo_dia_gestion}), class: "btn btn-success"
+      = link_to t("activerecord.attributes.gestion.reporte6"), resumen_reportes_path({format: "pdf", desde: @gestion.inicio_de_los_tiempos, hasta: @gestion.ultimo_dia_gestion}), class: "btn btn-success"
+      = link_to t("activerecord.attributes.gestion.reporte10"), depreciacion_reportes_path({format: "pdf", desde: @gestion.inicio_de_los_tiempos , hasta: @gestion.ultimo_dia_gestion}), class: "btn btn-success"
 
 #confirm-modal
 

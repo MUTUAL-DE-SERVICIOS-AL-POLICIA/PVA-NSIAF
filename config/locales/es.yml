@@ -435,7 +435,7 @@ es:
         fecha_cierre: "Fecha cierre"
         cargo: "Cargo"
         reporte6: "Resumen de activos fijos - reporte 6"
-        reporte10: "Depreciación de activos - reporte 10"
+        reporte10: "Detalle de activos - reporte 10"
       ingreso:
         factura_fecha: "Fecha Factura"
         factura_numero: "Número Factura"

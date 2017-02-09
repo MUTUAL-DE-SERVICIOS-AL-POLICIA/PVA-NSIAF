@@ -266,6 +266,10 @@ module ApplicationHelper
     "Desde #{I18n.l desde, format: :long} al #{I18n.l hasta, format: :long}"
   end
 
+  def titulo_a_la_fecha(hasta)
+    "Al #{I18n.l hasta, format: :long}"
+  end
+
   def color_menu
     case current_user.role
     when 'super_admin' then 'navbar-sa'

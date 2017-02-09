@@ -102,6 +102,12 @@ class Gestion < ActiveRecord::Base
     user.present? ? user.title : ""
   end
 
+  # Obtiene la fecha del primer ingreso de activos
+  def inicio_de_los_tiempos
+    fecha = NoteEntry.minimum(:delivery_note_date)
+    fecha.strftime("%d-%m-%Y")
+  end
+
   def primer_dia_gestion
     "01-01-#{ anio }" if anio.present?
   end
