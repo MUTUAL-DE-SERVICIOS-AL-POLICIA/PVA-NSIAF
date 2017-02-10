@@ -48,6 +48,7 @@ gem 'non-stupid-digest-assets'
 gem 'rest-client'
 
 group :development, :test do
+  gem 'awesome_print'
   gem 'rails-erd'
   gem 'spring'
   gem 'byebug'

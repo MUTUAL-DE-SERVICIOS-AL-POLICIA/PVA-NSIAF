@@ -4,8 +4,6 @@ class SubarticleRequest < ActiveRecord::Base
   belongs_to :subarticle
   belongs_to :request
 
-  after_update :create_kardex_price
-
   def self.invalidate_subarticles
     update_all(invalidate: true)
   end
@@ -83,35 +81,5 @@ class SubarticleRequest < ActiveRecord::Base
 
   def self.is_delivered?
     where('total_delivered < amount_delivered').present?
-  end
-
-  private
-
-  # Register in kardex when delivery subarticles
-  def create_kardex_price
-    if total_delivered == amount_delivered && total_delivered-1 == total_delivered_was
-      kardex = subarticle.last_kardex
-      if kardex.present?
-        kardex = kardex.replicate
-        kardex.reset_kardex_prices
-        kardex.remove_zero_balance
-
-        kardex.kardex_date = nil
-        kardex.invoice_number = 0
-        kardex.delivery_note_number = 0
-        kardex.order_number = request.id
-        kardex.detail = request.user_name_title
-        kardex.request = request
-
-        total = total_delivered.to_i
-        kardex.kardex_prices.each do |kardex_price|
-          if total > 0
-            total = kardex_price.decrease_amount(total)
-          end
-        end
-
-        kardex.save!
-      end
-    end
   end
 end

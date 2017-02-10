@@ -22,7 +22,6 @@ class BarcodesController < ApplicationController
     authorize! :pdf, :barcode
     params[:searchParam] = "0" unless params[:searchParam].present?
     @assets = Asset.buscar_barcode_to_pdf(params[:searchParam])
-    # Barcode.register_assets(@assets) if @assets.length > 0
     respond_to do |format|
       format.pdf do
         filename = 'código de barras'

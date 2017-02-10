@@ -362,7 +362,6 @@ es:
       entity: "Institución"
       gestion: "Gestión"
       kardex: "Kardex"
-      kardex_price: "Kardex Precios"
       material: "Material"
       note_entry: "Nota de Ingreso Almacén"
       subarticle: "Sub Artículo"
@@ -454,14 +453,6 @@ es:
         invoice_number: "Nº de Factura"
         order_number: "Nº de Pedido Mat"
         detail: "Detalle"
-      kardex_price:
-        input_quantities: "Entradas"
-        output_quantities: "Salidas"
-        balance_quantities: "Saldos"
-        unit_cost: "Costo Unitario"
-        input_amount: "Entradas"
-        output_amount: "Salidas"
-        balance_amount: "Saldos"
       material:
         code: "Código"
         description: "Descripción"

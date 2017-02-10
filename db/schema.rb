@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161208130735) do
+ActiveRecord::Schema.define(version: 20170203225558) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -22,17 +22,6 @@ ActiveRecord::Schema.define(version: 20161208130735) do
     t.boolean  "depreciar",              default: false, null: false
     t.boolean  "actualizar",             default: false, null: false
   end
-
-  create_table "articles", force: :cascade do |t|
-    t.string   "code",        limit: 255
-    t.string   "description", limit: 255
-    t.string   "status",      limit: 255
-    t.integer  "material_id", limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "articles", ["material_id"], name: "index_articles_on_material_id", using: :btree
 
   create_table "asset_proceedings", force: :cascade do |t|
     t.integer  "proceeding_id", limit: 4
@@ -100,23 +89,6 @@ ActiveRecord::Schema.define(version: 20161208130735) do
 
   add_index "auxiliaries", ["account_id"], name: "index_auxiliaries_on_account_id", using: :btree
 
-  create_table "barcode_statuses", primary_key: "status", force: :cascade do |t|
-    t.string   "description", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "barcodes", force: :cascade do |t|
-    t.string   "code",       limit: 255
-    t.integer  "entity_id",  limit: 4
-    t.integer  "status",     limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "barcodes", ["entity_id"], name: "index_barcodes_on_entity_id", using: :btree
-  add_index "barcodes", ["status"], name: "index_barcodes_on_status", using: :btree
-
   create_table "buildings", force: :cascade do |t|
     t.string   "code",       limit: 50
     t.string   "name",       limit: 230
@@ -153,15 +125,6 @@ ActiveRecord::Schema.define(version: 20161208130735) do
   end
 
   add_index "departments", ["building_id"], name: "index_departments_on_building_id", using: :btree
-
-  create_table "documentos", force: :cascade do |t|
-    t.string   "titulo",     limit: 255
-    t.text     "contenido",  limit: 65535
-    t.string   "formato",    limit: 255
-    t.string   "etiquetas",  limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "entities", force: :cascade do |t|
     t.string   "code",       limit: 50
@@ -236,40 +199,6 @@ ActiveRecord::Schema.define(version: 20161208130735) do
 
   add_index "ingresos", ["supplier_id"], name: "index_ingresos_on_supplier_id", using: :btree
   add_index "ingresos", ["user_id"], name: "index_ingresos_on_user_id", using: :btree
-
-  create_table "kardex_prices", force: :cascade do |t|
-    t.integer  "input_quantities",   limit: 4,                          default: 0,     null: false
-    t.integer  "output_quantities",  limit: 4,                          default: 0,     null: false
-    t.integer  "balance_quantities", limit: 4,                          default: 0,     null: false
-    t.decimal  "unit_cost",                    precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "input_amount",                 precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "output_amount",                precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "balance_amount",               precision: 10, scale: 2, default: 0.0,   null: false
-    t.integer  "kardex_id",          limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "invalidate",                                            default: false
-  end
-
-  add_index "kardex_prices", ["kardex_id"], name: "index_kardex_prices_on_kardex_id", using: :btree
-
-  create_table "kardexes", force: :cascade do |t|
-    t.date     "kardex_date"
-    t.string   "invoice_number",       limit: 255, default: "0"
-    t.integer  "order_number",         limit: 4
-    t.string   "detail",               limit: 255
-    t.integer  "subarticle_id",        limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "delivery_note_number", limit: 255
-    t.integer  "request_id",           limit: 4
-    t.integer  "note_entry_id",        limit: 4
-    t.boolean  "invalidate",                       default: false
-  end
-
-  add_index "kardexes", ["note_entry_id"], name: "index_kardexes_on_note_entry_id", using: :btree
-  add_index "kardexes", ["request_id"], name: "index_kardexes_on_request_id", using: :btree
-  add_index "kardexes", ["subarticle_id"], name: "index_kardexes_on_subarticle_id", using: :btree
 
   create_table "materials", force: :cascade do |t|
     t.string   "code",        limit: 50

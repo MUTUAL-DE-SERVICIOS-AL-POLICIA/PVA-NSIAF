@@ -3,12 +3,10 @@ class Subarticle < ActiveRecord::Base
   include Autoincremento
   include CodeNumber
 
-  belongs_to :article
   belongs_to :material
   has_many :subarticle_requests
   has_many :requests, through: :subarticle_requests
   has_many :entry_subarticles
-  has_many :kardexes
   has_many :transacciones, :class_name => "Transaccion", :foreign_key => "subarticle_id"
 
   with_options if: :is_not_migrate? do |m|
@@ -19,10 +17,6 @@ class Subarticle < ActiveRecord::Base
     m.validates :incremento, presence: true, uniqueness: { scope: :material_id, message: "debe ser único por material" }
     #m.validates :amount, :minimum, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     #
-    # TODO validación de los códigos de barras desactivado.
-    # m.validate do |subarticle|
-    #   BarcodeStatusValidator.new(subarticle).validate
-    # end
   end
 
   with_options if: :is_migrate? do |m|
@@ -30,45 +24,10 @@ class Subarticle < ActiveRecord::Base
     m.validates :description, :unit, presence: true
   end
 
-  # before_save :check_barcode
-
   has_paper_trail
 
   def self.active
     where(status: '1')
-  end
-
-  def self.close_subarticles(params)
-    date = Date.strptime(params[:date], '%d/%m/%Y')
-    subarticles = with_stock(params[:year]).where(id: params[:subarticle_ids])
-    subarticle_ids = []
-    subarticles.each do |subarticle|
-      e_subarticles = subarticle.entry_subarticles_exist(params[:year]).replicate
-      subarticle.close_stock!(params[:year])
-      EntrySubarticle.skip_callback(:create, :after, :create_kardex_price)
-
-      # Save entry subarticles
-      e_subarticles.each do |es|
-        es.amount = es.stock
-        es.total_cost = es.amount * es.unit_cost
-        es.note_entry = nil
-        es.date = date
-        es.save!
-      end
-      # Save kardex with multiple prices
-      kardex = subarticle.kardexes.new
-      kardex.kardex_date = date
-      kardex.invoice_number = 0
-      kardex.delivery_note_number = 0
-      kardex.detail = 'SALDO INICIAL'
-      kardex.order_number = 0
-      kardex.set_multi_prices(e_subarticles)
-      kardex.save!
-
-      EntrySubarticle.set_callback(:create, :after, :create_kardex_price)
-      subarticle_ids << subarticle.id
-    end
-    subarticle_ids
   end
 
   # Selecciona aquellos subartículos con saldo mayor a cero
@@ -103,13 +62,6 @@ class Subarticle < ActiveRecord::Base
       f_kardex = subarticle.saldo_final(hasta)
       suma + f_kardex.items.sum(&:importe_saldo)
     end
-  end
-
-  ##
-  # Utilizado para la migración de artículos a materiales, por tanto se queda
-  # en eliminar la categoría Artículos
-  def article_material_id
-    article.present? ? article.material : nil
   end
 
   # Decrementar el stock del subartículo
@@ -235,21 +187,11 @@ class Subarticle < ActiveRecord::Base
     entry_subarticles.search(stock_gt: 0).result(distinct: true)
   end
 
-  def kardexes_from_year(year = Date.today.year)
-    s_date = Date.strptime(year.to_s, '%Y').beginning_of_year
-    e_date = s_date.end_of_year
-    # TODO arreglar para "cerrar" una gestión, puede ser un rango de fechas
-    # kardexes.where(kardex_date: s_date..e_date)
-    kardexes
-  end
-
   ##
   # Código del material al cual pertenece los subartículos
   def material_code
     if material.present?
       material.code
-    elsif article.present?
-      article.material_code
     else
       ''
     end
@@ -325,14 +267,6 @@ class Subarticle < ActiveRecord::Base
     end
   end
 
-  def final_kardex(year = Date.today.year)
-    self.kardexes_from_year(year).final_kardex
-  end
-
-  def initial_kardex(year = Date.today.year)
-    self.kardexes_from_year(year).initial_kardex
-  end
-
   def self.search_subarticle(q)
     h = ApplicationController.helpers
     q = h.changeBarcode(q)
@@ -349,22 +283,8 @@ class Subarticle < ActiveRecord::Base
     date
   end
 
-  def check_barcode
-    if is_not_migrate?
-      bcode = Barcode.find_by_code barcode
-      if bcode.present?
-        self.barcode = bcode.code
-        bcode.change_to_used
-      end
-    end
-  end
-
   def esta_activo?
     status == '1'
-  end
-
-  def last_kardex
-    kardexes.last
   end
 
   def self.search_by(article_id)

@@ -112,7 +112,6 @@ namespace :db do
           s.incremento = index + 1
           s.barcode = "#{s.material_code}#{s.incremento}"
           s.code = s.barcode.to_i
-          s.material_id = s.article.material_id if s.article.present?
           s.save!
         end
       end

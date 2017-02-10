@@ -8,8 +8,6 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json}, except: [:new, :edit] do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
 
-      resources :documentos, only: [:show, :create]
-
       resources :nota_entradas, only: [:index] do
         put :anular, on: :member
       end
@@ -84,10 +82,6 @@ Rails.application.routes.draw do
     get :activos, on: :member
   end
 
-  resources :kardex_prices
-
-  resources :kardexes
-
   resources :seguros do
     get :asegurar, on: :member
     get :incorporaciones, on: :member
@@ -106,20 +100,10 @@ Rails.application.routes.draw do
     get :reports, on: :collection
   end
 
-  resources :articles, except: [:destroy] do
-    post :change_status, on: :member
-  end
-
-  constraints YearConstraint do
-    get '/subarticles/close/:year' => 'subarticles#close', as: 'close_subarticles'
-    post '/subarticles/close/:year' => 'subarticles#close_subarticles'
-  end
-
   resources :subarticles, except: [:destroy] do
-    resources :kardexes
+    resources :kardexes, only: [:index]
     member do
       post :change_status
-      get :kardex
     end
     collection do
       get :get_subarticles

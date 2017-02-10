@@ -21,7 +21,7 @@
         - if @request.nro_solicitud != 0 && @request.nro_solicitud.present?
           Nro. #{@request.obtiene_numero_solicitud}
 
-    #request-urls{data: {'request-id' => request_path('{id}'), 'subarticles-articles' => articles_subarticles_path(format: :json), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'validar-stocks' => validar_cantidades_api_request_path('{id}'), 'users-id' => user_path('{id}', format: :json)}}
+    #request-urls{data: {'request-id' => request_path('{id}'), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'validar-stocks' => validar_cantidades_api_request_path('{id}'), 'users-id' => user_path('{id}', format: :json)}}
 - if is_pdf? && @request.status == 'canceled'
   .anulado
     %h1 ANULADO

@@ -8,9 +8,6 @@
   - if current_user.is_admin_store?
     - if minimum_stock.present?
       = render 'shared/stores/minimum_stock'
-    .row
-      .col-sm-12= render 'shared/stores/alerts'
-
   - if current_user.is_admin?
     .row
       = render 'shared/admin'
