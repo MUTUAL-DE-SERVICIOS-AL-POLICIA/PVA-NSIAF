@@ -5,7 +5,7 @@ namespace :db do
   # tengan esta diferencia.
   # uso: rake db:stock_update
   desc 'Actualización de los subarticulos que tengan la diferencia en el stock y la sumatoria de entry_subarticles'
-  task stock_actuliazacion: :environment do
+  task stock_actualizacion: :environment do
     archivo = File.new('stock_update.txt', 'w')
     archivo_csv = File.new('stock_update.csv', 'w')
     texto = ''
