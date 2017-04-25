@@ -24,7 +24,7 @@ private
         r.numero_contrato,
         r.proveedor_nombre,
         r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_inicio_vigencia, format: :long) : '',
-        r.fecha_inicio_vigencia.present? ? I18n.l(r.fecha_fin_vigencia, format: :long) : '',
+        r.fecha_fin_vigencia.present? ? I18n.l(r.fecha_fin_vigencia, format: :long) : '',
         content_tag(:h4, content_tag(:span, r.estado, class: "label label-#{ r.cotizado? ? "warning" : r.vigente? ? "success" : "default" }")),
         r.cantidad_activos,
         [links_actions(r, 'seguro')].join(' ')
