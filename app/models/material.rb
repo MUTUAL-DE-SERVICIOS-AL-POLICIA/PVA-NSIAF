@@ -12,6 +12,24 @@ class Material < ActiveRecord::Base
     "#{code} - #{description}"
   end
 
+  def valorado_ingresos(desde, hasta)
+    subarticles.inject(0) do |total, article|
+      total + article.valorado_ingresos(desde, hasta)
+    end
+  end
+
+  def valorado_salidas(desde, hasta)
+    subarticles.inject(0) do |total, article|
+      total + article.valorado_salidas(desde, hasta)
+    end
+  end
+
+  def valorado_saldo(desde, hasta)
+    subarticles.inject(0) do |total, article|
+      total + article.valorado_saldo(desde, hasta)
+    end
+  end
+
   def verify_assignment
     subarticles.present?
   end
