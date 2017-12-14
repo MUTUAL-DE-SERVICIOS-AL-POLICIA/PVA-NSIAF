@@ -56,12 +56,15 @@ class ApplicationController < ActionController::Base
     def modelo_registros(name_model)
       column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries suppliers ingresos ubicaciones ufvs gestiones seguros).include?(name_model) ? 'id' : "#{name_model}.code"
       column_order = 'nro_solicitud' if name_model == 'requests'
+      sort_direction = params[:sSortDir_0] == "desc" ? "desc" : "asc"
       case controller_name
       when 'derecognised' then current = '0'
-      when 'assets' then current = '1'
+      when 'assets' then 
+        current = '1'
+        column_order = Asset.columnas[params[:iSortCol_0].to_i]
       when 'requests' then current = params[:status]
       else current = current_user
       end
-      name_model.classify.constantize.array_model(column_order, 'asc', '', '', params[:sSearch], params[:search_column], current)
+      name_model.classify.constantize.array_model(column_order, sort_direction, '', '', params[:sSearch], params[:search_column], current)
     end
 end
