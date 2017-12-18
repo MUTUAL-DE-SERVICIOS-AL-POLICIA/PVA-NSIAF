@@ -146,6 +146,13 @@ class Asset < ActiveRecord::Base
     arrayVal
   end
 
+  # Columnas para el DataTable
+  def self.columnas
+    # TODO se tiene que corregir el último campo assets.code para
+    # ordenación de seguros
+    %w[assets.code assets.code_old description ingresos.factura_fecha assets.precio suppliers.name accounts.name users.name ubicaciones.abreviacion assets.code]
+  end
+
   def self.derecognised
     where(status: 0)
   end
