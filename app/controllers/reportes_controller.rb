@@ -1,3 +1,5 @@
+require 'raw_sql'
+
 class ReportesController < ApplicationController
   # load_and_authorize_resource
   include Fechas
@@ -117,6 +119,12 @@ class ReportesController < ApplicationController
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end
     end
+  end
+
+  # Estadísticas de materiales por fecha
+  def estadisticas
+    @desde, @hasta = get_fechas(params)
+    @resultados = RawSQL.new('1_resultados.sql').result(desde: @desde, hasta: @hasta)
   end
 
   private

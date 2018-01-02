@@ -55,11 +55,14 @@ Rails.application.routes.draw do
   end
 
   resources :reportes do
-    get 'kardex', on: :collection
-    get 'activos', on: :collection
-    get 'depreciacion', on: :collection
-    get 'resumen', on: :collection
-    get 'cuenta_contable', on: :collection
+    collection do
+      get :kardex
+      get :activos
+      get :depreciacion
+      get :resumen
+      get :cuenta_contable
+      get :estadisticas
+    end
   end
 
   resources :entry_subarticles, only: [:edit, :update]
