@@ -4,4 +4,9 @@ module StoreHelper
     Subarticle.is_closed_year?(year)
   end
 
+  def sumar_total_salidas(resultados, fila)
+    resultados.select { |r| r['codigo'] == fila['codigo'] }
+              .inject(0) { |suma, r| suma + r['cantidad'] }
+  end
+
 end

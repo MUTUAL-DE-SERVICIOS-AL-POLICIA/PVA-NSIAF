@@ -1,6 +1,6 @@
 .page-header
   %h2
-    Subartículos por unidad
+    Salida de subartículos por unidad
 
     .pull-right
       = form_tag estadisticas_reportes_path, method: :get, class: 'form-inline' do
@@ -22,8 +22,11 @@
         - c2 = 0
         %tr.info
           %th.number= c1 += 1
-          %th.number= fila['code']
-          %th{colspan: 6}= fila['material']
+          %th.number= link_to(fila['codigo'], subarticle_path(fila['subarticulo_id'], desde: params[:desde], hasta: params[:hasta]))
+          %th{colspan: 4}= fila['material']
+          %th.number TOTAL SALIDA
+          %th.number= mostrar_entero_float sumar_total_salidas(@resultados, fila)
+          %th
         %tr.warning
           %th.number Nro
           %th.text-center Mes
@@ -31,8 +34,9 @@
           %th Detalle
           %th.text-center Fecha
           %th.text-center Nro Solicitud
-          %th.number Cantidad
           %th Unidad de medida
+          %th.number Salida
+          %th.number Saldo
       %tr
         %td.number= c2 += 1
         %td.text-center= fila['fecha'].strftime('%m/%Y')
@@ -40,6 +44,7 @@
         %td= fila['detalle']
         %td.text-center= l(fila['fecha'], format: :version)
         %td.text-center= link_to("##{fila['nro_solicitud']}", request_path(id: fila['modelo_id']))
-        %td.number= mostrar_entero_float(fila['cantidad'])
         %td= mostrar_entero_float(fila['unidad_medida'])
+        %td.number= mostrar_entero_float(fila['cantidad'])
+        %td.number= mostrar_entero_float(fila['saldo'])
       - auxiliar = fila
