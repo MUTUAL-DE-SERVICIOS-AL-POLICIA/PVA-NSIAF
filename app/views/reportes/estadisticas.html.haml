@@ -23,19 +23,23 @@
         %tr.info
           %th.number= c1 += 1
           %th.number= fila['code']
-          %th{colspan: 4}= fila['material']
+          %th{colspan: 6}= fila['material']
         %tr.warning
           %th.number Nro
           %th.text-center Mes
           %th Unidad
+          %th Detalle
           %th.text-center Fecha
           %th.text-center Nro Solicitud
-          %th.text-center Cantidad
+          %th.number Cantidad
+          %th Unidad de medida
       %tr
         %td.number= c2 += 1
         %td.text-center= fila['fecha'].strftime('%m/%Y')
         %td= fila['unidad']
-        %td.text-center= l fila['fecha'], format: :version
-        %td.text-center ##{fila['nro_solicitud']}
-        %td.text-center= mostrar_entero_float(fila['cantidad'])
+        %td= fila['detalle']
+        %td.text-center= l(fila['fecha'], format: :version)
+        %td.text-center= link_to("##{fila['nro_solicitud']}", request_path(id: fila['modelo_id']))
+        %td.number= mostrar_entero_float(fila['cantidad'])
+        %td= mostrar_entero_float(fila['unidad_medida'])
       - auxiliar = fila
