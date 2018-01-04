@@ -53,7 +53,7 @@
         %td.text-center= fila['fecha'].strftime('%m/%Y')
         %td= fila['unidad']
         %td= fila['detalle']
-        %td.text-center= l(fila['fecha'], format: :version)
+        %td.text-center= l(fila['fecha'].to_date, format: :default)
         %td.text-center= link_to("##{fila['nro_solicitud']}", request_url(id: fila['modelo_id']))
         %td= fila['unidad_medida']
         %td.number= mostrar_entero_float(fila['cantidad'])
