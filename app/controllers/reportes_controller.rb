@@ -124,8 +124,7 @@ class ReportesController < ApplicationController
   # Estadísticas de materiales por fecha
   def estadisticas
     @desde, @hasta = get_fechas(params)
-    desde, hasta = @desde.beginning_of_day, @hasta.end_of_day
-    @resultados = RawSQL.new('1_resultados.sql').result(desde: desde, hasta: hasta)
+    @resultados = RawSQL.new('1_resultados.sql').result(desde: @desde, hasta: @hasta)
     respond_to do |format|
       format.html
       format.pdf do

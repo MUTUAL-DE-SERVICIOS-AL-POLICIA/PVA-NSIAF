@@ -60,7 +60,7 @@
         %td.number= mostrar_entero_float(fila['saldo'])
       - auxiliar = fila
 
-- unless is_pdf?
+- if !is_pdf? && @resultados.any?
   .row
     .action-buttons.col-md-12.col-sm-12.text-center
       = link_to estadisticas_reportes_path(format: :pdf, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-lg btn-primary' do
