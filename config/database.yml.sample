@@ -34,6 +34,8 @@ production:
   encoding: utf8
   database: nsiaf_production
   pool: 5
+  host: localhost
   username: root
-  password:
+  password: root
+  port: 3306
   socket: /var/run/mysqld/mysqld.sock
