@@ -3,11 +3,8 @@ $ -> new Bajas() if $('[data-action=bajas]').length > 0
 class Bajas
   # lista de activos seleccionados
   _activos = []
-  _proveedor = {}
-  _factura = {}
-  _nota_entrega = {}
-  _c31 = {}
-  _observacion = {}
+  _baja = {}
+  alert 'bajas'
 
   constructor: ->
     @cacheElements()
@@ -15,24 +12,26 @@ class Bajas
 
   cacheElements: ->
     # Contenedor de URLs
-    @$ingresosUrls = $('#ingresos-urls')
+    @$bajasUrls = $('#bajas-urls')
     # Variables
-    @ingresosPath = @$ingresosUrls.data('activos')
-    @proveedoresPath = @$ingresosUrls.data('proveedores')
+    @ingresosPath = @$bajasUrls.data('activos')
+    @proveedoresPath = @$bajasUrls.data('proveedores')
     @$obt_ingreso_urls = $('#obt_ingreso-urls')
     @obt_ingreso_url = @$obt_ingreso_urls.data('obt-ingreso')
     @id_ingreso = @$obt_ingreso_urls.data('ingreso')
     # Elementos
     @$barcode = $('#code')
-    @$facturaForm = $('#factura-form')
-    @$ingresosForm = $('#ingresos-form')
-    @$proveedorAuto = @$facturaForm.find('.proveedor-auto')
+    @$bajaForm = $('#baja-form')
+    @$busquedaForm = $('#busqueda-form')
     @$ingresosTbl = $('#ingresos-tbl')
     @$proveedorTbl = $('#proveedor-tbl')
-    @$buscarBtn = @$ingresosForm.find('button[type=submit]')
+    @$buscarBtn = @$busquedaForm.find('button[type=submit]')
     @$guardarBtn = $('.guardar-btn')
     # Campos
-    @$proveedorNombre = @$facturaForm.find('#proveedor')
+    @$bajaDocumento = @$bajaForm.find('#documento')
+    @$bajaFecha = @$bajaForm.find('#fecha')
+    @$bajaObservacion = @$bajaForm.find('#observacion')
+
     @$proveedorNit = @$facturaForm.find('#nit')
     @$proveedorTelefono = @$facturaForm.find('#telefono')
     @$facturaNumero = @$facturaForm.find('#factura_numero')
@@ -57,47 +56,42 @@ class Bajas
     @$alertaIngresoTpl = Hogan.compile $('#alerta-ingreso-tpl').html() || ''
 
   bindEvents: ->
-    if @$proveedorAuto?
-      @proveedorAutocomplete()
     $(document).on 'click', @$buscarBtn.selector, @buscarActivos
-    $(document).on 'change', @$proveedorNombre.selector, @capturarProveedor
-    $(document).on 'change', @$proveedorNit.selector, @capturarProveedor
-    $(document).on 'change', @$proveedorTelefono.selector, @capturarProveedor
-    $(document).on 'change', @$facturaNumero.selector, @capturarFactura
-    $(document).on 'change', @$facturaAutorizacion.selector, @capturarFactura
-    $(document).on 'change', @$facturaFecha.selector, @capturarFactura
-    $(document).on 'change', @$notaEntregaNumero.selector, @capturarNotaEntrega
-    $(document).on 'change', @$notaEntregaFecha.selector, @capturarNotaEntrega
-    $(document).on 'change', @$c31Numero.selector, @capturarC31
-    $(document).on 'change', @$c31Fecha.selector, @capturarC31
+
+    $(document).on 'change', @$bajaDocumento.selector, @capturaBaja
+    $(document).on 'change', @$bajaFecha.selector, @capturaBaja
+    $(document).on 'change', @$bajaObservacion.selector, @capturaBaja
+
     $(document).on 'click', @$guardarBtn.selector, @confirmarIngreso
     $(document).on 'click', @$confirmarIngresoModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
     $(document).on 'click', @$alertaIngresoModal.find('button[type=submit]').selector, (e) => @aceptarAlertaIngreso(e)
 
   confirmarIngreso: (e) =>
+    alert 'baja'
     e.preventDefault()
     if @sonValidosDatos()
-      if @id_ingreso
-        url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val() + '&n=' + @id_ingreso
-      else
-        url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val()
-      $.ajax
-        url: url
-        type: 'GET'
-        dataType: 'JSON'
-      .done (xhr) =>
-        data = xhr
-        if data["tipo_respuesta"]
-          if data["tipo_respuesta"] == "confirmacion"
-            @$confirmModal.html @$confirmarIngresoTpl.render(data)
-            modal = @$confirmModal.find(@$confirmarIngresoModal.selector)
-            modal.modal('show')
-          else if data["tipo_respuesta"] == "alerta"
-            @$confirmModal.html @$alertaIngresoTpl.render(data)
-            modal = @$confirmModal.find(@$alertaIngresoModal.selector)
-            modal.modal('show')
-        else
-          @guardarIngresoActivosFijos(e)
+      # if @id_ingreso
+      #   url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val() + '&n=' + @id_ingreso
+      # else
+      #   url = @obt_ingreso_url + "?d=" + $("#factura_fecha").val()
+      @guardarBajasActivosFijos(e)
+      # $.ajax
+      #   url: url
+      #   type: 'GET'
+      #   dataType: 'JSON'
+      # .done (xhr) =>
+      #   data = xhr
+      #   if data["tipo_respuesta"]
+      #     if data["tipo_respuesta"] == "confirmacion"
+      #       @$confirmModal.html @$confirmarIngresoTpl.render(data)
+      #       modal = @$confirmModal.find(@$confirmarIngresoModal.selector)
+      #       modal.modal('show')
+      #     else if data["tipo_respuesta"] == "alerta"
+      #       @$confirmModal.html @$alertaIngresoTpl.render(data)
+      #       modal = @$confirmModal.find(@$alertaIngresoModal.selector)
+      #       modal.modal('show')
+      #   else
+      #     @guardarIngresoActivosFijos(e)
     else
       @alert.danger "Complete todos los datos requeridos"
 
@@ -108,8 +102,8 @@ class Bajas
       @$inputObservacion.val(el.val())
     @capturarObservacion()
     @$confirmModal.find(@$confirmarIngresoModal.selector).modal('hide')
-    $form = $(e.target).closest('form')
-    @guardarIngresoActivosFijos(e)
+    $form = $(e.targetingresosPath).closest('form')
+    @guardarBajasActivosFijos(e)
 
   validarObservacion: (e) =>
     el = @$confirmModal.find('#modal_observacion')
@@ -139,35 +133,17 @@ class Bajas
     callback(_cantidad > 0)
 
   buscarActivos: (e) =>
+    alert('presionando')
     e.preventDefault()
+    debugger
     _barcode = { barcode: @$barcode.val() }
     $.getJSON @ingresosPath, _barcode, @mostrarActivos
     @$barcode.select()
 
-  capturarC31: =>
-    _c31.c31_numero = @$c31Numero.val().trim()
-    _c31.c31_fecha = @$c31Fecha.val().trim()
-
-  capturarFactura: =>
-    _factura.factura_numero = @$facturaNumero.val().trim()
-    _factura.factura_autorizacion = @$facturaAutorizacion.val().trim()
-    _factura.factura_fecha = @$facturaFecha.val()
-
-  capturarNotaEntrega: =>
-    _nota_entrega.nota_entrega_numero = @$notaEntregaNumero.val().trim()
-    _nota_entrega.nota_entrega_fecha = @$notaEntregaFecha.val().trim()
-
-  capturarProveedor: =>
-    _proveedor.name = @$proveedorNombre.val().trim()
-    _proveedor.nit = @$proveedorNit.val().trim()
-    _proveedor.telefono = @$proveedorTelefono.val().trim()
-
-  cargarDatosProveedor: ->
-    @$proveedorNit.val _proveedor.nit
-    @$proveedorTelefono.val _proveedor.telefono
-
-  capturarObservacion: =>
-    _observacion.observacion = @$inputObservacion.val().trim()
+  capturaBaja: =>
+    _baja.documento = @$documento.val().trim()
+    _baja.fecha = @$fecha.val().trim()
+    _baja.observacion = @$observacion.val().trim()
 
   conversionNumeros: ->
     _activos.map (e, i) ->
@@ -180,14 +156,16 @@ class Bajas
       e.barcode is elemento.barcode
     ).length > 0
 
-  guardarIngresoActivosFijos: (e) =>
+  guardarBajasActivosFijos: (e) =>
     if @sonValidosDatos()
+      @jsonBaja()
+      debugger
       $(e.target).addClass('disabled')
       $.ajax
         url: @ingresosPath
         type: 'POST'
         dataType: 'JSON'
-        data: { ingreso: @jsonIngreso() }
+        data: { baja: @jsonBaja() }
       .done (ingreso) =>
         @alert.success "Se guardó correctamente la Nota de Ingreso"
         window.location = "#{@ingresosPath}/#{ingreso.id}"
@@ -198,15 +176,13 @@ class Bajas
     else
       @alert.danger "Complete todos los datos requeridos"
 
-  jsonIngreso: ->
-    ingreso =
+  jsonBaja: ->
+    baja =
       asset_ids: _activos.map((e) -> e.id)
-      supplier_id: _proveedor.id
-      total: @sumaTotal()
-    ingreso = $.extend({}, ingreso, _factura)
-    ingreso = $.extend({}, ingreso, _nota_entrega)
-    ingreso = $.extend({}, ingreso, _observacion)
-    $.extend({}, ingreso, _c31)
+      documento: _baja.documento
+      fecha: _baja.fecha
+      observacion: _baja.observacion
+    $.extend({}, bajas)
 
   mostrarActivos: (data) =>
     if data.length > 0
@@ -222,23 +198,6 @@ class Bajas
       cantidad: _activos.length
       total: @sumaTotal().formatNumber(2, '.', ',')
     @$ingresosTbl.html @$activosTpl.render(json)
-
-  proveedorAutocomplete: ->
-    proveedores = new Bloodhound(
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("description")
-      queryTokenizer: Bloodhound.tokenizers.whitespace
-      limit: 10
-      remote: decodeURIComponent(@proveedoresPath)
-    )
-    proveedores.initialize()
-    @$proveedorAuto.typeahead null,
-      displayKey: "name"
-      source: proveedores.ttAdapter()
-    .on 'typeahead:selected', @seleccionarProveedor
-
-  seleccionarProveedor: (evt, proveedor) =>
-    _proveedor = proveedor
-    @cargarDatosProveedor()
 
   sonValidosDatos: ->
     _activos.length > 0

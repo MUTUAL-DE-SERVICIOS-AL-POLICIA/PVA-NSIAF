@@ -1,30 +1,32 @@
-.row{data: {action: 'derecognised'}}
+#bajas-urls{data: {'activos' => bajas_path, 'proveedores' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
+/#obt_ingreso-urls{data: {'obt-ingreso' => obt_cod_ingreso_ingresos_path(format: :json), 'ingreso' => @ingreso.id}}
+.row{data: {action: 'bajas'}}
   .col-md-12
     %h3.text-center Baja de Activos Fijos
 
-  %form#factura-form.form-horizontal{role: 'form'}
+  %form#baja-form.form-horizontal{role: 'form'}
     .row
       .form-group
         %label.col-sm-3.control-label Respaldo
         .col-sm-3
-          = text_field_tag 'Numero documento', nil, class: 'form-control proveedor-auto', placeholder: 'Numero documento'
+          = text_field_tag 'documento', @baja.documento, class: 'form-control proveedor-auto required', placeholder: 'Numero documento'
         .col-sm-3
           .input-group
-            = text_field_tag 'Fecha documento', format_date(nil), class: 'form-control date', placeholder: 'Fecha documento'
+            = text_field_tag 'fecha', format_date(@baja.fecha), class: 'form-control date required', placeholder: 'Fecha baja'
             .input-group-addon
               %span.glyphicon.glyphicon-calendar
       .form-group
-        %label.col-sm-3.control-label Resumen
+        %label.col-sm-3.control-label Observacion
         .col-sm-6
-          = text_area 'Resumen', nil, class: 'form-control', placeholder: 'Resumen'
+          = text_area 'observacion', @baja.observacion, class: 'form-control required', placeholder: 'Motivo - Documento notarial - Observaciones'
 
   .row
     .col-md-12.col-sm-12
-      %form#ingresos-form{role: 'form'}
+      %form#busqueda-form{role: 'form'}
         .row.has-success
           .col-md-offset-3.col-sm-offset-3.col-xs-offset-3.col-md-6.col-sm-6.col-xs-6
             = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos (ej. 1-10, 3x14, 17, 20, ...)', autofocus: true
-          .col-md-3.col-sm-3.col-xs-3
+          .col-md-3.col-sm-3z.col-xs-3
             = button_tag class: 'nuevo-cargar-barcode btn btn-success btn-lg' do
               %span.glyphicon.glyphicon-search
               Buscar
@@ -46,8 +48,8 @@
         Cancelar
 
       = button_tag class: 'btn btn-primary guardar-btn', data: {disable_with: 'Guardando...'} do
-        %span.glyphicon.glyphicon-floppy-save
-        Dar de Baja
+        %span.glyphicon.glyphicon-eye-open
+        Vista previa
 
 #confirm-modal
 = render 'ingreso_modal'

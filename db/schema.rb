@@ -88,12 +88,13 @@ ActiveRecord::Schema.define(version: 20180223144500) do
   add_index "auxiliaries", ["account_id"], name: "index_auxiliaries_on_account_id", using: :btree
 
   create_table "bajas", force: :cascade do |t|
-    t.string   "documento",     limit: 255
+    t.integer  "numero",      limit: 4
+    t.string   "documento",   limit: 255
     t.date     "fecha"
-    t.text     "observaciones", limit: 65535
-    t.integer  "user_id",       limit: 4
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.text     "observacion", limit: 65535
+    t.integer  "user_id",     limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "bajas", ["user_id"], name: "index_bajas_on_user_id", using: :btree

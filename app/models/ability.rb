@@ -24,6 +24,7 @@ class Ability
       can :manage, Ubicacion
       can :manage, Ufv
       can :manage, Gestion
+      can :manage, Baja
       cannot [:edit, :update], Gestion, cerrado: true
     elsif user.is_admin_store? # Responsable de almacenes
       can [:welcome, :show, :update], User, id: user.id

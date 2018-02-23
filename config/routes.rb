@@ -89,7 +89,9 @@ Rails.application.routes.draw do
     get :resumen, on: :member
   end
 
-  resources :bajas, only: [:index, :new]
+  resources :bajas, only: [:index, :new] do
+    get :obt_cod_bajas, on: :collection
+  end
 
   resources :requests, except: [:edit, :destroy] do
     get :obtiene_nro_solicitud, on: :collection
