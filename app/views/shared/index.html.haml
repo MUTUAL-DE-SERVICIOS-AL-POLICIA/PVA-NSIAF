@@ -45,8 +45,8 @@
     - if is_versions
       #versions-export{ 'data-url' => export_versions_path }
   - if controller_name == 'bajas'
-    = link_to new_baja_path, class: "btn btn-danger" do
-      %span{ class: 'glyphicon glyphicon-remove' }
+    = link_to new_baja_path, class: "btn btn-primary" do
+      %span{ class: 'glyphicon glyphicon-plus' }
       Nueva Baja
 
 #datatable-spanish{ 'data-url' => spanish_datatables_path() }

@@ -4,6 +4,7 @@ class CreateBajas < ActiveRecord::Migration
       t.string :documento
       t.date :fecha
       t.text :observaciones
+      t.belongs_to :user, index: true
 
       t.timestamps null: false
     end

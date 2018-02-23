@@ -91,9 +91,12 @@ ActiveRecord::Schema.define(version: 20180223144500) do
     t.string   "documento",     limit: 255
     t.date     "fecha"
     t.text     "observaciones", limit: 65535
+    t.integer  "user_id",       limit: 4
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
   end
+
+  add_index "bajas", ["user_id"], name: "index_bajas_on_user_id", using: :btree
 
   create_table "buildings", force: :cascade do |t|
     t.string   "code",       limit: 50
