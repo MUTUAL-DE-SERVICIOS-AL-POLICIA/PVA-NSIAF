@@ -61,6 +61,13 @@ class Account < ActiveRecord::Base
     activos.where('ingresos.factura_fecha' => desde..hasta)
   end
 
+  # Lista de activos dados de baja en la cuenta en un rango de fechas
+  def auxiliares_activos_bajas(desde = Date.today, hasta = Date.today)
+    Asset.where(auxiliary_id: auxiliaries.ids)
+         .where(derecognised: desde..hasta)
+         .bajas
+  end
+
   def auxiliares_activos_depreciacion(desde = Date.today, hasta = Date.today)
     activos = Asset.joins(:ingreso).where(auxiliary_id: auxiliaries.ids)
     activos.where('ingresos.factura_fecha' => desde..hasta)

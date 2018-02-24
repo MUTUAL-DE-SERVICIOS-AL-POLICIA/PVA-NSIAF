@@ -143,6 +143,38 @@ class ReportesController < ApplicationController
     end
   end
 
+  # Reporte de bajas de activos fijos
+  def bajas
+    @desde, @hasta = get_fechas(params)
+    cuentas = params[:cuentas]
+    @cuentas = Account
+    @cuentas = @cuentas.where(id: cuentas) if cuentas.present?
+    if @desde && @hasta
+      @cuentas = @cuentas.joins(auxiliaries: :assets)
+                        .where('assets.status' => '0')
+                        .where('assets.derecognised' => @desde..@hasta)
+                        .uniq
+    else
+      @cuentas = @cuentas.none
+    end
+    respond_to do |format|
+      format.html
+      format.pdf do
+        filename = 'reporte-bajas-activos-fijos'
+        render pdf: filename,
+               disposition: 'attachment',
+               layout: 'pdf.html',
+               # show_as_html: params.key?('debug'),
+               template: 'reportes/bajas.html.haml',
+               orientation: 'Landscape',
+               page_size: 'Letter',
+               margin: view_context.margin_pdf_horizontal_estrecho,
+               header: { html: { template: 'shared/header_horizontal.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
+  end
+
   private
 
     def comprimir_a_zip(desde, hasta)

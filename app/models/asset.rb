@@ -47,6 +47,11 @@ class Asset < ActiveRecord::Base
 
   has_paper_trail
 
+  # Activos dados de baja
+  def self.bajas
+    where(status: '0')
+  end
+
   def self.busqueda_basica(col, q, cuentas, desde, hasta)
     activos = self.select('assets.id as id, assets.code as codigo, assets.description as descripcion, assets.precio as precio, ingresos.factura_numero as factura, ingresos.factura_fecha as fecha_ingreso, accounts.name as cuenta, ubicaciones.abreviacion as lugar')
                   .joins('LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id')
@@ -136,7 +141,7 @@ class Asset < ActiveRecord::Base
       if x[0].include?("x")
         mult = x[0].split('x').map(&:to_i)
         for i in 1..mult[0]
-          activos = where(barcode: mult[1])
+          activos = where(barcode: mult[i])
           arrayVal += activos
         end
       end
@@ -189,6 +194,11 @@ class Asset < ActiveRecord::Base
 
   def account_name
     auxiliary.present? ? auxiliary.account_name : ''
+  end
+
+  # Verificar si un activo está de baja
+  def baja?
+    self.status == '0'
   end
 
   def establecer_barcode
@@ -343,7 +353,8 @@ class Asset < ActiveRecord::Base
   end
 
   def costo_actualizado(fecha = Date.today)
-    costo_actualizado_inicial(fecha) * factor_actualizacion(fecha)
+    _fecha = determinar_fecha_de_baja(fecha)
+    costo_actualizado_inicial(_fecha) * factor_actualizacion(_fecha)
   end
 
   def porcentaje_depreciacion_anual
@@ -352,17 +363,18 @@ class Asset < ActiveRecord::Base
 
   # Días desde la adquisición del activo fijo
   def dias_consumidos(fecha = Date.today)
-    (fecha - ingreso_fecha).to_i + 1 rescue 0
+    (fecha.to_date - ingreso_fecha.to_date).to_i + 1 rescue 0
   end
 
   # Días desde el último cierre de gestión
   def dias_consumidos_ultimo(fecha = Date.today)
     cg = cierre_gestiones.where('fecha < ?', fecha).order(:fecha).last
-    cg.present? ? (fecha - cg.fecha).to_i : dias_consumidos(fecha)
+    cg.present? ? (fecha.to_date - cg.fecha.to_date).to_i : dias_consumidos(fecha)
   end
 
   def depreciacion_gestion(fecha = Date.today)
-    costo_actualizado(fecha) / 365.0 * dias_consumidos_ultimo(fecha) * porcentaje_depreciacion_anual / 100.0
+    _fecha = determinar_fecha_de_baja(fecha)
+    costo_actualizado(_fecha) / 365.0 * dias_consumidos_ultimo(_fecha) * porcentaje_depreciacion_anual / 100.0
   end
 
   def actualizacion_depreciacion_acumulada(fecha = Date.today)
@@ -370,13 +382,20 @@ class Asset < ActiveRecord::Base
   end
 
   def depreciacion_acumulada_total(fecha = Date.today)
-    costo_actualizado(fecha) / 365 * dias_consumidos(fecha) * porcentaje_depreciacion_anual / 100
+    _fecha = determinar_fecha_de_baja(fecha)
+    costo_actualizado(_fecha) / 365 * dias_consumidos(_fecha) * porcentaje_depreciacion_anual / 100
   end
 
   def valor_neto(fecha = Date.today)
     # El método redondear es un requisito para igualar a los resultados emitidos
     # por el sistema vSIAF del ministerio
     redondear(costo_actualizado(fecha)) - redondear(depreciacion_acumulada_total(fecha))
+  end
+
+  def valor_neto_inicial(fecha = Date.today)
+    # El método redondear es un requisito para igualar a los resultados emitidos
+    # por el sistema vSIAF del ministerio
+    redondear(costo_actualizado_inicial(fecha)) - redondear(depreciacion_acumulada_inicial(fecha))
   end
 
   def dar_revaluo_o_baja
@@ -418,6 +437,10 @@ class Asset < ActiveRecord::Base
 
   def self.valor_neto(fecha = Date.today)
     all.inject(0) { |s, a| redondear(a.valor_neto(fecha)) + s }
+  end
+
+  def self.valor_neto_inicial(fecha = Date.today)
+    all.inject(0) { |s, a| redondear(a.valor_neto_inicial(fecha)) + s }
   end
 
   ## END Los campos de la tabla para el reporte de Depreciación de Activos Fijos
@@ -484,7 +507,7 @@ class Asset < ActiveRecord::Base
     self.select("assets.id, assets.code, assets.barcode, assets.description, assets.precio, ingresos.factura_numero, assets.detalle,  ingresos.factura_fecha, assets.observaciones, accounts.name as cuenta")
         .joins("LEFT JOIN ingresos ON assets.ingreso_id = ingresos.id")
         .joins(auxiliary: [:account])
-	end
+  end
 
   # método que verifica si el activo tiene un código.
   def tiene_codigo?
@@ -551,4 +574,20 @@ class Asset < ActiveRecord::Base
     descripcion << "SERIE #{serie}" if serie.present? && serie.strip.present?
     self.description = descripcion.join(' ').squish
   end
+
+  private
+
+    # Determinar si el activo fue dado de baja y tomar su fecha de baja
+    def determinar_fecha_de_baja(fecha)
+      _fecha = fecha
+      if self.baja? && self.derecognised.to_date <= fecha.to_date
+        _fecha = self.derecognised.to_date
+      end
+      _fecha
+    end
 end
+
+
+
+
+

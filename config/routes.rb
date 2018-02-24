@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       get :resumen
       get :cuenta_contable
       get :estadisticas
+      get :bajas
     end
   end
 

@@ -267,7 +267,7 @@ module ApplicationHelper
   end
 
   def titulo_a_la_fecha(hasta)
-    "Al #{I18n.l hasta, format: :long}"
+    "Al #{I18n.l hasta.to_date, format: :long}"
   end
 
   def color_menu
