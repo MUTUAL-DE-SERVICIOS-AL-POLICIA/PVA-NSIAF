@@ -17,6 +17,16 @@ class BajasController < ApplicationController
   end
 
   def create
+    @baja = Baja.new(baja_params)
+    respond_to do |format|
+      if @baja.save
+        format.html { redirect_to @baja, notice: 'Ingreso creado exitosamente' }
+        format.json { render json: @baja, status: :created }
+      else
+        format.html { render :new }
+        format.json { render json: @baja.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   private
@@ -24,7 +34,4 @@ class BajasController < ApplicationController
   def baja_params
     params.require(:baja).permit(:documento, :fecha, :observacion)
   end
-
-  #def establece_usuario_actual
-  #end
 end
