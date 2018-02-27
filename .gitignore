@@ -31,3 +31,4 @@ erd.pdf
 /public/uploads
 /.byebug_history
 /vendor/assets/bower_components
+docker/almacenes/.env
