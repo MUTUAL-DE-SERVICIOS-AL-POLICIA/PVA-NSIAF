@@ -1,5 +1,5 @@
 class Asset < ActiveRecord::Base
-  include ImportDbf, Migrated, VersionLog, ManageStatus
+  include ImportDbf, Migrated, VersionLog
   include Moneda
   include Autoincremento
 

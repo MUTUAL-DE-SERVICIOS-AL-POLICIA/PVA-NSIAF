@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7.1'
+gem 'rails', '4.2.10'
 
 # Use mysql as the database for Active Record
 gem 'mysql2'
@@ -42,6 +42,9 @@ gem 'paper_trail'
 
 gem 'autocomplete-off'
 gem 'wicked_pdf'
+
+# Gema para los assets a la hora de generar PDF
+gem 'non-stupid-digest-assets'
 
 gem 'rest-client'
 
