@@ -18,7 +18,9 @@
 - when 'ufvs' then new_url = new_ufv_path
 - when 'gestiones' then new_url = new_gestion_path
 - when 'proceedings' then accion = 'actas'
-- control = controller_name == 'derecognised' ? 'assets' : controller_name
+
+- control = controller_name == 'bajas' ? 'assets' : controller_name
+
 
 = title t("#{control}.title.title")
 - if controller_name == 'assets'
@@ -29,7 +31,7 @@
     - if action_name == 'delivered'
       = t("delivered.title")
     - else
-      #{t("#{control}.title.title")} #{' dados de Baja' if controller_name == 'derecognised'}
+      #{t("#{control}.title.title")} #{' dados de Baja' if controller_name == 'bajas'}
       - if control == 'requests'
         = render 'dropdown', status: params[:status]
 .col-xs-2.button_new
@@ -42,6 +44,10 @@
       = t("#{control}.title.new")
     - if is_versions
       #versions-export{ 'data-url' => export_versions_path }
+  - if controller_name == 'bajas'
+    = link_to new_baja_path, class: "btn btn-primary" do
+      %span{ class: 'glyphicon glyphicon-plus' }
+      Nueva Baja
 
 #datatable-spanish{ 'data-url' => spanish_datatables_path() }
 

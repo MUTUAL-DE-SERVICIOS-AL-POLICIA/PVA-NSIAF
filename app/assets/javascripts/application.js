@@ -57,3 +57,4 @@
 //= require subarticulos
 //= require gestiones
 //= require barcode
+//= require bajas
