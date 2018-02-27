@@ -58,8 +58,6 @@ class Bajas
     @$alertaIngresoTpl = Hogan.compile $('#alerta-ingreso-tpl').html() || ''
 
   bindEvents: ->
-    if @$proveedorAuto?
-      @proveedorAutocomplete()
     $(document).on 'click', @$buscarBtn.selector, @buscarActivos
     $(document).on 'change', @$documento.selector, @capturarBaja
     $(document).on 'change', @$fecha.selector, @capturarBaja
@@ -85,25 +83,6 @@ class Bajas
     @$confirmModal.find(@$confirmarIngresoModal.selector).modal('hide')
     $form = $(e.target).closest('form')
     @guardarIngresoActivosFijos(e)
-
-  validarObservacion: (e) =>
-    el = @$confirmModal.find('#modal_observacion')
-    if el
-      valor = $.trim(el.val())
-      if valor
-        el.parents('.form-group').removeClass('has-error')
-        el.next().remove()
-        @aceptarConfirmarIngreso(e)
-      else
-        el.parents('.form-group').addClass('has-error')
-        el.after('<span class="help-block">no puede estar en blanco</span>') unless $('span.help-block').length
-        false
-
-  aceptarAlertaIngreso: (e) ->
-    e.preventDefault()
-    @$confirmModal.find(@$alertaIngresoModal.selector).modal('hide')
-    $form = $(e.target).closest('form')
-    false
 
   adicionarEnLaLista: (data, callback) ->
     _cantidad = 0
@@ -145,11 +124,11 @@ class Bajas
         type: 'POST'
         dataType: 'JSON'
         data: { baja: @jsonIngreso() }
-      .done (ingreso) =>
-        @alert.success "Se guardó correctamente la Nota de Ingreso"
-        window.location = "#{@ingresosPath}/#{ingreso.id}"
+      .done (baja) =>
+        @alert.success "Se guardó correctamente la Baja"
+        window.location = "#{@ingresosPath}/#{baja.id}"
       .fail (xhr, status) =>
-        @alert.danger 'Error al guardar Nota de Ingreso'
+        @alert.danger 'Error al guardar la Baja'
       .always (xhr, status) ->
         $(e.target).removeClass('disabled')
     else
@@ -161,7 +140,6 @@ class Bajas
       documento: @$documento.val()
       fecha: @$fecha.val()
       observacion: @$observacion.val()
-
     $.extend({}, baja)
 
   mostrarActivos: (data) =>
@@ -178,23 +156,6 @@ class Bajas
       cantidad: _activos.length
       total: @sumaTotal().formatNumber(2, '.', ',')
     @$ingresosTbl.html @$activosTpl.render(json)
-
-  proveedorAutocomplete: ->
-    proveedores = new Bloodhound(
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("description")
-      queryTokenizer: Bloodhound.tokenizers.whitespace
-      limit: 10
-      remote: decodeURIComponent(@proveedoresPath)
-    )
-    proveedores.initialize()
-    @$proveedorAuto.typeahead null,
-      displayKey: "name"
-      source: proveedores.ttAdapter()
-    .on 'typeahead:selected', @seleccionarProveedor
-
-  seleccionarProveedor: (evt, proveedor) =>
-    _proveedor = proveedor
-    @cargarDatosProveedor()
 
   sonValidosDatos: ->
     _activos.length > 0
