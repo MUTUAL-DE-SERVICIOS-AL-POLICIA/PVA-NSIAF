@@ -27,23 +27,10 @@ class Bajas
 
     @$facturaForm = $('#factura-form')
     @$ingresosForm = $('#ingresos-form')
-    @$proveedorAuto = @$facturaForm.find('.proveedor-auto')
     @$ingresosTbl = $('#ingresos-tbl')
     @$proveedorTbl = $('#proveedor-tbl')
     @$buscarBtn = @$ingresosForm.find('button[type=submit]')
     @$guardarBtn = $('.guardar-btn')
-    # Campos
-    @$proveedorNombre = @$facturaForm.find('#proveedor')
-    @$proveedorNit = @$facturaForm.find('#nit')
-    @$proveedorTelefono = @$facturaForm.find('#telefono')
-    @$facturaNumero = @$facturaForm.find('#factura_numero')
-    @$facturaAutorizacion = @$facturaForm.find('#factura_autorizacion')
-    @$facturaFecha = @$facturaForm.find('#factura_fecha')
-    @$notaEntregaNumero = @$facturaForm.find('#nota_entrega_numero')
-    @$notaEntregaFecha = @$facturaForm.find('#nota_entrega_fecha')
-    @$c31Numero = @$facturaForm.find('#c31_numero')
-    @$c31Fecha = @$facturaForm.find('#c31_fecha')
-    @$inputObservacion = $('#observacion')
     # Plantillas
     @$activosTpl = Hogan.compile $('#tpl-activo-seleccionado').html() || ''
     # Growl Notices
@@ -65,24 +52,29 @@ class Bajas
 
     $(document).on 'click', @$guardarBtn.selector, @confirmarIngreso
     $(document).on 'click', @$confirmarIngresoModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
-    $(document).on 'click', @$alertaIngresoModal.find('button[type=submit]').selector, (e) => @aceptarAlertaIngreso(e)
 
   confirmarIngreso: (e) =>
     e.preventDefault()
     if @sonValidosDatos()
-      @guardarIngresoActivosFijos(e)
+      @$confirmModal.html @$confirmarIngresoTpl.render({})
+      modal = @$confirmModal.find(@$confirmarIngresoModal.selector)
+      modal.modal('show')
     else
       @alert.danger "Complete todos los datos requeridos"
 
-  aceptarConfirmarIngreso: (e) =>
+  aceptarConfirmarModal: (e) =>
     e.preventDefault()
     el = @$confirmModal.find('#modal_observacion')
-    if el
-      @$inputObservacion.val(el.val())
-    @capturarObservacion()
     @$confirmModal.find(@$confirmarIngresoModal.selector).modal('hide')
     $form = $(e.target).closest('form')
     @guardarIngresoActivosFijos(e)
+
+  validarObservacion: (e) =>
+    el = @$confirmModal.find('#modal_observacion')
+    if el
+      el.parents('.form-group').removeClass('has-error')
+      el.next().remove()
+      @aceptarConfirmarModal(e)
 
   adicionarEnLaLista: (data, callback) ->
     _cantidad = 0
@@ -115,9 +107,8 @@ class Bajas
       e.barcode is elemento.barcode
     ).length > 0
 
-  guardarIngresoActivosFijos: (e) =>
+  guardarIngresoActivosFijos: (e) ->
     if @sonValidosDatos()
-      @jsonIngreso()
       $(e.target).addClass('disabled')
       $.ajax
         url: @ingresosPath
@@ -158,7 +149,7 @@ class Bajas
     @$ingresosTbl.html @$activosTpl.render(json)
 
   sonValidosDatos: ->
-    _activos.length > 0
+    _activos.length > 0 && @$documento.val() && @$fecha.val() && @$observacion.val()
 
   sumaTotal: ->
     _activos.reduce (total, elemento) ->
