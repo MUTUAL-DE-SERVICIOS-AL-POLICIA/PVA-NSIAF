@@ -1,10 +1,13 @@
 # NSIAF
 
-Sistema de Activos Fijos y Almacenes desarrollado por [ADSIB](http://adsib.gob.bo)
+Sistema de Activos Fijos y Almacenes desarrollado por [ADSIB](https://adsib.gob.bo)
+y [AGETIC](https://agetic.gob.bo)
 
 ## Instalación
 
-La instalación en modo `production` del Sistema está descrito en el archivo [`INSTALL.md`](INSTALL.md)
+La instalación en modo `production` del Sistema está descrito en el archivo
+[INSTALL.md](INSTALL.md) y para actualizar a una versión reciente seguir los
+pasos del archivo [UPDATE.md](UDPATE.md).
 
 ## Primeros pasos
 

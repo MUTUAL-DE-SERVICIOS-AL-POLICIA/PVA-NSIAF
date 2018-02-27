@@ -1,3 +1,5 @@
+require 'raw_sql'
+
 class ReportesController < ApplicationController
   # load_and_authorize_resource
   include Fechas
@@ -113,6 +115,28 @@ class ReportesController < ApplicationController
                orientation: 'Landscape',
                page_size: 'Letter',
                margin: view_context.margin_pdf_horizontal_estrecho,
+               header: { html: { template: 'shared/header_horizontal.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
+  end
+
+  # Estadísticas de materiales por fecha
+  def estadisticas
+    @desde, @hasta = get_fechas(params)
+    @resultados = RawSQL.new('1_resultados.sql').result(desde: @desde, hasta: @hasta)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        filename = 'Salida de subartículos por unidad'
+        render pdf: "#{filename}".parameterize,
+               disposition: 'attachment',
+               template: 'reportes/estadisticas.html.haml',
+               show_as_html: params[:debug].present?,
+               orientation: 'Landscape',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               margin: view_context.margin_pdf,
                header: { html: { template: 'shared/header_horizontal.pdf.haml' } },
                footer: { html: { template: 'shared/footer.pdf.haml' } }
       end

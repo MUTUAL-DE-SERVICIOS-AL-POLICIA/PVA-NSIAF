@@ -17,8 +17,8 @@ module Fechas
       params[:desde] = params[:desde].present? ? params[:desde] : Date.today.beginning_of_year.strftime(formato)
       params[:hasta] = params[:hasta].present? ? params[:hasta] : Date.today.strftime(formato)
     end
-    desde = Date.strptime(params[:desde], formato) if params[:desde].present?
-    hasta = Date.strptime(params[:hasta], formato) if params[:hasta].present?
+    desde = Date.strptime(params[:desde], formato).beginning_of_day if params[:desde].present?
+    hasta = Date.strptime(params[:hasta], formato).end_of_day if params[:hasta].present?
     [desde, hasta]
   end
 

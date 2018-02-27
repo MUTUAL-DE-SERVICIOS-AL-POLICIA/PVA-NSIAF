@@ -45,9 +45,10 @@ Se recomienda la versión `0.12.0` o superiores, el cual se puede descargar
 manualmente desde http://wkhtmltopdf.org/downloads.html
 
 ```console
-wget -c http://download.gna.org/wkhtmltopdf/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+wget -c https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
+tar -xvf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
 sudo mv wkhtmltox /opt/
+rm wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
 ```
 
 La ubicación del binario es: `/opt/wkhtmltox/bin/wkhtmltopdf`
@@ -56,6 +57,9 @@ La ubicación del binario es: `/opt/wkhtmltox/bin/wkhtmltopdf`
 
 Éste sistema depende del API de Conversión de Formatos para la importación de
 archivos `DBF`, cuyo repositorio es https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos
+
+Este paso es requerido solamente en el caso que se desee importar la base de datos
+desde el sistema VSIAF.
 
 La instalación del API de Conversión de Formatos está descrita en el archivo [INSTALL.md](https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos/blob/master/INSTALL.md)
 
@@ -75,9 +79,9 @@ Descargar Ruby y compilarlo:
 
 ```console
 mkdir /tmp/ruby && cd /tmp/ruby
-curl --remote-name --progress https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.3.tar.gz
-echo '241408c8c555b258846368830a06146e4849a1d58dcaf6b14a3b6a73058115b7  ruby-2.3.3.tar.gz' | shasum -c - && tar xzf ruby-2.3.3.tar.gz
-cd ruby-2.3.3
+curl --remote-name --progress https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.6.tar.gz
+echo '8322513279f9edfa612d445bc111a87894fac1128eaa539301cebfc0dd51571e  ruby-2.3.6.tar.gz' | shasum -c - && tar xzf ruby-2.3.6.tar.gz
+cd ruby-2.3.6
 ./configure --disable-install-rdoc
 make
 sudo make install
@@ -120,7 +124,7 @@ sudo adduser --disabled-login --gecos 'NSIAF' nsiaf
 
 ## Base de Datos
 
-Instalación de `MySQL`
+Instalación de `MySQL` la versión 5.5 que viene en Debian Jessie
 
 ```console
 sudo apt-get install -y mysql-server libmysqlclient-dev
@@ -147,7 +151,7 @@ cd /home/nsiaf
 Clonar el código fuente:
 
 ```console
-sudo -u nsiaf -H git clone https://gitlab.geo.gob.bo/adsib/nsiaf.git -b master nsiaf
+sudo -u nsiaf -H GIT_SSL_NO_VERIFY=true git clone https://gitlab.geo.gob.bo/adsib/nsiaf.git -b agetic-mysql
 ```
 
 Configurar el sistema:
@@ -176,7 +180,8 @@ Editar `config/database.yml`:
 sudo -u nsiaf -H editor config/database.yml
 ```
 
-si se necesita hacer una configuración más específica cambiar lo siguiente:
+si se necesita hacer una configuración más específica para la base de datos
+se debe cambiar los siguientes datos:
 
 ```yaml
 production:
@@ -184,8 +189,10 @@ production:
   encoding: utf8
   database: nsiaf_production
   pool: 5
+  host: localhost
   username: root
-  password:
+  password: root
+  port: 3306
   socket: /var/run/mysqld/mysqld.sock
 ```
 
@@ -201,7 +208,7 @@ Generar la clave secreta:
 sudo -u nsiaf -H bundle exec rake secret
 ```
 
-copiar la clave secreta y editar `config/secrets.yml`:
+copiar la clave secreta generada y editar `config/secrets.yml`:
 
 ```console
 sudo -u nsiaf -H editor config/secrets.yml
@@ -210,16 +217,16 @@ Editar `secrets.yml` con el siguiente contenido
 
 ```yml
 production:
-  convert_api_url: <%= ENV["CONVERT_API_URL"] %>
-  rails_host: <%= ENV["RAILS_HOST"] %>
-  rails_relative_url_root: <%= ENV["RAILS_RELATIVE_URL_ROOT"] %>
+  convert_api_url: "https://intranet.adsib.gob.bo/conversion-formatos"
+  rails_host: "www.dominio.gob.bo"
+  rails_relative_url_root: ""
   secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
-  wkhtmltopdf: '/opt/wkhtmltox/bin/wkhtmltopdf'
-  ufv_desde: '01-01-2015'
+  wkhtmltopdf: "/opt/wkhtmltox/bin/wkhtmltopdf"
+  ufv_desde: "01-01-2018"
   exception_notification:
     email_prefix: "[NSIAF] "
     sender_address: "notificador <noreply@dominio.gob.bo>"
-    exception_recipients: "desarrolladores@dominio.gob.bo"
+    exception_recipients: "desarrollador1@dominio.gob.bo, desarrollador2@dominio.gob.bo, ..."
   smtp_settings:
     address: 'smtp.dominio.gob.bo'
     port: 587
@@ -233,10 +240,11 @@ production:
 donde:
 
 * `convert_api_url` es la URL donde se encuentra instalado el API de [Conversión de Formatos](https://gitlab.geo.gob.bo/bolivia-libre/conversion-formatos)
-* `rails_host` es el host del servidor de deploy tal como: `www.dominio.gob.bo`
+* `rails_host` es el host del servidor de deploy tal como: `www.dominio.gob.bo`.
 * `rails_relative_url_root` es la ubicación del subdirectorio de deploy tal como: `www.dominio.gob.bo/activos`
   dejar una cadena vacía en el caso que el deploy sea en la raíz del dominio.
-* `secret_key_base` se **DEBE** reemplazar con la clave secreta generada
+* `secret_key_base` se **DEBE** reemplazar con la clave secreta generada en el
+  paso anterior.
 * `wkhtmltopdf` es la ubicación del binario para conversión de HTML a PDF.
 * `ufv_desde` descarga UFVs desde esa fecha del sitio web del Banco Central de
   Bolivia.
@@ -244,7 +252,7 @@ donde:
 * `exception_recipients` ahí va los destinos de los emails puede ser uno o
   varios emails separados por comas: `des1@dominio.gob.bo, des2@dominio.gob.bo`
 * `smtp_settings` la configuración del servidor de email desde el cual se
-  enviará los emails de notificación de excepciones
+  enviará los emails de notificación de excepciones.
 
 Descargar las dependencias para frontend:
 
@@ -271,20 +279,6 @@ El último comando establece los datos del usuario `super administrador`
 * Usuario: `admin`
 * Contraseña: `demo123`
 
-## Cron Jobs
-
-Instalación de crontab:
-
-```console
-sudo apt-get install -y cron
-```
-
-Configurar los tareas programadas:
-
-```console
-sudo -u nsiaf -H bundle exec whenever -s 'environment=production' --update-crontab
-```
-
 ## Apache
 
 Instalar `apache2` en el servidor:
@@ -297,7 +291,7 @@ apache2-threaded-dev libapr1-dev libaprutil1-dev
 Instalar `passenger` en el servidor:
 
 ```console
-sudo gem install passenger --version 5.0.30 --no-ri --no-rdoc
+sudo gem install passenger --version 5.2.0 --no-ri --no-rdoc
 ```
 
 Nota: se puede realizar la instalación de Passenger sin especificar la versión
@@ -323,7 +317,7 @@ sudo editor /etc/apache2/mods-available/passenger.conf
 
 ```apache
 <IfModule mod_passenger.c>
-  PassengerRoot /usr/local/lib/ruby/gems/2.3.0/gems/passenger-5.0.30
+  PassengerRoot /usr/local/lib/ruby/gems/2.3.0/gems/passenger-5.2.0
   PassengerDefaultRuby /usr/local/bin/ruby
 </IfModule>
 ```
@@ -333,13 +327,12 @@ sudo editor /etc/apache2/mods-available/passenger.load
 ```
 
 ```apache
-LoadModule passenger_module /usr/local/lib/ruby/gems/2.3.0/gems/passenger-5.0.30/buildout/apache2/mod_passenger.so
+LoadModule passenger_module /usr/local/lib/ruby/gems/2.3.0/gems/passenger-5.2.0/buildout/apache2/mod_passenger.so
 ```
 
-Nota: El contenido de éstos dos archivos depende de la versión de Ruby y de la
-versión de la gema Passenger.
+Nota: El contenido de éstos dos archivos depende de la versión de la gema Passenger.
 
-Habilitar el módulo `passenger`:
+Habilitar el módulo `passenger` para Apache2:
 
 ```console
 sudo a2enmod passenger
@@ -403,6 +396,9 @@ Contenido para deploy de la aplicación en un subdirectorio `/activos`
 </VirtualHost>
 ```
 
+Nota: Para el despliegue en un subdirectorio la configuración en `config/secrets.yml`
+debe ser: `rails_relative_url_root: "/activos"`.
+
 Habilitar el nuevo sitio y reiniciar Apache
 
 ```console
@@ -416,44 +412,33 @@ Nota: Puede ser necesario deshabilitar el dominio por defecto con el comando
 Visitamos el sitio http://www.dominio.gob.bo o http://www.dominio.gob.bo/activos depende
 de la configuración que se haya elegido para el deploy.
 
-## Actualización
+## Cron Jobs
 
-Para actualizar a una versión reciente del sistema realizar los siguientes pasos:
+Se hace uso de cron jobs para actualizar la información de los UFVs de manera
+automática desde la página oficial del Banco Central de Bolivia.
 
-Actualización del repositorio:
-
-```console
-cd /var/www/html/nsiaf
-sudo -u nsiaf -H git pull origin master
-```
-Actualización de gemas:
+Instalación de crontab:
 
 ```console
-sudo -u nsiaf -H bundle install --deployment --without development test
+sudo apt-get install -y cron
 ```
 
-Ejecución de migraciones:
-
-```console
-sudo -u nsiaf -H bundle exec rake db:migrate RAILS_ENV=production
-sudo -u nsiaf -H bundle exec rake db:seed RAILS_ENV=production
-```
-
-Compilación de archivos CSS y JS:
-
-```console
-sudo -u nsiaf -H bundle exec rake assets:clobber RAILS_ENV=production
-sudo -u nsiaf -H bundle exec rake assets:precompile RAILS_ENV=production
-```
-
-Actualización de tareas programadas:
+Configurar los tareas programadas:
 
 ```console
 sudo -u nsiaf -H bundle exec whenever -s 'environment=production' --update-crontab
 ```
 
-Reinicio del servidor mediante `passenger`:
+Para revisar la configuración en el crontab:
 
 ```console
-sudo -u nsiaf -H touch tmp/restart.txt
+sudo -u nsiaf -H crontab -l
 ```
+
+```console
+# Begin Whenever generated tasks for: /var/www/html/nsiaf/config/schedule.rb
+0 0,4,8,12,16,20 * * * /bin/bash -l -c 'cd /var/www/html/nsiaf && RAILS_ENV=production bundle exec rake db:ufv_importar --silent >> log/cron.log 2>&1'
+
+# End Whenever generated tasks for: /var/www/html/nsiaf/config/schedule.rb
+```
+
