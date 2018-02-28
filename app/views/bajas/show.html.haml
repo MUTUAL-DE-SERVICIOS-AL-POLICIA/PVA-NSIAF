@@ -1,9 +1,6 @@
 - unless is_pdf?
   .page-header
     .pull-right
-      -# = link_to edit_ingreso_path(@ingreso), class: 'btn btn-primary' do
-      -#   %span.glyphicon.glyphicon-edit
-      -#   = t("general.btn.edit")
       = link_to baja_path(@baja, format: :pdf), class: 'btn btn-info' do
         %span.glyphicon.glyphicon-print
         Imprimir PDF
@@ -11,7 +8,7 @@
         %span.glyphicon.glyphicon-list
         Bajas de Activos fijos
 
-    %h2 Baja de Activos Fijos Nro.
+    %h2 Baja de Activos Fijos Nro. #{@baja.numero}
 
 -if @activos.present?
   - lista_de_campos = listar_campos(@activos)
@@ -34,6 +31,7 @@
       %th.number.nowrap Precio Unit.
   %tbody
     -if @activos.present?
+      - total = 0
       - @activos.each_with_index do |activo, index|
         %tr
           %td.text-center= index + 1
@@ -41,10 +39,11 @@
           - lista_de_campos.each do |campo|
             %td= activo[campo]
           %td.number= number_with_delimiter activo.precio
+          - total += activo.precio
       %tr
         %th{ colspan: lista_de_campos.length+1 }
         %th.number TOTAL
-        /%th.number= number_with_delimiter @ingreso.total
+        %th.number= number_with_delimiter total
 
 %table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
   %thead
@@ -57,7 +56,7 @@
           %tbody
             - if @baja.documento.present?
               %tr
-                %th.text-right Doucmento
+                %th.text-right Documento
                 %td= @baja.documento
 
             - if @baja.fecha.present?

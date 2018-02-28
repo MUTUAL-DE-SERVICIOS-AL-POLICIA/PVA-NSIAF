@@ -14,19 +14,14 @@ class Bajas
     @$bajasUrls = $('#bajas-urls')
     # Variables
     @bajasPath = @$bajasUrls.data('bajas')
-    @$obt_ingreso_urls = $('#obt_ingreso-urls')
-    @obt_ingreso_url = @$obt_ingreso_urls.data('obt-ingreso')
-    @id_ingreso = @$obt_ingreso_urls.data('ingreso')
     # Elementos
     @$barcode = $('#code')
     @$documento = $('#documento')
     @$fecha = $('#fecha')
     @$observacion = $('#observacion_')
 
-
     @$activosForm = $('#activos-form')
-    @$ingresosTbl = $('#ingresos-tbl')
-    @$proveedorTbl = $('#proveedor-tbl')
+    @$bajasTbl = $('#bajas-tbl')
     @$buscarBtn = @$activosForm.find('button[type=submit]')
     @$guardarBtn = $('.guardar-btn')
     # Plantillas
@@ -35,12 +30,10 @@ class Bajas
     @alert = new Notices({ele: 'div.main'})
 
     @$confirmModal = $('#confirm-modal')
-    @$confirmarIngresoModal = $('#modal-confirmar-ingreso')
-    @$alertaIngresoModal = $('#modal-alerta-ingreso')
+    @$confirmarBajaModal = $('#modal-confirmar-baja')
 
     # Plantillas
-    @$confirmarIngresoTpl = Hogan.compile $('#confirmar-ingreso-tpl').html() || ''
-    @$alertaIngresoTpl = Hogan.compile $('#alerta-ingreso-tpl').html() || ''
+    @$confirmarBajaTpl = Hogan.compile $('#confirmar-baja-tpl').html() || ''
 
   bindEvents: ->
     $(document).on 'click', @$buscarBtn.selector, @buscarActivos
@@ -48,14 +41,14 @@ class Bajas
     $(document).on 'change', @$fecha.selector, @capturarBaja
     $(document).on 'change', @$observacion.selector, @capturarBaja
 
-    $(document).on 'click', @$guardarBtn.selector, @confirmarIngreso
-    $(document).on 'click', @$confirmarIngresoModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
+    $(document).on 'click', @$guardarBtn.selector, @confirmarBaja
+    $(document).on 'click', @$confirmarBajaModal.find('button[type=submit]').selector, (e) => @validarObservacion(e)
 
-  confirmarIngreso: (e) =>
+  confirmarBaja: (e) =>
     e.preventDefault()
     if @sonValidosDatos()
-      @$confirmModal.html @$confirmarIngresoTpl.render({})
-      modal = @$confirmModal.find(@$confirmarIngresoModal.selector)
+      @$confirmModal.html @$confirmarBajaTpl.render({})
+      modal = @$confirmModal.find(@$confirmarBajaModal.selector)
       modal.modal('show')
     else
       @alert.danger "Complete todos los datos requeridos"
@@ -63,9 +56,9 @@ class Bajas
   aceptarConfirmarModal: (e) =>
     e.preventDefault()
     el = @$confirmModal.find('#modal_observacion')
-    @$confirmModal.find(@$confirmarIngresoModal.selector).modal('hide')
+    @$confirmModal.find(@$confirmarBajaModal.selector).modal('hide')
     $form = $(e.target).closest('form')
-    @guardarIngresoActivosFijos(e)
+    @guardarBajaActivosFijos(e)
 
   validarObservacion: (e) =>
     el = @$confirmModal.find('#modal_observacion')
@@ -105,14 +98,14 @@ class Bajas
       e.barcode is elemento.barcode
     ).length > 0
 
-  guardarIngresoActivosFijos: (e) ->
+  guardarBajaActivosFijos: (e) ->
     if @sonValidosDatos()
       $(e.target).addClass('disabled')
       $.ajax
         url: @bajasPath
         type: 'POST'
         dataType: 'JSON'
-        data: { baja: @jsonIngreso() }
+        data: { baja: @jsonBaja() }
       .done (baja) =>
         @alert.success "Se guardó correctamente la Baja"
         window.location = "#{@bajasPath}/#{baja.id}"
@@ -123,7 +116,7 @@ class Bajas
     else
       @alert.danger "Complete todos los datos requeridos"
 
-  jsonIngreso: ->
+  jsonBaja: ->
     baja =
       asset_ids: _activos.map((e) -> e.id)
       documento: @$documento.val()
@@ -144,7 +137,7 @@ class Bajas
       activos: @conversionNumeros(_activos)
       cantidad: _activos.length
       total: @sumaTotal().formatNumber(2, '.', ',')
-    @$ingresosTbl.html @$activosTpl.render(json)
+    @$bajasTbl.html @$activosTpl.render(json)
 
   sonValidosDatos: ->
     _activos.length > 0 && @$documento.val() && @$fecha.val() && @$observacion.val()
