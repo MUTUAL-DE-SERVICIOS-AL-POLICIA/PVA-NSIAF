@@ -7,7 +7,7 @@ services:
     image: nsiaf:1.0.0
     container_name: nsiaf-backend
     ports:
-      - "8888:80"
+      - "8888:3000"
     depends_on:
       - db
     env_file: .env

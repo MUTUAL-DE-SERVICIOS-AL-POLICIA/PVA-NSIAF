@@ -2,7 +2,7 @@
 
 ## Requisitos
 
-Para levantar este sistema se necesita tener instalado [Docker](https://docs.docker.com/install/linux/docker-ce/debian/) y [Docker-Compose](https://docs.docker.com/compose/install/). Las imagenes base del sistema son [debian:8-slim](https://hub.docker.com/_/debian/) y [mysql:5.5](https://hub.docker.com/_/mysql/).
+Para levantar este sistema se necesita tener instalado [Docker](https://docs.docker.com/install/linux/docker-ce/debian/) y [Docker-Compose](https://docs.docker.com/compose/install/). Las imagenes base del sistema son [ruby:2.3.6](https://hub.docker.com/_/ruby/) y [mysql:5.5](https://hub.docker.com/_/mysql/).
 
 ## Generar las variables de entorno
 
@@ -98,7 +98,7 @@ docker-compose logs
 docker volume inspect almacenes_nsiaf-bd
 ```
 
-* El puerto que expone el sistema es el `80`, que por defecto se redirecciona al puerto `8888` del host de Docker.
+* El puerto que expone el sistema es el `3000`, que por defecto se redirecciona al puerto `8888` del host de Docker.
 
 * Para iniciar los contenedores por separado se pueden utilizar los archivos Dockerfile de cada subsistema en este orden:
 
