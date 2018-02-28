@@ -9,6 +9,10 @@ La instalación en modo `production` del Sistema está descrito en el archivo
 [INSTALL.md](INSTALL.md) y para actualizar a una versión reciente seguir los
 pasos del archivo [UPDATE.md](UDPATE.md).
 
+### Deploy con Docker
+
+[Guia de instalación](./docker/almacenes/README.md)
+
 ## Primeros pasos
 
 Después del despliegue de la aplicación (en el paso anterior), se define algunos pasos iniciales que se debe seguir en el sistema los cuales están descritos en el archivo [`MANUAL.md`](MANUAL.md)

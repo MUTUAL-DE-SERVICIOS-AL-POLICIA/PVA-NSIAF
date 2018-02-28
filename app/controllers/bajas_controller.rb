@@ -1,11 +1,13 @@
 class BajasController < ApplicationController
   load_and_authorize_resource
-  #before_action :establece_usuario_actual, only: [:create]
+  before_action :obtener_admin_activos, only: [:index]
 
   def index
     if params[:barcode].present?
       barcode = params[:barcode]
-      activos = Asset.buscar_por_barcode(barcode)
+      activos = Asset.where('assets.user_id = ?', @admin_ids)
+                     .where('baja_id is null')
+                     .buscar_por_barcode(barcode)
       render json: activos, root: false
     else
       format_to('assets', AssetsDatatable)
@@ -13,11 +15,16 @@ class BajasController < ApplicationController
   end
 
   def new
-    @baja = Baja.new(fecha:  Date.today)
+    @baja = Baja.new(fecha: Date.today)
+  end
+
+  def show
+    @baja = Baja.find(params[:id])
+    @activos = @baja.assets
   end
 
   def create
-    @baja = Baja.new(baja_params)
+    @baja = current_user.bajas.new(baja_params)
     respond_to do |format|
       if @baja.save
         format.html { redirect_to @baja, notice: 'Ingreso creado exitosamente' }
@@ -29,9 +36,34 @@ class BajasController < ApplicationController
     end
   end
 
+  def obt_cod_ingreso
+    resultado = Hash.new
+    if params[:d].present?
+      fecha = params[:d].to_date
+      if params[:n].present?
+        nota_ingreso = Baja.find(params[:n])
+        unless nota_ingreso.numero.present?
+          resultado = Baja.obtiene_siguiente_numero_ingreso(fecha)
+        end
+      else
+        resultado = Baja.obtiene_siguiente_numero_ingreso(fecha)
+      end
+      if resultado[:tipo_respuesta] == 'confirmacion'
+        resultado[:titulo] = "Confirmación de Ingreso"
+      elsif resultado[:tipo_respuesta] == 'alerta'
+        resultado[:titulo] = "Alerta de Ingreso"
+      end
+    end
+    render json: resultado, root: false
+  end
+
   private
 
   def baja_params
-    params.require(:baja).permit(:documento, :fecha, :observacion)
+    params.require(:baja).permit(:documento, :fecha, :observacion, asset_ids: [])
+  end
+
+  def obtener_admin_activos
+    @admin_ids = User.where(role: 'admin').map &:id
   end
 end
