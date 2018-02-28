@@ -11,10 +11,9 @@ class Bajas
 
   cacheElements: ->
     # Contenedor de URLs
-    @$ingresosUrls = $('#ingresos-urls')
+    @$bajasUrls = $('#bajas-urls')
     # Variables
-    @ingresosPath = @$ingresosUrls.data('bajas')
-    @proveedoresPath = @$ingresosUrls.data('proveedores')
+    @bajasPath = @$bajasUrls.data('bajas')
     @$obt_ingreso_urls = $('#obt_ingreso-urls')
     @obt_ingreso_url = @$obt_ingreso_urls.data('obt-ingreso')
     @id_ingreso = @$obt_ingreso_urls.data('ingreso')
@@ -25,11 +24,10 @@ class Bajas
     @$observacion = $('#observacion_')
 
 
-    @$facturaForm = $('#factura-form')
-    @$ingresosForm = $('#ingresos-form')
+    @$activosForm = $('#activos-form')
     @$ingresosTbl = $('#ingresos-tbl')
     @$proveedorTbl = $('#proveedor-tbl')
-    @$buscarBtn = @$ingresosForm.find('button[type=submit]')
+    @$buscarBtn = @$activosForm.find('button[type=submit]')
     @$guardarBtn = $('.guardar-btn')
     # Plantillas
     @$activosTpl = Hogan.compile $('#tpl-activo-seleccionado').html() || ''
@@ -87,7 +85,7 @@ class Bajas
   buscarActivos: (e) =>
     e.preventDefault()
     _barcode = { barcode: @$barcode.val() }
-    $.getJSON @ingresosPath, _barcode, @mostrarActivos
+    $.getJSON @bajasPath, _barcode, @mostrarActivos
     @$barcode.select()
 
   capturarBaja: =>
@@ -111,13 +109,13 @@ class Bajas
     if @sonValidosDatos()
       $(e.target).addClass('disabled')
       $.ajax
-        url: @ingresosPath
+        url: @bajasPath
         type: 'POST'
         dataType: 'JSON'
         data: { baja: @jsonIngreso() }
       .done (baja) =>
         @alert.success "Se guardó correctamente la Baja"
-        window.location = "#{@ingresosPath}/#{baja.id}"
+        window.location = "#{@bajasPath}/#{baja.id}"
       .fail (xhr, status) =>
         @alert.danger 'Error al guardar la Baja'
       .always (xhr, status) ->

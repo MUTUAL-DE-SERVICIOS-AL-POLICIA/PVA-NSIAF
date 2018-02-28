@@ -1,11 +1,11 @@
-#ingresos-urls{data: {'bajas' => bajas_path, 'proveedores' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
+#bajas-urls{data: {'bajas' => bajas_path, 'proveedores' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
 /#obt_ingreso-urls{data: {'obt-ingreso' => obt_cod_ingreso_ingresos_path(format: :json), 'ingreso' => @ingreso.id}}
 
 .row{data: {action: 'bajas'}}
   .col-md-12
     %h3.text-center Ingreso de Activos Fijos
 
-%form#factura-form.form-horizontal{role: 'form'}
+%form#baja-form.form-horizontal{role: 'form'}
   .form-group
     %label.col-sm-3.control-label Respaldo
     .col-sm-3
@@ -23,7 +23,7 @@
 
 .row
   .col-md-12.col-sm-12
-    %form#ingresos-form{role: 'form'}
+    %form#activos-form{role: 'form'}
       .row.has-success
         .col-md-offset-3.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
           = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos (ej. 1-10, 12-15, 17, 20, ...)', autofocus: true
