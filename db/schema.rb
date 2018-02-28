@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 20180223144500) do
   add_index "auxiliaries", ["account_id"], name: "index_auxiliaries_on_account_id", using: :btree
 
   create_table "bajas", force: :cascade do |t|
-    t.integer  "numero",      limit: 4
+    t.integer  "codigo",      limit: 4
     t.string   "documento",   limit: 255
     t.date     "fecha"
     t.text     "observacion", limit: 65535

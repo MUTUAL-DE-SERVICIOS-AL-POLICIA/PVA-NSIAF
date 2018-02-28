@@ -5,11 +5,11 @@ class Baja < ActiveRecord::Base
 
   # método que verifica si baja tiene un código.
   def tiene_codigo?
-    numero.present?
+    codigo.present?
   end
 
   # Método para obtener el siguiente codigo de activo.
   def self.obtiene_siguiente_codigo
-    Baja.all.empty? ? 1 : Baja.maximum(:numero) + 1
+    Baja.all.empty? ? 1 : Baja.maximum(:codigo) + 1
   end
 end

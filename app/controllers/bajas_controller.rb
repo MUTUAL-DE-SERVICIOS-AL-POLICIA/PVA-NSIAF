@@ -10,7 +10,7 @@ class BajasController < ApplicationController
                      .buscar_por_barcode(barcode)
       render json: activos, root: false
     else
-      format_to('assets', AssetsDatatable)
+      format_to('bajas', BajasDatatable)
     end
   end
 
@@ -48,27 +48,6 @@ class BajasController < ApplicationController
         format.json { render json: @baja.errors, status: :unprocessable_entity }
       end
     end
-  end
-
-  def obt_cod_ingreso
-    resultado = Hash.new
-    if params[:d].present?
-      fecha = params[:d].to_date
-      if params[:n].present?
-        nota_ingreso = Baja.find(params[:n])
-        unless nota_ingreso.numero.present?
-          resultado = Baja.obtiene_siguiente_numero_ingreso(fecha)
-        end
-      else
-        resultado = Baja.obtiene_siguiente_numero_ingreso(fecha)
-      end
-      if resultado[:tipo_respuesta] == 'confirmacion'
-        resultado[:titulo] = "Confirmación de Ingreso"
-      elsif resultado[:tipo_respuesta] == 'alerta'
-        resultado[:titulo] = "Alerta de Ingreso"
-      end
-    end
-    render json: resultado, root: false
   end
 
   private
