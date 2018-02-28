@@ -6,6 +6,7 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'ubicacion', 'ubicaciones'
   inflect.irregular 'gestion', 'gestiones'
+  inflect.irregular 'baja', 'bajas'
 end
 
 # These inflection rules are supported but not enabled by default:
