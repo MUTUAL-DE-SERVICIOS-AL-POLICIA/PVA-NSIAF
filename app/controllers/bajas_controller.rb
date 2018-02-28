@@ -21,6 +21,20 @@ class BajasController < ApplicationController
   def show
     @baja = Baja.find(params[:id])
     @activos = @baja.assets
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: "Baja #{@baja.fecha}".parameterize,
+               disposition: 'attachment',
+               template: 'bajas/show.html.haml',
+               layout: 'pdf.html',
+               page_size: 'Letter',
+               # show_as_html: params[:debug].present?,
+               margin: view_context.margin_pdf,
+               header: { html: { template: 'shared/header.pdf.haml' } },
+               footer: { html: { template: 'shared/footer.pdf.haml' } }
+      end
+    end
   end
 
   def create
