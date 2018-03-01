@@ -18,8 +18,7 @@
 - when 'ufvs' then new_url = new_ufv_path
 - when 'gestiones' then new_url = new_gestion_path
 - when 'proceedings' then accion = 'actas'
-
-- control = controller_name == 'bajas' ? 'assets' : controller_name
+- control = controller_name == 'bajas' ? 'bajas' : controller_name
 
 
 = title t("#{control}.title.title")

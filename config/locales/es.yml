@@ -75,6 +75,17 @@ es:
       modal: "Baja de Activo"
       confirm-deactivate: "<strong>%{name}</strong>"
       users: 'Devolución'
+  bajas:
+    title:
+      title: "Bajas"
+      list: "Listado de Bajas"
+      new: "Nueva Baja"
+      create: "Nueva Baja"
+      edit: "Editar Baja"
+      update: "Editar Baja"
+      modal: "Baja de Activo"
+      confirm-deactivate: "<strong>%{name}</strong>"
+      users: 'Devolución'
   auxiliaries:
     title:
       title: "Auxiliares"
