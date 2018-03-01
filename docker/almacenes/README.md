@@ -92,6 +92,8 @@ docker-compose up -d
 docker-compose logs
 ```
 
+*De otra forma si se desean observar los cambios en tiempo real se puede utilizar `watch -d "docker-compose logs"`*
+
 * El sistema crea un volumen de docker que se puede inspeccionar mediante el comando:
 
 ```sh
