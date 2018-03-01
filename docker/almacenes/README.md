@@ -4,6 +4,19 @@
 
 Para levantar este sistema se necesita tener instalado [Docker](https://docs.docker.com/install/linux/docker-ce/debian/) y [Docker-Compose](https://docs.docker.com/compose/install/). Las imagenes base del sistema son [ruby:2.3.6](https://hub.docker.com/_/ruby/) y [mysql:5.5](https://hub.docker.com/_/mysql/).
 
+## Clonar los archivos base
+
+```sh
+git config --global http.sslVerify "false"
+git init nsiaf
+cd nsiaf
+git remote add origin https://gitlab.geo.gob.bo/adsib/nsiaf.git
+git config core.sparsecheckout true
+echo "docker/*" | tee -a .git/info/sparse-checkout
+git pull --depth=1 origin agetic-mysql
+cd docker/almacenes
+```
+
 ## Generar las variables de entorno
 
 ```sh
