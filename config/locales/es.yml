@@ -416,6 +416,11 @@ es:
         name: "Nombre"
         account: "Cuenta"
         status: "Estado"
+      baja:
+        codigo: "Código"
+        documento: "Número Documento"
+        fecha: "Fecha de Baja"
+        observacion: "Observación"
       building:
         code: "Código"
         entity: "Institución"
