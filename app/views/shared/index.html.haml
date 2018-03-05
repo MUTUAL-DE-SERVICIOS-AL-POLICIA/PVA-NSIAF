@@ -53,7 +53,7 @@
 %table.table.table-striped.table-hover.datatable
   %thead
     %tr
-      - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones seguros).include?(control)
+      - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones seguros bajas).include?(control)
         - unless current_user.is_super_admin? && control == 'users'
           %th= User.human_attribute_name('code')
         - if control == 'users' && !current_user.is_super_admin?

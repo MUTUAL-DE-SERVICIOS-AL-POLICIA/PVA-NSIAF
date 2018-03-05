@@ -2,23 +2,31 @@
 
 .row{data: {action: 'bajas'}}
   .col-md-12
-    %h3.text-center Ingreso de Activos Fijos
+    %h3.text-center Baja de Activos Fijos
 
 %form#baja-form.form-horizontal{role: 'form'}
   .form-group
-    %label.col-sm-3.control-label Respaldo
+    %label.col-sm-3.control-label Baja
     .col-sm-3
-      = text_field_tag 'documento', @baja.documento, class: 'form-control proveedor-auto required', placeholder: 'Numero documento'
+      = select_tag 'motivo', options_for_select(["VISA", "MasterCard" ], nil), class: 'form-control proveedor-auto required', include_blank: 'Motivo'
     .col-sm-3
       .input-group
-        = text_field_tag 'fecha', format_date(@baja.fecha), class: 'form-control date required', placeholder: 'Fecha baja'
+        = text_field_tag 'fecha', format_date(@baja.fecha), class: 'form-control date required', placeholder: 'Fecha de baja'
         .input-group-addon
           %span.glyphicon.glyphicon-calendar
   .form-group
-    %label.col-sm-3.control-label Observacion
+    %label.col-sm-3.control-label Respaldo
+    .col-sm-3
+      = text_field_tag 'documento', @baja.documento, class: 'form-control proveedor-auto required', placeholder: 'Numero de documento'
+    .col-sm-3
+      .input-group
+        = text_field_tag 'fecha', @baja.fecha.present? ? format_date(@baja.fecha) : nil, class: 'form-control date required', placeholder: 'Fecha de documento'
+        .input-group-addon
+          %span.glyphicon.glyphicon-calendar
+  .form-group
+    %label.col-sm-3.control-label Observación
     .col-sm-6
-      = text_area 'observacion', @baja.observacion, class: 'form-control required', placeholder: 'Motivo - Documento notarial - Observaciones'
-
+      = text_area 'observacion', @baja.observacion, class: 'form-control required', placeholder: 'Observaciones y/o información adicional'
 
 .row
   .col-md-12.col-sm-12

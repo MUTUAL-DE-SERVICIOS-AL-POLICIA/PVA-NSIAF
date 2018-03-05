@@ -46,7 +46,7 @@ private
   end
 
   def sort_column
-    Baja.columnas[params[:iSortCol_0].to_i]
+    Baja.columns[params[:iSortCol_0].to_i]
   end
 
   def sort_direction

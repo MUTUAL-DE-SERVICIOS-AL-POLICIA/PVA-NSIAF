@@ -15,7 +15,7 @@ class BajasController < ApplicationController
   end
 
   def new
-    @baja = Baja.new(fecha: Date.today)
+    @baja = Baja.new
   end
 
   def show
