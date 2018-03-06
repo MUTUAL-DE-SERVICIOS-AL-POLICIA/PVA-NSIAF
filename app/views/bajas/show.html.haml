@@ -54,14 +54,24 @@
       %td
         %table.table-condensed
           %tbody
+            - if @baja.motivo.present?
+              %tr
+                %th.text-right Motivo
+                %td= @baja.motivo
+
             - if @baja.documento.present?
               %tr
-                %th.text-right Documento
+                %th.text-right Documento de Respaldo
                 %td= @baja.documento
+
+            - if @baja.fecha_documento.present?
+              %tr
+                %th.text-right Fecha de Documento de Respaldo
+                %td= @baja.fecha_documento
 
             - if @baja.fecha.present?
               %tr
-                %th.text-right Fecha Baja
+                %th.text-right Fecha de Baja
                 %td= @baja.fecha
 
             - if @baja.observacion.present?

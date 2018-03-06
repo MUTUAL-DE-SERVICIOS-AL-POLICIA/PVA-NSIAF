@@ -8,7 +8,7 @@
   .form-group
     %label.col-sm-3.control-label Baja
     .col-sm-3
-      = select_tag 'motivo', options_for_select(["VISA", "MasterCard" ], nil), class: 'form-control proveedor-auto required', include_blank: 'Motivo'
+      = select_tag 'motivo', options_for_select(@motivos, selected: @baja.motivo), class: 'form-control proveedor-auto required', include_blank: 'Motivo'
     .col-sm-3
       .input-group
         = text_field_tag 'fecha', format_date(@baja.fecha), class: 'form-control date required', placeholder: 'Fecha de baja'

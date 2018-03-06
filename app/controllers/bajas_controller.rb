@@ -13,6 +13,7 @@ class BajasController < ApplicationController
   end
 
   def new
+    @motivos = Baja::MOTIVOS
     @baja = Baja.new
   end
 

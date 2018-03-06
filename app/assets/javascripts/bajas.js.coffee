@@ -144,7 +144,7 @@ class Bajas
     @$bajasTbl.html @$activosTpl.render(json)
 
   sonValidosDatos: ->
-    _activos.length > 0 && @$documento.val() && @$fecha.val()
+    _activos.length > 0 && @$documento.val() && @$fecha_documento.val() && @$fecha.val() && @$motivo.val()
 
   sumaTotal: ->
     _activos.reduce (total, elemento) ->

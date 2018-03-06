@@ -3,14 +3,28 @@ class Baja < ActiveRecord::Base
   has_many :assets
   belongs_to :user
 
+  MOTIVOS = [
+    'Disposición definitiva de bienes',
+    'Hurto, robo o pérdida fortuita',
+    'Mermas',
+    'Vencimientos, descomposiciones, alteraciones o deterioros',
+    'Inutilización',
+    'Obsolescencia',
+    'Desmantelamiento total o parcial de edificaciones, excepto el terreno que no será dado de baja',
+    'Siniestros',
+    'Otros'
+  ]
+
   # método que verifica si baja tiene un código.
   def tiene_codigo?
     codigo.present?
   end
 
   # Método para obtener el siguiente codigo de activo.
-  def self.obtiene_siguiente_codigo
-    Baja.all.empty? ? 1 : Baja.maximum(:codigo) + 1
+  def self.obtiene_siguiente_codigo(fecha)
+    fecha = fecha.present? ? fecha : Date.today
+    bajas_gestion = Baja.where(fecha: fecha.beginning_of_year..fecha.end_of_year)
+    bajas_gestion.empty? ? 1 : bajas_gestion.maximum(:codigo) + 1
   end
 
   def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, current_user = '')
