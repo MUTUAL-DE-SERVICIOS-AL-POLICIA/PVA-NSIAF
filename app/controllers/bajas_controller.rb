@@ -1,12 +1,10 @@
 class BajasController < ApplicationController
   load_and_authorize_resource
-  before_action :obtener_admin_activos, only: [:index]
 
   def index
     if params[:barcode].present?
       barcode = params[:barcode]
-      activos = Asset.where('assets.user_id = ?', @admin_ids)
-                     .where('baja_id is null')
+      activos = Asset.where('baja_id is null')
                      .buscar_por_barcode(barcode)
       render json: activos, root: false
     else
@@ -53,10 +51,6 @@ class BajasController < ApplicationController
   private
 
   def baja_params
-    params.require(:baja).permit(:documento, :fecha, :observacion, asset_ids: [])
-  end
-
-  def obtener_admin_activos
-    @admin_ids = User.where(role: 'admin').map &:id
+    params.require(:baja).permit(:documento, :fecha_documento, :fecha, :motivo, :observacion, asset_ids: [])
   end
 end

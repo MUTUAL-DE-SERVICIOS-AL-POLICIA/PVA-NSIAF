@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180223144500) do
+ActiveRecord::Schema.define(version: 20180306161755) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -88,13 +88,15 @@ ActiveRecord::Schema.define(version: 20180223144500) do
   add_index "auxiliaries", ["account_id"], name: "index_auxiliaries_on_account_id", using: :btree
 
   create_table "bajas", force: :cascade do |t|
-    t.integer  "codigo",      limit: 4
-    t.string   "documento",   limit: 255
+    t.integer  "codigo",          limit: 4
+    t.string   "documento",       limit: 255
     t.date     "fecha"
-    t.text     "observacion", limit: 65535
-    t.integer  "user_id",     limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.text     "observacion",     limit: 65535
+    t.integer  "user_id",         limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "motivo",          limit: 255
+    t.date     "fecha_documento"
   end
 
   add_index "bajas", ["user_id"], name: "index_bajas_on_user_id", using: :btree
@@ -149,7 +151,7 @@ ActiveRecord::Schema.define(version: 20180223144500) do
   create_table "entradas_salidas", id: false, force: :cascade do |t|
     t.integer  "id",             limit: 4,   default: 0,  null: false
     t.integer  "subarticle_id",  limit: 4
-    t.date     "fecha"
+    t.datetime "fecha"
     t.string   "factura",        limit: 255
     t.date     "nota_entrega"
     t.string   "nro_pedido",     limit: 11

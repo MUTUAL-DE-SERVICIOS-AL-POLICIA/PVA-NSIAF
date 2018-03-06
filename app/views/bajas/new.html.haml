@@ -20,7 +20,7 @@
       = text_field_tag 'documento', @baja.documento, class: 'form-control proveedor-auto required', placeholder: 'Numero de documento'
     .col-sm-3
       .input-group
-        = text_field_tag 'fecha', @baja.fecha.present? ? format_date(@baja.fecha) : nil, class: 'form-control date required', placeholder: 'Fecha de documento'
+        = text_field_tag 'fecha_documento', @baja.fecha.present? ? format_date(@baja.fecha) : nil, class: 'form-control date required', placeholder: 'Fecha de documento'
         .input-group-addon
           %span.glyphicon.glyphicon-calendar
   .form-group

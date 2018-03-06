@@ -16,7 +16,9 @@ class Bajas
     @bajasPath = @$bajasUrls.data('bajas')
     # Elementos
     @$barcode = $('#code')
+    @$motivo = $('#motivo')
     @$documento = $('#documento')
+    @$fecha_documento = $('#fecha_documento')
     @$fecha = $('#fecha')
     @$observacion = $('#observacion_')
 
@@ -119,7 +121,9 @@ class Bajas
   jsonBaja: ->
     baja =
       asset_ids: _activos.map((e) -> e.id)
+      motivo: @$motivo.val()
       documento: @$documento.val()
+      fecha_documento: @$fecha_documento.val()
       fecha: @$fecha.val()
       observacion: @$observacion.val()
     $.extend({}, baja)
@@ -140,7 +144,7 @@ class Bajas
     @$bajasTbl.html @$activosTpl.render(json)
 
   sonValidosDatos: ->
-    _activos.length > 0 && @$documento.val() && @$fecha.val() && @$observacion.val()
+    _activos.length > 0 && @$documento.val() && @$fecha.val()
 
   sumaTotal: ->
     _activos.reduce (total, elemento) ->
