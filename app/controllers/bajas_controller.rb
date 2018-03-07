@@ -49,6 +49,9 @@ class BajasController < ApplicationController
     end
   end
 
+  def edit
+  end
+
   private
 
   def baja_params

@@ -17,12 +17,13 @@ class BajasDatatable
 private
 
   def data
+
     array.map do |baja|
       as = []
       as << baja.codigo
       as << baja.documento
       as << (baja.fecha.present? ? I18n.l(baja.fecha) : nil)
-      as << links_actions(baja, 'baja') + unsubscribe(baja)
+      #as << links_actions(baja, 'baja') + unsubscribe(baja)
       as
     end
 
@@ -46,7 +47,8 @@ private
   end
 
   def sort_column
-    Baja.columns[params[:iSortCol_0].to_i]
+    columns = %w[bajas.codigo bajas.fecha bajas.documento]
+    columns[params[:iSortCol_0].to_i]
   end
 
   def sort_direction

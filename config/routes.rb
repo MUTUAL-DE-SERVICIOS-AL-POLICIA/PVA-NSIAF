@@ -92,7 +92,7 @@ Rails.application.routes.draw do
     get :resumen, on: :member
   end
 
-  resources :bajas, only: [:index, :new, :create, :show]
+  resources :bajas, only: [:index, :new, :create, :show, :edit]
 
   resources :requests, except: [:edit, :destroy] do
     get :obtiene_nro_solicitud, on: :collection
