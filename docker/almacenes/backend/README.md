@@ -16,4 +16,4 @@ docker run --name nsiaf-backend --link nsiaf-bd -e RAILS_HOST=presidencia -e MYS
 
 * Los volumenes que expone el contenedor son `"/var/www/html/nsiaf", "/var/log/apache2"`
 
-* El puerto que expone el contenedor es `80`.
+* El puerto que expone el contenedor es `3000`.

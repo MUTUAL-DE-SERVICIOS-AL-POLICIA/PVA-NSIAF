@@ -1,14 +1,16 @@
-FROM debian:8-slim
+FROM ruby:2.3.6
 MAINTAINER Daniel Jimenez Jerez <djimenez@agetic.gob.bo>
 
 ENV DOMINIO=nsiaf
-RUN echo "America/La_Paz" | tee /etc/timezone; dpkg-reconfigure -f noniteractive tzdata; apt-get update; apt-get install -y build-essential openssl libreadline6 libreadline6-dev git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison nodejs subversion imagemagick libmagickwand-dev libmysqlclient-dev git wget apache2 libcurl4-openssl-dev apache2-mpm-worker apache2-threaded-dev libapr1-dev libaprutil1-dev cron; apt-get remove --purge -y ruby1.8; wget -O /tmp/wkhtmltopdf.tar.xz -c https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz; tar -xf /tmp/wkhtmltopdf.tar.xz -C /opt/; wget -O /tmp/ruby-2.3.6.tar.gz -c https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.6.tar.gz; tar -xzf /tmp/ruby-2.3.6.tar.gz -C /tmp/; cd /tmp/ruby-2.3.6; ./configure --disable-install-rdoc; make; make install; gem install bundler --no-ri --no-rdoc; wget -qO- https://deb.nodesource.com/setup_6.x | bash; apt-get install -y nodejs; npm install -g bower@1.8.2; wget --no-check-certificate -O /tmp/nsiaf.tar.gz -c https://gitlab.geo.gob.bo/adsib/nsiaf/repository/archive.tar.gz?ref=agetic-mysql; mkdir -p /var/www/html/nsiaf; tar -xf /tmp/nsiaf.tar.gz -C /var/www/html/nsiaf --strip-components 1
-WORKDIR /var/www/html/nsiaf
-RUN bundle config --global silence_root_warning 1; bundle install --deployment --without development test; bundle exec bower install --allow-root; gem install passenger --version 5.2.0 --no-ri --no-rdoc; passenger-install-apache2-module --languages ruby; echo "#!/bin/bash\n. /usr/local/etc/env\nexec /usr/local/bin/ruby \"\$@\"" | tee /usr/local/ruby_wrapper; chmod +x /usr/local/ruby_wrapper; echo "<IfModule mod_passenger.c>\n\tPassengerRoot /usr/local/lib/ruby/gems/2.3.0/gems/passenger-5.2.0\n\tPassengerDefaultRuby /usr/local/ruby_wrapper\n</IfModule>" | tee /etc/apache2/mods-available/passenger.conf; echo "#!/bin/sh\nsource /usr/local/etc/env" | tee /etc/profile.d/env.sh; chmod +x /etc/profile.d/env.sh; echo "LoadModule passenger_module /usr/local/lib/ruby/gems/2.3.0/gems/passenger-5.2.0/buildout/apache2/mod_passenger.so" | tee /etc/apache2/mods-available/passenger.load; a2enmod passenger; a2enmod rewrite; echo "<VirtualHost *:80>\n\tServerName $DOMINIO\n\tDocumentRoot /var/www/html/nsiaf/public\n\tRailsEnv production\n\t<Directory /var/www/html/nsiaf/public>\n\t\tAllow from all\n\t\tOptions -MultiViews\n\t</Directory>\n</VirtualHost>" | tee /etc/apache2/sites-available/$DOMINIO.conf; a2dissite 000-default; a2ensite $DOMINIO; bundle exec whenever -s 'environment=production' --update-crontab; mkdir log; mkdir tmp; touch log/production.log
+ENV DEBIAN_FRONTEND noninteractive
+ENV RAILS_SERVE_STATIC_FILES enabled
+RUN echo "America/La_Paz" | tee /etc/timezone; dpkg-reconfigure -f noniteractive tzdata; apt-get update; apt-get install -y nodejs npm imagemagick libmagickwand-dev cron; wget -O /tmp/wkhtmltopdf.tar.xz -c https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz; tar -xf /tmp/wkhtmltopdf.tar.xz -C /opt/; ln -s /usr/bin/nodejs /usr/bin/node; npm install -g bower@1.8.2; wget --no-check-certificate -O /tmp/nsiaf.tar.gz -c https://gitlab.geo.gob.bo/adsib/nsiaf/repository/archive.tar.gz?ref=agetic-mysql; mkdir -p /opt/nsiaf; tar -xf /tmp/nsiaf.tar.gz -C /opt/nsiaf --strip-components 1; rm -rf /tmp/*
+WORKDIR /opt/nsiaf
+RUN bundle install --deployment --without development test; bundle exec bower install --allow-root; mkdir log; mkdir tmp; touch log/production.log; apt-get remove -y --purge nodejs npm curl wget g++ gcc make automake git openssh-client mercurial; apt-get autoremove --purge -y; apt-get autoclean
 COPY database.yml config/database.yml
 COPY secrets.yml config/secrets.yml
 COPY run.sh /opt/run.sh
 
 VOLUME ["/var/www/html/nsiaf", "/var/log/apache2"]
-EXPOSE 80
+EXPOSE 3000
 ENTRYPOINT /opt/run.sh

@@ -6,7 +6,6 @@ VARIABLE=secret_key_base
 if [ ! -f /opt/install.lock ]
 then
   echo "Generando archivo de configuracion ..."
-  echo -e "export MYSQL_DATABASE=$MYSQL_DATABASE\nexport MYSQL_HOST=$MYSQL_HOST\nexport MYSQL_USER=$MYSQL_USER\nexport MYSQL_PASSWORD=$MYSQL_PASSWORD\nexport MYSQL_PORT=$MYSQL_PORT" | tee /usr/local/etc/env
   A=$(sed -ne "s/$VARIABLE://p" $ARCHIVO | sed -e "s/ //g")
   if [[ "$A" == "" ]]
   then
@@ -24,6 +23,4 @@ then
   bundle exec whenever -s 'environment=production' --update-crontab
   touch /opt/install.lock
 fi
-service apache2 start
-echo "Servidor iniciado"
-tail -f log/production.log /var/log/apache2/error.log /var/log/apache2/access.log
+rails server -b 0.0.0.0 -e production
