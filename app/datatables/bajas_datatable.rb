@@ -45,7 +45,7 @@ private
   end
 
   def sort_column
-    columns = %w[bajas.codigo bajas.fecha bajas.documento]
+    columns = %w[bajas.numero bajas.fecha bajas.documento]
     columns[params[:iSortCol_0].to_i]
   end
 

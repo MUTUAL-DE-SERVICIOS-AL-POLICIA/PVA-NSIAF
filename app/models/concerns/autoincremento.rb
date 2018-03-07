@@ -79,6 +79,6 @@ module Autoincremento
 
   def autoincremento_baja
     nuevo_codigo = Baja.obtiene_siguiente_codigo(fecha)
-    self.codigo = nuevo_codigo unless tiene_codigo?
+    self.numero = nuevo_codigo unless tiene_codigo?
   end
 end
