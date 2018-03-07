@@ -417,7 +417,7 @@ es:
         account: "Cuenta"
         status: "Estado"
       baja:
-        codigo: "Código"
+        numero: "Código"
         documento: "Número Documento"
         fecha: "Fecha de Baja"
         observacion: "Observación"

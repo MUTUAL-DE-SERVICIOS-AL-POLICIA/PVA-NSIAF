@@ -23,10 +23,8 @@ private
       as << baja.codigo
       as << baja.documento
       as << (baja.fecha.present? ? I18n.l(baja.fecha) : nil)
-      #as << links_actions(baja, 'baja') + unsubscribe(baja)
-      as
+      as << links_actions(baja, 'baja')
     end
-
   end
 
   def array

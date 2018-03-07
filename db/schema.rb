@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180306161755) do
+ActiveRecord::Schema.define(version: 20180223144500) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 20180306161755) do
   add_index "auxiliaries", ["account_id"], name: "index_auxiliaries_on_account_id", using: :btree
 
   create_table "bajas", force: :cascade do |t|
-    t.integer  "codigo",          limit: 4
+    t.integer  "numero",          limit: 4
     t.string   "documento",       limit: 255
     t.date     "fecha"
     t.text     "observacion",     limit: 65535
@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 20180306161755) do
   create_table "entradas_salidas", id: false, force: :cascade do |t|
     t.integer  "id",             limit: 4,   default: 0,  null: false
     t.integer  "subarticle_id",  limit: 4
-    t.datetime "fecha"
+    t.date     "fecha"
     t.string   "factura",        limit: 255
     t.date     "nota_entrega"
     t.string   "nro_pedido",     limit: 11

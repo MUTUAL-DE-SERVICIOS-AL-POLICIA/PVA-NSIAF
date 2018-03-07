@@ -1,7 +1,7 @@
 class CreateBajas < ActiveRecord::Migration
   def change
     create_table :bajas do |t|
-      t.integer :codigo
+      t.integer :numero
       t.string :documento
       t.date :fecha
       t.text :observacion
