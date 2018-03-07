@@ -19,7 +19,7 @@ gem 'react-rails'
 gem 'coffee-rails', '~> 4.0.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer',  platforms: :ruby
+# gem 'therubyracer',  platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -42,8 +42,6 @@ gem 'paper_trail'
 
 gem 'autocomplete-off'
 gem 'wicked_pdf'
-
-gem 'non-stupid-digest-assets'
 
 gem 'rest-client'
 
@@ -73,9 +71,6 @@ end
 # Read Excel files
 gem 'roo'
 
-# Angular templates into the Asset Pipeline
-gem 'angular-rails-templates'
-
 gem 'active_model_serializers'
 
 gem 'momentjs-rails', '>= 2.9.0'
@@ -94,3 +89,5 @@ gem 'aasm'
 gem 'active_record_union'
 
 gem 'exception_notification'
+
+gem 'webpacker', '~> 3.2'

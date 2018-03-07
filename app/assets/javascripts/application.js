@@ -29,12 +29,6 @@
 //= require jquery.chained.remote
 //= require jquery-barcode
 //= require bootstrap-growl
-//= require angular/angular
-//= require angular-rails-templates
-//= require angular-resource/angular-resource
-//= require angular-route/angular-route
-//= require_tree ./almacenes
-//= require app_almacenes
 //= require format_number
 //= require current_date_spanish
 //= require function
