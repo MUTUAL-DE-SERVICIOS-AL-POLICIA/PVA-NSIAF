@@ -35,7 +35,7 @@ class Baja < ActiveRecord::Base
         type_search = "baja.#{search_column}"
         array = array.where("#{type_search} like :search", search: "%#{sSearch}%")
       else
-        array = array.where("bajas.fecha LIKE ? OR baja.numero LIKE ? OR baja.observacion LIKE ? OR baja.motivo LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
+        array = array.where("bajas.fecha LIKE ? OR bajas.numero LIKE ? OR bajas.observacion LIKE ? OR bajas.motivo LIKE ?", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%", "%#{sSearch}%")
       end
     end
     array
@@ -43,6 +43,23 @@ class Baja < ActiveRecord::Base
 
   def self.set_columns
     h = ApplicationController.helpers
-    [h.get_column(self, 'numero'), h.get_column(self, 'documento'), h.get_column(self, 'fecha'), h.get_column(self, 'observacion')]
+    [h.get_column(self, 'numero'), h.get_column(self, 'documento'), h.get_column(self, 'fecha')]
+  end
+
+  def self.to_csv
+    columns = %w(codigo motivo documento fecha_documento fecha)
+    h = ApplicationController.helpers
+    CSV.generate do |csv|
+      csv << columns.map { |c| Ingreso.human_attribute_name(c) }
+      all.each do |baja|
+        a = Array.new
+        a << baja.numero
+        a << baja.motivo
+        a << baja.documento
+        a << baja.fecha_documento
+        a << baja.fecha
+        csv << a
+      end
+    end
   end
 end

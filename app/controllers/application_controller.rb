@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   private
 
     def modelo_registros(name_model)
-      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries suppliers ingresos ubicaciones ufvs gestiones seguros).include?(name_model) ? 'id' : "#{name_model}.code"
+      column_order = name_model == 'proceedings' ? 'users.name' : %w(versions requests note_entries suppliers ingresos ubicaciones ufvs gestiones seguros bajas).include?(name_model) ? 'id' : "#{name_model}.code"
       column_order = 'nro_solicitud' if name_model == 'requests'
       sort_direction = params[:sSortDir_0] == "desc" ? "desc" : "asc"
       case controller_name

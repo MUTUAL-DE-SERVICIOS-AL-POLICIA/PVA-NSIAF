@@ -30,7 +30,7 @@
     - if action_name == 'delivered'
       = t("delivered.title")
     - else
-      #{t("#{control}.title.title")} #{' dados de Baja' if controller_name == 'bajas'}
+      #{t("#{control}.title.title")} #{' de Activos Fijos' if controller_name == 'bajas'}
       - if control == 'requests'
         = render 'dropdown', status: params[:status]
 .col-xs-2.button_new

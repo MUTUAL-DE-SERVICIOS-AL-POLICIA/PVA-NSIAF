@@ -17,10 +17,10 @@ class BajasDatatable
 private
 
   def data
-
     array.map do |baja|
       as = []
-      as << baja.codigo
+      as << baja.numero
+      as << baja.motivo
       as << baja.documento
       as << (baja.fecha.present? ? I18n.l(baja.fecha) : nil)
       as << links_actions(baja, 'baja')
@@ -45,18 +45,11 @@ private
   end
 
   def sort_column
-    columns = %w[bajas.numero bajas.fecha bajas.documento]
+    columns = %w[bajas.numero bajas.motivo bajas.documento bajas.fecha]
     columns[params[:iSortCol_0].to_i]
   end
 
   def sort_direction
     params[:sSortDir_0] == "desc" ? "desc" : "asc"
-  end
-
-  def unsubscribe(baja)
-    if @view.url_for == "#{Rails.application.config.action_controller.relative_url_root}/bajas" && baja.user.present? && baja.user.id == current_user.id
-      url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(baja.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(baja), title: 'Dar baja')
-    end
-    url || ''
   end
 end
