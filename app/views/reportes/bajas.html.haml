@@ -107,7 +107,7 @@
               %th.number= number_with_delimiter activos.valor_neto(fecha)
 
             - if @cuentas.length == indice + 1
-              - activos_bajas = Asset.bajas.where(bajas: {fecha: desde..fecha})
+              - activos_bajas = @cuentas.activos.bajas.where(bajas: {fecha: desde..fecha})
               %tr.info
                 %th{colspan: 3} CANTIDAD DE ACTIVOS: #{activos_bajas.length}
                 %th{colspan: 1} TOTALES:

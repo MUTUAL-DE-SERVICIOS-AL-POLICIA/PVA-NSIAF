@@ -18,6 +18,13 @@ class Account < ActiveRecord::Base
 
   has_paper_trail
 
+  # Lista de activos de una cuenta
+  def self.activos
+    Asset.joins(auxiliary: :account)
+         .where(accounts: {id: ids})
+         .uniq
+  end
+
   def self.set_columns
     h = ApplicationController.helpers
     [h.get_column(self, 'code'), h.get_column(self, 'name')]
