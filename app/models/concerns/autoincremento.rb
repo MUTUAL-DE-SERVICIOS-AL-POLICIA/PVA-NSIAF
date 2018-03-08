@@ -19,6 +19,8 @@ module Autoincremento
         autoincremento_request unless self.tiene_numero?
       when 'Asset'
         autoincremento_asset unless tiene_codigo?
+      when 'Baja'
+        autoincremento_baja unless tiene_codigo?
       end
     end
   end
@@ -72,8 +74,11 @@ module Autoincremento
 
   def autoincremento_asset
     nuevo_codigo = Asset.obtiene_siguiente_codigo
-    unless tiene_codigo?
-      self.code = nuevo_codigo
-    end
+    self.code = nuevo_codigo unless tiene_codigo?
+  end
+
+  def autoincremento_baja
+    nuevo_codigo = Baja.obtiene_siguiente_codigo(fecha)
+    self.numero = nuevo_codigo unless tiene_codigo?
   end
 end

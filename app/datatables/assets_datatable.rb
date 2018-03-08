@@ -32,7 +32,7 @@ private
       if asset.status == '0'
         as << (asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : '')
       end
-      as << links_actions(asset, 'asset') + unsubscribe(asset)
+      as << links_actions(asset, 'asset')
       as
     end
 

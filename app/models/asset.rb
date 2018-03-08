@@ -20,6 +20,7 @@ class Asset < ActiveRecord::Base
   belongs_to :auxiliary
   belongs_to :user, counter_cache: true
   belongs_to :ingreso
+  belongs_to :baja
   belongs_to :ubicacion
 
   has_many :asset_proceedings
