@@ -150,10 +150,9 @@ class ReportesController < ApplicationController
     @cuentas = Account
     @cuentas = @cuentas.where(id: cuentas) if cuentas.present?
     if @desde && @hasta
-      @cuentas = @cuentas.joins(auxiliaries: :assets)
-                        .where('assets.status' => '0')
-                        .where('assets.derecognised' => @desde..@hasta)
-                        .uniq
+      @cuentas = @cuentas.joins(auxiliaries: {assets: :baja})
+                         .where(bajas: {fecha: @desde..@hasta})
+                         .uniq
     else
       @cuentas = @cuentas.none
     end

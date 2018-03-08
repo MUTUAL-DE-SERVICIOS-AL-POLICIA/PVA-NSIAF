@@ -50,7 +50,7 @@ class Asset < ActiveRecord::Base
 
   # Activos dados de baja
   def self.bajas
-    where(status: '0')
+    joins(:baja)
   end
 
   def self.busqueda_basica(col, q, cuentas, desde, hasta)
@@ -159,10 +159,6 @@ class Asset < ActiveRecord::Base
     %w[assets.code assets.code_old description ingresos.factura_fecha assets.precio suppliers.name accounts.name users.name ubicaciones.abreviacion assets.code]
   end
 
-  def self.derecognised
-    where(status: 0)
-  end
-
   # Método para obtener el siguiente codigo de activo.
   def self.obtiene_siguiente_codigo
     Asset.all.empty? ? 1 : Asset.maximum(:code) + 1
@@ -199,7 +195,30 @@ class Asset < ActiveRecord::Base
 
   # Verificar si un activo está de baja
   def baja?
-    self.status == '0'
+    baja.present?
+  end
+
+  # Número de documento de respaldo
+  def baja_documento
+    baja.present? ? baja.documento : ''
+  end
+
+  # Fecha de emisión del documento de respaldo
+  def baja_fecha_documento
+    baja.present? ? baja.fecha_documento : nil
+  end
+
+  # Fecha de la baja
+  def baja_fecha
+    baja.present? ? baja.fecha : nil
+  end
+
+  def baja_motivo
+    baja.present? ? baja.motivo : ''
+  end
+
+  def baja_observacion
+    baja.present? ? baja.observacion : ''
   end
 
   def establecer_barcode
@@ -253,8 +272,8 @@ class Asset < ActiveRecord::Base
     false
   end
 
-  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status)
-    array = includes(:ingreso, :user, :ubicacion, ingreso: :supplier, auxiliary: :account).order("#{sort_column} #{sort_direction}").where(status: status).references(auxiliary: :account)
+  def self.array_model(sort_column, sort_direction, page, per_page, sSearch, search_column, status = nil)
+    array = includes(:ingreso, :user, :ubicacion, :baja, ingreso: :supplier, auxiliary: :account).order("#{sort_column} #{sort_direction}").references(auxiliary: :account)
     array = array.page(page).per_page(per_page) if per_page.present?
     if sSearch.present?
       if search_column.present?
@@ -277,17 +296,16 @@ class Asset < ActiveRecord::Base
     array
   end
 
-  def self.to_csv(is_low = false)
-    columns = %w(code description user ubicacion)
+  def self.to_csv
+    columns = %w(code description user ubicacion fecha_baja)
     columns_title = columns
-    columns_title += %w(derecognised) if is_low
     CSV.generate do |csv|
       csv << columns_title.map { |c| self.human_attribute_name(c) }
       all.each do |asset|
         a = asset.attributes.values_at(*columns).compact
         a.push(asset.user_name)
         a.push(asset.ubicacion_detalle)
-        a.push(I18n.l(asset.derecognised, format: :version)) if asset.derecognised.present?
+        a.push(asset.baja_fecha.present? ? I18n.l(asset.baja_fecha.to_date) : '')
         csv << a
       end
     end
@@ -295,10 +313,6 @@ class Asset < ActiveRecord::Base
 
   def self.total_historico
     all.sum(:precio)
-  end
-
-  def derecognised_date
-    update_attribute(:derecognised, Time.now)
   end
 
   def get_state
@@ -581,14 +595,10 @@ class Asset < ActiveRecord::Base
     # Determinar si el activo fue dado de baja y tomar su fecha de baja
     def determinar_fecha_de_baja(fecha)
       _fecha = fecha
-      if self.baja? && self.derecognised.to_date <= fecha.to_date
-        _fecha = self.derecognised.to_date
+      if self.baja? && self.baja_fecha.present? && self.baja_fecha.to_date <= fecha.to_date
+        _fecha = self.baja_fecha.to_date
       end
       _fecha
     end
 end
-
-
-
-
 

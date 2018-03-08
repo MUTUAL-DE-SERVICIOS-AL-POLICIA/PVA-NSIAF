@@ -68,7 +68,7 @@
               %th.number{title: 'Valor Neto'} Valor Neto
           %tbody
             - activos.each_with_index do |activo, index|
-              - fecha_baja = activo.derecognised.to_date
+              - fecha_baja = activo.baja_fecha.to_date
               %tr
                 %td.text-right= index + 1
                 %td.text-center= activo.code
@@ -107,7 +107,7 @@
               %th.number= number_with_delimiter activos.valor_neto(fecha)
 
             - if @cuentas.length == indice + 1
-              - activos_bajas = Asset.bajas.where(derecognised: desde..fecha)
+              - activos_bajas = Asset.bajas.where(bajas: {fecha: desde..fecha})
               %tr.info
                 %th{colspan: 3} CANTIDAD DE ACTIVOS: #{activos_bajas.length}
                 %th{colspan: 1} TOTALES:

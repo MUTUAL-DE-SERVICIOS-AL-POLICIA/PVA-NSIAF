@@ -133,7 +133,6 @@ Rails.application.routes.draw do
 
   resources :assets, except: [:destroy] do
     member do
-      post :change_status
       get :historical
     end
     collection do

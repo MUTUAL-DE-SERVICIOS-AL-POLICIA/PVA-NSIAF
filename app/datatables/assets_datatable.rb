@@ -1,5 +1,5 @@
 class AssetsDatatable
-  delegate :params, :link_to, :link_to_if, :content_tag, :img_status, :data_link, :links_actions, :current_user, to: :@view
+  delegate :params, :link_to, :link_to_if, :content_tag, :data_link, :links_actions, :current_user, to: :@view
 
   def initialize(view)
     @view = view
@@ -19,7 +19,7 @@ private
   def data
     array.map do |asset|
       as = []
-      as << asset.code
+      as << [asset.code, asset.baja? ? content_tag(:span, 'BAJA', class: 'label label-danger') : ''].join(' ')
       as << asset.code_old
       as << asset.description
       as << (asset.ingreso_fecha.present? ? I18n.l(asset.ingreso_fecha) : nil)
@@ -29,9 +29,6 @@ private
       as << link_to_if(asset.user, asset.user_name, asset.user, title: asset.user_code)
       as << content_tag(:span, asset.ubicacion_abreviacion, title: asset.ubicacion_detalle)
       as << icono_seguro(asset.seguro_vigente?)
-      if asset.status == '0'
-        as << (asset.derecognised.present? ? I18n.l(asset.derecognised, format: :version) : '')
-      end
       as << links_actions(asset, 'asset')
       as
     end
@@ -52,8 +49,7 @@ private
   end
 
   def fetch_array
-    status = @view.url_for == "#{Rails.application.config.action_controller.relative_url_root}/assets" ? '1' : '0'
-    Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column], status)
+    Asset.array_model(sort_column, sort_direction, page, per_page, params[:sSearch], params[:search_column])
   end
 
   def page
@@ -70,12 +66,5 @@ private
 
   def sort_direction
     params[:sSortDir_0] == "desc" ? "desc" : "asc"
-  end
-
-  def unsubscribe(asset)
-    if @view.url_for == "#{Rails.application.config.action_controller.relative_url_root}/assets" && asset.user.present? && asset.user.id == current_user.id
-      url = link_to(content_tag(:span, '', class: "glyphicon glyphicon-#{img_status(asset.status)}"), '#', class: 'btn btn-warning btn-xs', data: data_link(asset), title: 'Dar baja')
-    end
-    url || ''
   end
 end

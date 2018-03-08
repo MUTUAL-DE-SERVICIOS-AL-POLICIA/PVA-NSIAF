@@ -1,6 +1,6 @@
 class AssetsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_asset, only: [:show, :edit, :update, :change_status, :historical]
+  before_action :set_asset, only: [:show, :edit, :update, :historical]
 
   # GET /assets
   # GET /assets.json
@@ -53,24 +53,15 @@ class AssetsController < ApplicationController
   # PATCH/PUT /assets/1
   # PATCH/PUT /assets/1.json
   def update
-    url = @asset.status == '0' ? derecognised_index_path : assets_url
     respond_to do |format|
       if @asset.update(asset_params)
-        format.html { redirect_to url, notice: t('general.updated', model: Asset.model_name.human) }
+        format.html { redirect_to assets_url, notice: t('general.updated', model: Asset.model_name.human) }
         format.json { head :no_content }
       else
         format.html { render action: 'form' }
         format.json { render json: @asset.errors, status: :unprocessable_entity }
       end
     end
-  end
-
-  def change_status
-    @asset.derecognised = Time.now
-    @asset.decline_user_id = current_user.id
-    @asset.update(asset_params)
-    @asset.change_status
-    render nothing: true
   end
 
   def users
@@ -139,7 +130,7 @@ class AssetsController < ApplicationController
         params.require(:asset).permit(:code, :code_old, :detalle, :medidas,
                                       :material, :color, :marca, :modelo,
                                       :serie, :precio, :auxiliary_id, :state,
-                                      :derecognised, :description_decline,
+                                      :description_decline,
                                       :reason_decline, :decline_user_id,
                                       :seguro, :ubicacion_id)
       end

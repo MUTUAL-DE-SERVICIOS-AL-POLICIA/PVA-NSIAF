@@ -48,16 +48,26 @@
 %table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
   %thead
     %tr
-      %th.col-md-6.col-sm-7.col-xs-8 Datos Baja
+      %th.col-md-6.col-sm-7.col-xs-8 Detalle de la baja
   %tbody
     %tr
       %td
         %table.table-condensed
           %tbody
+            - if @baja.fecha.present?
+              %tr
+                %th.text-right Fecha de Baja
+                %td= l(@baja.fecha.to_date) if @baja.fecha
+
             - if @baja.motivo.present?
               %tr
                 %th.text-right Motivo
                 %td= @baja.motivo
+
+            - if @baja.observacion.present?
+              %tr
+                %th.text-right Observación
+                %td= @baja.observacion
 
             - if @baja.documento.present?
               %tr
@@ -67,16 +77,6 @@
             - if @baja.fecha_documento.present?
               %tr
                 %th.text-right Fecha de Documento de Respaldo
-                %td= @baja.fecha_documento
-
-            - if @baja.fecha.present?
-              %tr
-                %th.text-right Fecha de Baja
-                %td= @baja.fecha
-
-            - if @baja.observacion.present?
-              %tr
-                %th.text-right Observación
-                %td= @baja.observacion
+                %td= l(@baja.fecha_documento.to_date) if @baja.fecha_documento
 
 = fecha_impresion if is_pdf?

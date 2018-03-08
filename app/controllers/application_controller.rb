@@ -28,8 +28,7 @@ class ApplicationController < ActionController::Base
       format.json { render json: datatable.new(view_context) }
       format.csv do
         @array = modelo_registros(name_model)
-        array_csv = controller_name == 'derecognised' ? @array.to_csv(true) : @array.to_csv
-        send_data array_csv, filename: "#{filename}.csv"
+        send_data @array.to_csv, filename: "#{filename}.csv"
       end
       format.pdf do
         @array = modelo_registros(name_model)
@@ -46,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def info_for_paper_trail
-    unless %w(dbf sessions proceedings requests).include?(request[:controller]) || %w(change_status update_password change_status).include?(request[:action])
+    unless %w(dbf sessions proceedings requests).include?(request[:controller]) || %w(update_password change_status).include?(request[:action])
       { item_spanish: I18n.t(controller_name.to_s.downcase.singularize, scope: 'activerecord.models'), event: I18n.t(action_name, scope: 'versions') }
     end
   end
@@ -58,8 +57,7 @@ class ApplicationController < ActionController::Base
       column_order = 'nro_solicitud' if name_model == 'requests'
       sort_direction = params[:sSortDir_0] == "desc" ? "desc" : "asc"
       case controller_name
-      when 'derecognised' then current = '0'
-      when 'assets' then 
+      when 'assets' then
         current = '1'
         column_order = Asset.columnas[params[:iSortCol_0].to_i]
       when 'requests' then current = params[:status]
