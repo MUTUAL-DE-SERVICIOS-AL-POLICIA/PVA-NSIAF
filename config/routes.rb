@@ -134,6 +134,7 @@ Rails.application.routes.draw do
   resources :assets, except: [:destroy] do
     member do
       get :historical
+      get :depreciacion
     end
     collection do
       get :autocomplete

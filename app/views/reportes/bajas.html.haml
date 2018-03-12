@@ -52,6 +52,7 @@
               %th.text-center{title: 'Código'} Código
               %th{title: 'Descripción'} Descripción
               %th.text-center{title: 'Fecha Histórico'} Fecha Hist
+              %th.text-center{title: 'Costo Histórico'} Costo Hist
               %th.number Costo Actual Inicial
               %th.number{title: 'Depreciación Acumulada Inicial'} Depreciación Acum. Inicial
               %th.number Valor Neto Inicial
@@ -74,6 +75,7 @@
                 %td.text-center= activo.code
                 %td= activo.description
                 %td.text-center= l activo.ingreso_fecha if activo.ingreso_fecha
+                %td.text-center= number_with_delimiter activo.precio
                 %td.number= number_with_delimiter activo.costo_actualizado_inicial(fecha_baja)
                 %td.number= number_with_delimiter activo.depreciacion_acumulada_inicial(fecha_baja)
                 %td.number= number_with_delimiter activo.valor_neto_inicial(fecha_baja)
@@ -91,6 +93,7 @@
             %tr
               %th{colspan: 3} CANTIDAD: #{activos.length}
               %th{colspan: 1} TOTAL GRUPO:
+              %th.number= number_with_delimiter activos.total_historico
               %th.number= number_with_delimiter activos.costo_actualizado_inicial(fecha)
               %th.number= number_with_delimiter activos.depreciacion_acumulada_inicial(fecha)
               %th.number= number_with_delimiter activos.valor_neto_inicial(fecha)
@@ -111,6 +114,7 @@
               %tr.info
                 %th{colspan: 3} CANTIDAD DE ACTIVOS: #{activos_bajas.length}
                 %th{colspan: 1} TOTALES:
+                %th.number= number_with_delimiter activos_bajas.total_historico
                 %th.number= number_with_delimiter activos_bajas.costo_actualizado_inicial(fecha)
                 %th.number= number_with_delimiter activos_bajas.depreciacion_acumulada_inicial(fecha)
                 %th.number= number_with_delimiter activos_bajas.valor_neto_inicial(fecha)

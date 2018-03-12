@@ -1,6 +1,6 @@
 class AssetsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_asset, only: [:show, :edit, :update, :historical]
+  before_action :set_asset, only: [:show, :edit, :update, :historical, :depreciacion]
 
   # GET /assets
   # GET /assets.json
@@ -110,6 +110,9 @@ class AssetsController < ApplicationController
     respond_to do |format|
       format.json { render json: view_context.assets_json(assets) }
     end
+  end
+
+  def depreciacion
   end
 
   private
