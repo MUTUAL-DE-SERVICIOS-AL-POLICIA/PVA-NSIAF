@@ -143,7 +143,7 @@ class ReportesController < ApplicationController
     end
   end
 
-  # Reporte de bajas de activos fijos
+  # Reporte de bajas de activos fijos - reporte 9 vSIAF
   def bajas
     @desde, @hasta = get_fechas(params)
     cuentas = params[:cuentas]

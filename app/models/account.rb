@@ -64,8 +64,11 @@ class Account < ActiveRecord::Base
   ##
   # BEGIN datos para el reporte resumen de activos fijos ordenado por grupo contable
   def auxiliares_activos(desde = Date.today, hasta = Date.today)
-    activos = Asset.joins(:ingreso).where(auxiliary_id: auxiliaries.ids)
-    activos.where('ingresos.factura_fecha' => desde..hasta)
+    activos_bajas_ids = Asset.bajas.where(bajas: {fecha: desde..hasta}).ids
+    Asset.joins(:ingreso)
+         .where(auxiliary_id: auxiliaries.ids)
+         .where(ingresos: {factura_fecha: desde..hasta})
+         .where.not(id: activos_bajas_ids)
   end
 
   # Lista de activos dados de baja en la cuenta en un rango de fechas
@@ -73,11 +76,6 @@ class Account < ActiveRecord::Base
     Asset.joins(:baja)
          .where(auxiliary_id: auxiliaries.ids)
          .where(bajas: {fecha: desde..hasta})
-  end
-
-  def auxiliares_activos_depreciacion(desde = Date.today, hasta = Date.today)
-    activos = Asset.joins(:ingreso).where(auxiliary_id: auxiliaries.ids)
-    activos.where('ingresos.factura_fecha' => desde..hasta)
   end
 
   def cantidad_activos(desde = Date.today, hasta = Date.today)
