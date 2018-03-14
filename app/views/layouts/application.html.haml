@@ -9,7 +9,6 @@
 
     %title #{ yield_or_default(:title, title_system) }
     = stylesheet_link_tag "application", media: "all"
-    = stylesheet_pack_tag "application"
     = csrf_meta_tags
   %body
     .navbar{role: "navigation", class: color_menu}

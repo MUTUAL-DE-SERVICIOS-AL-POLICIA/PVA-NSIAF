@@ -38,9 +38,9 @@ private
   # Método que obtiene el ícono que corresponde a los activos con o sin seguro.
   def icono_seguro(seguro_vigente)
     if seguro_vigente
-      content_tag(:span, content_tag(:i, '', class: 'fa fa-lock', 'aria-hidden' => 'true'), class: 'pull-right badge badge-success', title: 'Asegurado')
+      content_tag(:span, content_tag(:i, '', class: 'fas fa-lock', 'aria-hidden' => 'true'), class: 'pull-right badge badge-success', title: 'Asegurado')
     else
-      content_tag(:span, content_tag(:i, '', class: 'fa fa-unlock', 'aria-hidden' => 'true'), class: 'pull-right badge badge-default', title: 'Sin Asegurar')
+      content_tag(:span, content_tag(:i, '', class: 'fas fa-unlock', 'aria-hidden' => 'true'), class: 'pull-right badge badge-default', title: 'Sin Asegurar')
     end
   end
 

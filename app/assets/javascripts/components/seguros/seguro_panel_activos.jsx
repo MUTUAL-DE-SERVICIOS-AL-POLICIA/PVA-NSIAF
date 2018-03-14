@@ -26,7 +26,7 @@ class SeguroPanelActivos extends React.Component {
       boton_asegurar =
         <div>
           <a className='btn btn-success pull-right' href='#' title='Asegurado'>
-            <i aria-hidden='true' className='fa fa-lock fa-2x'></i>
+            <i aria-hidden='true' className='fas fa-lock fa-2x'></i>
           </a>
           <div className='clearfix visible-xs-block'></div>
           <br />
@@ -69,7 +69,7 @@ class SeguroPanelActivos extends React.Component {
     else {
       boton_asegurar =
         <a className="btn btn-warning pull-right" onClick={this.asegurar} title='Por Asegurar'>
-          <i aria-hidden="true" className="fa fa-unlock-alt fa-2x"></i>
+          <i aria-hidden="true" className="fas fa-unlock-alt fa-2x"></i>
         </a>;
     }
     return(

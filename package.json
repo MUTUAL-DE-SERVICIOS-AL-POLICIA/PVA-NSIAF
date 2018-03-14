@@ -1,7 +1,8 @@
 {
   "dependencies": {
-    "@rails/webpacker": "^3.3.0",
-    "font-awesome": "^4.7.0"
+    "@fortawesome/fontawesome": "^1.1.4",
+    "@fortawesome/fontawesome-free-solid": "^5.0.8",
+    "@rails/webpacker": "^3.3.1"
   },
   "devDependencies": {
     "webpack-cli": "^2.0.10",

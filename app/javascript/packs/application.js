@@ -7,4 +7,11 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import 'font-awesome/scss/font-awesome.scss';
+import fontawesome from '@fortawesome/fontawesome';
+import faLock from '@fortawesome/fontawesome-free-solid/faLock';
+import faUnlock from '@fortawesome/fontawesome-free-solid/faUnlock';
+import faUnlockAlt from '@fortawesome/fontawesome-free-solid/faUnlockAlt';
+
+fontawesome.library.add(faLock);
+fontawesome.library.add(faUnlock);
+fontawesome.library.add(faUnlockAlt);
