@@ -11,7 +11,9 @@ import fontawesome from '@fortawesome/fontawesome';
 import faLock from '@fortawesome/fontawesome-free-solid/faLock';
 import faUnlock from '@fortawesome/fontawesome-free-solid/faUnlock';
 import faUnlockAlt from '@fortawesome/fontawesome-free-solid/faUnlockAlt';
+import faRetweet from '@fortawesome/fontawesome-free-solid/faRetweet';
 
 fontawesome.library.add(faLock);
 fontawesome.library.add(faUnlock);
 fontawesome.library.add(faUnlockAlt);
+fontawesome.library.add(faRetweet);

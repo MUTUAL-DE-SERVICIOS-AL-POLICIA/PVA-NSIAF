@@ -101,6 +101,10 @@
               %tr
                 %th.text-right Observación
                 %td= @note_entry.observacion
+            - if @note_entry.reingreso?
+              %tr
+                %th.text-right Tipo:
+                %td REINGRESO
       %td
 
 = fecha_impresion if is_pdf?

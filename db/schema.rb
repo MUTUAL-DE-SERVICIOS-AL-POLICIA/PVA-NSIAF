@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180308151738) do
+ActiveRecord::Schema.define(version: 20180326134822) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "code",       limit: 4
@@ -240,6 +240,7 @@ ActiveRecord::Schema.define(version: 20180308151738) do
     t.string   "incremento_alfabetico", limit: 255
     t.string   "observacion",           limit: 255
     t.date     "c31_fecha"
+    t.boolean  "reingreso",                                                  default: false, null: false
   end
 
   add_index "note_entries", ["supplier_id"], name: "index_note_entries_on_supplier_id", using: :btree
