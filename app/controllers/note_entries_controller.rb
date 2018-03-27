@@ -95,7 +95,7 @@ class NoteEntriesController < ApplicationController
                                        :invoice_number, :invoice_autorizacion,
                                        :c31, :invoice_date, :supplier_id,
                                        :subtotal, :total, :descuento,
-                                       :observacion, :c31_fecha,
+                                       :observacion, :c31_fecha, :reingreso,
                                        entry_subarticles_attributes: [
                                          :id, :subarticle_id, :amount,
                                          :unit_cost, :total_cost

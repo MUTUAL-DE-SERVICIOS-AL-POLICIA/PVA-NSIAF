@@ -23,7 +23,7 @@ private
         r.obtiene_nro_nota_ingreso,
         r.supplier_name,
         r.user_name,
-        r.total,
+        "#{r.total} #{content_tag(:span, content_tag(:i, '', class: 'fas fa-retweet', 'aria-hidden' => 'true'), class: 'badge badge-warning', title: 'REINGRESO') if r.reingreso?}",
         r.note_date(r.delivery_note_date),
         [links_actions(r, 'asset')].join(' ')
       ]
