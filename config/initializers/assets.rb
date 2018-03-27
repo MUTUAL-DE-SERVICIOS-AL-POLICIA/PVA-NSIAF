@@ -10,6 +10,3 @@ Rails.application.config.assets.paths << Rails.root.join("vendor", "assets")
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 Rails.application.config.assets.precompile += %w( login.css pdf.css pdf.js )
 
-# Extraido del tutorial para instalar fontawesome con bower para Rails
-# https://github.com/platanus/guides/blob/master/setup/fontawesome-bower-rails.md
-Rails.application.config.assets.precompile << Proc.new { |path| path =~ /fontawesome\/fonts/ and File.extname(path).in?(['.otf', '.eot', '.svg', '.ttf', '.woff']) }
