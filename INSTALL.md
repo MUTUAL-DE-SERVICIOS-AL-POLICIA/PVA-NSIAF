@@ -108,10 +108,10 @@ Actualización del paquete npm:
 sudo npm install -g npm
 ```
 
-Instalación del paquete bower:
+Instalación del paquete `yarn`:
 
 ```console
-sudo npm install -g bower
+sudo npm install -g yarn
 ```
 
 ## Usuario de Sistema Operativo
@@ -257,7 +257,7 @@ donde:
 Descargar las dependencias para frontend:
 
 ```console
-sudo -u nsiaf -H bundle exec bower install
+sudo -u nsiaf -H yarn install
 ```
 
 Compilamos los archivos CSS y JS:

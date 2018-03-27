@@ -18,7 +18,7 @@ sudo -u nsiaf -H bundle install --deployment --without development test
 Descargar las dependencias para frontend:
 
 ```console
-sudo -u nsiaf -H bundle exec bower install
+sudo -u nsiaf -H yarn install
 ```
 
 Ejecución de migraciones:
