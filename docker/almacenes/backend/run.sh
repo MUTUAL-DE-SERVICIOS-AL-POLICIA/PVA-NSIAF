@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ARCHIVO=config/secrets.yml
 VARIABLE=secret_key_base
@@ -16,10 +16,11 @@ then
     export CONVERT_API_URL=https://intranet.adsib.gob.bo/conversion-formatos
   fi
   chmod -R 777 ./config ./log ./tmp
-  bundle exec rake assets:clobber RAILS_ENV=production
-  bundle exec rake assets:precompile RAILS_ENV=production
-  bundle exec rake db:migrate RAILS_ENV=production
-  bundle exec rake db:seed RAILS_ENV=production
+  bundle exec rake assets:clobber
+  bundle exec rake assets:precompile
+  bundle exec rake db:migrate
+  bundle exec rake db:seed
+  bundle exec rake db:setup
   bundle exec whenever -s 'environment=production' --update-crontab
   touch /opt/install.lock
 fi
