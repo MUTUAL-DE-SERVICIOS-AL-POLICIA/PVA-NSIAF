@@ -126,7 +126,7 @@ docker volume inspect almacenes_nsiaf-db
 ss -tlnp
 ```
 
-`Para abrir el puerto 3306 de MySQL, se debe modificar el archivo [docker-compose.yml](./docker-compose.yml) y descomentar los ports del contenedor db`
+`Para abrir el puerto 3306 de MySQL, se debe modificar el archivo` [docker-compose.yml](./docker-compose.yml) `y descomentar los ports del contenedor db`
 
 * Para iniciar los contenedores por separado se pueden utilizar los archivos Dockerfile de cada subsistema en este orden:
 

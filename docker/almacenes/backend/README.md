@@ -1,6 +1,6 @@
 # Backend del sistema NSIAF
 
-`Antes de iniciar un contenedor de esta imagen debe estar funcionando primero el [contenedor de la base de datos](../db/README.md)`
+`Antes de iniciar un contenedor de esta imagen debe estar funcionando primero el` [contenedor de la base de datos](../db/README.md)
 
 * Crear la imagen de nsiaf
 
