@@ -93,6 +93,14 @@ Opción para utilizar el servicio SMTP mediante TLS. Por ejemplo: `true`
 
 ## Iniciar el sistema
 
+* Armar la imagen del backend de NSIAF
+
+```sh
+docker-compose build
+```
+
+* Levantar el sistema
+
 ```sh
 docker-compose up -d
 ```
@@ -102,18 +110,22 @@ docker-compose up -d
 * Una vez el sistema se encuentre iniciado y levantado, se puden inspeccionar los logs mediante:
 
 ```sh
-docker-compose logs
+docker-compose logs --follow
 ```
-
-*De otra forma si se desean observar los cambios en tiempo real se puede utilizar `watch --color -d "docker-compose logs"`*
 
 * El sistema crea un volumen de docker que se puede inspeccionar mediante el comando:
 
 ```sh
-docker volume inspect almacenes_nsiaf-bd
+docker volume inspect almacenes_nsiaf-db
 ```
 
 * El puerto que expone el sistema es el `3000`, que por defecto se redirecciona al puerto `8888` del host de Docker.
+
+```sh
+ss -tlnp
+```
+
+`Para abrir el puerto 3306 de MySQL, se debe modificar el archivo [docker-compose.yml](./docker-compose.yml) y descomentar los ports del contenedor db`
 
 * Para iniciar los contenedores por separado se pueden utilizar los archivos Dockerfile de cada subsistema en este orden:
 
