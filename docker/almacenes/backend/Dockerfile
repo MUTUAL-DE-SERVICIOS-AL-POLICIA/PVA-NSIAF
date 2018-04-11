@@ -5,7 +5,6 @@ LABEL version="1.0.0"
 LABEL description="Backend para el sistema de activos y almacenes NSIAF"
 
 ENV DOMINIO nsiaf
-ENV DEBIAN_FRONTEND noninteractive
 ENV RAILS_SERVE_STATIC_FILES enabled
 ENV RAILS_ENV production
 

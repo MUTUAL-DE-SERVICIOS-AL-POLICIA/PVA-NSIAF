@@ -2,7 +2,7 @@
 
 ## Requisitos
 
-Para levantar este sistema se necesita tener instalado [Docker](https://docs.docker.com/install/linux/docker-ce/debian/) y [Docker-Compose](https://docs.docker.com/compose/install/). Las imagenes base del sistema son [ruby:2.3.6](https://hub.docker.com/_/ruby/) y [mysql:5.5](https://hub.docker.com/_/mysql/).
+Para levantar este sistema se necesita tener instalado [Docker](https://docs.docker.com/install/linux/docker-ce/debian/) y [Docker-Compose](https://docs.docker.com/compose/install/). Las imagenes base del sistema son [ruby:2.3.6+Node.JS](https://hub.docker.com/r/scardon/ruby-node-alpine/) y [mysql:5.5](https://hub.docker.com/_/mysql/).
 
 ## Clonar los archivos base
 
@@ -103,6 +103,7 @@ docker-compose build
 
 ```sh
 docker-compose up -d
+docker image prune -a
 ```
 
 *Si se desean ver los logs a medida que la imagen es creada, se debe suprimir la opción -d*
