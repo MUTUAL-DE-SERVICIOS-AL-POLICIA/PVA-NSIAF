@@ -1,6 +1,6 @@
 FROM ruby:2.3.6
 
-LABEL maintainer="djimenez@agetic.gob.bo"
+LABEL maintainer="uiid-investigacion@agetic.gob.bo"
 LABEL version="1.0.0"
 LABEL description="Backend para el sistema de activos y almacenes NSIAF"
 
