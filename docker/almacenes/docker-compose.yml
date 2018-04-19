@@ -15,8 +15,6 @@ services:
   db:
     image: mysql:5.5
     container_name: nsiaf-db
-    # ports:
-    #   - "3306:3306"
     volumes:
       - nsiaf-db:/var/lib/mysql
     env_file: .env
