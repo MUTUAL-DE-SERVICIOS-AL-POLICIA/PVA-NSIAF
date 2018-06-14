@@ -8,6 +8,11 @@ Para levantar este sistema se necesita tener instalado [Docker](https://docs.doc
 
 ```sh
 git -c http.sslVerify=false clone --branch=agetic-mysql https://gitlab.geo.gob.bo/adsib/nsiaf.git
+```
+
+## Entrar a la carpeta `docker/almacenes` del repositorio recien clonado
+
+```sh
 cd docker/almacenes
 ```
 
@@ -92,7 +97,7 @@ Opción para utilizar el servicio SMTP mediante TLS. Por ejemplo: `true`
 docker-compose up -d
 ```
 
-Si se desean ver los logs a medida que la imagen es creada, se debe suprimir la opción -d
+Si se desean ver los logs a medida que la imagen es creada, se debe suprimir la opción `-d`
 
 Una vez el sistema se encuentre iniciado y levantado, se puden inspeccionar los logs mediante:
 
@@ -100,13 +105,13 @@ Una vez el sistema se encuentre iniciado y levantado, se puden inspeccionar los 
 docker-compose logs --follow
 ```
 
-* El sistema crea un volumen de docker que se puede inspeccionar mediante el comando:
+El sistema crea un volumen de docker que se puede inspeccionar mediante el comando:
 
 ```sh
 docker volume inspect almacenes_nsiaf-db
 ```
 
-* El puerto que expone el sistema es el `3000`, que por defecto se redirecciona al puerto `8888` del host de Docker.
+El puerto que expone el sistema es el `3000`, que por defecto se redirecciona al puerto `8888` del host de Docker.
 
 ```sh
 ss -tlnp
@@ -114,7 +119,7 @@ ss -tlnp
 
 Para abrir el puerto 3306 de MySQL, se debe modificar el archivo [docker-compose.yml](./docker-compose.yml) y aumentar la opcion `ports`  del contenedor `nsiaf-db`.
 
-* Para iniciar los contenedores por separado se pueden utilizar los archivos Dockerfile de cada subsistema en este orden:
+Para iniciar los contenedores por separado se pueden utilizar los archivos Dockerfile de cada subsistema en este orden:
 
 - [Base de datos](./db/README.md)
 - [Backend](./backend/README.md)
