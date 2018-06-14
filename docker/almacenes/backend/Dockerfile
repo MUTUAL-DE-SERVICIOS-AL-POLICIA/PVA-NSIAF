@@ -10,6 +10,8 @@ ENV DOMINIO=nsiaf \
 
 WORKDIR /opt/nsiaf
 
+COPY . .
+
 RUN echo "America/La_Paz" > /etc/timezone && \
     dpkg-reconfigure -f noniteractive tzdata && \
     curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
@@ -17,8 +19,6 @@ RUN echo "America/La_Paz" > /etc/timezone && \
     wget -O /tmp/wkhtmltopdf.tar.xz -c https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
     tar -xf /tmp/wkhtmltopdf.tar.xz -C /opt/ && \
     npm install -g yarn@1.5.1 && \
-    wget --no-check-certificate -O /tmp/nsiaf.tar.gz -c https://gitlab.geo.gob.bo/adsib/nsiaf/repository/archive.tar.gz?ref=agetic-mysql && \
-    tar -xf /tmp/nsiaf.tar.gz -C /opt/nsiaf --strip-components 1 && \
     bundle install --deployment --without development test && \
     yarn install && \
     mkdir log && \
@@ -29,9 +29,9 @@ RUN echo "America/La_Paz" > /etc/timezone && \
     apt-get autoclean --dry-run && \
     rm -rf /tmp/*
 
-COPY database.yml secrets.yml config/
+COPY docker/almacenes/backend/database.yml docker/almacenes/backend/secrets.yml config/
 
-COPY run.sh /opt/run.sh
+COPY docker/almacenes/backend/run.sh /opt/run.sh
 
 VOLUME ["/opt/nsiaf/log"]
 
