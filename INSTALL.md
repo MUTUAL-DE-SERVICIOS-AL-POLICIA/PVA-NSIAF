@@ -277,7 +277,7 @@ sudo -u nsiaf -H bundle exec rake db:seed RAILS_ENV=production
 El último comando establece los datos del usuario `super administrador`
 
 * Usuario: `admin`
-* Contraseña: `demo123`
+* Contraseña: `admin`
 
 ## Apache
 
