@@ -1,6 +1,6 @@
 version: '3'
 services:
-  web:
+  nsiaf-backend:
     build:
       context: ../../
       dockerfile: docker/almacenes/backend/Dockerfile
@@ -12,7 +12,7 @@ services:
       - db
     env_file: .env
     restart: always
-  db:
+  nsiaf-db:
     image: mysql:5.5
     container_name: nsiaf-db
     volumes:
