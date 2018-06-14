@@ -9,7 +9,7 @@ services:
     ports:
       - "8888:3000"
     depends_on:
-      - db
+      - nsiaf-db
     env_file: .env
     restart: always
   nsiaf-db:
