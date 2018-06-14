@@ -7,13 +7,7 @@ Para levantar este sistema se necesita tener instalado [Docker](https://docs.doc
 ## Clonar los archivos base
 
 ```sh
-git config --global http.sslVerify "false"
-git init nsiaf
-cd nsiaf
-git remote add origin https://gitlab.geo.gob.bo/adsib/nsiaf.git
-git config core.sparsecheckout true
-echo "docker/*" | tee -a .git/info/sparse-checkout
-git pull --depth=1 origin agetic-mysql
+git -c http.sslVerify=false clone --branch=agetic-mysql https://gitlab.geo.gob.bo/adsib/nsiaf.git
 cd docker/almacenes
 ```
 
@@ -23,7 +17,7 @@ cd docker/almacenes
 cp .env.ejemplo .env
 ```
 
-`Editar el archivo de acuerdo a la siguiente tabla de variables disponibles`
+Editar el archivo de acuerdo a la siguiente tabla de variables disponibles
 
 ## Variables de entorno
 
@@ -93,22 +87,14 @@ Opción para utilizar el servicio SMTP mediante TLS. Por ejemplo: `true`
 
 ## Iniciar el sistema
 
-* Armar la imagen del backend de NSIAF
-
-```sh
-docker-compose build
-```
-
-* Levantar el sistema
 
 ```sh
 docker-compose up -d
-docker image prune -a
 ```
 
-*Si se desean ver los logs a medida que la imagen es creada, se debe suprimir la opción -d*
+Si se desean ver los logs a medida que la imagen es creada, se debe suprimir la opción -d
 
-* Una vez el sistema se encuentre iniciado y levantado, se puden inspeccionar los logs mediante:
+Una vez el sistema se encuentre iniciado y levantado, se puden inspeccionar los logs mediante:
 
 ```sh
 docker-compose logs --follow
@@ -126,7 +112,7 @@ docker volume inspect almacenes_nsiaf-db
 ss -tlnp
 ```
 
-`Para abrir el puerto 3306 de MySQL, se debe modificar el archivo` [docker-compose.yml](./docker-compose.yml) `y descomentar los ports del contenedor db`
+Para abrir el puerto 3306 de MySQL, se debe modificar el archivo [docker-compose.yml](./docker-compose.yml) y aumentar la opcion `ports`  del contenedor `nsiaf-db`.
 
 * Para iniciar los contenedores por separado se pueden utilizar los archivos Dockerfile de cada subsistema en este orden:
 
