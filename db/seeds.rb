@@ -5,7 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-user = { name: 'Administrador', username: 'admin', email: 'admin@dominio.gob.bo', password: 'demo123', role: 'super_admin' }
+admin_usuario = ENV['ADMIN_USUARIO'] || 'admin'
+admin_password = ENV['ADMIN_PASSWORD'] || 'admin'
+user = { name: 'Administrador', username: admin_usuario, email: 'admin@dominio.gob.bo', password: admin_password, role: 'super_admin' }
 u = User.find_by_username('admin')
 unless u.present?
   u = User.new(user)
