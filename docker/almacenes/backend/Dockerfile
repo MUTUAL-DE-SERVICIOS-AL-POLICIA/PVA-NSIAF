@@ -33,8 +33,6 @@ COPY docker/almacenes/backend/database.yml docker/almacenes/backend/secrets.yml 
 
 COPY docker/almacenes/backend/run.sh /opt/run.sh
 
-VOLUME ["/opt/nsiaf/log"]
-
 EXPOSE 3000
 
 ENTRYPOINT ["/opt/run.sh"]
