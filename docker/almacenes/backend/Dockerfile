@@ -10,7 +10,7 @@ ENV DOMINIO=nsiaf \
 
 WORKDIR /opt/nsiaf
 
-COPY . .
+COPY Gemfile Gemfile.lock yarn.lock package.json ./
 
 RUN echo "America/La_Paz" > /etc/timezone && \
     dpkg-reconfigure -f noniteractive tzdata && \
@@ -28,6 +28,8 @@ RUN echo "America/La_Paz" > /etc/timezone && \
     apt-get autoremove --purge -y && \
     apt-get autoclean --dry-run && \
     rm -rf /tmp/*
+
+COPY . .
 
 COPY docker/almacenes/backend/database.yml docker/almacenes/backend/secrets.yml config/
 
