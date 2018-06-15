@@ -23,4 +23,4 @@ then
   touch /opt/install.lock
 fi
 
-rails server -b 0.0.0.0 -e production
+exec "$@"

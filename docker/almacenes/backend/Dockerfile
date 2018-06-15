@@ -36,3 +36,6 @@ COPY docker/almacenes/backend/run.sh /opt/run.sh
 EXPOSE 3000
 
 ENTRYPOINT ["/opt/run.sh"]
+
+CMD ["rails","server","-b","0.0.0.0","-e","production"]
+
