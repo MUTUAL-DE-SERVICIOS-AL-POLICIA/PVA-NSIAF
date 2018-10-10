@@ -1,0 +1,27 @@
+version: '3'
+services:
+  nsiaf-backend:
+    build:
+      context: ../../
+      dockerfile: docker/almacenes/backend/Dockerfile
+    image: nsiaf:1.0.0
+    container_name: nsiaf-backend
+    ports:
+      - "8888:3000"
+    volumes:
+      - /home/will/projects/nsiaf-backend:/opt/nsiaf/log
+    depends_on:
+      - nsiaf-db
+    env_file: .env
+    restart: always
+  nsiaf-db:
+    image: mysql:5.5
+    container_name: nsiaf-db
+    ports:
+      - "33060:3306"
+    volumes:
+      - nsiaf-db:/var/lib/mysql
+    env_file: .env
+    restart: always
+volumes:
+  nsiaf-db:

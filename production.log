@@ -1,0 +1,95 @@
+I, [2018-10-08T12:10:49.018726 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:10:49 -0400
+I, [2018-10-08T12:10:49.045514 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:10:49.096840 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (4.4ms)
+I, [2018-10-08T12:10:49.112247 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (11.0ms)
+I, [2018-10-08T12:10:49.112923 #1]  INFO -- : Completed 200 OK in 67ms (Views: 23.0ms | ActiveRecord: 1.4ms)
+I, [2018-10-08T12:10:49.360854 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:10:49 -0400
+I, [2018-10-08T12:10:49.361838 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:10:49.371007 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:10:49.375157 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (3.3ms)
+I, [2018-10-08T12:10:49.375715 #1]  INFO -- : Completed 200 OK in 14ms (Views: 5.0ms | ActiveRecord: 0.3ms)
+I, [2018-10-08T12:10:49.840558 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:10:49 -0400
+I, [2018-10-08T12:10:49.841426 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:10:49.850776 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.2ms)
+I, [2018-10-08T12:10:49.855139 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (3.5ms)
+I, [2018-10-08T12:10:49.855811 #1]  INFO -- : Completed 200 OK in 14ms (Views: 5.5ms | ActiveRecord: 0.3ms)
+I, [2018-10-08T12:10:50.184676 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:10:50 -0400
+I, [2018-10-08T12:10:50.185481 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:10:50.194760 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:10:50.198382 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.7ms)
+I, [2018-10-08T12:10:50.199155 #1]  INFO -- : Completed 200 OK in 14ms (Views: 4.7ms | ActiveRecord: 0.4ms)
+I, [2018-10-08T12:10:50.400981 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:10:50 -0400
+I, [2018-10-08T12:10:50.402031 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:10:50.411085 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:10:50.414220 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.3ms)
+I, [2018-10-08T12:10:50.414756 #1]  INFO -- : Completed 200 OK in 13ms (Views: 4.0ms | ActiveRecord: 0.5ms)
+I, [2018-10-08T12:10:50.576706 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:10:50 -0400
+I, [2018-10-08T12:10:50.577679 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:10:50.587002 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:10:50.590764 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.7ms)
+I, [2018-10-08T12:10:50.591423 #1]  INFO -- : Completed 200 OK in 14ms (Views: 4.8ms | ActiveRecord: 0.3ms)
+I, [2018-10-08T12:10:50.969025 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:10:50 -0400
+I, [2018-10-08T12:10:50.969949 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:10:50.976584 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:10:50.979862 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.4ms)
+I, [2018-10-08T12:10:50.980431 #1]  INFO -- : Completed 200 OK in 10ms (Views: 4.1ms | ActiveRecord: 0.4ms)
+I, [2018-10-08T12:10:51.138418 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:10:51 -0400
+I, [2018-10-08T12:10:51.139311 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:10:51.148515 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:10:51.152751 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (3.2ms)
+I, [2018-10-08T12:10:51.153586 #1]  INFO -- : Completed 200 OK in 14ms (Views: 5.3ms | ActiveRecord: 0.3ms)
+I, [2018-10-08T12:11:02.804881 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:11:02 -0400
+I, [2018-10-08T12:11:02.805870 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:11:02.811613 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:11:02.814817 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.4ms)
+I, [2018-10-08T12:11:02.815344 #1]  INFO -- : Completed 200 OK in 9ms (Views: 4.0ms | ActiveRecord: 0.2ms)
+I, [2018-10-08T12:11:03.147035 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:11:03 -0400
+I, [2018-10-08T12:11:03.147901 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:11:03.154355 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.2ms)
+I, [2018-10-08T12:11:03.157775 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.6ms)
+I, [2018-10-08T12:11:03.158376 #1]  INFO -- : Completed 200 OK in 10ms (Views: 4.5ms | ActiveRecord: 0.3ms)
+I, [2018-10-08T12:11:03.331866 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:11:03 -0400
+I, [2018-10-08T12:11:03.332722 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:11:03.338570 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:11:03.341600 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.2ms)
+I, [2018-10-08T12:11:03.342134 #1]  INFO -- : Completed 200 OK in 9ms (Views: 3.8ms | ActiveRecord: 0.2ms)
+I, [2018-10-08T12:11:03.497044 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:11:03 -0400
+I, [2018-10-08T12:11:03.497744 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:11:03.505256 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:11:03.508723 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.5ms)
+I, [2018-10-08T12:11:03.509280 #1]  INFO -- : Completed 200 OK in 11ms (Views: 4.3ms | ActiveRecord: 0.3ms)
+I, [2018-10-08T12:11:03.641327 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:11:03 -0400
+I, [2018-10-08T12:11:03.642013 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:11:03.647693 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:11:03.650996 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.6ms)
+I, [2018-10-08T12:11:03.651543 #1]  INFO -- : Completed 200 OK in 9ms (Views: 4.1ms | ActiveRecord: 0.2ms)
+I, [2018-10-08T12:11:03.802575 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:11:03 -0400
+I, [2018-10-08T12:11:03.803753 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:11:03.809617 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:11:03.813045 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.6ms)
+I, [2018-10-08T12:11:03.813789 #1]  INFO -- : Completed 200 OK in 10ms (Views: 4.4ms | ActiveRecord: 0.2ms)
+I, [2018-10-08T12:11:03.947897 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:11:03 -0400
+I, [2018-10-08T12:11:03.948642 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:11:03.957247 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.2ms)
+I, [2018-10-08T12:11:03.961894 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (3.5ms)
+I, [2018-10-08T12:11:03.962686 #1]  INFO -- : Completed 200 OK in 14ms (Views: 5.8ms | ActiveRecord: 0.2ms)
+I, [2018-10-08T12:11:04.089854 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:11:04 -0400
+I, [2018-10-08T12:11:04.090958 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:11:04.098643 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:11:04.101964 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.5ms)
+I, [2018-10-08T12:11:04.102514 #1]  INFO -- : Completed 200 OK in 11ms (Views: 4.2ms | ActiveRecord: 0.3ms)
+I, [2018-10-08T12:12:28.659802 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:12:28 -0400
+I, [2018-10-08T12:12:28.660716 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:12:28.667813 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.3ms)
+I, [2018-10-08T12:12:28.671941 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.9ms)
+I, [2018-10-08T12:12:28.672486 #1]  INFO -- : Completed 200 OK in 12ms (Views: 5.3ms | ActiveRecord: 0.3ms)
+I, [2018-10-08T12:12:29.173846 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:12:29 -0400
+I, [2018-10-08T12:12:29.174728 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:12:29.181645 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.1ms)
+I, [2018-10-08T12:12:29.185290 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.5ms)
+I, [2018-10-08T12:12:29.185827 #1]  INFO -- : Completed 200 OK in 11ms (Views: 4.5ms | ActiveRecord: 0.2ms)
+I, [2018-10-08T12:12:29.622891 #1]  INFO -- : Started GET "/" for 172.28.0.1 at 2018-10-08 12:12:29 -0400
+I, [2018-10-08T12:12:29.623844 #1]  INFO -- : Processing by UsersController#welcome as HTML
+I, [2018-10-08T12:12:29.630680 #1]  INFO -- :   Rendered shared/welcome.html.haml within layouts/application (0.2ms)
+I, [2018-10-08T12:12:29.633525 #1]  INFO -- :   Rendered layouts/_main_nav.html.haml (2.0ms)
+I, [2018-10-08T12:12:29.634042 #1]  INFO -- : Completed 200 OK in 10ms (Views: 3.7ms | ActiveRecord: 0.2ms)
