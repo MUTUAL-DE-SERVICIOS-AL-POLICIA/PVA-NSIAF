@@ -3,6 +3,42 @@
 Sistema de Activos Fijos y Almacenes desarrollado por [ADSIB](https://adsib.gob.bo)
 y [AGETIC](https://agetic.gob.bo)
 
+## Funcionalidad
+
+Este sistema provee la gestión de almacenes y activos. A continuación se detallan algunas características de ambos módulos.
+
+### Almacenes
+
+* Gestión de proveedores
+* Grupos de materiales
+* Subartículos de materiales
+* Notas de ingreso de almacen
+* Solicitud de materiales
+* Reporte de inventario físico valorado
+* Reporte de entradas y salidas valorado
+* Reporte de kardexes
+* Reporte de estadísticas
+
+Todos los reportes son generados de acuerdo a un rango de fechas a elección del usuario.
+
+### Activos
+
+* Administración de ubicaciones de la entidad
+* Gestión de UFVs
+* Cuentas de activos fijos
+* Auxiliares de activos fijos
+* Gestión de activos fijos
+* Gestión de empresas aseguradoras
+* Seguros para cada activo o grupos de activos
+* Generación de actas de asignación de asignación, devolución y bajas de activos fijos
+* Generación de codigos de barras
+* Reporte de activos fijos filtrado por cuentas y rango de fechas
+* REP-6 Resumen de activos fijos
+* REP-10 Inventario de activos fijos
+* REP-9 Reporte de bajas de activos fijos
+
+Todos los reportes son generados de acuerdo a un rango de fechas a elección del usuario.
+
 ## Instalación
 
 La instalación en modo `production` del Sistema está descrito en el archivo
