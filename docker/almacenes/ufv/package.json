@@ -1,0 +1,19 @@
+{
+  "name": "ufv-sync",
+  "version": "1.0.0",
+  "description": "UFV Synchronizer",
+  "main": "index.js",
+  "author": "Daniel Jimenez Jerez",
+  "license": "GPL-3.0",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cheerio": "1.0.0-rc.2",
+    "cron": "1.5.0",
+    "fetch": "1.1.0",
+    "moment": "2.22.2",
+    "mysql2": "1.6.4",
+    "sequelize": "4.41.2"
+  }
+}

@@ -12,6 +12,16 @@ services:
       - nsiaf-db
     env_file: .env
     restart: always
+  nsiaf-ufv:
+    build:
+      context: ../../
+      dockerfile: docker/almacenes/ufv/Dockerfile
+    image: nsiaf-ufv:1.0.0
+    container_name: nsiaf-ufv
+    depends_on:
+      - nsiaf-db
+    env_file: .env
+    restart: always
   nsiaf-db:
     image: mysql:5.5
     container_name: nsiaf-db
