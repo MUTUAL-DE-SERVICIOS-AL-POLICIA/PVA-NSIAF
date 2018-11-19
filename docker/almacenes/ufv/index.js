@@ -37,7 +37,7 @@ const Ufv = sequelize.define('ufv', {
   ]
 })
 
-new CronJob('20 04 11 * * *', () =>  {
+new CronJob('0 0 6 * * *', () =>  {
   sequelize.authenticate()
   .then(() => {
     console.log(`Conectado a base de datos`)
