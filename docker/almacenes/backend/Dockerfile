@@ -1,10 +1,11 @@
-FROM ruby:2.3.6
+FROM qixtand/debian-stretch-ruby:2.3.6
 
 LABEL maintainer="uiid-investigacion@agetic.gob.bo" \
       version="1.0.0" \
       description="Backend para el sistema de activos y almacenes NSIAF"
 
 ENV DOMINIO=nsiaf \
+    DEBIAN_FRONTEND=noninteractive \
     RAILS_SERVE_STATIC_FILES=enabled \
     RAILS_ENV=production
 
