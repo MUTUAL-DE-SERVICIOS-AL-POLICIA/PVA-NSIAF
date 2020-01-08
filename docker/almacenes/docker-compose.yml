@@ -22,6 +22,8 @@ services:
       - nsiaf-db
     env_file: .env
     restart: always
+    logging:
+      driver: none 
   nsiaf-db:
     image: mysql:5.5
     container_name: nsiaf-db
@@ -31,5 +33,7 @@ services:
       - nsiaf-db:/var/lib/mysql
     env_file: .env
     restart: always
+    logging:
+      driver: none 
 volumes:
   nsiaf-db:

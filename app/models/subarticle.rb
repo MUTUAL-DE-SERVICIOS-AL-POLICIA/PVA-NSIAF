@@ -121,11 +121,13 @@ class Subarticle < ActiveRecord::Base
     # Saldo Final
     saldo_final = transacciones.saldo_final_resumen(hasta)
 
-    lista = if !transacciones.first.nil? and desde < transacciones.first.fecha
-              lista + [saldo_final]
-            else
-              [saldo_inicial] + lista + [saldo_final]
-            end
+    unless transacciones.first.fecha.nil?
+      lista = if !transacciones.first.nil? and desde < transacciones.first.fecha
+                lista + [saldo_final]
+              else
+                [saldo_inicial] + lista + [saldo_final]
+              end
+    end
 
     # Sumar saldo final
     Transaccion.generar_saldo_final(lista)

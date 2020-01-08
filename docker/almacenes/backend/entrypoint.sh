@@ -23,4 +23,9 @@ then
   touch /opt/install.lock
 fi
 
+if [ -f /opt/nsiaf/tmp/pids/server.pid ]
+then
+  rm /opt/nsiaf/tmp/pids/server.pid
+fi
+
 exec "$@"
